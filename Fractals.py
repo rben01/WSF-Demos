@@ -5,22 +5,13 @@ Created on Wed Oct  2 12:44:25 2019
 @author: DannySwift
 """
 
-import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-from PIL import Image
- 
-iterations=7
-start_angle = np.radians(90)
-angles = [start_angle]
-mid_xs = [0]
-mid_ys = [0]
-lines=[]
+from PIL import Image            
             
-            
-def animate(i):
+def animate(i, angle, ax, angles, mid_xs, mid_ys, lines):
     bp = 3**i #branchpoints
     xs = mid_xs[-bp:]
     ys = mid_ys[-bp:]
@@ -51,11 +42,19 @@ def animate(i):
     
     return lines
 
+
 def make_gif(deg_angle):
     if deg_angle == None:
         angle = np.radians(45)
     else:
         angle = np.radians(deg_angle)
+        
+    iterations=7
+    start_angle = np.radians(90)
+    angles = [start_angle]
+    mid_xs = [0]
+    mid_ys = [0]
+    lines=[]
 
     fig, ax = plt.subplots(frameon=False)
     fig.set_facecolor('xkcd:sky')
@@ -74,7 +73,7 @@ def make_gif(deg_angle):
       pil_image = Image.frombytes('RGB', canvas.get_width_height(), canvas.tostring_rgb())
       images.append(pil_image)
 
-      animate(i)
+      animate(i, angle, ax, angles, mid_xs, mid_ys, lines)
     
     gif_filepath = 'gifs' + os.sep + '{}.gif'.format(deg_angle)
     

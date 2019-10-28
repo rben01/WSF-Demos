@@ -8,22 +8,26 @@ class WebServer(BaseHTTPRequestHandler):
 
     def do_GET(self):
         self.send_response(200)
+        self.send_header('Content-type', 'image/gif')
         self.end_headers()
-        params = parse_qs(urlparse(self.url).query)
+        params = parse_qs(urlparse(self.path).query)
 
-        if params['demo'] == 'fractal':
-            angle = params['angle']
-            gif_path = 'gifs' + os.sep + '{}.gif'.format(angle)
+        if params['demo'][0] == 'fractal':
+            angle = params['angle'][0]
+            gif_path = '.' + os.sep + 'gifs' + os.sep + '{}.gif'.format(angle)
             try:
                 file = open(gif_path, 'rb')
             except:
                 Fractals.make_gif(angle)
                 file = open(gif_path, 'rb')
-            gif = file.read()
+            self.wfile.write(file.read())
+            self.wfile.close()
             file.close()
-            self.wfile.write(gif)
 
 
 if __name__ == '__main__':
-    httpd = HTTPServer(("localhost", 8000), WebServer)
-    httpd.serve_forever()
+    try:
+        server = HTTPServer(("localhost", 8000), WebServer)
+        server.serve_forever()
+    except KeyboardInterrupt:
+        server.socket.close()
