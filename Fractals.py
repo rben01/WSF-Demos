@@ -5,17 +5,15 @@ Created on Wed Oct  2 12:44:25 2019
 @author: DannySwift
 """
 
-import IPython.display as IPdisplay
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
-import io
+import os
 
 from PIL import Image
  
 iterations=7
 start_angle = np.radians(90)
-angle = np.radians(45)
 angles = [start_angle]
 mid_xs = [0]
 mid_ys = [0]
@@ -53,8 +51,12 @@ def animate(i):
     
     return lines
 
+def make_gif(deg_angle):
+    if deg_angle == None:
+        angle = np.radians(45)
+    else:
+        angle = np.radians(deg_angle)
 
-if __name__ == '__main__':
     fig, ax = plt.subplots(frameon=False)
     fig.set_facecolor('xkcd:sky')
     ax.set_facecolor('xkcd:sky')
@@ -64,7 +66,6 @@ if __name__ == '__main__':
     plt.ylim(-0.7, 1.3)
 
     images = []
-    sio = io.StringIO()
     
     for i in range(iterations):
   
@@ -75,10 +76,8 @@ if __name__ == '__main__':
 
       animate(i)
     
-
-    gif_filepath = 'fractal{}.gif'.format(str(angle))
-
-
+    gif_filepath = 'gifs' + os.sep + '{}.gif'.format(deg_angle)
+    
     images[0].save(
       gif_filepath,
       save_all=True,
@@ -87,4 +86,3 @@ if __name__ == '__main__':
       loop=0,
       duration=1000
     )
-    IPdisplay.Image(url=gif_filepath)
