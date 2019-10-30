@@ -85,3 +85,5 @@ def make_gif(deg_angle):
       loop=0,
       duration=1000
     )
+
+    return(gif_filepath)
