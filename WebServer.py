@@ -24,6 +24,11 @@ class WebServer(BaseHTTPRequestHandler):
             self.wfile.close()
             file.close()
 
+    def run(self, environ, start_response):
+        serve_forever()
+
+server = WebServer(("localhost", 8000), WebServer)
+
 
 if __name__ == '__main__':
     try:

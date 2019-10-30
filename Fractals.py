@@ -75,7 +75,7 @@ def make_gif(deg_angle):
 
       animate(i, angle, ax, angles, mid_xs, mid_ys, lines)
     
-    gif_filepath = 'gifs' + os.sep + '{}.gif'.format(deg_angle)
+    gif_filepath = '{}.gif'.format(deg_angle)
     
     images[0].save(
       gif_filepath,
