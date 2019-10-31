@@ -7,7 +7,6 @@ Created on Wed Oct  2 12:44:25 2019
 
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 
 from PIL import Image            
             
