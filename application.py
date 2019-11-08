@@ -22,4 +22,4 @@ def do_GET():
 if __name__ == '__main__':
     if not os.path.exists('gifs'):
         os.makedirs('gifs')
-    application.run()
+    application.run(ssl_context='adhoc')
