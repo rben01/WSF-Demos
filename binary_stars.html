@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<title>Binary Stars</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Lato", sans-serif;
+    }
+
+    body,
+    html {
+        height: 100%;
+        color: white;
+        line-height: 1.8;
+        background-color: black;
+    }
+
+    .w3-wide {
+        letter-spacing: 10px;
+    }
+
+    .w3-hover-opacity {
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed">Angular Speed</label>
+            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.1"
+                oninput="speedID.innerHTML = 'v=' + speed.value + 'c'">
+            <br>
+            <text id="speedID"></text>
+            <br>
+            <label for="distance">Distance from Earth</label>
+            <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="6">
+            <br>
+            <input type="button" id="reset" value="Reset">
+        </form>
+    </div>
+
+    <div id="animate" class="w3-content w3-container">
+        <canvas id="canvas" width="900" height="300"></canvas>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
+        integrity="sha256-CIc5A981wu9+q+hmFYYySmOvsA3IsoX+apaYlL0j6fg=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+        var elem = document.getElementById("animate");
+        var speed = 0.1;
+        var distance = 6;
+        var theta = 0;
+        var interval;
+
+        function render() {
+            var ctx = document.getElementById("canvas")
+            ctx = ctx.getContext("2d");
+            ctx.clearRect(0, 0, 900, 300);
+            ctx.fillStyle = "blue";
+            ctx.beginPath();
+            ctx.arc(150, 150, 150, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.font = "30px Helvetica";
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.fillText("Earth", 110, 160);
+            ctx.fill();
+            ctx.fillStyle = "orange";
+            ctx.beginPath();
+            ctx.arc(300 + distance * 60, 150, 50, 0, 2 * Math.PI);
+            ctx.arc(300 + distance * 60 - 100 * Math.cos(theta), 150 + 100 - Math.sin(theta), 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "white"
+            ctx.beginPath();
+            ctx.fillText("Star", 275 + distance * 60, 160);
+            ctx.fill();
+        }
+
+        function go() {
+            theta += speed * 2 * Math.PI / 20;
+            render();
+        }
+
+        $("#start").click(function () {
+            speed = document.getElementById("speed").value;
+            distance = document.getElementById("distance").value;
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(go, 50);
+        })
+
+        $("#reset").click(function () {
+            speed = document.getElementById("speed").value;
+            distance = document.getElementById("distance").value;
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(go, 50);
+        })
+
+        $(document).ready(function () {
+            render();
+        })
+    </script>
+</body>
