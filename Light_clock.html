@@ -35,14 +35,15 @@
 </style>
 
 <body>
+    <br><br>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed">Speed</label>
+            <label for="speed" style="font-size: 20px;">Speed</label>
             <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
-                oninput="speedID.innerHTML = 'v=' + speed.value + 'c'">
+                oninput="speedID.innerHTML = 'v = ' + speed.value + 'c'">
             <br>
-            <text id="speedID"></text>
-            <br>
+            <text id="speedID" style="font-size:20px"></text>
+            <br><br>
             <input type="button" id="start" value="Start">
             <input type="button" id="reset" value="Reset">
         </form>
