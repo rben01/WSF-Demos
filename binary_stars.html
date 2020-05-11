@@ -44,7 +44,10 @@
             <text id="speedID"></text>
             <br>
             <label for="distance">Distance from Earth</label>
-            <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="6">
+            <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="6"
+                oninput="distanceID.innerHTML = distance.value + 'light years'">
+            <br>
+            <text id="distanceID"></text>
             <br>
             <input type="button" id="reset" value="Reset">
         </form>
