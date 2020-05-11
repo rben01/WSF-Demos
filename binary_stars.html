@@ -63,6 +63,10 @@
         var elem = document.getElementById("animate");
         var speed = 0.1;
         var distance = 6;
+        var x1 = 0;
+        var x2 = 0;
+        var t1 = 0;
+        var t2 = 0;
         var theta = 0;
         var interval;
 
@@ -82,7 +86,23 @@
             ctx.fillStyle = "orange";
             ctx.beginPath();
             ctx.arc(300 + distance * 60, 150, 50, 0, 2 * Math.PI);
-            ctx.arc(300 + distance * 60 - 100 * Math.cos(theta), 150 + 100 - Math.sin(theta), 10, 0, 2 * Math.PI);
+            ctx.arc(300 + distance * 60 - 100 * Math.cos(theta), 150 + 100 * Math.sin(theta), 10, 0, 2 * Math.PI);
+            if (theta > Math.PI / 2) {
+                t1 += 1
+                x1 = x0 - 3 * t1 * (1 - speed);
+                if (x1 >= 150 + 150 / Math.sqrt(2)) {
+                    ctx.moveTo(x1, 250);
+                    ctx.arc(x1, 250, 4, 0, 2 * Math.PI);
+                }
+            }
+            if (theta > 3 * Math.PI / 2) {
+                t2 += 1;
+                x2 = x0 - 3 * t2 * (1 + speed);
+                if (x2 >= 150 + 150 / Math.sqrt(2)) {
+                    ctx.moveTo(x2, 50);
+                    ctx.arc(x2, 50, 4, 0, 2 * Math.PI);
+                }
+            }
             ctx.fill();
             ctx.fillStyle = "white"
             ctx.beginPath();
@@ -105,8 +125,12 @@
         })
 
         $("#reset").click(function () {
-            speed = document.getElementById("speed").value;
+            speed = Number(document.getElementById("speed").value);
             distance = document.getElementById("distance").value;
+            theta = 0;
+            t1 = 0;
+            t2 = 0;
+            x0 = 300 + distance * 60;
             if (interval) {
                 clearInterval(interval);
             }
