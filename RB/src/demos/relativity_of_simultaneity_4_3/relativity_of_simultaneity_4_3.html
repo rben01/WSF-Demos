@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			#container {
+				height: 100px;
+				width: 100px;
+				background-color: black;
+			}
+		</style>
+		<script src="https://d3js.org/d3.v4.min.js"></script>
+	</head>
+
+	<body>
+		<svg id="canvas" style="margin: 0 auto; display: block;"></svg>
+
+		<script src="./relativity_of_simultaneity_4_3.js"></script>
+
+		<div>
+			<button id="btn-run-animation" onclick="beginAnimation()">Begin animation</button>
+		</div>
+		<div>
+			<label>
+				Train speed:
+				<span id="train-speed-text" style="min-width: 3em; display: inline-block;"
+					>0.1</span
+				>
+				<input
+					type="range"
+					id="input-train-speed"
+					name="input-train-speed"
+					min="0"
+					max=".999999"
+					step=".005"
+					value=".1"
+					oninput="updateTrainSpeed(this.value)"
+				/>
+			</label>
+		</div>
+
+		<script>
+			updateTrainSpeed();
+		</script>
+	</body>
+</html>
