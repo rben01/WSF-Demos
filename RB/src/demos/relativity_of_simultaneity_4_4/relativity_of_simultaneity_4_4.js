@@ -3,7 +3,7 @@
 const X_MARGIN_PROPTN = 0.0;
 const Y_MARGIN_PROPTN = 0.15;
 
-const TRAIN_WIDTH_PROPTN = 0.75;
+const TRAIN_WIDTH_PROPTN = 0.5;
 const TRAIN_HEIGHT_PROPTN = 0.6;
 
 // If the program is bug-free, any reasonably scaled values of the axis bounds will work
@@ -27,7 +27,7 @@ const TOTAL_DURATION_SEC = 3;
 const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
 
 const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 400;
+const CANVAS_HEIGHT = 550;
 
 const canvas = d3
 	.select("#canvas")
@@ -35,22 +35,49 @@ const canvas = d3
 	.attr("height", CANVAS_HEIGHT)
 	.style("background-color", "black");
 
+const subcanvases = canvas
+	.selectAll()
+	.data([
+		{
+			originX: 0,
+			originY: 0,
+			width: CANVAS_WIDTH,
+			height: CANVAS_HEIGHT / 2,
+			observerIsStandingOn: "train",
+		},
+		{
+			originX: 0,
+			originY: CANVAS_HEIGHT / 2,
+			width: CANVAS_WIDTH,
+			height: CANVAS_HEIGHT / 2,
+			observerIsStandingOn: "ground",
+		},
+	])
+	.enter()
+	.append("g")
+	.attr("transform", d => `translate(0, ${d.originY})`)
+	.classed("subcanvas", true);
+
+console.log(subcanvases);
+
 // Photon goes from center of train to end of train over the course of the animation
 function axDistTraveled({ fracOfC }) {
 	return (fracOfC * AX_TRAIN_WIDTH) / 2;
 }
 
-function transAxisToCanvas({ x, y, dx, dy }) {
+function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
 	const xFrac = (x - AX_MIN_X) / AX_WIDTH;
 	const yFrac = (y - AX_MIN_Y) / AX_HEIGHT;
 
 	const xCanvasCoords =
-		CANVAS_WIDTH * X_MARGIN_PROPTN + xFrac * CANVAS_WIDTH * (1 - 2 * X_MARGIN_PROPTN);
+		canvasInfo.width * X_MARGIN_PROPTN +
+		xFrac * canvasInfo.width * (1 - 2 * X_MARGIN_PROPTN);
 	const yCanvasCoords =
-		CANVAS_HEIGHT * Y_MARGIN_PROPTN + yFrac * CANVAS_HEIGHT * (1 - 2 * Y_MARGIN_PROPTN);
+		canvasInfo.height * Y_MARGIN_PROPTN +
+		yFrac * canvasInfo.height * (1 - 2 * Y_MARGIN_PROPTN);
 
-	const dxCanvasCoords = (CANVAS_WIDTH / AX_WIDTH) * dx;
-	const dyCanvasCoords = (CANVAS_HEIGHT / AX_HEIGHT) * dy;
+	const dxCanvasCoords = (canvasInfo.width / AX_WIDTH) * dx;
+	const dyCanvasCoords = (canvasInfo.height / AX_HEIGHT) * dy;
 
 	return {
 		x: xCanvasCoords,
@@ -76,27 +103,24 @@ function y2(d) {
 	return d.p2.y;
 }
 
-function addTrainAndLightSources(canvas) {
+function addTrainAndLightSources(canvasInfo) {
 	const trainXMin = AX_MID_X - AX_TRAIN_WIDTH / 2;
 	const trainYMin = AX_MID_Y - AX_TRAIN_HEIGHT / 2;
 
 	const trainXMax = trainXMin + AX_TRAIN_WIDTH;
 	const trainYMax = trainYMin + AX_TRAIN_HEIGHT;
 
-	const trainMinCanvasCoords = transAxisToCanvas({ x: trainXMin, y: trainYMin });
-	const trainMaxCanvasCoords = transAxisToCanvas({ x: trainXMax, y: trainYMax });
+	const trainMinCanvasCoords = transAxisToCanvas(canvasInfo, {
+		x: trainXMin,
+		y: trainYMin,
+	});
+	const trainMaxCanvasCoords = transAxisToCanvas(canvasInfo, {
+		x: trainXMax,
+		y: trainYMax,
+	});
 
 	const trainCanvasWidth = trainMaxCanvasCoords.x - trainMinCanvasCoords.x;
 	const trainCanvasHeight = trainMaxCanvasCoords.y - trainMinCanvasCoords.y;
-
-	canvas
-		.append("rect")
-		.attr("x", trainMinCanvasCoords.x)
-		.attr("y", trainMinCanvasCoords.y)
-		.attr("width", trainCanvasWidth)
-		.attr("height", trainCanvasHeight)
-		.attr("fill", "#4ff8")
-		.classed("train-train-car", true);
 
 	const lsCenterX = AX_MID_X;
 	const lsCenterY = AX_MID_Y;
@@ -108,7 +132,7 @@ function addTrainAndLightSources(canvas) {
 		y: lsCanvasCenterY,
 		dx: lsCanvasRadiusX,
 		dy: lsCanvasRadiusY,
-	} = transAxisToCanvas({
+	} = transAxisToCanvas(canvasInfo, {
 		x: lsCenterX,
 		y: lsCenterY,
 		dx: lsRadiusX,
@@ -117,38 +141,120 @@ function addTrainAndLightSources(canvas) {
 
 	const lsRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
 
-	canvas
-		.append("circle")
-		.attr("cx", lsCanvasCenterX)
-		.attr("cy", lsCanvasCenterY)
-		.attr("r", lsRadius)
-		.attr("fill", "#fb3f")
-		.attr("stroke", "#ffff")
-		.classed("train-light-source", true);
+	// const trainCar = d3
+	// 	.select(this)
+	// 	.selectAll()
+	// 	.data([{ x0: trainMinCanvasCoords.x }])
+	// 	.enter()
+	// 	.append("rect")
+	// 	.attr("x", trainMinCanvasCoords.x)
+	// 	.attr("y", trainMinCanvasCoords.y)
+	// 	.attr("width", trainCanvasWidth)
+	// 	.attr("height", trainCanvasHeight)
+	// 	.attr("fill", "#4ff8")
+	// 	.classed("train-train-car", true);
+
+	// // console.log(lsCanvasCenterX, lsCanvasCenterY);
+	// const lightSource = d3
+	// 	.select(this)
+	// 	.selectAll()
+	// 	.data([{ x0: lsCanvasCenterX }])
+	// 	.enter()
+	// 	.append("circle")
+	// 	.attr("cx", d => d.x0)
+	// 	.attr("cy", lsCanvasCenterY)
+	// 	.attr("r", lsRadius)
+	// 	.attr("fill", "#fb3f")
+	// 	.attr("stroke", "#ffff")
+	// 	.classed("train-light-source", true);
 
 	const photonRadius = lsRadius / 2;
 
-	const photonData = [
-		{ x0: lsCanvasCenterX, x1: trainMinCanvasCoords.x },
-		{ x0: lsCanvasCenterX, x1: trainMaxCanvasCoords.x },
-	];
+	// const photons = d3
+	// 	.select(this)
+	// 	.selectAll()
+	// 	.data([
+	// 		{ x0: lsCanvasCenterX, x1: trainMinCanvasCoords.x },
+	// 		{ x0: lsCanvasCenterX, x1: trainMaxCanvasCoords.x },
+	// 	])
+	// 	.enter()
+	// 	.append("circle")
+	// 	.attr("cx", d => d.x0)
+	// 	.attr("cy", lsCanvasCenterY)
+	// 	.attr("r", photonRadius)
+	// 	.attr("fill", "#fd0f")
+	// 	.attr("stroke", "#ffff")
+	// 	.classed("train-photon", true);
 
-	const photons = canvas
+	const circleTopLevelAttrs = {
+		shape: "circle",
+		x0: lsCanvasCenterX,
+	};
+
+	const circleAttrAttrs = {
+		cx: lsCanvasCenterX,
+		cy: lsCanvasCenterY,
+		r: lsRadius,
+	};
+
+	const photonAttrAttrs = {
+		...circleAttrAttrs,
+		r: photonRadius,
+		fill: "#fd0f",
+		stroke: "#ffff",
+	};
+
+	return d3
+		.select(this)
 		.selectAll()
-		.data(photonData)
+		.data([
+			{
+				type: "train",
+				class: "train-car",
+				shape: "rect",
+				x0: trainMinCanvasCoords.x,
+				attrs: {
+					x: trainMinCanvasCoords.x,
+					y: trainMinCanvasCoords.y,
+					width: trainCanvasWidth,
+					height: trainCanvasHeight,
+					fill: "#4ff8",
+				},
+			},
+			{
+				type: "lightSource",
+				class: "train-light-source",
+				...circleTopLevelAttrs,
+				attrs: {
+					...circleAttrAttrs,
+					fill: "#fb3f",
+					stroke: "#ffff",
+				},
+			},
+			{
+				type: "leftPhoton",
+				class: "train-photon",
+				...circleTopLevelAttrs,
+				attrs: photonAttrAttrs,
+			},
+			{
+				type: "rightPhoton",
+				class: "train-photon",
+				...circleTopLevelAttrs,
+				attrs: photonAttrAttrs,
+			},
+		])
 		.enter()
-		.append("circle")
-		.attr("cx", d => d.x0)
-		.attr("cy", lsCanvasCenterY)
-		.attr("r", photonRadius)
-		.attr("fill", "#fd0f")
-		.attr("stroke", "#ffff")
-		.classed("train-photon", true);
+		.each(d => {
+			var d3Obj = d3.select(this).append(d.shape).classed(d.class, true);
 
-	return photons;
+			Object.keys(d.attrs).forEach(key => {
+				d3Obj = d3Obj.attr(key, d.attrs[key]);
+			});
+		});
 }
 
-function addTracks(canvas) {
+function addTracks(canvasInfo) {
 	const nTiesVisible = 9;
 	const lineExtendPastFrac = 0.05;
 
@@ -172,11 +278,12 @@ function addTracks(canvas) {
 		const [p1, p2] = [
 			{ x: tieAxX, y: AX_MIN_Y },
 			{ x: tieAxX, y: AX_MAX_Y },
-		].map(transAxisToCanvas);
+		].map(p => transAxisToCanvas(canvasInfo, p));
 		tiesCanvasCoords.push({ p1, p2, baseX: p1.x });
 	}
 
-	const ties = canvas
+	const ties = d3
+		.select(this)
 		.selectAll()
 		.data(tiesCanvasCoords)
 		.enter()
@@ -195,11 +302,12 @@ function addTracks(canvas) {
 		const [p1, p2] = [
 			{ x: AX_MIN_X, y: railY },
 			{ x: AX_MAX_X, y: railY },
-		].map(transAxisToCanvas);
+		].map(p => transAxisToCanvas(canvasInfo, p));
 		railsCanvasCoords.push({ p1, p2 });
 	});
 
-	const rails = canvas
+	const rails = d3
+		.select(this)
 		.selectAll()
 		.data(railsCanvasCoords)
 		.enter()
@@ -215,10 +323,13 @@ function addTracks(canvas) {
 	return { ties, rails };
 }
 
-const trackLines = addTracks(canvas);
-console.log(trackLines);
+// subcanvas.each((d, i) => addTracks());
 
-const photons = addTrainAndLightSources(canvas);
+// const trackLines = addTracks(canvas);
+// console.log(trackLines);
+const trackLines = subcanvases.each(addTracks);
+const xxx = subcanvases.each(addTrainAndLightSources);
+console.log(subcanvases);
 
 // eslint-disable-next-line no-unused-vars
 function updateTrainSpeed(speed) {
@@ -237,11 +348,21 @@ function updateTrainSpeed(speed) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function beginAnimation() {
+function beginAnimationOnCanvas(canvasInfo) {
 	document.getElementById("btn-run-animation").innerText = "Restart animation";
 	const distanceTraveled = transAxisToCanvas({
 		dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
 	}).dx;
+
+	trackLines.ties
+		.transition()
+		.duration(0)
+		.attr("x1", d => d.baseX)
+		.attr("x2", d => d.baseX)
+		.each(d => {
+			if (d.observerIsStandingOn == "train") {
+			}
+		});
 
 	trackLines.ties
 		.transition()
