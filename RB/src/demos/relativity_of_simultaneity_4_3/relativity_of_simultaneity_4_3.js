@@ -6,6 +6,7 @@ const Y_MARGIN_PROPTN = 0.15;
 const TRAIN_WIDTH_PROPTN = 0.75;
 const TRAIN_HEIGHT_PROPTN = 0.6;
 
+// If the program is bug-free, any reasonably scaled values of the axis bounds will work
 const AX_MIN_X = 5;
 const AX_MIN_Y = 3;
 const AX_MAX_X = 10;
@@ -59,6 +60,22 @@ function transAxisToCanvas({ x, y, dx, dy }) {
 	};
 }
 
+function x1(d) {
+	return d.p1.x;
+}
+
+function y1(d) {
+	return d.p1.y;
+}
+
+function x2(d) {
+	return d.p2.x;
+}
+
+function y2(d) {
+	return d.p2.y;
+}
+
 function addTrainAndLightSources(canvas) {
 	const trainXMin = AX_MID_X - AX_TRAIN_WIDTH / 2;
 	const trainYMin = AX_MID_Y - AX_TRAIN_HEIGHT / 2;
@@ -78,7 +95,8 @@ function addTrainAndLightSources(canvas) {
 		.attr("y", trainMinCanvasCoords.y)
 		.attr("width", trainCanvasWidth)
 		.attr("height", trainCanvasHeight)
-		.attr("fill", "#4ff8");
+		.attr("fill", "#4ff8")
+		.classed("train-train-car", true);
 
 	const lsCenterX = AX_MID_X;
 	const lsCenterY = AX_MID_Y;
@@ -105,24 +123,27 @@ function addTrainAndLightSources(canvas) {
 		.attr("cy", lsCanvasCenterY)
 		.attr("r", lsRadius)
 		.attr("fill", "#fb3f")
-		.attr("stroke", "#ffff");
+		.attr("stroke", "#ffff")
+		.classed("train-light-source", true);
 
 	const photonRadius = lsRadius / 2;
-	const photons = {};
 
-	["photon1", "photon2"].forEach(photon => {
-		photons[photon] = canvas
-			.append("circle")
-			.attr("cx", lsCanvasCenterX)
-			.attr("cy", lsCanvasCenterY)
-			.attr("r", photonRadius)
-			.attr("fill", "#fd0f")
-			.attr("stroke", "#ffff");
-	});
+	const photonData = [
+		{ x0: lsCanvasCenterX, x1: trainMinCanvasCoords.x },
+		{ x0: lsCanvasCenterX, x1: trainMaxCanvasCoords.x },
+	];
 
-	photons.xMin = trainMinCanvasCoords.x;
-	photons.xMax = trainMaxCanvasCoords.x;
-	photons.x0 = lsCanvasCenterX;
+	const photons = canvas
+		.selectAll()
+		.data(photonData)
+		.enter()
+		.append("circle")
+		.attr("cx", d => d.x0)
+		.attr("cy", lsCanvasCenterY)
+		.attr("r", photonRadius)
+		.attr("fill", "#fd0f")
+		.attr("stroke", "#ffff")
+		.classed("train-photon", true);
 
 	return photons;
 }
@@ -131,101 +152,73 @@ function addTracks(canvas) {
 	const nTiesVisible = 9;
 	const lineExtendPastFrac = 0.05;
 
-	const trackInteriorXMin = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
-	const trackInteriorXMax = AX_MAX_X - lineExtendPastFrac * AX_WIDTH;
-	const trackInteriorYMin = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
-	const trackInteriorYMax = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
+	const trackInteriorAxMinX = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
+	const trackInteriorAxMaxX = AX_MAX_X - lineExtendPastFrac * AX_WIDTH;
+	const trackInteriorAxMinY = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
+	const trackInteriorAxMaxY = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
 
-	const distBtwnTies = (trackInteriorXMax - trackInteriorXMin) / (nTiesVisible - 1);
-
-	// make rails
-	const rails = [];
-	[trackInteriorYMin, trackInteriorYMax].forEach(railY => {
-		rails.push({
-			p1: {
-				x: AX_MIN_X,
-				y: railY,
-			},
-			p2: {
-				x: AX_MAX_X,
-				y: railY,
-			},
-		});
-	});
+	const axDistBtwnTies =
+		(trackInteriorAxMaxX - trackInteriorAxMinX) / (nTiesVisible - 1);
 
 	const nTiesTotal = Math.ceil(
-		nTiesVisible + axDistTraveled({ fracOfC: 1 }) / distBtwnTies,
+		nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
 	);
 
 	// make ties
-	const ties = [];
+	const tiesCanvasCoords = [];
 	for (var i = 0; i < nTiesTotal; i++) {
-		const tieX = trackInteriorXMin + i * distBtwnTies;
+		const tieAxX = trackInteriorAxMinX + i * axDistBtwnTies;
 
-		ties.push({
-			p1: {
-				x: tieX,
-				y: AX_MIN_Y,
-			},
-			p2: {
-				x: tieX,
-				y: AX_MAX_Y,
-			},
-		});
+		const [p1, p2] = [
+			{ x: tieAxX, y: AX_MIN_Y },
+			{ x: tieAxX, y: AX_MAX_Y },
+		].map(transAxisToCanvas);
+		tiesCanvasCoords.push({ p1, p2, baseX: p1.x });
 	}
 
-	const trackLines = {};
+	console.log(tiesCanvasCoords);
 
-	const tieXCanvasLocs = [];
-	[
-		{
-			name: "ties",
-			lineArray: ties,
-		},
-		{
-			name: "rails",
-			lineArray: rails,
-		},
-	].forEach(obj => {
-		const { name, lineArray } = obj;
-		const lines = [];
+	const ties = canvas
+		.selectAll()
+		.data(tiesCanvasCoords)
+		.enter()
+		.append("line")
+		.attr("x1", x1)
+		.attr("y1", y1)
+		.attr("x2", x2)
+		.attr("y2", y2)
+		.style("stroke", "#997f39")
+		.style("stroke-width", 20)
+		.classed("railroad-tie", true);
 
-		for (const line of lineArray) {
-			const p1 = transAxisToCanvas(line.p1);
-			const p2 = transAxisToCanvas(line.p2);
-
-			let strokeColor;
-			let strokeWidth;
-
-			if (name == "rails") {
-				strokeColor = "white";
-				strokeWidth = 5;
-			} else if (name == "ties") {
-				tieXCanvasLocs.push(p1.x);
-				strokeColor = "#997f39";
-				strokeWidth = 20;
-			}
-
-			lines.push(
-				canvas
-					.append("line")
-					.style("stroke", strokeColor)
-					.style("stroke-width", strokeWidth)
-					.attr("x1", p1.x)
-					.attr("y1", p1.y)
-					.attr("x2", p2.x)
-					.attr("y2", p2.y),
-			);
-		}
-		trackLines[name] = lines;
+	// make rails
+	const railsCanvasCoords = [];
+	[trackInteriorAxMinY, trackInteriorAxMaxY].forEach(railY => {
+		const [p1, p2] = [
+			{ x: AX_MIN_X, y: railY },
+			{ x: AX_MAX_X, y: railY },
+		].map(transAxisToCanvas);
+		railsCanvasCoords.push({ p1, p2 });
 	});
 
-	trackLines.tieXCanvasLocs = tieXCanvasLocs;
+	const rails = canvas
+		.selectAll()
+		.data(railsCanvasCoords)
+		.enter()
+		.append("line")
+		.attr("x1", x1)
+		.attr("y1", y1)
+		.attr("x2", x2)
+		.attr("y2", y2)
+		.attr("stroke", "white")
+		.attr("stroke-width", 5)
+		.classed("railroad-rail", true);
 
-	return trackLines;
+	return { ties, rails };
 }
 
 const trackLines = addTracks(canvas);
+console.log(trackLines);
 
 const photons = addTrainAndLightSources(canvas);
 
@@ -251,61 +244,24 @@ function beginAnimation() {
 	const distanceTraveled = transAxisToCanvas({
 		dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
 	}).dx;
-	for (var i = 0; i < trackLines.tieXCanvasLocs.length; i++) {
-		const tie = trackLines.ties[i];
-		["x1", "x2"].forEach(attr => {
-			const x0 = trackLines.tieXCanvasLocs[i];
-			tie
-				.transition()
-				.duration(0)
-				.attr(attr, x0)
-				.transition()
-				.duration(TOTAL_DURATION_MS)
-				.ease(d3.easeLinear)
-				.attr("x1", x0 - distanceTraveled)
-				.attr("x2", x0 - distanceTraveled);
-		});
-	}
 
-	// trackLines.ties.forEach(tie => {
-	// const p1CanvasCoords = tie.attr("x1");
-	// const p2CanvasCoords = tie.attr("x2");
-
-	// const p1AxisCoords = transCanvasToAxis({ x: tie.attr("x1") });
-	// const p2AxisCoords = transCanvasToAxis({ x: tie.attr("x2") });
-
-	// console.log(p1AxisCoords);
-	// console.log(p2AxisCoords);
-	// [p1AxisCoords, p2AxisCoords].forEach(ac => {
-	// 	ac.x -= axDistTraveled({ fracOfC: USER_INFO.trainSpeed }) * 1;
-	// });
-
-	// console.log(axDistTraveled({ fracOfC: USER_INFO.trainSpeed }));
-	// console.log(p1AxisCoords);
-	// console.log(p2AxisCoords);
-	// 	tie
-	// 		.transition()
-	// 		.duration(TOTAL_DURATION_MS)
-	// 		.ease(d3.easeLinear)
-	// 		.attr("x1", tie.attr("x1") - distanceTraveled)
-	// 		.attr("x2", tie.attr("x2") - distanceTraveled);
-	// });
-
-	photons.photon1
+	trackLines.ties
 		.transition()
 		.duration(0)
-		.attr("cx", photons.x0)
+		.attr("x1", d => d.baseX)
+		.attr("x2", d => d.baseX)
 		.transition()
 		.duration(TOTAL_DURATION_MS)
 		.ease(d3.easeLinear)
-		.attr("cx", photons.xMin);
+		.attr("x1", d => d.baseX - distanceTraveled)
+		.attr("x2", d => d.baseX - distanceTraveled);
 
-	photons.photon2
+	photons
 		.transition()
 		.duration(0)
-		.attr("cx", photons.x0)
+		.attr("cx", d => d.x0)
 		.transition()
 		.duration(TOTAL_DURATION_MS)
 		.ease(d3.easeLinear)
-		.attr("cx", photons.xMax);
+		.attr("cx", d => d.x1);
 }
