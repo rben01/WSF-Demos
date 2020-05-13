@@ -1,5 +1,6 @@
 import argparse
 import re
+import sys
 from pathlib import Path
 
 from bs4 import BeautifulSoup, Tag
@@ -20,7 +21,7 @@ def main():
     outfile = Path(args.outfile)
 
     if infile.resolve() == outfile.resolve():
-        raise ValueError("infile and outfile are the same; they must be different")
+        sys.exit("infile and outfile are the same; they must be different")
 
     with infile.open() as f:
         soup = BeautifulSoup(f.read(), "lxml")
@@ -31,7 +32,7 @@ def main():
     scripts = soup.find_all("script")
     for script in scripts:
         script: Tag
-        src = script.get("src")
+        src = script.attrs.get("src")
         if (
             src is None
             or src in ignored_srcs
