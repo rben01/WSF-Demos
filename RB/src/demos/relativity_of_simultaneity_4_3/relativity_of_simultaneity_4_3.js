@@ -1,7 +1,7 @@
 /* global d3 */
 
 const X_MARGIN_PROPTN = 0.0;
-const Y_MARGIN_PROPTN = 0.2;
+const Y_MARGIN_PROPTN = 0.15;
 
 const TRAIN_WIDTH_PROPTN = 0.75;
 const TRAIN_HEIGHT_PROPTN = 0.6;
@@ -78,7 +78,7 @@ function addTrainAndLightSources(canvas) {
 		.attr("y", trainMinCanvasCoords.y)
 		.attr("width", trainCanvasWidth)
 		.attr("height", trainCanvasHeight)
-		.attr("fill", "#4ff5");
+		.attr("fill", "#4ff8");
 
 	const lsCenterX = AX_MID_X;
 	const lsCenterY = AX_MID_Y;
@@ -128,7 +128,7 @@ function addTrainAndLightSources(canvas) {
 }
 
 function addTracks(canvas) {
-	const nTiesVisible = 11;
+	const nTiesVisible = 9;
 	const lineExtendPastFrac = 0.05;
 
 	const trackInteriorXMin = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
@@ -179,12 +179,12 @@ function addTracks(canvas) {
 	const tieXCanvasLocs = [];
 	[
 		{
-			name: "rails",
-			lineArray: rails,
-		},
-		{
 			name: "ties",
 			lineArray: ties,
+		},
+		{
+			name: "rails",
+			lineArray: rails,
 		},
 	].forEach(obj => {
 		const { name, lineArray } = obj;
@@ -194,15 +194,23 @@ function addTracks(canvas) {
 			const p1 = transAxisToCanvas(line.p1);
 			const p2 = transAxisToCanvas(line.p2);
 
-			if (name == "ties") {
+			let strokeColor;
+			let strokeWidth;
+
+			if (name == "rails") {
+				strokeColor = "white";
+				strokeWidth = 5;
+			} else if (name == "ties") {
 				tieXCanvasLocs.push(p1.x);
+				strokeColor = "#997f39";
+				strokeWidth = 20;
 			}
 
 			lines.push(
 				canvas
 					.append("line")
-					.style("stroke", "white")
-					.style("stroke-width", 5)
+					.style("stroke", strokeColor)
+					.style("stroke-width", strokeWidth)
 					.attr("x1", p1.x)
 					.attr("y1", p1.y)
 					.attr("x2", p2.x)
