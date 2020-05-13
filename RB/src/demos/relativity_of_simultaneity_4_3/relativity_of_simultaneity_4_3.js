@@ -4,7 +4,7 @@ const X_MARGIN_PROPTN = 0.0;
 const Y_MARGIN_PROPTN = 0.2;
 
 const TRAIN_WIDTH_PROPTN = 0.75;
-const TRAIN_HEIGHT_PROPTN = 0.5;
+const TRAIN_HEIGHT_PROPTN = 0.6;
 
 const AX_MIN_X = 5;
 const AX_MIN_Y = 3;
@@ -56,27 +56,6 @@ function transAxisToCanvas({ x, y, dx, dy }) {
 		y: yCanvasCoords,
 		dx: dxCanvasCoords,
 		dy: dyCanvasCoords,
-	};
-}
-
-function transCanvasToAxis({ x, y, dx, dy }) {
-	const xFrac =
-		(x - CANVAS_WIDTH * X_MARGIN_PROPTN) / (CANVAS_WIDTH * (1 - 2 * X_MARGIN_PROPTN));
-
-	const yFrac =
-		(y - CANVAS_HEIGHT * Y_MARGIN_PROPTN) / (CANVAS_HEIGHT * (1 - 2 * Y_MARGIN_PROPTN));
-
-	const xAxisCoords = AX_MIN_X + xFrac * AX_WIDTH;
-	const yAxisCoords = AX_MIN_Y + yFrac * AX_HEIGHT;
-
-	const dxAxisCoords = (AX_WIDTH / CANVAS_WIDTH) * dx;
-	const dyAxisCoords = (AX_HEIGHT / CANVAS_HEIGHT) * dy;
-
-	return {
-		x: xAxisCoords,
-		y: yAxisCoords,
-		dx: dxAxisCoords,
-		dy: dyAxisCoords,
 	};
 }
 
