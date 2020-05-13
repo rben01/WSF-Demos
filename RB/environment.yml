@@ -12,5 +12,7 @@ dependencies:
   - plotly
   - dash
   - ffmpeg
+  - beautifulsoup4
+  - lxml
   - flake8
   - black
