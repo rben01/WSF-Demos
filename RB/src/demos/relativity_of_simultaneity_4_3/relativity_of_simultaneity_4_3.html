@@ -14,7 +14,7 @@
 	<body>
 		<svg id="canvas" style="margin: 0 auto; display: block;"></svg>
 
-		<script src="./relativity_of_simultaneity_4_3.js"></script>
+		<script type="text/javascript" src="./relativity_of_simultaneity_4_3.js"></script>
 
 		<div>
 			<button id="btn-run-animation" onclick="beginAnimation()">Begin animation</button>
@@ -30,7 +30,7 @@
 					id="input-train-speed"
 					name="input-train-speed"
 					min="0"
-					max=".999999"
+					max="1"
 					step=".005"
 					value=".1"
 					oninput="updateTrainSpeed(this.value)"
@@ -38,7 +38,7 @@
 			</label>
 		</div>
 
-		<script>
+		<script type="text/javascript">
 			updateTrainSpeed();
 		</script>
 	</body>
