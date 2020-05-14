@@ -216,7 +216,6 @@ function addTracks(canvas) {
 }
 
 const trackLines = addTracks(canvas);
-console.log(trackLines);
 
 const photons = addTrainAndLightSources(canvas);
 
@@ -236,9 +235,30 @@ function updateTrainSpeed(speed) {
 	}
 }
 
+const playbackInfo = {
+	animationIsPlaying: false,
+	animationStartDate: null,
+	animationTimer: null,
+	beginButton: document.getElementById("btn-run-animation"),
+	resetButton: document.getElementById("btn-reset-animation"),
+};
+
 // eslint-disable-next-line no-unused-vars
 function beginAnimation() {
-	document.getElementById("btn-run-animation").innerText = "Restart animation";
+	if (playbackInfo.animationIsPlaying) {
+		return;
+	}
+
+	playbackInfo.animationIsPlaying = true;
+	playbackInfo.animationStartDate = new Date();
+	playbackInfo.beginButton.disabled = true;
+	playbackInfo.resetButton.disabled = false;
+
+	playbackInfo.animationTimer = setTimeout(() => {
+		playbackInfo.animationIsPlaying = false;
+		playbackInfo.animationEndDate = new Date();
+	}, TOTAL_DURATION_MS);
+
 	const distanceTraveled = transAxisToCanvas({
 		dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
 	}).dx;
@@ -262,4 +282,32 @@ function beginAnimation() {
 		.duration(TOTAL_DURATION_MS)
 		.ease(d3.easeLinear)
 		.attr("cx", d => d.x1);
+}
+
+// eslint-disable-next-line no-unused-vars
+function stopAnimation() {
+	playbackInfo.animationIsPlaying = false;
+	clearTimeout(playbackInfo.animationTimer);
+
+	playbackInfo.beginButton.disabled = false;
+	playbackInfo.resetButton.disabled = true;
+
+	const elapsedTimeMS =
+		new Date().getTime() - playbackInfo.animationStartDate.getTime();
+
+	const easing = d3.easePoly.exponent(2);
+	const durationMS = 300 * Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
+
+	trackLines.ties
+		.transition()
+		.duration(durationMS)
+		.ease(easing)
+		.attr("x1", d => d.baseX)
+		.attr("x2", d => d.baseX);
+
+	photons
+		.transition()
+		.duration(durationMS)
+		.ease(easing)
+		.attr("cx", d => d.x0);
 }

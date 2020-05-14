@@ -29,6 +29,14 @@ const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 550;
 
+const OBJ_CLASSES = {
+	trainCar: "train-car",
+	trainLightSource: "train-light-source",
+	trainPhoton: "train-photon",
+	railroadTie: "railroad-tie",
+	railroadRail: "railroad-rail",
+};
+
 const canvas = d3
 	.select("#canvas")
 	.attr("width", CANVAS_WIDTH)
@@ -56,6 +64,15 @@ const subcanvases = canvas
 	.enter()
 	.append("g")
 	.attr("transform", d => `translate(0, ${d.originY})`)
+	.each(function (d) {
+		d3.select(this)
+			.append("text")
+			.text(`Observer standing on ${d.observerIsStandingOn}`)
+			.attr("fill", "white")
+			.attr("y", d.height / 10)
+			.attr("font-size", "2em")
+			.attr("font-family", "sans-serif");
+	})
 	.classed("subcanvas", true);
 
 // Photon goes from center of train to end of train over the course of the animation
@@ -128,6 +145,7 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 	const circleTopLevelAttrs = {
 		shape: "circle",
 		x0: lsCanvasCenterX,
+		originXAttr: "cx",
 	};
 
 	const _circleAttrAttrs = {
@@ -151,11 +169,11 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 
 	return [
 		{
-			type: "train",
-			class: "train-car",
+			class: OBJ_CLASSES.trainCar,
 			canvas: canvasInfo,
 			shape: "rect",
 			x0: trainMinCanvasCoords.x,
+			originXAttr: "x",
 			attrs: {
 				x: trainMinCanvasCoords.x,
 				y: trainMinCanvasCoords.y,
@@ -165,23 +183,20 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 			},
 		},
 		{
-			type: "lightSource",
-			class: "train-light-source",
+			class: OBJ_CLASSES.trainLightSource,
 			canvas: canvasInfo,
 			...circleTopLevelAttrs,
 			attrs: lightSourceAttrs,
 		},
 		{
-			type: "photon",
-			class: "train-photon",
+			class: OBJ_CLASSES.trainPhoton,
 			canvas: canvasInfo,
 			...circleTopLevelAttrs,
 			attrs: photonAttrAttrs,
 			direction: "left",
 		},
 		{
-			type: "photon",
-			class: "train-photon",
+			class: OBJ_CLASSES.trainPhoton,
 			canvas: canvasInfo,
 			...circleTopLevelAttrs,
 			attrs: photonAttrAttrs,
@@ -218,8 +233,7 @@ function _getTracksData(canvasInfo) {
 		].map(p => transAxisToCanvas(canvasInfo, p));
 
 		data.push({
-			type: "railroadTie",
-			class: "railroad-tie",
+			class: OBJ_CLASSES.railroadTie,
 			canvas: canvasInfo,
 			x0: p1.x,
 			shape: "line",
@@ -242,8 +256,7 @@ function _getTracksData(canvasInfo) {
 		].map(p => transAxisToCanvas(canvasInfo, p));
 
 		data.push({
-			type: "railroadRail",
-			class: "railroad-rail",
+			class: OBJ_CLASSES.railroadRail,
 			canvas: canvasInfo,
 			shape: "line",
 			attrs: {
@@ -288,8 +301,7 @@ function addTrainAndLightSources(subcanvases) {
 }
 
 const tracks = addTracks(subcanvases);
-console.log(tracks);
-const trainObjs = addTrainAndLightSources(subcanvases);
+const trainAndLightSources = addTrainAndLightSources(subcanvases);
 
 // eslint-disable-next-line no-unused-vars
 function updateTrainSpeed(speed) {
@@ -307,10 +319,31 @@ function updateTrainSpeed(speed) {
 	}
 }
 
+const playbackInfo = {
+	animationIsPlaying: false,
+	animationStartDate: null,
+	animationTimer: null,
+	beginButton: document.getElementById("btn-run-animation"),
+	resetButton: document.getElementById("btn-reset-animation"),
+};
+
 // eslint-disable-next-line no-unused-vars
 function beginAnimation() {
-	document.getElementById("btn-run-animation").innerText = "Restart animation";
-	subcanvases.each(canvasInfo => {
+	if (playbackInfo.animationIsPlaying) {
+		return;
+	}
+
+	playbackInfo.animationIsPlaying = true;
+	playbackInfo.animationStartDate = new Date();
+	playbackInfo.beginButton.disabled = true;
+	playbackInfo.resetButton.disabled = false;
+
+	playbackInfo.animationTimer = setTimeout(() => {
+		playbackInfo.animationIsPlaying = false;
+		playbackInfo.animationEndDate = new Date();
+	}, TOTAL_DURATION_MS);
+
+	subcanvases.each(function (canvasInfo) {
 		const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
 			dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
 		}).dx;
@@ -319,29 +352,40 @@ function beginAnimation() {
 			dx: axDistTraveled({ fracOfC: 1 }),
 		}).dx;
 
-		tracks
-			.filter(d => d.type == "railroadTie" && d.canvas.observerIsStandingOn == "train")
-			.each(function (d) {
-				d3.select(this)
-					.transition()
-					.duration(0)
-					.attr("x1", d => d.x0)
-					.attr("x2", d => d.x0)
-					.transition()
-					.duration(TOTAL_DURATION_MS)
-					.ease(d3.easeLinear)
-					.attr("x1", d.x0 - distanceTrainTravels)
-					.attr("x2", d.x0 - distanceTrainTravels);
-			});
+		if (canvasInfo.observerIsStandingOn === "train") {
+			d3.select(this)
+				.selectAll(`.${OBJ_CLASSES.railroadTie}`)
+				.transition()
+				.duration(0)
+				.attr("x1", d => d.x0)
+				.attr("x2", d => d.x0)
+				.transition()
+				.duration(TOTAL_DURATION_MS)
+				.ease(d3.easeLinear)
+				.attr("x1", d => d.x0 - distanceTrainTravels)
+				.attr("x2", d => d.x0 - distanceTrainTravels);
+		} else if (canvasInfo.observerIsStandingOn === "ground") {
+			d3.select(this)
+				.selectAll(`.${OBJ_CLASSES.trainCar}, .${OBJ_CLASSES.trainLightSource}`)
+				.each(function (d) {
+					d3.select(this)
+						.transition()
+						.duration(0)
+						.attr(d.originXAttr, d.x0)
+						.transition()
+						.duration(TOTAL_DURATION_MS)
+						.ease(d3.easeLinear)
+						.attr(d.originXAttr, d.x0 + distanceTrainTravels);
+				});
+		}
 
-		trainObjs.each(function (d) {
-			if (d.type == "photon") {
-				let xf;
-				if (d.direction == "left") {
-					xf = d.x0 - distanceLightTravels;
-				} else {
-					xf = d.x0 + distanceLightTravels;
-				}
+		d3.select(this)
+			.selectAll(`.${OBJ_CLASSES.trainPhoton}`)
+			.each(function (d) {
+				const xf =
+					d.direction === "left"
+						? d.x0 - distanceLightTravels
+						: d.x0 + distanceLightTravels;
 				d3.select(this)
 					.transition()
 					.duration(0)
@@ -350,26 +394,41 @@ function beginAnimation() {
 					.duration(TOTAL_DURATION_MS)
 					.ease(d3.easeLinear)
 					.attr("cx", xf);
-			} else if (
-				d.canvas.observerIsStandingOn == "ground" &&
-				(d.type == "train" || d.type == "lightSource")
-			) {
-				let xAttr;
-				if (d.type == "train") {
-					xAttr = "x";
-				} else if (d.type == "lightSource") {
-					xAttr = "cx";
-				}
+			});
+	});
+}
 
-				d3.select(this)
-					.transition()
-					.duration(0)
-					.attr(xAttr, d.x0)
-					.transition()
-					.duration(TOTAL_DURATION_MS)
-					.ease(d3.easeLinear)
-					.attr(xAttr, d.x0 + distanceTrainTravels);
-			}
-		});
+// eslint-disable-next-line no-unused-vars
+function stopAnimation() {
+	playbackInfo.animationIsPlaying = false;
+	clearTimeout(playbackInfo.animationTimer);
+
+	playbackInfo.beginButton.disabled = false;
+	playbackInfo.resetButton.disabled = true;
+
+	const elapsedTimeMS =
+		new Date().getTime() - playbackInfo.animationStartDate.getTime();
+
+	const easing = d3.easePoly.exponent(2);
+	const durationMS = 300 * Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
+
+	tracks
+		.filter(
+			d =>
+				d.class === OBJ_CLASSES.railroadTie &&
+				d.canvas.observerIsStandingOn === "train",
+		)
+		.transition()
+		.duration(durationMS)
+		.ease(easing)
+		.attr("x1", d => d.x0)
+		.attr("x2", d => d.x0);
+
+	trainAndLightSources.each(function (d) {
+		d3.select(this)
+			.transition()
+			.duration(durationMS)
+			.ease(easing)
+			.attr(d.originXAttr, d.x0);
 	});
 }
