@@ -3,6 +3,7 @@ import re
 import sys
 from pathlib import Path
 
+import requests
 from bs4 import BeautifulSoup, Tag
 
 
@@ -15,34 +16,55 @@ def inline(
     with infile.open() as f:
         soup = BeautifulSoup(f.read(), "lxml")
 
-    tag_names_and_link_attrs = [("script", "src"), ("link", "href")]
+    js_source_strs = []
+    css_source_strs = []
 
-    for tag_name, link_attr in tag_names_and_link_attrs:
+    tag_names_and_link_attrs = [
+        ("script", "src", js_source_strs),
+        ("link", "href", css_source_strs),
+    ]
+
+    for tag_name, link_attr, source_strs in tag_names_and_link_attrs:
         tags = soup.find_all(tag_name)
         for tag in tags:
             tag: Tag
             link_dest = tag.attrs.get(link_attr)
-            if (
-                link_dest is None
-                or link_dest in ignored_link_dests
+
+            if link_dest is not None and (
+                link_dest in ignored_link_dests
                 or any(regex.search(link_dest) for regex in ignored_link_dest_regexes)
             ):
                 continue
 
-            tag.attrs.pop(link_attr)
-            absolute_src: Path = infile.parent / link_dest
+            if link_dest is None:
+                contents = tag.string
+            else:
+                absolute_src: Path = infile.parent / link_dest
 
-            with absolute_src.open() as f:
-                contents = f.read()
+                with absolute_src.open() as f:
+                    contents = f.read()
 
-            if tag_name == "script":
-                tag.string = contents
-            elif tag_name == "link":
-                tag.decompose()
-                style_tag: Tag = soup.new_tag("style")
-                style_tag.attrs["type"] = "text/css"
-                style_tag.string = contents
-                soup.find("body").insert(0, style_tag)
+            source_strs.append(contents)
+            tag.decompose()
+
+    if js_source_strs:
+        js_source_str = "\n".join(js_source_strs)
+        response = requests.post(
+            "https://javascript-minifier.com/raw", data={"input": js_source_str},
+        )
+        script_tag = soup.new_tag("script")
+        script_tag["type"] = "text/javascript"
+        script_tag.string = response.text
+        soup.find("body").append(script_tag)
+
+    if css_source_strs:
+        css_source_str = "\n".join(css_source_strs)
+        response = requests.post(
+            "https://cssminifier.com/raw", data={"input": css_source_str}
+        )
+        style_tag = soup.new_tag("style")
+        style_tag.string = response.text
+        soup.find("body").insert(0, style_tag)
 
     with outfile.open("w") as f:
         f.write("\n".join(line.strip() for line in soup.prettify().splitlines()))
@@ -50,7 +72,7 @@ def inline(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("infile", nargs="?", help="The HTML file to inline")
+    parser.add_argument("infiles", nargs="*", help="The HTML file to inline")
     parser.add_argument("-o", required=False, dest="outfile", help="Output filename")
     parser.add_argument(
         "--exclude-html-regex",
@@ -72,9 +94,8 @@ def main():
 
     args = parser.parse_args()
 
-    infile_was_specified = args.infile is not None
-    if infile_was_specified:
-        infiles = [Path(args.infile)]
+    if len(args.infiles) > 0:
+        infiles = [Path(p) for p in args.infiles]
     else:
         if args.outfile is not None:
             sys.exit("Cannot specify outfile without specifying an infile")

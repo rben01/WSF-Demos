@@ -21,8 +21,6 @@ const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
 const AX_TRAIN_WIDTH = AX_WIDTH * TRAIN_WIDTH_PROPTN;
 const AX_TRAIN_HEIGHT = AX_HEIGHT * TRAIN_HEIGHT_PROPTN;
 
-const USER_INFO = { trainSpeed: 0.1 };
-
 const TOTAL_DURATION_SEC = 3;
 const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
 
@@ -137,9 +135,12 @@ function addTrainAndLightSources(canvas) {
 
 	const photonRadius = lsRadius / 2;
 
+	const axDistLightTravels = transAxisToCanvas({
+		dx: axDistTraveled({ fracOfC: 1 }),
+	}).dx;
 	const photonData = [
-		{ x0: lsCanvasCenterX, x1: trainMinCanvasCoords.x },
-		{ x0: lsCanvasCenterX, x1: trainMaxCanvasCoords.x },
+		{ x0: lsCanvasCenterX, x1: lsCanvasCenterX - axDistLightTravels },
+		{ x0: lsCanvasCenterX, x1: lsCanvasCenterX + axDistLightTravels },
 	];
 	const photons = CONFIG.configure(
 		canvas
@@ -237,22 +238,6 @@ const trackLines = addTracks(canvas);
 
 const photons = addTrainAndLightSources(canvas);
 
-// eslint-disable-next-line no-unused-vars
-function updateTrainSpeed(speed) {
-	const trainSpeedInputValue =
-		typeof speed !== "undefined"
-			? speed
-			: document.getElementById("input-train-speed").value;
-
-	try {
-		const floatStr = Math.max(0, Math.min(parseFloat(trainSpeedInputValue), 1));
-		USER_INFO.trainSpeed = floatStr;
-		document.getElementById("train-speed-text").textContent = trainSpeedInputValue;
-	} catch (e) {
-		console.log(trainSpeedInputValue);
-	}
-}
-
 const playbackInfo = {
 	animationIsPlaying: false,
 	animationStartDate: null,
@@ -279,7 +264,7 @@ function beginAnimation() {
 
 	const distanceTraveled = transAxisToCanvas({
 		dx: axDistTraveled({
-			fracOfC: USER_INFO.trainSpeed,
+			fracOfC: CONFIG.trainSpeed,
 		}),
 	}).dx;
 

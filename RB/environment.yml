@@ -13,6 +13,7 @@ dependencies:
   - dash
   - ffmpeg
   - beautifulsoup4
+  - requests
   - lxml
   - flake8
   - black

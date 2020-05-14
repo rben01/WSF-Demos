@@ -2,10 +2,12 @@
 const CONFIG = {
 	durationMSOfAnimationReset: 300,
 	easingForAnimationReset: d3.easePoly.exponent(2.5),
+
 	xMarginProptn: 0,
 	yMarginProptn: 0.15,
 	trainWidthProptn: 0.4,
 	trainHeightProptn: 0.6,
+	trainSpeed: 0.1,
 
 	trainCar: {
 		class: "train-car",
@@ -75,4 +77,20 @@ function toTitleCase(str) {
 	return str.replace(/\b\w+/g, function (txt) {
 		return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
 	});
+}
+
+// eslint-disable-next-line no-unused-vars
+function updateTrainSpeed(speed) {
+	const trainSpeedInputValue =
+		typeof speed !== "undefined"
+			? speed
+			: document.getElementById("input-train-speed").value;
+
+	try {
+		const floatStr = Math.max(0, Math.min(parseFloat(trainSpeedInputValue), 1));
+		CONFIG.trainSpeed = floatStr;
+		document.getElementById("train-speed-text").textContent = trainSpeedInputValue;
+	} catch (e) {
+		console.log(trainSpeedInputValue);
+	}
 }
