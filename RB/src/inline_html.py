@@ -8,17 +8,19 @@ from bs4 import BeautifulSoup, Tag
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument(
-        "-i", required=True, dest="infile", help="The HTML file to inline"
-    )
-    parser.add_argument("-o", required=True, dest="outfile", help="Output filename")
+    parser.add_argument("infile", help="The HTML file to inline")
+    parser.add_argument("-o", required=False, dest="outfile", help="Output filename")
     parser.add_argument("--ignore", action="append", default=[])
     parser.add_argument("--ignore-regex", action="append", default=[])
 
     args = parser.parse_args()
 
     infile = Path(args.infile)
-    outfile = Path(args.outfile)
+
+    if args.outfile is None:
+        outfile = infile.with_name(infile.stem + "_inlined").with_suffix(infile.suffix)
+    else:
+        outfile = Path(args.outfile)
 
     if infile.resolve() == outfile.resolve():
         sys.exit("infile and outfile are the same; they must be different")

@@ -13,5 +13,12 @@
         "ecmaVersion": 11,
         "sourceType": "module"
     },
-    "rules": { "eqeqeq": "error", "curly": "error", "no-multi-spaces": "error" }
+    "rules": {
+        "eqeqeq": "error",
+        "curly": ["error", "all"],
+        "no-multi-spaces": "error",
+        "no-unused-expressions": "error",
+        "no-var": "error",
+        "prefer-const": "error"
+    }
 }
