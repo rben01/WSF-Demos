@@ -19,7 +19,12 @@
 		"curly": ["error", "all"],
 		"no-multi-spaces": "error",
 		"no-unused-expressions": "error",
+		"no-use-before-define": "error",
 		"no-var": "error",
-		"prefer-const": "error"
+		"prefer-const": "error",
+		"prefer-rest-params": "error",
+		"prefer-spread": "error",
+		"prefer-template": "error",
+		"semi": "error"
 	}
 }
