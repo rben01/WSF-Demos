@@ -1,61 +1,67 @@
 body {
-	max-width: 800px;
-	margin: 50px auto;
-	padding: 0;
-	background-color: black;
-	color: white;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 0;
+    background-color: black;
+    color: white;
+}
+
+.play-button {
+    margin-top: 1.5em;
+    margin-bottom: 2em;
+    width: 5em;
 }
 
 input[type="range"] {
-	-webkit-appearance: none;
-	-moz-apperance: none;
-	width: 40%;
-	height: 8px;
-	padding: 0 0px;
-	background: #8b8f92;
-	border-radius: 2px;
-	margin-top: 25px;
+    -webkit-appearance: none;
+    -moz-apperance: none;
+    width: 40%;
+    height: 8px;
+    padding: 0 0px;
+    background: #8b8f92;
+    border-radius: 2px;
+    margin-top: 25px;
 }
 
 input[type="range"]::-webkit-slider-thumb {
-	-webkit-appearance: none;
-	-moz-apperance: none;
-	width: 25px;
-	height: 25px;
-	-webkit-border-radius: 20px;
-	-moz-border-radius: 20px;
-	-ms-border-radius: 20px;
-	-o-border-radius: 20px;
-	border-radius: 20px;
-	background-image: -webkit-gradient(
-		linear,
-		left top,
-		left bottom,
-		color-stop(0, #fefefe),
-		color-stop(0.49, #d7d7d7),
-		color-stop(0.51, #d1d1d1),
-		color-stop(1, #c8c8c8)
-	);
-	border: 1px solid #787878;
+    -webkit-appearance: none;
+    -moz-apperance: none;
+    width: 25px;
+    height: 25px;
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+    -ms-border-radius: 20px;
+    -o-border-radius: 20px;
+    border-radius: 20px;
+    background-image: -webkit-gradient(
+        linear,
+        left top,
+        left bottom,
+        color-stop(0, #fefefe),
+        color-stop(0.49, #d7d7d7),
+        color-stop(0.51, #d1d1d1),
+        color-stop(1, #c8c8c8)
+    );
+    border: 1px solid #787878;
 }
 
 input[type="range"]::-moz-range-thumb {
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	border: 1px solid #000000;
-	height: 20px;
-	width: 20px;
-	border-radius: 20px;
-	background: #ffffff;
-	cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    cursor: pointer;
 }
 
 /* All the same stuff for IE */
 input[type="range"]::-ms-thumb {
-	box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-	border: 1px solid #000000;
-	height: 20px;
-	width: 20px;
-	border-radius: 20px;
-	background: #ffffff;
-	cursor: pointer;
+    box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+    border: 1px solid #000000;
+    height: 20px;
+    width: 20px;
+    border-radius: 20px;
+    background: #ffffff;
+    cursor: pointer;
 }

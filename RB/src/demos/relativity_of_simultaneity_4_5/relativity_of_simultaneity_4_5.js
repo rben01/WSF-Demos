@@ -352,6 +352,23 @@ function beginAnimation() {
                 .ease(d3.easeLinear)
                 .attr("x1", d => d.x0 - distanceTrainTravels)
                 .attr("x2", d => d.x0 - distanceTrainTravels);
+
+            d3.select(this)
+                .selectAll(`.${CONFIG.trainPhoton.class}`)
+                .each(function (d) {
+                    const xf =
+                        d.direction === "left"
+                            ? d.x0 - distanceLightTravels
+                            : d.x0 + distanceLightTravels;
+                    d3.select(this)
+                        .transition()
+                        .duration(0)
+                        .attr("cx", d.x0)
+                        .transition()
+                        .duration(TOTAL_DURATION_MS)
+                        .ease(d3.easeLinear)
+                        .attr("cx", xf);
+                });
         } else if (canvasInfo.observerIsStandingOn === "ground") {
             d3.select(this)
                 .selectAll(
@@ -367,24 +384,24 @@ function beginAnimation() {
                         .ease(d3.easeLinear)
                         .attr(d.originXAttr, d.x0 + distanceTrainTravels);
                 });
-        }
 
-        d3.select(this)
-            .selectAll(`.${CONFIG.trainPhoton.class}`)
-            .each(function (d) {
-                const xf =
-                    d.direction === "left"
-                        ? d.x0 - distanceLightTravels
-                        : d.x0 + distanceLightTravels;
-                d3.select(this)
-                    .transition()
-                    .duration(0)
-                    .attr("cx", d.x0)
-                    .transition()
-                    .duration(TOTAL_DURATION_MS)
-                    .ease(d3.easeLinear)
-                    .attr("cx", xf);
-            });
+            d3.select(this)
+                .selectAll(`.${CONFIG.trainPhoton.class}`)
+                .each(function (d) {
+                    const xf =
+                        d.direction === "left"
+                            ? d.x0 - distanceLightTravels + distanceTrainTravels
+                            : d.x0 + distanceLightTravels + distanceTrainTravels;
+                    d3.select(this)
+                        .transition()
+                        .duration(0)
+                        .attr("cx", d.x0)
+                        .transition()
+                        .duration(TOTAL_DURATION_MS)
+                        .ease(d3.easeLinear)
+                        .attr("cx", xf);
+                });
+        }
     });
 }
 

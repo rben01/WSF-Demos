@@ -1,3 +1,7 @@
+/* global CONFIG */
+
+"use-strict";
+
 const X_MARGIN_PROPTN = 0.0;
 const Y_MARGIN_PROPTN = 0.15;
 
@@ -93,14 +97,15 @@ function addTrainAndLightSources(canvas) {
     const trainCanvasWidth = trainMaxCanvasCoords.x - trainMinCanvasCoords.x;
     const trainCanvasHeight = trainMaxCanvasCoords.y - trainMinCanvasCoords.y;
 
-    canvas
-        .append("rect")
-        .attr("x", trainMinCanvasCoords.x)
-        .attr("y", trainMinCanvasCoords.y)
-        .attr("width", trainCanvasWidth)
-        .attr("height", trainCanvasHeight)
-        .attr("fill", "#4ff8")
-        .classed("train-train-car", true);
+    CONFIG.configure(
+        canvas
+            .append("rect")
+            .attr("x", trainMinCanvasCoords.x)
+            .attr("y", trainMinCanvasCoords.y)
+            .attr("width", trainCanvasWidth)
+            .attr("height", trainCanvasHeight),
+        CONFIG.trainCar,
+    );
 
     const lsCenterX = AX_MID_X;
     const lsCenterY = AX_MID_Y;
@@ -121,39 +126,32 @@ function addTrainAndLightSources(canvas) {
 
     const lsRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
 
-    canvas
-        .append("circle")
-        .attr("cx", lsCanvasCenterX)
-        .attr("cy", lsCanvasCenterY)
-        .attr("r", lsRadius)
-        .attr("fill", "#fb3f")
-        .attr("stroke", "#ffff")
-        .classed("train-light-source", true);
+    CONFIG.configure(
+        canvas
+            .append("circle")
+            .attr("cx", lsCanvasCenterX)
+            .attr("cy", lsCanvasCenterY)
+            .attr("r", lsRadius),
+        CONFIG.trainLightSource,
+    );
 
     const photonRadius = lsRadius / 2;
 
     const photonData = [
-        {
-            x0: lsCanvasCenterX,
-            x1: trainMinCanvasCoords.x,
-        },
-        {
-            x0: lsCanvasCenterX,
-            x1: trainMaxCanvasCoords.x,
-        },
+        { x0: lsCanvasCenterX, x1: trainMinCanvasCoords.x },
+        { x0: lsCanvasCenterX, x1: trainMaxCanvasCoords.x },
     ];
-
-    const photons = canvas
-        .selectAll()
-        .data(photonData)
-        .enter()
-        .append("circle")
-        .attr("cx", d => d.x0)
-        .attr("cy", lsCanvasCenterY)
-        .attr("r", photonRadius)
-        .attr("fill", "#fd0f")
-        .attr("stroke", "#ffff")
-        .classed("train-photon", true);
+    const photons = CONFIG.configure(
+        canvas
+            .selectAll()
+            .data(photonData)
+            .enter()
+            .append("circle")
+            .attr("cx", d => d.x0)
+            .attr("cy", lsCanvasCenterY)
+            .attr("r", photonRadius),
+        CONFIG.trainPhoton,
+    );
 
     return photons;
 }
@@ -176,18 +174,12 @@ function addTracks(canvas) {
 
     // make ties
     const tiesCanvasCoords = [];
-    for (var i = 0; i < nTiesTotal; i++) {
+    for (let i = 0; i < nTiesTotal; i++) {
         const tieAxX = trackInteriorAxMinX + i * axDistBtwnTies;
 
         const [p1, p2] = [
-            {
-                x: tieAxX,
-                y: AX_MIN_Y,
-            },
-            {
-                x: tieAxX,
-                y: AX_MAX_Y,
-            },
+            { x: tieAxX, y: AX_MIN_Y },
+            { x: tieAxX, y: AX_MAX_Y },
         ].map(transAxisToCanvas);
         tiesCanvasCoords.push({
             p1,
@@ -196,31 +188,25 @@ function addTracks(canvas) {
         });
     }
 
-    const ties = canvas
-        .selectAll()
-        .data(tiesCanvasCoords)
-        .enter()
-        .append("line")
-        .attr("x1", x1)
-        .attr("y1", y1)
-        .attr("x2", x2)
-        .attr("y2", y2)
-        .style("stroke", "#997f39")
-        .style("stroke-width", 20)
-        .classed("railroad-tie", true);
+    const ties = CONFIG.configure(
+        canvas
+            .selectAll()
+            .data(tiesCanvasCoords)
+            .enter()
+            .append("line")
+            .attr("x1", x1)
+            .attr("y1", y1)
+            .attr("x2", x2)
+            .attr("y2", y2),
+        CONFIG.railroadTie,
+    );
 
     // make rails
     const railsCanvasCoords = [];
     [trackInteriorAxMinY, trackInteriorAxMaxY].forEach(railY => {
         const [p1, p2] = [
-            {
-                x: AX_MIN_X,
-                y: railY,
-            },
-            {
-                x: AX_MAX_X,
-                y: railY,
-            },
+            { x: AX_MIN_X, y: railY },
+            { x: AX_MAX_X, y: railY },
         ].map(transAxisToCanvas);
         railsCanvasCoords.push({
             p1,
@@ -228,18 +214,19 @@ function addTracks(canvas) {
         });
     });
 
-    const rails = canvas
-        .selectAll()
-        .data(railsCanvasCoords)
-        .enter()
-        .append("line")
-        .attr("x1", x1)
-        .attr("y1", y1)
-        .attr("x2", x2)
-        .attr("y2", y2)
-        .attr("stroke", "white")
-        .attr("stroke-width", 5)
-        .classed("railroad-rail", true);
+    const rails = CONFIG.configure(
+        canvas
+            .selectAll()
+            .data(railsCanvasCoords)
+            .enter()
+            .append("line")
+            .attr("x1", x1)
+            .attr("y1", y1)
+            .attr("x2", x2)
+            .attr("y2", y2),
+        CONFIG.railroadRail,
+    );
+
     return {
         ties,
         rails,
@@ -328,8 +315,10 @@ function stopAnimation() {
     const elapsedTimeMS =
         new Date().getTime() - playbackInfo.animationStartDate.getTime();
 
-    const easing = d3.easePoly.exponent(2);
-    const durationMS = 300 * Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
+    const easing = CONFIG.easingForAnimationReset;
+    const durationMS =
+        CONFIG.durationMSOfAnimationReset *
+        Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
 
     trackLines.ties
         .transition()

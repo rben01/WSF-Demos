@@ -1,54 +1,60 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="UTF-8" />
-		<script src="https://d3js.org/d3.v5.min.js"></script>
-		<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
-	</head>
+    <head>
+        <meta charset="UTF-8" />
+        <script src="https://d3js.org/d3.v5.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+    </head>
 
-	<body style="max-width: 800px; margin: 50px auto; padding: 0;">
-		<div>
-			<span>
-				<label>
-					Train speed (as fraction of 𝑐):
-					<span id="train-speed-text" style="min-width: 3em; display: inline-block;"
-						>0.1</span
-					>
-					<input
-						type="range"
-						id="input-train-speed"
-						name="input-train-speed"
-						min="0"
-						max="0.5"
-						step=".005"
-						value=".1"
-						oninput="updateTrainSpeed(this.value)"
-					/>
-				</label>
-			</span>
-		</div>
-		<div>
-			<button
-				id="btn-run-animation"
-				onclick="beginAnimation()"
-				style="margin-top: 1.5em; margin-bottom: 3em;"
-			>
-				Begin animation
-			</button>
-			<button
-				id="btn-reset-animation"
-				onclick="stopAnimation()"
-				style="margin-top: 1.5em; margin-bottom: 3em;"
-				disabled
-			>
-				Reset animation
-			</button>
-		</div>
-		<svg id="canvas" style="margin: 0 auto; display: block;"></svg>
+    <body>
+        <div>
+            <span>
+                <label>
+                    Train speed (as fraction of 𝑐):
+                    <span
+                        id="train-speed-text"
+                        style="min-width: 3em; display: inline-block;"
+                        >0.1</span
+                    >
+                    <input
+                        type="range"
+                        id="input-train-speed"
+                        name="input-train-speed"
+                        min="0"
+                        max="0.5"
+                        step=".005"
+                        value=".1"
+                        oninput="updateTrainSpeed(this.value)"
+                    />
+                </label>
+            </span>
+        </div>
+        <div>
+            <button
+                id="btn-run-animation"
+                onclick="beginAnimation()"
+                class="play-button"
+            >
+                Begin
+            </button>
+            <button
+                id="btn-reset-animation"
+                onclick="stopAnimation()"
+                class="play-button"
+                disabled
+            >
+                Reset
+            </button>
+        </div>
+        <svg id="canvas" style="margin: 0 auto; display: block;"></svg>
 
-		<script type="text/javascript" src="./relativity_of_simultaneity_4_4.js"></script>
-		<script type="text/javascript">
-			updateTrainSpeed();
-		</script>
-	</body>
+        <script type="text/javascript" src="../aesthetic.js"></script>
+        <script
+            type="text/javascript"
+            src="./relativity_of_simultaneity_4_4.js"
+        ></script>
+        <script type="text/javascript">
+            updateTrainSpeed();
+        </script>
+    </body>
 </html>
