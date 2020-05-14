@@ -57,13 +57,14 @@ const subcanvases = canvas
 	.append("g")
 	.attr("transform", d => `translate(0, ${d.originY})`)
 	.each(function (d) {
-		d3.select(this)
-			.append("text")
-			.text(toTitleCase(`Events as seen from ${d.observerIsStandingOn}`))
-			.attr("fill", "white")
-			.attr("y", d.height / 10)
-			.attr("font-size", "2em")
-			.attr("font-family", "sans-serif");
+		CONFIG.configure(
+			d3
+				.select(this)
+				.append("text")
+				.text(toTitleCase(`Events as seen from ${d.observerIsStandingOn}`))
+				.attr("y", d.height / 10),
+			CONFIG.canvasText,
+		);
 	})
 	.classed("subcanvas", true);
 

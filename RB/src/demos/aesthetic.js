@@ -37,6 +37,13 @@ const CONFIG = {
 			"stroke-width": 5,
 		},
 	},
+	canvasText: {
+		attrs: {
+			fill: "white",
+			"font-size": "30px",
+			"font-family": "sans-serif",
+		},
+	},
 	configure: function (d3Obj, config) {
 		Object.keys(config).forEach(key => {
 			const value = config[key];
