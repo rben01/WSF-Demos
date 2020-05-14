@@ -2,12 +2,6 @@
 
 "use strict";
 
-const X_MARGIN_PROPTN = 0.0;
-const Y_MARGIN_PROPTN = 0.15;
-
-const TRAIN_WIDTH_PROPTN = 0.5;
-const TRAIN_HEIGHT_PROPTN = 0.6;
-
 // If the program is bug-free, any reasonably scaled values of the axis bounds will work
 const AX_MIN_X = 5;
 const AX_MIN_Y = 3;
@@ -18,8 +12,8 @@ const AX_HEIGHT = AX_MAX_Y - AX_MIN_Y;
 const AX_MID_X = AX_MIN_X + (AX_MAX_X - AX_MIN_X) / 2;
 const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
 
-const AX_TRAIN_WIDTH = AX_WIDTH * TRAIN_WIDTH_PROPTN;
-const AX_TRAIN_HEIGHT = AX_HEIGHT * TRAIN_HEIGHT_PROPTN;
+const AX_TRAIN_WIDTH = AX_WIDTH * CONFIG.trainWidthProptn;
+const AX_TRAIN_HEIGHT = AX_HEIGHT * CONFIG.trainHeightProptn;
 
 const USER_INFO = { trainSpeed: 0.1 };
 
@@ -68,9 +62,8 @@ const subcanvases = canvas
 	})
 	.classed("subcanvas", true);
 
-// Photon goes from center of train to end of train over the course of the animation
 function axDistTraveled({ fracOfC }) {
-	return (fracOfC * AX_TRAIN_WIDTH) / 2;
+	return fracOfC * AX_TRAIN_WIDTH * CONFIG.axDistTraveledAsFracOfTrainWidth;
 }
 
 function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
@@ -78,11 +71,11 @@ function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
 	const yFrac = (y - AX_MIN_Y) / AX_HEIGHT;
 
 	const xCanvasCoords =
-		canvasInfo.width * X_MARGIN_PROPTN +
-		xFrac * canvasInfo.width * (1 - 2 * X_MARGIN_PROPTN);
+		canvasInfo.width * CONFIG.xMarginProptn +
+		xFrac * canvasInfo.width * (1 - 2 * CONFIG.xMarginProptn);
 	const yCanvasCoords =
-		canvasInfo.height * Y_MARGIN_PROPTN +
-		yFrac * canvasInfo.height * (1 - 2 * Y_MARGIN_PROPTN);
+		canvasInfo.height * CONFIG.yMarginProptn +
+		yFrac * canvasInfo.height * (1 - 2 * CONFIG.yMarginProptn);
 
 	const dxCanvasCoords = (canvasInfo.width / AX_WIDTH) * dx;
 	const dyCanvasCoords = (canvasInfo.height / AX_HEIGHT) * dy;

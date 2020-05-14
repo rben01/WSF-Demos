@@ -2,6 +2,11 @@
 const CONFIG = {
 	durationMSOfAnimationReset: 300,
 	easingForAnimationReset: d3.easePoly.exponent(2.5),
+	xMarginProptn: 0,
+	yMarginProptn: 0.15,
+	trainWidthProptn: 0.4,
+	trainHeightProptn: 0.6,
+
 	trainCar: {
 		class: "train-car",
 		attrs: {
@@ -44,6 +49,7 @@ const CONFIG = {
 			"font-family": "sans-serif",
 		},
 	},
+	axDistTraveledAsFracOfTrainWidth: 1.2,
 	configure: function (d3Obj, config) {
 		Object.keys(config).forEach(key => {
 			const value = config[key];
