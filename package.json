@@ -1,19 +1,22 @@
 {
-  "name": "wsf-demos",
-  "version": "1.0.0",
-  "description": "WSF Demos",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dts333/WSF-Demos.git"
-  },
-  "author": "Robert Bennett, Danny Swift",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dts333/WSF-Demos/issues"
-  },
-  "homepage": "https://github.com/dts333/WSF-Demos#readme"
+	"name": "wsf-demos",
+	"version": "1.0.0",
+	"description": "WSF Demos",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dts333/WSF-Demos.git"
+	},
+	"author": "Robert Bennett, Danny Swift",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/dts333/WSF-Demos/issues"
+	},
+	"homepage": "https://github.com/dts333/WSF-Demos#readme",
+	"devDependencies": {
+		"eslint": "^7.0.0"
+	}
 }
