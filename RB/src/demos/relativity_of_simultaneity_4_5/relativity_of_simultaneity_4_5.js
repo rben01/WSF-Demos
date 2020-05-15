@@ -260,14 +260,12 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 		.selectAll()
 		.data(dataFunc)
 		.enter()
-		.append(function (d) {
-			return d3.create(`svg:${d.shape}`).node();
-		})
+		.append(d => d3.create(`svg:${d.shape}`).node())
 		.each(function (d) {
-			let d3Obj = d3.select(this).classed(d.class, true);
+			const d3Obj = d3.select(this).classed(d.class, true);
 
 			Object.keys(d.attrs).forEach(key => {
-				d3Obj = d3Obj.attr(key, d.attrs[key]);
+				d3Obj.attr(key, d.attrs[key]);
 			});
 
 			return d3Obj;

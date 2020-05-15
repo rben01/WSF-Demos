@@ -123,9 +123,9 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 		dy: lsRadiusY,
 	});
 
-	const lsRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
+	const lightSourceRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
 
-	const photonRadius = lsRadius / 2;
+	const photonRadius = lightSourceRadius / 2;
 
 	const circleTopLevelAttrs = {
 		shape: "circle",
@@ -140,7 +140,7 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 
 	const lightSourceAttrs = {
 		..._circleAttrAttrs,
-		r: lsRadius,
+		r: lightSourceRadius,
 		...CONFIG.trainLightSource.attrs,
 	};
 
@@ -231,7 +231,7 @@ function _getTracksData(canvasInfo) {
 		});
 	}
 
-	// make rails
+	// make rails -- has to go after ties because in SVGs the z-order is determined by order created, so if rails are supposed to lie above the ties...
 	[trackInteriorAxMinY, trackInteriorAxMaxY].forEach(railY => {
 		const [p1, p2] = [
 			{ x: AX_MIN_X, y: railY },
@@ -260,14 +260,12 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 		.selectAll()
 		.data(dataFunc)
 		.enter()
-		.append(function (d) {
-			return d3.create(`svg:${d.shape}`).node();
-		})
+		.append(d => d3.create(`svg:${d.shape}`).node())
 		.each(function (d) {
-			let d3Obj = d3.select(this).classed(d.class, true);
+			const d3Obj = d3.select(this).classed(d.class, true);
 
 			Object.keys(d.attrs).forEach(key => {
-				d3Obj = d3Obj.attr(key, d.attrs[key]);
+				d3Obj.attr(key, d.attrs[key]);
 			});
 
 			return d3Obj;
