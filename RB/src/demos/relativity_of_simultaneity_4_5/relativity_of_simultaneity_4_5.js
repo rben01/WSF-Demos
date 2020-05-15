@@ -1,4 +1,4 @@
-/* global CONFIG, toTitleCase */
+/* global CONFIG, USER_INFO, toTitleCase, getRailroadTieParams */
 
 "use strict";
 
@@ -189,7 +189,6 @@ function _getTrainAndLightSourcesData(canvasInfo) {
 
 function _getTracksData(canvasInfo) {
 	console.log(canvasInfo);
-	const nTiesVisible = 9;
 	const lineExtendPastFrac = 0.05;
 
 	const trackInteriorAxMinX = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
@@ -197,17 +196,20 @@ function _getTracksData(canvasInfo) {
 	const trackInteriorAxMinY = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
 	const trackInteriorAxMaxY = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
 
-	const axDistBtwnTies =
-		(trackInteriorAxMaxX - trackInteriorAxMinX) / (nTiesVisible - 1);
+	const { axDistBtwnTies, initialTieAxX } = getRailroadTieParams({
+		trackInteriorAxMinX,
+		trackInteriorAxMaxX,
+		nTiesVisible: CONFIG.nTiesVisible,
+	});
 
 	const nTiesTotal = Math.ceil(
-		nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
+		CONFIG.nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
 	);
 
 	// make ties
 	const data = [];
 	for (let i = 0; i < nTiesTotal; i++) {
-		const tieAxX = trackInteriorAxMinX + i * axDistBtwnTies;
+		const tieAxX = initialTieAxX + i * axDistBtwnTies;
 
 		const [p1, p2] = [
 			{ x: tieAxX, y: AX_MIN_Y },
@@ -309,7 +311,7 @@ function beginAnimation() {
 
 	subcanvases.each(function (canvasInfo) {
 		const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
-			dx: axDistTraveled({ fracOfC: CONFIG.trainSpeed }),
+			dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
 		}).dx;
 
 		const distanceLightTravels = transAxisToCanvas(canvasInfo, {

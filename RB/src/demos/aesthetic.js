@@ -1,5 +1,10 @@
+"use strict";
+
 // eslint-disable-next-line no-unused-vars
-const CONFIG = {
+const USER_INFO = { trainSpeed: 0.1 };
+
+// eslint-disable-next-line no-unused-vars
+const CONFIG = Object.freeze({
 	durationMSOfAnimationReset: 300,
 	easingForAnimationReset: d3.easePoly.exponent(2.5),
 
@@ -7,7 +12,8 @@ const CONFIG = {
 	yMarginProptn: 0.15,
 	trainWidthProptn: 0.4,
 	trainHeightProptn: 0.6,
-	trainSpeed: 0.1,
+	nTiesVisible: 9,
+	axDistTraveledAsFracOfTrainWidth: 1.2,
 
 	trainCar: {
 		class: "train-car",
@@ -51,7 +57,6 @@ const CONFIG = {
 			"font-family": "sans-serif",
 		},
 	},
-	axDistTraveledAsFracOfTrainWidth: 1.2,
 	configure: function (d3Obj, config) {
 		Object.keys(config).forEach(key => {
 			const value = config[key];
@@ -69,7 +74,7 @@ const CONFIG = {
 
 		return d3Obj;
 	},
-};
+});
 
 // https://stackoverflow.com/a/196991
 // eslint-disable-next-line no-unused-vars
@@ -88,9 +93,29 @@ function updateTrainSpeed(speed) {
 
 	try {
 		const floatStr = Math.max(0, Math.min(parseFloat(trainSpeedInputValue), 1));
-		CONFIG.trainSpeed = floatStr;
+		USER_INFO.trainSpeed = floatStr;
 		document.getElementById("train-speed-text").textContent = trainSpeedInputValue;
 	} catch (e) {
 		console.log(trainSpeedInputValue);
 	}
+}
+
+// eslint-disable-next-line no-unused-vars
+function getRailroadTieParams({
+	trackInteriorAxMinX,
+	trackInteriorAxMaxX,
+	nTiesVisible,
+}) {
+	const trackInteriorAxWidth = trackInteriorAxMaxX - trackInteriorAxMinX;
+
+	const axDistBtwnTies = trackInteriorAxWidth / (nTiesVisible - 1);
+
+	const middleTieAxX = (trackInteriorAxMinX + trackInteriorAxMaxX) / 2;
+	const initialTieAxX =
+		middleTieAxX - Math.floor((nTiesVisible - 1) / 2) * axDistBtwnTies;
+
+	return {
+		axDistBtwnTies,
+		initialTieAxX,
+	};
 }

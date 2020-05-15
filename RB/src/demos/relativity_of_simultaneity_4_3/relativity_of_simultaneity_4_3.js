@@ -1,4 +1,4 @@
-/* global CONFIG */
+/* global CONFIG, USER_INFO, getRailroadTieParams */
 
 "use-strict";
 
@@ -7,6 +7,8 @@ const Y_MARGIN_PROPTN = 0.15;
 
 const TRAIN_WIDTH_PROPTN = 0.75;
 const TRAIN_HEIGHT_PROPTN = 0.6;
+
+const THIS_DEMO_SPEED_MULTIPLIER = 0.5 / CONFIG.axDistTraveledAsFracOfTrainWidth;
 
 // If the program is bug-free, any reasonably scaled values of the axis bounds will work
 const AX_MIN_X = 5;
@@ -35,7 +37,12 @@ const canvas = d3
 
 // Photon goes from center of train to end of train over the course of the animation
 function axDistTraveled({ fracOfC }) {
-	return (fracOfC * AX_TRAIN_WIDTH) / 2;
+	return (
+		fracOfC *
+		AX_TRAIN_WIDTH *
+		CONFIG.axDistTraveledAsFracOfTrainWidth *
+		THIS_DEMO_SPEED_MULTIPLIER
+	);
 }
 
 function transAxisToCanvas({ x, y, dx, dy }) {
@@ -158,7 +165,6 @@ function addTrainAndLightSources(canvas) {
 }
 
 function addTracks(canvas) {
-	const nTiesVisible = 9;
 	const lineExtendPastFrac = 0.05;
 
 	const trackInteriorAxMinX = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
@@ -166,8 +172,17 @@ function addTracks(canvas) {
 	const trackInteriorAxMinY = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
 	const trackInteriorAxMaxY = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
 
-	const axDistBtwnTies =
-		(trackInteriorAxMaxX - trackInteriorAxMinX) / (nTiesVisible - 1);
+	// "zoom in" to keep train/track ratios consistent between demos
+	const nTiesVisible =
+		(((CONFIG.nTiesVisible * CONFIG.trainWidthProptn) / TRAIN_WIDTH_PROPTN) *
+			(AX_MAX_X - AX_MIN_X)) /
+		(trackInteriorAxMaxX - trackInteriorAxMinX);
+
+	const { axDistBtwnTies, initialTieAxX } = getRailroadTieParams({
+		trackInteriorAxMinX,
+		trackInteriorAxMaxX,
+		nTiesVisible,
+	});
 
 	const nTiesTotal = Math.ceil(
 		nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
@@ -176,7 +191,7 @@ function addTracks(canvas) {
 	// make ties
 	const tiesCanvasCoords = [];
 	for (let i = 0; i < nTiesTotal; i++) {
-		const tieAxX = trackInteriorAxMinX + i * axDistBtwnTies;
+		const tieAxX = initialTieAxX + i * axDistBtwnTies;
 
 		const [p1, p2] = [
 			{ x: tieAxX, y: AX_MIN_Y },
@@ -262,9 +277,10 @@ function beginAnimation() {
 		playbackInfo.animationEndDate = new Date();
 	}, TOTAL_DURATION_MS);
 
-	const distanceTraveled = transAxisToCanvas({
+	// I've sort of lost track of the math happening here, but empirically it all works out
+	const distanceTrainTravels = transAxisToCanvas({
 		dx: axDistTraveled({
-			fracOfC: CONFIG.trainSpeed,
+			fracOfC: USER_INFO.trainSpeed,
 		}),
 	}).dx;
 
@@ -276,8 +292,8 @@ function beginAnimation() {
 		.transition()
 		.duration(TOTAL_DURATION_MS)
 		.ease(d3.easeLinear)
-		.attr("x1", d => d.baseX - distanceTraveled)
-		.attr("x2", d => d.baseX - distanceTraveled);
+		.attr("x1", d => d.baseX - distanceTrainTravels)
+		.attr("x2", d => d.baseX - distanceTrainTravels);
 
 	photons
 		.transition()
