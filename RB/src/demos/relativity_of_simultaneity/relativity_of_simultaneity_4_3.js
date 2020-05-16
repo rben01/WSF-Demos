@@ -185,7 +185,8 @@ function addTracks(canvas) {
 	});
 
 	const nTiesTotal = Math.ceil(
-		nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
+		nTiesVisible +
+			axDistTraveled({ fracOfC: CONFIG.maxTrainSpeed }) / axDistBtwnTies,
 	);
 
 	// make ties

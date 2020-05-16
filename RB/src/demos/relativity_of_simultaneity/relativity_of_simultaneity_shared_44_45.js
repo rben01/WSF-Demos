@@ -202,9 +202,14 @@ function _getTracksData(canvasInfo) {
 		nTiesVisible: CONFIG.nTiesVisible,
 	});
 
-	const nTiesTotal = Math.ceil(
-		CONFIG.nTiesVisible + axDistTraveled({ fracOfC: 1 }) / axDistBtwnTies,
-	);
+	const nTiesTotal =
+		canvasInfo.observerIsStandingOn === "ground"
+			? CONFIG.nTiesVisible
+			: Math.ceil(
+					CONFIG.nTiesVisible +
+						axDistTraveled({ fracOfC: CONFIG.maxTrainSpeed }) /
+							axDistBtwnTies,
+			  );
 
 	// make ties
 	const data = [];

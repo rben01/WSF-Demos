@@ -14,6 +14,7 @@ const CONFIG = Object.freeze({
 	trainHeightProptn: 0.6,
 	nTiesVisible: 9,
 	axDistTraveledAsFracOfTrainWidth: 1.2,
+	maxTrainSpeed: 0.5,
 
 	trainCar: {
 		class: "train-car",
@@ -92,8 +93,12 @@ function updateTrainSpeed(speed) {
 			: document.getElementById("input-train-speed").value;
 
 	try {
-		const floatStr = Math.max(0, Math.min(parseFloat(trainSpeedInputValue), 1));
-		USER_INFO.trainSpeed = floatStr;
+		const floatVal = parseFloat(trainSpeedInputValue);
+		if (floatVal < 0 || floatVal > 1) {
+			console.log(`Got invalid speed (outside [0,1]): ${floatVal}`);
+		}
+		const clamped = Math.max(0, Math.min(floatVal, 1));
+		USER_INFO.trainSpeed = clamped;
 		document.getElementById("train-speed-text").textContent = trainSpeedInputValue;
 	} catch (e) {
 		console.log(trainSpeedInputValue);
@@ -119,3 +124,5 @@ function getRailroadTieParams({
 		initialTieAxX,
 	};
 }
+
+document.getElementById("input-train-speed").max = `${CONFIG.maxTrainSpeed}`;

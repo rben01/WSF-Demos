@@ -15,6 +15,7 @@
 	},
 	"rules": {
 		"eqeqeq": "error",
+		"no-mixed-spaces-and-tabs": "off",
 		"curly": ["error", "all"],
 		"no-multi-spaces": "error",
 		"no-unused-expressions": "error",
