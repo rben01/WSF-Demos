@@ -10,6 +10,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 SYMBOLS_TO_REPLACE = [
+    "AESTHETIC",
     "AX_HEIGHT",
     "AX_MAX_X",
     "AX_MAX_Y",
@@ -249,18 +250,23 @@ def inline(
             replacements_dict = dict(sorted(zip(SYMBOLS_TO_REPLACE, replacer)))
 
             # https://stackoverflow.com/a/6464500
-            symbol_regex = (r"{even_num_quotes}\b({sym_re})\b").format(
+            symbol_regex = (r"{even_num_quotes}|(\b{sym_re}\b)").format(
                 sym_re="|".join(map(re.escape, replacements_dict.keys())),
                 even_num_quotes=_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE,
             )
 
             js_code = re.sub(
-                symbol_regex, lambda match: replacements_dict[match.group(1)], js_code,
+                symbol_regex,
+                lambda match: replacements_dict.get(match.group(1), match.group(1)),
+                js_code,
             )
 
-            with Path(outfile.parent / "source maps" / outfile.name).with_suffix(
-                ".sourcemap.json"
-            ).open("w") as f:
+            sourcemap_dir = Path(outfile.parent / "source maps")
+            sourcemap_dir.mkdir(exist_ok=True, parents=False)
+
+            with (sourcemap_dir / outfile.name).with_suffix(".sourcemap.json").open(
+                "w"
+            ) as f:
                 json.dump(replacements_dict, f, indent=2)
 
         script_tag.string = js_code
