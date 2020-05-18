@@ -1,3 +1,4 @@
+# %%
 import argparse
 import enum
 import re
@@ -149,7 +150,7 @@ class SymbolReplacer:
 
         self.symbol_chars = ["a"]
 
-    def _advance(self):
+    def __advance(self):
         for i, c in enumerate(self.symbol_chars):
             if c == "z":
                 self.symbol_chars[i] = "a"
@@ -159,17 +160,21 @@ class SymbolReplacer:
         else:
             self.symbol_chars.append("a")
 
-    def _current_symbol(self):
+    def __current_symbol(self):
         return "".join(reversed(self.symbol_chars)).lower()
 
-    def get_next_symbol(self) -> str:
-        symbol = self._current_symbol()
+    def _get_next_symbol(self) -> str:
+        symbol = self.__current_symbol()
         while symbol in self.symbols_used:
-            self._advance()
-            symbol = self._current_symbol()
+            self.__advance()
+            symbol = self.__current_symbol()
 
         self.symbols_used.add(symbol)
         return symbol
+
+    def __iter__(self):
+        while True:
+            yield self._get_next_symbol()
 
 
 def inline(
@@ -229,12 +234,14 @@ def inline(
         if minify_globals:
             symbols = SYMBOL_RE.findall(js_code)
             replacer = SymbolReplacer(symbols, lang=Lang.js)
-            for sym_to_replace in SYMBOLS_TO_REPLACE:
-                js_code = re.sub(
-                    r"""(?<!")\b{}\b(?!")""".format(sym_to_replace),
-                    replacer.get_next_symbol(),
-                    js_code,
-                )
+            replacements_dict = dict(zip(SYMBOLS_TO_REPLACE, replacer))
+            symbol_regex = r"""(?<!")\b({})\b(?!")""".format(
+                "|".join(map(re.escape, replacements_dict.keys()))
+            )
+
+            js_code = re.sub(
+                symbol_regex, lambda match: replacements_dict[match.group(1)], js_code,
+            )
 
         script_tag.string = js_code
         soup.find("body").append(script_tag)
@@ -318,5 +325,6 @@ def main():
         )
 
 
+# %%
 if __name__ == "__main__":
     main()
