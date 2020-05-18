@@ -1,6 +1,7 @@
 # %%
 import argparse
 import enum
+import json
 import re
 import sys
 from pathlib import Path
@@ -66,8 +67,11 @@ SYMBOLS_TO_REPLACE = [
     "yMarginProptn",
 ]
 
-
-SYMBOL_RE: re.Pattern = re.compile(r"""(?<!")\b[a-zA-Z_]\w*\b(?!")""")
+_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE = r'(\\"|"(?:\\"|[^"])*")'
+# https://stackoverflow.com/a/23667311
+SYMBOL_RE: re.Pattern = re.compile(
+    fr"{_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE}|(\b[a-zA-Z_]\w*\b)"
+)
 
 
 class Lang(enum.Enum):
@@ -76,6 +80,7 @@ class Lang(enum.Enum):
 
 class SymbolReplacer:
     KEYWORDS = {
+        None: [],
         Lang.js: [
             "abstract",
             "arguments",
@@ -140,28 +145,35 @@ class SymbolReplacer:
             "extends",
             "import",
             "super",
-        ]
+        ],
+    }
+
+    ALPHABETS = {
+        None: list("abcdefghijklmnopqrstuvwxyz"),
+        Lang.js: list("nstcoaeirlpfd"),
     }
 
     def __init__(self, base_symbols, lang=None):
         self.symbols_used = set(sorted(s.lower() for s in base_symbols))
-        if lang is not None:
-            self.symbols_used.update(self.KEYWORDS[lang])
+        self.symbols_used.update(self.KEYWORDS.get(lang, []))
+        self.alphabet = self.ALPHABETS.get(lang)
 
-        self.symbol_chars = ["a"]
+        assert len(self.alphabet) == len(set(self.alphabet))
+
+        self.char_nums_list = [0]
 
     def __advance(self):
-        for i, c in enumerate(self.symbol_chars):
-            if c == "z":
-                self.symbol_chars[i] = "a"
+        for i, n in enumerate(self.char_nums_list):
+            if n == len(self.alphabet) - 1:
+                self.char_nums_list[i] = 0
             else:
-                self.symbol_chars[i] = chr(ord(c) + 1)
+                self.char_nums_list[i] += 1
                 break
         else:
-            self.symbol_chars.append("a")
+            self.char_nums_list.append(0)
 
     def __current_symbol(self):
-        return "".join(reversed(self.symbol_chars)).lower()
+        return "".join(self.alphabet[n] for n in reversed(self.char_nums_list))
 
     def _get_next_symbol(self) -> str:
         symbol = self.__current_symbol()
@@ -183,7 +195,7 @@ def inline(
     *,
     ignored_link_dests,
     ignored_link_dest_regexes,
-    minify_globals=True
+    minify_globals=True,
 ):
     if infile.resolve() == outfile.resolve():
         sys.exit("infile and outfile are the same; they must be different")
@@ -232,16 +244,24 @@ def inline(
         js_code = response.text
 
         if minify_globals:
-            symbols = SYMBOL_RE.findall(js_code)
+            symbols = [match[1] for match in SYMBOL_RE.findall(js_code) if match[1]]
             replacer = SymbolReplacer(symbols, lang=Lang.js)
-            replacements_dict = dict(zip(SYMBOLS_TO_REPLACE, replacer))
-            symbol_regex = r"""(?<!")\b({})\b(?!")""".format(
-                "|".join(map(re.escape, replacements_dict.keys()))
+            replacements_dict = dict(sorted(zip(SYMBOLS_TO_REPLACE, replacer)))
+
+            # https://stackoverflow.com/a/6464500
+            symbol_regex = (r"{even_num_quotes}\b({sym_re})\b").format(
+                sym_re="|".join(map(re.escape, replacements_dict.keys())),
+                even_num_quotes=_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE,
             )
 
             js_code = re.sub(
                 symbol_regex, lambda match: replacements_dict[match.group(1)], js_code,
             )
+
+            with Path(outfile.parent / "source maps" / outfile.name).with_suffix(
+                ".sourcemap.json"
+            ).open("w") as f:
+                json.dump(replacements_dict, f, indent=2)
 
         script_tag.string = js_code
         soup.find("body").append(script_tag)
@@ -301,14 +321,11 @@ def main():
 
     for infile in infiles:
         if args.outfile is None:
+            suffix = infile.suffix
             if args.minify_globals:
-                filename_suffix = "_inlined_min"
-            else:
-                filename_suffix = "_inlined"
+                suffix = f".min{suffix}"
 
-            outfile = infile.with_name(infile.stem + filename_suffix).with_suffix(
-                infile.suffix
-            )
+            outfile = infile.with_name(infile.stem + "_inlined").with_suffix(suffix)
 
         else:
             outfile = Path(args.outfile)
