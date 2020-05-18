@@ -257,7 +257,7 @@ def inline(
 
             js_code = re.sub(
                 symbol_regex,
-                lambda match: replacements_dict.get(match.group(1), match.group(1)),
+                lambda match: replacements_dict.get(match.group(0), match.group(0)),
                 js_code,
             )
 
