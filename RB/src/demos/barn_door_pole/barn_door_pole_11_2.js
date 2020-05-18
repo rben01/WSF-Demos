@@ -1,4 +1,4 @@
-/* globals CONFIG USER_INFO TOTAL_DURATION_MS playbackInfo subcanvases transAxisToCanvas axDistTraveled */
+/* globals AESTHETIC CONFIG USER_INFO TOTAL_DURATION_MS isIterable playbackInfo subcanvases transAxisToCanvas axDistTraveled */
 
 "use strict";
 
@@ -13,14 +13,13 @@ const AX_MID_X = AX_MIN_X + (AX_MAX_X - AX_MIN_X) / 2;
 const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
 
 const POLE_BARN_RATIO = 1.5;
-const BARN_WIDTH_PROPTN = 0.3;
+const BARN_WIDTH_PROPTN = 0.2;
+const BARN_HEIGHT_PROPTN = 0.5;
 const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
 
 const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
+const AX_BARN_HEIGHT = AX_HEIGHT * BARN_HEIGHT_PROPTN;
 const AX_POLE_WIDTH = AX_WIDTH * POLE_WIDTH_PROPTN;
-
-const TOTAL_DURATION_SEC = 5;
-const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 400;
@@ -31,8 +30,9 @@ const canvas = d3
 	.attr("height", CANVAS_HEIGHT)
 	.attr("background-color", "black");
 
+const xyz = d3.selectAll("svg");
+
 const subcanvases = canvas
-	.selectAll()
 	.data([
 		{
 			originX: 0,
@@ -49,221 +49,91 @@ const subcanvases = canvas
 			observerIsStandingOn: "pole",
 		},
 	])
-	.enter()
-	.append("g")
-	.attr("transform", d => `translate(0, ${d.originY})`)
-	.classed("subcanvas", true);
+	.each(function (d) {
+		d3.select(this)
+			.append("g")
+			.attr("transform", `translate(0, ${d.originY})`)
+			.classed("subcanvas", true);
+	})
+	.selectAll("g");
 
 function lorentzFactor({ fracOfC }) {
 	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
 }
 
-// How far something traveling at fracOfC should travel
-function axDistTraveled({ fracOfC }) {
-	return fracOfC * AX_TRAIN_WIDTH * CONFIG.axDistTraveledAsFracOfTrainWidth;
-}
-
 function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
-	const xFrac = (x - AX_MIN_X) / AX_WIDTH;
-	const yFrac = (y - AX_MIN_Y) / AX_HEIGHT;
+	const xList = isIterable(x) ? x : [x];
+	const yList = isIterable(y) ? y : [y];
+	const dxList = isIterable(dx) ? dx : [dx];
+	const dyList = isIterable(dy) ? dy : [dy];
 
-	const xCanvasCoords =
-		canvasInfo.width * CONFIG.xMarginProptn +
-		xFrac * canvasInfo.width * (1 - 2 * CONFIG.xMarginProptn);
-	const yCanvasCoords =
-		canvasInfo.height * CONFIG.yMarginProptn +
-		yFrac * canvasInfo.height * (1 - 2 * CONFIG.yMarginProptn);
+	const xFracList = xList.map(x => (x - AX_MIN_X) / AX_WIDTH);
+	const yFracList = yList.map(y => (y - AX_MIN_Y) / AX_HEIGHT);
 
-	const dxCanvasCoords = (canvasInfo.width / AX_WIDTH) * dx;
-	const dyCanvasCoords = (canvasInfo.height / AX_HEIGHT) * dy;
+	const xCanvasCoordsList = xFracList.map(xFrac => xFrac * canvasInfo.width);
+	const yCanvasCoordsList = yFracList.map(yFrac => yFrac * canvasInfo.height);
+
+	const dxCanvasCoordsList = dxList.map(dx => (canvasInfo.width / AX_WIDTH) * dx);
+	const dyCanvasCoordsList = dyList.map(dy => (canvasInfo.height / AX_HEIGHT) * dy);
 
 	return {
-		x: xCanvasCoords,
-		y: yCanvasCoords,
-		dx: dxCanvasCoords,
-		dy: dyCanvasCoords,
+		x: isIterable(x) ? xCanvasCoordsList : xCanvasCoordsList[0],
+		y: isIterable(y) ? yCanvasCoordsList : yCanvasCoordsList[0],
+		dx: isIterable(dx) ? dxCanvasCoordsList : dxCanvasCoordsList[0],
+		dy: isIterable(dy) ? dyCanvasCoordsList : dyCanvasCoordsList[0],
 	};
 }
 
-function _getBarn(canvasInfo) {
-	if (canvasInfo.observerIsStandingOn === 'barn') {
+function _getBarnData(canvasInfo) {
+	const barnMidAxX =
+		canvasInfo.observerIsStandingOn === "barn"
+			? AX_MIN_Y + (2 / 3) * AX_WIDTH
+			: AX_MIN_Y + (1 / 3) * AX_WIDTH;
+	const barnMidAxY = AX_MID_Y;
 
-	} else {
+	const barnMinAxX = barnMidAxX - AX_BARN_WIDTH / 2;
+	const barnMinAxY = barnMidAxY - AX_BARN_HEIGHT / 2;
 
-	}
-}
-
-function _getTrainAndLightSourcesData(canvasInfo) {
-	const trainXMin = AX_MID_X - AX_TRAIN_WIDTH / 2;
-	const trainYMin = AX_MID_Y - AX_TRAIN_HEIGHT / 2;
-
-	const trainXMax = trainXMin + AX_TRAIN_WIDTH;
-	const trainYMax = trainYMin + AX_TRAIN_HEIGHT;
-
-	const trainMinCanvasCoords = transAxisToCanvas(canvasInfo, {
-		x: trainXMin,
-		y: trainYMin,
-	});
-	const trainMaxCanvasCoords = transAxisToCanvas(canvasInfo, {
-		x: trainXMax,
-		y: trainYMax,
-	});
-
-	const trainCanvasWidth = trainMaxCanvasCoords.x - trainMinCanvasCoords.x;
-	const trainCanvasHeight = trainMaxCanvasCoords.y - trainMinCanvasCoords.y;
-
-	const lsCenterX = AX_MID_X;
-	const lsCenterY = AX_MID_Y;
-	const lsRadiusX = 0.03 * AX_WIDTH;
-	const lsRadiusY = 0.03 * AX_HEIGHT;
+	const barnDoorAxHeight = (1 / 3) * AX_BARN_HEIGHT;
+	const barnSideWallAxHeight = (AX_BARN_HEIGHT - barnDoorAxHeight) / 2;
 
 	const {
-		x: lsCanvasCenterX,
-		y: lsCanvasCenterY,
-		dx: lsCanvasRadiusX,
-		dy: lsCanvasRadiusY,
+		x: [barnMidCanvasX, barnMinCanvasX],
+		y: [barnMinCanvasY],
+		dx: barnCanvasWidth,
+		dy: [barnCanvasHeight, barnDoorCanvasHeight, barnDoorSideWallCanvasHeight],
 	} = transAxisToCanvas(canvasInfo, {
-		x: lsCenterX,
-		y: lsCenterY,
-		dx: lsRadiusX,
-		dy: lsRadiusY,
+		x: [barnMidAxX, barnMinAxX],
+		y: [barnMinAxY],
+		dx: AX_BARN_WIDTH,
+		dy: [AX_BARN_HEIGHT, barnDoorAxHeight, barnSideWallAxHeight],
 	});
 
-	const lightSourceRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
-
-	const photonRadius = lightSourceRadius / 2;
-
-	const circleTopLevelAttrs = {
-		shape: "circle",
-		x0: lsCanvasCenterX,
-		originXAttr: "cx",
-	};
-
-	const _circleAttrAttrs = {
-		cx: lsCanvasCenterX,
-		cy: lsCanvasCenterY,
-	};
-
-	const lightSourceAttrs = {
-		..._circleAttrAttrs,
-		r: lightSourceRadius,
-		...CONFIG.trainLightSource.attrs,
-	};
-
-	const photonAttrAttrs = {
-		..._circleAttrAttrs,
-		r: photonRadius,
-		...CONFIG.trainPhoton.attrs,
-	};
+	const dashArray = [
+		barnCanvasWidth + barnDoorSideWallCanvasHeight,
+		barnDoorCanvasHeight,
+		barnDoorSideWallCanvasHeight + barnCanvasWidth + barnDoorSideWallCanvasHeight,
+		barnDoorCanvasHeight,
+		barnDoorSideWallCanvasHeight,
+	].join(" ");
 
 	return [
 		{
-			class: CONFIG.trainCar.class,
+			class: "barn-body",
 			canvas: canvasInfo,
 			shape: "rect",
-			x0: trainMinCanvasCoords.x,
-			originXAttr: "x",
+			midX: barnMidCanvasX,
 			attrs: {
-				x: trainMinCanvasCoords.x,
-				y: trainMinCanvasCoords.y,
-				width: trainCanvasWidth,
-				height: trainCanvasHeight,
-				...CONFIG.trainCar.attrs,
+				x: barnMinCanvasX,
+				y: barnMinCanvasY,
+				width: barnCanvasWidth,
+				height: barnCanvasHeight,
+				fill: AESTHETIC.solidFill,
+				stroke: AESTHETIC.solidStroke,
+				"stroke-dasharray": dashArray,
 			},
-		},
-		{
-			class: CONFIG.trainLightSource.class,
-			canvas: canvasInfo,
-			...circleTopLevelAttrs,
-			attrs: lightSourceAttrs,
-		},
-		{
-			class: CONFIG.trainPhoton.class,
-			canvas: canvasInfo,
-			...circleTopLevelAttrs,
-			attrs: photonAttrAttrs,
-			direction: "left",
-		},
-		{
-			class: CONFIG.trainPhoton.class,
-			canvas: canvasInfo,
-			...circleTopLevelAttrs,
-			attrs: photonAttrAttrs,
-			direction: "right",
 		},
 	];
-}
-
-function _getTracksData(canvasInfo) {
-	const lineExtendPastFrac = 0.05;
-
-	const trackInteriorAxMinX = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
-	const trackInteriorAxMaxX = AX_MAX_X - lineExtendPastFrac * AX_WIDTH;
-	const trackInteriorAxMinY = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
-	const trackInteriorAxMaxY = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
-
-	const { axDistBtwnTies, initialTieAxX } = getRailroadTieParams({
-		trackInteriorAxMinX,
-		trackInteriorAxMaxX,
-		nTiesVisible: CONFIG.nTiesVisible,
-	});
-
-	const nTiesTotal =
-		canvasInfo.observerIsStandingOn === "ground"
-			? CONFIG.nTiesVisible
-			: Math.ceil(
-					CONFIG.nTiesVisible +
-						axDistTraveled({ fracOfC: CONFIG.maxTrainSpeed }) /
-							axDistBtwnTies,
-			  );
-
-	// make ties
-	const data = [];
-	for (let i = 0; i < nTiesTotal; i++) {
-		const tieAxX = initialTieAxX + i * axDistBtwnTies;
-
-		const [p1, p2] = [
-			{ x: tieAxX, y: AX_MIN_Y },
-			{ x: tieAxX, y: AX_MAX_Y },
-		].map(p => transAxisToCanvas(canvasInfo, p));
-
-		data.push({
-			class: CONFIG.railroadTie.class,
-			canvas: canvasInfo,
-			x0: p1.x,
-			shape: "line",
-			attrs: {
-				x1: p1.x,
-				y1: p1.y,
-				x2: p2.x,
-				y2: p2.y,
-				...CONFIG.railroadTie.attrs,
-			},
-		});
-	}
-
-	// make rails -- has to go after ties because in SVGs the z-order is determined by order created, so if rails are supposed to lie above the ties...
-	[trackInteriorAxMinY, trackInteriorAxMaxY].forEach(railY => {
-		const [p1, p2] = [
-			{ x: AX_MIN_X, y: railY },
-			{ x: AX_MAX_X, y: railY },
-		].map(p => transAxisToCanvas(canvasInfo, p));
-
-		data.push({
-			class: CONFIG.railroadRail.class,
-			canvas: canvasInfo,
-			shape: "line",
-			attrs: {
-				x1: p1.x,
-				y1: p1.y,
-				x2: p2.x,
-				y2: p2.y,
-				...CONFIG.railroadRail.attrs,
-			},
-		});
-	});
-
-	return data;
 }
 
 function _addGraphicalObjs(subcanvases, dataFunc) {
@@ -283,16 +153,14 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 		});
 }
 
-function addTracks(subcanvases) {
-	return _addGraphicalObjs(subcanvases, _getTracksData);
+function addBarns(subcanvases) {
+	return _addGraphicalObjs(subcanvases, _getBarnData);
 }
 
-function addTrainAndLightSources(subcanvases) {
-	return _addGraphicalObjs(subcanvases, _getTrainAndLightSourcesData);
-}
+const barns = addBarns(subcanvases);
 
-const tracks = addTracks(subcanvases);
-const trainAndLightSources = addTrainAndLightSources(subcanvases);
+// const tracks = addTracks(subcanvases);
+// const trainAndLightSources = addTrainAndLightSources(subcanvases);
 
 const playbackInfo = {
 	animationIsPlaying: false,
