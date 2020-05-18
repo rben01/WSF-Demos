@@ -1,3 +1,4 @@
+/* global AESTHETIC */
 "use strict";
 
 // eslint-disable-next-line no-unused-vars
@@ -19,8 +20,8 @@ const CONFIG = Object.freeze({
 	trainCar: {
 		class: "train-car",
 		attrs: {
-			fill: "#4ff8",
-			stroke: "#fff8",
+			fill: AESTHETIC.solidFill,
+			stroke: AESTHETIC.solidStroke,
 		},
 	},
 	trainLightSource: {
@@ -57,23 +58,6 @@ const CONFIG = Object.freeze({
 			"font-size": "30px",
 			"font-family": "sans-serif",
 		},
-	},
-	configure: function (d3Obj, config) {
-		Object.keys(config).forEach(key => {
-			const value = config[key];
-			if (key === "attrs") {
-				const attrs = value;
-				Object.keys(attrs).forEach(attr => {
-					d3Obj.attr(attr, attrs[attr]);
-				});
-			} else if (key === "class") {
-				d3Obj.classed(value, true);
-			} else {
-				throw new Error(`Unexpected key ${key}`);
-			}
-		});
-
-		return d3Obj;
 	},
 });
 

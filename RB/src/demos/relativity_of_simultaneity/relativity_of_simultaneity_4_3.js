@@ -1,4 +1,4 @@
-/* global CONFIG, USER_INFO, getRailroadTieParams */
+/* global AESTHETIC CONFIG, USER_INFO, getRailroadTieParams */
 
 "use-strict";
 
@@ -102,7 +102,7 @@ function addTrainAndLightSources(canvas) {
 	const trainCanvasWidth = trainMaxCanvasCoords.x - trainMinCanvasCoords.x;
 	const trainCanvasHeight = trainMaxCanvasCoords.y - trainMinCanvasCoords.y;
 
-	CONFIG.configure(
+	AESTHETIC.configure(
 		canvas
 			.append("rect")
 			.attr("x", trainMinCanvasCoords.x)
@@ -131,7 +131,7 @@ function addTrainAndLightSources(canvas) {
 
 	const lsRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
 
-	CONFIG.configure(
+	AESTHETIC.configure(
 		canvas
 			.append("circle")
 			.attr("cx", lsCanvasCenterX)
@@ -149,7 +149,7 @@ function addTrainAndLightSources(canvas) {
 		{ x0: lsCanvasCenterX, x1: lsCanvasCenterX - axDistLightTravels },
 		{ x0: lsCanvasCenterX, x1: lsCanvasCenterX + axDistLightTravels },
 	];
-	const photons = CONFIG.configure(
+	const photons = AESTHETIC.configure(
 		canvas
 			.selectAll()
 			.data(photonData)
@@ -205,7 +205,7 @@ function addTracks(canvas) {
 		});
 	}
 
-	const ties = CONFIG.configure(
+	const ties = AESTHETIC.configure(
 		canvas
 			.selectAll()
 			.data(tiesCanvasCoords)
@@ -231,7 +231,7 @@ function addTracks(canvas) {
 		});
 	});
 
-	const rails = CONFIG.configure(
+	const rails = AESTHETIC.configure(
 		canvas
 			.selectAll()
 			.data(railsCanvasCoords)

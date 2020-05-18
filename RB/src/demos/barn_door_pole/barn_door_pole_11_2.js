@@ -1,4 +1,4 @@
-/* global AESTHETIC CONFIG, toTitleCase, getRailroadTieParams */
+/* globals CONFIG USER_INFO TOTAL_DURATION_MS playbackInfo subcanvases transAxisToCanvas axDistTraveled */
 
 "use strict";
 
@@ -12,17 +12,21 @@ const AX_HEIGHT = AX_MAX_Y - AX_MIN_Y;
 const AX_MID_X = AX_MIN_X + (AX_MAX_X - AX_MIN_X) / 2;
 const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
 
-const AX_TRAIN_WIDTH = AX_WIDTH * CONFIG.trainWidthProptn;
-const AX_TRAIN_HEIGHT = AX_HEIGHT * CONFIG.trainHeightProptn;
+const POLE_BARN_RATIO = 1.5;
+const BARN_WIDTH_PROPTN = 0.3;
+const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
 
-const TOTAL_DURATION_SEC = 3;
+const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
+const AX_POLE_WIDTH = AX_WIDTH * POLE_WIDTH_PROPTN;
+
+const TOTAL_DURATION_SEC = 5;
 const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
 
 const CANVAS_WIDTH = 800;
-const CANVAS_HEIGHT = 550;
+const CANVAS_HEIGHT = 400;
 
 const canvas = d3
-	.select("#canvas")
+	.selectAll(".viz-canvas")
 	.attr("width", CANVAS_WIDTH)
 	.attr("height", CANVAS_HEIGHT)
 	.attr("background-color", "black");
@@ -34,31 +38,25 @@ const subcanvases = canvas
 			originX: 0,
 			originY: 0,
 			width: CANVAS_WIDTH,
-			height: CANVAS_HEIGHT / 2,
-			observerIsStandingOn: "train",
+			height: CANVAS_HEIGHT,
+			observerIsStandingOn: "barn",
 		},
 		{
 			originX: 0,
-			originY: CANVAS_HEIGHT / 2,
+			originY: 0,
 			width: CANVAS_WIDTH,
-			height: CANVAS_HEIGHT / 2,
-			observerIsStandingOn: "ground",
+			height: CANVAS_HEIGHT,
+			observerIsStandingOn: "pole",
 		},
 	])
 	.enter()
 	.append("g")
 	.attr("transform", d => `translate(0, ${d.originY})`)
-	.each(function (d) {
-		AESTHETIC.configure(
-			d3
-				.select(this)
-				.append("text")
-				.text(toTitleCase(`Events as seen from ${d.observerIsStandingOn}`))
-				.attr("y", d.height / 10),
-			CONFIG.canvasText,
-		);
-	})
 	.classed("subcanvas", true);
+
+function lorentzFactor({ fracOfC }) {
+	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
 
 // How far something traveling at fracOfC should travel
 function axDistTraveled({ fracOfC }) {
@@ -85,6 +83,14 @@ function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
 		dx: dxCanvasCoords,
 		dy: dyCanvasCoords,
 	};
+}
+
+function _getBarn(canvasInfo) {
+	if (canvasInfo.observerIsStandingOn === 'barn') {
+
+	} else {
+
+	}
 }
 
 function _getTrainAndLightSourcesData(canvasInfo) {
@@ -330,5 +336,95 @@ function stopAnimation() {
 			.duration(durationMS)
 			.ease(easing)
 			.attr(d.originXAttr, d.x0);
+	});
+}
+
+// eslint-disable-next-line no-unused-vars
+function beginAnimation() {
+	if (playbackInfo.animationIsPlaying) {
+		return;
+	}
+
+	playbackInfo.animationIsPlaying = true;
+	playbackInfo.animationStartDate = new Date();
+	playbackInfo.beginButton.disabled = true;
+	playbackInfo.resetButton.disabled = false;
+
+	playbackInfo.animationTimer = setTimeout(() => {
+		playbackInfo.animationIsPlaying = false;
+		playbackInfo.animationEndDate = new Date();
+	}, TOTAL_DURATION_MS);
+
+	subcanvases.each(function (canvasInfo) {
+		const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
+			dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
+		}).dx;
+
+		const distanceLightTravels = transAxisToCanvas(canvasInfo, {
+			dx: axDistTraveled({ fracOfC: 1 }),
+		}).dx;
+
+		if (canvasInfo.observerIsStandingOn === "train") {
+			d3.select(this)
+				.selectAll(`.${CONFIG.railroadTie.class}`)
+				.transition()
+				.duration(0)
+				.attr("x1", d => d.x0)
+				.attr("x2", d => d.x0)
+				.transition()
+				.duration(TOTAL_DURATION_MS)
+				.ease(d3.easeLinear)
+				.attr("x1", d => d.x0 - distanceTrainTravels)
+				.attr("x2", d => d.x0 - distanceTrainTravels);
+
+			d3.select(this)
+				.selectAll(`.${CONFIG.trainPhoton.class}`)
+				.each(function (d) {
+					const xf =
+						d.direction === "left"
+							? d.x0 - distanceLightTravels
+							: d.x0 + distanceLightTravels;
+					d3.select(this)
+						.transition()
+						.duration(0)
+						.attr("cx", d.x0)
+						.transition()
+						.duration(TOTAL_DURATION_MS)
+						.ease(d3.easeLinear)
+						.attr("cx", xf);
+				});
+		} else if (canvasInfo.observerIsStandingOn === "ground") {
+			d3.select(this)
+				.selectAll(
+					`.${CONFIG.trainCar.class}, .${CONFIG.trainLightSource.class}`,
+				)
+				.each(function (d) {
+					d3.select(this)
+						.transition()
+						.duration(0)
+						.attr(d.originXAttr, d.x0)
+						.transition()
+						.duration(TOTAL_DURATION_MS)
+						.ease(d3.easeLinear)
+						.attr(d.originXAttr, d.x0 + distanceTrainTravels);
+				});
+
+			d3.select(this)
+				.selectAll(`.${CONFIG.trainPhoton.class}`)
+				.each(function (d) {
+					const xf =
+						d.direction === "left"
+							? d.x0 - distanceLightTravels + distanceTrainTravels
+							: d.x0 + distanceLightTravels + distanceTrainTravels;
+					d3.select(this)
+						.transition()
+						.duration(0)
+						.attr("cx", d.x0)
+						.transition()
+						.duration(TOTAL_DURATION_MS)
+						.ease(d3.easeLinear)
+						.attr("cx", xf);
+				});
+		}
 	});
 }

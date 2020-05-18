@@ -5,13 +5,22 @@ body {
 	background-color: black;
 	color: white;
 	font-size: 21px;
+	font-family: sans-serif;
 }
 
 .play-button {
 	margin-top: 1.5em;
-	margin-bottom: 2em;
+	margin-bottom: 1em;
 	width: 5em;
 	font-size: 15px;
+}
+
+.highlighted-text {
+	color: #5df;
+}
+
+.viz-canvas {
+	padding-top: 1em;
 }
 
 input[type="range"] {
