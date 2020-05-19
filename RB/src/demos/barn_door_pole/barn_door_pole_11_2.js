@@ -378,6 +378,27 @@ function getDurationMS(speed) {
 	return TIME_FOR_LIGHT_TO_TRAVERSE_MS / speed;
 }
 
+function _tweenDoors({ transition, toX, toY, xEase, yEase }) {
+	["x1", "x2"].forEach(attr => {
+		transition = transition.attrTween(attr, function () {
+			const interpolator = d3.interpolateNumber(this.getAttribute(attr), toX);
+			return t => interpolator(xEase(t));
+		});
+	});
+
+	["y1", "y2"].forEach(attr => {
+		transition = transition.attrTween(attr, function () {
+			const interpolator = d3.interpolateNumber(
+				this.getAttribute(attr),
+				toY[attr],
+			);
+			return t => interpolator(yEase(t));
+		});
+	});
+
+	return transition;
+}
+
 // eslint-disable-next-line no-unused-vars
 function beginAnimation(playbackInfo) {
 	updateRelativeSpeed();
@@ -409,6 +430,7 @@ function beginAnimation(playbackInfo) {
 	subcanvases
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
+			// I apologize to the world for this monstrosity
 			const subcanvas = d3.select(this);
 			if (stationaryObject === "barn") {
 				const poles = subcanvas.selectAll(".pole");
@@ -465,6 +487,7 @@ function beginAnimation(playbackInfo) {
 							.transition()
 							.delay(durationMSToBarnDoor.enter)
 							.duration(doorChangeStateDurationMS)
+							.ease(d3.easeCubicInOut)
 							.attr("y1", barnDoorDatum.open.y1)
 							.attr("y2", barnDoorDatum.open.y2);
 
@@ -476,6 +499,7 @@ function beginAnimation(playbackInfo) {
 										durationMSToBarnDoor.enter,
 								)
 								.duration(doorChangeStateDurationMS)
+								.ease(d3.easeCubicInOut)
 								.attr("y1", barnDoorDatum.closed.y1)
 								.attr("y2", barnDoorDatum.closed.y2);
 						}
@@ -538,7 +562,7 @@ function beginAnimation(playbackInfo) {
 								doorBeginOpenX +
 								distTraveled * (doorChangeStateDurationMS / durationMS);
 
-							const transition = barnDoor
+							const transitionToPreOpen = barnDoor
 								.transition()
 								.duration(0)
 								.attr("x1", baseX)
@@ -547,14 +571,17 @@ function beginAnimation(playbackInfo) {
 								.duration(durationMSToPole.enter)
 								.ease(easing)
 								.attr("x1", doorBeginOpenX)
-								.attr("x2", doorBeginOpenX)
-								.transition()
-								.duration(doorChangeStateDurationMS)
-								.ease(d3.easeLinear)
-								.attr("x1", doorEndOpenX)
-								.attr("x2", doorEndOpenX)
-								.attr("y1", barnDoorDatum.open.y1)
-								.attr("y2", barnDoorDatum.open.y2);
+								.attr("x2", doorBeginOpenX);
+
+							const transitionOpen = _tweenDoors({
+								transition: transitionToPreOpen
+									.transition()
+									.duration(doorChangeStateDurationMS),
+								toX: doorEndOpenX,
+								toY: barnDoorDatum.open,
+								xEase: d3.easeLinear,
+								yEase: d3.easeCubicInOut,
+							});
 
 							const doorXFinal = baseX + distTraveled;
 
@@ -579,7 +606,7 @@ function beginAnimation(playbackInfo) {
 										(doorEndCloseX - barnDoorDatum.baseX) /
 											distTraveled);
 
-								const atPreCloseLoc = transition
+								const atPreCloseLoc = transitionOpen
 									.transition()
 									.duration(traversePoleDurationMS)
 									.ease(easing)
@@ -587,20 +614,23 @@ function beginAnimation(playbackInfo) {
 									.attr("x2", doorBeginCloseX);
 
 								if (doorEndCloseX <= doorXFinal) {
-									atPreCloseLoc
-										.transition()
-										.duration(doorChangeStateDurationMS)
-										.ease(d3.easeLinear)
-										.attr("x1", doorEndCloseX)
-										.attr("y1", barnDoorDatum.closed.y1)
-										.attr("x2", doorEndCloseX)
-										.attr("y2", barnDoorDatum.closed.y2)
+									// The door will fully close before it stops moving horizontally
+									_tweenDoors({
+										transition: atPreCloseLoc
+											.transition()
+											.duration(doorChangeStateDurationMS),
+										toX: doorEndCloseX,
+										toY: barnDoorDatum.closed,
+										xEase: d3.easeLinear,
+										yEase: d3.easeCubicInOut,
+									})
 										.transition()
 										.duration(remainingDurationMS)
 										.ease(easing)
 										.attr("x1", barnDoorDatum.baseX + distTraveled)
 										.attr("x2", barnDoorDatum.baseX + distTraveled);
 								} else {
+									// The door will fully close after it stops moving horizontally, so we have to break the closing animation into two parts, one with horizontal movement and one without
 									const moveToFinalXDurationMS =
 										durationMS *
 										((doorXFinal - doorBeginCloseX) / distTraveled);
@@ -620,20 +650,21 @@ function beginAnimation(playbackInfo) {
 												closeRatio,
 									};
 
-									atPreCloseLoc
-										.transition()
-										.duration(moveToFinalXDurationMS)
-										.ease(d3.easeLinear)
-										.attr("x1", doorXFinal)
-										.attr("y1", midway.y1)
-										.attr("x2", doorXFinal)
-										.attr("y2", midway.y2)
+									_tweenDoors({
+										transition: atPreCloseLoc
+											.transition()
+											.duration(moveToFinalXDurationMS),
+										toX: doorXFinal,
+										toY: midway,
+										xEase: d3.easeLinear,
+										yEase: d3.easeCubicIn,
+									})
 										.transition()
 										.duration(
 											doorChangeStateDurationMS -
 												moveToFinalXDurationMS,
 										)
-										.ease(d3.easeLinear)
+										.ease(d3.easeCubicOut)
 										.attr("y1", barnDoorDatum.closed.y1)
 										.attr("y2", barnDoorDatum.closed.y2);
 								}
@@ -642,7 +673,7 @@ function beginAnimation(playbackInfo) {
 									durationMS *
 									((doorXFinal - doorEndOpenX) / distTraveled);
 								console.log(remainingTimeMS, doorXFinal, doorEndOpenX);
-								transition
+								transitionOpen
 									.transition()
 									.duration(remainingTimeMS)
 									.ease(d3.easeLinear)
@@ -680,6 +711,17 @@ function stopAnimation(playbackInfo) {
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
 			const subcanvas = d3.select(this);
+			subcanvas
+				.selectAll(".barn-door")
+				.transition()
+				.duration(durationMS / 2)
+				.attr("y1", d => d.open.y1)
+				.attr("y2", d => d.open.y2);
+			// .transition()
+			// .duration(durationMS / 2)
+			// .attr("y1", d => d.closed.y1)
+			// .attr("y2", d => d.closed.y2);
+
 			if (stationaryObject === "barn") {
 				const poles = subcanvas.selectAll(".pole");
 				const poleData = _getPoleData(d, { fracOfC: speed });
