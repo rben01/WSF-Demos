@@ -12,19 +12,18 @@
 				<label>
 					Relative speed (as fraction of 𝑐):
 					<span
-						id="train-speed-text"
+						id="relative-speed-text"
 						class="highlighted-text"
 						style="min-width: 3em; display: inline-block;"
-						>0.1</span
-					>
+					></span>
 					<input
 						type="range"
-						id="input-train-speed"
-						name="input-train-speed"
-						min="0"
+						id="input-relative-speed"
+						name="input-relative-speed"
+						min="0.1"
 						max="0.95"
 						step=".05"
-						value=".1"
+						value=".9"
 						oninput="updateRelativeSpeed(this.value)"
 					/>
 				</label>
@@ -40,14 +39,14 @@
 				<span>Barn's Perspective</span>
 				<button
 					id="btn-run-animation-barn-perspective"
-					onclick="beginAnimation()"
+					onclick="beginAnimation(bothPlaybackInfo.barnStationary)"
 					class="play-button"
 				>
 					Start
 				</button>
 				<button
 					id="btn-reset-animation-barn-perspective"
-					onclick="stopAnimation()"
+					onclick="stopAnimation(bothPlaybackInfo.barnStationary)"
 					class="play-button"
 					disabled
 				>
@@ -56,7 +55,9 @@
 			</span>
 			<br />
 			<span
-				>Contracted length of pole: <span class="highlighted-text">5</span>m
+				>Contracted length of pole:
+				<span id="text-contracted-length-pole" class="highlighted-text">5</span
+				>m
 			</span>
 		</div>
 		<svg
@@ -71,14 +72,14 @@
 				<span>Pole's Perspective</span>
 				<button
 					id="btn-run-animation-pole-perspective"
-					onclick="beginAnimation()"
+					onclick="beginAnimation(bothPlaybackInfo.poleStationary)"
 					class="play-button"
 				>
 					Start
 				</button>
 				<button
 					id="btn-reset-animation-pole-perspective"
-					onclick="stopAnimation()"
+					onclick="stopAnimation(bothPlaybackInfo.poleStationary)"
 					class="play-button"
 					disabled
 				>
@@ -87,7 +88,9 @@
 			</span>
 			<br />
 			<span
-				>Contracted length of barn: <span class="highlighted-text">5</span>m
+				>Contracted length of barn:
+				<span id="text-contracted-length-barn" class="highlighted-text">5</span
+				>m
 			</span>
 		</div>
 		<svg
@@ -97,10 +100,11 @@
 			style="margin: 0 auto; display: block;"
 		></svg>
 
-		<script type="text/javascript" src="../train_aesthetic.js"></script>
+		<script type="text/javascript" src="../utils.js"></script>
+		<script type="text/javascript" src="../global_aesthetic.js"></script>
 		<script type="text/javascript" src="barn_door_pole_11_2.js"></script>
 		<script type="text/javascript">
-			updateRelativeSpeed();
+			updateRelativeSpeed(0.9);
 		</script>
 	</body>
 </html>

@@ -307,9 +307,9 @@ function stopAnimation() {
 	const elapsedTimeMS =
 		new Date().getTime() - playbackInfo.animationStartDate.getTime();
 
-	const easing = CONFIG.easingForAnimationReset;
+	const easing = AESTHETIC.easingForAnimationReset;
 	const durationMS =
-		CONFIG.durationMSOfAnimationReset *
+		AESTHETIC.durationMSOfAnimationReset *
 		Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
 
 	tracks

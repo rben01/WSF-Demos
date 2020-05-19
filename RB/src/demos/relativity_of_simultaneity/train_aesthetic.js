@@ -6,9 +6,6 @@ const USER_INFO = { trainSpeed: 0.1 };
 
 // eslint-disable-next-line no-unused-vars
 const CONFIG = Object.freeze({
-	durationMSOfAnimationReset: 300,
-	easingForAnimationReset: d3.easePoly.exponent(2.5),
-
 	xMarginProptn: 0,
 	yMarginProptn: 0.15,
 	trainWidthProptn: 0.4,

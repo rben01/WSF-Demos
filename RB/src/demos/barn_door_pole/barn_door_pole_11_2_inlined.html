@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js">
+</script>
+</head>
+<body>
+<style>
+body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}
+</style>
+<div>
+<span>
+<label>
+Relative speed (as fraction of 𝑐):
+<span class="highlighted-text" id="train-speed-text" style="min-width: 3em; display: inline-block;">
+0.1
+</span>
+<input id="input-train-speed" max="0.95" min="0" name="input-train-speed" oninput="updateRelativeSpeed(this.value)" step=".05" type="range" value=".1"/>
+</label>
+</span>
+</div>
+<div>
+<span id="barn-rest-length">
+Rest length of barn: 6.00m
+</span>
+<br/>
+<span id="pole-rest-length">
+Rest length of pole: 9.00m
+</span>
+</div>
+<br/>
+<div>
+<span>
+<span>
+Barn's Perspective
+</span>
+<button class="play-button" id="btn-run-animation-barn-perspective" onclick="beginAnimation()">
+Start
+</button>
+<button class="play-button" disabled="" id="btn-reset-animation-barn-perspective" onclick="stopAnimation()">
+Reset
+</button>
+</span>
+<br/>
+<span>
+Contracted length of pole:
+<span class="highlighted-text">
+5
+</span>
+m
+</span>
+</div>
+<svg class="viz-canvas" id="canvas-barn-perspective" style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+</svg>
+<br/>
+<div>
+<span>
+<span>
+Pole's Perspective
+</span>
+<button class="play-button" id="btn-run-animation-pole-perspective" onclick="beginAnimation()">
+Start
+</button>
+<button class="play-button" disabled="" id="btn-reset-animation-pole-perspective" onclick="stopAnimation()">
+Reset
+</button>
+</span>
+<br/>
+<span>
+Contracted length of barn:
+<span class="highlighted-text">
+5
+</span>
+m
+</span>
+</div>
+<svg class="viz-canvas" id="canvas-pole-perspective" style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg">
+</svg>
+<!-- <script type="text/javascript" src="./train_aesthetic.js"></script> -->
+<script type="text/javascript">
+"use strict";const AESTHETIC={solidFill:"#4ff8",solidStroke:"#fff8",configure:function(a,t){return Object.keys(t).forEach(n=>{const i=t[n];if("attrs"===n){const t=i;Object.keys(t).forEach(n=>{a.attr(n,t[n])})}else{if("class"!==n)throw new Error(`Unexpected key ${n}`);a.classed(i,!0)}}),a}},AX_MIN_X=5,AX_MIN_Y=3,AX_MAX_X=10,AX_MAX_Y=7,AX_WIDTH=AX_MAX_X-AX_MIN_X,AX_HEIGHT=AX_MAX_Y-AX_MIN_Y,AX_MID_X=AX_MIN_X+(AX_MAX_X-AX_MIN_X)/2,AX_MID_Y=AX_MIN_Y+(AX_MAX_Y-AX_MIN_Y)/2,POLE_BARN_RATIO=1.5,BARN_WIDTH_PROPTN=.3,POLE_WIDTH_PROPTN=.3*1.5,AX_BARN_WIDTH=.3*AX_WIDTH,AX_POLE_WIDTH=AX_WIDTH*(.3*1.5),TOTAL_DURATION_SEC=5,TOTAL_DURATION_MS=5e3,CANVAS_WIDTH=800,CANVAS_HEIGHT=400,canvas=d3.selectAll(".viz-canvas").attr("width",800).attr("height",400).attr("background-color","black"),subcanvases=canvas.selectAll().data([{originX:0,originY:0,width:800,height:400,observerIsStandingOn:"barn"},{originX:0,originY:0,width:800,height:400,observerIsStandingOn:"pole"}]).enter().append("g").attr("transform",a=>`translate(0, ${a.originY})`).classed("subcanvas",!0);function lorentzFactor({fracOfC:a}){return 1/Math.sqrt(1-a*a)}function axDistTraveled({fracOfC:a}){return a*AX_TRAIN_WIDTH*CONFIG.axDistTraveledAsFracOfTrainWidth}function transAxisToCanvas(a,{x:t,y:n,dx:i,dy:s}){const e=(t-AX_MIN_X)/AX_WIDTH,r=(n-AX_MIN_Y)/AX_HEIGHT;return{x:a.width*CONFIG.xMarginProptn+e*a.width*(1-2*CONFIG.xMarginProptn),y:a.height*CONFIG.yMarginProptn+r*a.height*(1-2*CONFIG.yMarginProptn),dx:a.width/AX_WIDTH*i,dy:a.height/AX_HEIGHT*s}}function _getBarn(a){a.observerIsStandingOn}function _getTrainAndLightSourcesData(a){const t=AX_MID_X-AX_TRAIN_WIDTH/2,n=AX_MID_Y-AX_TRAIN_HEIGHT/2,i=t+AX_TRAIN_WIDTH,s=n+AX_TRAIN_HEIGHT,e=transAxisToCanvas(a,{x:t,y:n}),r=transAxisToCanvas(a,{x:i,y:s}),o=r.x-e.x,c=r.y-e.y,l=AX_MID_X,A=AX_MID_Y,_=.03*AX_WIDTH,d=.03*AX_HEIGHT,{x:I,y:T,dx:X,dy:x}=transAxisToCanvas(a,{x:l,y:A,dx:_,dy:d}),u=Math.min(X,x),h=u/2,O={shape:"circle",x0:I,originXAttr:"cx"},g={cx:I,cy:T},N={...g,r:u,...CONFIG.trainLightSource.attrs},f={...g,r:h,...CONFIG.trainPhoton.attrs};return[{class:CONFIG.trainCar.class,canvas:a,shape:"rect",x0:e.x,originXAttr:"x",attrs:{x:e.x,y:e.y,width:o,height:c,...CONFIG.trainCar.attrs}},{class:CONFIG.trainLightSource.class,canvas:a,...O,attrs:N},{class:CONFIG.trainPhoton.class,canvas:a,...O,attrs:f,direction:"left"},{class:CONFIG.trainPhoton.class,canvas:a,...O,attrs:f,direction:"right"}]}function _getTracksData(a){const t=AX_MIN_X+.05*AX_WIDTH,n=AX_MAX_X-.05*AX_WIDTH,i=AX_MIN_Y+.05*AX_HEIGHT,s=AX_MAX_Y-.05*AX_HEIGHT,{axDistBtwnTies:e,initialTieAxX:r}=getRailroadTieParams({trackInteriorAxMinX:t,trackInteriorAxMaxX:n,nTiesVisible:CONFIG.nTiesVisible}),o="ground"===a.observerIsStandingOn?CONFIG.nTiesVisible:Math.ceil(CONFIG.nTiesVisible+axDistTraveled({fracOfC:CONFIG.maxTrainSpeed})/e),c=[];for(let t=0;t<o;t++){const n=r+t*e,[i,s]=[{x:n,y:AX_MIN_Y},{x:n,y:AX_MAX_Y}].map(t=>transAxisToCanvas(a,t));c.push({class:CONFIG.railroadTie.class,canvas:a,x0:i.x,shape:"line",attrs:{x1:i.x,y1:i.y,x2:s.x,y2:s.y,...CONFIG.railroadTie.attrs}})}return[i,s].forEach(t=>{const[n,i]=[{x:AX_MIN_X,y:t},{x:AX_MAX_X,y:t}].map(t=>transAxisToCanvas(a,t));c.push({class:CONFIG.railroadRail.class,canvas:a,shape:"line",attrs:{x1:n.x,y1:n.y,x2:i.x,y2:i.y,...CONFIG.railroadRail.attrs}})}),c}function _addGraphicalObjs(a,t){return a.selectAll().data(t).enter().append(a=>d3.create(`svg:${a.shape}`).node()).each(function(a){const t=d3.select(this).classed(a.class,!0);return Object.keys(a.attrs).forEach(n=>{t.attr(n,a.attrs[n])}),t})}function addTracks(a){return _addGraphicalObjs(a,_getTracksData)}function addTrainAndLightSources(a){return _addGraphicalObjs(a,_getTrainAndLightSourcesData)}const tracks=addTracks(subcanvases),trainAndLightSources=addTrainAndLightSources(subcanvases),playbackInfo={animationIsPlaying:!1,animationStartDate:null,animationTimer:null,beginButton:document.getElementById("btn-run-animation"),resetButton:document.getElementById("btn-reset-animation")};function stopAnimation(){playbackInfo.animationIsPlaying=!1,clearTimeout(playbackInfo.animationTimer),playbackInfo.beginButton.disabled=!1,playbackInfo.resetButton.disabled=!0;const a=(new Date).getTime()-playbackInfo.animationStartDate.getTime(),t=CONFIG.easingForAnimationReset,n=CONFIG.durationMSOfAnimationReset*Math.min(1,.5*(1+a/TOTAL_DURATION_MS));tracks.filter(a=>a.class===CONFIG.railroadTie.class&&"train"===a.canvas.observerIsStandingOn).transition().duration(n).ease(t).attr("x1",a=>a.x0).attr("x2",a=>a.x0),trainAndLightSources.each(function(a){d3.select(this).transition().duration(n).ease(t).attr(a.originXAttr,a.x0)})}function beginAnimation(){playbackInfo.animationIsPlaying||(playbackInfo.animationIsPlaying=!0,playbackInfo.animationStartDate=new Date,playbackInfo.beginButton.disabled=!0,playbackInfo.resetButton.disabled=!1,playbackInfo.animationTimer=setTimeout(()=>{playbackInfo.animationIsPlaying=!1,playbackInfo.animationEndDate=new Date},TOTAL_DURATION_MS),subcanvases.each(function(a){const t=transAxisToCanvas(a,{dx:axDistTraveled({fracOfC:USER_INFO.trainSpeed})}).dx,n=transAxisToCanvas(a,{dx:axDistTraveled({fracOfC:1})}).dx;"train"===a.observerIsStandingOn?(d3.select(this).selectAll(`.${CONFIG.railroadTie.class}`).transition().duration(0).attr("x1",a=>a.x0).attr("x2",a=>a.x0).transition().duration(TOTAL_DURATION_MS).ease(d3.easeLinear).attr("x1",a=>a.x0-t).attr("x2",a=>a.x0-t),d3.select(this).selectAll(`.${CONFIG.trainPhoton.class}`).each(function(a){const t="left"===a.direction?a.x0-n:a.x0+n;d3.select(this).transition().duration(0).attr("cx",a.x0).transition().duration(TOTAL_DURATION_MS).ease(d3.easeLinear).attr("cx",t)})):"ground"===a.observerIsStandingOn&&(d3.select(this).selectAll(`.${CONFIG.trainCar.class}, .${CONFIG.trainLightSource.class}`).each(function(a){d3.select(this).transition().duration(0).attr(a.originXAttr,a.x0).transition().duration(TOTAL_DURATION_MS).ease(d3.easeLinear).attr(a.originXAttr,a.x0+t)}),d3.select(this).selectAll(`.${CONFIG.trainPhoton.class}`).each(function(a){const i="left"===a.direction?a.x0-n+t:a.x0+n+t;d3.select(this).transition().duration(0).attr("cx",a.x0).transition().duration(TOTAL_DURATION_MS).ease(d3.easeLinear).attr("cx",i)}))}))}updateRelativeSpeed();
+</script>
+</body>
+</html>
