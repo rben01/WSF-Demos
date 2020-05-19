@@ -198,7 +198,7 @@ function _getPoleDatum(canvasInfo, { fracOfC }) {
 	};
 }
 
-function _getBarnDoors(barnDatum) {
+function _getBarnDoorsDatums(barnDatum) {
 	const { x, y, width, height } = barnDatum.attrs;
 	const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
 	const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
@@ -259,9 +259,17 @@ function _getBarnAndPoleData(canvasInfo) {
 	}
 
 	const barnDatum = _getBarnDatum(canvasInfo, { fracOfC: barnSpeed });
-	const barnDoors = _getBarnDoors(barnDatum);
-	console.log(barnDoors);
-	return [barnDatum, _getPoleDatum(canvasInfo, { fracOfC: poleSpeed }), ...barnDoors];
+	const barnDoorsDatums = _getBarnDoorsDatums(barnDatum);
+	const poleDatum = _getPoleDatum(canvasInfo, { fracOfC: poleSpeed });
+	console.log(barnDoorsDatums);
+	return {
+		objects: {
+			barnDatum,
+			barnDoors: barnDoorsDatums,
+			poleDatum,
+		},
+		data: [barnDatum, ...barnDoorsDatums, poleDatum],
+	};
 }
 
 function _addGraphicalObjs(subcanvases, dataFunc) {
@@ -280,10 +288,10 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 }
 
 function addBarnsAndPoles(subcanvases) {
-	return _addGraphicalObjs(subcanvases, _getBarnAndPoleData);
+	return _addGraphicalObjs(subcanvases, d => _getBarnAndPoleData(d).data);
 }
 
-addBarnsAndPoles(subcanvases);
+console.log(addBarnsAndPoles(subcanvases));
 
 const bothPlaybackInfo = {
 	barnStationary: {
@@ -323,7 +331,7 @@ function updateRelativeSpeed(speedStr) {
 		});
 
 		subcanvases.each(function (d) {
-			const [barnDatum, poleDatum] = _getBarnAndPoleData(d);
+			const { barnDatum, poleDatum } = _getBarnAndPoleData(d).objects;
 			const subcanvas = d3.select(this);
 			let datum, d3Obj;
 			if (d.observerIsStandingOn === "barn") {
@@ -346,7 +354,7 @@ function updateRelativeSpeed(speedStr) {
 				datum = barnDatum;
 				d3Obj = subcanvas.select(".barn");
 			}
-
+			console.log(d3Obj);
 			const transition = d3Obj.transition().duration(100).ease(d3.easeCubicOut);
 			Object.keys(datum.attrs).forEach(key => {
 				transition.attr(key, datum.attrs[key]);
