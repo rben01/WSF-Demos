@@ -1,4 +1,4 @@
-/* globals AESTHETIC isIterable */
+/* globals AESTHETIC isIterable _addGraphicalObjs */
 
 "use strict";
 
@@ -67,7 +67,7 @@ const subcanvases = canvas
 	.selectAll("g");
 
 function lorentzFactor({ fracOfC }) {
-	if (typeof fracOfC === "undefined") {
+	if (!fracOfC) {
 		fracOfC = 0;
 	}
 	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
@@ -117,7 +117,11 @@ function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
 	};
 }
 
-function _getBarnDatum(canvasInfo, { fracOfC }) {
+function _getBarnData(canvasInfo, { fracOfC }) {
+	if (canvasInfo.observerIsStandingOn === "barn") {
+		fracOfC = 0;
+	}
+
 	const lf = lorentzFactor({ fracOfC });
 
 	const barnMidAxX = AX_MIN_X + (1 / 3) * AX_WIDTH;
@@ -147,26 +151,32 @@ function _getBarnDatum(canvasInfo, { fracOfC }) {
 		barnDoorSideWallCanvasHeight + 100,
 	].join(" ");
 
-	return {
-		class: "barn",
-		canvas: canvasInfo,
-		shape: "rect",
-		midX: barnMidCanvasX,
-		attrs: {
-			x: barnMinCanvasX,
-			y: barnMinCanvasY,
-			width: barnCanvasWidth,
-			height: barnCanvasHeight,
-			fill: AESTHETIC.solidFill,
-			stroke: "white",
-			"stroke-width": 5,
-			"stroke-linecap": "square",
-			"stroke-dasharray": barnDashArray,
+	return [
+		{
+			class: "barn",
+			canvas: canvasInfo,
+			shape: "rect",
+			midX: barnMidCanvasX,
+			attrs: {
+				x: barnMinCanvasX,
+				y: barnMinCanvasY,
+				width: barnCanvasWidth,
+				height: barnCanvasHeight,
+				fill: AESTHETIC.solidFill,
+				stroke: "white",
+				"stroke-width": 5,
+				"stroke-linecap": "square",
+				"stroke-dasharray": barnDashArray,
+			},
 		},
-	};
+	];
 }
 
-function _getPoleDatum(canvasInfo, { fracOfC }) {
+function _getPoleData(canvasInfo, { fracOfC }) {
+	if (canvasInfo.observerIsStandingOn === "pole") {
+		fracOfC = 0;
+	}
+
 	const lf = lorentzFactor({ fracOfC });
 	const poleMidAxX = AX_MIN_X + (2 / 3) * AX_WIDTH;
 	const poleMinAxX = poleMidAxX - (0.5 * AX_POLE_WIDTH) / lf;
@@ -182,20 +192,22 @@ function _getPoleDatum(canvasInfo, { fracOfC }) {
 		y: poleMidAxY,
 	});
 
-	return {
-		class: "pole",
-		canvas: canvasInfo,
-		shape: "line",
-		midX: poleMidCanvasX,
-		attrs: {
-			x1: poleMinCanvasX,
-			y1: poleMidCanvasY,
-			x2: poleMaxCanvasX,
-			y2: poleMidCanvasY,
-			stroke: "white",
-			"stroke-width": 5,
+	return [
+		{
+			class: "pole",
+			canvas: canvasInfo,
+			shape: "line",
+			midX: poleMidCanvasX,
+			attrs: {
+				x1: poleMinCanvasX,
+				y1: poleMidCanvasY,
+				x2: poleMaxCanvasX,
+				y2: poleMidCanvasY,
+				stroke: "white",
+				"stroke-width": 5,
+			},
 		},
-	};
+	];
 }
 
 function _getBarnDoorsDatums(barnDatum) {
@@ -228,9 +240,9 @@ function _getBarnDoorsDatums(barnDatum) {
 			...doorCommonAttrs,
 			attrs: {
 				x1: x - BARN_DOOR_OFFSET,
-				y1: doorCommonAttrs.closed.y1,
+				y1: doorCommonAttrs.open.y1,
 				x2: x - BARN_DOOR_OFFSET,
-				y2: doorCommonAttrs.closed.y2,
+				y2: doorCommonAttrs.open.y2,
 				...doorCommonAttrAttrs,
 			},
 		},
@@ -249,49 +261,26 @@ function _getBarnDoorsDatums(barnDatum) {
 
 function _getBarnAndPoleData(canvasInfo) {
 	const fracOfC = getSpeed();
-	let barnSpeed, poleSpeed;
-	if (canvasInfo.observerIsStandingOn === "barn") {
-		barnSpeed = 0;
-		poleSpeed = fracOfC;
-	} else {
-		barnSpeed = fracOfC;
-		poleSpeed = 0;
-	}
 
-	const barnDatum = _getBarnDatum(canvasInfo, { fracOfC: barnSpeed });
-	const barnDoorsDatums = _getBarnDoorsDatums(barnDatum);
-	const poleDatum = _getPoleDatum(canvasInfo, { fracOfC: poleSpeed });
-	console.log(barnDoorsDatums);
+	const barnData = _getBarnData(canvasInfo, { fracOfC: fracOfC });
+	const barnDoorsData = _getBarnDoorsDatums(barnData[0]);
+	const poleData = _getPoleData(canvasInfo, { fracOfC: fracOfC });
+
 	return {
 		objects: {
-			barnDatum,
-			barnDoors: barnDoorsDatums,
-			poleDatum,
+			barnData: barnData,
+			barnDoorsData: barnDoorsData,
+			poleData,
 		},
-		data: [barnDatum, ...barnDoorsDatums, poleDatum],
+		data: [...barnData, ...barnDoorsData, ...poleData],
 	};
-}
-
-function _addGraphicalObjs(subcanvases, dataFunc) {
-	return subcanvases
-		.selectAll()
-		.data(dataFunc)
-		.enter()
-		.append(d => d3.create(`svg:${d.shape}`).node())
-		.each(function (d) {
-			const d3Obj = d3.select(this).classed(d.class, true);
-
-			Object.keys(d.attrs).forEach(key => {
-				d3Obj.attr(key, d.attrs[key]);
-			});
-		});
 }
 
 function addBarnsAndPoles(subcanvases) {
 	return _addGraphicalObjs(subcanvases, d => _getBarnAndPoleData(d).data);
 }
 
-console.log(addBarnsAndPoles(subcanvases));
+addBarnsAndPoles(subcanvases);
 
 const bothPlaybackInfo = {
 	barnStationary: {
@@ -331,9 +320,10 @@ function updateRelativeSpeed(speedStr) {
 		});
 
 		subcanvases.each(function (d) {
-			const { barnDatum, poleDatum } = _getBarnAndPoleData(d).objects;
+			const { barnData, barnDoorsData, poleData } = _getBarnAndPoleData(
+				d,
+			).objects;
 			const subcanvas = d3.select(this);
-			let datum, d3Obj;
 			if (d.observerIsStandingOn === "barn") {
 				if (bothPlaybackInfo.barnStationary.frozen) {
 					return;
@@ -341,9 +331,6 @@ function updateRelativeSpeed(speedStr) {
 				document.getElementById(
 					"text-contracted-length-pole",
 				).textContent = poleApparentWidth.toFixed(2);
-
-				datum = poleDatum;
-				d3Obj = subcanvas.select(".pole");
 			} else {
 				if (bothPlaybackInfo.poleStationary.frozen) {
 					return;
@@ -351,13 +338,29 @@ function updateRelativeSpeed(speedStr) {
 				document.getElementById(
 					"text-contracted-length-barn",
 				).textContent = barnApparentWidth.toFixed(2);
-				datum = barnDatum;
-				d3Obj = subcanvas.select(".barn");
 			}
-			console.log(d3Obj);
-			const transition = d3Obj.transition().duration(100).ease(d3.easeCubicOut);
-			Object.keys(datum.attrs).forEach(key => {
-				transition.attr(key, datum.attrs[key]);
+
+			const dataMap = {
+				".barn": barnData,
+				".pole": poleData,
+				".barn-door": barnDoorsData,
+			};
+
+			Object.entries(dataMap).forEach(([key, data]) => {
+				const objs = subcanvas.selectAll(key);
+
+				objs.data(data);
+				objs.each(function (d) {
+					const transition = d3
+						.select(this)
+						.transition()
+						.duration(100)
+						.ease(d3.easeCubicOut);
+
+					Object.entries(d.attrs).forEach(([key, val]) => {
+						transition.attr(key, val);
+					});
+				});
 			});
 		});
 	} catch (e) {
@@ -402,59 +405,65 @@ function beginAnimation(playbackInfo) {
 		.each(function (d) {
 			const subcanvas = d3.select(this);
 			if (stationaryObject === "barn") {
-				const pole = subcanvas.select(".pole");
-				const poleDatum = _getPoleDatum(d, { fracOfC: speed });
+				const poles = subcanvas.selectAll(".pole");
+				const poleData = _getPoleData(d, { fracOfC: speed });
 
-				const poleAxisWidth = AX_POLE_WIDTH / lf;
+				poles.data(poleData).each(function (d) {
+					const pole = d3.select(this);
 
-				const poleMidAxXFinal = AX_MIN_X + 0.1 * AX_WIDTH;
-				const {
-					x: poleMidCanvasXFinal,
-					dx: poleCanvasWidth,
-				} = transAxisToCanvas(d, {
-					x: poleMidAxXFinal,
-					dx: poleAxisWidth,
+					const poleAxisWidth = AX_POLE_WIDTH / lf;
+					const poleMidAxXFinal = AX_MIN_X + 0.1 * AX_WIDTH;
+					const {
+						x: poleMidCanvasXFinal,
+						dx: poleCanvasWidth,
+					} = transAxisToCanvas(d.canvas, {
+						x: poleMidAxXFinal,
+						dx: poleAxisWidth,
+					});
+
+					const poleMinCanvasXFinal =
+						poleMidCanvasXFinal - poleCanvasWidth / 2;
+					const poleMaxCanvasXFinal = poleMinCanvasXFinal + poleCanvasWidth;
+
+					pole.transition()
+						.duration(0)
+						.attr("x1", d.attrs.x1)
+						.attr("x2", d.attrs.x2)
+						.transition()
+						.duration(durationMS)
+						.ease(easing)
+						.attr("x1", poleMinCanvasXFinal)
+						.attr("x2", poleMaxCanvasXFinal);
 				});
-
-				const poleMinCanvasXFinal = poleMidCanvasXFinal - poleCanvasWidth / 2;
-				const poleMaxCanvasXFinal = poleMinCanvasXFinal + poleCanvasWidth;
-
-				pole.transition()
-					.duration(0)
-					.attr("x1", poleDatum.attrs.x1)
-					.attr("x2", poleDatum.attrs.x2)
-					.transition()
-					.duration(durationMS)
-					.ease(easing)
-					.attr("x1", poleMinCanvasXFinal)
-					.attr("x2", poleMaxCanvasXFinal);
 			} else {
-				const barn = subcanvas.select(".barn");
-				const barnDatum = _getBarnDatum(d, { fracOfC: speed });
-				console.log(barnDatum);
-				const barnAxisWidth = AX_BARN_WIDTH / lf;
+				const barns = subcanvas.selectAll(".barn");
+				const barnData = _getBarnData(d, { fracOfC: speed });
 
-				const barnMidAxXFinal = AX_MIN_X + 0.9 * AX_WIDTH;
-				const {
-					x: barnMidCanvasXFinal,
-					dx: barnCanvasWidth,
-				} = transAxisToCanvas(d, {
-					x: barnMidAxXFinal,
-					dx: barnAxisWidth,
+				barns.data(barnData).each(function (d) {
+					console.log(d);
+					const barn = d3.select(this);
+					const barnAxisWidth = AX_BARN_WIDTH / lf;
+
+					const barnMidAxXFinal = AX_MIN_X + 0.9 * AX_WIDTH;
+					const {
+						x: barnMidCanvasXFinal,
+						dx: barnCanvasWidth,
+					} = transAxisToCanvas(d.canvas, {
+						x: barnMidAxXFinal,
+						dx: barnAxisWidth,
+					});
+
+					const barnMinCanvasXFinal =
+						barnMidCanvasXFinal - barnCanvasWidth / 2;
+
+					barn.transition()
+						.duration(0)
+						.attr("x", d.attrs.x)
+						.transition()
+						.duration(durationMS)
+						.ease(easing)
+						.attr("x", barnMinCanvasXFinal);
 				});
-
-				const barnMinCanvasXFinal = barnMidCanvasXFinal - barnCanvasWidth / 2;
-				console.log(barnMinCanvasXFinal);
-				console.log(barnDatum);
-				console.log(durationMS);
-
-				barn.transition()
-					.duration(0)
-					.attr("x", barnDatum.attrs.x)
-					.transition()
-					.duration(durationMS)
-					.ease(easing)
-					.attr("x", barnMinCanvasXFinal);
 			}
 		});
 }
@@ -484,24 +493,30 @@ function stopAnimation(playbackInfo) {
 		.each(function (d) {
 			const subcanvas = d3.select(this);
 			if (stationaryObject === "barn") {
-				const pole = subcanvas.select(".pole");
-				const poleDatum = _getPoleDatum(d, { fracOfC: speed });
+				const poles = subcanvas.selectAll(".pole");
+				const poleData = _getPoleData(d, { fracOfC: speed });
 
-				pole.transition()
-					.duration(durationMS)
-					.ease(easing)
-					.attr("x1", poleDatum.attrs.x1)
-					.attr("x2", poleDatum.attrs.x2)
-					.on("end", updateRelativeSpeed());
+				poles.data(poleData).each(function (d) {
+					const pole = d3.select(this);
+					pole.transition()
+						.duration(durationMS)
+						.ease(easing)
+						.attr("x1", d.attrs.x1)
+						.attr("x2", d.attrs.x2)
+						.on("end", updateRelativeSpeed());
+				});
 			} else {
-				const barn = subcanvas.select(".barn");
-				const barnDatum = _getBarnDatum(d, { fracOfC: speed });
+				const barns = subcanvas.selectAll(".barn");
+				const barnData = _getBarnData(d, { fracOfC: speed });
 
-				barn.transition()
-					.duration(durationMS)
-					.ease(easing)
-					.attr("x", barnDatum.attrs.x)
-					.on("end", updateRelativeSpeed());
+				barns.data(barnData).each(function (d) {
+					const barn = d3.select(this);
+					barn.transition()
+						.duration(durationMS)
+						.ease(easing)
+						.attr("x", d.attrs.x)
+						.on("end", updateRelativeSpeed());
+				});
 			}
 		});
 }

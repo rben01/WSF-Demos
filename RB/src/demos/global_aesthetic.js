@@ -7,12 +7,11 @@ const AESTHETIC = {
 	durationMSOfAnimationReset: 300,
 	easingForAnimationReset: d3.easePoly.exponent(2.5),
 	configure: function (d3Obj, config) {
-		Object.keys(config).forEach(key => {
-			const value = config[key];
+		Object.entries(config).forEach(([key, value]) => {
 			if (key === "attrs") {
 				const attrs = value;
-				Object.keys(attrs).forEach(attr => {
-					d3Obj.attr(attr, attrs[attr]);
+				Object.entries(attrs).forEach((attr, val) => {
+					d3Obj.attr(attr, val);
 				});
 			} else if (key === "class") {
 				d3Obj.classed(value, true);
