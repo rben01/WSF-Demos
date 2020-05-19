@@ -210,7 +210,7 @@ function _getPoleData(canvasInfo, { fracOfC }) {
 	];
 }
 
-function _getBarnDoorsDatums(barnDatum) {
+function _getBarnDoorsData(barnDatum) {
 	const { x, y, width, height } = barnDatum.attrs;
 	const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
 	const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
@@ -235,24 +235,29 @@ function _getBarnDoorsDatums(barnDatum) {
 		"stroke-width": 4,
 	};
 
+	const leftDoorX = x - BARN_DOOR_OFFSET;
+	const rightDoorX = x + width + BARN_DOOR_OFFSET;
+
 	return [
 		{
 			...doorCommonAttrs,
+			baseX: leftDoorX,
 			attrs: {
-				x1: x - BARN_DOOR_OFFSET,
-				y1: doorCommonAttrs.open.y1,
-				x2: x - BARN_DOOR_OFFSET,
-				y2: doorCommonAttrs.open.y2,
+				x1: leftDoorX,
+				y1: doorCommonAttrs.closed.y1,
+				x2: leftDoorX,
+				y2: doorCommonAttrs.closed.y2,
 				...doorCommonAttrAttrs,
 			},
 		},
 		{
 			...doorCommonAttrs,
+			baseX: rightDoorX,
 			attrs: {
-				x1: x + width + BARN_DOOR_OFFSET,
-				y1: doorCommonAttrs.open.y1,
-				x2: x + width + BARN_DOOR_OFFSET,
-				y2: doorCommonAttrs.open.y2,
+				x1: rightDoorX,
+				y1: doorCommonAttrs.closed.y1,
+				x2: rightDoorX,
+				y2: doorCommonAttrs.closed.y2,
 				...doorCommonAttrAttrs,
 			},
 		},
@@ -263,7 +268,7 @@ function _getBarnAndPoleData(canvasInfo) {
 	const fracOfC = getSpeed();
 
 	const barnData = _getBarnData(canvasInfo, { fracOfC: fracOfC });
-	const barnDoorsData = _getBarnDoorsDatums(barnData[0]);
+	const barnDoorsData = _getBarnDoorsData(barnData[0]);
 	const poleData = _getPoleData(canvasInfo, { fracOfC: fracOfC });
 
 	return {
@@ -408,7 +413,7 @@ function beginAnimation(playbackInfo) {
 				const poles = subcanvas.selectAll(".pole");
 				const poleData = _getPoleData(d, { fracOfC: speed });
 
-				poles.data(poleData).each(function (d) {
+				poles.data(poleData).each(function (poleDatum) {
 					const pole = d3.select(this);
 
 					const poleAxisWidth = AX_POLE_WIDTH / lf;
@@ -416,7 +421,7 @@ function beginAnimation(playbackInfo) {
 					const {
 						x: poleMidCanvasXFinal,
 						dx: poleCanvasWidth,
-					} = transAxisToCanvas(d.canvas, {
+					} = transAxisToCanvas(poleDatum.canvas, {
 						x: poleMidAxXFinal,
 						dx: poleAxisWidth,
 					});
@@ -425,22 +430,64 @@ function beginAnimation(playbackInfo) {
 						poleMidCanvasXFinal - poleCanvasWidth / 2;
 					const poleMaxCanvasXFinal = poleMinCanvasXFinal + poleCanvasWidth;
 
+					const distTraveled = poleDatum.attrs.x1 - poleMinCanvasXFinal;
+
 					pole.transition()
 						.duration(0)
-						.attr("x1", d.attrs.x1)
-						.attr("x2", d.attrs.x2)
+						.attr("x1", poleDatum.attrs.x1)
+						.attr("x2", poleDatum.attrs.x2)
 						.transition()
 						.duration(durationMS)
 						.ease(easing)
 						.attr("x1", poleMinCanvasXFinal)
 						.attr("x2", poleMaxCanvasXFinal);
+
+					const doorChangeStateDurationMS = 300;
+					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
+						const barnDoor = d3.select(this);
+						const distToBarnDoor = {
+							enter:
+								poleDatum.attrs.x1 -
+								barnDoorDatum.baseX -
+								6 * BARN_DOOR_OFFSET * speed,
+							leave:
+								poleDatum.attrs.x2 -
+								barnDoorDatum.baseX -
+								9 * BARN_DOOR_OFFSET * speed,
+						};
+
+						const durationMSToBarnDoor = {
+							enter: durationMS * (distToBarnDoor.enter / distTraveled),
+							leave: durationMS * (distToBarnDoor.leave / distTraveled),
+						};
+
+						const transition = barnDoor
+							.transition()
+							.delay(durationMSToBarnDoor.enter)
+							.duration(doorChangeStateDurationMS)
+							.attr("y1", barnDoorDatum.open.y1)
+							.attr("y2", barnDoorDatum.open.y2);
+
+						if (poleDatum.attrs.x2 - barnDoorDatum.baseX <= distTraveled) {
+							transition
+								.transition()
+								.delay(
+									durationMSToBarnDoor.leave -
+										durationMSToBarnDoor.enter,
+								)
+								.duration(doorChangeStateDurationMS)
+								.attr("y1", barnDoorDatum.closed.y1)
+								.attr("y2", barnDoorDatum.closed.y2);
+						}
+
+						console.log(durationMSToBarnDoor);
+					});
 				});
 			} else {
 				const barns = subcanvas.selectAll(".barn");
 				const barnData = _getBarnData(d, { fracOfC: speed });
 
-				barns.data(barnData).each(function (d) {
-					console.log(d);
+				barns.data(barnData).each(function (barnDatum) {
 					const barn = d3.select(this);
 					const barnAxisWidth = AX_BARN_WIDTH / lf;
 
@@ -448,7 +495,7 @@ function beginAnimation(playbackInfo) {
 					const {
 						x: barnMidCanvasXFinal,
 						dx: barnCanvasWidth,
-					} = transAxisToCanvas(d.canvas, {
+					} = transAxisToCanvas(barnDatum.canvas, {
 						x: barnMidAxXFinal,
 						dx: barnAxisWidth,
 					});
@@ -456,13 +503,47 @@ function beginAnimation(playbackInfo) {
 					const barnMinCanvasXFinal =
 						barnMidCanvasXFinal - barnCanvasWidth / 2;
 
+					const distTraveled = barnMinCanvasXFinal - barnDatum.attrs.x;
+
 					barn.transition()
 						.duration(0)
-						.attr("x", d.attrs.x)
+						.attr("x", barnDatum.attrs.x)
 						.transition()
 						.duration(durationMS)
 						.ease(easing)
 						.attr("x", barnMinCanvasXFinal);
+
+					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
+						const barnDoor = d3.select(this);
+						const poleDatum = subcanvas.select(".pole").datum();
+
+						const distToPole = {
+							enter:
+								poleDatum.attrs.x1 -
+								barnDoorDatum.baseX -
+								6 * BARN_DOOR_OFFSET * speed,
+							leave:
+								poleDatum.attrs.x2 -
+								barnDoorDatum.baseX -
+								9 * BARN_DOOR_OFFSET * speed,
+						};
+
+						const durationMSToPole = {
+							enter: durationMS * (distToPole.enter / distTraveled),
+							leave: durationMS * (distToPole.leave / distTraveled),
+						};
+
+						barnDoor
+							.transition()
+							.duration(0)
+							.attr("x1", barnDoorDatum.baseX)
+							.attr("x2", barnDoorDatum.baseX)
+							.transition()
+							.duration(durationMS)
+							.ease(easing)
+							.attr("x1", barnDoorDatum.baseX + distTraveled)
+							.attr("x2", barnDoorDatum.baseX + distTraveled);
+					});
 				});
 			}
 		});
