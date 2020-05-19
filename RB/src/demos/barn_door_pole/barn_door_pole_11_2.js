@@ -711,16 +711,6 @@ function stopAnimation(playbackInfo) {
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
 			const subcanvas = d3.select(this);
-			subcanvas
-				.selectAll(".barn-door")
-				.transition()
-				.duration(durationMS / 2)
-				.attr("y1", d => d.open.y1)
-				.attr("y2", d => d.open.y2);
-			// .transition()
-			// .duration(durationMS / 2)
-			// .attr("y1", d => d.closed.y1)
-			// .attr("y2", d => d.closed.y2);
 
 			if (stationaryObject === "barn") {
 				const poles = subcanvas.selectAll(".pole");
