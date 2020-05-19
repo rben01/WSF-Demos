@@ -405,6 +405,7 @@ function beginAnimation(playbackInfo) {
 	const easing = d3.easeLinear;
 	const lf = lorentzFactor({ fracOfC: speed });
 
+	const doorChangeStateDurationMS = 150;
 	subcanvases
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
@@ -442,18 +443,17 @@ function beginAnimation(playbackInfo) {
 						.attr("x1", poleMinCanvasXFinal)
 						.attr("x2", poleMaxCanvasXFinal);
 
-					const doorChangeStateDurationMS = 300;
 					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
 						const barnDoor = d3.select(this);
 						const distToBarnDoor = {
 							enter:
 								poleDatum.attrs.x1 -
 								barnDoorDatum.baseX -
-								6 * BARN_DOOR_OFFSET * speed,
+								2 * BARN_DOOR_OFFSET * speed,
 							leave:
 								poleDatum.attrs.x2 -
 								barnDoorDatum.baseX -
-								9 * BARN_DOOR_OFFSET * speed,
+								6 * BARN_DOOR_OFFSET * speed,
 						};
 
 						const durationMSToBarnDoor = {
@@ -515,34 +515,141 @@ function beginAnimation(playbackInfo) {
 
 					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
 						const barnDoor = d3.select(this);
-						const poleDatum = subcanvas.select(".pole").datum();
+						const baseX = barnDoorDatum.baseX;
+						subcanvas.selectAll(".pole").each(poleDatum => {
+							const distToPole = {
+								enter:
+									poleDatum.attrs.x1 -
+									baseX -
+									3 * BARN_DOOR_OFFSET * speed,
+								leave:
+									poleDatum.attrs.x2 -
+									baseX -
+									2 * BARN_DOOR_OFFSET * speed,
+							};
 
-						const distToPole = {
-							enter:
-								poleDatum.attrs.x1 -
-								barnDoorDatum.baseX -
-								6 * BARN_DOOR_OFFSET * speed,
-							leave:
-								poleDatum.attrs.x2 -
-								barnDoorDatum.baseX -
-								9 * BARN_DOOR_OFFSET * speed,
-						};
+							const durationMSToPole = {
+								enter: durationMS * (distToPole.enter / distTraveled),
+								leave: durationMS * (distToPole.leave / distTraveled),
+							};
+							console.log(durationMSToPole);
+							const doorBeginOpenX = baseX + distToPole.enter;
+							const doorEndOpenX =
+								doorBeginOpenX +
+								distTraveled * (doorChangeStateDurationMS / durationMS);
 
-						const durationMSToPole = {
-							enter: durationMS * (distToPole.enter / distTraveled),
-							leave: durationMS * (distToPole.leave / distTraveled),
-						};
+							const transition = barnDoor
+								.transition()
+								.duration(0)
+								.attr("x1", baseX)
+								.attr("x2", baseX)
+								.transition()
+								.duration(durationMSToPole.enter)
+								.ease(easing)
+								.attr("x1", doorBeginOpenX)
+								.attr("x2", doorBeginOpenX)
+								.transition()
+								.duration(doorChangeStateDurationMS)
+								.ease(d3.easeLinear)
+								.attr("x1", doorEndOpenX)
+								.attr("x2", doorEndOpenX)
+								.attr("y1", barnDoorDatum.open.y1)
+								.attr("y2", barnDoorDatum.open.y2);
 
-						barnDoor
-							.transition()
-							.duration(0)
-							.attr("x1", barnDoorDatum.baseX)
-							.attr("x2", barnDoorDatum.baseX)
-							.transition()
-							.duration(durationMS)
-							.ease(easing)
-							.attr("x1", barnDoorDatum.baseX + distTraveled)
-							.attr("x2", barnDoorDatum.baseX + distTraveled);
+							const doorXFinal = baseX + distTraveled;
+
+							// At this point the door has just finished opening
+							if (
+								poleDatum.attrs.x2 - barnDoorDatum.baseX <=
+								distTraveled
+							) {
+								const poleEffectiveWidth =
+									baseX + distToPole.leave - doorEndOpenX;
+								const traversePoleDurationMS =
+									durationMS * (poleEffectiveWidth / distTraveled);
+								const doorBeginCloseX = baseX + distToPole.leave;
+								const doorEndCloseX =
+									doorBeginCloseX +
+									distTraveled *
+										(doorChangeStateDurationMS / durationMS);
+
+								const remainingDurationMS =
+									durationMS *
+									(1 -
+										(doorEndCloseX - barnDoorDatum.baseX) /
+											distTraveled);
+
+								const atPreCloseLoc = transition
+									.transition()
+									.duration(traversePoleDurationMS)
+									.ease(easing)
+									.attr("x1", doorBeginCloseX)
+									.attr("x2", doorBeginCloseX);
+
+								if (doorEndCloseX <= doorXFinal) {
+									atPreCloseLoc
+										.transition()
+										.duration(doorChangeStateDurationMS)
+										.ease(d3.easeLinear)
+										.attr("x1", doorEndCloseX)
+										.attr("y1", barnDoorDatum.closed.y1)
+										.attr("x2", doorEndCloseX)
+										.attr("y2", barnDoorDatum.closed.y2)
+										.transition()
+										.duration(remainingDurationMS)
+										.ease(easing)
+										.attr("x1", barnDoorDatum.baseX + distTraveled)
+										.attr("x2", barnDoorDatum.baseX + distTraveled);
+								} else {
+									const moveToFinalXDurationMS =
+										durationMS *
+										((doorXFinal - doorBeginCloseX) / distTraveled);
+									const closeRatio =
+										moveToFinalXDurationMS /
+										doorChangeStateDurationMS;
+									const midway = {
+										y1:
+											barnDoorDatum.open.y1 +
+											(barnDoorDatum.closed.y1 -
+												barnDoorDatum.open.y1) *
+												closeRatio,
+										y2:
+											barnDoorDatum.open.y2 +
+											(barnDoorDatum.closed.y2 -
+												barnDoorDatum.open.y2) *
+												closeRatio,
+									};
+
+									atPreCloseLoc
+										.transition()
+										.duration(moveToFinalXDurationMS)
+										.ease(d3.easeLinear)
+										.attr("x1", doorXFinal)
+										.attr("y1", midway.y1)
+										.attr("x2", doorXFinal)
+										.attr("y2", midway.y2)
+										.transition()
+										.duration(
+											doorChangeStateDurationMS -
+												moveToFinalXDurationMS,
+										)
+										.ease(d3.easeLinear)
+										.attr("y1", barnDoorDatum.closed.y1)
+										.attr("y2", barnDoorDatum.closed.y2);
+								}
+							} else {
+								const remainingTimeMS =
+									durationMS *
+									((doorXFinal - doorEndOpenX) / distTraveled);
+								console.log(remainingTimeMS, doorXFinal, doorEndOpenX);
+								transition
+									.transition()
+									.duration(remainingTimeMS)
+									.ease(d3.easeLinear)
+									.attr("x1", doorXFinal)
+									.attr("x2", doorXFinal);
+							}
+						});
 					});
 				});
 			}
