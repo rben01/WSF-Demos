@@ -1,4 +1,4 @@
-/* globals AESTHETIC CONFIG isIterable */
+/* globals AESTHETIC isIterable */
 
 "use strict";
 
@@ -29,6 +29,9 @@ const TIME_FOR_LIGHT_TO_TRAVERSE_MS = TIME_FOR_LIGHT_TO_TRAVERSE_SEC * 1000;
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 100;
+
+const BARN_DOOR_HEIGHT_PROPTN = 0.5;
+const BARN_DOOR_OFFSET = CANVAS_WIDTH / 100;
 
 const USER_INFO = { relativeSpeed: 0.1 };
 
@@ -122,7 +125,7 @@ function _getBarnDatum(canvasInfo, { fracOfC }) {
 	const barnMinAxX = barnMidAxX - (0.5 * AX_BARN_WIDTH) / lf;
 	const barnMinAxY = AX_MID_Y - 0.5 * AX_BARN_HEIGHT;
 
-	const barnDoorAxHeight = (1 / 2) * AX_BARN_HEIGHT;
+	const barnDoorAxHeight = BARN_DOOR_HEIGHT_PROPTN * AX_BARN_HEIGHT;
 	const barnSideWallAxHeight = (AX_BARN_HEIGHT - barnDoorAxHeight) / 2;
 	const {
 		x: [barnMidCanvasX, barnMinCanvasX],
@@ -195,6 +198,55 @@ function _getPoleDatum(canvasInfo, { fracOfC }) {
 	};
 }
 
+function _getBarnDoors(barnDatum) {
+	const { x, y, width, height } = barnDatum.attrs;
+	const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
+	const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
+	const doorMaxCanvasY = doorMinCanvasY + doorCanvasHeight;
+
+	const doorCommonAttrs = {
+		class: "barn-door",
+		barn: barnDatum,
+		shape: "line",
+		closed: {
+			y1: doorMinCanvasY,
+			y2: doorMaxCanvasY,
+		},
+		open: {
+			y1: doorMaxCanvasY,
+			y2: doorMaxCanvasY + doorCanvasHeight,
+		},
+	};
+
+	const doorCommonAttrAttrs = {
+		stroke: "white",
+		"stroke-width": 4,
+	};
+
+	return [
+		{
+			...doorCommonAttrs,
+			attrs: {
+				x1: x - BARN_DOOR_OFFSET,
+				y1: doorCommonAttrs.closed.y1,
+				x2: x - BARN_DOOR_OFFSET,
+				y2: doorCommonAttrs.closed.y2,
+				...doorCommonAttrAttrs,
+			},
+		},
+		{
+			...doorCommonAttrs,
+			attrs: {
+				x1: x + width + BARN_DOOR_OFFSET,
+				y1: doorCommonAttrs.open.y1,
+				x2: x + width + BARN_DOOR_OFFSET,
+				y2: doorCommonAttrs.open.y2,
+				...doorCommonAttrAttrs,
+			},
+		},
+	];
+}
+
 function _getBarnAndPoleData(canvasInfo) {
 	const fracOfC = getSpeed();
 	let barnSpeed, poleSpeed;
@@ -205,10 +257,11 @@ function _getBarnAndPoleData(canvasInfo) {
 		barnSpeed = fracOfC;
 		poleSpeed = 0;
 	}
-	return [
-		_getBarnDatum(canvasInfo, { fracOfC: barnSpeed }),
-		_getPoleDatum(canvasInfo, { fracOfC: poleSpeed }),
-	];
+
+	const barnDatum = _getBarnDatum(canvasInfo, { fracOfC: barnSpeed });
+	const barnDoors = _getBarnDoors(barnDatum);
+	console.log(barnDoors);
+	return [barnDatum, _getPoleDatum(canvasInfo, { fracOfC: poleSpeed }), ...barnDoors];
 }
 
 function _addGraphicalObjs(subcanvases, dataFunc) {
@@ -223,8 +276,6 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 			Object.keys(d.attrs).forEach(key => {
 				d3Obj.attr(key, d.attrs[key]);
 			});
-
-			return d3Obj;
 		});
 }
 
