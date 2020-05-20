@@ -1,4 +1,4 @@
-/* globals AESTHETIC isIterable _addGraphicalObjs */
+/* globals AESTHETIC isIterable _addGraphicalObjs lorentzFactor */
 
 "use strict";
 
@@ -65,13 +65,6 @@ const subcanvases = canvas
 			.classed("subcanvas", true);
 	})
 	.selectAll("g");
-
-function lorentzFactor({ fracOfC }) {
-	if (!fracOfC) {
-		fracOfC = 0;
-	}
-	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
-}
 
 function apparentWidthsMeters({ fracOfC }) {
 	const lf = lorentzFactor({ fracOfC });

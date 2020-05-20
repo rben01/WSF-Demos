@@ -25,3 +25,11 @@ function _addGraphicalObjs(subcanvases, dataFunc) {
 			});
 		});
 }
+
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+	if (!fracOfC) {
+		fracOfC = 0;
+	}
+	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
