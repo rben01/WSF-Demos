@@ -1,5 +1,6 @@
 # %%
 import argparse
+import base64
 import enum
 import json
 import re
@@ -208,11 +209,12 @@ def inline(
     css_source_strs = []
 
     tag_names_and_link_attrs = [
-        ("script", "src", js_source_strs),
-        ("link", "href", css_source_strs),
+        ("script", "src", js_source_strs, "r"),
+        ("link", "href", css_source_strs, "r"),
+        ("img", "src", None, "rb"),
     ]
 
-    for tag_name, link_attr, source_strs in tag_names_and_link_attrs:
+    for tag_name, link_attr, source_strs, file_mode in tag_names_and_link_attrs:
         tags = soup.find_all(tag_name)
         for tag in tags:
             tag: Tag
@@ -229,11 +231,17 @@ def inline(
             else:
                 absolute_src: Path = infile.parent / link_dest
 
-                with absolute_src.open() as f:
+                with absolute_src.open(file_mode) as f:
                     contents = f.read()
 
-            source_strs.append(contents)
-            tag.decompose()
+            if tag_name == "img":
+                data = base64.b64encode(contents).decode("utf-8")
+                tag[
+                    "src"
+                ] = f"data:image/{absolute_src.suffix.strip('.')};base64,{data}"
+            else:
+                source_strs.append(contents)
+                tag.decompose()
 
     if js_source_strs:
         js_source_str = "\n".join(js_source_strs)
