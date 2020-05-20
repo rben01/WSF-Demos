@@ -554,10 +554,15 @@ function beginAnimation(playbackInfo) {
 									const yClosed = barnDoorDatum.closed[attr];
 									const yOpen = barnDoorDatum.open[attr];
 
-									const openingInterpolator = d3.interpolateNumber(
+									const doorOpenInterpolator = d3.interpolateNumber(
 										yClosed,
 										yOpen,
 									);
+
+									const doorCloseEasing =
+										fracToPole.leave < 1
+											? d3.easeCubicInOut
+											: d3.easeCubicIn;
 
 									return t => {
 										if (t < fracToPole.enter) {
@@ -569,7 +574,7 @@ function beginAnimation(playbackInfo) {
 											const openFrac =
 												(t - fracToPole.enter) /
 												doorChangeStateFrac;
-											return openingInterpolator(
+											return doorOpenInterpolator(
 												d3.easeCubicInOut(openFrac),
 											);
 										} else if (t < fracToPole.leave) {
@@ -578,16 +583,12 @@ function beginAnimation(playbackInfo) {
 											t <
 											fracToPole.leave + doorChangeStateFrac
 										) {
-											// const upperBound = Math.min(
-											// 	fracToPole.leave + doorChangeStateFrac,
-											// 	1,
-											// );
 											const closeFrac =
 												(t - fracToPole.leave) /
 												doorChangeStateFrac;
 
-											return openingInterpolator(
-												d3.easeCubicInOut(1 - closeFrac),
+											return doorOpenInterpolator(
+												doorCloseEasing(1 - closeFrac),
 											);
 										} else {
 											return yClosed;
