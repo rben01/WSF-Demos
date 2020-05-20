@@ -16,9 +16,12 @@ const POLE_PHYSICAL_SIZE = 9;
 const BARN_PHYSICAL_SIZE = 6;
 
 const POLE_BARN_RATIO = 1.5;
-const BARN_WIDTH_PROPTN = 0.2;
+const BARN_WIDTH_PROPTN = 0.16;
 const BARN_HEIGHT_PROPTN = 0.8;
 const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
+
+const AX_STARTPOINT_RATIO = 0.3;
+const ANIMATION_AX_ENDPOINT = 0.085;
 
 const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
 const AX_BARN_HEIGHT = AX_HEIGHT * BARN_HEIGHT_PROPTN;
@@ -117,7 +120,7 @@ function _getBarnData(canvasInfo, { fracOfC }) {
 
 	const lf = lorentzFactor({ fracOfC });
 
-	const barnMidAxX = AX_MIN_X + (1 / 3) * AX_WIDTH;
+	const barnMidAxX = AX_MIN_X + AX_STARTPOINT_RATIO * AX_WIDTH;
 
 	const barnMinAxX = barnMidAxX - (0.5 * AX_BARN_WIDTH) / lf;
 	const barnMinAxY = AX_MID_Y - 0.5 * AX_BARN_HEIGHT;
@@ -171,7 +174,7 @@ function _getPoleData(canvasInfo, { fracOfC }) {
 	}
 
 	const lf = lorentzFactor({ fracOfC });
-	const poleMidAxX = AX_MIN_X + (2 / 3) * AX_WIDTH;
+	const poleMidAxX = AX_MIN_X + (1 - AX_STARTPOINT_RATIO) * AX_WIDTH;
 	const poleMinAxX = poleMidAxX - (0.5 * AX_POLE_WIDTH) / lf;
 	const poleMaxAxX = poleMidAxX + (0.5 * AX_POLE_WIDTH) / lf;
 
@@ -308,9 +311,17 @@ function updateRelativeSpeed(speedStr) {
 	try {
 		const speed = getSpeed(speedStr);
 		USER_INFO.trainSpeed = speed;
-		if (speedStr) {
+		if (speedStr || speedStr === 0) {
 			speedTextSpan.textContent = speedStr;
 		}
+
+		[bothPlaybackInfo.barnStationary, bothPlaybackInfo.poleStationary].forEach(
+			playbackInfo => {
+				if (!playbackInfo.frozen) {
+					playbackInfo.beginButton.disabled = speed === 0;
+				}
+			},
+		);
 
 		const {
 			barn: barnApparentWidth,
@@ -381,6 +392,11 @@ function beginAnimation(playbackInfo) {
 	}
 
 	const speed = getSpeed();
+
+	if (speed === 0) {
+		return;
+	}
+
 	const netDurationMS = getDurationMS(speed);
 
 	playbackInfo.animationIsPlaying = true;
@@ -414,7 +430,7 @@ function beginAnimation(playbackInfo) {
 					const pole = d3.select(this);
 
 					const poleAxisWidth = AX_POLE_WIDTH / lf;
-					const poleMidAxXFinal = AX_MIN_X + 0.1 * AX_WIDTH;
+					const poleMidAxXFinal = AX_MIN_X + ANIMATION_AX_ENDPOINT * AX_WIDTH;
 					const {
 						x: poleMidCanvasXFinal,
 						dx: poleCanvasWidth,
@@ -491,7 +507,8 @@ function beginAnimation(playbackInfo) {
 					const barn = d3.select(this);
 					const barnAxisWidth = AX_BARN_WIDTH / lf;
 
-					const barnMidAxXFinal = AX_MIN_X + 0.9 * AX_WIDTH;
+					const barnMidAxXFinal =
+						AX_MIN_X + (1 - ANIMATION_AX_ENDPOINT) * AX_WIDTH;
 					const {
 						x: barnMidCanvasXFinal,
 						dx: barnCanvasWidth,

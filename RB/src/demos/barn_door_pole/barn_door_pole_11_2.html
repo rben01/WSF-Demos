@@ -20,20 +20,21 @@
 						type="range"
 						id="input-relative-speed"
 						name="input-relative-speed"
-						min="0.5"
+						min="0.0"
 						max="0.95"
 						step=".05"
-						value=".75"
+						value="0"
 						oninput="updateRelativeSpeed(this.value)"
 					/>
 				</label>
 			</span>
 		</div>
 		<div>
-			<span id="barn-rest-length">Rest length of barn: 6.00m</span><br />
-			<span id="pole-rest-length">Rest length of pole: 9.00m</span>
+			<p id="barn-pole-rest-length">
+				Rest length of barn: 6.00m<br />
+				Rest length of pole: 9.00m
+			</p>
 		</div>
-		<br />
 		<div>
 			<span>
 				<span>Barn's Perspective</span>
@@ -104,7 +105,7 @@
 		<script type="text/javascript" src="../global_aesthetic.js"></script>
 		<script type="text/javascript" src="barn_door_pole_11_2.js"></script>
 		<script type="text/javascript">
-			updateRelativeSpeed(0.75);
+			updateRelativeSpeed(0);
 		</script>
 	</body>
 </html>
