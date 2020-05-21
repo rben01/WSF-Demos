@@ -19,7 +19,7 @@ const BARN_WIDTH_PROPTN = 0.16;
 const BARN_HEIGHT_PROPTN = 0.8;
 const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
 
-const AX_STARTPOINT_RATIO = 0.37;
+const AX_STARTPOINT_RATIO = 0.37; // Should be .37 but other values are useful for testing
 const ANIMATION_AX_ENDPOINT = 0.13;
 
 const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
@@ -96,26 +96,45 @@ function getSpeed(speedStr) {
 }
 
 function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
-	const xList = isIterable(x) ? x : [x];
-	const yList = isIterable(y) ? y : [y];
-	const dxList = isIterable(dx) ? dx : [dx];
-	const dyList = isIterable(dy) ? dy : [dy];
+	const data = { x, y, dx, dy };
 
-	const xFracList = xList.map(x => (x - AX_MIN_X) / AX_WIDTH);
-	const yFracList = yList.map(y => (y - AX_MIN_Y) / AX_HEIGHT);
+	const iterableVars = {};
+	const varsAsLists = {};
 
-	const xCanvasCoordsList = xFracList.map(xFrac => xFrac * canvasInfo.width);
-	const yCanvasCoordsList = yFracList.map(yFrac => yFrac * canvasInfo.height);
+	Object.entries(data).forEach(([key, value]) => {
+		const valueIsIterable = isIterable(value);
 
-	const dxCanvasCoordsList = dxList.map(dx => (canvasInfo.width / AX_WIDTH) * dx);
-	const dyCanvasCoordsList = dyList.map(dy => (canvasInfo.height / AX_HEIGHT) * dy);
+		iterableVars[key] = valueIsIterable;
+		varsAsLists[key] = valueIsIterable ? value : [value];
+	});
 
-	return {
-		x: isIterable(x) ? xCanvasCoordsList : xCanvasCoordsList[0],
-		y: isIterable(y) ? yCanvasCoordsList : yCanvasCoordsList[0],
-		dx: isIterable(dx) ? dxCanvasCoordsList : dxCanvasCoordsList[0],
-		dy: isIterable(dy) ? dyCanvasCoordsList : dyCanvasCoordsList[0],
-	};
+	const canvasCoords = {};
+	Object.entries(varsAsLists).forEach(([key, value]) => {
+		let coordFunc;
+		switch (key) {
+			case "x":
+				coordFunc = x => ((x - AX_MIN_X) / AX_WIDTH) * canvasInfo.width;
+				break;
+			case "y":
+				coordFunc = y => ((y - AX_MIN_Y) / AX_HEIGHT) * canvasInfo.height;
+				break;
+			case "dx":
+				coordFunc = dx => (canvasInfo.width / AX_WIDTH) * dx;
+				break;
+			case "dy":
+				coordFunc = dy => (canvasInfo.height / AX_HEIGHT) * dy;
+				break;
+			default:
+				throw new Error(`Unexpected case ${key}`);
+		}
+		canvasCoords[key] = value.map(coordFunc);
+	});
+
+	const ans = {};
+	Object.entries(canvasCoords).forEach(([key, coordsList]) => {
+		ans[key] = iterableVars[key] ? coordsList : coordsList[0];
+	});
+	return ans;
 }
 
 function _getBarnData(canvasInfo, { fracOfC, progress = 0 } = {}) {
@@ -368,6 +387,9 @@ function updateRelativeSpeed(speedStr) {
 			},
 		);
 
+		const BARN = ".barn";
+		const POLE = ".pole";
+
 		const {
 			barn: barnApparentWidth,
 			pole: poleApparentWidth,
@@ -387,16 +409,16 @@ function updateRelativeSpeed(speedStr) {
 
 			const subcanvas = d3.select(this);
 			if (d.observerIsStandingOn === "barn") {
-				stationaryObjKey = ".barn";
-				movingObjKey = ".pole";
+				stationaryObjKey = BARN;
+				movingObjKey = POLE;
 				getStationaryObjDataFunc = _getBarnData;
 				getMovingObjDataFunc = _getPoleData;
 				stationaryObjPlaybackInfo = bothPlaybackInfo.barnStationary;
 				textFieldID = "text-contracted-length-pole";
 				apparentWidthStr = poleApparentWidth;
 			} else {
-				stationaryObjKey = ".pole";
-				movingObjKey = ".barn";
+				stationaryObjKey = POLE;
+				movingObjKey = BARN;
 				getStationaryObjDataFunc = _getPoleData;
 				getMovingObjDataFunc = _getBarnData;
 				stationaryObjPlaybackInfo = bothPlaybackInfo.poleStationary;
@@ -432,8 +454,8 @@ function updateRelativeSpeed(speedStr) {
 			};
 
 			dataMap[".barn-door"] = _getBarnDoorsData(d, {
-				barnData: dataMap[".barn"],
-				poleData: dataMap[".pole"],
+				barnData: dataMap[BARN],
+				poleData: dataMap[POLE],
 			});
 
 			document.getElementById(textFieldID).textContent = apparentWidthStr.toFixed(
@@ -499,95 +521,88 @@ function beginAnimation(playbackInfo) {
 
 	const doorChangeStateDurationMS = 150;
 
+	const BARN = ".barn";
+	const POLE = ".pole";
+
+	// All three maps are keyed by the moving object
+	const getCanvasWidthMap = {
+		[BARN]: datum => datum.attrs.width,
+		[POLE]: datum => datum.attrs.x2 - datum.attrs.x1,
+	};
+
+	const endpointRatioMap = {
+		[BARN]: 1 - ANIMATION_AX_ENDPOINT,
+		[POLE]: ANIMATION_AX_ENDPOINT,
+	};
+
+	const getNetDistTraveledMap = {
+		[BARN]: ({ datum, minCanvasXf }) => minCanvasXf - datum.attrs.x,
+		[POLE]: ({ datum, minCanvasXf }) => datum.attrs.x1 - minCanvasXf,
+	};
+
 	subcanvases
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
-			// I apologize to the world for this monstrosity
 			const subcanvas = d3.select(this);
 			const onBarn = d.observerIsStandingOn === "barn";
 
-			const BARN = ".barn";
-			const POLE = ".pole";
-			const keys = [BARN, POLE];
-
-			const objs = {};
-			keys.forEach(
-				cls => (objs[cls] = d3.select(subcanvas.selectAll(cls).node())),
+			const movingObjClass = onBarn ? POLE : BARN;
+			const movingObj = d3.select(subcanvas.selectAll(movingObjClass).node());
+			const movingObjDatum = movingObj.datum();
+			const movingObjCanvasWidth = getCanvasWidthMap[movingObjClass](
+				movingObjDatum,
 			);
+			const endpointRatio = endpointRatioMap[movingObjClass];
+			const midCanvasXf = transAxisToCanvas(d, {
+				x: AX_MIN_X + endpointRatio * AX_WIDTH,
+			}).x;
+			const minCanvasXf = midCanvasXf - movingObjCanvasWidth / 2;
+			const netDistTraveled = getNetDistTraveledMap[movingObjClass]({
+				datum: movingObjDatum,
+				minCanvasXf,
+			});
 
-			const datums = {};
-			keys.forEach(key => (datums[key] = objs[key].datum()));
-
-			const canvasWidths = {
-				[BARN]: datums[BARN].attrs.width,
-				[POLE]: datums[POLE].attrs.x2 - datums[POLE].attrs.x1,
-			};
-
-			const endpointRatios = {
-				[BARN]: 1 - ANIMATION_AX_ENDPOINT,
-				[POLE]: ANIMATION_AX_ENDPOINT,
-			};
-
-			const midCanvasXfs = {};
-			keys.forEach(
-				key =>
-					(midCanvasXfs[key] = transAxisToCanvas(d, {
-						x: AX_MIN_X + endpointRatios[key] * AX_WIDTH,
-					}).x),
-			);
-
-			const minCanvasXfs = {};
-			keys.forEach(
-				key => (minCanvasXfs[key] = midCanvasXfs[key] - canvasWidths[key] / 2),
-			);
-
-			const netDistsTraveled = {
-				[BARN]: minCanvasXfs[BARN] - datums[BARN].attrs.x,
-				[POLE]: datums[POLE].attrs.x1 - minCanvasXfs[POLE],
-			};
-
-			const netDistTraveled = onBarn
-				? netDistsTraveled[POLE]
-				: netDistsTraveled[BARN];
-
-			let poleFinalPos;
+			let poleFinalPos, poleDatum, getBarnDoorXf;
 			if (onBarn) {
-				const poleX1f = minCanvasXfs[POLE];
-				const poleX2f = minCanvasXfs[POLE] + canvasWidths[POLE];
-				objs[POLE].transition()
+				const poleX1f = minCanvasXf;
+				const poleX2f = minCanvasXf + movingObjCanvasWidth;
+				movingObj
+					.transition()
 					.duration(0)
-					.attr("x1", datums[POLE].attrs.x1)
-					.attr("x2", datums[POLE].attrs.x2)
+					.attr("x1", movingObjDatum.attrs.x1)
+					.attr("x2", movingObjDatum.attrs.x2)
 					.transition()
 					.duration(netDurationMS)
 					.ease(easing)
 					.attr("x1", poleX1f)
 					.attr("x2", poleX2f);
-				poleFinalPos = {
-					x1: poleX1f,
-					x2: poleX2f,
-				};
+
+				poleFinalPos = { x1: poleX1f, x2: poleX2f };
+
+				poleDatum = movingObjDatum;
+				getBarnDoorXf = baseX => baseX;
 			} else {
-				objs[BARN].transition()
+				movingObj
+					.transition()
 					.duration(0)
-					.attr("x", datums[BARN].attrs.x)
+					.attr("x", movingObjDatum.attrs.x)
 					.transition()
 					.duration(netDurationMS)
 					.ease(easing)
-					.attr("x", minCanvasXfs[BARN]);
-				poleFinalPos = {
-					x1: datums[POLE].attrs.x1,
-					x2: datums[POLE].attrs.x2,
-				};
+					.attr("x", minCanvasXf);
+
+				poleDatum = d3.select(subcanvas.selectAll(POLE).node()).datum();
+				poleFinalPos = { x1: poleDatum.attrs.x1, x2: poleDatum.attrs.x2 };
+
+				getBarnDoorXf = baseX => baseX + netDistTraveled;
 			}
 
 			subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
 				const barnDoor = d3.select(this);
 				const baseX = barnDoorDatum.baseX;
-				const poleDatum = datums[POLE];
 
 				const distToPole = {
-					// Magic numbers here depend on doorChangeStateDurationMS
+					// Magic numbers here were chosen so that they'd look good with the chosen value of doorChangeStateDurationMS
 					enter: poleDatum.attrs.x1 - baseX - 3 * BARN_DOOR_OFFSET * speed,
 					leave:
 						poleDatum.attrs.x2 -
@@ -604,7 +619,7 @@ function beginAnimation(playbackInfo) {
 
 				const doorChangeStateFrac = doorChangeStateDurationMS / netDurationMS;
 
-				const xf = onBarn ? baseX : baseX + netDistsTraveled[BARN];
+				const xf = getBarnDoorXf(baseX);
 				const doorIsOpenWhenFinished =
 					poleFinalPos.x1 <= xf && xf <= poleFinalPos.x2;
 
@@ -615,31 +630,27 @@ function beginAnimation(playbackInfo) {
 					const doorCloseEasing =
 						fracToPole.leave < 1 ? d3.easeCubicInOut : d3.easeCubicIn;
 
+					const enterTime = fracToPole.enter;
+					const leaveTime = fracToPole.leave;
+
 					return function () {
 						return t => {
-							if (t < fracToPole.enter) {
+							if (t < enterTime) {
 								return yClosed;
-							} else if (t < fracToPole.enter + doorChangeStateFrac) {
-								const openFrac =
-									(t - fracToPole.enter) / doorChangeStateFrac;
+							} else if (t < enterTime + doorChangeStateFrac) {
+								const openFrac = (t - enterTime) / doorChangeStateFrac;
 								return doorOpenInterpolator(
 									d3.easeCubicInOut(openFrac),
 								);
-							} else if (t < fracToPole.leave) {
+							} else if (t < leaveTime || doorIsOpenWhenFinished) {
 								return yOpen;
-							} else if (t < fracToPole.leave + doorChangeStateFrac) {
-								if (doorIsOpenWhenFinished) {
-									return yOpen;
-								}
-
-								const closeFrac =
-									(t - fracToPole.leave) / doorChangeStateFrac;
-
+							} else if (t < leaveTime + doorChangeStateFrac) {
+								const closeFrac = (t - leaveTime) / doorChangeStateFrac;
 								return doorOpenInterpolator(
 									doorCloseEasing(1 - closeFrac),
 								);
 							} else {
-								return doorIsOpenWhenFinished ? yOpen : yClosed;
+								return yClosed;
 							}
 						};
 					};
