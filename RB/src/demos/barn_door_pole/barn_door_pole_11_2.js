@@ -20,8 +20,8 @@ const BARN_WIDTH_PROPTN = 0.16;
 const BARN_HEIGHT_PROPTN = 0.8;
 const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
 
-const AX_STARTPOINT_RATIO = 0.3;
-const ANIMATION_AX_ENDPOINT = 0.085;
+const AX_STARTPOINT_RATIO = 0.37;
+const ANIMATION_AX_ENDPOINT = 0.13;
 
 const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
 const AX_BARN_HEIGHT = AX_HEIGHT * BARN_HEIGHT_PROPTN;
@@ -32,6 +32,12 @@ const TIME_FOR_LIGHT_TO_TRAVERSE_MS = TIME_FOR_LIGHT_TO_TRAVERSE_SEC * 1000;
 
 const CANVAS_WIDTH = 800;
 const CANVAS_HEIGHT = 100;
+
+const ANIMATION_STATE = {
+	hasNotYetStarted: 0,
+	isPlaying: 1,
+	hasFinishedPlaying: 2,
+};
 
 const BARN_DOOR_HEIGHT_PROPTN = 0.5;
 const BARN_DOOR_OFFSET = CANVAS_WIDTH / 100;
@@ -113,14 +119,21 @@ function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
 	};
 }
 
-function _getBarnData(canvasInfo, { fracOfC }) {
+function _getBarnData(canvasInfo, { fracOfC, progress = 0 } = {}) {
 	if (canvasInfo.observerIsStandingOn === "barn") {
 		fracOfC = 0;
 	}
 
+	if (canvasInfo.observerIsStandingOn === "barn") {
+		progress = 0;
+	}
+
 	const lf = lorentzFactor({ fracOfC });
 
-	const barnMidAxX = AX_MIN_X + AX_STARTPOINT_RATIO * AX_WIDTH;
+	const midAxXi = AX_MIN_X + AX_STARTPOINT_RATIO * AX_WIDTH;
+	const midAxXf = AX_MIN_X + (1 - ANIMATION_AX_ENDPOINT) * AX_WIDTH;
+
+	const barnMidAxX = (1 - progress) * midAxXi + progress * midAxXf;
 
 	const barnMinAxX = barnMidAxX - (0.5 * AX_BARN_WIDTH) / lf;
 	const barnMinAxY = AX_MID_Y - 0.5 * AX_BARN_HEIGHT;
@@ -168,13 +181,22 @@ function _getBarnData(canvasInfo, { fracOfC }) {
 	];
 }
 
-function _getPoleData(canvasInfo, { fracOfC }) {
+function _getPoleData(canvasInfo, { fracOfC, progress = 0 } = {}) {
 	if (canvasInfo.observerIsStandingOn === "pole") {
 		fracOfC = 0;
 	}
 
+	if (canvasInfo.observerIsStandingOn === "pole") {
+		progress = 0;
+	}
+
 	const lf = lorentzFactor({ fracOfC });
-	const poleMidAxX = AX_MIN_X + (1 - AX_STARTPOINT_RATIO) * AX_WIDTH;
+
+	const midAxXi = AX_MIN_X + (1 - AX_STARTPOINT_RATIO) * AX_WIDTH;
+	const midAxXf = AX_MIN_X + ANIMATION_AX_ENDPOINT * AX_WIDTH;
+
+	const poleMidAxX = (1 - progress) * midAxXi + progress * midAxXf;
+
 	const poleMinAxX = poleMidAxX - (0.5 * AX_POLE_WIDTH) / lf;
 	const poleMaxAxX = poleMidAxX + (0.5 * AX_POLE_WIDTH) / lf;
 
@@ -206,7 +228,17 @@ function _getPoleData(canvasInfo, { fracOfC }) {
 	];
 }
 
-function _getBarnDoorsData(barnDatum) {
+function _getBarnDoorsData(
+	canvasInfo,
+	{ fracOfC, progress = 0, barnData, poleData } = {},
+) {
+	const barnDatum = barnData
+		? barnData[0]
+		: _getBarnData(canvasInfo, { fracOfC, progress })[0];
+	const poleDatum = poleData
+		? poleData[0]
+		: _getPoleData(canvasInfo, { fracOfC, progress })[0];
+
 	const { x, y, width, height } = barnDatum.attrs;
 	const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
 	const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
@@ -234,6 +266,22 @@ function _getBarnDoorsData(barnDatum) {
 	const leftDoorX = x - BARN_DOOR_OFFSET;
 	const rightDoorX = x + width + BARN_DOOR_OFFSET;
 
+	const leftDoorIsClosed =
+		poleDatum.attrs.x2 < leftDoorX || poleDatum.attrs.x1 > leftDoorX;
+	const rightDoorIsClosed =
+		poleDatum.attrs.x1 > rightDoorX || poleDatum.attrs.x2 < rightDoorX;
+
+	// https://stackoverflow.com/a/39333479
+	const getYs = ({ y1, y2 }) => ({ y1, y2 });
+
+	const leftDoorY = leftDoorIsClosed
+		? getYs(doorCommonAttrs.closed)
+		: getYs(doorCommonAttrs.open);
+
+	const rightDoorY = rightDoorIsClosed
+		? getYs(doorCommonAttrs.closed)
+		: getYs(doorCommonAttrs.open);
+
 	return [
 		{
 			...doorCommonAttrs,
@@ -241,9 +289,8 @@ function _getBarnDoorsData(barnDatum) {
 			side: "left",
 			attrs: {
 				x1: leftDoorX,
-				y1: doorCommonAttrs.closed.y1,
 				x2: leftDoorX,
-				y2: doorCommonAttrs.closed.y2,
+				...leftDoorY,
 				...doorCommonAttrAttrs,
 			},
 		},
@@ -253,21 +300,20 @@ function _getBarnDoorsData(barnDatum) {
 			side: "right",
 			attrs: {
 				x1: rightDoorX,
-				y1: doorCommonAttrs.closed.y1,
 				x2: rightDoorX,
-				y2: doorCommonAttrs.closed.y2,
+				...rightDoorY,
 				...doorCommonAttrAttrs,
 			},
 		},
 	];
 }
 
-function _getBarnAndPoleData(canvasInfo) {
+function _getBarnAndPoleData(canvasInfo, { progress = 0 } = {}) {
 	const fracOfC = getSpeed();
 
-	const barnData = _getBarnData(canvasInfo, { fracOfC: fracOfC });
-	const barnDoorsData = _getBarnDoorsData(barnData[0]);
-	const poleData = _getPoleData(canvasInfo, { fracOfC: fracOfC });
+	const barnData = _getBarnData(canvasInfo, { fracOfC, progress });
+	const barnDoorsData = _getBarnDoorsData(canvasInfo, { fracOfC, progress });
+	const poleData = _getPoleData(canvasInfo, { fracOfC, progress });
 
 	return {
 		objects: {
@@ -288,8 +334,7 @@ addBarnsAndPoles(subcanvases);
 const bothPlaybackInfo = {
 	barnStationary: {
 		stationary: "barn",
-		frozen: false,
-		animationIsPlaying: false,
+		animationState: ANIMATION_STATE.hasNotYetStarted,
 		animationStartDate: null,
 		animationTimer: null,
 		beginButton: document.getElementById("btn-run-animation-barn-perspective"),
@@ -297,8 +342,7 @@ const bothPlaybackInfo = {
 	},
 	poleStationary: {
 		stationary: "pole",
-		frozen: false,
-		animationIsPlaying: false,
+		animationState: ANIMATION_STATE.hasNotYetStarted,
 		animationStartDate: null,
 		animationTimer: null,
 		beginButton: document.getElementById("btn-run-animation-pole-perspective"),
@@ -317,7 +361,7 @@ function updateRelativeSpeed(speedStr) {
 
 		[bothPlaybackInfo.barnStationary, bothPlaybackInfo.poleStationary].forEach(
 			playbackInfo => {
-				if (!playbackInfo.frozen) {
+				if (playbackInfo.animationState === ANIMATION_STATE.hasNotYetStarted) {
 					playbackInfo.beginButton.disabled = speed === 0;
 				}
 			},
@@ -331,31 +375,70 @@ function updateRelativeSpeed(speedStr) {
 		});
 
 		subcanvases.each(function (d) {
-			const { barnData, barnDoorsData, poleData } = _getBarnAndPoleData(
-				d,
-			).objects;
+			let stationaryObjKey,
+				movingObjKey,
+				getMovingObjDataFunc,
+				getStationaryObjDataFunc,
+				stationaryObjPlaybackInfo,
+				textFieldID,
+				apparentWidthStr,
+				progress;
+
 			const subcanvas = d3.select(this);
 			if (d.observerIsStandingOn === "barn") {
-				if (bothPlaybackInfo.barnStationary.frozen) {
-					return;
-				}
-				document.getElementById(
-					"text-contracted-length-pole",
-				).textContent = poleApparentWidth.toFixed(2);
+				stationaryObjKey = ".barn";
+				movingObjKey = ".pole";
+				getStationaryObjDataFunc = _getBarnData;
+				getMovingObjDataFunc = _getPoleData;
+				stationaryObjPlaybackInfo = bothPlaybackInfo.barnStationary;
+				textFieldID = "text-contracted-length-pole";
+				apparentWidthStr = poleApparentWidth;
 			} else {
-				if (bothPlaybackInfo.poleStationary.frozen) {
+				stationaryObjKey = ".pole";
+				movingObjKey = ".barn";
+				getStationaryObjDataFunc = _getPoleData;
+				getMovingObjDataFunc = _getBarnData;
+				stationaryObjPlaybackInfo = bothPlaybackInfo.poleStationary;
+				textFieldID = "text-contracted-length-barn";
+				apparentWidthStr = barnApparentWidth;
+			}
+
+			switch (stationaryObjPlaybackInfo.animationState) {
+				case ANIMATION_STATE.hasNotYetStarted: {
+					progress = 0;
+					break;
+				}
+				case ANIMATION_STATE.isPlaying: {
 					return;
 				}
-				document.getElementById(
-					"text-contracted-length-barn",
-				).textContent = barnApparentWidth.toFixed(2);
+				case ANIMATION_STATE.hasFinishedPlaying: {
+					progress = 1;
+					break;
+				}
+				default: {
+					throw new Error(
+						`Unexpect case ${stationaryObjPlaybackInfo.animationState}`,
+					);
+				}
 			}
 
 			const dataMap = {
-				".barn": barnData,
-				".pole": poleData,
-				".barn-door": barnDoorsData,
+				[stationaryObjKey]: getStationaryObjDataFunc(d, {
+					fracOfC: speed,
+					progress,
+				}),
+				[movingObjKey]: getMovingObjDataFunc(d, { fracOfC: speed, progress }),
 			};
+
+			dataMap[".barn-door"] = _getBarnDoorsData(d, {
+				barnData: dataMap[".barn"],
+				poleData: dataMap[".pole"],
+			});
+
+			console.log(apparentWidthStr);
+			document.getElementById(textFieldID).textContent = apparentWidthStr.toFixed(
+				2,
+			);
 
 			Object.entries(dataMap).forEach(([key, data]) => {
 				const objs = subcanvas.selectAll(key);
@@ -399,15 +482,15 @@ function beginAnimation(playbackInfo) {
 
 	const netDurationMS = getDurationMS(speed);
 
-	playbackInfo.animationIsPlaying = true;
+	playbackInfo.animationState = ANIMATION_STATE.isPlaying;
 	playbackInfo.animationStartDate = new Date();
 	playbackInfo.beginButton.disabled = true;
 	playbackInfo.resetButton.disabled = false;
-	playbackInfo.frozen = true;
 
 	playbackInfo.animationTimer = setTimeout(() => {
-		playbackInfo.animationIsPlaying = false;
 		playbackInfo.animationEndDate = new Date();
+		playbackInfo.animationState = ANIMATION_STATE.hasFinishedPlaying;
+		updateRelativeSpeed();
 	}, netDurationMS);
 
 	const stationaryObject = playbackInfo.stationary;
@@ -483,8 +566,9 @@ function beginAnimation(playbackInfo) {
 							.attr("y1", barnDoorDatum.open.y1)
 							.attr("y2", barnDoorDatum.open.y2);
 
+						let finalTransition = transition;
 						if (poleDatum.attrs.x2 - barnDoorDatum.baseX <= distTraveled) {
-							transition
+							finalTransition = transition
 								.transition()
 								.delay(
 									durationMSToBarnDoor.leave -
@@ -495,8 +579,7 @@ function beginAnimation(playbackInfo) {
 								.attr("y1", barnDoorDatum.closed.y1)
 								.attr("y2", barnDoorDatum.closed.y2);
 						}
-
-						console.log(durationMSToBarnDoor);
+						// finalTransition.on("end", () => updateRelativeSpeed());
 					});
 				});
 			} else {
@@ -529,6 +612,7 @@ function beginAnimation(playbackInfo) {
 						.duration(netDurationMS)
 						.ease(easing)
 						.attr("x", barnMinCanvasXFinal);
+					// .on("end", () => updateRelativeSpeed());
 
 					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
 						const barnDoor = d3.select(this);
@@ -650,54 +734,11 @@ function beginAnimation(playbackInfo) {
 
 // eslint-disable-next-line no-unused-vars
 function stopAnimation(playbackInfo) {
-	playbackInfo.frozen = false;
-	playbackInfo.animationIsPlaying = false;
+	playbackInfo.animationState = ANIMATION_STATE.hasNotYetStarted;
 	clearTimeout(playbackInfo.animationTimer);
 
 	playbackInfo.beginButton.disabled = false;
 	playbackInfo.resetButton.disabled = true;
 
-	const elapsedTimeMS =
-		new Date().getTime() - playbackInfo.animationStartDate.getTime();
-
-	const stationaryObject = playbackInfo.stationary;
-
-	const speed = getSpeed();
-	const easing = AESTHETIC.easingForAnimationReset;
-	const durationMS =
-		AESTHETIC.durationMSOfAnimationReset *
-		Math.min(1, 0.5 * (1 + elapsedTimeMS / getDurationMS(speed)));
-
-	subcanvases
-		.filter(d => d.observerIsStandingOn === stationaryObject)
-		.each(function (d) {
-			const subcanvas = d3.select(this);
-
-			if (stationaryObject === "barn") {
-				const poles = subcanvas.selectAll(".pole");
-				const poleData = _getPoleData(d, { fracOfC: speed });
-
-				poles.data(poleData).each(function (d) {
-					const pole = d3.select(this);
-					pole.transition()
-						.duration(durationMS)
-						.ease(easing)
-						.attr("x1", d.attrs.x1)
-						.attr("x2", d.attrs.x2)
-						.on("end", updateRelativeSpeed());
-				});
-			} else {
-				const barns = subcanvas.selectAll(".barn");
-				const barnData = _getBarnData(d, { fracOfC: speed });
-
-				barns.data(barnData).each(function (d) {
-					const barn = d3.select(this);
-					barn.transition()
-						.duration(durationMS)
-						.ease(easing)
-						.attr("x", d.attrs.x)
-						.on("end", updateRelativeSpeed());
-				});
-			}
-		});
+	updateRelativeSpeed();
 }
