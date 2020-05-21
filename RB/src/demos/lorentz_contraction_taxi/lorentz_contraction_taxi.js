@@ -3,6 +3,7 @@
 const ANIMATION_DURATION_SEC = 5;
 const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
 const FPS = 37;
+const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
 const N_DIGITS_DISPLAYED = 4;
 
 const speedInputSlider = document.getElementById("input-taxi-speed");
@@ -15,7 +16,6 @@ const taxiImg = document.getElementById("img-taxi");
 const playbackInfo = {
 	animationIsPlaying: false,
 	animationTimer: null,
-	N_FRAMES: ANIMATION_DURATION_SEC * FPS,
 	currFrame: 0,
 	speeds: {
 		min: 0,
@@ -47,7 +47,7 @@ function updateTaxiSpeed(speedStr, fromUserInteraction = false) {
 			taxiImg.style.transform = `scaleX(${1 / lf})`;
 
 			if (fromUserInteraction) {
-				playbackInfo.currFrame = speed * playbackInfo.N_FRAMES;
+				playbackInfo.currFrame = Math.round(speed * N_FRAMES);
 			}
 		}
 	} catch (e) {
@@ -76,7 +76,7 @@ function toggleAnimation() {
 	playbackInfo.animationIsPlaying = true;
 	playButton.textContent = "Pause";
 
-	if (playbackInfo.currFrame > playbackInfo.N_FRAMES) {
+	if (playbackInfo.currFrame >= N_FRAMES) {
 		playbackInfo.currFrame = 0;
 	}
 
@@ -86,13 +86,13 @@ function toggleAnimation() {
 	);
 
 	playbackInfo.animationTimer = setInterval(() => {
-		if (playbackInfo.currFrame > playbackInfo.N_FRAMES) {
+		if (playbackInfo.currFrame > N_FRAMES) {
 			updateTaxiSpeed(speedInputSlider.max);
 			stopAnimation();
 			return;
 		}
 
-		const t = playbackInfo.currFrame / playbackInfo.N_FRAMES;
+		const t = playbackInfo.currFrame / N_FRAMES;
 		const speed = interpolator(t);
 		const lf = lorentzFactor({
 			fracOfC: speed,
@@ -102,5 +102,5 @@ function toggleAnimation() {
 
 		updateTaxiSpeed(speed);
 		playbackInfo.currFrame += 1;
-	}, ANIMATION_DURATION_MS / playbackInfo.N_FRAMES);
+	}, ANIMATION_DURATION_MS / N_FRAMES);
 }
