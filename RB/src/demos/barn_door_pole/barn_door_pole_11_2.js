@@ -9,7 +9,6 @@ const AX_MAX_X = 10;
 const AX_MAX_Y = 7;
 const AX_WIDTH = AX_MAX_X - AX_MIN_X;
 const AX_HEIGHT = AX_MAX_Y - AX_MIN_Y;
-const AX_MID_X = AX_MIN_X + (AX_MAX_X - AX_MIN_X) / 2;
 const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
 
 const POLE_PHYSICAL_SIZE = 9;
@@ -287,6 +286,7 @@ function _getBarnDoorsData(
 			...doorCommonAttrs,
 			baseX: leftDoorX,
 			side: "left",
+			isOpen: !leftDoorIsClosed,
 			attrs: {
 				x1: leftDoorX,
 				x2: leftDoorX,
@@ -298,6 +298,7 @@ function _getBarnDoorsData(
 			...doorCommonAttrs,
 			baseX: rightDoorX,
 			side: "right",
+			isOpen: !rightDoorIsClosed,
 			attrs: {
 				x1: rightDoorX,
 				x2: rightDoorX,
@@ -435,7 +436,6 @@ function updateRelativeSpeed(speedStr) {
 				poleData: dataMap[".pole"],
 			});
 
-			console.log(apparentWidthStr);
 			document.getElementById(textFieldID).textContent = apparentWidthStr.toFixed(
 				2,
 			);
@@ -496,239 +496,194 @@ function beginAnimation(playbackInfo) {
 	const stationaryObject = playbackInfo.stationary;
 
 	const easing = d3.easeLinear;
-	const lf = lorentzFactor({ fracOfC: speed });
 
 	const doorChangeStateDurationMS = 150;
+
 	subcanvases
 		.filter(d => d.observerIsStandingOn === stationaryObject)
 		.each(function (d) {
 			// I apologize to the world for this monstrosity
 			const subcanvas = d3.select(this);
+			const onBarn = d.observerIsStandingOn === "barn";
 
-			if (stationaryObject === "barn") {
-				const poles = subcanvas.selectAll(".pole");
-				const poleData = _getPoleData(d, { fracOfC: speed });
+			const BARN = ".barn";
+			const POLE = ".pole";
+			const keys = [BARN, POLE];
 
-				poles.data(poleData).each(function (poleDatum) {
-					const pole = d3.select(this);
+			const objs = {};
+			keys.forEach(
+				cls => (objs[cls] = d3.select(subcanvas.selectAll(cls).node())),
+			);
 
-					const poleAxisWidth = AX_POLE_WIDTH / lf;
-					const poleMidAxXFinal = AX_MIN_X + ANIMATION_AX_ENDPOINT * AX_WIDTH;
-					const {
-						x: poleMidCanvasXFinal,
-						dx: poleCanvasWidth,
-					} = transAxisToCanvas(poleDatum.canvas, {
-						x: poleMidAxXFinal,
-						dx: poleAxisWidth,
-					});
+			const datums = {};
+			keys.forEach(key => (datums[key] = objs[key].datum()));
 
-					const poleMinCanvasXFinal =
-						poleMidCanvasXFinal - poleCanvasWidth / 2;
-					const poleMaxCanvasXFinal = poleMinCanvasXFinal + poleCanvasWidth;
+			const canvasWidths = {
+				[BARN]: datums[BARN].attrs.width,
+				[POLE]: datums[POLE].attrs.x2 - datums[POLE].attrs.x1,
+			};
 
-					const distTraveled = poleDatum.attrs.x1 - poleMinCanvasXFinal;
+			const endpointRatios = {
+				[BARN]: 1 - ANIMATION_AX_ENDPOINT,
+				[POLE]: ANIMATION_AX_ENDPOINT,
+			};
 
-					pole.transition()
-						.duration(0)
-						.attr("x1", poleDatum.attrs.x1)
-						.attr("x2", poleDatum.attrs.x2)
-						.transition()
-						.duration(netDurationMS)
-						.ease(easing)
-						.attr("x1", poleMinCanvasXFinal)
-						.attr("x2", poleMaxCanvasXFinal);
+			const midCanvasXfs = {};
+			keys.forEach(
+				key =>
+					(midCanvasXfs[key] = transAxisToCanvas(d, {
+						x: AX_MIN_X + endpointRatios[key] * AX_WIDTH,
+					}).x),
+			);
 
-					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
-						const barnDoor = d3.select(this);
-						const distToBarnDoor = {
-							enter:
-								poleDatum.attrs.x1 -
-								barnDoorDatum.baseX -
-								2 * BARN_DOOR_OFFSET * speed,
-							leave:
-								poleDatum.attrs.x2 -
-								barnDoorDatum.baseX -
-								6 * BARN_DOOR_OFFSET * speed,
-						};
+			const minCanvasXfs = {};
+			keys.forEach(
+				key => (minCanvasXfs[key] = midCanvasXfs[key] - canvasWidths[key] / 2),
+			);
 
-						const durationMSToBarnDoor = {
-							enter:
-								netDurationMS * (distToBarnDoor.enter / distTraveled),
-							leave:
-								netDurationMS * (distToBarnDoor.leave / distTraveled),
-						};
+			const netDistsTraveled = {
+				[BARN]: minCanvasXfs[BARN] - datums[BARN].attrs.x,
+				[POLE]: datums[POLE].attrs.x1 - minCanvasXfs[POLE],
+			};
 
-						const transition = barnDoor
-							.transition()
-							.delay(durationMSToBarnDoor.enter)
-							.duration(doorChangeStateDurationMS)
-							.ease(d3.easeCubicInOut)
-							.attr("y1", barnDoorDatum.open.y1)
-							.attr("y2", barnDoorDatum.open.y2);
+			const netDistTraveled = onBarn
+				? netDistsTraveled[POLE]
+				: netDistsTraveled[BARN];
 
-						let finalTransition = transition;
-						if (poleDatum.attrs.x2 - barnDoorDatum.baseX <= distTraveled) {
-							finalTransition = transition
-								.transition()
-								.delay(
-									durationMSToBarnDoor.leave -
-										durationMSToBarnDoor.enter,
-								)
-								.duration(doorChangeStateDurationMS)
-								.ease(d3.easeCubicInOut)
-								.attr("y1", barnDoorDatum.closed.y1)
-								.attr("y2", barnDoorDatum.closed.y2);
-						}
-						// finalTransition.on("end", () => updateRelativeSpeed());
-					});
-				});
+			let poleFinalPos;
+			if (onBarn) {
+				const poleX1f = minCanvasXfs[POLE];
+				const poleX2f = minCanvasXfs[POLE] + canvasWidths[POLE];
+				objs[POLE].transition()
+					.duration(0)
+					.attr("x1", datums[POLE].attrs.x1)
+					.attr("x2", datums[POLE].attrs.x2)
+					.transition()
+					.duration(netDurationMS)
+					.ease(easing)
+					.attr("x1", poleX1f)
+					.attr("x2", poleX2f);
+				poleFinalPos = {
+					x1: poleX1f,
+					x2: poleX2f,
+				};
 			} else {
-				const barns = subcanvas.selectAll(".barn");
-				const barnData = _getBarnData(d, { fracOfC: speed });
-
-				barns.data(barnData).each(function (barnDatum) {
-					const barn = d3.select(this);
-					const barnAxisWidth = AX_BARN_WIDTH / lf;
-
-					const barnMidAxXFinal =
-						AX_MIN_X + (1 - ANIMATION_AX_ENDPOINT) * AX_WIDTH;
-					const {
-						x: barnMidCanvasXFinal,
-						dx: barnCanvasWidth,
-					} = transAxisToCanvas(barnDatum.canvas, {
-						x: barnMidAxXFinal,
-						dx: barnAxisWidth,
-					});
-
-					const barnMinCanvasXFinal =
-						barnMidCanvasXFinal - barnCanvasWidth / 2;
-
-					const netDistTraveled = barnMinCanvasXFinal - barnDatum.attrs.x;
-
-					barn.transition()
-						.duration(0)
-						.attr("x", barnDatum.attrs.x)
-						.transition()
-						.duration(netDurationMS)
-						.ease(easing)
-						.attr("x", barnMinCanvasXFinal);
-					// .on("end", () => updateRelativeSpeed());
-
-					subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
-						const barnDoor = d3.select(this);
-						const baseX = barnDoorDatum.baseX;
-						subcanvas.selectAll(".pole").each(poleDatum => {
-							// const thisDoorIsFrontDoor = barnDatum.canvasInfo.observerIsStandingOn === 'barn' && barnDoorDatum.side === 'right' ||  barnDatum.canvasInfo.observerIsStandingOn === 'barn' && barnDoorDatum.side === 'right'
-							const distToPole = {
-								enter:
-									poleDatum.attrs.x1 -
-									baseX -
-									3 * BARN_DOOR_OFFSET * speed,
-								leave:
-									poleDatum.attrs.x2 -
-									baseX -
-									(barnDoorDatum.side === "left" ? 1 : 2) *
-										BARN_DOOR_OFFSET *
-										speed,
-							};
-
-							const fracToPole = {
-								enter: distToPole.enter / netDistTraveled,
-								leave: distToPole.leave / netDistTraveled,
-							};
-
-							const doorChangeStateFrac =
-								doorChangeStateDurationMS / netDurationMS;
-
-							const xTweener = function () {
-								const interpolator = d3.interpolateNumber(
-									baseX,
-									baseX + netDistTraveled,
-								);
-								return function (t) {
-									return interpolator(d3.easeLinear(t));
-								};
-							};
-
-							const yTweener = function (attr) {
-								return function () {
-									const yClosed = barnDoorDatum.closed[attr];
-									const yOpen = barnDoorDatum.open[attr];
-
-									const doorOpenInterpolator = d3.interpolateNumber(
-										yClosed,
-										yOpen,
-									);
-
-									const doorCloseEasing =
-										fracToPole.leave < 1
-											? d3.easeCubicInOut
-											: d3.easeCubicIn;
-
-									return t => {
-										if (t < fracToPole.enter) {
-											return yClosed;
-										} else if (
-											t <
-											fracToPole.enter + doorChangeStateFrac
-										) {
-											const openFrac =
-												(t - fracToPole.enter) /
-												doorChangeStateFrac;
-											return doorOpenInterpolator(
-												d3.easeCubicInOut(openFrac),
-											);
-										} else if (t < fracToPole.leave) {
-											return yOpen;
-										} else if (
-											t <
-											fracToPole.leave + doorChangeStateFrac
-										) {
-											const closeFrac =
-												(t - fracToPole.leave) /
-												doorChangeStateFrac;
-
-											return doorOpenInterpolator(
-												doorCloseEasing(1 - closeFrac),
-											);
-										} else {
-											return yClosed;
-										}
-									};
-								};
-							};
-
-							barnDoor
-								.transition()
-								.duration(0)
-								.attr("x1", baseX)
-								.attr("x2", baseX)
-								.transition()
-								.duration(netDurationMS)
-								.ease(d3.easeLinear)
-								.attrTween("x1", xTweener)
-								.attrTween("x2", xTweener)
-								.attrTween("y1", yTweener("y1"))
-								.attrTween("y2", yTweener("y2"))
-								.transition()
-								.duration(100)
-								.ease(d3.easeCubicOut)
-								.attr(
-									"y1",
-									fracToPole.leave < 1
-										? barnDoorDatum.closed.y1
-										: barnDoorDatum.open.y1,
-								)
-								.attr(
-									"y2",
-									fracToPole.leave < 1
-										? barnDoorDatum.closed.y2
-										: barnDoorDatum.open.y2,
-								);
-						});
-					});
-				});
+				objs[BARN].transition()
+					.duration(0)
+					.attr("x", datums[BARN].attrs.x)
+					.transition()
+					.duration(netDurationMS)
+					.ease(easing)
+					.attr("x", minCanvasXfs[BARN]);
+				poleFinalPos = {
+					x1: datums[POLE].attrs.x1,
+					x2: datums[POLE].attrs.x2,
+				};
 			}
+
+			subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
+				const barnDoor = d3.select(this);
+				const baseX = barnDoorDatum.baseX;
+				const poleDatum = datums[POLE];
+
+				const distToPole = {
+					// Magic numbers here depend on doorChangeStateDurationMS
+					enter: poleDatum.attrs.x1 - baseX - 3 * BARN_DOOR_OFFSET * speed,
+					leave:
+						poleDatum.attrs.x2 -
+						baseX -
+						(barnDoorDatum.side === "left" ? 1 : 2) *
+							BARN_DOOR_OFFSET *
+							speed,
+				};
+
+				const fracToPole = {
+					enter: distToPole.enter / netDistTraveled,
+					leave: distToPole.leave / netDistTraveled,
+				};
+
+				const doorChangeStateFrac = doorChangeStateDurationMS / netDurationMS;
+
+				const xf = onBarn ? baseX : baseX + netDistsTraveled[BARN];
+				const doorIsOpenWhenFinished =
+					poleFinalPos.x1 <= xf && xf <= poleFinalPos.x2;
+
+				const yTweener = function (attr) {
+					const yClosed = barnDoorDatum.closed[attr];
+					const yOpen = barnDoorDatum.open[attr];
+					const doorOpenInterpolator = d3.interpolateNumber(yClosed, yOpen);
+					const doorCloseEasing =
+						fracToPole.leave < 1 ? d3.easeCubicInOut : d3.easeCubicIn;
+
+					return function () {
+						return t => {
+							if (t < fracToPole.enter) {
+								return yClosed;
+							} else if (t < fracToPole.enter + doorChangeStateFrac) {
+								const openFrac =
+									(t - fracToPole.enter) / doorChangeStateFrac;
+								return doorOpenInterpolator(
+									d3.easeCubicInOut(openFrac),
+								);
+							} else if (t < fracToPole.leave) {
+								return yOpen;
+							} else if (t < fracToPole.leave + doorChangeStateFrac) {
+								if (doorIsOpenWhenFinished) {
+									return yOpen;
+								}
+
+								const closeFrac =
+									(t - fracToPole.leave) / doorChangeStateFrac;
+
+								return doorOpenInterpolator(
+									doorCloseEasing(1 - closeFrac),
+								);
+							} else {
+								return doorIsOpenWhenFinished ? yOpen : yClosed;
+							}
+						};
+					};
+				};
+
+				const transition = barnDoor
+					.transition()
+					.duration(0)
+					.attr("x1", baseX)
+					.attr("x2", baseX)
+					.transition()
+					.duration(netDurationMS)
+					.ease(d3.easeLinear)
+					.attrTween("y1", yTweener("y1"))
+					.attrTween("y2", yTweener("y2"));
+
+				if (!onBarn) {
+					const xTweener = function () {
+						const interpolator = d3.interpolateNumber(
+							baseX,
+							baseX + netDistTraveled,
+						);
+						return interpolator;
+					};
+					transition.attrTween("x1", xTweener).attrTween("x2", xTweener);
+				}
+
+				transition
+					.transition()
+					.duration(100)
+					.ease(d3.easeCubicOut)
+					.attr(
+						"y1",
+						doorIsOpenWhenFinished
+							? barnDoorDatum.open.y1
+							: barnDoorDatum.closed.y1,
+					)
+					.attr(
+						"y2",
+						doorIsOpenWhenFinished
+							? barnDoorDatum.open.y2
+							: barnDoorDatum.closed.y2,
+					);
+			});
 		});
 }
 
