@@ -50,7 +50,7 @@ const lfTextSpan = document.getElementById("lorentz-factor-text");
 const disintegrationDistTextSpan = document.getElementById("text-disintigration-dist");
 const newtonianDistTextSpan = document.getElementById("text-newtonian-answer");
 
-const newtonianLineColor = "#888c";
+const newtonianLineColor = "#777f";
 
 function getSpeed(speedStr) {
 	speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
@@ -124,7 +124,7 @@ function drawGraph() {
 			.attr("stroke", "#fffd")
 			.attr("stroke-width", 4);
 
-		// Add curve for Newtonian prediction
+		// Add line for Newtonian prediction
 		graphObjs.newtonianLine = subcanvas
 			.append("svg:line")
 			.attr("x1", AX_BOUNDS.xMin)
@@ -227,16 +227,20 @@ function drawGraph() {
 			.each(applyDatum);
 
 		// Add axis labels
+		const commonAxisLabelAttrs = {
+			"font-size": 15,
+			fill: "white",
+		};
 		const xTickTextData = xScale.ticks(6).map(x => {
 			return {
 				class: "x-axis-label",
 				text: x,
 				attrs: {
 					x: xScale(x),
-					y: AX_BOUNDS.yMin + 15,
-					"font-size": 12,
-					fill: "white",
+					y: AX_BOUNDS.yMin + 22,
 					"text-anchor": "middle",
+					"dominant-baseline": "text-top",
+					...commonAxisLabelAttrs,
 				},
 			};
 		});
@@ -246,12 +250,11 @@ function drawGraph() {
 				class: "y-axis-label",
 				text: y,
 				attrs: {
-					x: AX_BOUNDS.xMin - 15,
+					x: AX_BOUNDS.xMin - 10,
 					y: yScale(y),
-					"font-size": 12,
-					fill: "white",
 					"text-anchor": "end",
 					"dominant-baseline": "central",
+					...commonAxisLabelAttrs,
 				},
 			};
 		});
@@ -387,22 +390,21 @@ function updateMuonSpeed(speedStr, { fromUserInput = true } = {}) {
 
 // eslint-disable-next-line no-unused-vars
 function hideNewtonianLine() {
-	const transitionDurationMS = 200;
+	const transitionDurationMS = 150;
 
 	USER_INFO.newtonianLineIsVisible = !USER_INFO.newtonianLineIsVisible;
+	let opacity;
 	if (USER_INFO.newtonianLineIsVisible) {
 		toggleNewtonianButton.textContent = "Hide Newtonian Answer";
-		d3.select(newtonianAnswerSection)
-			.transition()
-			.duration(transitionDurationMS)
-			.style("opacity", "1");
+		opacity = 1;
 	} else {
 		toggleNewtonianButton.textContent = "Show Newtonian Answer";
-		d3.select(newtonianAnswerSection)
-			.transition()
-			.duration(transitionDurationMS)
-			.style("opacity", "0");
+		opacity = 0;
 	}
+	d3.select(newtonianAnswerSection)
+		.transition()
+		.duration(transitionDurationMS)
+		.style("opacity", opacity);
 
 	const color = USER_INFO.newtonianLineIsVisible ? newtonianLineColor : "#0000";
 	graphObjs.newtonianLine
