@@ -211,6 +211,7 @@ def inline(
     tag_names_and_link_attrs = [
         ("script", "src", js_source_strs, "r"),
         ("link", "href", css_source_strs, "r"),
+        ("style", None, css_source_strs, "r"),
         ("img", "src", None, "rb"),
     ]
 
