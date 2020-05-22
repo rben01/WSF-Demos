@@ -3,7 +3,7 @@
 "use strict";
 
 const C = 299792458;
-const MUON_BASE_LIFESPAN = 2e-6;
+const MUON_BASE_LIFESPAN = 2.19e-6;
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 350;
@@ -47,7 +47,7 @@ const toggleNewtonianButton = document.getElementById("btn-toggle-show-newtonian
 const speedInputSlider = document.getElementById("input-muon-speed");
 const speedTextSpan = document.getElementById("muon-speed-text");
 const lfTextSpan = document.getElementById("lorentz-factor-text");
-const disintegrationDistTextSpan = document.getElementById("text-disintigration-dist");
+const disintegrationDistTextSpan = document.getElementById("text-disintegration-dist");
 const newtonianDistTextSpan = document.getElementById("text-newtonian-answer");
 
 const newtonianLineColor = "#777f";
@@ -282,7 +282,7 @@ function drawGraph() {
 			.attr("x", AX_BOUNDS.xMax + 25)
 			.attr("y", AX_BOUNDS.yMin - 16)
 			.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
-			.attr("font-size", 20)
+			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
@@ -294,7 +294,7 @@ function drawGraph() {
 			.append("svg:text")
 			.attr("x", AX_BOUNDS.xMin)
 			.attr("y", AX_BOUNDS.yMax - 10)
-			.attr("font-size", 20)
+			.attr("font-size", 19)
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
 			.text("Distance (meters)");

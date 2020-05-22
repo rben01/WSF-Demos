@@ -242,7 +242,7 @@ function drawGraph() {
 			.attr("x", AX_BOUNDS.xMax + 25)
 			.attr("y", AX_BOUNDS.yMin - 16)
 			.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
-			.attr("font-size", 20)
+			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
@@ -254,7 +254,7 @@ function drawGraph() {
 			.append("svg:text")
 			.attr("x", AX_BOUNDS.xMin)
 			.attr("y", AX_BOUNDS.yMax - 10)
-			.attr("font-size", 20)
+			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
@@ -270,14 +270,43 @@ function getGridlinesData({ fracOfC }) {
 	const x = xScale(fracOfC);
 	const y = yScale(getRelativisticMass({ fracOfC }));
 
+	const commonLineAttrs = {
+		stroke: "#fffb",
+		"stroke-width": 3,
+		"stroke-dasharray": "1.5 1.5",
+	};
 	return [
+		{
+			shape: "line",
+			class: "gridline",
+			type: "horizontal",
+			attrs: {
+				x1: AX_BOUNDS.xMin,
+				x2: x,
+				y1: y,
+				y2: y,
+				...commonLineAttrs,
+			},
+		},
+		{
+			shape: "line",
+			class: "gridline",
+			type: "vertical",
+			attrs: {
+				x1: x,
+				x2: x,
+				y1: AX_BOUNDS.yMin,
+				y2: y,
+				...commonLineAttrs,
+			},
+		},
 		{
 			shape: "circle",
 			class: "gridline-dot",
 			attrs: {
 				cx: x,
 				cy: y,
-				r: 5,
+				r: 4,
 				fill: "white",
 			},
 		},
@@ -312,29 +341,4 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		console.log(speedStr);
 		throw e;
 	}
-}
-
-// eslint-disable-next-line no-unused-vars
-function hideNewtonianLine() {
-	const transitionDurationMS = 150;
-
-	USER_INFO.newtonianLineIsVisible = !USER_INFO.newtonianLineIsVisible;
-	let opacity;
-	if (USER_INFO.newtonianLineIsVisible) {
-		toggleNewtonianButton.textContent = "Hide Newtonian Answer";
-		opacity = 1;
-	} else {
-		toggleNewtonianButton.textContent = "Show Newtonian Answer";
-		opacity = 0;
-	}
-	d3.select(newtonianAnswerSection)
-		.transition()
-		.duration(transitionDurationMS)
-		.style("opacity", opacity);
-
-	const color = USER_INFO.newtonianLineIsVisible ? newtonianLineColor : "#0000";
-	graphObjs.newtonianLine
-		.transition()
-		.duration(transitionDurationMS)
-		.attr("stroke", color);
 }
