@@ -340,7 +340,10 @@ def main():
             if args.minify_globals:
                 suffix = f".min{suffix}"
 
-            outfile = infile.with_name(infile.stem + "_inlined").with_suffix(suffix)
+            outfile_name = (
+                infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
+            )
+            outfile = infile.parent.parent.parent / "dist" / outfile_name
 
         else:
             outfile = Path(args.outfile)
