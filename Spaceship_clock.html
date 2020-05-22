@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<title>Spaceship Clock</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+    body,
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+        font-family: "Lato", sans-serif;
+    }
+
+    body,
+    html {
+        height: 100%;
+        color: white;
+        line-height: 1.8;
+        background-color: black;
+    }
+
+    .w3-wide {
+        letter-spacing: 10px;
+    }
+
+    .w3-hover-opacity {
+        cursor: pointer;
+    }
+</style>
+
+<body>
+    <br><br>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
+            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
+                oninput="speedID.innerHTML = 'Speed of Rocket: ' + speed.value + 'c'">
+            <br>
+            <text id="speedID" style="font-size:20px"></text>
+            <br><br>
+            <input type="button" id="start" value="Start">
+            <input type="button" id="reset" value="Reset">
+        </form>
+    </div>
+
+    <div id="animate" class="w3-content w3-container">
+        <canvas id="canvas" width="900" height="400"></canvas>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
+        integrity="sha256-CIc5A981wu9+q+hmFYYySmOvsA3IsoX+apaYlL0j6fg=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+        var elem = document.getElementById("animate");
+        var speed = 0.001;
+        var tickstart = [];
+        var tickend = [];
+        var numerals = [];
+        for (i = 0; i < 60; i++) {
+            tickstart.push([150 + 145 * Math.cos(i * Math.PI / 30), 200 + 145 * Math.sin(i * Math.PI / 30)]);
+            if (i % 5 == 0) {
+                tickend.push([150 + 130 * Math.cos(i * Math.PI / 30), 200 + 130 * Math.sin(i * Math.PI / 30)]);
+                numerals.push([150 + 118 * Math.cos(i * Math.PI / 30 - Math.PI / 3 - 0.001 * i), 200 + 118 * Math.sin(i * Math.PI / 30 - Math.PI / 3 - 0.001 * i)]);
+            }
+            else {
+                tickend.push([150 + 135 * Math.cos(i * Math.PI / 30), 200 + 135 * Math.sin(i * Math.PI / 30)]);
+            }
+        }
+        var t = 0;
+        var alpha = 1;
+        var interval;
+
+        function render() {
+            var ctx = document.getElementById("canvas")
+            ctx = ctx.getContext("2d");
+            ctx.clearRect(0, 0, 900, 400);
+            ctx.strokeStyle = "white";
+            ctx.fillStyle = "white";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(150, 200, 150, 0, 2 * Math.PI);
+            ctx.moveTo(750, 200);
+            ctx.arc(600, 200, 150, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(150, 200, 2, 0, 2 * Math.PI);
+            ctx.moveTo(600, 200);
+            ctx.arc(600, 200, 2, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.beginPath();
+            for (var i = 0; i < 60; i++) {
+                ctx.moveTo(tickstart[i][0], tickstart[i][1]);
+                ctx.lineTo(tickend[i][0], tickend[i][1]);
+                ctx.moveTo(tickstart[i][0] + 450, tickstart[i][1]);
+                ctx.lineTo(tickend[i][0] + 450, tickend[i][1]);
+            }
+            ctx.stroke();
+            ctx.font = "12px Helvetica";
+            ctx.beginPath();
+            for (var i = 0; i < 12; i++) {
+                ctx.fillText(i + 1, numerals[i][0], numerals[i][1]);
+                ctx.fillText(i + 1, numerals[i][0] + 450, numerals[i][1]);
+            }
+            ctx.fill();
+            ctx.font = "30px Helvetica";
+            ctx.beginPath();
+            ctx.fillText("Earth", 115, 35);
+            ctx.fillText("Spaceship", 525, 35);
+            ctx.fill();
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(150, 200);
+            ctx.lineTo(150 + 100 * Math.cos(Math.PI * t / 600 - Math.PI / 2), 200 + 100 * Math.sin(Math.PI * t / 600 - Math.PI / 2));
+            ctx.moveTo(600, 200);
+            ctx.lineTo(600 + 100 * Math.cos(alpha * Math.PI * t / 600 - Math.PI / 2), 200 + 100 * Math.sin(alpha * Math.PI * t / 600 - Math.PI / 2));
+            ctx.stroke();
+        }
+
+        function go() {
+            t += 1;
+            render();
+        }
+
+        $("#start").click(function () {
+            speed = document.getElementById("speed").value;
+            alpha = Math.sqrt(1 - speed ** 2);
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(go, 50);
+        })
+
+        $("#reset").click(function () {
+            t = 0;
+            clearInterval(interval);
+            render();
+        })
+
+        $(document).ready(function () {
+            render();
+        })
+    </script>
+</body>
