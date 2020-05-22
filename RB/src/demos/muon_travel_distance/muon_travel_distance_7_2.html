@@ -45,7 +45,7 @@
 						name="input-muon-speed"
 						min="0.0"
 						max="0.99"
-						step=".001"
+						step=".0005"
 						value="0"
 						oninput="updateMuonSpeed(this.value)"
 					/>
@@ -120,7 +120,7 @@
 		<script type="text/javascript" src="../global_aesthetic.js"></script>
 		<script type="text/javascript" src="muon_travel_distance_7_2.js"></script>
 		<script type="text/javascript">
-			updateMuonSpeed(0);
+			updateMuonSpeed(0.5, { fromUserInput: false });
 		</script>
 	</body>
 </html>

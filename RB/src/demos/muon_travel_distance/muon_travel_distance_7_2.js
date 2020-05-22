@@ -80,6 +80,8 @@ const yScale = d3
 	.domain([0, muonDistTraveled({ fracOfC: speedInputSlider.max })])
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
+const graphObjs = {};
+
 function drawGraph() {
 	const data = [[0, 0]];
 
@@ -119,11 +121,11 @@ function drawGraph() {
 		subcanvas
 			.append("svg:path")
 			.attr("d", curve(data))
-			.attr("stroke", "white")
-			.attr("stroke-width", 3);
+			.attr("stroke", "#fffd")
+			.attr("stroke-width", 4);
 
 		// Add curve for Newtonian prediction
-		subcanvas
+		graphObjs.newtonianLine = subcanvas
 			.append("svg:line")
 			.attr("x1", AX_BOUNDS.xMin)
 			.attr("x2", AX_BOUNDS.xMax)
@@ -268,20 +270,20 @@ function drawGraph() {
 			.append("text")
 			.selectAll()
 			.data([
-				{ c: "𝑣", h: 1 },
-				{ c: "＿", h: 0.7 },
-				{ c: "𝑐", h: 1 },
+				{ char: "𝑣", height: 1 },
+				{ char: "＿", height: 0.7 },
+				{ char: "𝑐", height: 1 },
 			])
 			.enter()
 			.append("tspan")
 			.attr("x", AX_BOUNDS.xMax + 25)
 			.attr("y", AX_BOUNDS.yMin - 16)
+			.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
 			.attr("font-size", 20)
-			// .attr("stroke", "white")
+			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
-			.attr("dy", (d, i) => `${i * 0.6 + d.h}em`)
-			.text(d => d.c)
+			.text(d => d.char)
 			.classed("x-axis-unit", true);
 
 		// Add distance label to y axis
@@ -296,9 +298,9 @@ function drawGraph() {
 	});
 }
 
-function getLinesData({ fracOfC }) {
+function getGridlinesData({ fracOfC }) {
 	if (typeof fracOfC === "undefined") {
-		fracOfC = getSpeed();
+		fracOfC = 0.5;
 	}
 
 	const x = xScale(fracOfC);
@@ -307,7 +309,7 @@ function getLinesData({ fracOfC }) {
 	const commonLineAttrs = {
 		stroke: "#fffb",
 		"stroke-width": 3,
-		"stroke-dasharray": "2 2",
+		"stroke-dasharray": "1.5 1.5",
 	};
 	return [
 		{
@@ -334,15 +336,29 @@ function getLinesData({ fracOfC }) {
 				...commonLineAttrs,
 			},
 		},
+		{
+			shape: "circle",
+			class: "gridline-dot",
+			attrs: {
+				cx: x,
+				cy: y,
+				r: 4,
+				fill: "white",
+			},
+		},
 	];
 }
 
 drawGraph();
-const lines = _addGraphicalObjs(subcanvases, getLinesData);
+graphObjs.gridLines = _addGraphicalObjs(subcanvases, getGridlinesData);
 
 // eslint-disable-next-line no-unused-vars
-function updateMuonSpeed(speedStr) {
+function updateMuonSpeed(speedStr, { fromUserInput = true } = {}) {
 	try {
+		if (!fromUserInput) {
+			speedInputSlider.value = speedStr;
+		}
+
 		const speed = getSpeed(speedStr);
 		speedTextSpan.textContent = speed.toFixed(3);
 
@@ -355,12 +371,14 @@ function updateMuonSpeed(speedStr) {
 		const trueDistTraveled = newtonianDistTraveled * lf;
 		disintegrationDistTextSpan.textContent = trueDistTraveled.toFixed(2);
 
-		lines.data(getLinesData({ fracOfC: speed })).each(function (d) {
-			const transition = d3.select(this).transition().duration(5);
-			Object.entries(d.attrs).forEach(([key, val]) => {
-				transition.attr(key, val);
+		graphObjs.gridLines
+			.data(getGridlinesData({ fracOfC: speed }))
+			.each(function (d) {
+				const transition = d3.select(this).transition().duration(10);
+				Object.entries(d.attrs).forEach(([key, val]) => {
+					transition.attr(key, val);
+				});
 			});
-		});
 	} catch (e) {
 		console.log(speedStr);
 		throw e;
@@ -369,23 +387,26 @@ function updateMuonSpeed(speedStr) {
 
 // eslint-disable-next-line no-unused-vars
 function hideNewtonianLine() {
-	const transitionDurationMS = 100;
+	const transitionDurationMS = 200;
 
 	USER_INFO.newtonianLineIsVisible = !USER_INFO.newtonianLineIsVisible;
 	if (USER_INFO.newtonianLineIsVisible) {
 		toggleNewtonianButton.textContent = "Hide Newtonian Answer";
 		d3.select(newtonianAnswerSection)
-			.transition(transitionDurationMS)
+			.transition()
+			.duration(transitionDurationMS)
 			.style("opacity", "1");
 	} else {
 		toggleNewtonianButton.textContent = "Show Newtonian Answer";
 		d3.select(newtonianAnswerSection)
-			.transition(transitionDurationMS)
+			.transition()
+			.duration(transitionDurationMS)
 			.style("opacity", "0");
 	}
-	subcanvases.selectAll(".newtonian-prediction").each(function () {
-		const obj = d3.select(this);
-		const color = USER_INFO.newtonianLineIsVisible ? newtonianLineColor : "#0000";
-		obj.transition(transitionDurationMS).attr("stroke", color);
-	});
+
+	const color = USER_INFO.newtonianLineIsVisible ? newtonianLineColor : "#0000";
+	graphObjs.newtonianLine
+		.transition()
+		.duration(transitionDurationMS)
+		.attr("stroke", color);
 }
