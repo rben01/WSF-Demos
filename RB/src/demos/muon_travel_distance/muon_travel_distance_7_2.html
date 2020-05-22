@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+		<style>
+			.toggle-button {
+				width: 200px;
+			}
+
+			.eqn-left {
+				text-align: right;
+			}
+
+			.eqn-middle {
+				padding-left: 0.25em;
+				padding-right: 0.25em;
+			}
+
+			.eqn-right {
+				text-align: left;
+			}
+
+			.sci-num {
+				padding-right: 0.05em;
+			}
+
+			.h-centered {
+				margin: auto;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<span>
+				<label>
+					Speed of muon (as fraction of 𝑐):
+					<span style="min-width: 1em; display: inline-block;"></span>
+					<input
+						type="range"
+						id="input-muon-speed"
+						name="input-muon-speed"
+						min="0.0"
+						max="0.99"
+						step=".001"
+						value="0"
+						oninput="updateMuonSpeed(this.value)"
+					/>
+				</label>
+			</span>
+		</div>
+		<button
+			id="btn-toggle-show-newtonian"
+			onclick="hideNewtonianLine()"
+			class="play-button toggle-button"
+		>
+			Hide Newtonian Answer
+		</button>
+
+		<div>
+			<table>
+				<tr>
+					<td class="eqn-left">Speed of muon</td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="muon-speed-text" class="highlighted-text sci-num"
+							>0</span
+						>c
+					</td>
+				</tr>
+				<tr>
+					<td class="eqn-left">𝛾</td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="lorentz-factor-text" class="highlighted-text">1</span>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div>
+			<br />
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="canvas-muon-travel-distance"
+				class="viz-canvas"
+				style="margin: auto; display: block;"
+			></svg>
+		</div>
+		<div
+			class="h-centered"
+			style="
+				width: 75%;
+				border-radius: 10px;
+				border-color: white;
+				border-style: solid;
+				margin-top: 1em;
+				margin-bottom: 0.4em;
+			"
+		>
+			<div style="padding: 15px;">
+				Disinitegration Distance for Muon =
+				<span id="text-disintigration-dist" class="highlighted-text sci-num"
+					>0</span
+				>m
+			</div>
+		</div>
+		<div id="sect-newtonian-answer" class="h-centered" style="padding: 10px;">
+			<i
+				>Newtonian Answer =
+				<span id="text-newtonian-answer" class="highlighted-text sci-num"
+					>0</span
+				>m</i
+			>
+		</div>
+
+		<script type="text/javascript" src="../utils.js"></script>
+		<script type="text/javascript" src="../global_aesthetic.js"></script>
+		<script type="text/javascript" src="muon_travel_distance_7_2.js"></script>
+		<script type="text/javascript">
+			updateMuonSpeed(0);
+		</script>
+	</body>
+</html>

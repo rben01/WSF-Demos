@@ -10,22 +10,22 @@ function isIterable(obj) {
 	return typeof obj[Symbol.iterator] === "function";
 }
 
+function applyDatum(datum) {
+	const d3Obj = d3.select(this);
+	d3Obj.classed(datum.class, true);
+	Object.entries(datum.attrs).forEach(([key, val]) => {
+		d3Obj.attr(key, val);
+	});
+}
+
 // eslint-disable-next-line no-unused-vars
-function _addGraphicalObjs(subcanvases, dataFunc) {
-	return subcanvases
+function _addGraphicalObjs(sel, dataFunc) {
+	return sel
 		.selectAll()
 		.data(dataFunc)
 		.enter()
 		.append(d => d3.create(`svg:${d.shape}`).node())
-		.each(function (d) {
-			const d3Obj = d3.select(this);
-
-			d3Obj.classed(d.class, true);
-
-			Object.entries(d.attrs).forEach(([key, val]) => {
-				d3Obj.attr(key, val);
-			});
-		});
+		.each(applyDatum);
 }
 
 // eslint-disable-next-line no-unused-vars
