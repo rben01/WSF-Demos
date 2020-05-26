@@ -25,6 +25,10 @@
         background-color: black;
     }
 
+    .sci-num {
+        padding-right: 0.15em;
+    }
+
     .w3-wide {
         letter-spacing: 10px;
     }
@@ -118,9 +122,9 @@
             ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(150, 200);
-            ctx.lineTo(150 + 100 * Math.cos(Math.PI * t / 600 - Math.PI / 2), 200 + 100 * Math.sin(Math.PI * t / 600 - Math.PI / 2));
+            ctx.lineTo(150 + 100 * Math.cos(Math.PI * t / 300 - Math.PI / 2), 200 + 100 * Math.sin(Math.PI * t / 300 - Math.PI / 2));
             ctx.moveTo(600, 200);
-            ctx.lineTo(600 + 100 * Math.cos(alpha * Math.PI * t / 600 - Math.PI / 2), 200 + 100 * Math.sin(alpha * Math.PI * t / 600 - Math.PI / 2));
+            ctx.lineTo(600 + 100 * Math.cos(alpha * Math.PI * t / 300 - Math.PI / 2), 200 + 100 * Math.sin(alpha * Math.PI * t / 300 - Math.PI / 2));
             ctx.stroke();
         }
 
