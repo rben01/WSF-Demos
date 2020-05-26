@@ -347,7 +347,7 @@ def main():
             outfile_name = (
                 infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
             )
-            outfile = infile.parent.parent.parent / "dist" / outfile_name
+            outfile = infile.parent.parent.parent.parent / "dist" / outfile_name
 
         else:
             outfile = Path(args.outfile)
