@@ -72,7 +72,7 @@
             tickstart.push([150 + 145 * Math.cos(i * Math.PI / 30), 200 + 145 * Math.sin(i * Math.PI / 30)]);
             if (i % 5 == 0) {
                 tickend.push([150 + 130 * Math.cos(i * Math.PI / 30), 200 + 130 * Math.sin(i * Math.PI / 30)]);
-                numerals.push([150 + 118 * Math.cos(i * Math.PI / 30 - Math.PI / 3 - 0.001 * i), 200 + 118 * Math.sin(i * Math.PI / 30 - Math.PI / 3 - 0.001 * i)]);
+                numerals.push([145 + 115 * Math.cos(i * Math.PI / 30 - Math.PI / 3), 205 + 115 * Math.sin(i * Math.PI / 30 - Math.PI / 3)]);
             }
             else {
                 tickend.push([150 + 135 * Math.cos(i * Math.PI / 30), 200 + 135 * Math.sin(i * Math.PI / 30)]);
@@ -107,7 +107,7 @@
                 ctx.lineTo(tickend[i][0] + 450, tickend[i][1]);
             }
             ctx.stroke();
-            ctx.font = "12px Helvetica";
+            ctx.font = "15px Helvetica";
             ctx.beginPath();
             for (var i = 0; i < 12; i++) {
                 ctx.fillText(i + 1, numerals[i][0], numerals[i][1]);
