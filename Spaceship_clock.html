@@ -107,19 +107,28 @@
                 ctx.lineTo(tickend[i][0] + 450, tickend[i][1]);
             }
             ctx.stroke();
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            for (var i = 0; i < 12; i++) {
+                ctx.moveTo(tickstart[5 * i][0], tickstart[5 * i][1]);
+                ctx.lineTo(tickend[5 * i][0], tickend[5 * i][1]);
+                ctx.moveTo(tickstart[5 * i][0] + 450, tickstart[5 * i][1]);
+                ctx.lineTo(tickend[5 * i][0] + 450, tickend[5 * i][1]);
+            }
+            ctx.stroke();
             ctx.font = "15px Helvetica";
+            ctx.lineWidth = 2;
             ctx.beginPath();
             for (var i = 0; i < 12; i++) {
                 ctx.fillText(i + 1, numerals[i][0], numerals[i][1]);
                 ctx.fillText(i + 1, numerals[i][0] + 450, numerals[i][1]);
             }
             ctx.fill();
-            ctx.font = "30px Helvetica";
+            ctx.font = "27px Helvetica";
             ctx.beginPath();
-            ctx.fillText("Earth", 115, 35);
-            ctx.fillText("Spaceship", 525, 35);
+            ctx.fillText("Earth", 118, 35);
+            ctx.fillText("Rocket", 555, 35);
             ctx.fill();
-            ctx.lineWidth = 3;
             ctx.beginPath();
             ctx.moveTo(150, 200);
             ctx.lineTo(150 + 100 * Math.cos(Math.PI * t / 300 - Math.PI / 2), 200 + 100 * Math.sin(Math.PI * t / 300 - Math.PI / 2));
