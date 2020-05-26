@@ -291,7 +291,11 @@ def inline(
         soup.find("body").insert(0, style_tag)
 
     with outfile.open("w") as f:
-        f.write("\n".join(line.strip() for line in soup.prettify().splitlines()))
+        f.write(
+            "\n".join(
+                line.strip() for line in re.sub("\n\n+", "\n", str(soup)).splitlines()
+            )
+        )
 
 
 def main():

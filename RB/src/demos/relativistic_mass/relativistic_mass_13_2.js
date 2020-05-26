@@ -2,12 +2,11 @@
 
 "use strict";
 
-const C = 299792458;
 const REST_MASS = 5;
 
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 350;
-const AXIS_MARGINS = { top: 0.03, bottom: 0.1, left: 0.13, right: 0.06 };
+const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
