@@ -1,5 +1,8 @@
 "use strict";
 
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
 function isIterable(obj) {
@@ -10,11 +13,12 @@ function isIterable(obj) {
 	return typeof obj[Symbol.iterator] === "function";
 }
 
-function applyDatum(datum) {
+function applyDatum(datum, { transition } = {}) {
 	const d3Obj = d3.select(this);
 	d3Obj.classed(datum.class, true);
+	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
 	Object.entries(datum.attrs).forEach(([key, val]) => {
-		d3Obj.attr(key, val);
+		t.attr(key, val);
 	});
 }
 

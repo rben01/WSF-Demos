@@ -1,8 +1,7 @@
-/* globals _addGraphicalObjs applyDatum lorentzFactor */
+/* globals _addGraphicalObjs applyDatum lorentzFactor C */
 
 "use strict";
 
-const C = 299792458;
 const MUON_BASE_LIFESPAN = 2.19e-6;
 
 const CANVAS_WIDTH = 600;
