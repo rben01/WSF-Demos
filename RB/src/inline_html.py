@@ -370,7 +370,11 @@ def main():
             outfile_name = (
                 infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
             )
-            outfile = infile.parent.parent.parent.parent / "dist" / outfile_name
+            outdir: Path = (
+                infile.parent.parent.parent.parent / "dist" / infile.parent.parent.name
+            )
+            outdir.mkdir(exist_ok=True, parents=True)
+            outfile = outdir / outfile_name
 
         else:
             outfile = Path(args.outfile)

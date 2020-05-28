@@ -67,11 +67,16 @@ function toTitleCase(str) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function updateTrainSpeed(speed) {
+function updateTrainSpeed(speed, { initial = false } = {}) {
 	const trainSpeedInputValue =
 		typeof speed !== "undefined"
 			? speed
 			: document.getElementById("input-train-speed").value;
+
+	if (!initial) {
+		document.getElementById("div-speed-info").style.visibility = "visible";
+		document.getElementById("btn-run-animation").disabled = false;
+	}
 
 	try {
 		const floatVal = parseFloat(trainSpeedInputValue);
@@ -80,7 +85,9 @@ function updateTrainSpeed(speed) {
 		}
 		const clamped = Math.max(0, Math.min(floatVal, 1));
 		USER_INFO.trainSpeed = clamped;
-		document.getElementById("train-speed-text").textContent = trainSpeedInputValue;
+		document.getElementById(
+			"train-speed-text",
+		).textContent = (+trainSpeedInputValue).toFixed(3);
 	} catch (e) {
 		console.log(trainSpeedInputValue);
 	}

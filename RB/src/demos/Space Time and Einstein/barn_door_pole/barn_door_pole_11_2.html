@@ -10,12 +10,7 @@
 		<div>
 			<span>
 				<label>
-					Relative speed (as fraction of 𝑐):
-					<span
-						id="relative-speed-text"
-						class="highlighted-text"
-						style="min-width: 3em; display: inline-block;"
-					></span>
+					<span class="slider-label">Relative speed:</span>
 					<input
 						type="range"
 						id="input-relative-speed"
@@ -28,6 +23,18 @@
 					/>
 				</label>
 			</span>
+			<div
+				id="div-speed-info"
+				class="div-below-slider"
+				style="visibility: hidden;"
+			>
+				<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
+				><span
+					id="relative-speed-text"
+					class="sci-num highlighted-text eqn-right"
+					>0.1</span
+				>𝑐
+			</div>
 		</div>
 		<div>
 			<p id="barn-pole-rest-length">
@@ -107,7 +114,7 @@
 		<script type="text/javascript" src="../../global_aesthetic.js"></script>
 		<script type="text/javascript" src="barn_door_pole_11_2.js"></script>
 		<script type="text/javascript">
-			updateRelativeSpeed(0);
+			updateRelativeSpeed(0, { fromUserInput: false });
 		</script>
 	</body>
 </html>
