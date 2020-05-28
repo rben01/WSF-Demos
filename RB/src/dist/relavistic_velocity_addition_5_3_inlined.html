@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}.slider-label{display:inline-block;min-width:16em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.heading{margin-bottom:.5em;margin-top:2em}.h-centered{margin:auto;text-align:center}</style>
+<div>
+<span>
+<label>
+<span class="slider-label">
+Rocket velocity (as fraction of 𝑐):
+</span>
+<input id="input-rocket-speed" max="0.999" min="0.0" name="input-rocket-speed" oninput="updateRocketSpeed(this.value)" step=".0005" type="range" value="0"/>
+</label>
+</span>
+<span>
+<label>
+<span class="slider-label">
+Projectile velocity (as fraction of 𝑐):
+</span>
+<input id="input-projectile-speed" max="0.999" min="0.0" name="input-projectile-speed" oninput="updateProjectileSpeed(this.value)" step=".0005" type="range" value="0"/>
+</label>
+</span>
+</div>
+<div>
+<div style="display: inline-block; vertical-align: top; width: 10em;">
+<h4 class="heading">Rocket Frame</h4>
+<table>
+<tr>
+<td class="eqn-left">
+𝑣<sub><sub>rocket</sub></sub>
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right"><span class="sci-num">0.00</span>𝑐</td>
+</tr>
+<tr>
+<td class="eqn-left">
+𝑣<sub><sub>projectile</sub></sub>
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="sci-num highlighted-text" id="text-rocket-frame-projectile-speed">0.00</span>𝑐
+</td>
+</tr>
+</table>
+<h4 class="heading">Ground Frame</h4>
+<table>
+<tr>
+<td class="eqn-left">
+𝑣<sub><sub>rocket</sub></sub>
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="sci-num" id="text-ground-frame-rocket-speed">0.00</span>𝑐
+</td>
+</tr>
+<tr>
+<td class="eqn-left">
+𝑣<sub><sub>projectile</sub></sub>
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="sci-num highlighted-text" id="text-ground-frame-projectile-speed">0.00</span>𝑐
+</td>
+</tr>
+</table>
+</div>
+<div style="display: inline-block; vertical-align: bottom;">
+<svg class="viz-canvas" id="canvas-rocket-projectile" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+</div>
+<div class="h-centered" style="margin-top: 2em; font-size: smaller;">
+<i>The Galilean prediction for the projectile velocity as seen in the
+ground frame is
+<span class="sci-num highlighted-text" id="text-galilean-speed-prediction">0</span>𝑐</i>
+</div>
+<script type="text/javascript">"use strict";const C=299792458;function isIterable(e){return null!=e&&"function"==typeof e[Symbol.iterator]}function applyDatum(e,{transition:t}={}){const a=d3.select(this);a.classed(e.class,!0);const r=void 0===t?a:a.transition(t);Object.entries(e.attrs).forEach(([e,t])=>{r.attr(e,t)})}function _addGraphicalObjs(e,t){return e.selectAll().data(t).enter().append(e=>d3.create(`svg:${e.shape}`).node()).each(applyDatum)}function lorentzFactor({fracOfC:e}){return e||(e=0),1/Math.sqrt(1-e*e)}const AESTHETIC={solidFill:"#4ff8",solidStroke:"#fff8",durationMSOfAnimationReset:300,easingForAnimationReset:d3.easePoly.exponent(2.5),configure:function(e,t){return Object.entries(t).forEach(([t,a])=>{if("attrs"===t){const t=a;Object.entries(t).forEach(([t,a])=>{e.attr(t,a)})}else{if("class"!==t)throw new Error(`Unexpected key ${t}`);e.classed(a,!0)}}),e}},CANVAS_WIDTH=500,CANVAS_HEIGHT=450,AXIS_MARGINS={top:.1,bottom:.13,left:.13,right:.06},AX_BOUNDS={xMin:500*AXIS_MARGINS.left,xMax:500*(1-AXIS_MARGINS.right),yMin:450*(1-AXIS_MARGINS.bottom),yMax:450*AXIS_MARGINS.top},ROCKET="rocket",PROJECTILE="projectile",canvas=d3.select("#canvas-rocket-projectile").attr("width",500).attr("height",450).attr("background-color","black"),subcanvases=canvas.data([{originX:0,originY:0,width:500,height:450}]).each(function(e){d3.select(this).append("g").attr("transform",`translate(0, ${e.originY})`).classed("subcanvas",!0)}).selectAll("g"),groundFrameProjectileSpeedTextSpan=document.getElementById("text-ground-frame-projectile-speed"),galileanSpeedPredictionTextSpan=document.getElementById("text-galilean-speed-prediction"),OBJECTS={[ROCKET]:{speed:0,speedSlider:document.getElementById("input-rocket-speed"),textSpan:document.getElementById("text-ground-frame-rocket-speed")},[PROJECTILE]:{speed:0,speedSlider:document.getElementById("input-projectile-speed"),textSpan:document.getElementById("text-rocket-frame-projectile-speed")}};function _getSpeedHelper(e,{obj:t}){e=void 0!==e?e:OBJECTS[t].speedSlider.value;const a=parseFloat(e);if(a<0||a>1)throw new Error(`Got invalid speed (outside [0,1]): ${a}`);return a}function getRocketSpeed(e){return _getSpeedHelper(e,{obj:ROCKET})}function getProjectileSpeed(e){return _getSpeedHelper(e,{obj:PROJECTILE})}function getRelativisticProjectileSpeed({rocketFracOfC:e,projectileFracOfCRelativeToRocket:t}={}){return void 0===e&&(e=getRocketSpeed()),void 0===t&&(t=getProjectileSpeed()),(e+t)/(1+e*t)}const xScale=d3.scaleLinear().domain([-.02,1]).range([AX_BOUNDS.xMin,AX_BOUNDS.xMax]),yScale=d3.scaleLinear().domain([-.04,2]).range([AX_BOUNDS.yMin,AX_BOUNDS.yMax]),graphObjs={};function drawGraph({baseObject:e}){return subcanvases.each(function(){const t=d3.select(this);t.append("svg:line").attr("x1",xScale(0)).attr("x2",xScale(1)).attr("y1",yScale(0)).attr("y2",yScale(2)).attr("stroke","white").attr("stroke-width",2);const a={stroke:"#fff3","stroke-width":2},r=[{class:"x-axis",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMax,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMin,...a}},{class:"y-axis",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMin,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMax,...a}}];t.selectAll().data(r).enter().append("svg:line").each(applyDatum);const n={stroke:"#fff4","stroke-width":1},c=xScale.ticks(21).map(e=>{const t=xScale(e);return{class:"x-tick",attrs:{x1:t,x2:t,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMin-3,...n}}}),o=yScale.ticks(21).map(e=>{const t=yScale(e);return{class:"y-tick",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMin+3,y1:t,y2:t,...n}}});t.selectAll().data([...c,...o]).enter().append("svg:line").each(applyDatum);const s={"font-size":15,fill:"white"},i=xScale.ticks(6).map(e=>({class:"x-axis-label",text:e,attrs:{x:xScale(e),y:AX_BOUNDS.yMin+22,"text-anchor":"middle","dominant-baseline":"text-top",...s}})),l=yScale.ticks(4).map(e=>({class:"y-axis-label",text:e,attrs:{x:AX_BOUNDS.xMin-10,y:yScale(e),"text-anchor":"end","dominant-baseline":"central",...s}}));t.selectAll().data([...i,...l]).enter().append("svg:text").each(applyDatum).text(e=>e.text);const p=subcanvases.append("text").attr("x",AX_BOUNDS.xMax-25).attr("y",AX_BOUNDS.yMin+45).attr("font-size",21).attr("stroke","white").attr("fill","white").attr("text-anchor","middle");p.append("tspan").text("𝑣"),p.append("tspan").text(e===ROCKET?"rocket":"projectile").style("font-size","12").style("font-weight",8).attr("dx",".1em").attr("dy",".5em"),p.append("tspan").text(" / 𝑐");const d=subcanvases.append("text").attr("x",AX_BOUNDS.xMin).attr("y",AX_BOUNDS.yMax-30).attr("font-size",21).attr("stroke","white").attr("fill","white").attr("text-anchor","middle");d.append("tspan").text("𝑣"),d.append("tspan").text("projectile").style("font-size","12").style("font-weight",8).attr("dx",".1em").attr("dy",".5em"),d.append("tspan").text(" / 𝑐")})}const graphAttrs={[ROCKET]:{stroke:"#4c4f"},[PROJECTILE]:{stroke:"red"},common:{"stroke-width":4,fill:"#0000"}};function getGraphData({baseObject:e}){const t={[ROCKET]:getRocketSpeed(),[PROJECTILE]:getProjectileSpeed()};return[...function(){const a=[];e===ROCKET?a.push([0,t[PROJECTILE]]):a.push([0,t[ROCKET]]);const r=0,n=Math.max(...xScale.domain()),c=0,o=Math.max(...yScale.domain());let s;for(let i=2;i<5;++i){const l=Math.pow(10,-i),p=2===i?Math.pow(10,-i):1-9*Math.pow(10,-i),d=2===i?Math.pow(10,i):10;for(let i=0;i<d-1;++i){const d=p+i*l;s=getRelativisticProjectileSpeed(e===ROCKET?{rocketFracOfC:d,projectileFracOfCRelativeToRocket:t[PROJECTILE]}:{rocketFracOfC:t[ROCKET],projectileFracOfCRelativeToRocket:d}),r<d&&d<=n&&c<s&&s<=o&&a.push([d,s,xScale(d),yScale(s)])}}return[{shape:"path",class:"curve",attrs:{d:d3.line().x(e=>xScale(e[0])).y(e=>yScale(e[1])).curve(d3.curveCardinal)(a),...graphAttrs[e],...graphAttrs.common}}]}(),...function(){const a=xScale(e===ROCKET?t[ROCKET]:t[PROJECTILE]),r=yScale(getRelativisticProjectileSpeed({rocketFracOfC:t[ROCKET],projectileFracOfCRelativeToRocket:t[PROJECTILE]})),n={stroke:"#fd2f","stroke-width":2,"stroke-dasharray":"1.5 1.5"};return[{shape:"line",class:"gridline",type:"horizontal",attrs:{x1:AX_BOUNDS.xMin,x2:a,y1:r,y2:r,...n}},{shape:"line",class:"gridline",type:"vertical",attrs:{x1:a,x2:a,y1:AX_BOUNDS.yMin,y2:r,...n}},{shape:"circle",class:"gridline-dot",attrs:{cx:a,cy:r,r:4,fill:"#fd2f"}}]}()]}function _updateSpeedHelper(e,{fromUserInput:t=!0,obj:a,baseObject:r}={}){try{t||(OBJECTS[a].speedSlider.value=e);const n=OBJECTS[a].speed,c=_getSpeedHelper(e,{obj:a});OBJECTS[a].speed=c,OBJECTS[a].textSpan.textContent=c.toFixed(3);const o=getRocketSpeed(),s=getProjectileSpeed(),i=Math.min(getRelativisticProjectileSpeed({rocketFracOfC:o,projectileFracOfCRelativeToRocket:s}),.999);groundFrameProjectileSpeedTextSpan.textContent=i.toFixed(3);const l=o+s;galileanSpeedPredictionTextSpan.textContent=l.toFixed(3);const p=t?1e3*Math.abs(n-c)*.2:0,d=d3.transition().duration(p);graphObjs.features.data(()=>getGraphData({baseObject:r})).each(function(e){return applyDatum.call(this,e,{transition:d})})}catch(t){throw console.log(e),t}}function updateRocketSpeed(e,{fromUserInput:t=!0}={}){return _updateSpeedHelper(e,{fromUserInput:t,obj:ROCKET,baseObject:PROJECTILE})}function updateProjectileSpeed(e,{fromUserInput:t=!0}={}){return _updateSpeedHelper(e,{fromUserInput:t,obj:PROJECTILE,baseObject:PROJECTILE})}drawGraph({baseObject:PROJECTILE}),graphObjs.features=_addGraphicalObjs(subcanvases,()=>getGraphData({baseObject:PROJECTILE})),updateRocketSpeed(.5,{fromUserInput:!1}),updateProjectileSpeed(.5,{fromUserInput:!1});</script></body>
+</html>

@@ -23,6 +23,10 @@ body {
 	padding-top: 1em;
 }
 
+.sci-num {
+	padding-right: 0.15em;
+}
+
 input[type="range"] {
 	-webkit-appearance: none;
 	-moz-apperance: none;

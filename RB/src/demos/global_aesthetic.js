@@ -10,7 +10,7 @@ const AESTHETIC = {
 		Object.entries(config).forEach(([key, value]) => {
 			if (key === "attrs") {
 				const attrs = value;
-				Object.entries(attrs).forEach((attr, val) => {
+				Object.entries(attrs).forEach(([attr, val]) => {
 					d3Obj.attr(attr, val);
 				});
 			} else if (key === "class") {

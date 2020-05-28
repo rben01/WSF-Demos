@@ -1,5 +1,6 @@
 # %%
 import argparse
+import base64
 import enum
 import json
 import re
@@ -196,7 +197,9 @@ def inline(
     *,
     ignored_link_dests,
     ignored_link_dest_regexes,
-    minify_globals=True,
+    minify_js=False,
+    minify_css=False,
+    minify_globals=False,
 ):
     if infile.resolve() == outfile.resolve():
         sys.exit("infile and outfile are the same; they must be different")
@@ -208,11 +211,13 @@ def inline(
     css_source_strs = []
 
     tag_names_and_link_attrs = [
-        ("script", "src", js_source_strs),
-        ("link", "href", css_source_strs),
+        ("script", "src", js_source_strs, "r"),
+        ("link", "href", css_source_strs, "r"),
+        ("style", None, css_source_strs, "r"),
+        ("img", "src", None, "rb"),
     ]
 
-    for tag_name, link_attr, source_strs in tag_names_and_link_attrs:
+    for tag_name, link_attr, source_strs, file_mode in tag_names_and_link_attrs:
         tags = soup.find_all(tag_name)
         for tag in tags:
             tag: Tag
@@ -229,21 +234,30 @@ def inline(
             else:
                 absolute_src: Path = infile.parent / link_dest
 
-                with absolute_src.open() as f:
+                with absolute_src.open(file_mode) as f:
                     contents = f.read()
 
-            source_strs.append(contents)
-            tag.decompose()
+            if tag_name == "img":
+                data = base64.b64encode(contents).decode("utf-8")
+                tag[
+                    "src"
+                ] = f"data:image/{absolute_src.suffix.strip('.')};base64,{data}"
+            else:
+                source_strs.append(contents)
+                tag.decompose()
 
     if js_source_strs:
         js_source_str = "\n".join(js_source_strs)
-        response = requests.post(
-            "https://javascript-minifier.com/raw", data={"input": js_source_str},
-        )
+        if minify_js:
+            response = requests.post(
+                "https://javascript-minifier.com/raw", data={"input": js_source_str},
+            )
+            js_code = response.text
+        else:
+            js_code = js_source_str
+
         script_tag = soup.new_tag("script")
         script_tag["type"] = "text/javascript"
-        js_code = response.text
-
         if minify_globals:
             symbols = [match[1] for match in SYMBOL_RE.findall(js_code) if match[1]]
             replacer = SymbolReplacer(symbols, lang=Lang.js)
@@ -274,15 +288,24 @@ def inline(
 
     if css_source_strs:
         css_source_str = "\n".join(css_source_strs)
-        response = requests.post(
-            "https://cssminifier.com/raw", data={"input": css_source_str}
-        )
+        if minify_css:
+            response = requests.post(
+                "https://cssminifier.com/raw", data={"input": css_source_str}
+            )
+            css_source = response.text
+        else:
+            css_source = css_source_str
+
         style_tag = soup.new_tag("style")
-        style_tag.string = response.text
+        style_tag.string = css_source
         soup.find("body").insert(0, style_tag)
 
     with outfile.open("w") as f:
-        f.write("\n".join(line.strip() for line in soup.prettify().splitlines()))
+        f.write(
+            "\n".join(
+                line.strip() for line in re.sub("\n\n+", "\n", str(soup)).splitlines()
+            )
+        )
 
 
 def main():
@@ -306,6 +329,19 @@ def main():
         default=[],
         help="A regex describing external resources to skip inlining",
     )
+
+    parser.add_argument(
+        "--minify-js",
+        action="store_true",
+        help="Minify JavaScript (requires an internet connection)",
+    )
+
+    parser.add_argument(
+        "--minify-css",
+        action="store_true",
+        help="Minify CSS (requires an internet connection)",
+    )
+
     parser.add_argument(
         "--minify-globals",
         action="store_true",
@@ -331,7 +367,10 @@ def main():
             if args.minify_globals:
                 suffix = f".min{suffix}"
 
-            outfile = infile.with_name(infile.stem + "_inlined").with_suffix(suffix)
+            outfile_name = (
+                infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
+            )
+            outfile = infile.parent.parent.parent.parent / "dist" / outfile_name
 
         else:
             outfile = Path(args.outfile)
@@ -344,6 +383,8 @@ def main():
             outfile,
             ignored_link_dests=ignored_link_dests,
             ignored_link_dest_regexes=ignored_link_dest_regexes,
+            minify_js=args.minify_js,
+            minify_css=args.minify_css,
             minify_globals=args.minify_globals,
         )
 
