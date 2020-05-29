@@ -9,19 +9,6 @@
 				width: 200px;
 			}
 
-			.eqn-left {
-				text-align: right;
-			}
-
-			.eqn-middle {
-				padding-left: 0.25em;
-				padding-right: 0.25em;
-			}
-
-			.eqn-right {
-				text-align: left;
-			}
-
 			.h-centered {
 				margin: auto;
 				text-align: center;
@@ -33,8 +20,7 @@
 		<div>
 			<span>
 				<label>
-					Speed of muon (as fraction of 𝑐):
-					<span style="min-width: 1em; display: inline-block;"></span>
+					<span class="slider-label">Speed of muon:</span>
 					<input
 						type="range"
 						id="input-muon-speed"
@@ -59,7 +45,7 @@
 		<div>
 			<table>
 				<tr>
-					<td class="eqn-left">Speed of muon</td>
+					<td class="eqn-left">𝑣</td>
 					<td class="eqn-middle">=</td>
 					<td class="eqn-right">
 						<span id="muon-speed-text" class="highlighted-text sci-num"

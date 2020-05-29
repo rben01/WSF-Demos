@@ -371,12 +371,16 @@ const bothPlaybackInfo = {
 };
 
 // eslint-disable-next-line no-unused-vars
-function updateRelativeSpeed(speedStr) {
+function updateRelativeSpeed(speedStr, { fromUserInput = true } = {}) {
 	try {
 		const speed = getSpeed(speedStr);
 		USER_INFO.trainSpeed = speed;
 		if (speedStr || speedStr === 0) {
-			speedTextSpan.textContent = speedStr;
+			speedTextSpan.textContent = (+speedStr).toFixed(2);
+		}
+
+		if (fromUserInput) {
+			document.getElementById("div-speed-info").style.visibility = "visible";
 		}
 
 		[bothPlaybackInfo.barnStationary, bothPlaybackInfo.poleStationary].forEach(

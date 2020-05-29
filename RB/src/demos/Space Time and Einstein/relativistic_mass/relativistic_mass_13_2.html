@@ -5,19 +5,6 @@
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<style>
-			.eqn-left {
-				text-align: right;
-			}
-
-			.eqn-middle {
-				padding-left: 0.25em;
-				padding-right: 0.25em;
-			}
-
-			.eqn-right {
-				text-align: left;
-			}
-
 			.h-centered {
 				margin: auto;
 				text-align: center;
@@ -29,8 +16,7 @@
 		<div>
 			<span>
 				<label>
-					Speed of particle (as fraction of 𝑐):
-					<span style="min-width: 1em; display: inline-block;"></span>
+					<span class="slider-label">Speed of particle:</span>
 					<input
 						type="range"
 						id="input-particle-speed"
@@ -44,7 +30,7 @@
 				</label>
 			</span>
 		</div>
-		<div>
+		<div class="div-below-slider">
 			<table>
 				<tr>
 					<td class="eqn-left">𝑣</td>
