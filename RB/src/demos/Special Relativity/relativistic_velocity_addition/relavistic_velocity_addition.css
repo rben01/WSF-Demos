@@ -1,0 +1,22 @@
+.top-sliders-sect {
+	padding-bottom: 1em;
+}
+
+.rva-button {
+	width: 13em;
+}
+
+.slider-label {
+	display: inline-block;
+	min-width: 9em;
+}
+
+.heading {
+	margin-bottom: 0.5em;
+	margin-top: 2em;
+}
+
+.h-centered {
+	margin: auto;
+	text-align: center;
+}

@@ -4,30 +4,19 @@
 		<meta charset="UTF-8" />
 		<script src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
-		<style>
-			.slider-label {
-				display: inline-block;
-				min-width: 16em;
-			}
-
-			.heading {
-				margin-bottom: 0.5em;
-				margin-top: 2em;
-			}
-
-			.h-centered {
-				margin: auto;
-				text-align: center;
-			}
-		</style>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./relavistic_velocity_addition.css"
+		/>
 	</head>
 
 	<body>
-		<div>
+		<div class="top-sliders-sect">
 			<span>
 				<label>
 					<span class="slider-label">
-						Rocket velocity (as fraction of 𝑐):
+						Rocket velocity:
 					</span>
 					<input
 						type="range"
@@ -41,10 +30,11 @@
 					/>
 				</label>
 			</span>
+			<br />
 			<span>
 				<label>
 					<span class="slider-label">
-						Projectile velocity (as fraction of 𝑐):
+						Projectile velocity:
 					</span>
 					<input
 						type="range"
@@ -65,14 +55,14 @@
 				<table>
 					<tr>
 						<td class="eqn-left">
-							𝑣<sub><sub>rocket</sub></sub>
+							𝑣′<sub><sub>rocket</sub></sub>
 						</td>
 						<td class="eqn-middle">=</td>
-						<td class="eqn-right"><span class="sci-num">0.00</span>𝑐</td>
+						<td class="eqn-right"><span class="sci-num">0.000</span>𝑐</td>
 					</tr>
 					<tr>
 						<td class="eqn-left">
-							𝑣<sub><sub>projectile</sub></sub>
+							𝑣′<sub><sub>projectile</sub></sub>
 						</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
@@ -92,7 +82,9 @@
 						</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
-							<span id="text-ground-frame-rocket-speed" class="sci-num"
+							<span
+								id="text-ground-frame-rocket-speed"
+								class="sci-num highlighted-text"
 								>0.00</span
 							>𝑐
 						</td>
@@ -116,10 +108,9 @@
 						><button
 							id="btn-hide-newtonian"
 							onclick="toggleNewtonian()"
-							class="play-button"
-							style="width: 10em;"
+							class="play-button rva-button"
 						>
-							Hide Newtonian
+							Hide Galilean Prediction
 						</button></span
 					>
 				</div>

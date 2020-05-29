@@ -255,7 +255,7 @@ function drawGraph({ baseObject }) {
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle");
-		xAxisText.append("tspan").text("𝑣");
+		xAxisText.append("tspan").text(`𝑣${baseObject === ROCKET ? " " : "′"}`);
 		xAxisText
 			.append("tspan")
 			.text(baseObject === ROCKET ? "rocket" : "projectile")
@@ -268,21 +268,31 @@ function drawGraph({ baseObject }) {
 		// Add distance label to y axis
 		const yAxisText = subcanvases
 			.append("text")
+			.attr("width", "5em")
 			.attr("x", AX_BOUNDS.xMin)
 			.attr("y", AX_BOUNDS.yMax - 30)
 			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle");
-		yAxisText.append("tspan").text("𝑣");
-		yAxisText
+		const vYLabel = yAxisText
+			.append("tspan")
+			.attr("x", xScale.range()[0])
+			.attr("text-anchor", "middle");
+		vYLabel.append("tspan").text("𝑣");
+		vYLabel
 			.append("tspan")
 			.text("projectile")
 			.style("font-size", "12")
 			.style("font-weight", 8)
 			.attr("dx", ".1em")
 			.attr("dy", ".5em");
-		yAxisText.append("tspan").text(" / 𝑐");
+		yAxisText
+			.append("svg:tspan")
+			.text("𝑐")
+			.attr("x", xScale.range()[0])
+			.attr("dy", "0.8em")
+			.attr("text-anchor", "middle");
 	});
 }
 
@@ -420,43 +430,8 @@ function getGraphData({ baseObject }) {
 			}),
 		);
 
+		// Galilean line must go first so that it's drawn over by the other line
 		return [
-			{
-				shape: "line",
-				class: "gridline",
-				type: "horizontal",
-				attrs: {
-					x1: AX_BOUNDS.xMin,
-					x2: x,
-					y1: y,
-					y2: y,
-					stroke: fgColor,
-					...commonLineAttrs,
-				},
-			},
-			{
-				shape: "line",
-				class: "gridline",
-				type: "vertical",
-				attrs: {
-					x1: x,
-					x2: x,
-					y1: AX_BOUNDS.yMin,
-					y2: y,
-					stroke: fgColor,
-					...commonLineAttrs,
-				},
-			},
-			{
-				shape: "circle",
-				class: "gridline-dot",
-				attrs: {
-					cx: x,
-					cy: y,
-					r: 4,
-					fill: fgColor,
-				},
-			},
 			{
 				shape: "line",
 				class: "galilean galilean-gridline",
@@ -493,7 +468,43 @@ function getGraphData({ baseObject }) {
 					cx: x,
 					cy: galileanY,
 					r: 4,
-					fill: galileanFgColor,
+					fill: "#ddd",
+				},
+			},
+			{
+				shape: "line",
+				class: "gridline",
+				type: "horizontal",
+				attrs: {
+					x1: AX_BOUNDS.xMin,
+					x2: x,
+					y1: y,
+					y2: y,
+					stroke: fgColor,
+					...commonLineAttrs,
+				},
+			},
+			{
+				shape: "line",
+				class: "gridline",
+				type: "vertical",
+				attrs: {
+					x1: x,
+					x2: x,
+					y1: AX_BOUNDS.yMin,
+					y2: y,
+					stroke: fgColor,
+					...commonLineAttrs,
+				},
+			},
+			{
+				shape: "circle",
+				class: "gridline-dot",
+				attrs: {
+					cx: x,
+					cy: y,
+					r: 4,
+					fill: fgColor,
 				},
 			},
 		];
