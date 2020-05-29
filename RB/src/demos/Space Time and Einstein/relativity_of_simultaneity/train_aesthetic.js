@@ -73,11 +73,6 @@ function updateTrainSpeed(speed, { initial = false } = {}) {
 			? speed
 			: document.getElementById("input-train-speed").value;
 
-	if (!initial) {
-		document.getElementById("div-speed-info").style.visibility = "visible";
-		document.getElementById("btn-run-animation").disabled = false;
-	}
-
 	try {
 		const floatVal = parseFloat(trainSpeedInputValue);
 		if (floatVal < 0 || floatVal > 1) {

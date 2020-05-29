@@ -11,6 +11,7 @@ const AX_BOUNDS = {
 	yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
 	yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
 };
+const galileanFgColor = "#aaaf";
 
 const ROCKET = "rocket";
 const PROJECTILE = "projectile";
@@ -94,6 +95,13 @@ function getRelativisticProjectileSpeed({
 	);
 }
 
+function getGalileanProjectileSpeed({
+	rocketFracOfC,
+	projectileFracOfCRelativeToRocket,
+}) {
+	return rocketFracOfC + projectileFracOfCRelativeToRocket;
+}
+
 const xScale = d3
 	.scaleLinear()
 	.domain([-0.02, 1])
@@ -111,14 +119,14 @@ function drawGraph({ baseObject }) {
 	return subcanvases.each(function () {
 		const subcanvas = d3.select(this);
 
-		subcanvas
-			.append("svg:line")
-			.attr("x1", xScale(0))
-			.attr("x2", xScale(1))
-			.attr("y1", yScale(0))
-			.attr("y2", yScale(2))
-			.attr("stroke", "white")
-			.attr("stroke-width", 2);
+		// subcanvas
+		// 	.append("svg:line")
+		// 	.attr("x1", xScale(0))
+		// 	.attr("x2", xScale(1))
+		// 	.attr("y1", yScale(0))
+		// 	.attr("y2", yScale(2))
+		// 	.attr("stroke", "white")
+		// 	.attr("stroke-width", 2);
 
 		// Add axes
 		const commonAxesAttrs = {
@@ -289,6 +297,15 @@ function getGraphData({ baseObject }) {
 		[PROJECTILE]: getProjectileSpeed(),
 	};
 
+	const xBounds = {
+		min: 0,
+		max: Math.max(...xScale.domain()),
+	};
+	const yBounds = {
+		min: 0,
+		max: Math.max(...yScale.domain()),
+	};
+
 	function getCurveData() {
 		const data = [];
 
@@ -300,15 +317,6 @@ function getGraphData({ baseObject }) {
 
 		const base = 10;
 		const startPrecision = 2;
-
-		const xBounds = {
-			min: 0,
-			max: Math.max(...xScale.domain()),
-		};
-		const yBounds = {
-			min: 0,
-			max: Math.max(...yScale.domain()),
-		};
 
 		let y;
 		for (let precision = startPrecision; precision < 5; ++precision) {
@@ -360,6 +368,29 @@ function getGraphData({ baseObject }) {
 					...graphAttrs.common,
 				},
 			},
+			{
+				shape: "line",
+				galilean: true,
+				class: "galilean galilean-line",
+				attrs: {
+					x1: xScale(xBounds.min),
+					x2: xScale(xBounds.max),
+					y1: yScale(data[0][1]),
+					y2: yScale(
+						getGalileanProjectileSpeed({
+							rocketFracOfC:
+								baseObject === ROCKET ? xBounds.max : speeds[ROCKET],
+							projectileFracOfCRelativeToRocket:
+								baseObject === PROJECTILE
+									? xBounds.max
+									: speeds[PROJECTILE],
+						}),
+					),
+					stroke: galileanFgColor,
+					"stroke-width": 4,
+					"stroke-dasharray": "5 3",
+				},
+			},
 		];
 	}
 
@@ -376,10 +407,19 @@ function getGraphData({ baseObject }) {
 		const fgColor = "#fd2f";
 
 		const commonLineAttrs = {
-			stroke: fgColor,
 			"stroke-width": 2,
 			"stroke-dasharray": "1.5 1.5",
 		};
+
+		const galileanY = yScale(
+			getGalileanProjectileSpeed({
+				rocketFracOfC:
+					baseObject === ROCKET ? xScale.invert(x) : speeds[ROCKET],
+				projectileFracOfCRelativeToRocket:
+					baseObject === PROJECTILE ? xScale.invert(x) : speeds[PROJECTILE],
+			}),
+		);
+
 		return [
 			{
 				shape: "line",
@@ -390,6 +430,7 @@ function getGraphData({ baseObject }) {
 					x2: x,
 					y1: y,
 					y2: y,
+					stroke: fgColor,
 					...commonLineAttrs,
 				},
 			},
@@ -402,6 +443,7 @@ function getGraphData({ baseObject }) {
 					x2: x,
 					y1: AX_BOUNDS.yMin,
 					y2: y,
+					stroke: fgColor,
 					...commonLineAttrs,
 				},
 			},
@@ -415,10 +457,67 @@ function getGraphData({ baseObject }) {
 					fill: fgColor,
 				},
 			},
+			{
+				shape: "line",
+				class: "galilean galilean-gridline",
+				galilean: true,
+				type: "horizontal",
+				attrs: {
+					x1: AX_BOUNDS.xMin,
+					x2: x,
+					y1: galileanY,
+					y2: galileanY,
+					stroke: galileanFgColor,
+					...commonLineAttrs,
+				},
+			},
+			{
+				shape: "line",
+				class: "galilean galilean-gridline",
+				galilean: true,
+				type: "horizontal",
+				attrs: {
+					x1: x,
+					x2: x,
+					y1: y,
+					y2: galileanY,
+					stroke: galileanFgColor,
+					...commonLineAttrs,
+				},
+			},
+			{
+				shape: "circle",
+				galilean: true,
+				class: "galilean galilean-gridline-dot",
+				attrs: {
+					cx: x,
+					cy: galileanY,
+					r: 4,
+					fill: galileanFgColor,
+				},
+			},
 		];
 	}
 
 	return [...getCurveData(), ...getGridlinesData()];
+}
+
+let showNewtonian = true;
+
+// eslint-disable-next-line no-unused-vars
+function toggleNewtonian() {
+	showNewtonian = !showNewtonian;
+	graphObjs.features
+		.filter(d => d.galilean)
+		.each(function () {
+			const opacity = showNewtonian ? 1 : 0;
+			d3.select(this).transition().duration(100).style("opacity", opacity);
+		});
+	// const galileanObjs = document.getElementsByClassName("galilean");
+	// for (let i = 0; i < galileanObjs.length; ++i) {
+	// 	const o = galileanObjs[i];
+	// 	o.style.visibility = o.style.visibility === "hidden" ? "visible" : "hidden";
+	// }
 }
 
 // eslint-disable-next-line no-unused-vars

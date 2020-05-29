@@ -59,7 +59,7 @@ input[type="range"] {
 	border-radius: 2px;
 	margin-top: 25px;
 	position: relative;
-	bottom: 2.5px;
+	bottom: 4px;
 }
 
 input[type="range"]::-webkit-slider-thumb {

@@ -123,6 +123,18 @@
 						</td>
 					</tr>
 				</table>
+				<div style="padding-top: 1em;">
+					<span
+						><button
+							id="btn-hide-newtonian"
+							onclick="toggleNewtonian()"
+							class="play-button"
+							style="width: 10em;"
+						>
+							Hide Newtonian
+						</button></span
+					>
+				</div>
 			</div>
 			<div style="display: inline-block; vertical-align: bottom;">
 				<svg
@@ -157,8 +169,8 @@
 			src="./relavistic_velocity_addition_5_2.js"
 		></script>
 		<script type="text/javascript">
-			updateRocketSpeed(0.5, { fromUserInput: false });
-			updateProjectileSpeed(0.5, { fromUserInput: false });
+			updateRocketSpeed(0, { fromUserInput: false });
+			updateProjectileSpeed(0, { fromUserInput: false });
 		</script>
 	</body>
 </html>
