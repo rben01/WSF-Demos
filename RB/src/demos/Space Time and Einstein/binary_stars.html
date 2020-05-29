@@ -14,13 +14,13 @@
         <br>
         <form>
             <label for="speed">Angular Speed
-                <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.1"
+                <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
                     oninput="speedID.innerHTML = speed.value"></label>
             <br>
             <text><i>v</i> = <span id="speedID" class="highlighted-text sci-num"></span><i>c</i></text>
             <br>
             <label for="distance">Distance from Earth</label>
-            <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="6"
+            <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="5"
                 oninput="distanceID.innerHTML = distance.value">
             <br>
             <text><span id="distanceID" class="highlighted-text sci-num"></span> light years</text>
