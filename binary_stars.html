@@ -6,53 +6,28 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    body,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: "Lato", sans-serif;
-    }
-
-    body,
-    html {
-        height: 100%;
-        color: white;
-        line-height: 1.8;
-        background-color: black;
-    }
-
-    .w3-wide {
-        letter-spacing: 10px;
-    }
-
-    .w3-hover-opacity {
-        cursor: pointer;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="RB/src/demos/wsf_demo.css" />
 
 <body>
     <div id='formContainer' class='w3-content w3-container'>
         <br>
         <br>
         <form>
-            <label for="speed">Angular Speed</label>
-            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.1"
-                oninput="speedID.innerHTML = 'v = ' + speed.value + 'c'">
+            <label for="speed">Angular Speed
+                <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.1"
+                    oninput="speedID.innerHTML = speed.value"></label>
             <br>
-            <text id="speedID"></text>
+            <text><i>v</i> = <span id="speedID" class="highlighted-text sci-num"></span><i>c</i></text>
             <br>
             <label for="distance">Distance from Earth</label>
             <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="6"
-                oninput="distanceID.innerHTML = distance.value + ' light years'">
+                oninput="distanceID.innerHTML = distance.value">
             <br>
-            <text id="distanceID"></text>
+            <text><span id="distanceID" class="highlighted-text sci-num"></span> light years</text>
             <br>
             <br>
-            <input type="button" id="reset" value="Reset">
+            <input type="button" id="start" value="Start">
+            <input type="button" id="reset" value="Reset" disabled>
         </form>
         <br>
         <br>
@@ -128,12 +103,18 @@
         }
 
         $("#start").click(function () {
-            speed = document.getElementById("speed").value;
+            speed = Number(document.getElementById("speed").value);
             distance = document.getElementById("distance").value;
+            theta = 0;
+            t1 = 0;
+            t2 = 0;
+            x0 = 300 + distance * lypx;
             if (interval) {
                 clearInterval(interval);
             }
             interval = setInterval(go, 50);
+            this.disabled = true;
+            document.getElementById("reset").disabled = false;
         })
 
         $("#reset").click(function () {
@@ -146,10 +127,18 @@
             if (interval) {
                 clearInterval(interval);
             }
-            interval = setInterval(go, 50);
+            render();
+            this.disabled = true;
+            document.getElementById("start").disabled = false;
         })
 
         $(document).ready(function () {
+            label = document.getElementById("speedID");
+            input = document.getElementById("speed");
+            label.innerHTML = input.value;
+            label = document.getElementById("distanceID");
+            input = document.getElementById("distance");
+            label.innerHTML = input.value;
             render();
         })
     </script>
