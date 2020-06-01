@@ -5,9 +5,29 @@
 			type="text/javascript"
 			src="https://cdn.plot.ly/plotly-latest.min.js"
 		></script>
+		<link href="../../wsf_demo.css" rel="stylesheet" type="text/css" />
+		<style>
+			body {
+				color: black;
+				background-color: white;
+			}
+		</style>
 	</head>
 	<body>
-		<div id="graph" style="width: 600px; height: 400px;"></div>
+		<div id="content"></div>
+		<span>
+			<label>
+				<span class="slider-label">
+					Temperature:
+				</span>
+				<input
+					type="range"
+					id="input-temp"
+					name="input-temp"
+					oninput="updateSelectedTemperatureIndex(this.value)"
+				/>
+			</label>
+		</span>
 		<script type="text/javascript" src="./higgs_symmetry_breaking.js"></script>
 	</body>
 </html>

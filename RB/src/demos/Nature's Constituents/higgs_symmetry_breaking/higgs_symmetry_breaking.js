@@ -1,7 +1,5 @@
 /* global Plotly */
 
-const graphDiv = document.getElementById("graph");
-
 function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 	const data = [];
 	const nx = Math.ceil((2 * rMax) / dx) + 1;
@@ -107,7 +105,7 @@ function getDataForTemp({
 
 	const data3d = allData.grid;
 	const hatBendR2 = (temp2 - 1) / (2 * lambda);
-	const hatBendR = Math.sqrt(hatBendR2);
+	const hatBendR = temp2 < 1 ? 0 : Math.sqrt(hatBendR2);
 	const zMax2d = Math.max(
 		...data2d.filter(({ x }) => Math.abs(x) > hatBendR).map(({ z }) => z),
 	);
@@ -144,118 +142,78 @@ function getDataForTemp({
 	return { data2d, data3d, radialLines, circularLines };
 }
 
-function makePlot() {
+const temperatures = [0.5, 1, 1.5, 2, 2.5, 3, 3.5, 4];
+
+function getGraphID(index) {
+	return `graph-${index}`;
+}
+
+function makePlot({ index, graphDiv }) {
 	const lambda = 0.5;
-	const temperatures = [1, 1.5, 2, 2.5, 3, 3.5, 4];
 	const rMax = 5;
 
 	const traces = [];
-	const steps = [];
 
-	temperatures.forEach((temperature, index) => {
-		const { data2d, data3d, radialLines, circularLines } = getDataForTemp({
-			temperature,
-			lambda,
-			rMax,
-			dx: 0.03,
-			dy: 0.03,
-			nCircularLines: 10,
-			nRadialLines: 12,
-		});
+	const temperature = temperatures[index];
 
-		const label = `t${temperature}`;
-
-		const trace2d = {
-			visible: index === 0,
-			x: data2d.map(d => d.x),
-			y: data2d.map(d => d.z),
-			type: "line",
-			showgrid: false,
-			showlegend: false,
-			xaxis: "x2",
-			yaxis: "y2",
-		};
-
-		const trace3d = {
-			visible: index === 0,
-			...data3d,
-			type: "surface",
-			showscale: false,
-			scene: "scene1",
-			// surfacecolor: data3d.z.map(zRow =>
-			// 	zRow.map(() => {
-			// 		return "rgb(0.1,0.1,0.1)";
-			// 	}),
-			// ),
-			colorscale: [
-				[0, "rgb(0.6,0.6,0.6)"],
-				[1, "rgb(0.9,0.7,0.7)"],
-			],
-			contours: {
-				x: { highlight: false },
-				y: { highlight: false },
-				z: { show: false },
-			},
-			// opacity: 0.999,
-		};
-
-		traces.push(trace2d);
-		traces.push(trace3d);
-
-		for (const line of [...radialLines, ...circularLines]) {
-			traces.push({
-				visible: index === 0,
-				type: "scatter3d",
-				mode: "lines",
-				...line,
-				line: {
-					color: "#ccc",
-					width: 2,
-				},
-				showscale: false,
-				scene: "scene1",
-			});
-		}
-
-		const nTracesPerTemp = 2 + radialLines.length + circularLines.length;
-
-		const visibleArr = Array.from({
-			length: temperatures.length * nTracesPerTemp,
-		}).map(() => false);
-
-		const firstVisibleTraceIndex = nTracesPerTemp * index;
-		for (let i = 0; i < nTracesPerTemp; ++i) {
-			visibleArr[firstVisibleTraceIndex + i] = true;
-		}
-
-		const step = {
-			label: label,
-			method: "restyle",
-			args: ["visible", visibleArr],
-		};
-		steps.push(step);
+	const { data2d, data3d, radialLines, circularLines } = getDataForTemp({
+		temperature,
+		lambda,
+		rMax,
+		dx: 0.04,
+		dy: 0.04,
+		nCircularLines: 10,
+		nRadialLines: 12,
 	});
 
-	console.log(steps);
+	const trace2d = {
+		x: data2d.map(d => d.x),
+		y: data2d.map(d => d.z),
+		type: "line",
+		showgrid: false,
+		showlegend: false,
+		xaxis: "x2",
+		yaxis: "y2",
+	};
 
-	const sliders = [
-		{
-			pad: { t: 30 },
-			x: 0.05,
-			len: 0.95,
-			// currentvalue: {
-			// 	xanchor: "right",
-			// 	prefix: "Temperature: ",
-			// 	font: {
-			// 		color: "#888",
-			// 		size: 20,
-			// 	},
-			// },
-			transition: { duration: 500 },
-			// By default, animate commands are bound to the most recently animated frame:
-			steps: steps,
+	const trace3d = {
+		...data3d,
+		type: "surface",
+		showscale: false,
+		scene: "scene1",
+		// surfacecolor: data3d.z.map(zRow =>
+		// 	zRow.map(() => {
+		// 		return "rgb(0.1,0.1,0.1)";
+		// 	}),
+		// ),
+		colorscale: [
+			[0, "rgb(0.3,0.3,0.4)"],
+			[1, "rgb(0.7,0.7,0.9)"],
+		],
+		contours: {
+			x: { highlight: false },
+			y: { highlight: false },
+			z: { show: false },
 		},
-	];
+		// opacity: 0.999,
+	};
+
+	traces.push(trace2d);
+	traces.push(trace3d);
+
+	for (const line of [...radialLines, ...circularLines]) {
+		traces.push({
+			type: "scatter3d",
+			mode: "lines",
+			...line,
+			line: {
+				color: "#ccc",
+				width: 2,
+			},
+			showscale: false,
+			scene: "scene1",
+		});
+	}
 
 	const layout = {
 		showlegend: false,
@@ -282,121 +240,53 @@ function makePlot() {
 			margin: { t: 0, b: 0, l: 0, r: 0 },
 			hovermode: false,
 		},
-		sliders: sliders,
+		// sliders: sliders,
 	};
 
 	const config = { displayModeBar: false };
 
+	console.log(traces);
 	Plotly.newPlot(graphDiv, traces, layout, config);
 
 	return { traces, layout };
 }
 
+const rootDiv = document.getElementById("content");
+
+const temperatureSlider = document.getElementById("input-temp");
+temperatureSlider.min = 0;
+temperatureSlider.max = temperatures.length - 1;
+temperatureSlider.step = 1;
+temperatureSlider.value = 0;
+
 // eslint-disable-next-line no-unused-vars
-const p = makePlot();
-const x = () =>
-	Plotly.plot(
-		"graph",
-		{
-			data: [
-				{
-					x: [1, 2, 3],
-					y: [2, 1, 3],
-					line: {
-						color: "red",
-						simplify: false,
-					},
-				},
-			],
-			layout: {
-				sliders: [
-					{
-						pad: { t: 30 },
-						x: 0.05,
-						len: 0.95,
-						currentvalue: {
-							xanchor: "right",
-							prefix: "color: ",
-							font: {
-								color: "#888",
-								size: 20,
-							},
-						},
-						transition: { duration: 500 },
-						// By default, animate commands are bound to the most recently animated frame:
-						steps: [
-							{
-								label: "red",
-								method: "animate",
-								args: [
-									["red"],
-									{
-										mode: "immediate",
-										frame: { redraw: false, duration: 500 },
-										transition: { duration: 500 },
-									},
-								],
-							},
-							{
-								label: "green",
-								method: "animate",
-								args: [
-									["green"],
-									{
-										mode: "immediate",
-										frame: { redraw: false, duration: 500 },
-										transition: { duration: 500 },
-									},
-								],
-							},
-							{
-								label: "blue",
-								method: "animate",
-								args: [
-									["blue"],
-									{
-										mode: "immediate",
-										frame: { redraw: false, duration: 500 },
-										transition: { duration: 500 },
-									},
-								],
-							},
-						],
-					},
-				],
-			},
-			// The slider itself does not contain any notion of timing, so animating a slider
-			// must be accomplished through a sequence of frames. Here we'll change the color
-			// and the data of a single trace:
-			frames: [
-				{
-					name: "red",
-					data: [
-						{
-							y: [2, 1, 3],
-							"line.color": "red",
-						},
-					],
-				},
-				{
-					name: "green",
-					data: [
-						{
-							y: [3, 2, 1],
-							"line.color": "green",
-						},
-					],
-				},
-				{
-					name: "blue",
-					data: [
-						{
-							y: [1, 3, 2],
-							"line.color": "blue",
-						},
-					],
-				},
-			],
-		},
-		{ showSendToCloud: true },
-	);
+function updateSelectedTemperatureIndex(selectedIndex) {
+	if (typeof selectedIndex === "undefined") {
+		selectedIndex = 0;
+	} else {
+		selectedIndex = +selectedIndex;
+	}
+
+	const id = getGraphID(selectedIndex);
+	let graphDiv = document.getElementById(id);
+
+	if (graphDiv === null) {
+		graphDiv = document.createElement("div");
+		graphDiv.id = id;
+		graphDiv.class = "graph";
+		graphDiv.style.width = "600px";
+		graphDiv.style.height = "400px";
+		rootDiv.appendChild(graphDiv);
+		makePlot({ index: selectedIndex, graphDiv });
+	}
+
+	for (let i = 0; i < temperatures.length; ++i) {
+		const id = getGraphID(i);
+		const graphDiv = document.getElementById(id);
+		if (graphDiv !== null) {
+			graphDiv.style.display = i === selectedIndex ? "block" : "none";
+		}
+	}
+}
+
+updateSelectedTemperatureIndex(0);
