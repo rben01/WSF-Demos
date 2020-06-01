@@ -50,19 +50,28 @@
 			</span>
 		</div>
 		<div>
+			<button
+				id="btn-hide-newtonian"
+				onclick="toggleNewtonian()"
+				class="play-button rva-button"
+			>
+				Hide Galilean Prediction
+			</button>
+		</div>
+		<div>
 			<div style="display: inline-block; vertical-align: top; width: 10em;">
 				<h4 class="heading">Rocket Frame</h4>
 				<table>
 					<tr>
 						<td class="eqn-left">
-							𝑣′<sub><sub>rocket</sub></sub>
+							𝑣′<span class="subscript primed-subscript">rocket</span>
 						</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right"><span class="sci-num">0.000</span>𝑐</td>
 					</tr>
 					<tr>
 						<td class="eqn-left">
-							𝑣′<sub><sub>projectile</sub></sub>
+							𝑣′<span class="subscript primed-subscript">projectile</span>
 						</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
@@ -77,9 +86,7 @@
 				<h4 class="heading">Ground Frame</h4>
 				<table>
 					<tr>
-						<td class="eqn-left">
-							𝑣<sub><sub>rocket</sub></sub>
-						</td>
+						<td class="eqn-left">𝑣<span class="subscript">rocket</span></td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
 							<span
@@ -91,7 +98,7 @@
 					</tr>
 					<tr>
 						<td class="eqn-left">
-							𝑣<sub><sub>projectile</sub></sub>
+							𝑣<span class="subscript">projectile</span>
 						</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
@@ -103,17 +110,6 @@
 						</td>
 					</tr>
 				</table>
-				<div style="padding-top: 1em;">
-					<span
-						><button
-							id="btn-hide-newtonian"
-							onclick="toggleNewtonian()"
-							class="play-button rva-button"
-						>
-							Hide Galilean Prediction
-						</button></span
-					>
-				</div>
 			</div>
 			<div style="display: inline-block; vertical-align: bottom;">
 				<svg
@@ -125,7 +121,11 @@
 			</div>
 		</div>
 
-		<div class="h-centered" style="margin-top: 2em; font-size: smaller;">
+		<div
+			id="text-galilean-prediction"
+			class="h-centered"
+			style="margin-top: 2em; font-size: smaller;"
+		>
 			<i
 				>The Galilean prediction for the projectile velocity as seen in the
 				ground frame is

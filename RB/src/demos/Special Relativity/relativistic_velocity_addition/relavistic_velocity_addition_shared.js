@@ -4,7 +4,7 @@
 
 const CANVAS_WIDTH = 500;
 const CANVAS_HEIGHT = 450;
-const AXIS_MARGINS = { top: 0.1, bottom: 0.13, left: 0.13, right: 0.06 };
+const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
@@ -45,6 +45,9 @@ const groundFrameProjectileSpeedTextSpan = document.getElementById(
 const galileanSpeedPredictionTextSpan = document.getElementById(
 	"text-galilean-speed-prediction",
 );
+
+const galileanDescription = document.getElementById("text-galilean-prediction");
+const galileanButton = document.getElementById("btn-hide-newtonian");
 
 const OBJECTS = {
 	[ROCKET]: {
@@ -245,54 +248,91 @@ function drawGraph({ baseObject }) {
 			.each(applyDatum)
 			.text(d => d.text);
 
-		// Add v/c label to x axis
+		// Add v/c label to x and y axes
+		const apostropheWidth = 3;
+		const subscriptXOffset = 4;
+		const subscriptYOffset = 2;
+		const fracBarYOffset = 7;
+		const fracBarWidth = 19;
+		const denominatorYOffset = 20;
+
+		// x axis
+		const xLabelX = xScale.range()[1] + 30;
+		const xLabelY = AX_BOUNDS.yMin;
 		// https://stackoverflow.com/a/22085843
 		const xAxisText = subcanvases
 			.append("text")
-			.attr("x", AX_BOUNDS.xMax - 25)
-			.attr("y", AX_BOUNDS.yMin + 45)
+			.attr("x", xLabelX)
+			.attr("y", xLabelY)
 			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle");
-		xAxisText.append("tspan").text(`𝑣${baseObject === ROCKET ? " " : "′"}`);
+		// .attr("text-rendering", "geometricPrecision");
+		xAxisText
+			.append("tspan")
+			.attr("x", xLabelX)
+			.text(`𝑣${baseObject === ROCKET ? " " : "′"}`);
 		xAxisText
 			.append("tspan")
 			.text(baseObject === ROCKET ? "rocket" : "projectile")
-			.style("font-size", "12")
-			.style("font-weight", 8)
-			.attr("dx", ".1em")
-			.attr("dy", ".5em");
-		xAxisText.append("tspan").text(" / 𝑐");
+			.attr("font-size", 12)
+			.attr("font-weight", 8)
+			.attr("text-anchor", "start")
+			.attr(
+				"x",
+				xLabelX +
+					subscriptXOffset +
+					(baseObject === PROJECTILE ? 0 : apostropheWidth),
+			)
+			.attr("dy", subscriptYOffset);
+		xAxisText
+			.append("svg:tspan")
+			.text("𝑐")
+			.attr("x", xLabelX)
+			.attr("dy", denominatorYOffset);
+		subcanvas
+			.append("line")
+			.attr("x1", xLabelX - fracBarWidth / 2)
+			.attr("x2", xLabelX + fracBarWidth / 2)
+			.attr("y1", xLabelY + fracBarYOffset)
+			.attr("y2", xLabelY + fracBarYOffset)
+			.attr("stroke", "white")
+			.attr("stroke-width", 2);
 
 		// Add distance label to y axis
-		const yAxisText = subcanvases
+		const yLabelX = AX_BOUNDS.xMin;
+		const yLabelY = AX_BOUNDS.yMax - 40;
+		const yAxisText = subcanvas
 			.append("text")
-			.attr("width", "5em")
-			.attr("x", AX_BOUNDS.xMin)
-			.attr("y", AX_BOUNDS.yMax - 30)
+			.attr("x", yLabelX)
+			.attr("y", yLabelY)
 			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle");
-		const vYLabel = yAxisText
-			.append("tspan")
-			.attr("x", xScale.range()[0])
-			.attr("text-anchor", "middle");
-		vYLabel.append("tspan").text("𝑣");
-		vYLabel
+		yAxisText.append("tspan").attr("x", xScale.range()[0]).text("𝑣");
+		yAxisText
 			.append("tspan")
 			.text("projectile")
-			.style("font-size", "12")
-			.style("font-weight", 8)
-			.attr("dx", ".1em")
-			.attr("dy", ".5em");
+			.attr("font-size", 12)
+			.attr("font-weight", 8)
+			.attr("text-anchor", "start")
+			.attr("x", yLabelX + subscriptXOffset + 4)
+			.attr("dy", subscriptYOffset);
 		yAxisText
-			.append("svg:tspan")
+			.append("tspan")
 			.text("𝑐")
 			.attr("x", xScale.range()[0])
-			.attr("dy", "0.8em")
-			.attr("text-anchor", "middle");
+			.attr("dy", denominatorYOffset);
+		subcanvas
+			.append("line")
+			.attr("x1", yLabelX - fracBarWidth / 2)
+			.attr("x2", yLabelX + fracBarWidth / 2)
+			.attr("y1", yLabelY + fracBarYOffset)
+			.attr("y2", yLabelY + fracBarYOffset)
+			.attr("stroke", "white")
+			.attr("stroke-width", 2);
 	});
 }
 
@@ -518,17 +558,23 @@ let showNewtonian = true;
 // eslint-disable-next-line no-unused-vars
 function toggleNewtonian() {
 	showNewtonian = !showNewtonian;
+
+	const durationMS = 100;
+	const opacity = showNewtonian ? 1 : 0;
+
 	graphObjs.features
 		.filter(d => d.galilean)
 		.each(function () {
-			const opacity = showNewtonian ? 1 : 0;
-			d3.select(this).transition().duration(100).style("opacity", opacity);
+			d3.select(this).transition().duration(durationMS).style("opacity", opacity);
 		});
-	// const galileanObjs = document.getElementsByClassName("galilean");
-	// for (let i = 0; i < galileanObjs.length; ++i) {
-	// 	const o = galileanObjs[i];
-	// 	o.style.visibility = o.style.visibility === "hidden" ? "visible" : "hidden";
-	// }
+
+	d3.select(galileanDescription)
+		.transition()
+		.duration(durationMS)
+		.style("opacity", opacity);
+	galileanButton.textContent = `${
+		showNewtonian ? "Hide" : "Show"
+	} Galilean Prediction`;
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -566,42 +612,8 @@ function _updateSpeedHelper(speedStr, { fromUserInput = true, obj, baseObject } 
 			.each(function (datum) {
 				return applyDatum.call(this, datum, { transition });
 			});
-
-		// graphObjs.curve.data(drawGraph()).each(function (d) {
-		// 	const transition = d3.select(this).transition().duration(10);
-		// 	Object.entries(d.attrs).forEach(([key, val]) => {
-		// 		transition.attr(key, val);
-		// 	});
-		// });
 	} catch (e) {
 		console.log(speedStr);
 		throw e;
 	}
 }
-
-// eslint-disable-next-line no-unused-vars
-// function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
-// 	try {
-// 		if (!fromUserInput) {
-// 			speedInputSlider.value = speedStr;
-// 		}
-
-// 		const speed = getSpeed(speedStr);
-// 		speedTextSpan.textContent = speed.toFixed(3);
-
-// 		const relMass = getRelativisticMass({ fracOfC: speed });
-// 		relMassTextSpan.textContent = relMass.toFixed(2);
-
-// 		graphObjs.gridLines
-// 			.data(getGridlinesData({ fracOfC: speed }))
-// 			.each(function (d) {
-// 				const transition = d3.select(this).transition().duration(10);
-// 				Object.entries(d.attrs).forEach(([key, val]) => {
-// 					transition.attr(key, val);
-// 				});
-// 			});
-// 	} catch (e) {
-// 		console.log(speedStr);
-// 		throw e;
-// 	}
-// }
