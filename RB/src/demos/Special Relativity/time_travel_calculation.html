@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<title>Time Travel Calculation</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+
+<body>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
+            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
+                oninput="speedID.innerHTML = speed.value; etime.innerHTML = Math.floor(1 / Math.sqrt(1-speed.value**2) * 100) / 100">
+            <br>
+            <text style="font-size:20px"> Speed of Rocket = <span class="highlighted-text sci-num"
+                    id="speedID">0.001</span><i>c</i></text>
+            <br><br>
+        </form>
+    </div>
+
+    <div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block;">
+        <br><br>
+        <text style="font-size: 20px;"> Time Elapsed on Rocket = 1 year </text>
+        <br><br>
+    </div>
+
+    <div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block;">
+        <br><br>
+        <text style="font-size: 20px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num"
+                id="etime"></span>
+            year </text>
+        <br><br>
+    </div>
+</body>
