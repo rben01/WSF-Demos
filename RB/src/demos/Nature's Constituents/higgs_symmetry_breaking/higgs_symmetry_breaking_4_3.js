@@ -264,49 +264,37 @@ const graphDivPromises = [];
 
 function initializeGraphDivs() {
 	for (let i = 0; i < temperatures.length; ++i) {
-		const id = getGraphID(i);
 		const graphDiv = document.createElement("div");
-		graphDiv.id = getGraphID(id);
+		graphDiv.id = getGraphID(i);
 		graphDiv.class = "graph";
 		graphDiv.style.width = "600px";
 		graphDiv.style.height = "400px";
+		graphDiv.style.display = i === 0 ? "block" : "none";
 		rootDiv.appendChild(graphDiv);
 		graphDivPromises.push(
-			new Promise(() => makePlot({ index: i, graphDiv })).then(() => {
-				graphDiv.on("plotly_relayout", () => {
-					prevCamera = graphDiv.layout.scene.camera;
-				});
-				return graphDiv;
-			}),
+			new Promise(resolve => resolve(makePlot({ index: i, graphDiv }))).then(
+				() => {
+					graphDiv.on("plotly_relayout", () => {
+						prevCamera = graphDiv.layout.scene.camera;
+					});
+					return graphDiv;
+				},
+			),
 		);
 	}
 }
 
 // eslint-disable-next-line no-unused-vars
-function updateSelectedTemperatureIndex(selectedIndex) {
+async function updateSelectedTemperatureIndex(selectedIndex) {
 	if (typeof selectedIndex === "undefined") {
 		selectedIndex = 0;
 	} else {
 		selectedIndex = +selectedIndex;
 	}
 
-	const id = getGraphID(selectedIndex);
-	let graphDiv = document.getElementById(id);
-
-	if (graphDiv === null) {
-		graphDiv = document.createElement("div");
-		graphDiv.id = id;
-		graphDiv.class = "graph";
-		graphDiv.style.width = "600px";
-		graphDiv.style.height = "400px";
-		rootDiv.appendChild(graphDiv);
-		makePlot({ index: selectedIndex, graphDiv, camera: prevCamera });
-		graphDiv.on("plotly_relayout", () => {
-			prevCamera = graphDiv.layout.scene.camera;
-		});
-	} else {
-		Plotly.relayout(graphDiv, { "scene.camera": prevCamera });
-	}
+	graphDivPromises[selectedIndex].then(graphDiv =>
+		Plotly.relayout(graphDiv, { "scene.camera": prevCamera }),
+	);
 
 	for (let i = 0; i < temperatures.length; ++i) {
 		const id = getGraphID(i);
@@ -315,6 +303,7 @@ function updateSelectedTemperatureIndex(selectedIndex) {
 			graphDiv.style.display = i === selectedIndex ? "block" : "none";
 		}
 	}
+	return selectedIndex;
 }
 
-updateSelectedTemperatureIndex(0);
+initializeGraphDivs();
