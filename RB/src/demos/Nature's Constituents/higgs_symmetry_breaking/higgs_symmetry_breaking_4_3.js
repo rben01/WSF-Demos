@@ -3,7 +3,7 @@
 const EPSILON = 0.000001;
 const graphDiv = document.getElementById("graph-0");
 const temperatures = [];
-for (let t = 4; t > 0; t -= 0.05) {
+for (let t = 3.6; t > 1; t -= 0.05) {
 	temperatures.push(t);
 }
 
@@ -20,10 +20,23 @@ function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 
 	const grid = { x: [], y: [], z: [] };
 
+	const edgeThreshold = 0;
 	["x", "y"].forEach(v => {
-		for (let i = -n[v]; i <= n[v]; ++i) {
+		const nEdgePoints = 10;
+		const edgePoints = { left: [], right: [] };
+		const dEP = d[v] / nEdgePoints;
+		for (let i = 1; i <= nEdgePoints; ++i) {
+			const ep = (n[v] - edgeThreshold) * d[v] + i * dEP * edgeThreshold;
+			edgePoints.left.push(-ep);
+			edgePoints.right.push(ep);
+		}
+		edgePoints.left.reverse();
+
+		for (let i = -n[v] + edgeThreshold; i <= n[v] - edgeThreshold; ++i) {
 			grid[v].push(i * d[v]);
 		}
+
+		grid[v] = [...edgePoints.left, ...grid[v], ...edgePoints.right];
 	});
 
 	for (const x of grid.x) {
@@ -42,10 +55,14 @@ function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 	for (let i = 0; i < nRadialLines; ++i) {
 		const thisRadialLine = { x: [], y: [], z: [] };
 		const theta = i * dTheta;
-		const dr = dx;
-		const nr = Math.ceil(rMax / dr) + 1;
+		const dr = 0.1;
+		const nr = Math.ceil(rMax / dr);
 		for (let ir = -nr; ir <= nr; ++ir) {
 			const r = ir * dr;
+			// if (r < -rMax - EPSILON || r > rMax + EPSILON) {
+			// 	continue;
+			// }
+
 			const x = r * Math.cos(theta);
 			const y = r * Math.sin(theta);
 
@@ -58,10 +75,10 @@ function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 
 	const dCircularLine = rMax / nCircularLines;
 	const circularLines = [];
-	for (let i = 0; i < nCircularLines; ++i) {
+	for (let i = 0; i <= nCircularLines; ++i) {
 		const thisCircularLine = { x: [], y: [], z: [] };
-		const r = dCircularLine * i;
-		const dTheta = 0.01;
+		const r = i < nCircularLines ? dCircularLine * i : rMax;
+		const dTheta = 0.02;
 		for (let theta = 0; theta < Math.PI * 2 + dTheta; theta += dTheta) {
 			const x = r * Math.cos(theta);
 			const y = r * Math.sin(theta);
@@ -118,23 +135,44 @@ function getTraceDataForTemp({
 	const r2ForZMax =
 		(temp2m1 + Math.sqrt(temp2m1 * temp2m1 + 4 * lambda * zMax2d)) / (2 * lambda);
 
+	const dAffordance = 1.5;
 	for (let i = 0; i < grid.z.length; ++i) {
 		const x = grid.x[i];
 		const signedDx = sign(x) * dx;
 		const x2 = x * x;
-		const xFartherFromOrigin2 = (x + signedDx) * (x + signedDx);
+		const xFartherFromOrigin2 =
+			(x + dAffordance * signedDx) * (x + dAffordance * signedDx);
+
 		const zRow = grid.z[i];
 		for (let j = 0; j < zRow.length; ++j) {
 			const y = grid.y[j];
-			const y2 = y * y;
-
 			const z = zRow[j];
 
 			if (x > 0 && y > 0) {
 				zRow[j] = null;
-			} else if (x2 + y2 > hatBendR2 && z > zMax2d) {
-				zRow[j] = null;
+				continue;
 			}
+
+			const y2 = y * y;
+			if (x2 + y2 > hatBendR2 && z > zMax2d) {
+				zRow[j] = null;
+				continue;
+			}
+
+			// if (x2 + y2 > rMax * rMax) {
+			// 	// zRow[j] = f(rMax, 0);
+			// 	continue;
+			// }
+
+			// const signedDy = sign(y) * dy;
+			// const yFartherFromOrigin2 =
+			// 	(y + dAffordance * signedDy) * (y + dAffordance * signedDy);
+			// if (xFartherFromOrigin2 + yFartherFromOrigin2 >= r2ForZMax - 0.1) {
+			// 	// zRow[j] = zMax2d;
+			// }
+			// // if (f(x + signedDx, y + signedDy) > zMax2d) {
+			// // 	zRow[j] = zMax2d;
+			// // }
 		}
 	}
 
@@ -160,6 +198,7 @@ function getTraceDataForTemp({
 		circularLines,
 		hatBendR,
 		hatBendZ: f(hatBendR, 0),
+		zMax: f(rMax, 0),
 	};
 }
 
@@ -178,12 +217,13 @@ function getPlotInfo({ index, setCamera }) {
 		circularLines,
 		hatBendR,
 		hatBendZ,
+		zMax,
 	} = getTraceDataForTemp({
 		temperature,
 		lambda,
 		rMax,
-		dx: 0.2,
-		dy: 0.2,
+		dx: 0.3,
+		dy: 0.3,
 		nCircularLines: 20,
 		nRadialLines: 18,
 	});
@@ -310,9 +350,10 @@ function getPlotInfo({ index, setCamera }) {
 				showgrid: false,
 				visible: false,
 				showspikes: false,
+				range: [hatBendZ, zMax],
 			},
 			margin: { t: 0, b: 0, l: 0, r: 0 },
-			// hovermode: false,
+			hovermode: false,
 		},
 		annotations: annotations,
 		// sliders: sliders,
@@ -323,9 +364,9 @@ function getPlotInfo({ index, setCamera }) {
 			up: { x: 0, y: 0, z: 1 },
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
-				x: 0.9519232993369161,
-				y: 1.0389494860696102,
-				z: 0.4231501161615341,
+				x: 1,
+				y: 1,
+				z: 0.8,
 			},
 			projection: { type: "perspective" },
 		};
@@ -333,7 +374,7 @@ function getPlotInfo({ index, setCamera }) {
 		layout.scene1.camera = graphDiv._fullLayout.scene._scene.getCamera();
 	}
 
-	const config = { displayModeBar: false };
+	const config = { displayModeBar: false, scrollZoom: false };
 
 	return { traces, layout, config };
 }

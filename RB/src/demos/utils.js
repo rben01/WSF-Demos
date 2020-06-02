@@ -41,6 +41,9 @@ function lorentzFactor({ fracOfC }) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function sign(x) {
-	return x < 0 ? -1 : x === 0 ? 0 : 1;
+function sign(x, epsilon) {
+	if (typeof epsilon === "undefined") {
+		epsilon = 1e-6;
+	}
+	return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
 }
