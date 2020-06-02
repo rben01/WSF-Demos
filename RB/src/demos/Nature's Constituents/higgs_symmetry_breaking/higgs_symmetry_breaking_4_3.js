@@ -2,25 +2,19 @@
 
 function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 	const data = [];
-	const nx = Math.ceil((2 * rMax) / dx) + 1;
-	const ny = Math.ceil((2 * rMax) / dy) + 1;
+	const nx = Math.ceil(rMax / dx) + 1;
+	const ny = Math.ceil(rMax / dy) + 1;
 
 	const grid = { x: [], y: [], z: [] };
 
-	for (let ix = 0; ix < nx; ++ix) {
-		const x = -rMax + ix * dx;
-		if (x > rMax) {
-			break;
-		}
+	for (let ix = -nx; ix <= nx; ++ix) {
+		const x = ix * dx;
 
 		grid.x.push(x);
 
 		const zRow = [];
-		for (let iy = 0; iy < ny; ++iy) {
-			const y = -rMax + iy * dy;
-			if (y > rMax) {
-				break;
-			}
+		for (let iy = -ny; iy <= ny; ++iy) {
+			const y = iy * dy;
 
 			const z = f(x, y);
 			data.push({ x, y, z });
@@ -94,14 +88,7 @@ function getDataForTemp({
 		nRadialLines,
 	});
 
-	let minAbsY = Math.abs(allData.data[0].y);
-	for (const d of allData.data) {
-		const yAbs = Math.abs(d.y);
-		if (yAbs < minAbsY) {
-			minAbsY = yAbs;
-		}
-	}
-	const data2d = allData.data.filter(({ y }) => y === minAbsY);
+	const data2d = allData.data.filter(({ y }) => y === 0);
 
 	const data3d = allData.grid;
 	const hatBendR2 = (temp2 - 1) / (2 * lambda);
@@ -148,7 +135,7 @@ function getGraphID(index) {
 	return `graph-${index}`;
 }
 
-function makePlot({ index, graphDiv }) {
+function makePlot({ index, graphDiv, camera }) {
 	const lambda = 0.5;
 	const rMax = 5;
 
@@ -160,8 +147,8 @@ function makePlot({ index, graphDiv }) {
 		temperature,
 		lambda,
 		rMax,
-		dx: 0.04,
-		dy: 0.04,
+		dx: 0.15,
+		dy: 0.15,
 		nCircularLines: 10,
 		nRadialLines: 12,
 	});
@@ -208,11 +195,24 @@ function makePlot({ index, graphDiv }) {
 			...line,
 			line: {
 				color: "#ccc",
-				width: 2,
+				width: 2.5,
 			},
 			showscale: false,
 			scene: "scene1",
 		});
+	}
+
+	if (typeof camera === "undefined") {
+		camera = {
+			up: { x: 0, y: 0, z: 1 },
+			center: { x: 0, y: 0, z: 0 },
+			eye: {
+				x: -0.6945026086643402,
+				y: 1.1301264956406285,
+				z: 0.5748740996161328,
+			},
+			projection: { type: "perspective" },
+		};
 	}
 
 	const layout = {
@@ -232,7 +232,7 @@ function makePlot({ index, graphDiv }) {
 			visible: false,
 		},
 		scene1: {
-			camera: { eye: { x: 1, y: 1, z: 0.3 } },
+			camera: camera,
 			domain: { x: [0.5, 1], y: [0, 1] },
 			xaxis: { showgrid: false, visible: false, showspikes: false },
 			yaxis: { showgrid: false, visible: false, showspikes: false },
@@ -245,7 +245,6 @@ function makePlot({ index, graphDiv }) {
 
 	const config = { displayModeBar: false };
 
-	console.log(traces);
 	Plotly.newPlot(graphDiv, traces, layout, config);
 
 	return { traces, layout };
@@ -258,6 +257,30 @@ temperatureSlider.min = 0;
 temperatureSlider.max = temperatures.length - 1;
 temperatureSlider.step = 1;
 temperatureSlider.value = 0;
+
+let prevCamera = undefined;
+
+const graphDivPromises = [];
+
+function initializeGraphDivs() {
+	for (let i = 0; i < temperatures.length; ++i) {
+		const id = getGraphID(i);
+		const graphDiv = document.createElement("div");
+		graphDiv.id = getGraphID(id);
+		graphDiv.class = "graph";
+		graphDiv.style.width = "600px";
+		graphDiv.style.height = "400px";
+		rootDiv.appendChild(graphDiv);
+		graphDivPromises.push(
+			new Promise(() => makePlot({ index: i, graphDiv })).then(() => {
+				graphDiv.on("plotly_relayout", () => {
+					prevCamera = graphDiv.layout.scene.camera;
+				});
+				return graphDiv;
+			}),
+		);
+	}
+}
 
 // eslint-disable-next-line no-unused-vars
 function updateSelectedTemperatureIndex(selectedIndex) {
@@ -277,7 +300,12 @@ function updateSelectedTemperatureIndex(selectedIndex) {
 		graphDiv.style.width = "600px";
 		graphDiv.style.height = "400px";
 		rootDiv.appendChild(graphDiv);
-		makePlot({ index: selectedIndex, graphDiv });
+		makePlot({ index: selectedIndex, graphDiv, camera: prevCamera });
+		graphDiv.on("plotly_relayout", () => {
+			prevCamera = graphDiv.layout.scene.camera;
+		});
+	} else {
+		Plotly.relayout(graphDiv, { "scene.camera": prevCamera });
 	}
 
 	for (let i = 0; i < temperatures.length; ++i) {
