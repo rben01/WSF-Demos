@@ -164,8 +164,8 @@ function getTraceDataForTemp({
 }
 
 function getPlotInfo({ index, setCamera }) {
-	const lambda = 0.5;
-	const rMax = 5;
+	const lambda = 0.13;
+	const rMax = 10;
 
 	const traces = [];
 
@@ -238,36 +238,14 @@ function getPlotInfo({ index, setCamera }) {
 	}
 
 	const isStable = hatBendR < EPSILON;
-	const annotationXLocs = isStable ? [0] : [-hatBendR, hatBendR];
-	// const annotations = annotationXLocs.map((x, index) => {
-	// 	const sign = index === 0 ? 1 : -1;
-	// 	const scale = index === 0 ? 1 : 0.8;
-	// 	const annotationText = isStable
-	// 		? "Stable<br>𝜙=0"
-	// 		: index === 0
-	// 		? `Unstable<br>𝜙=${hatBendR.toFixed(2)}`
-	// 		: "";
-	// 	return {
-	// 		x: x,
-	// 		y: hatBendZ,
-	// 		xref: "x2",
-	// 		yref: "y2",
-	// 		showarrow: true,
-	// 		arrowhead: 3,
-	// 		ax: sign * scale * 30,
-	// 		ay: scale * 40,
-	// 		arrowcolor: "red",
-	// 		text: "",
-	// 	};
-	// });
-
-	console.log(hatBendR);
-	const annotations = [];
 	const annotAttrs = {
 		bordercolor: "black",
 		borderwidth: 1,
 		bgcolor: "#fffde0bb",
+		yanchor: "top",
 	};
+
+	const annotations = [];
 	if (isStable) {
 		annotations.push({
 			x: 0,
@@ -297,11 +275,11 @@ function getPlotInfo({ index, setCamera }) {
 		});
 		annotations.push({
 			x: 0,
-			y: -40,
+			y: hatBendZ - 40,
 			xref: "x2",
 			yref: "y2",
 			showarrow: false,
-			text: `Unstable<br>|𝜙|=${hatBendR.toFixed(2)}`,
+			text: "Unstable<br> ",
 			...annotAttrs,
 		});
 	}
