@@ -6,33 +6,7 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    body,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: "Lato", sans-serif;
-    }
-
-    body,
-    html {
-        height: 100%;
-        color: white;
-        line-height: 1.8;
-        background-color: black;
-    }
-
-    .w3-wide {
-        letter-spacing: 10px;
-    }
-
-    .w3-hover-opacity {
-        cursor: pointer;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
 
 <body>
     <br><br>
@@ -40,9 +14,10 @@
         <form>
             <label for="speed" style="font-size: 20px;">Speed</label>
             <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
-                oninput="speedID.innerHTML = 'v = ' + speed.value + 'c'">
+                oninput="speedID.innerHTML = speed.value">
             <br>
-            <text id="speedID" style="font-size:20px"></text>
+            <text style="font-size:20px"><i>v</i> = <span class="highlighted-text sci-num"
+                    id="speedID"></span><i>c</i></text>
             <br><br>
             <input type="button" id="start" value="Start">
             <input type="button" id="reset" value="Reset">
@@ -102,6 +77,7 @@
             ctx.lineTo(100 + pos, 250);
             ctx.stroke();
             ctx.strokeStyle = "red";
+            ctx.lineWidth = 2;
             ctx.beginPath();
             ctx.moveTo(phox0, phoy0);
             phox = phox0;
@@ -128,7 +104,7 @@
             ctx.stroke();
             ctx.beginPath();
             ctx.fillStyle = "yellow";
-            ctx.arc(phox, phoy, 5, 0, 2 * Math.PI);
+            ctx.arc(phox, phoy, 7, 0, 2 * Math.PI);
             ctx.fill();
         }
 
@@ -156,6 +132,9 @@
         })
 
         $(document).ready(function () {
+            label = document.getElementById("speedID");
+            input = document.getElementById("speed");
+            label.innerHTML = input.value;
             render();
         })
     </script>

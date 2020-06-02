@@ -6,51 +6,18 @@
 <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<style>
-    body,
-    h1,
-    h2,
-    h3,
-    h4,
-    h5,
-    h6 {
-        font-family: "Lato", sans-serif;
-    }
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
 
-    body,
-    html {
-        height: 100%;
-        color: white;
-        line-height: 1.8;
-        background-color: black;
-    }
-
-    .highlighted-text {
-        color: #5df;
-    }
-
-    .sci-num {
-        padding-right: 0.15em;
-    }
-
-    .w3-wide {
-        letter-spacing: 10px;
-    }
-
-    .w3-hover-opacity {
-        cursor: pointer;
-    }
-</style>
 
 <body>
     <br><br>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
-                oninput="speedID.innerHTML = speed.value">
+            <label for="speed" style="font-size: 20px;">Speed of Rocket
+                <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
+                    oninput="speedID.innerHTML = speed.value"></label>
             <br>
-            <text style="font-size:20px">v = <span class="highlighted-text" id="speedID"></span> <i>c</i></text>
+            <text style="font-size:20px"><i>v</i> = <span class="highlighted-text" id="speedID"></span> <i>c</i></text>
             <br><br>
             <input type="button" id="start" value="Start">
             <input type="button" id="reset" value="Reset">
