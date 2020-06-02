@@ -135,7 +135,7 @@ function getGraphID(index) {
 	return `graph-${index}`;
 }
 
-function makePlot({ index, graphDiv, camera }) {
+function getPlotInfo({ index, camera }) {
 	const lambda = 0.5;
 	const rMax = 5;
 
@@ -245,12 +245,8 @@ function makePlot({ index, graphDiv, camera }) {
 
 	const config = { displayModeBar: false };
 
-	Plotly.newPlot(graphDiv, traces, layout, config);
-
-	return { traces, layout };
+	return { traces, layout, config };
 }
-
-const rootDiv = document.getElementById("content");
 
 const temperatureSlider = document.getElementById("input-temp");
 temperatureSlider.min = 0;
@@ -268,30 +264,16 @@ function updateSelectedTemperatureIndex(selectedIndex) {
 		selectedIndex = +selectedIndex;
 	}
 
-	const id = getGraphID(selectedIndex);
-	let graphDiv = document.getElementById(id);
+	const plotInfo = getPlotInfo({ index: selectedIndex, camera: prevCamera });
 
-	if (graphDiv === null) {
-		graphDiv = document.createElement("div");
-		graphDiv.id = id;
-		graphDiv.class = "graph";
-		graphDiv.style.width = "600px";
-		graphDiv.style.height = "400px";
-		rootDiv.appendChild(graphDiv);
-		makePlot({ index: selectedIndex, graphDiv, camera: prevCamera });
+	const graphDiv = document.getElementById(getGraphID(0));
+
+	const firstRun = typeof graphDiv.layout === "undefined";
+	Plotly.react(graphDiv, plotInfo.traces, plotInfo.layout, plotInfo.config);
+	if (firstRun) {
 		graphDiv.on("plotly_relayout", () => {
 			prevCamera = graphDiv.layout.scene.camera;
 		});
-	} else {
-		Plotly.relayout(graphDiv, { "scene.camera": prevCamera });
-	}
-
-	for (let i = 0; i < temperatures.length; ++i) {
-		const id = getGraphID(i);
-		const graphDiv = document.getElementById(id);
-		if (graphDiv !== null) {
-			graphDiv.style.display = i === selectedIndex ? "block" : "none";
-		}
 	}
 }
 
