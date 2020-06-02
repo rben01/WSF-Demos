@@ -207,9 +207,9 @@ function makePlot({ index, graphDiv, camera }) {
 			up: { x: 0, y: 0, z: 1 },
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
-				x: -0.6945026086643402,
-				y: 1.1301264956406285,
-				z: 0.5748740996161328,
+				x: 0.9519232993369161,
+				y: 1.0389494860696102,
+				z: 0.3231501161615341,
 			},
 			projection: { type: "perspective" },
 		};
@@ -260,41 +260,31 @@ temperatureSlider.value = 0;
 
 let prevCamera = undefined;
 
-const graphDivPromises = [];
-
-function initializeGraphDivs() {
-	for (let i = 0; i < temperatures.length; ++i) {
-		const graphDiv = document.createElement("div");
-		graphDiv.id = getGraphID(i);
-		graphDiv.class = "graph";
-		graphDiv.style.width = "600px";
-		graphDiv.style.height = "400px";
-		graphDiv.style.display = i === 0 ? "block" : "none";
-		rootDiv.appendChild(graphDiv);
-		graphDivPromises.push(
-			new Promise(resolve => resolve(makePlot({ index: i, graphDiv }))).then(
-				() => {
-					graphDiv.on("plotly_relayout", () => {
-						prevCamera = graphDiv.layout.scene.camera;
-					});
-					return graphDiv;
-				},
-			),
-		);
-	}
-}
-
 // eslint-disable-next-line no-unused-vars
-async function updateSelectedTemperatureIndex(selectedIndex) {
+function updateSelectedTemperatureIndex(selectedIndex) {
 	if (typeof selectedIndex === "undefined") {
 		selectedIndex = 0;
 	} else {
 		selectedIndex = +selectedIndex;
 	}
 
-	graphDivPromises[selectedIndex].then(graphDiv =>
-		Plotly.relayout(graphDiv, { "scene.camera": prevCamera }),
-	);
+	const id = getGraphID(selectedIndex);
+	let graphDiv = document.getElementById(id);
+
+	if (graphDiv === null) {
+		graphDiv = document.createElement("div");
+		graphDiv.id = id;
+		graphDiv.class = "graph";
+		graphDiv.style.width = "600px";
+		graphDiv.style.height = "400px";
+		rootDiv.appendChild(graphDiv);
+		makePlot({ index: selectedIndex, graphDiv, camera: prevCamera });
+		graphDiv.on("plotly_relayout", () => {
+			prevCamera = graphDiv.layout.scene.camera;
+		});
+	} else {
+		Plotly.relayout(graphDiv, { "scene.camera": prevCamera });
+	}
 
 	for (let i = 0; i < temperatures.length; ++i) {
 		const id = getGraphID(i);
@@ -303,7 +293,6 @@ async function updateSelectedTemperatureIndex(selectedIndex) {
 			graphDiv.style.display = i === selectedIndex ? "block" : "none";
 		}
 	}
-	return selectedIndex;
 }
 
-initializeGraphDivs();
+updateSelectedTemperatureIndex(0);
