@@ -1,49 +1,55 @@
-/* global Plotly sign */
+/* global Plotly */
 
 const EPSILON = 0.000001;
+const LAMBDA = 0.13;
+const R_MAX = 10;
+
 const graphDiv = document.getElementById("graph-0");
+
 const temperatures = [];
-for (let t = 3.6; t > 1; t -= 0.05) {
+for (let t = 3.6; t > 0.5; t -= 0.05) {
 	temperatures.push(t);
 }
-
 const temperatureSlider = document.getElementById("input-temp");
 temperatureSlider.min = 0;
 temperatureSlider.max = temperatures.length - 1;
 temperatureSlider.step = 1;
-temperatureSlider.value = 0;
+temperatureSlider.value = temperatureSlider.min;
+
+const phis = [];
+for (let p = 0; p < 8.5; p += 0.1) {
+	phis.push(p);
+}
+const phiSlider = document.getElementById("input-phi");
+phiSlider.min = 0;
+phiSlider.max = phis.length - 1;
+phiSlider.step = 1;
+phiSlider.value = phiSlider.min;
+
+let particle2dTraceIndex, particle3dTraceIndex;
+
+function higgs(x, y, tempSquared) {
+	const r2 = x * x + y * y;
+	const r4 = r2 * r2;
+	return (1 - tempSquared) * r2 + LAMBDA * r4;
+}
 
 function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
-	const data = [];
 	const d = { x: dx, y: dy };
 	const n = { x: Math.ceil(rMax / dx) + 1, y: Math.ceil(rMax / dy) + 1 };
 
 	const grid = { x: [], y: [], z: [] };
 
-	const edgeThreshold = 0;
 	["x", "y"].forEach(v => {
-		const nEdgePoints = 10;
-		const edgePoints = { left: [], right: [] };
-		const dEP = d[v] / nEdgePoints;
-		for (let i = 1; i <= nEdgePoints; ++i) {
-			const ep = (n[v] - edgeThreshold) * d[v] + i * dEP * edgeThreshold;
-			edgePoints.left.push(-ep);
-			edgePoints.right.push(ep);
-		}
-		edgePoints.left.reverse();
-
-		for (let i = -n[v] + edgeThreshold; i <= n[v] - edgeThreshold; ++i) {
+		for (let i = -n[v]; i <= n[v]; ++i) {
 			grid[v].push(i * d[v]);
 		}
-
-		grid[v] = [...edgePoints.left, ...grid[v], ...edgePoints.right];
 	});
 
 	for (const x of grid.x) {
 		const zRow = [];
 		for (const y of grid.y) {
 			const z = f(x, y);
-			data.push({ x, y, z });
 			zRow.push(z);
 		}
 
@@ -90,12 +96,11 @@ function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
 		circularLines.push(thisCircularLine);
 	}
 
-	return { data, grid, radialLines, circularLines };
+	return { grid, radialLines, circularLines };
 }
 
 function getTraceDataForTemp({
 	temperature,
-	lambda,
 	rMax,
 	dx,
 	dy,
@@ -104,11 +109,7 @@ function getTraceDataForTemp({
 }) {
 	const temp2 = temperature * temperature;
 
-	const f = (x, y) => {
-		const r2 = x * x + y * y;
-		const r4 = r2 * r2;
-		return (1 - temp2) * r2 + lambda * r4;
-	};
+	const f = (x, y) => higgs(x, y, temp2);
 
 	const { grid, radialLines, circularLines } = getData({
 		f,
@@ -126,22 +127,15 @@ function getTraceDataForTemp({
 	}
 
 	const temp2m1 = temp2 - 1;
-	const hatBendR2 = temp2m1 / (2 * lambda);
+	const hatBendR2 = temp2m1 / (2 * LAMBDA);
 
 	const zMax2d = Math.max(
 		...data2d.filter(({ x }) => x * x > hatBendR2).map(({ z }) => z),
 	);
 
-	const r2ForZMax =
-		(temp2m1 + Math.sqrt(temp2m1 * temp2m1 + 4 * lambda * zMax2d)) / (2 * lambda);
-
-	const dAffordance = 1.5;
 	for (let i = 0; i < grid.z.length; ++i) {
 		const x = grid.x[i];
-		const signedDx = sign(x) * dx;
 		const x2 = x * x;
-		const xFartherFromOrigin2 =
-			(x + dAffordance * signedDx) * (x + dAffordance * signedDx);
 
 		const zRow = grid.z[i];
 		for (let j = 0; j < zRow.length; ++j) {
@@ -158,21 +152,6 @@ function getTraceDataForTemp({
 				zRow[j] = null;
 				continue;
 			}
-
-			// if (x2 + y2 > rMax * rMax) {
-			// 	// zRow[j] = f(rMax, 0);
-			// 	continue;
-			// }
-
-			// const signedDy = sign(y) * dy;
-			// const yFartherFromOrigin2 =
-			// 	(y + dAffordance * signedDy) * (y + dAffordance * signedDy);
-			// if (xFartherFromOrigin2 + yFartherFromOrigin2 >= r2ForZMax - 0.1) {
-			// 	// zRow[j] = zMax2d;
-			// }
-			// // if (f(x + signedDx, y + signedDy) > zMax2d) {
-			// // 	zRow[j] = zMax2d;
-			// // }
 		}
 	}
 
@@ -202,13 +181,41 @@ function getTraceDataForTemp({
 	};
 }
 
-function getPlotInfo({ index, setCamera }) {
-	const lambda = 0.13;
-	const rMax = 10;
+function getParticleInfo({ particlePhi }) {
+	const particleRadius = 10;
 
+	const currTemp = temperatures[+temperatureSlider.value];
+	const particle = {
+		x: particlePhi,
+		z: higgs(particlePhi, 0, currTemp * currTemp) + particleRadius + 8,
+	};
+
+	const particleTrace2d = {
+		x: [particle.x],
+		y: [particle.z],
+		type: "scatter",
+		mode: "markers",
+		marker: { size: particleRadius, color: "red" },
+		xaxis: "x2",
+		yaxis: "y2",
+	};
+
+	const particleTrace3d = {
+		x: [0],
+		y: [particle.x],
+		z: [particle.z + 4],
+		type: "scatter3d",
+		mode: "markers",
+		marker: { size: particleRadius, color: "red" },
+		showscale: false,
+		scene: "scene1",
+	};
+
+	return { trace2d: particleTrace2d, trace3d: particleTrace3d };
+}
+
+function getPlotInfo({ temperature, phi, setCamera }) {
 	const traces = [];
-
-	const temperature = temperatures[index];
 
 	const {
 		data2d,
@@ -220,9 +227,8 @@ function getPlotInfo({ index, setCamera }) {
 		zMax,
 	} = getTraceDataForTemp({
 		temperature,
-		lambda,
-		rMax,
-		dx: 0.3,
+		rMax: R_MAX,
+		dx: 0.3, // Minimum value to avoid spiky crown syndrome is ~0.3
 		dy: 0.3,
 		nCircularLines: 20,
 		nRadialLines: 18,
@@ -237,6 +243,12 @@ function getPlotInfo({ index, setCamera }) {
 		xaxis: "x2",
 		yaxis: "y2",
 	};
+	traces.push(trace2d);
+
+	const particleInfo = getParticleInfo({ particlePhi: phi });
+
+	traces.push(particleInfo.trace2d);
+	particle2dTraceIndex = traces.length - 1;
 
 	const trace3d = {
 		...data3d,
@@ -259,9 +271,10 @@ function getPlotInfo({ index, setCamera }) {
 		},
 		// opacity: 0.999,
 	};
-
-	traces.push(trace2d);
 	traces.push(trace3d);
+
+	traces.push(particleInfo.trace3d);
+	particle3dTraceIndex = traces.length - 1;
 
 	for (const line of [...radialLines, ...circularLines]) {
 		traces.push({
@@ -282,7 +295,6 @@ function getPlotInfo({ index, setCamera }) {
 		bordercolor: "black",
 		borderwidth: 1,
 		bgcolor: "#fffde0bb",
-		yanchor: "top",
 	};
 
 	const annotations = [];
@@ -293,12 +305,13 @@ function getPlotInfo({ index, setCamera }) {
 			xref: "x2",
 			yref: "y2",
 			showarrow: false,
-			text: "Stable<br>𝜙=0",
+			text: "Stable (𝜙=0)",
+			yanchor: "top",
 			...annotAttrs,
 		});
 	} else {
 		[-hatBendR, hatBendR].forEach((x, index) => {
-			const sign = index === 0 ? -1 : 1;
+			const sign = index === 0 ? 1 : -1;
 
 			annotations.push({
 				x: x,
@@ -307,11 +320,26 @@ function getPlotInfo({ index, setCamera }) {
 				yref: "y2",
 				showarrow: true,
 				arrowhead: 3,
-				ax: sign * 10,
-				ay: 30,
+				ax: sign * hatBendR * 5,
+				ay: 20,
 				arrowcolor: "red",
 				text: "",
+				yanchor: "top",
 			});
+		});
+		annotations.push({
+			x: 0,
+			y: 20,
+			xref: "x2",
+			yref: "y2",
+			showarrow: true,
+			text: "Unstable",
+			xanchor: "middle",
+			yanchor: "bottom",
+			arrowcolor: "red",
+			ax: 0,
+			ay: -20,
+			...annotAttrs,
 		});
 		annotations.push({
 			x: 0,
@@ -319,7 +347,9 @@ function getPlotInfo({ index, setCamera }) {
 			xref: "x2",
 			yref: "y2",
 			showarrow: false,
-			text: "Unstable<br> ",
+			text: "Stable",
+			xanchor: "middle",
+			yanchor: "top",
 			...annotAttrs,
 		});
 	}
@@ -327,7 +357,7 @@ function getPlotInfo({ index, setCamera }) {
 	const layout = {
 		showlegend: false,
 		showgrid: false,
-		hovermode: false,
+		// hovermode: false,
 		yaxis2: {
 			anchor: "x2",
 			domain: [0, 1],
@@ -380,15 +410,10 @@ function getPlotInfo({ index, setCamera }) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function updateSelectedTemperatureIndex(selectedIndex) {
-	if (typeof selectedIndex === "undefined") {
-		selectedIndex = 0;
-	} else {
-		selectedIndex = +selectedIndex;
-	}
-
+function update() {
 	const plotInfo = getPlotInfo({
-		index: selectedIndex,
+		temperature: temperatures[temperatureSlider.value],
+		phi: phis[phiSlider.value],
 		setCamera: !graphDiv.__hasBeenInitialized,
 	});
 
@@ -403,4 +428,5 @@ function updateSelectedTemperatureIndex(selectedIndex) {
 	}
 }
 
-updateSelectedTemperatureIndex(0);
+update();
+// updateSelectedPhiIndex(0);
