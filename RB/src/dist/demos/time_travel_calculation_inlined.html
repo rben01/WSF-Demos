@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><title>Time Travel Calculation</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+</head><body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
+<div class="w3-content w3-container" id="formContainer">
+<form>
+<label for="speed" style="font-size: 20px;">Speed of Rocket</label>
+<input id="speed" max=".999999999" min="0.998" name="speed" oninput="speedID.innerHTML = speed.value; etime.innerHTML = Math.floor(1 / Math.sqrt(1-speed.value**2) * 100) / 100" step="0.000000001" type="range" value="0.001"/>
+<br/>
+<text style="font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.998</span><i>c</i></text>
+<br/><br/>
+</form>
+</div>
+<div style="width: 850px;">
+<div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block; width: 390px; margin-right: 20px;">
+<br/>
+<text style="font-size: 20px;"> Time Elapsed on Rocket = 1 year </text>
+<br/><br/>
+</div>
+<text></text>
+<div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block; width: 390px;">
+<br/>
+<text style="font-size: 20px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">15.81</span>
+years </text>
+<br/><br/>
+</div>
+</div>
+</body></html>
