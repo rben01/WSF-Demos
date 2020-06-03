@@ -185,9 +185,15 @@ function getParticleInfo({ particlePhi }) {
 	const particleRadius = 10;
 
 	const currTemp = temperatures[+temperatureSlider.value];
+	const slope =
+		2 * (1 - currTemp * currTemp) * particlePhi +
+		4 * LAMBDA * Math.pow(particlePhi, 3);
 	const particle = {
 		x: particlePhi,
-		z: higgs(particlePhi, 0, currTemp * currTemp) + particleRadius + 8,
+		z:
+			higgs(particlePhi, 0, currTemp * currTemp) +
+			particleRadius +
+			Math.abs(slope) / 2,
 	};
 
 	const particleTrace2d = {
@@ -357,7 +363,7 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 	const layout = {
 		showlegend: false,
 		showgrid: false,
-		// hovermode: false,
+		hovermode: false,
 		yaxis2: {
 			anchor: "x2",
 			domain: [0, 1],
