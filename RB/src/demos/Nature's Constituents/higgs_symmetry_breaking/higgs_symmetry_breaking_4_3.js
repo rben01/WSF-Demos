@@ -329,7 +329,7 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 		});
 		annotations.push({
 			x: 0,
-			y: 20,
+			y: 40,
 			xref: "x2",
 			yref: "y2",
 			showarrow: true,
