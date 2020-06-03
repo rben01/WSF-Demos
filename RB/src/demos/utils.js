@@ -39,3 +39,11 @@ function lorentzFactor({ fracOfC }) {
 	}
 	return 1 / Math.sqrt(1 - fracOfC * fracOfC);
 }
+
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+	if (typeof epsilon === "undefined") {
+		epsilon = 1e-6;
+	}
+	return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}

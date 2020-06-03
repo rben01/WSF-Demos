@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="UTF-8" />
 		<script
 			type="text/javascript"
 			src="https://cdn.plot.ly/plotly-latest.min.js"
@@ -11,23 +12,48 @@
 				color: black;
 				background-color: white;
 			}
+
+			.custom-slider-label {
+				min-width: 6em;
+			}
 		</style>
+		<script type="text/javascript" src="../../utils.js"></script>
 	</head>
 	<body>
-		<div id="content"></div>
 		<span>
 			<label>
-				<span class="slider-label">
+				<span class="slider-label custom-slider-label">
 					Temperature:
 				</span>
 				<input
 					type="range"
 					id="input-temp"
 					name="input-temp"
-					oninput="updateSelectedTemperatureIndex(this.value)"
+					oninput="update();"
 				/>
 			</label>
 		</span>
-		<script type="text/javascript" src="./higgs_symmetry_breaking_4_3.js"></script>
+		<br />
+		<span>
+			<label>
+				<span class="slider-label custom-slider-label">
+					𝜙:
+				</span>
+				<input
+					type="range"
+					id="input-phi"
+					name="input-phi"
+					oninput="update();"
+				/>
+			</label>
+		</span>
+		<div id="content">
+			<div id="graph-0" style="width: 600px; height: 400px;"></div>
+		</div>
+		<script
+			charset="UTF-8"
+			type="text/javascript"
+			src="./higgs_symmetry_breaking_4_3.js"
+		></script>
 	</body>
 </html>
