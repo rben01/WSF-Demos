@@ -7,7 +7,7 @@ const R_MAX = 10;
 const graphDiv = document.getElementById("graph-0");
 
 const temperatures = [];
-for (let t = 3.6; t > 0.5; t -= 0.05) {
+for (let t = 3.6; t > 0; t -= 0.05) {
 	temperatures.push(t);
 }
 const temperatureSlider = document.getElementById("input-temp");
@@ -16,22 +16,47 @@ temperatureSlider.max = temperatures.length - 1;
 temperatureSlider.step = 1;
 temperatureSlider.value = temperatureSlider.min;
 
+const T_CRIT_SLIDER_INDEX = (() => {
+	for (let i = 0; i < temperatures.length; ++i) {
+		const t = temperatures[i];
+		if (Math.abs(t - 1) < 0.01) {
+			return i;
+		}
+	}
+})();
+
+const temperatureTextSpan = document.getElementById("text-temp-inequality");
+const phiTextSpan = document.getElementById("text-phi");
+
 const phis = [];
-for (let p = 0; p < 8.5; p += 0.1) {
+for (let p = -8.5; p <= 8.5; p += 0.1) {
 	phis.push(p);
 }
 const phiSlider = document.getElementById("input-phi");
 phiSlider.min = 0;
 phiSlider.max = phis.length - 1;
 phiSlider.step = 1;
-phiSlider.value = phiSlider.min;
+phiSlider.value = (phis.length - 1) / 2;
 
-let particle2dTraceIndex, particle3dTraceIndex;
+const MAX_BEND_DESIRED = 175;
+const HAT_BEND_MAX_R = (() => {
+	const temp = temperatures[0];
+	const temp2 = temp * temp;
+	return Math.sqrt((temp2 - 1) / (2 * LAMBDA));
+})();
 
-function higgs(x, y, tempSquared) {
+function higgs(x, y, temp) {
 	const r2 = x * x + y * y;
 	const r4 = r2 * r2;
-	return (1 - tempSquared) * r2 + LAMBDA * r4;
+
+	const a = temp >= 1 ? 1 : LAMBDA * R_MAX * R_MAX * (2 - temp) * 0.4;
+	const b = Math.min(1, temp);
+
+	return a * (1 - temp * temp) * r2 + b * LAMBDA * r4;
+}
+
+function phiAdjStr(phi) {
+	return ((MAX_BEND_DESIRED * phi) / HAT_BEND_MAX_R).toPrecision(4);
 }
 
 function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
@@ -109,7 +134,7 @@ function getTraceDataForTemp({
 }) {
 	const temp2 = temperature * temperature;
 
-	const f = (x, y) => higgs(x, y, temp2);
+	const f = (x, y) => higgs(x, y, temperature);
 
 	const { grid, radialLines, circularLines } = getData({
 		f,
@@ -120,14 +145,29 @@ function getTraceDataForTemp({
 		nRadialLines,
 	});
 
-	const middleZRow = grid.z[(grid.z.length - 1) / 2];
+	const nInterpolatedPoints = 0;
 	const data2d = [];
 	for (let i = 0; i < grid.x.length; ++i) {
-		data2d.push({ x: grid.x[i], z: middleZRow[i] });
-	}
+		const givenX = grid.x[i];
+		data2d.push({ x: givenX, z: f(givenX, 0) });
 
-	const temp2m1 = temp2 - 1;
-	const hatBendR2 = temp2m1 / (2 * LAMBDA);
+		if (i < grid.x.length - 1) {
+			for (let r = 1; r <= nInterpolatedPoints; ++r) {
+				const l = nInterpolatedPoints + 1 - r;
+				const interpolatedX =
+					(l * grid.x[i] + r * grid.x[i + 1]) / (nInterpolatedPoints + 1);
+				data2d.push({ x: interpolatedX, z: f(interpolatedX, 0) });
+			}
+		}
+
+		// if (i < grid.x.length - 1) {
+		// 	xs2d.push((grid.x[i] + grid.x[i + 1]) / 2);
+		// }
+		// data2d.push({ x: grid.x[i], z: middleZRow[i] });
+	}
+	console.log(data2d);
+
+	const hatBendR2 = (temp2 - 1) / (2 * LAMBDA);
 
 	const zMax2d = Math.max(
 		...data2d.filter(({ x }) => x * x > hatBendR2).map(({ z }) => z),
@@ -185,20 +225,29 @@ function getParticleInfo({ particlePhi }) {
 	const particleRadius = 10;
 
 	const currTemp = temperatures[+temperatureSlider.value];
-	const slope =
+	const hatBendR = (() => {
+		if (currTemp <= 1) {
+			return 0;
+		}
+		const r2 = Math.sqrt((currTemp * currTemp - 1) / (2 * LAMBDA));
+		return r2;
+	})();
+	const slope = Math.abs(
 		2 * (1 - currTemp * currTemp) * particlePhi +
-		4 * LAMBDA * Math.pow(particlePhi, 3);
-	const particle = {
-		x: particlePhi,
-		z:
-			higgs(particlePhi, 0, currTemp * currTemp) +
-			particleRadius +
-			Math.abs(slope) / 2,
-	};
+			4 * LAMBDA * Math.pow(particlePhi, 3),
+	);
+	const maxHiggs = higgs(R_MAX, 0, currTemp);
+	const z =
+		higgs(particlePhi, 0, currTemp) +
+		particleRadius +
+		Math.pow(slope, 1.05) / 7 +
+		300 / maxHiggs +
+		maxHiggs * 0.02 -
+		5;
 
 	const particleTrace2d = {
-		x: [particle.x],
-		y: [particle.z],
+		x: [particlePhi],
+		y: [z],
 		type: "scatter",
 		mode: "markers",
 		marker: { size: particleRadius, color: "red" },
@@ -208,11 +257,28 @@ function getParticleInfo({ particlePhi }) {
 
 	const particleTrace3d = {
 		x: [0],
-		y: [particle.x],
-		z: [particle.z + 4],
+		y: [particlePhi],
+		z: [
+			z +
+				// Math.pow(slope, 1.05) / 40 +
+				Math.pow(Math.max(0, Math.abs(particlePhi) - hatBendR) / R_MAX, 0.8) *
+					0.1 *
+					0.9 *
+					Math.pow(maxHiggs, 0.8) +
+				// (Math.abs(Math.abs(particlePhi) - hatBendR) / R_MAX) * 5 +
+				// (Math.cos(((Math.PI / 2) * 1.2 * particlePhi) / R_MAX) * 20) /
+				// 	Math.pow(maxHiggs, 0.5) +
+				(Math.sin(((Math.PI / 1.5) * 1.2 * Math.abs(particlePhi / 2)) / R_MAX) *
+					slope *
+					0.5 *
+					10000) /
+					(maxHiggs * maxHiggs) +
+				slope * 0.01 +
+				(particlePhi === 0 ? maxHiggs * 0.001 : 0),
+		],
 		type: "scatter3d",
 		mode: "markers",
-		marker: { size: particleRadius, color: "red" },
+		marker: { size: particleRadius * 0.9, color: "red" },
 		showscale: false,
 		scene: "scene1",
 	};
@@ -254,7 +320,6 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 	const particleInfo = getParticleInfo({ particlePhi: phi });
 
 	traces.push(particleInfo.trace2d);
-	particle2dTraceIndex = traces.length - 1;
 
 	const trace3d = {
 		...data3d,
@@ -280,7 +345,6 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 	traces.push(trace3d);
 
 	traces.push(particleInfo.trace3d);
-	particle3dTraceIndex = traces.length - 1;
 
 	for (const line of [...radialLines, ...circularLines]) {
 		traces.push({
@@ -297,12 +361,13 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 	}
 
 	const isStable = hatBendR < EPSILON;
-	const annotAttrs = {
+	const annotTextAttrs = {
 		bordercolor: "black",
 		borderwidth: 1,
-		bgcolor: "#fffde0bb",
+		bgcolor: "#fffde0",
 	};
 
+	const yOffsetBottom = 163;
 	const annotations = [];
 	if (isStable) {
 		annotations.push({
@@ -310,24 +375,28 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 			y: -40,
 			xref: "x2",
 			yref: "y2",
-			showarrow: false,
-			text: "Stable (𝜙=0)",
+			showarrow: true,
+			arrowhead: 2,
+			arrowcolor: "red",
+			text: "Stable (𝜙 = 0 GeV)",
 			yanchor: "top",
-			...annotAttrs,
+			ax: 0,
+			ay: 20,
+			...annotTextAttrs,
 		});
 	} else {
 		[-hatBendR, hatBendR].forEach((x, index) => {
 			const sign = index === 0 ? 1 : -1;
 
 			annotations.push({
-				x: x,
-				y: hatBendZ,
+				x: x + (sign * hatBendR) / 50,
+				y: hatBendZ - 45 + Math.pow(hatBendR, 1.7) * 1.2,
 				xref: "x2",
 				yref: "y2",
 				showarrow: true,
-				arrowhead: 3,
-				ax: sign * hatBendR * 5,
-				ay: 20,
+				arrowhead: 2,
+				ax: sign * hatBendR * 3,
+				ay: Math.pow(hatBendR, 0.6) * 5 + 18,
 				arrowcolor: "red",
 				text: "",
 				yanchor: "top",
@@ -335,28 +404,31 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 		});
 		annotations.push({
 			x: 0,
-			y: 40,
+			y: 40 + 100 / (Math.pow(hatBendR, 1) + 2),
 			xref: "x2",
 			yref: "y2",
 			showarrow: true,
-			text: "Unstable",
+			arrowhead: 2,
+			text: "Unstable (𝜙 = 0 GeV)",
 			xanchor: "middle",
 			yanchor: "bottom",
 			arrowcolor: "red",
 			ax: 0,
-			ay: -20,
-			...annotAttrs,
+			ay: -29,
+			...annotTextAttrs,
 		});
+
+		const phiStr = phiAdjStr(hatBendR);
 		annotations.push({
 			x: 0,
-			y: hatBendZ - 40,
+			y: hatBendZ * 0.65 - yOffsetBottom,
 			xref: "x2",
 			yref: "y2",
 			showarrow: false,
-			text: "Stable",
+			text: `Stable (𝜙 = ±${phiStr} GeV)`,
 			xanchor: "middle",
 			yanchor: "top",
-			...annotAttrs,
+			...annotTextAttrs,
 		});
 	}
 
@@ -373,13 +445,13 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 		},
 		xaxis2: {
 			anchor: "y2",
-			domain: [0, 0.5],
+			domain: [0, 0.45],
 			showgrid: false,
 			visible: false,
 			fixedrange: true,
 		},
 		scene1: {
-			domain: { x: [0.5, 1], y: [0, 1] },
+			domain: { x: [0.55, 1], y: [0, 1] },
 			xaxis: { showgrid: false, visible: false, showspikes: false },
 			yaxis: { showgrid: false, visible: false, showspikes: false },
 			zaxis: {
@@ -417,21 +489,46 @@ function getPlotInfo({ temperature, phi, setCamera }) {
 
 // eslint-disable-next-line no-unused-vars
 function update() {
+	const temperatureIndex = temperatureSlider.value;
+	const phi = (() => {
+		const p = phis[phiSlider.value];
+		if (Math.abs(p) < EPSILON) {
+			return 0;
+		}
+		return p;
+	})();
+
 	const plotInfo = getPlotInfo({
-		temperature: temperatures[temperatureSlider.value],
-		phi: phis[phiSlider.value],
+		temperature: temperatures[temperatureIndex],
+		phi,
 		setCamera: !graphDiv.__hasBeenInitialized,
 	});
 
 	Plotly.react(graphDiv, plotInfo.traces, plotInfo.layout, plotInfo.config);
 	if (!graphDiv.__hasBeenInitialized) {
 		graphDiv.__hasBeenInitialized = true;
-		// graphDiv.on("plotly_relayout", () => {
-		// 	prevCamera = graphDiv.layout.scene.camera;
-		// });
-	} else {
-		// Plotly.react();
 	}
+
+	if (temperatureIndex < T_CRIT_SLIDER_INDEX) {
+		temperatureTextSpan.textContent = "<";
+	} else if (temperatureIndex < T_CRIT_SLIDER_INDEX + 2) {
+		temperatureTextSpan.textContent = "=";
+	} else {
+		temperatureTextSpan.textContent = ">";
+	}
+
+	const phiStr = (() => {
+		if (phi === 0) {
+			return ` ${phiAdjStr(0)}`;
+		}
+		const p = phiAdjStr(phi);
+		if (!p.startsWith("-")) {
+			return `+${p}`;
+		}
+		return p;
+	})();
+
+	phiTextSpan.textContent = phiStr;
 }
 
 update();
