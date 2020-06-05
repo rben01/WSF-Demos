@@ -28,7 +28,7 @@
 						type="range"
 						id="input-x-coord"
 						name="input-x-coord"
-						oninput=""
+						oninput="updateAngle({x: +this.value})"
 					/>
 				</label>
 			</span>
@@ -42,7 +42,7 @@
 						type="range"
 						id="input-y-coord"
 						name="input-y-coord"
-						oninput=""
+						oninput="updateAngle({y: +this.value})"
 					/>
 				</label>
 			</span>
@@ -54,13 +54,9 @@
 					</span>
 					<input
 						type="range"
-						id="input-y-coord"
-						name="input-y-coord"
-						min="-1"
-						max="1"
-						step=".001"
-						value="-1"
-						oninput="updateAngle({angleRad: this.value})"
+						id="input-angle-rad"
+						name="input-angle-rad"
+						oninput="updateAngle({angleRad: +this.value})"
 					/>
 				</label>
 			</span>

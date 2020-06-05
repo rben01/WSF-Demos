@@ -3,14 +3,15 @@
 "use strict";
 
 const RANGES = {
-	x: { min: -2, max: 2 },
-	y: { min: -10, max: 10 },
+	x: { min: -1, max: 1 },
+	y: { min: -1, max: 1 },
 };
 Object.keys(RANGES).forEach(k => {
 	const v = RANGES[k];
+	const sqrt2 = Math.sqrt(2);
 	v.mid = ((v.max + v.min) * 3) / 4;
-	v.posDist = v.max - v.mid;
-	v.negDist = v.mid - v.min;
+	v.posDist = (v.max - v.mid) * sqrt2;
+	v.negDist = (v.mid - v.min) * sqrt2;
 });
 
 const CANVAS_WIDTH = 400;
@@ -33,6 +34,14 @@ const sliders = {};
 	slider.step = 0.001;
 	slider.value = 0;
 });
+sliders.angle = (() => {
+	const angleSlider = document.getElementById("input-angle-rad");
+	angleSlider.min = "-1";
+	angleSlider.max = "1";
+	angleSlider.step = ".001";
+	angleSlider.value = "-1";
+	return angleSlider;
+})();
 
 const canvas = d3
 	.select("#viz-canvas")
@@ -120,31 +129,34 @@ function drawGraph() {
 }
 
 function getLinesData({ x, y, angleRad }) {
+	if (typeof x === "undefined") {
+		x = +sliders.x.value;
+	}
+
+	if (typeof y === "undefined") {
+		y = +sliders.y.value;
+	}
+
+	if (typeof angleRad === "undefined") {
+		angleRad = +sliders.angle.value;
+	}
+
 	const sin = Math.sin(angleRad);
 	const cos = Math.cos(angleRad);
-	console.log(sin, cos);
 
 	const rotAxesAttrs = {
 		"stroke-width": 3,
 	};
-
-	// Remember, in canvas coords, +y is down, -y is up
-	const xMidCanvas = xScale(RANGES.x.mid);
-	const yMidCanvas = yScale(RANGES.y.mid);
-	const xPosDistCanvas = xScale(RANGES.x.max) - xMidCanvas;
-	const xNegDistCanvas = xMidCanvas - xScale(RANGES.x.min);
-	const yPosDistCanvas = yMidCanvas - yScale(RANGES.y.max);
-	const yNegDistCanvas = yScale(RANGES.y.min) - yMidCanvas;
 
 	const rotAxesData = [
 		{
 			shape: "line",
 			class: "rot-axis-x",
 			attrs: {
-				x1: xMidCanvas - xNegDistCanvas * cos,
-				y1: yMidCanvas + xNegDistCanvas * sin,
-				x2: xMidCanvas + xPosDistCanvas * cos,
-				y2: yMidCanvas - xPosDistCanvas * sin,
+				x1: xScale(RANGES.x.mid - RANGES.x.negDist * cos),
+				y1: yScale(RANGES.y.mid - RANGES.x.negDist * sin),
+				x2: xScale(RANGES.x.mid + RANGES.x.posDist * cos),
+				y2: yScale(RANGES.y.mid + RANGES.x.posDist * sin),
 				stroke: "#bdf",
 				...rotAxesAttrs,
 			},
@@ -153,22 +165,89 @@ function getLinesData({ x, y, angleRad }) {
 			shape: "line",
 			class: "rot-axis-y",
 			attrs: {
-				x1: xMidCanvas + yNegDistCanvas * sin,
-				y1: yMidCanvas + yNegDistCanvas * cos,
-				x2: xMidCanvas - yPosDistCanvas * sin,
-				y2: yMidCanvas - yPosDistCanvas * cos,
+				x1: xScale(RANGES.x.mid + RANGES.y.negDist * sin),
+				y1: yScale(RANGES.y.mid - RANGES.y.negDist * cos),
+				x2: xScale(RANGES.x.mid - RANGES.y.posDist * sin),
+				y2: yScale(RANGES.y.mid + RANGES.y.posDist * cos),
 				stroke: "#c45",
 				...rotAxesAttrs,
 			},
 		},
 	];
-	return rotAxesData;
+
+	const uprightLinesAttrs = {
+		stroke: "white",
+		"stroke-width": 2,
+		"stroke-dasharray": "5 5",
+	};
+	const uprightLinesData = [
+		{
+			shape: "line",
+			class: "upright-line-horizontal",
+			attrs: {
+				x1: xScale(0),
+				y1: yScale(y),
+				x2: xScale(x),
+				y2: yScale(y),
+				...uprightLinesAttrs,
+			},
+		},
+		{
+			shape: "line",
+			class: "upright-line-vertical",
+			attrs: {
+				x1: xScale(x),
+				y1: yScale(0),
+				x2: xScale(x),
+				y2: yScale(y),
+				...uprightLinesAttrs,
+			},
+		},
+	];
+
+	const m = Math.tan(angleRad, angleRad);
+	const rotLine1X1 = (x * m - y) / (m + 1 / m);
+	const rotLine1Y1 = y + m * (rotLine1X1 - x);
+	const rotLine2X1 = (m * y + x) / (m * m + 1);
+	const rotLine2Y1 = y - (1 / m) * (rotLine2X1 - x);
+
+	const rotatedLinesAttrs = {
+		stroke: "red",
+		"stroke-width": 2,
+		"stroke-dasharray": "5 5",
+	};
+	const rotatedLinesData = [
+		{
+			shape: "line",
+			class: "rotated-line-horizontal",
+			attrs: {
+				x1: xScale(rotLine1X1),
+				y1: yScale(rotLine1Y1),
+				x2: xScale(x),
+				y2: yScale(y),
+				...rotatedLinesAttrs,
+			},
+		},
+		{
+			shape: "line",
+			class: "rotated-line-vertical",
+			attrs: {
+				x1: xScale(rotLine2X1),
+				y1: yScale(rotLine2Y1),
+				x2: xScale(x),
+				y2: yScale(y),
+				...rotatedLinesAttrs,
+			},
+		},
+	];
+
+	return [...rotAxesData, ...uprightLinesData, ...rotatedLinesData];
 }
 
 drawGraph();
 
-function updateAngle({ angleRad }) {
-	applyGraphicalObjs(subcanvases, () => getLinesData({ angleRad }), {
+function updateAngle({ x, y, angleRad }) {
+	applyGraphicalObjs(subcanvases, () => getLinesData({ x, y, angleRad }), {
 		selector: ".graph-obj",
 		cssClass: "graph-obj",
 	});
