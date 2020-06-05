@@ -33,6 +33,16 @@ function _addGraphicalObjs(sel, dataFunc) {
 }
 
 // eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, dataFunc, { selector, cssClass }) {
+	return sel
+		.selectAll(selector)
+		.data(dataFunc)
+		.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
+		.each(applyDatum)
+		.classed(cssClass, true);
+}
+
+// eslint-disable-next-line no-unused-vars
 function lorentzFactor({ fracOfC }) {
 	if (!fracOfC) {
 		fracOfC = 0;
