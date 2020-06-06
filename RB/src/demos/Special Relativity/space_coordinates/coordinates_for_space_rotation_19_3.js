@@ -131,34 +131,6 @@ const yScale = d3
 	.domain([RANGES.y.min, RANGES.y.max])
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
-function scalarMult(a, vec) {
-	return vec.map(x => a * x);
-}
-
-function getUnitVector(v) {
-	const sumSq = v.reduce((accum, currVal) => accum + currVal * currVal, 0);
-	const norm = Math.sqrt(sumSq);
-	return scalarMult(1 / norm, v);
-}
-
-function dotProd(x, y) {
-	if (x.length !== y.length) {
-		throw new Error("Got vectors of different lengths");
-	}
-
-	let dp = 0;
-	for (let i = 0; i < x.length; ++i) {
-		dp += x[i] * y[i];
-	}
-	return dp;
-}
-
-function projection(a, b) {
-	const unitB = getUnitVector(b);
-	const magnitude = dotProd(a, unitB);
-	return scalarMult(magnitude, unitB);
-}
-
 function getAngleFromIndex(angleIndex) {
 	return -(ANGLES.min + (angleIndex / ANGLES.n) * (ANGLES.max - ANGLES.min));
 }
@@ -258,11 +230,16 @@ function getLinesData({ x, y, angleRad }) {
 		"marker-end": `url(#${ARROWHEAD_IDS.rotated})`,
 	};
 
-	const rotXAxPosEndX = RANGES.x.mid + RANGES.x.posDist * cos;
-	const rotXAxPosEndY = RANGES.y.mid + RANGES.x.posDist * sin;
-
-	const rotYAxPosEndX = RANGES.x.mid - RANGES.y.posDist * sin;
-	const rotYAxPosEndY = RANGES.y.mid + RANGES.y.posDist * cos;
+	const rotAxPosEnd = {
+		xAx: {
+			x: RANGES.x.mid + RANGES.x.posDist * cos,
+			y: RANGES.y.mid + RANGES.x.posDist * sin,
+		},
+		yAx: {
+			x: RANGES.x.mid - RANGES.y.posDist * sin,
+			y: RANGES.y.mid + RANGES.y.posDist * cos,
+		},
+	};
 
 	const rotAxesData = [
 		{
@@ -271,8 +248,8 @@ function getLinesData({ x, y, angleRad }) {
 			attrs: {
 				x1: xScale(RANGES.x.mid - RANGES.x.negDist * cos),
 				y1: yScale(RANGES.y.mid - RANGES.x.negDist * sin),
-				x2: xScale(rotXAxPosEndX),
-				y2: yScale(rotXAxPosEndY),
+				x2: xScale(rotAxPosEnd.xAx.x),
+				y2: yScale(rotAxPosEnd.xAx.y),
 				...rotAxesAttrs,
 				stroke: highlightFGColor,
 			},
@@ -283,8 +260,8 @@ function getLinesData({ x, y, angleRad }) {
 			attrs: {
 				x1: xScale(RANGES.x.mid + RANGES.y.negDist * sin),
 				y1: yScale(RANGES.y.mid - RANGES.y.negDist * cos),
-				x2: xScale(rotYAxPosEndX),
-				y2: yScale(rotYAxPosEndY),
+				x2: xScale(rotAxPosEnd.yAx.x),
+				y2: yScale(rotAxPosEnd.yAx.y),
 				...rotAxesAttrs,
 				stroke: highlightFGColor,
 			},
@@ -321,20 +298,19 @@ function getLinesData({ x, y, angleRad }) {
 		},
 	];
 
-	const m = Math.tan(angleRad);
-	const bbb = [rotXAxPosEndX, rotXAxPosEndY];
-	const xxx = projection([x, y], bbb);
-	console.log(
-		bbb,
-		getUnitVector(bbb),
-		dotProd(getUnitVector(bbb), [x, y]),
-		Math.sqrt(dotProd(xxx, xxx)),
-		xxx,
-	);
-	const rotXAxX1 = (m * y + x) / (m * m + 1);
-	const rotXAxY1 = y - (1 / m) * (rotXAxX1 - x);
-	const rotYAxX1 = (x * m - y) / (m + 1 / m);
-	const rotYAxY1 = y + m * (rotYAxX1 - x);
+	// Compute projection of point onto rotated axes
+	const rotAxProjCoords = {};
+	Object.entries(rotAxPosEnd).forEach(([ax, coords]) => {
+		const posEndNorm = Math.sqrt(coords.x * coords.x + coords.y * coords.y);
+		const posEndUnitVecX = coords.x / posEndNorm;
+		const posEndUnitVecY = coords.y / posEndNorm;
+		const projectionDotProd = x * posEndUnitVecX + y * posEndUnitVecY;
+
+		rotAxProjCoords[ax] = {};
+		rotAxProjCoords[ax].x = projectionDotProd * posEndUnitVecX;
+		rotAxProjCoords[ax].y = projectionDotProd * posEndUnitVecY;
+		rotAxProjCoords[ax].dotProd = projectionDotProd;
+	});
 
 	const rotatedLinesAttrs = {
 		stroke: highlightFGColor,
@@ -346,8 +322,8 @@ function getLinesData({ x, y, angleRad }) {
 			shape: "line",
 			class: "rotated-line-vertical",
 			attrs: {
-				x1: xScale(rotXAxX1),
-				y1: yScale(rotXAxY1),
+				x1: xScale(rotAxProjCoords.xAx.x),
+				y1: yScale(rotAxProjCoords.xAx.y),
 				x2: xScale(x),
 				y2: yScale(y),
 				...rotatedLinesAttrs,
@@ -357,8 +333,8 @@ function getLinesData({ x, y, angleRad }) {
 			shape: "line",
 			class: "rotated-line-horizontal",
 			attrs: {
-				x1: xScale(rotYAxX1),
-				y1: yScale(rotYAxY1),
+				x1: xScale(rotAxProjCoords.yAx.x),
+				y1: yScale(rotAxProjCoords.yAx.y),
 				x2: xScale(x),
 				y2: yScale(y),
 				...rotatedLinesAttrs,
@@ -377,9 +353,9 @@ function getLinesData({ x, y, angleRad }) {
 			shape: "text",
 			class: "rotated-x-axis-label",
 			attrs: {
-				x: xScale(rotXAxPosEndX + axisLabelDist * -sin),
+				x: xScale(rotAxPosEnd.xAx.x + axisLabelDist * -sin),
 				y: yScale(
-					rotXAxPosEndY + axisLabelDist * cos + Math.max(0, angleRad / 2),
+					rotAxPosEnd.xAx.y + axisLabelDist * cos + Math.max(0, angleRad / 2),
 				),
 				...axisLabelAttrs,
 				opacity: Math.min(
@@ -396,8 +372,8 @@ function getLinesData({ x, y, angleRad }) {
 			shape: "text",
 			class: "rotated-y-axis-label",
 			attrs: {
-				x: xScale(rotYAxPosEndX + axisLabelDist * cos),
-				y: yScale(rotYAxPosEndY + axisLabelDist * sin + angleRad * 0.6),
+				x: xScale(rotAxPosEnd.yAx.x + axisLabelDist * cos),
+				y: yScale(rotAxPosEnd.yAx.y + axisLabelDist * sin + angleRad * 0.6),
 				...axisLabelAttrs,
 				opacity: Math.min(
 					angleRad < 0
@@ -423,11 +399,11 @@ function getLinesData({ x, y, angleRad }) {
 	};
 
 	// The way to determine the sign of the projection onto the rotated axes is by taking the inner product between the positive end of the rotated axis and the x,y point in the upright axis; the sign is positive when the two things point mostly in the same direction (inner product >= 0)
-	const rotXAxDist = Math.sqrt(rotXAxX1 * rotXAxX1 + rotXAxY1 * rotXAxY1);
-	const rotXAxSign = x * rotXAxPosEndX + y * rotXAxPosEndY >= 0 ? 1 : -1;
+	// const rotXAxDist = Math.sqrt(rotXAxX1 * rotXAxX1 + rotXAxY1 * rotXAxY1);
+	// const rotXAxSign = x * rotXAxPosEndX + y * rotXAxPosEndY >= 0 ? 1 : -1;
 
-	const rotYAxDist = Math.sqrt(rotYAxX1 * rotYAxX1 + rotYAxY1 * rotYAxY1);
-	const rotYAxSign = x * rotYAxPosEndX + y * rotYAxPosEndY >= 0 ? 1 : -1;
+	// const rotYAxDist = Math.sqrt(rotYAxX1 * rotYAxX1 + rotYAxY1 * rotYAxY1);
+	// const rotYAxSign = x * rotYAxPosEndX + y * rotYAxPosEndY >= 0 ? 1 : -1;
 
 	return {
 		data: [
@@ -438,8 +414,8 @@ function getLinesData({ x, y, angleRad }) {
 			pointDatum,
 		],
 		rotCoords: {
-			xAxXCoord: rotXAxSign * rotXAxDist,
-			yAxYCoord: rotYAxDist * rotYAxSign,
+			xAxXCoord: rotAxProjCoords.xAx.dotProd,
+			yAxYCoord: rotAxProjCoords.yAx.dotProd,
 		},
 	};
 }
