@@ -20,6 +20,10 @@ function applyDatum(datum, { transition } = {}) {
 	Object.entries(datum.attrs).forEach(([key, val]) => {
 		t.attr(key, val);
 	});
+
+	if ("text" in datum) {
+		t.text(datum.text);
+	}
 }
 
 // eslint-disable-next-line no-unused-vars
