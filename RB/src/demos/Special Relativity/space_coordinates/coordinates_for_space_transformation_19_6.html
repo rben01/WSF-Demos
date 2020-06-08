@@ -32,7 +32,7 @@
 						type="range"
 						id="input-x-coord"
 						name="input-x-coord"
-						oninput="updateAngle({x: +this.value})"
+						oninput="updateAngle({x: this.value})"
 					/>
 				</label>
 			</span>
@@ -46,7 +46,7 @@
 						type="range"
 						id="input-y-coord"
 						name="input-y-coord"
-						oninput="updateAngle({y: +this.value})"
+						oninput="updateAngle({y: this.value})"
 					/>
 				</label>
 			</span>
@@ -60,7 +60,21 @@
 						type="range"
 						id="input-angle-rad"
 						name="input-angle-rad"
-						oninput="updateAngle({angleRad: +this.value})"
+						oninput="updateAngle({angleRad: this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Displacement:
+					</span>
+					<input
+						type="range"
+						id="input-displacement-x"
+						name="input-displacement-x"
+						oninput="updateAngle({displacementX: this.value})"
 					/>
 				</label>
 			</span>

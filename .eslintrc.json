@@ -16,7 +16,16 @@
 	"rules": {
 		"eqeqeq": "error",
 		"no-mixed-spaces-and-tabs": "off",
-		"curly": ["error", "all"],
+		"curly": [
+			"error",
+			"all"
+		],
+		"no-unused-vars": [
+			"error",
+			{
+				"argsIgnorePattern": "^_"
+			}
+		],
 		"no-multi-spaces": "error",
 		"no-unused-expressions": "error",
 		"no-use-before-define": "error",

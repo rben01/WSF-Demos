@@ -63,3 +63,9 @@ function sign(x, epsilon) {
 	}
 	return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
 }
+
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+	const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+	return Math.sqrt(sum);
+}
