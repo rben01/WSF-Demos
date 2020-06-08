@@ -37,12 +37,14 @@ function _addGraphicalObjs(sel, dataFunc) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function applyGraphicalObjs(sel, dataFunc, { selector, cssClass }) {
+function applyGraphicalObjs(sel, dataFunc, { selector, cssClass, transition }) {
 	return sel
 		.selectAll(selector)
 		.data(dataFunc)
 		.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
-		.each(applyDatum)
+		.each(function (d) {
+			applyDatum.call(this, d, { transition });
+		})
 		.classed(cssClass, true);
 }
 
