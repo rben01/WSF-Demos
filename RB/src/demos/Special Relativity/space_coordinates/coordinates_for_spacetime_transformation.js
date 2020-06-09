@@ -2,11 +2,11 @@
 "use strict";
 
 const RANGES = {
-	axis: { min: -15, max: 15 },
+	axis: { min: -20, max: 20 },
 	angle: {
 		min: -Math.PI,
 		max: Math.PI,
-		n: 1000,
+		n: 1001,
 	},
 	displacement: {
 		min: -5,
@@ -26,6 +26,7 @@ const RANGES = {
 const sliders = {};
 sliders.displacement = {};
 
+const MAX_DISPLACEMENT = 5;
 ["x", "y"].forEach(v => {
 	const slider = document.getElementById(`input-${v}-coord`);
 	sliders[v] = slider;
@@ -38,8 +39,8 @@ sliders.displacement = {};
 	sliders.displacement[v] = (() => {
 		const displacementSlider = document.getElementById(`input-displacement-${v}`);
 		if (displacementSlider !== null) {
-			displacementSlider.min = -5;
-			displacementSlider.max = 5;
+			displacementSlider.min = -MAX_DISPLACEMENT;
+			displacementSlider.max = MAX_DISPLACEMENT;
 			displacementSlider.step = 0.001;
 			displacementSlider.value = 0;
 		}
@@ -61,15 +62,13 @@ const AXIS_MARGINS = {
 	top: 0.05,
 	bottom: 0.05,
 	left: sliders.displacement.x !== null ? 0.2 : 0.05,
-	right: sliders.displacement.x !== null ? 0.2 : 0.05,
+	right: sliders.displacement.x !== null ? 0.2 : 0.1,
 };
 const CANVAS_HEIGHT = 400;
 const CANVAS_WIDTH =
-	sliders.displacement.x === null
-		? CANVAS_HEIGHT
-		: (CANVAS_HEIGHT / (1 - (AXIS_MARGINS.left + AXIS_MARGINS.right))) *
-		  (1 - (AXIS_MARGINS.top + AXIS_MARGINS.bottom));
-const AX_BOUNDS = {
+	(CANVAS_HEIGHT / (1 - (AXIS_MARGINS.left + AXIS_MARGINS.right))) *
+	(1 - (AXIS_MARGINS.top + AXIS_MARGINS.bottom));
+const CANVAS_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
 	yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
@@ -88,7 +87,7 @@ const textSpans = {
 	},
 };
 
-const highlightFGColor = "#5df";
+const primedAxesColor = "#4f7";
 
 const canvas = d3
 	.select("#viz-canvas")
@@ -116,7 +115,7 @@ const ARROWHEAD_IDS = {
 
 	[
 		[ARROWHEAD_IDS.upright, "white"],
-		[ARROWHEAD_IDS.transformed, highlightFGColor],
+		[ARROWHEAD_IDS.transformed, primedAxesColor],
 	].forEach(([id, color]) => {
 		defs.append("svg:marker")
 			.attr("id", id)
@@ -152,11 +151,11 @@ const subcanvases = canvas
 const xScale = d3
 	.scaleLinear()
 	.domain([RANGES.axis.min, RANGES.axis.max])
-	.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+	.range([CANVAS_BOUNDS.xMin, CANVAS_BOUNDS.xMax]);
 const yScale = d3
 	.scaleLinear()
 	.domain([RANGES.axis.min, RANGES.axis.max])
-	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
+	.range([CANVAS_BOUNDS.yMin, CANVAS_BOUNDS.yMax]);
 
 function getAngleFromIndex(angleIndex) {
 	if (typeof angleIndex === "undefined") {
@@ -168,7 +167,7 @@ function getAngleFromIndex(angleIndex) {
 
 	return -(
 		RANGES.angle.min +
-		(angleIndex / RANGES.angle.n) * (RANGES.angle.max - RANGES.angle.min)
+		(angleIndex / (RANGES.angle.n - 1)) * (RANGES.angle.max - RANGES.angle.min)
 	);
 }
 
@@ -309,20 +308,85 @@ function getLinesData({
 		y: RANGES.axis.mid + displacementY,
 	};
 
-	const tfAxPosEndDisplacement = {
-		xAx: {
-			x: RANGES.axis.posDist * cos,
-			y: RANGES.axis.posDist * sin,
+	const tfAxDisplacement = {
+		pos: {
+			xAx: {
+				x: RANGES.axis.posDist * cos,
+				y: RANGES.axis.posDist * sin,
+			},
+			yAx: {
+				x: -RANGES.axis.posDist * sin,
+				y: RANGES.axis.posDist * cos,
+			},
 		},
-		yAx: {
-			x: -RANGES.axis.posDist * sin,
-			y: RANGES.axis.posDist * cos,
+		neg: {
+			xAx: {
+				x: RANGES.axis.negDist * cos,
+				y: RANGES.axis.negDist * sin,
+			},
+			yAx: {
+				x: -RANGES.axis.negDist * sin,
+				y: RANGES.axis.negDist * cos,
+			},
 		},
 	};
 
+	// console.log(tfAxDisplacement);
+	const _maxNorm = l2Norm(RANGES.axis.posDist, RANGES.axis.posDist);
+	const _minNorm = l2Norm(RANGES.axis.posDist, 0);
+	const _normScale = d3
+		.scaleLinear()
+		.domain([_minNorm, _maxNorm])
+		.range([0, 1])
+		.clamp(true);
+
+	// Object.values(tfAxDisplacement).forEach(bothAxesEndDisplacement => {
+	// 	Object.values(bothAxesEndDisplacement).forEach(axEndDisp => {
+	// 		let { x: dx, y: dy } = axEndDisp;
+	// 		const ratio = dy / dx;
+
+	// 		dx *= 10;
+	// 		dy *= 10;
+
+	// 		if (dx > RANGES.axis.posDist + MAX_DISPLACEMENT) {
+	// 			dx = RANGES.axis.posDist + MAX_DISPLACEMENT;
+	// 			dy = dx * ratio;
+	// 		} else if (dx < -RANGES.axis.negDist - MAX_DISPLACEMENT) {
+	// 			dx = -RANGES.axis.negDist - MAX_DISPLACEMENT;
+	// 			dy = dx * ratio;
+	// 		} else if (dy > RANGES.axis.posDist) {
+	// 			dy = RANGES.axis.posDist;
+	// 			dx = dy / ratio;
+	// 		} else if (dy < -RANGES.axis.negDist) {
+	// 			dy = -RANGES.axis.negDist;
+	// 			dx = dy / ratio;
+	// 		}
+
+	// 		if (ratio !== Infinity) {
+	// 			dx = Math.max(
+	// 				-RANGES.axis.negDist - MAX_DISPLACEMENT,
+	// 				Math.min(dx, RANGES.axis.posDist + MAX_DISPLACEMENT),
+	// 			);
+	// 			dy = dx * ratio;
+	// 		}
+
+	// 		if (ratio !== 0) {
+	// 			dy = Math.max(-RANGES.axis.negDist, Math.min(dy, RANGES.axis.posDist));
+	// 			dx = dy / ratio;
+	// 		}
+
+	// 		const norm = l2Norm(dx, dy);
+	// 		const scale = Math.pow(0.9, _normScale(norm));
+
+	// 		axEndDisp.x = dx * scale;
+	// 		axEndDisp.y = dy * scale;
+	// 	});
+	// });
+	// console.log(tfAxDisplacement);
+
 	// Looks like {xAx: {x: y: }, {yAx: {x: y: }}}
 	const tfAxPosEndCoords = {};
-	Object.entries(tfAxPosEndDisplacement).forEach(([ax, info]) => {
+	Object.entries(tfAxDisplacement.pos).forEach(([ax, info]) => {
 		tfAxPosEndCoords[ax] = {};
 		Object.entries(info).forEach(([coord, dist]) => {
 			tfAxPosEndCoords[ax][coord] = tfAxOrigin[coord] + dist;
@@ -334,24 +398,24 @@ function getLinesData({
 			shape: "line",
 			class: "tf-axis-x",
 			attrs: {
-				x1: xScale(tfAxOrigin.x - RANGES.axis.negDist * cos),
-				y1: yScale(tfAxOrigin.y - RANGES.axis.negDist * sin),
+				x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.xAx.x),
+				y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.xAx.y),
 				x2: xScale(tfAxPosEndCoords.xAx.x),
 				y2: yScale(tfAxPosEndCoords.xAx.y),
 				...tfAxesAttrs,
-				stroke: highlightFGColor,
+				stroke: primedAxesColor,
 			},
 		},
 		{
 			shape: "line",
 			class: "tf-axis-y",
 			attrs: {
-				x1: xScale(tfAxOrigin.x + RANGES.axis.negDist * sin),
-				y1: yScale(tfAxOrigin.y - RANGES.axis.negDist * cos),
+				x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.yAx.x),
+				y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.yAx.y),
 				x2: xScale(tfAxPosEndCoords.yAx.x),
 				y2: yScale(tfAxPosEndCoords.yAx.y),
 				...tfAxesAttrs,
-				stroke: highlightFGColor,
+				stroke: primedAxesColor,
 			},
 		},
 	];
@@ -391,8 +455,8 @@ function getLinesData({
 	// Compute projection of point onto transformed axes by translating point and transformed axes back to origin, computing projection onto transformed axes (now rotated but not translated), and then translating back
 	const tfAxProjCoords = {};
 	Object.keys(tfAxPosEndCoords).forEach(ax => {
-		const tfAxPosEndDispX = tfAxPosEndDisplacement[ax].x;
-		const tfAxPosEndDispY = tfAxPosEndDisplacement[ax].y;
+		const tfAxPosEndDispX = tfAxDisplacement.pos[ax].x;
+		const tfAxPosEndDispY = tfAxDisplacement.pos[ax].y;
 		const posEndNorm = l2Norm(tfAxPosEndDispX, tfAxPosEndDispY);
 		const posEndUnitVecX = tfAxPosEndDispX / posEndNorm;
 		const posEndUnitVecY = tfAxPosEndDispY / posEndNorm;
@@ -406,7 +470,7 @@ function getLinesData({
 	});
 
 	const tfLinesAttrs = {
-		stroke: highlightFGColor,
+		stroke: primedAxesColor,
 		"stroke-width": 2,
 		"stroke-dasharray": "5 5",
 	};
@@ -437,12 +501,11 @@ function getLinesData({
 
 	const axisLabelDist = 0.05 * RANGES.axis.span;
 	const axisLabelAttrs = {
-		fill: highlightFGColor,
+		fill: primedAxesColor,
 	};
 	const getOpacity = (x, y) => {
 		const minDistToUprightAxisLabel = Math.min(
 			...["xAx", "yAx"].map(ax => {
-				console.log(x, y, ax, AXIS_LABEL_LOCS[ax]);
 				const distFromUprightAxisLabel = l2Norm(
 					x - AXIS_LABEL_LOCS[ax].x,
 					y - AXIS_LABEL_LOCS[ax].y,
@@ -452,7 +515,7 @@ function getLinesData({
 		);
 
 		const beginAppearScaledDist = 0.05;
-		const fullyAppearScaledDist = 0.1;
+		const fullyAppearScaledDist = 0.07;
 		const unadjustedOpacity =
 			(1 / (fullyAppearScaledDist - beginAppearScaledDist)) *
 			(minDistToUprightAxisLabel - beginAppearScaledDist);
@@ -523,7 +586,7 @@ function getLinesData({
 			cx: xScale(x),
 			cy: yScale(y),
 			r: 4,
-			fill: "#ed0",
+			fill: "#fd0",
 		},
 	};
 
@@ -575,7 +638,7 @@ function updateAngle({
 	if (!userInput || typeof angleRad !== "undefined") {
 		textSpans.angle.textContent = (angleIndex === (RANGES.angle.n - 1) / 2
 			? +0
-			: angleRad
+			: (angleRad * 180) / Math.PI
 		).toFixed(2);
 	}
 }
