@@ -10,7 +10,7 @@
 <div class="w3-content w3-container" id="formContainer">
 <form>
 <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-<input id="speed" max="1998000" min="0" name="speed" oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000; etime.innerHTML = Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100" step="1" style="width: 70%;" type="range" value="0"/>
+<input id="speed" max="1998000" min="0" name="speed" oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000; etime.innerHTML = Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100; if(Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100 &gt; 1){yearID.innerHTML='years'} else{yearID.innerHTML='year'}" step="1" style="width: 70%;" type="range" value="0"/>
 <br/>
 <text style="font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.001</span><i>c</i></text>
 <br/><br/>
@@ -25,8 +25,8 @@
 <text></text>
 <div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block; width: 440px;">
 <br/>
-<text style="font-size: 20px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">15.81</span>
-years </text>
+<text style="font-size: 20px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">1</span>
+<span id="yearID">year</span> </text>
 <br/><br/>
 </div>
 </div>
