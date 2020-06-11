@@ -10,24 +10,24 @@
 <div class="w3-content w3-container" id="formContainer">
 <form>
 <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-<input id="speed" max="1998000" min="0" name="speed" oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000; etime.innerHTML = Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100" step="1" style="width: 70%;" type="range" value="0"/>
+<input id="speed" max="1998000" min="0" name="speed" oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000; etime.innerHTML = numberWithCommas(Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100); if(Math.floor(1 / Math.sqrt(1-ar[speed.value]**2) * 100) / 100 &gt; 1){yearID.innerHTML='years'} else{yearID.innerHTML='year'}" step="1" style="width: 70%;" type="range" value="0"/>
 <br/>
 <text style="font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.001</span><i>c</i></text>
 <br/><br/>
 </form>
 </div>
 <div style="width: 950px;">
-<div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block; width: 440px; margin-right: 20px;">
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px; margin-right: 20px;">
 <br/>
-<text style="font-size: 20px;"> Time Elapsed on Rocket = 1 year </text>
+<text style="font-size: 21px;"> Time Elapsed on Rocket = 1 year </text>
 <br/><br/>
 </div>
 <text></text>
-<div style="border-radius: 10px; border-style: solid; padding-inline: 25px; display: inline-block; width: 440px;">
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px;">
 <br/>
-<text style="font-size: 20px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">15.81</span>
-years </text>
+<text style="font-size: 21px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">1</span>
+<span id="yearID">year</span> </text>
 <br/><br/>
 </div>
 </div>
-<script type="text/javascript">for(var ar=[],i=.001;i<.999;i+=1e-6)ar.push(i);for(i=.999;i<1;i+=1e-9)ar.push(i);</script></body></html>
+<script type="text/javascript">for(var ar=[],i=.001;i<.999;i+=1e-6)ar.push(i);for(i=.999;i<1;i+=1e-9)ar.push(i);function numberWithCommas(i){return i.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}</script></body></html>
