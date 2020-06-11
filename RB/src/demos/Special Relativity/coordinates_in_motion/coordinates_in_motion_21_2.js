@@ -120,8 +120,9 @@ const heightScale = d3
 	.domain([0, RANGES.y.span])
 	.range([0, AX_BOUNDS.yMin - AX_BOUNDS.yMax]);
 
-function getTimeDelta({ x, fracOfC }) {
-	return lorentzFactor({ fracOfC }) * x * fracOfC;
+// x has units of light-minutes
+function getTimeDeltaMinutes({ x, fracOfC }) {
+	return x * fracOfC;
 }
 
 function getTextClassName(frameName) {
@@ -271,7 +272,7 @@ function getGraphData(d) {
 }
 
 function timeToStr(referenceMinute, secondsAfterReferenceMinute) {
-	secondsAfterReferenceMinute = Math.round(secondsAfterReferenceMinute);
+	secondsAfterReferenceMinute = Math.floor(secondsAfterReferenceMinute);
 	const minutesAfterReferenceMinute = Math.floor(secondsAfterReferenceMinute / 60);
 
 	const second = secondsAfterReferenceMinute - minutesAfterReferenceMinute * 60;
@@ -325,13 +326,13 @@ function updateClocks({ fracOfC, referenceFrame } = {}) {
 	const speedSign = frameAIsStationary ? 1 : -1;
 	movingText.each(function (d) {
 		const x = d.x;
-		const dtSeconds = getTimeDelta({ x: x, fracOfC: speedSign * fracOfC });
+		const dtSeconds = getTimeDeltaMinutes({ x: x, fracOfC: speedSign * fracOfC });
 
 		const text = d3.select(this);
 		text.text(timeToStr(10, dtSeconds));
 	});
 
-	const speedStr = (-speedSign * fracOfC).toFixed(2);
+	const speedStr = (frameAIsStationary ? "−  " : "") + fracOfC.toFixed(2);
 	const speedPlaceholdersToUpdate = frameAIsStationary
 		? speedPlaceholders.b
 		: speedPlaceholders.a;
