@@ -15,13 +15,16 @@ function isIterable(obj) {
 
 function applyDatum(datum, { transition } = {}) {
 	const d3Obj = d3.select(this).datum(datum);
-	d3Obj.classed(datum.class, true);
+
+	if (typeof datum.class !== "undefined") {
+		d3Obj.classed(datum.class, true);
+	}
 	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
 	Object.entries(datum.attrs).forEach(([key, val]) => {
 		t.attr(key, val);
 	});
 
-	if ("text" in datum) {
+	if (typeof datum.text !== "undefined") {
 		t.text(datum.text);
 	}
 }
