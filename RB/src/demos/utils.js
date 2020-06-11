@@ -14,7 +14,7 @@ function isIterable(obj) {
 }
 
 function applyDatum(datum, { transition } = {}) {
-	const d3Obj = d3.select(this);
+	const d3Obj = d3.select(this).datum(datum);
 	d3Obj.classed(datum.class, true);
 	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
 	Object.entries(datum.attrs).forEach(([key, val]) => {
@@ -37,15 +37,20 @@ function _addGraphicalObjs(sel, dataFunc) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function applyGraphicalObjs(sel, dataFunc, { selector, cssClass, transition }) {
-	return sel
+function applyGraphicalObjs(sel, dataFunc, { selector, cssClass, transition } = {}) {
+	const s = sel
 		.selectAll(selector)
 		.data(dataFunc)
 		.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
 		.each(function (d) {
 			applyDatum.call(this, d, { transition });
-		})
-		.classed(cssClass, true);
+		});
+
+	if (typeof cssClass !== "undefined") {
+		s.classed(cssClass, true);
+	}
+
+	return s;
 }
 
 // eslint-disable-next-line no-unused-vars
