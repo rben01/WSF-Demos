@@ -13,24 +13,37 @@ Object.values(RANGES).forEach(range => {
 
 const speedSlider = document.getElementById("input-speed");
 
+const frameButtons = {};
+const speedPlaceholders = {};
+const speedSpans = {};
+const movingTextSpans = {};
+
+["a", "b"].forEach(frameLetter => {
+	frameButtons[frameLetter] = document.getElementById(
+		`input-ref-frame-${frameLetter}`,
+	);
+	speedPlaceholders[frameLetter] = document.getElementsByClassName(
+		`frame-${frameLetter}-speed-placeholder`,
+	);
+	speedSpans[frameLetter] = document.getElementById(`frame-${frameLetter}-speed`);
+	movingTextSpans[frameLetter] = document.getElementById(
+		`frame-${frameLetter}-moving-text`,
+	);
+});
+
 const AXIS_MARGINS = {
 	top: 0.05,
-	bottom: 0.1,
+	bottom: 0.15,
 	left: 0.05,
 	right: 0.05,
 };
-const CANVAS_HEIGHT = 200;
+const CANVAS_HEIGHT = 150;
 const CANVAS_WIDTH = 800;
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
 	yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
 	yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
-};
-
-const textSpans = {
-	frameA: document.getElementById("text-frame-a"),
-	frameB: document.getElementById("text-frame-b"),
 };
 
 const highlightFGColor = "#5df";
@@ -47,14 +60,21 @@ const ARROWHEAD_ID = "marker-arrowhead";
 	const markerAttrs = {
 		attrs: {
 			refX: 4,
-			refY: 4,
+			refY: 2.5,
 			markerUnits: "strokeWidth",
-			markerWidth: 10,
-			markerHeight: 8,
+			markerWidth: 7,
+			markerHeight: 5,
 			orient: "auto",
 		},
 	};
-	const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
+	const pathAttrs = {
+		attrs: {
+			d: "M 1 1 L 5 2.5 L 1 4 L 2 2.5 z",
+			"stroke-linejoin": "miter",
+			stroke: highlightFGColor,
+			fill: highlightFGColor,
+		},
+	};
 	const defs = canvases.append("svg:defs");
 
 	defs.append("svg:marker")
@@ -65,9 +85,7 @@ const ARROWHEAD_ID = "marker-arrowhead";
 		.append("svg:path")
 		.each(function () {
 			applyDatum.call(this, pathAttrs);
-		})
-		.attr("stroke", highlightFGColor)
-		.attr("fill", highlightFGColor);
+		});
 })();
 
 const subcanvases = canvases
@@ -102,21 +120,26 @@ const heightScale = d3
 	.domain([0, RANGES.y.span])
 	.range([0, AX_BOUNDS.yMin - AX_BOUNDS.yMax]);
 
-function getTimeDelta({ dx, fracOfC }) {
-	return (lorentzFactor({ fracOfC }) * dx * fracOfC) / 10;
+function getTimeDelta({ x, fracOfC }) {
+	return lorentzFactor({ fracOfC }) * x * fracOfC;
 }
 
 function getTextClassName(frameName) {
 	return `text-frame-${frameName}`;
 }
 
+function getArrowClassName(frameName) {
+	return `arrow-frame-${frameName}`;
+}
+
 function getGraphData(d) {
 	const y0s = yScale(0);
+	const frameName = d.isTopFrame ? "a" : "b";
 
 	function getBoxesAndTextData() {
 		const lineColor = "white";
-		const fillColor = "brown";
-		const boxHeightAboveGround = 0.2;
+		const fillColor = "#5c4e29";
+		const boxHeightAboveGround = 0.3;
 
 		const boxData = [];
 		const lineData = [];
@@ -124,7 +147,7 @@ function getGraphData(d) {
 
 		const boxXLocs = xScale.ticks(RANGES.x.span / 2);
 		const boxWidth = 1.8;
-		const boxHeight = 0.2;
+		const boxHeight = 0.25;
 		boxXLocs.forEach(x => {
 			boxData.push({
 				shape: "rect",
@@ -155,7 +178,6 @@ function getGraphData(d) {
 				},
 			});
 
-			const frameName = d.isTopFrame ? "a" : "b";
 			textData.push({
 				shape: "text",
 				class: getTextClassName(frameName),
@@ -173,6 +195,23 @@ function getGraphData(d) {
 		});
 
 		return [...boxData, ...lineData, ...textData];
+	}
+
+	function getArrowDatum() {
+		return {
+			shape: "line",
+			class: getArrowClassName(frameName),
+			attrs: {
+				x1: xScale((d.isTopFrame ? 1 : -1) * 6),
+				y1: yScale(0.75),
+				x2: xScale(2),
+				y2: yScale(0.75),
+				opacity: 0,
+				stroke: "#5df",
+				"stroke-width": 5,
+				"marker-end": `url(#${ARROWHEAD_ID})`,
+			},
+		};
 	}
 
 	function getAxesData() {
@@ -228,7 +267,7 @@ function getGraphData(d) {
 		return [axisDatum, ...ticksData, ...labelsData];
 	}
 
-	return [...getBoxesAndTextData(), ...getAxesData()];
+	return [...getBoxesAndTextData(), getArrowDatum(), ...getAxesData()];
 }
 
 function timeToStr(referenceMinute, secondsAfterReferenceMinute) {
@@ -237,7 +276,6 @@ function timeToStr(referenceMinute, secondsAfterReferenceMinute) {
 
 	const second = secondsAfterReferenceMinute - minutesAfterReferenceMinute * 60;
 	const minute = referenceMinute + minutesAfterReferenceMinute;
-	console.log(minute, second, secondsAfterReferenceMinute);
 
 	const minuteStr = minute.toFixed(0).padStart(2, "0");
 	const secondStr = second.toFixed(0).padStart(2, "0");
@@ -245,25 +283,77 @@ function timeToStr(referenceMinute, secondsAfterReferenceMinute) {
 	return `${minuteStr}:${secondStr}`;
 }
 
-function updateClocks({ fracOfC, topFrameIsStationary }) {
-	const stationaryFrameName = getTextClassName(topFrameIsStationary ? "a" : "b");
-	const movingFrameName = getTextClassName(topFrameIsStationary ? "b" : "a");
+function updateClocks({ fracOfC, referenceFrame } = {}) {
+	if (typeof fracOfC === "undefined") {
+		fracOfC = speedSlider.value;
+	}
+	fracOfC = +fracOfC;
 
-	const stationaryText = d3.selectAll(`.${stationaryFrameName}`);
-	const movingText = d3.selectAll(`.${movingFrameName}`);
+	if (typeof referenceFrame === "undefined") {
+		referenceFrame = frameButtons.a.checked ? "a" : "b";
+	}
+
+	const frameAIsStationary = referenceFrame === "a";
+
+	const stationaryMovingFrameLetters = frameAIsStationary ? ["a", "b"] : ["b", "a"];
+	const stationaryMovingArrowClasses = stationaryMovingFrameLetters.map(
+		getArrowClassName,
+	);
+	const stationaryMovingTextClasses = stationaryMovingFrameLetters.map(
+		getTextClassName,
+	);
+
+	const [stationaryArrow, movingArrow] = stationaryMovingArrowClasses.map(className =>
+		d3.selectAll(`.${className}`),
+	);
+	const [stationaryText, movingText] = stationaryMovingTextClasses.map(className =>
+		d3.selectAll(`.${className}`),
+	);
+
+	stationaryArrow.attr("opacity", 0);
+
+	const movingArrowAbsX2 = 6.5 + fracOfC * 4;
+	movingArrow
+		.attr("x2", xScale((frameAIsStationary ? -1 : 1) * movingArrowAbsX2))
+		.attr("opacity", 1);
 
 	stationaryText.each(function () {
 		const text = d3.select(this);
 		text.text(timeToStr(10, 0));
 	});
 
+	const speedSign = frameAIsStationary ? 1 : -1;
 	movingText.each(function (d) {
 		const x = d.x;
-		const dtSeconds = getTimeDelta({ dx: x, fracOfC: fracOfC });
+		const dtSeconds = getTimeDelta({ x: x, fracOfC: speedSign * fracOfC });
 
 		const text = d3.select(this);
 		text.text(timeToStr(10, dtSeconds));
 	});
+
+	const speedStr = (-speedSign * fracOfC).toFixed(2);
+	const speedPlaceholdersToUpdate = frameAIsStationary
+		? speedPlaceholders.b
+		: speedPlaceholders.a;
+
+	for (let i = 0; i < speedPlaceholdersToUpdate.length; ++i) {
+		const placeholder = speedPlaceholdersToUpdate[i];
+		placeholder.textContent = speedStr;
+	}
+
+	if (frameAIsStationary) {
+		speedSpans.a.style.visibility = "hidden";
+		speedSpans.b.style.visibility = "visible";
+
+		movingTextSpans.a.textContent = "At Rest";
+		movingTextSpans.b.textContent = "Moving";
+	} else {
+		speedSpans.a.style.visibility = "visible";
+		speedSpans.b.style.visibility = "hidden";
+
+		movingTextSpans.a.textContent = "Moving";
+		movingTextSpans.b.textContent = "At Rest";
+	}
 }
 
 subcanvases.each(function (d) {
@@ -271,4 +361,4 @@ subcanvases.each(function (d) {
 	applyGraphicalObjs(subcanvas, () => getGraphData(d));
 });
 
-updateClocks({ fracOfC: -0.9999, topFrameIsStationary: true });
+updateClocks();
