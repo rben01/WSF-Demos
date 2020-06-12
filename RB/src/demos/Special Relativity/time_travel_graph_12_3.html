@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<title>Time Travel Graph</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+
+<body>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
+            <input type="range" id="speed" name="speed" min="0" max="1998000" step="1" value="0" style="width: 70%;"
+                oninput="speedID.innerHTML = Math.floor(x[speed.value]*1000000000)/1000000000; 
+                etime.innerHTML = numberWithCommas(Math.floor(y[speed.value] * 100) / 100); 
+                if(Math.floor(1 / Math.sqrt(1-x[speed.value]**2) * 100) / 100 > 1){
+                    yearID.innerHTML='years'
+                    } 
+                else{
+                    yearID.innerHTML='year'
+                }
+                trace1 = {
+                    x: [0,x[speed.value]],
+                    y: [y[speed.value], y[speed.value]],
+                }
+                trace2 = {
+                    x: [x[speed.value], x[speed.value]],
+                    y: [0, y[speed.value]],
+                }
+                Plotly.newPlot('graph', [g, trace1, trace2], layout)">
+            <br>
+            <text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num"
+                    id="speedID">0.001</span><i>c</i></text>
+            <br><br>
+        </form>
+    </div>
+
+    <div style="width: 950px;">
+        <text>Earth Years to Return</text>
+        <div id="graph"></div>
+    </div>
+
+    <div style="width: 950px;">
+        <div
+            style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px; margin-right: 20px;">
+            <br>
+            <text style="font-size: 21px;"> Time Elapsed on Rocket = 1 year </text>
+            <br><br>
+        </div>
+        <text></text>
+
+        <div
+            style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px;">
+            <br>
+            <text style="font-size: 21px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num"
+                    id="etime">1</span>
+                <span id="yearID">year</span> </text>
+            <br><br>
+        </div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="text/javascript">
+        var x = [];
+        var y = [];
+        var trace1 = {};
+        var trace2 = {};
+        for (var i = 0.001; i < 0.999; i += 0.000001) {
+            x.push(i);
+            y.push(1 / Math.sqrt(1 - i ** 2));
+        }
+        for (var i = 0.999; i < 1; i += 0.000000001) {
+            x.push(i);
+            y.push(1 / Math.sqrt(1 - i ** 2));
+        }
+        var g = {
+            x: x,
+            y: y,
+            type: 'scatter',
+            line: {
+                color: 'grey',
+                width: 4,
+            }
+        };
+        var layout = {
+            yaxis: {
+                range: [0, 20],
+                autorange: false,
+            },
+            paper_bgcolor: 'black',
+            plot_bgcolor: 'black',
+        }
+        Plotly.newPlot('graph', [g], layout);
+
+        function numberWithCommas(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    </script>
+
+</body>
