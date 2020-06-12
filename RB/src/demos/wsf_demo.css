@@ -49,6 +49,15 @@ body {
 	text-align: left;
 }
 
+.radio-label {
+	padding-left: 3px;
+}
+
+input[type="radio"] {
+	position: relative;
+	bottom: 4px;
+}
+
 input[type="range"] {
 	-webkit-appearance: none;
 	-moz-apperance: none;

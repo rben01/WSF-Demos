@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 9.1em;
+				text-align: left;
+				padding-left: 2em;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.frame-title-section {
+				text-align: center;
+			}
+			.frame-title {
+				margin: 0 auto;
+				font-size: 120%;
+			}
+			.float-right {
+				float: right;
+				margin-right: 100px;
+			}
+			.float-left {
+				float: left;
+				margin-left: 100px;
+			}
+			.hidden {
+				visibility: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="top-sliders-sect">
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Reference frame:
+					</span>
+					<label>
+						<input
+							type="radio"
+							id="input-ref-frame-a"
+							name="input-ref-frame"
+							value="a"
+							onchange="updateClocks({referenceFrame: this.value})"
+						/><span class="radio-label">A</span></label
+					>
+					<span style="padding-left: 5px; padding-right: 5px;"></span>
+					<label>
+						<input
+							type="radio"
+							id="input-ref-frame-b"
+							name="input-ref-frame"
+							value="b"
+							checked
+							onchange="updateClocks({referenceFrame: this.value})"
+						/><span class="radio-label">B</span></label
+					>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Relative speed (𝑣):
+					</span>
+					<input
+						type="range"
+						id="input-speed"
+						name="input-speed"
+						min="0"
+						max=".99"
+						step=".01"
+						value="0"
+						oninput="updateClocks({fracOfC: this.value})"
+					/>
+				</label>
+			</span>
+		</div>
+		<br />
+		<div class="frame-title-section">
+			<span class="float-left hidden"
+				>𝑣 =
+				<span class="highlighted-text sci-num frame-a-speed-placeholder"
+					>100</span
+				>𝑐</span
+			>
+			<span class="frame-title"
+				>Frame A —
+				<span id="frame-a-moving-text" class="highlighted-text"
+					>At Rest</span
+				></span
+			>
+			<span id="frame-a-speed" class="float-right" style="visibility: hidden;"
+				>𝑣 =
+				<span class="highlighted-text sci-num frame-a-speed-placeholder"
+					>100</span
+				>𝑐</span
+			>
+		</div>
+		<svg id="svg-frame-a" class="viz-canvas"></svg>
+		<div style="height: 50px;"></div>
+		<div class="frame-title-section">
+			<span id="frame-b-speed" class="float-left" style="visibility: hidden;"
+				>𝑣 =
+				<span class="highlighted-text sci-num frame-b-speed-placeholder"
+					>100</span
+				>𝑐</span
+			>
+			<span class="frame-title"
+				>Frame B —
+				<span id="frame-b-moving-text" class="highlighted-text"
+					>Moving</span
+				></span
+			>
+			<span class="float-right hidden"
+				>𝑣 =
+				<span class="highlighted-text sci-num frame-b-speed-placeholder"
+					>100</span
+				>𝑐</span
+			>
+		</div>
+		<svg id="svg-frame-b" class="viz-canvas"></svg>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./coordinates_in_motion_21_2.js"></script>
+	</body>
+</html>

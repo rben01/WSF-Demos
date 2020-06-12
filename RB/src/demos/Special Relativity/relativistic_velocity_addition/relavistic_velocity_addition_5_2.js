@@ -5,7 +5,7 @@ function updateRocketSpeed(speedStr, { fromUserInput = true } = {}) {
 	return _updateSpeedHelper(speedStr, {
 		fromUserInput,
 		obj: ROCKET,
-		baseObject: ROCKET,
+		baseObject: PROJECTILE,
 	});
 }
 
@@ -14,11 +14,12 @@ function updateProjectileSpeed(speedStr, { fromUserInput = true } = {}) {
 	return _updateSpeedHelper(speedStr, {
 		fromUserInput,
 		obj: PROJECTILE,
-		baseObject: ROCKET,
+		baseObject: PROJECTILE,
 	});
 }
 
-drawGraph({ baseObject: ROCKET });
+drawGraph({ baseObject: PROJECTILE });
+
 graphObjs.features = _addGraphicalObjs(subcanvases, () =>
-	getGraphData({ baseObject: ROCKET }),
+	getGraphData({ baseObject: PROJECTILE }),
 );
