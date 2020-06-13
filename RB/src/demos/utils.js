@@ -27,6 +27,11 @@ function applyDatum(datum, { transition } = {}) {
 	if (typeof datum.text !== "undefined") {
 		t.text(datum.text);
 	}
+
+	if (typeof datum.children !== "undefined") {
+		// eslint-disable-next-line no-use-before-define
+		applyGraphicalObjs(t, () => datum.children, { transition });
+	}
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -40,11 +45,15 @@ function _addGraphicalObjs(sel, dataFunc) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function applyGraphicalObjs(sel, dataFunc, { selector, cssClass, transition } = {}) {
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
 	const s = sel
 		.selectAll(selector)
-		.data(dataFunc)
-		.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
+		.data(data, key)
+		.join(
+			enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+			update => update,
+			exit => exit.remove(),
+		)
 		.each(function (d) {
 			applyDatum.call(this, d, { transition });
 		});
