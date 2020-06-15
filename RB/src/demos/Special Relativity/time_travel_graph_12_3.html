@@ -13,21 +13,24 @@
         <form>
             <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
             <input type="range" id="speed" name="speed" min="0" max="1998000" step="1" value="0" style="width: 70%;"
-                oninput="speedID.innerHTML = Math.floor(x[speed.value]*1000000000)/1000000000; 
-                etime.innerHTML = numberWithCommas(Math.floor(y[speed.value] * 100) / 100); 
-                if(Math.floor(1 / Math.sqrt(1-x[speed.value]**2) * 100) / 100 > 1){
+                oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000;
+                yp = 1 / Math.sqrt(1-ar[speed.value]**2);
+                etime.innerHTML = numberWithCommas(Math.floor(yp * 100) / 100); 
+                if(Math.floor(yp * 100) / 100 > 1){
                     yearID.innerHTML='years'
                     } 
                 else{
                     yearID.innerHTML='year'
                 }
                 trace1 = {
-                    x: [0,x[speed.value]],
-                    y: [y[speed.value], y[speed.value]],
+                    x: [0,ar[speed.value]],
+                    y: [yp, yp],
+                    line: {dash: 'dash', color: 'white'}
                 }
                 trace2 = {
-                    x: [x[speed.value], x[speed.value]],
-                    y: [0, y[speed.value]],
+                    x: [ar[speed.value], ar[speed.value]],
+                    y: [0, yp],
+                    line: {dash: 'dash', color: 'white'}
                 }
                 Plotly.newPlot('graph', [g, trace1, trace2], layout)">
             <br>
@@ -63,17 +66,21 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript">
+        var ar = [];
         var x = [];
         var y = [];
+        var yp = 0;
         var trace1 = {};
         var trace2 = {};
         for (var i = 0.001; i < 0.999; i += 0.000001) {
-            x.push(i);
-            y.push(1 / Math.sqrt(1 - i ** 2));
+            ar.push(i);
         }
         for (var i = 0.999; i < 1; i += 0.000000001) {
-            x.push(i);
-            y.push(1 / Math.sqrt(1 - i ** 2));
+            ar.push(i);
+        }
+        for (var i = 0; i < 1998; i++) {
+            x.push(ar[1000 * i]);
+            y.push(1 / Math.sqrt(1 - ar[1000 * i] ** 2));
         }
         var g = {
             x: x,
@@ -85,12 +92,22 @@
             }
         };
         var layout = {
+            xaxis: {
+                range: [0, 1],
+                linecolor: 'white',
+                tickcolor: 'white',
+                tickfont: { color: 'white' }
+            },
             yaxis: {
                 range: [0, 20],
                 autorange: false,
+                linecolor: 'white',
+                tickcolor: 'white',
+                tickfont: { color: 'white' }
             },
             paper_bgcolor: 'black',
             plot_bgcolor: 'black',
+            showlegend: false,
         }
         Plotly.newPlot('graph', [g], layout);
 
