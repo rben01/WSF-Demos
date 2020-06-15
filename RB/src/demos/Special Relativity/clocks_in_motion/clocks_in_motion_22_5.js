@@ -26,9 +26,9 @@ const AX_BOUNDS = {
 };
 
 const speedSlider = document.getElementById("input-speed");
-// const nSpokesSlider = document.getElementById("input-n-spokes");
+const speedTextSpan = document.getElementById("text-speed");
 
-const highlightFGColor = "#5df";
+const arrowColor = "#aaa";
 
 const canvases = d3
 	.select("#viz-canvas")
@@ -53,8 +53,8 @@ const ARROWHEAD_ID = "marker-arrowhead";
 		attrs: {
 			d: "M 1 1 L 5 2.5 L 1 4 L 2 2.5 z",
 			"stroke-linejoin": "miter",
-			stroke: highlightFGColor,
-			fill: highlightFGColor,
+			stroke: arrowColor,
+			fill: arrowColor,
 		},
 	};
 	const defs = canvases.append("svg:defs");
@@ -101,7 +101,7 @@ const yDistScale = d3
 	.domain([0, RANGES.axis.span])
 	.range([0, AX_BOUNDS.yMin - AX_BOUNDS.yMax]);
 
-const RADIUS = (RANGES.axis.span / 2) * 0.9;
+const RADIUS = (RANGES.axis.span / 2) * 0.8;
 const line = d3
 	.line()
 	.x(p => xScale(p[0]))
@@ -117,12 +117,68 @@ const spokeXes = (() => {
 	return x;
 })();
 
-const COLORS = d3.schemeSet1;
+const arcArrowDatum = (() => {
+	const xys = [];
+	const radius = RADIUS * 1.2;
+	const span = RANGES.axis.span * 0.2;
+	const dx = span / 100;
+	const nx = Math.ceil(span / dx);
+	for (let i = nx; i >= -nx; --i) {
+		const x = RANGES.axis.mid + i * dx;
+		const y =
+			RANGES.axis.mid +
+			Math.sqrt(Math.pow(radius, 2) - Math.pow(x - RANGES.axis.mid, 2));
+		xys.push([x, y]);
+	}
+
+	const path = line(xys);
+
+	return {
+		shape: "path",
+		class: "drawing",
+		attrs: {
+			id: "arc",
+			d: path,
+			stroke: arrowColor,
+			"stroke-width": 3,
+			"marker-end": `url(#${ARROWHEAD_ID})`,
+		},
+	};
+})();
+
+const wheelGhostDatum = {
+	shape: "circle",
+	class: "drawing wheel-fixed",
+	attrs: {
+		id: "fixed-wheel",
+		cx: xScale(RANGES.axis.mid),
+		cy: yScale(RANGES.axis.mid),
+		r: xDistScale(RADIUS),
+		stroke: "#aaa",
+		"fill-opacity": 0,
+		"stroke-width": 1,
+		"stroke-dasharray": "2 2",
+	},
+};
+
+const COLORS = (() => {
+	const c = d3.schemeCategory10.map(color => d3.interpolateRgb(color, "white")(0.05));
+	c[5] = "#fe2";
+	return c;
+})();
+
+// const COLORS = (() => {
+// 	const colors = d3.schemeCategory10.filter((_, index) => index !== 5 && index !== 7);
+// 	colors[6] = colors[5];
+// 	colors[5] = "#ee3";
+// 	return colors.map(color => d3.interpolateRgb(color, "white")(0.05));
+// })();
 
 function getSpokeDatum({ fracOfC, nSpokes, i }) {
 	const klass = "drawing spoke";
-	const id = `spoke_${i}`;
+	const id = `spoke-${i}`;
 	const color = COLORS[i % COLORS.length];
+
 	if (i === 0) {
 		const xMid = xScale(RANGES.axis.mid);
 		return {
@@ -138,60 +194,40 @@ function getSpokeDatum({ fracOfC, nSpokes, i }) {
 				"stroke-width": 3,
 			},
 		};
-	} else {
-		const lf = lorentzFactor({ fracOfC });
-		const theta0 = Math.PI / 2 + (Math.PI / nSpokes) * i;
-		const xys = spokeXes
-			.map(x => {
-				const angle = theta0 + (x * lf * fracOfC * fracOfC) / RADIUS;
-
-				// A different branch of the tan function, which we don't want to include
-				if (
-					angle - EPSILON <= Math.PI * 0.5 ||
-					angle + EPSILON >= Math.PI * 1.5
-				) {
-					return null;
-				}
-				const y = x * lf * Math.tan(angle);
-				return [x, y, angle, Math.tan(angle) / Math.PI];
-			})
-			.filter(p => p !== null);
-		// if (i === nSpokes - 1) {
-		// 	console.log(xys);
-		// }
-
-		const path = line(xys);
-		return {
-			shape: "path",
-			class: klass,
-			attrs: {
-				id,
-				d: path,
-				stroke: color,
-				"fill-opacity": 0,
-				"stroke-width": 3,
-				"clip-path": "url(#wheelClip)",
-			},
-		};
 	}
+
+	const lf = lorentzFactor({ fracOfC });
+	const theta0 = Math.PI / 2 + (Math.PI / nSpokes) * i; // angle above the horizontal
+	const xys = spokeXes
+		.map(x => {
+			const angle = theta0 + (x * lf * fracOfC * fracOfC) / RADIUS;
+
+			// A different branch of the tan function, which we don't want to include
+			if (angle - EPSILON <= Math.PI * 0.5 || angle + EPSILON >= Math.PI * 1.5) {
+				return null;
+			}
+
+			const y = x * lf * Math.tan(angle);
+			return [x, y, angle, Math.tan(angle) / Math.PI];
+		})
+		.filter(p => p !== null);
+
+	const path = line(xys);
+	return {
+		shape: "path",
+		class: klass,
+		attrs: {
+			id,
+			d: path,
+			stroke: color,
+			"fill-opacity": 0,
+			"stroke-width": 3,
+			"clip-path": "url(#wheelClip)",
+		},
+	};
 }
 
 function getWheelAndSpokeData({ fracOfC, nSpokes }) {
-	const wheelGhostDatum = {
-		shape: "circle",
-		class: "drawing wheel-fixed",
-		attrs: {
-			id: "fixed-wheel",
-			cx: xScale(RANGES.axis.mid),
-			cy: yScale(RANGES.axis.mid),
-			r: xDistScale(RADIUS),
-			stroke: "#aaa",
-			"fill-opacity": 0,
-			"stroke-width": 1,
-			"stroke-dasharray": "2 2",
-		},
-	};
-
 	const movingWheelDatum = {
 		shape: "ellipse",
 		class: "drawing wheel-moving",
@@ -216,7 +252,7 @@ function getWheelAndSpokeData({ fracOfC, nSpokes }) {
 		children: [{ ...movingWheelDatum, attrs: { ...movingWheelDatum.attrs } }],
 	};
 
-	// Remove class to avoid catching the clip's child in the selection, and remove duplicate ID that will be used up in the data join
+	// Remove duplicate ID that will be used up in the data join
 	movingWheelClip.children.forEach(child => {
 		delete child.attrs.id;
 	});
@@ -240,6 +276,7 @@ function getWheelAndSpokeData({ fracOfC, nSpokes }) {
 	};
 
 	return [
+		arcArrowDatum,
 		wheelGhostDatum,
 		...spokesData,
 		movingWheelClip,
@@ -271,6 +308,8 @@ function update({ fracOfC, nSpokes } = {}) {
 		key: d => (d ? d.attrs.id : this.id),
 		selector: ".drawing",
 	});
+
+	speedTextSpan.textContent = fracOfC.toFixed(2);
 }
 
 const spokeButtons = (() => {
@@ -279,7 +318,6 @@ const spokeButtons = (() => {
 	for (let nSpokes = 4; nSpokes <= 6; ++nSpokes) {
 		const button = document.createElement("button");
 		button.textContent = nSpokes;
-		button.id = `spoke-button-${nSpokes}`;
 		button.classList.add("spoke-button");
 		button.value = nSpokes;
 		button.disabled = nSpokes === currNSpokes;
