@@ -1,4 +1,4 @@
-/* global applyDatum applyGraphicalObjs lorentzFactor */
+/* global applyDatum applyGraphicalObjs lorentzFactor C */
 const EPSILON = 0.0000001;
 
 const RANGES = {
@@ -16,8 +16,8 @@ const AXIS_MARGINS = {
 	left: 0.05,
 	right: 0.05,
 };
-const CANVAS_HEIGHT = 400;
-const CANVAS_WIDTH = 400;
+const CANVAS_HEIGHT = 550;
+const CANVAS_WIDTH = 550;
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
@@ -107,16 +107,6 @@ const line = d3
 	.x(p => xScale(p[0]))
 	.y(p => yScale(p[1]));
 
-const spokeXes = (() => {
-	const x = [];
-	const dx = RANGES.axis.span / 300;
-	const nx = Math.ceil(RADIUS / dx);
-	for (let i = -nx; i <= nx; ++i) {
-		x.push(RANGES.axis.mid + i * dx);
-	}
-	return x;
-})();
-
 const arcArrowDatum = (() => {
 	const xys = [];
 	const radius = RADIUS * 1.2;
@@ -198,9 +188,19 @@ function getSpokeDatum({ fracOfC, nSpokes, i }) {
 
 	const lf = lorentzFactor({ fracOfC });
 	const theta0 = Math.PI / 2 + (Math.PI / nSpokes) * i; // angle above the horizontal
-	const xys = spokeXes
+
+	const xs = [];
+	const dx = RANGES.axis.span / lf / 200;
+	const nx = Math.ceil(RADIUS / dx);
+	for (let i = -nx; i <= nx; ++i) {
+		xs.push(RANGES.axis.mid + i * dx);
+	}
+
+	const v = fracOfC * C;
+
+	const xys = xs
 		.map(x => {
-			const angle = theta0 + (x * lf * fracOfC * fracOfC) / RADIUS;
+			const angle = theta0 + (x * lf * lf * fracOfC * fracOfC) / RADIUS;
 
 			// A different branch of the tan function, which we don't want to include
 			if (angle - EPSILON <= Math.PI * 0.5 || angle + EPSILON >= Math.PI * 1.5) {
