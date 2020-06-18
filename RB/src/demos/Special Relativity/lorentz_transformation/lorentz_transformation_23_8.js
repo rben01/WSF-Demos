@@ -14,6 +14,8 @@ const YMIN = -1;
 const YMAX = 1;
 const YMID = (YMIN + YMAX) / 2;
 
+const KNOB_RADIUS = 0.2;
+
 const joystickAttrs = {
 	width: 100,
 	height: 100,
@@ -26,12 +28,17 @@ const joystickAttrs = {
 const xScale = d3.scaleLinear().domain([XMIN, XMAX]).range([0, joystickAttrs.width]);
 const yScale = d3.scaleLinear().domain([YMIN, YMAX]).range([joystickAttrs.height, 0]);
 
-const knobCoords = { x: XMID, y: YMID };
-const thetaScale = d3.scaleLinear().domain([XMIN, XMAX]).range([-Math.PI, Math.PI]);
+const knobCoords = { x: XMIN + KNOB_RADIUS, y: YMID };
+const thetaScale = d3
+	.scaleLinear()
+	.domain([XMIN + KNOB_RADIUS, XMAX - KNOB_RADIUS])
+	.range([Math.PI, 0])
+	.clamp(true);
 const phiScale = d3
 	.scaleLinear()
-	.domain([YMIN, YMAX])
-	.range([-Math.PI / 2, Math.PI / 2]);
+	.domain([YMIN + KNOB_RADIUS, YMAX - KNOB_RADIUS])
+	.range([-Math.PI / 2, Math.PI / 2])
+	.clamp(true);
 
 function matMulHelper(mat1, mat2) {
 	if (typeof mat1[0].length === "undefined") {
@@ -89,8 +96,8 @@ function getRingTraces(transformation) {
 
 	const traces = [];
 
-	const nThetas = 17;
-	const nPhis = 7;
+	const nThetas = 16;
+	const nPhis = 8;
 	const nPointsPerRing = 79;
 	const dTheta = (2 * Math.PI) / nThetas;
 	const dPhi = (2 * Math.PI) / nPhis;
@@ -199,9 +206,22 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 		torusPrime.z.push(newPoint[2]);
 	}
 
-	const velMag = 4.5;
-	const velPoint = matMul(getRz(-theta), getRy(-phi), [velMag, 0, 0]);
+	const velRotateTransformation = matMul(getRz(-theta), getRy(-phi));
+
+	const velMag = 4.85;
+	const velPoint = matMul(velRotateTransformation, [velMag, 0, 0]);
 	const scatterPoints = [velPoint, velPoint.map(c => -c)];
+
+	const arrowhead = TORUS_POINTS.arrowhead;
+	const rotArrowhead = { x: [], y: [], z: [] };
+	for (let i = 0; i < arrowhead.x.length; ++i) {
+		const coords = [arrowhead.x, arrowhead.y, arrowhead.z].map(l => l[i]);
+		const newPoint = matMul(velRotateTransformation, coords);
+
+		rotArrowhead.x.push(newPoint[0]);
+		rotArrowhead.y.push(newPoint[1]);
+		rotArrowhead.z.push(newPoint[2]);
+	}
 
 	const speedColor = "#28d";
 	const data = [
@@ -224,29 +244,31 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			y: scatterPoints.map(p => p[1]),
 			z: scatterPoints.map(p => p[2]),
 			mode: "lines",
-			line: { width: 3, color: speedColor },
+			line: { width: 5, color: speedColor },
 		},
 		{
-			type: "scatter3d",
+			type: "mesh3d",
 			scene: "scene1",
-			x: [velPoint[0]],
-			y: [velPoint[1]],
-			z: [velPoint[2]],
-			mode: "markers",
-			marker: { symbol: "diamond", color: speedColor },
+			x: rotArrowhead.x,
+			y: rotArrowhead.y,
+			z: rotArrowhead.z,
+			i: arrowhead.simplices.map(s => s[0]),
+			j: arrowhead.simplices.map(s => s[1]),
+			k: arrowhead.simplices.map(s => s[2]),
+			facecolor: TORUS_POINTS.arrowhead.simplices.map(() => speedColor),
 		},
 		...getRingTraces(transformation),
 	];
 	console.log(velPoint);
 
 	const axesAttrs = {
-		// showgrid: false,
-		// visible: false,
+		showgrid: false,
+		visible: false,
 		showspikes: false,
 	};
 
 	const axisRange = (() => {
-		const range = 4.8;
+		const range = 5.3;
 		return [-range, range];
 	})();
 
@@ -272,8 +294,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
 				x: 0,
-				y: -1.7,
-				z: 1,
+				y: -1.4,
+				z: 0.9,
 			},
 			projection: { type: "perspective" },
 		};
@@ -306,8 +328,8 @@ joystick
 const lines = applyGraphicalObjs(
 	joystick,
 	[
-		{ x1: XMIN, y1: YMID, x2: XMAX, y2: YMID },
-		{ x1: XMID, y1: YMIN, x2: XMID, y2: YMAX },
+		{ x1: XMIN, y1: knobCoords.y, x2: XMAX, y2: knobCoords.y },
+		{ x1: knobCoords.x, y1: YMIN, x2: knobCoords.x, y2: YMAX },
 	].map(attrs => {
 		const x1 = xScale(attrs.x1);
 		const y1 = yScale(attrs.y1);
@@ -334,7 +356,7 @@ const knob = applyGraphicalObjs(joystick, [
 		attrs: {
 			cx: xScale(knobCoords.x),
 			cy: yScale(knobCoords.y),
-			r: 10,
+			r: xScale(KNOB_RADIUS) - xScale(0),
 			fill: joystickAttrs.knobColor,
 			stroke: joystickAttrs.knobOutline,
 			"stroke-width": 1,
@@ -344,22 +366,28 @@ const knob = applyGraphicalObjs(joystick, [
 ]);
 
 function moveJoystick(ex, ey) {
-	const x = xScale.invert(ex);
-	const y = yScale.invert(ey);
+	const cx = xScale.invert(ex);
+	const cy = yScale.invert(ey);
 
-	if (!(XMIN < x && x < XMAX && YMIN < y && y < YMAX)) {
+	if (!(XMIN < cx && cx < XMAX && YMIN < cy && cy < YMAX)) {
 		return;
 	}
 
-	knob.attr("cx", ex).attr("cy", ey);
+	const x = Math.max(XMIN + KNOB_RADIUS, Math.min(cx, XMAX - KNOB_RADIUS));
+	const y = Math.max(YMIN + KNOB_RADIUS, Math.min(cy, YMAX - KNOB_RADIUS));
 
 	knobCoords.x = x;
 	knobCoords.y = y;
 
+	const sx = xScale(x);
+	const sy = yScale(y);
+
+	knob.attr("cx", xScale(x)).attr("cy", yScale(y));
+
 	lines
 		.data([
-			{ x1: xScale(XMIN), y1: ey, x2: xScale(XMAX), y2: ey },
-			{ x1: ex, y1: yScale(YMIN), x2: ex, y2: yScale(YMAX) },
+			{ x1: xScale(XMIN), y1: sy, x2: xScale(XMAX), y2: sy },
+			{ x1: sx, y1: yScale(YMIN), x2: sx, y2: yScale(YMAX) },
 		])
 		.attr("x1", d => d.x1)
 		.attr("y1", d => d.y1)

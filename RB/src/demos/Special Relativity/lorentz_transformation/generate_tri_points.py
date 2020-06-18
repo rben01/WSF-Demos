@@ -16,7 +16,7 @@ theta1d = theta2d.flatten()
 phi1d = phi2d.flatten()
 
 
-def get_xyz(theta, phi):
+def get_torus_xyz(theta, phi):
     MAJOR_RADIUS = 3
     MINOR_RADIUS = 1
     x = (MAJOR_RADIUS + MINOR_RADIUS * np.cos(phi)) * np.cos(theta)
@@ -25,16 +25,30 @@ def get_xyz(theta, phi):
     return x, y, z
 
 
-x1d, y1d, z1d = get_xyz(theta1d, phi1d)
-x2d, y2d, z2d = get_xyz(theta2d, phi2d)
+# An arrow pointing in the +x dir
+def get_arrow_trisurf():
+    DISTANCE = 4.8
+    HEIGHT = 0.5
+    RADIUS = 0.25
+    theta = np.linspace(0, 2 * np.pi, 30)
 
-# rings = []
-# points = np.array([x2d, y2d, z2d])
-# for i in range(points.shape[1]):
-#     rings.append(points[:, i, :].T.tolist())
-# for i in range(points.shape[2]):
-#     rings.append(points[:, :, 2].T.tolist())
+    x = DISTANCE * np.ones_like(theta)
+    y = RADIUS * np.cos(theta)
+    z = RADIUS * np.sin(theta)
 
+    x = [*x, HEIGHT + DISTANCE]
+    z = [*z, 0]
+    y = [*y, 0]
+
+    phi = [*np.zeros_like(theta), 1]
+    theta = [*theta, 0]
+
+    tri = Delaunay(np.vstack([theta, phi]).T)
+
+    return {"x": x, "y": y, "z": z, "simplices": tri.simplices.tolist()}
+
+
+x1d, y1d, z1d = get_torus_xyz(theta1d, phi1d)
 
 points2D = np.vstack([theta1d, phi1d]).T
 tri = Delaunay(points2D)
@@ -45,7 +59,7 @@ data = {
     "y": y1d.tolist(),
     "z": z1d.tolist(),
     "simplices": simplices.tolist(),
-    # "rings": rings,
+    "arrowhead": get_arrow_trisurf(),
 }
 
 data_str = json.dumps(data, indent=0)
