@@ -8,7 +8,7 @@ from scipy.spatial import Delaunay
 
 
 # https://plotly.com/python/trisurf/#torus
-n = 10
+n = 50
 theta1d = np.linspace(0, 2 * np.pi, n)
 phi1d = np.linspace(0, 2 * np.pi, n)
 theta2d, phi2d = np.meshgrid(theta1d, phi1d)
