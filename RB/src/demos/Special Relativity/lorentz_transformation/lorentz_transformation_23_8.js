@@ -181,10 +181,9 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 
 	const unrotatePhiAngle = Math.atan2(Math.sin(phi), Math.cos(phi) / gamma);
 
-	const unrotateTransformation = matMul(getRz(-theta), getRy(-unrotatePhiAngle));
-
 	const transformation = matMul(
-		unrotateTransformation,
+		getRz(-theta),
+		getRy(-unrotatePhiAngle),
 		getLx(),
 		getRy(phi),
 		getRz(theta),
@@ -201,7 +200,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 	}
 
 	const velMag = 4.5;
-	const velPoint = matMul(unrotateTransformation, [velMag, 0, 0]);
+	const velPoint = matMul(getRz(-theta), getRy(-phi), [velMag, 0, 0]);
 	const scatterPoints = [velPoint, velPoint.map(c => -c)];
 
 	const speedColor = "#28d";
@@ -241,8 +240,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 	console.log(velPoint);
 
 	const axesAttrs = {
-		showgrid: false,
-		visible: false,
+		// showgrid: false,
+		// visible: false,
 		showspikes: false,
 	};
 
@@ -252,8 +251,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 	})();
 
 	const layout = {
-		width: 600,
-		height: 600,
+		width: 450,
+		height: 450,
 		hovermode: false,
 		showlegend: false,
 		margin: { t: 0, b: 0, l: 0, r: 0 },
