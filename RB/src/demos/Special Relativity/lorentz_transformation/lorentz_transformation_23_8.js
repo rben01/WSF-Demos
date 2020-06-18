@@ -27,7 +27,7 @@ const joystick = d3
 	.attr("width", joystickAttrs.width)
 	.attr("height", joystickAttrs.height);
 
-const joystickBg = joystick
+joystick
 	.append("rect")
 	.attr("x", 0)
 	.attr("y", 0)
@@ -118,19 +118,103 @@ joystick
 		mouseIsDown = false;
 	});
 
-function plotTorus(v, theta, phi) {
-	const cosPhi = Math.cos(phi);
+function plotTorus(speed, theta, phi) {
 	const cosTheta = Math.cos(theta);
 	const sinTheta = Math.sin(theta);
+	const cosPhi = Math.cos(phi);
+	const sinPhi = Math.sin(phi);
 
-	// const vx =
+	const v = {
+		s: speed,
+		x: speed * cosPhi * cosTheta,
+		y: speed * cosPhi * sinTheta,
+		z: speed * sinPhi,
+	};
+
+	// Will have lots of needless keys but idrc
+	const vEntries = Object.entries(v);
+	vEntries.forEach(([ax1, speed1]) => {
+		vEntries.forEach(([ax2, speed2]) => {
+			const key = `${ax1}${ax2}`;
+			v[key] = speed1 * speed2;
+		});
+	});
+
+	if (speed === 0) {
+		v.ss = 1;
+	}
+	console.log(v);
+
+	const lf = lorentzFactor({ fracOfC: speed });
+	const matrix = {
+		t: [lf, -lf * v.x, -lf * v.y, -lf * v.z],
+		x: [
+			-lf * v.x,
+			1 + ((lf - 1) * v.xx) / v.ss,
+			((lf - 1) * v.xy) / v.ss,
+			((lf - 1) * v.xz) / v.ss,
+		],
+		y: [
+			-lf * v.y,
+			((lf - 1) * v.yx) / v.ss,
+			1 + ((lf - 1) * v.yy) / v.ss,
+			((lf - 1) * v.yz) / v.ss,
+		],
+		z: [
+			-lf * v.z,
+			((lf - 1) * v.zx) / v.ss,
+			((lf - 1) * v.zy) / v.ss,
+			1 + ((lf - 1) * v.zz) / v.ss,
+		],
+	};
+
+	const torusPrime = { x: [], y: [], z: [] };
+	const axes = Object.keys(torusPrime);
+	for (let i = 0; i < TORUS_POINTS.x.length; ++i) {
+		const coords = [TORUS_POINTS.x, TORUS_POINTS.y, TORUS_POINTS.z].map(l => l[i]);
+		const column = [0, ...coords];
+
+		axes.forEach(axis => {
+			const row = matrix[axis];
+			let sum = 0;
+			for (let j = 0; j < row.length; ++j) {
+				sum += row[j] * column[j];
+			}
+
+			const oldVal = TORUS_POINTS[axis][i];
+			const newVal = oldVal === 0 ? 0 : (oldVal * oldVal) / sum;
+			torusPrime[axis].push(newVal);
+		});
+	}
+
+	console.log(TORUS_POINTS);
+	console.log(torusPrime);
+
+	// const primedSpeeds = {};
+	// Object.entries(matrix).forEach(([axis, row]) => {
+	// 	let sum = 0;
+	// 	for (let i = 0; i < row.length; ++i) {
+	// 		sum += row[i] * vector[i];
+	// 	}
+	// 	primedSpeeds[axis] = sum;
+	// });
+	// console.log(primedSpeeds);
+
+	// const points = {};
+	// axes.forEach(axis => (points[axis] = []));
+	// Because torus is centered on the origin, scaling is as easy as multiplying (no translation to worry about)
+	// for (let i = 0; i < TORUS_POINTS.x.length; ++i) {
+	// 	axes.forEach(axis => {
+	// 		points[axis].push(gammas[axis]);
+	// 	});
+	// }
 
 	const data = [
 		{
 			type: "mesh3d",
-			x: TORUS_POINTS.x,
-			y: TORUS_POINTS.y,
-			z: TORUS_POINTS.z,
+			x: torusPrime.x,
+			y: torusPrime.y,
+			z: torusPrime.z,
 			i: TORUS_POINTS.simplices.map(s => s[0]),
 			j: TORUS_POINTS.simplices.map(s => s[1]),
 			k: TORUS_POINTS.simplices.map(s => s[2]),
@@ -140,9 +224,17 @@ function plotTorus(v, theta, phi) {
 		},
 	];
 
+	const axesAttrs = {
+		showgrid: false,
+		visible: false,
+		showspikes: false,
+	};
 	const layout = {
 		scene1: {
-			// xaxis: { showgrid: false, visible: false, showspikes: false },
+			xaxis: axesAttrs,
+			yaxis: axesAttrs,
+			zaxis: axesAttrs,
+			aspectmode: "data",
 			// yaxis: { showgrid: false, visible: false, showspikes: false },
 			// zaxis: { showgrid: false, visible: false, showspikes: false },
 		},
@@ -151,4 +243,4 @@ function plotTorus(v, theta, phi) {
 	Plotly.react("plot", data, layout);
 }
 
-plotTorus();
+plotTorus(0.9, 0, 0);
