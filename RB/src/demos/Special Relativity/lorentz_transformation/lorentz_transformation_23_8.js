@@ -118,6 +118,28 @@ joystick
 		mouseIsDown = false;
 	});
 
+function matMul(matrix, column, point) {
+	const newPoint = {};
+	const sums = {};
+	Object.entries(matrix).forEach(([axis, row]) => {
+		let boost = 0;
+		for (let j = 0; j < row.length; ++j) {
+			boost += row[j] * column[j];
+		}
+
+		const oldVal = point[axis];
+		const newVal = Math.abs(boost) < 0.001 ? 0 : (oldVal * oldVal) / boost;
+		newPoint[axis] = newVal;
+		sums[axis] = boost;
+	});
+	if (Math.abs(newPoint.z) > 20) {
+		console.log(matrix);
+		console.log(column);
+		console.log(newPoint, sums);
+	}
+	return newPoint;
+}
+
 function plotTorus(speed, theta, phi) {
 	const cosTheta = Math.cos(theta);
 	const sinTheta = Math.sin(theta);
@@ -143,6 +165,7 @@ function plotTorus(speed, theta, phi) {
 	if (speed === 0) {
 		v.ss = 1;
 	}
+
 	console.log(v);
 
 	const lf = lorentzFactor({ fracOfC: speed });
@@ -167,69 +190,132 @@ function plotTorus(speed, theta, phi) {
 			1 + ((lf - 1) * v.zz) / v.ss,
 		],
 	};
+	console.log(matrix);
 
 	const torusPrime = { x: [], y: [], z: [] };
 	const axes = Object.keys(torusPrime);
 	for (let i = 0; i < TORUS_POINTS.x.length; ++i) {
 		const coords = [TORUS_POINTS.x, TORUS_POINTS.y, TORUS_POINTS.z].map(l => l[i]);
 		const column = [0, ...coords];
+		const point = { x: coords[0], y: coords[1], z: coords[2] };
+
+		const newPoint = matMul(matrix, column, point);
 
 		axes.forEach(axis => {
-			const row = matrix[axis];
-			let sum = 0;
-			for (let j = 0; j < row.length; ++j) {
-				sum += row[j] * column[j];
-			}
-
-			const oldVal = TORUS_POINTS[axis][i];
-			const newVal = oldVal === 0 ? 0 : (oldVal * oldVal) / sum;
-			torusPrime[axis].push(newVal);
+			torusPrime[axis].push(newPoint[axis]);
 		});
 	}
 
-	console.log(TORUS_POINTS);
-	console.log(torusPrime);
+	const ringTraces = (() => {
+		const majorRadius = 3;
+		const minorRadius = 1.001;
 
-	// const primedSpeeds = {};
-	// Object.entries(matrix).forEach(([axis, row]) => {
-	// 	let sum = 0;
-	// 	for (let i = 0; i < row.length; ++i) {
-	// 		sum += row[i] * vector[i];
-	// 	}
-	// 	primedSpeeds[axis] = sum;
-	// });
-	// console.log(primedSpeeds);
+		function getPoint(theta, phi) {
+			const x = (majorRadius + minorRadius * Math.cos(phi)) * Math.cos(theta);
+			const y = (majorRadius + minorRadius * Math.cos(phi)) * Math.sin(theta);
+			const z = minorRadius * Math.sin(phi);
 
-	// const points = {};
-	// axes.forEach(axis => (points[axis] = []));
-	// Because torus is centered on the origin, scaling is as easy as multiplying (no translation to worry about)
-	// for (let i = 0; i < TORUS_POINTS.x.length; ++i) {
-	// 	axes.forEach(axis => {
-	// 		points[axis].push(gammas[axis]);
-	// 	});
-	// }
+			const column = [0, x, y, z];
+			const point = { x, y, z };
+
+			const newPoint = matMul(matrix, column, point);
+			return newPoint;
+		}
+
+		const traces = [];
+
+		const nThetas = 17;
+		const nPhis = 7;
+		const nPointsPerRing = 79;
+		const dTheta = (2 * Math.PI) / nThetas;
+		const dPhi = (2 * Math.PI) / nPhis;
+		const dRingPoints = (2 * Math.PI) / nPointsPerRing;
+
+		const ringTraceAttrs = {
+			type: "scatter3d",
+			mode: "lines",
+			line: {
+				width: 2,
+				color: "#bbb",
+			},
+		};
+
+		for (let i = 0; i <= nThetas; ++i) {
+			const primedRing = { x: [], y: [], z: [] };
+			const theta = i * dTheta;
+			for (let j = 0; j <= nPointsPerRing; ++j) {
+				const phi = j * dRingPoints;
+
+				const point = getPoint(theta, phi);
+				axes.forEach(axis => {
+					const newVal = point[axis];
+					primedRing[axis].push(newVal);
+				});
+			}
+			traces.push({
+				...primedRing,
+				...ringTraceAttrs,
+			});
+		}
+		for (let i = 0; i <= nPhis; ++i) {
+			const primedRing = { x: [], y: [], z: [] };
+			const phi = i * dPhi;
+			for (let j = 0; j <= nPointsPerRing; ++j) {
+				const theta = j * dRingPoints;
+
+				const point = getPoint(theta, phi);
+				axes.forEach(axis => {
+					const newVal = point[axis];
+					primedRing[axis].push(newVal);
+				});
+			}
+			traces.push({
+				...primedRing,
+				...ringTraceAttrs,
+			});
+		}
+
+		return traces;
+	})();
 
 	const data = [
 		{
 			type: "mesh3d",
+			scene: "scene1",
 			x: torusPrime.x,
 			y: torusPrime.y,
 			z: torusPrime.z,
 			i: TORUS_POINTS.simplices.map(s => s[0]),
 			j: TORUS_POINTS.simplices.map(s => s[1]),
 			k: TORUS_POINTS.simplices.map(s => s[2]),
-			mode: "line",
-			scene: "scene1",
+			facecolor: d3
+				.range(TORUS_POINTS.simplices.length)
+				.map(i => d3.interpolateViridis(i / TORUS_POINTS.simplices.length)),
 			// marker: { size: 1, color: "red" },
 		},
+		// {
+		// 	type: "mesh3d",
+		// 	scene: "scene1",
+		// 	x: TORUS_POINTS.x,
+		// 	y: TORUS_POINTS.y,
+		// 	z: TORUS_POINTS.z,
+		// 	i: TORUS_POINTS.simplices.map(s => s[0]),
+		// 	j: TORUS_POINTS.simplices.map(s => s[1]),
+		// 	k: TORUS_POINTS.simplices.map(s => s[2]),
+
+		// 	// marker: { size: 1, color: "red" },
+		// },
+		// ...ringTraces,
 	];
+	console.log(data);
 
 	const axesAttrs = {
-		showgrid: false,
-		visible: false,
-		showspikes: false,
+		// showgrid: false,
+		// visible: false,
+		// showspikes: false,
 	};
 	const layout = {
+		showlegend: false,
 		scene1: {
 			xaxis: axesAttrs,
 			yaxis: axesAttrs,
@@ -243,4 +329,4 @@ function plotTorus(speed, theta, phi) {
 	Plotly.react("plot", data, layout);
 }
 
-plotTorus(0.9, 0, 0);
+plotTorus(0.9, 0, Math.PI / 3);
