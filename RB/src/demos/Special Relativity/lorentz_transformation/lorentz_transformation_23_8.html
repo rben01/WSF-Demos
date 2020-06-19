@@ -84,36 +84,53 @@
 						max=".999"
 						step=".001"
 						value="0"
-						oninput="plotTorus({speed: this.value})"
+						oninput="updateSpeed({speed: this.value, fromUserInteraction:true});stopAnimation();"
 					/>
 				</label>
 			</span>
 		</div>
-		<br />
-		<div class="frames-box">
-			<div class="frame">
-				<table>
-					<tr>
-						<td class="eqn-left">𝑣</td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-v" class="sci-num highlighted-text">0</span>𝑐
-						</td>
-					</tr>
-					<tr>
-						<td class="eqn-left">𝛾</td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-gamma" class="sci-num highlighted-text"
-								>0</span
-							>
-						</td>
-					</tr>
-				</table>
-			</div>
+		<div style="display: flex; flex-direction: row;">
+			<div style="width: 6em;">
+				<span
+					><button
+						id="start-button"
+						class="play-button"
+						onclick="toggleAnimation();"
+					>
+						Start
+					</button></span
+				>
+				<div class="frames-box">
+					<div class="frame">
+						<table>
+							<tr>
+								<td class="eqn-left">𝑣</td>
+								<td class="eqn-middle">=</td>
+								<td class="eqn-right">
+									<span id="text-v" class="sci-num highlighted-text"
+										>0</span
+									>𝑐
+								</td>
+							</tr>
+							<tr>
+								<td class="eqn-left">𝛾</td>
+								<td class="eqn-middle">=</td>
+								<td class="eqn-right">
+									<span
+										id="text-gamma"
+										class="sci-num highlighted-text"
+										>0</span
+									>
+								</td>
+							</tr>
+						</table>
+					</div>
 
+					<div class="divider"></div>
+				</div>
+			</div>
 			<div class="divider"></div>
-			<div style="margin: auto;">
+			<div>
 				<div id="plot"></div>
 			</div>
 		</div>

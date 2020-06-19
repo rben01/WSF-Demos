@@ -18,7 +18,7 @@ phi1d = phi2d.flatten()
 
 def get_torus_xyz(theta, phi):
     MAJOR_RADIUS = 3
-    MINOR_RADIUS = 1
+    MINOR_RADIUS = 1.5
     x = (MAJOR_RADIUS + MINOR_RADIUS * np.cos(phi)) * np.cos(theta)
     y = (MAJOR_RADIUS + MINOR_RADIUS * np.cos(phi)) * np.sin(theta)
     z = MINOR_RADIUS * np.sin(phi)
@@ -27,9 +27,9 @@ def get_torus_xyz(theta, phi):
 
 # An arrow pointing in the +x dir
 def get_arrow_trisurf():
-    DISTANCE = 4.8
-    HEIGHT = 0.5
-    RADIUS = 0.25
+    HEIGHT = 0.9
+    DISTANCE = 6.5 - HEIGHT
+    RADIUS = 0.33
     theta = np.linspace(0, 2 * np.pi, 30)
 
     x = DISTANCE * np.ones_like(theta)

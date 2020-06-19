@@ -3,9 +3,10 @@ const speedSlider = document.getElementById("input-v");
 const speedSpan = document.getElementById("text-v");
 const gammaSpan = document.getElementById("text-gamma");
 const graphDiv = document.getElementById("plot");
+const playButton = document.getElementById("start-button");
 
 const MAJOR_RADIUS = 3;
-const MINOR_RADIUS = 1.0001;
+const MINOR_RADIUS = 1.5001;
 
 const XMIN = -1;
 const XMAX = 1;
@@ -96,8 +97,8 @@ function getRingTraces(transformation) {
 
 	const traces = [];
 
-	const nThetas = 16;
-	const nPhis = 8;
+	const nThetas = 20;
+	const nPhis = 12;
 	const nPointsPerRing = 79;
 	const dTheta = (2 * Math.PI) / nThetas;
 	const dPhi = (2 * Math.PI) / nPhis;
@@ -108,7 +109,7 @@ function getRingTraces(transformation) {
 		mode: "lines",
 		line: {
 			width: 2,
-			color: "#444",
+			color: "#333",
 		},
 	};
 
@@ -208,9 +209,12 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 
 	const velRotateTransformation = matMul(getRz(-theta), getRy(-phi));
 
-	const velMag = 4.85;
-	const velPoint = matMul(velRotateTransformation, [velMag, 0, 0]);
-	const scatterPoints = [velPoint, velPoint.map(c => -c)];
+	const velMag = 6.51;
+	const [velPointHead, velPointTail] = [velMag - 0.9, -velMag].map(vm =>
+		matMul(velRotateTransformation, [vm, 0, 0]),
+	);
+
+	const scatterPoints = [velPointHead, velPointTail];
 
 	const arrowhead = TORUS_POINTS.arrowhead;
 	const rotArrowhead = { x: [], y: [], z: [] };
@@ -223,7 +227,14 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 		rotArrowhead.z.push(newPoint[2]);
 	}
 
-	const speedColor = "#28d";
+	const lighting = {
+		ambient: 0.7,
+		roughness: 0.9,
+		diffuse: 0.9,
+		specular: 0.1,
+	};
+
+	const speedColor = "#38e";
 	const data = [
 		{
 			type: "mesh3d",
@@ -234,7 +245,9 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			i: TORUS_POINTS.simplices.map(s => s[0]),
 			j: TORUS_POINTS.simplices.map(s => s[1]),
 			k: TORUS_POINTS.simplices.map(s => s[2]),
-			facecolor: TORUS_POINTS.simplices.map(() => "#e20"),
+			facecolor: TORUS_POINTS.simplices.map(() => "#f21200"),
+			lighting,
+
 			// marker: { size: 1, color: "red" },
 		},
 		{
@@ -244,7 +257,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			y: scatterPoints.map(p => p[1]),
 			z: scatterPoints.map(p => p[2]),
 			mode: "lines",
-			line: { width: 5, color: speedColor },
+			line: { width: 10, color: speedColor },
+			lightposition: { x: 100, y: 100, z: 100 },
 		},
 		{
 			type: "mesh3d",
@@ -256,10 +270,12 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			j: arrowhead.simplices.map(s => s[1]),
 			k: arrowhead.simplices.map(s => s[2]),
 			facecolor: TORUS_POINTS.arrowhead.simplices.map(() => speedColor),
+			lighting: { ...lighting, ambient: 0.8 },
+			lightposition: { x: 100, y: 100, z: 100 },
 		},
 		...getRingTraces(transformation),
 	];
-	console.log(velPoint);
+	console.log(data.slice(0, 2));
 
 	const axesAttrs = {
 		showgrid: false,
@@ -268,7 +284,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 	};
 
 	const axisRange = (() => {
-		const range = 5.3;
+		const range = 14;
 		return [-range, range];
 	})();
 
@@ -278,6 +294,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 		hovermode: false,
 		showlegend: false,
 		margin: { t: 0, b: 0, l: 0, r: 0 },
+		paper_bgcolor: "black",
 		scene1: {
 			xaxis: { range: axisRange, ...axesAttrs },
 			yaxis: { range: axisRange, ...axesAttrs },
@@ -294,13 +311,12 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
 				x: 0,
-				y: -1.4,
-				z: 0.9,
+				y: -0.5,
+				z: 0.45,
 			},
 			projection: { type: "perspective" },
 		};
 	}
-	console.log(layout.scene1.camera);
 
 	const config = { displayModeBar: false, scrollZoom: false };
 
@@ -415,3 +431,71 @@ joystick
 	});
 
 plotTorus({ restoreCamera: false });
+
+const ANIMATION_DURATION_SEC = 7;
+const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
+const FPS = 37;
+const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
+const playbackInfo = {
+	animationIsPlaying: false,
+	animationTimer: null,
+	currFrame: 0,
+	speeds: {
+		min: 0,
+		max: parseFloat(speedSlider.max),
+	},
+};
+
+// eslint-disable-next-line no-unused-vars
+function updateSpeed({ speed, fromUserInteraction } = { fromUserInteraction: false }) {
+	speed = parseFloat(speed);
+	speedSlider.value = speed;
+
+	plotTorus({ speed });
+
+	if (fromUserInteraction) {
+		playbackInfo.currFrame = Math.round(speed * N_FRAMES);
+	}
+}
+
+function stopAnimation() {
+	playbackInfo.animationIsPlaying = false;
+	clearInterval(playbackInfo.animationTimer);
+	playButton.innerText = "Start";
+}
+
+// eslint-disable-next-line no-unused-vars
+function toggleAnimation() {
+	console.log(playbackInfo.animationIsPlaying);
+
+	if (playbackInfo.animationIsPlaying) {
+		stopAnimation();
+		return;
+	}
+
+	playbackInfo.animationIsPlaying = true;
+	playButton.textContent = "Pause";
+
+	if (playbackInfo.currFrame >= N_FRAMES) {
+		playbackInfo.currFrame = 0;
+	}
+
+	const interpolator = d3.interpolateNumber(
+		playbackInfo.speeds.min,
+		playbackInfo.speeds.max,
+	);
+
+	playbackInfo.animationTimer = setInterval(() => {
+		if (playbackInfo.currFrame > N_FRAMES) {
+			updateSpeed({ speed: speedSlider.max });
+			stopAnimation();
+			return;
+		}
+
+		const t = playbackInfo.currFrame / N_FRAMES;
+		const speed = interpolator(t);
+
+		updateSpeed({ speed });
+		playbackInfo.currFrame += 2;
+	}, ANIMATION_DURATION_MS / N_FRAMES);
+}
