@@ -209,7 +209,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 
 	const velRotateTransformation = matMul(getRz(-theta), getRy(-phi));
 
-	const velMag = 6.51;
+	const velMag = 7.91;
 	const [velPointHead, velPointTail] = [velMag - 0.9, -velMag].map(vm =>
 		matMul(velRotateTransformation, [vm, 0, 0]),
 	);
@@ -258,7 +258,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			y: scatterPoints.map(p => p[1]),
 			z: scatterPoints.map(p => p[2]),
 			mode: "lines",
-			line: { width: 10, color: speedColor },
+			line: { width: 11, color: speedColor },
 			lightposition: null,
 		},
 		{
@@ -290,8 +290,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 	})();
 
 	const layout = {
-		width: 450,
-		height: 450,
+		width: 500,
+		height: 500,
 		hovermode: false,
 		showlegend: false,
 		margin: { t: 0, b: 0, l: 0, r: 0 },
@@ -312,8 +312,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
 				x: 0,
-				y: -0.5,
-				z: 0.45,
+				y: -0.6,
+				z: 0.5,
 			},
 			projection: { type: "perspective" },
 		};

@@ -27,9 +27,9 @@ def get_torus_xyz(theta, phi):
 
 # An arrow pointing in the +x dir
 def get_arrow_trisurf():
-    HEIGHT = 0.9
-    DISTANCE = 6.5 - HEIGHT
-    RADIUS = 0.33
+    HEIGHT = 1
+    DISTANCE = 7.9 - HEIGHT
+    RADIUS = 0.38
     theta = np.linspace(0, 2 * np.pi, 30)
 
     x = DISTANCE * np.ones_like(theta)
