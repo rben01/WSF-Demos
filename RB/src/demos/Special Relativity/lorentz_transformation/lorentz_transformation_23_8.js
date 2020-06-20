@@ -247,6 +247,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			k: TORUS_POINTS.simplices.map(s => s[2]),
 			facecolor: TORUS_POINTS.simplices.map(() => "#f21200"),
 			lighting,
+			lightposition: null,
 
 			// marker: { size: 1, color: "red" },
 		},
@@ -258,7 +259,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			z: scatterPoints.map(p => p[2]),
 			mode: "lines",
 			line: { width: 10, color: speedColor },
-			lightposition: { x: 100, y: 100, z: 100 },
+			lightposition: null,
 		},
 		{
 			type: "mesh3d",
@@ -270,8 +271,8 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			j: arrowhead.simplices.map(s => s[1]),
 			k: arrowhead.simplices.map(s => s[2]),
 			facecolor: TORUS_POINTS.arrowhead.simplices.map(() => speedColor),
-			lighting: { ...lighting, ambient: 0.8 },
-			lightposition: { x: 100, y: 100, z: 100 },
+			// lighting: { ...lighting, ambient: 0.8 },
+			lightposition: null,
 		},
 		...getRingTraces(transformation),
 	];
