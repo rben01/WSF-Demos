@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<script
+			type="text/javascript"
+			src="https://cdn.plot.ly/plotly-latest.min.js"
+		></script>
+		<style>
+			.slider-label-custom {
+				min-width: 25em;
+				font-size: 80%;
+				margin-right: 0.2em;
+			}
+
+			.ib {
+				display: inline-block;
+				margin-top: auto;
+				margin-bottom: auto;
+				vertical-align: middle;
+			}
+
+			.flex-row {
+				display: inline-block;
+			}
+
+			.frame {
+				display: inline-block;
+				width: 300px;
+			}
+
+			.divider {
+				width: 50px;
+				display: inline-block;
+			}
+
+			.frame-title {
+				font-weight: bold;
+			}
+
+			.minus-sign {
+				margin-right: 1px;
+			}
+
+			.prime {
+				width: 0px;
+				padding: 0px;
+				margin: 0px;
+				margin-right: -2px;
+			}
+
+			.plot-container {
+				display: inline-block;
+				text-align: center;
+			}
+
+			.reset-button {
+				margin-left: 20px;
+				margin-right: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑥-Component of Speed of Object in Stationary Frame:
+					</span>
+					<input
+						type="range"
+						id="input-vx"
+						name="input-vx"
+						min="-.99"
+						max=".99"
+						step=".01"
+						value="0"
+						oninput="update({vx:this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑦-Component of Speed of Object in Stationary Frame:
+					</span>
+					<input
+						type="range"
+						id="input-vy"
+						name="input-vy"
+						min="-.99"
+						max=".99"
+						step=".01"
+						value="0"
+						oninput="update({vy:this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑧-Component of Speed of Object in Stationary Frame:
+					</span>
+					<input
+						type="range"
+						id="input-vz"
+						name="input-vz"
+						min="-.99"
+						max=".99"
+						step=".01"
+						value="0"
+						oninput="update({vz:this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Relative Velocity Between Frames:
+					</span>
+					<input
+						type="range"
+						id="input-vr"
+						name="input-vr"
+						min="-.99"
+						max=".99"
+						step=".01"
+						value="0"
+						oninput="update({vr:this.value})"
+					/>
+				</label>
+			</span>
+		</div>
+		<div>
+			<span class="plot-title">Velocity as Seen in Stationary Frame</span
+			><button class="play-button reset-button" onclick="reset()">Reset</button
+			><span class="plot-title">Velocity as Seen in Moving Frame</span>
+		</div>
+		<div>
+			<div class="plot-container">
+				<div id="plot"></div>
+				<div>
+					<span class="velocity"
+						>𝑢 =
+						<span class="sci-num"
+							>(<span id="text-vx" class="highlighted-text">0</span>,
+							<span id="text-vy" class="highlighted-text">0</span>,
+							<span id="text-vz" class="highlighted-text">0</span>)</span
+						>𝑐</span
+					>
+					<div style="display: inline-block; width: 250px;"></div>
+					<span class="velocity"
+						>𝑢<span class="prime">′</span> =
+						<span class="sci-num"
+							>(<span id="text-vxp" class="highlighted-text">0</span>,
+							<span id="text-vyp" class="highlighted-text">0</span>,
+							<span id="text-vzp" class="highlighted-text">0</span>)</span
+						>𝑐</span
+					>
+				</div>
+				<div>
+					<span
+						><i
+							>The moving frame of reference is moving along the positive
+							𝑥 axis of the stationary frame with a speed 𝑣 =
+							<span id="text-vr" class="highlighted-text sci-num"></span
+							>𝑐</i
+						></span
+					>
+				</div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./arrowhead.js"></script>
+		<script type="text/javascript" src="./combining_velocities_25_5.js"></script>
+	</body>
+</html>
