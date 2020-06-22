@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs Plotly TORUS_POINTS lorentzFactor */
+/* global applyGraphicalObjs Plotly TORUS_POINTS lorentzFactor, matMul */
 const speedSlider = document.getElementById("input-v");
 const speedSpan = document.getElementById("text-v");
 const gammaSpan = document.getElementById("text-gamma");
@@ -10,7 +10,6 @@ const MINOR_RADIUS = 1.5001;
 
 const XMIN = -1;
 const XMAX = 1;
-const XMID = (XMIN + XMAX) / 2;
 const YMIN = -1;
 const YMAX = 1;
 const YMID = (YMIN + YMAX) / 2;
@@ -40,48 +39,6 @@ const phiScale = d3
 	.domain([YMIN + KNOB_RADIUS, YMAX - KNOB_RADIUS])
 	.range([-Math.PI / 2, Math.PI / 2])
 	.clamp(true);
-
-function matMulHelper(mat1, mat2) {
-	if (typeof mat1[0].length === "undefined") {
-		mat1 = [mat1];
-	}
-
-	const squeezeAns = typeof mat2[0].length === "undefined";
-	if (squeezeAns) {
-		mat2 = mat2.map(elem => [elem]);
-	}
-
-	const m = mat1.length;
-	const k = mat2.length;
-	const n = mat2[0].length;
-
-	const ans = [];
-	for (let r = 0; r < m; ++r) {
-		const rowAns = [];
-		for (let c = 0; c < n; ++c) {
-			let sum = 0;
-			for (let i = 0; i < k; ++i) {
-				sum += mat1[r][i] * mat2[i][c];
-			}
-			rowAns.push(sum);
-		}
-		ans.push(rowAns);
-	}
-
-	if (squeezeAns) {
-		return ans.map(row => row[0]);
-	}
-
-	return ans;
-}
-
-function matMul(...mats) {
-	let ans = mats[0];
-	for (let i = 1; i < mats.length; ++i) {
-		ans = matMulHelper(ans, mats[i]);
-	}
-	return ans;
-}
 
 function getRingTraces(transformation) {
 	function addPoint(primedRing, theta, phi) {

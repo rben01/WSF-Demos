@@ -86,3 +86,46 @@ function l2Norm(...vector) {
 	const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
 	return Math.sqrt(sum);
 }
+
+function __matMulHelper(mat1, mat2) {
+	if (typeof mat1[0].length === "undefined") {
+		mat1 = [mat1];
+	}
+
+	const squeezeAns = typeof mat2[0].length === "undefined";
+	if (squeezeAns) {
+		mat2 = mat2.map(elem => [elem]);
+	}
+
+	const m = mat1.length;
+	const k = mat2.length;
+	const n = mat2[0].length;
+
+	const ans = [];
+	for (let r = 0; r < m; ++r) {
+		const rowAns = [];
+		for (let c = 0; c < n; ++c) {
+			let sum = 0;
+			for (let i = 0; i < k; ++i) {
+				sum += mat1[r][i] * mat2[i][c];
+			}
+			rowAns.push(sum);
+		}
+		ans.push(rowAns);
+	}
+
+	if (squeezeAns) {
+		return ans.map(row => row[0]);
+	}
+
+	return ans;
+}
+
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+	let ans = mats[0];
+	for (let i = 1; i < mats.length; ++i) {
+		ans = __matMulHelper(ans, mats[i]);
+	}
+	return ans;
+}

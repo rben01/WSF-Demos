@@ -53,6 +53,13 @@ body {
 	padding-left: 3px;
 }
 
+.subscript {
+	position: relative;
+	top: 0.3em;
+	left: 0em;
+	font-size: 65%;
+}
+
 input[type="radio"] {
 	position: relative;
 	bottom: 4px;
