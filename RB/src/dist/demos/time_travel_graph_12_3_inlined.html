@@ -6,12 +6,12 @@
 <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-</head><body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
+</head><body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.bottom,.fraction,.top{padding:0 5px}.fraction{display:inline-block;text-align:center}.bottom{border-top:1px solid white;display:block}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
 <div class="w3-content w3-container" id="formContainer">
 <form>
 <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-<input id="speed" max="1998000" min="0" name="speed" oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000;
-yp = 1 / Math.sqrt(1-ar[speed.value]**2);
+<input id="speed" max="0.999" min="0" name="speed" oninput="speedID.innerHTML = speed.value;
+yp = 1 / Math.sqrt(1-speed.value**2);
 etime.innerHTML = numberWithCommas(Math.floor(yp * 100) / 100);
 if(Math.floor(yp * 100) / 100 &gt; 1){
 yearID.innerHTML='years'
@@ -20,23 +20,22 @@ else{
 yearID.innerHTML='year'
 }
 trace1 = {
-x: [0,ar[speed.value]],
+x: [0,speed.value],
 y: [yp, yp],
 line: {dash: 'dash', color: 'white'}
 }
 trace2 = {
-x: [ar[speed.value], ar[speed.value]],
+x: [speed.value, speed.value],
 y: [0, yp],
 line: {dash: 'dash', color: 'white'}
 }
-Plotly.newPlot('graph', [g, trace1, trace2], layout)" step="1" style="width: 70%;" type="range" value="0"/>
+Plotly.newPlot('graph', [g, trace1, trace2], layout)" step="0.001" style="width: 70%;" type="range" value="0"/>
 <br/>
 <text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.001</span><i>c</i></text>
 <br/><br/>
 </form>
 </div>
 <div style="width: 950px;">
-<text>Earth Years to Return</text>
 <div id="graph"></div>
 </div>
 <div style="width: 950px;">
@@ -54,4 +53,4 @@ Plotly.newPlot('graph', [g, trace1, trace2], layout)" step="1" style="width: 70%
 </div>
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script type="text/javascript">for(var ar=[],x=[],y=[],yp=0,trace1={},trace2={},i=.001;i<.999;i+=1e-6)ar.push(i);for(i=.999;i<1;i+=1e-9)ar.push(i);for(i=0;i<1998;i++)x.push(ar[1e3*i]),y.push(1/Math.sqrt(1-ar[1e3*i]**2));var g={x:x,y:y,type:"scatter",line:{color:"grey",width:4}},layout={xaxis:{range:[0,1],linecolor:"white",tickcolor:"white",tickfont:{color:"white"}},yaxis:{range:[0,20],autorange:!1,linecolor:"white",tickcolor:"white",tickfont:{color:"white"}},paper_bgcolor:"black",plot_bgcolor:"black",showlegend:!1};function numberWithCommas(r){return r.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}Plotly.newPlot("graph",[g],layout);</script></body></html>
+<script type="text/javascript">for(var x=[],y=[],yp=0,trace1={},trace2={},i=0;i<1;i+=1e-4)x.push(i),y.push(1/Math.sqrt(1-i**2));var g={x:x,y:y,type:"scatter",line:{color:"lightgrey",width:4}},layout={title:{text:"Earth Years",font:{color:"white"},x:0},xaxis:{range:[0,1],linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.2,.4,.6,.8,1]},yaxis:{range:[0,25],autorange:!1,linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[5,10,15,20,25]},paper_bgcolor:"black",plot_bgcolor:"black",showlegend:!1,annotations:[{xref:"paper",yref:"paper",x:1.04,y:-.05,xanchor:"right",yanchor:"bottom",text:"<sup>v</sup>/<sub>c</sub>",font:{color:"white",size:18},color:"white",showarrow:!1},{xref:"paper",yref:"paper",x:-0,y:-.1,text:"0",font:{color:"white",size:18},showarrow:!1}]};function numberWithCommas(t){return t.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}Plotly.newPlot("graph",[g],layout);</script></body></html>

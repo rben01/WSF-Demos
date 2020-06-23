@@ -12,9 +12,9 @@
     <div id='formContainer' class='w3-content w3-container'>
         <form>
             <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-            <input type="range" id="speed" name="speed" min="0" max="1998000" step="1" value="0" style="width: 70%;"
-                oninput="speedID.innerHTML = Math.floor(ar[speed.value]*1000000000)/1000000000;
-                yp = 1 / Math.sqrt(1-ar[speed.value]**2);
+            <input type="range" id="speed" name="speed" min="0" max="0.999" step="0.001" value="0" style="width: 70%;"
+                oninput="speedID.innerHTML = speed.value;
+                yp = 1 / Math.sqrt(1-speed.value**2);
                 etime.innerHTML = numberWithCommas(Math.floor(yp * 100) / 100); 
                 if(Math.floor(yp * 100) / 100 > 1){
                     yearID.innerHTML='years'
@@ -23,12 +23,12 @@
                     yearID.innerHTML='year'
                 }
                 trace1 = {
-                    x: [0,ar[speed.value]],
+                    x: [0,speed.value],
                     y: [yp, yp],
                     line: {dash: 'dash', color: 'white'}
                 }
                 trace2 = {
-                    x: [ar[speed.value], ar[speed.value]],
+                    x: [speed.value, speed.value],
                     y: [0, yp],
                     line: {dash: 'dash', color: 'white'}
                 }
@@ -41,7 +41,6 @@
     </div>
 
     <div style="width: 950px;">
-        <text>Earth Years to Return</text>
         <div id="graph"></div>
     </div>
 
@@ -66,48 +65,71 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript">
-        var ar = [];
         var x = [];
         var y = [];
         var yp = 0;
         var trace1 = {};
         var trace2 = {};
-        for (var i = 0.001; i < 0.999; i += 0.000001) {
-            ar.push(i);
-        }
-        for (var i = 0.999; i < 1; i += 0.000000001) {
-            ar.push(i);
-        }
-        for (var i = 0; i < 1998; i++) {
-            x.push(ar[1000 * i]);
-            y.push(1 / Math.sqrt(1 - ar[1000 * i] ** 2));
+        for (var i = 0; i < 1; i += 0.0001) {
+            x.push(i);
+            y.push(1 / Math.sqrt(1 - i ** 2));
         }
         var g = {
             x: x,
             y: y,
             type: 'scatter',
             line: {
-                color: 'grey',
+                color: 'lightgrey',
                 width: 4,
             }
         };
         var layout = {
+            title: {
+                text: 'Earth Years',
+                font: { color: 'white' },
+                x: 0,
+            },
             xaxis: {
                 range: [0, 1],
                 linecolor: 'white',
-                tickcolor: 'white',
-                tickfont: { color: 'white' }
+                tickcolor: 'black',
+                tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+                tickvals: [0.2, 0.4, 0.6, 0.8, 1]
             },
             yaxis: {
-                range: [0, 20],
+                range: [0, 25],
                 autorange: false,
                 linecolor: 'white',
-                tickcolor: 'white',
-                tickfont: { color: 'white' }
+                tickcolor: 'black',
+                tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+                tickvals: [5, 10, 15, 20, 25]
             },
             paper_bgcolor: 'black',
             plot_bgcolor: 'black',
             showlegend: false,
+            annotations: [
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 1.04,
+                    y: -0.05,
+                    xanchor: 'right',
+                    yanchor: 'bottom',
+                    text: '<sup>v</sup>/<sub>c</sub>',
+                    font: { color: 'white', size: 18 },
+                    color: 'white',
+                    showarrow: false,
+                },
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: -0.0,
+                    y: -0.1,
+                    text: '0',
+                    font: { color: 'white', size: 18 },
+                    showarrow: false
+                }
+            ]
         }
         Plotly.newPlot('graph', [g], layout);
 
