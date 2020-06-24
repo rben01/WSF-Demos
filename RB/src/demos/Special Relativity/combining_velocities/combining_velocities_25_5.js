@@ -303,6 +303,9 @@ function update(vars, { restoreCamera } = {}) {
 
 function reset() {
 	update({ vx: 0, vy: 0, vz: 0, vr: 0 }, { restoreCamera: false });
+	variables.forEach(v => {
+		sliders[v].value = 0;
+	});
 }
 reset();
 

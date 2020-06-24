@@ -60,6 +60,10 @@ body {
 	font-size: 65%;
 }
 
+.minus-sign {
+	margin-right: 1px;
+}
+
 input[type="radio"] {
 	position: relative;
 	bottom: 4px;

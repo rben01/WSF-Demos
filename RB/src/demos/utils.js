@@ -2,6 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
+const HL_COLOR = "#5df";
 
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -128,4 +129,38 @@ function matMul(...mats) {
 		ans = __matMulHelper(ans, mats[i]);
 	}
 	return ans;
+}
+
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+	const markerAttrs = {
+		attrs: {
+			refX: length / 2,
+			refY: width / 2,
+			markerUnits: "userSpaceOnUse",
+			markerWidth: length,
+			markerHeight: width,
+			orient: "auto",
+		},
+	};
+	const arrowheadAttrs = {
+		attrs: {
+			d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+				width / 2
+			} z`,
+			"stroke-linejoin": "miter",
+			stroke: color,
+			fill: color,
+			...attrs,
+		},
+	};
+	defs.append("svg:marker")
+		.attr("id", id)
+		.each(function () {
+			applyDatum.call(this, markerAttrs);
+		})
+		.append("svg:path")
+		.each(function () {
+			applyDatum.call(this, arrowheadAttrs);
+		});
 }
