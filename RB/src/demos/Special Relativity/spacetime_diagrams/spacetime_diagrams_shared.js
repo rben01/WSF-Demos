@@ -174,12 +174,14 @@ function _toggleSlices(
 			.duration(1000)
 			.style("opacity", 1)
 			.end()
-			.then(() => {
-				console.log("h");
-				state = ANIM_STATES.after;
-				call(afterFinishCallback);
-			})
-			.catch(() => {});
+			.then(
+				() => {
+					console.log("h");
+					state = ANIM_STATES.after;
+					call(afterFinishCallback);
+				},
+				() => {},
+			);
 	} else {
 		state = ANIM_STATES.before;
 		call(beforeCancelCallback);
@@ -190,10 +192,12 @@ function _toggleSlices(
 			.style("opacity", 0)
 
 			.end()
-			.then(() => {
-				call(afterCancelCallback);
-			})
-			.catch(() => {});
+			.then(
+				() => {
+					call(afterCancelCallback);
+				},
+				() => {},
+			);
 	}
 }
 
@@ -232,6 +236,91 @@ function _updateDiagrams({
 			}),
 		)
 		.flat(Infinity);
+	const dataForGroup = d => {
+		const index = d.index;
+		const arrowheadOffset = 0.0001;
+		let x1, y1, x2, y2, textPos, arrowheadX2, arrowheadY2, axisSymbol;
+		if (d.axis === "t") {
+			const x0 = index;
+			({ min: y1, max: y2 } = AXES.y);
+			[y1, y2] = [y1, y2].map(y => y * 1.2);
+			[x1, x2] = [y1, y2].map(y => speed * y + x0);
+
+			textPos = {
+				x: xScale(x2) - 15,
+				y: yScale(y2) - 14,
+			};
+			// if (textPos.x > xScale(AXES.x.max) - 20 + AXES_EXTENT_PAST_DATA) {
+			// 	textPos.x = xScale(x1) - 10;
+			// 	textPos.y = yScale(y1) + 16;
+			// }
+
+			arrowheadX2 = x2 + speed * arrowheadOffset;
+			arrowheadY2 = y2 + arrowheadOffset;
+			axisSymbol = "𝑥";
+		} else if (d.axis === "x") {
+			const y0 = index;
+			({ min: x1, max: x2 } = AXES.x);
+			[x1, x2] = [x1, x2].map(x => x * 1.2);
+			[y1, y2] = [x1, x2].map(x => speed * x + y0);
+
+			textPos = {
+				x: xScale(x2) - 15,
+				y: yScale(y2) - 12,
+			};
+			// if (textPos.y < 20 - AXES_EXTENT_PAST_DATA) {
+			// 	textPos.x = xScale(x1) - 10;
+			// 	textPos.y = yScale(y1) + 16;
+			// }
+
+			arrowheadX2 = x2 + arrowheadOffset;
+			arrowheadY2 = y2 + speed * arrowheadOffset;
+			axisSymbol = "𝑡";
+		} else {
+			throw new Error(`Unexpected axis ${d.axis}`);
+		}
+
+		[x1, x2] = [x1, x2].map(xScale);
+		[y1, y2] = [y1, y2].map(yScale);
+		arrowheadX2 = xScale(arrowheadX2);
+		arrowheadY2 = yScale(arrowheadY2);
+		return [
+			{
+				shape: "line",
+				attrs: {
+					x1: x1,
+					y1: y1,
+					x2: x2,
+					y2: y2,
+					stroke: lineColor,
+					"stroke-width": 2,
+					"stroke-dasharray": "3 3",
+				},
+			},
+			{
+				shape: "line",
+				attrs: {
+					x1: x2,
+					y1: y2,
+					x2: arrowheadX2,
+					y2: arrowheadY2,
+					stroke: lineColor,
+					"stroke-width": 2,
+					"marker-end": `url(#${LINE_ARROWHEAD_ID})`,
+				},
+			},
+			{
+				shape: "text",
+				text: `${axisSymbol}′ = ${index}`.replace("-", "−"),
+				attrs: {
+					...textPos,
+					fill: "white",
+					"font-size": "70%",
+					filter: `url(#text-bg)`,
+				},
+			},
+		];
+	};
 	const elems = svg
 		.selectAll(`.${lineGroupsClass}`)
 		.data(lineGroups)
@@ -243,85 +332,7 @@ function _updateDiagrams({
 		})
 		.classed(lineGroupsClass, true)
 		.selectAll(`.${lineElemsClass}`)
-		.data(d => {
-			const index = d.index;
-			const arrowheadOffset = 0.0001;
-			let x1, y1, x2, y2, textPos, arrowheadX2, arrowheadY2, axisSymbol;
-			if (d.axis === "t") {
-				const x0 = index;
-				({ min: y1, max: y2 } = AXES.y);
-				[y1, y2] = [y1, y2].map(y => y * 1.2);
-				[x1, x2] = [y1, y2].map(y => speed * y + x0);
-
-				textPos = { x: xScale(x2) - 15, y: yScale(y2) - 14 };
-				// if (textPos.x > xScale(AXES.x.max) - 20 + AXES_EXTENT_PAST_DATA) {
-				// 	textPos.x = xScale(x1) - 10;
-				// 	textPos.y = yScale(y1) + 16;
-				// }
-
-				arrowheadX2 = x2 + speed * arrowheadOffset;
-				arrowheadY2 = y2 + arrowheadOffset;
-				axisSymbol = "𝑥";
-			} else if (d.axis === "x") {
-				const y0 = index;
-				({ min: x1, max: x2 } = AXES.x);
-				[x1, x2] = [x1, x2].map(x => x * 1.2);
-				[y1, y2] = [x1, x2].map(x => speed * x + y0);
-
-				textPos = { x: xScale(x2) - 15, y: yScale(y2) - 10 };
-				// if (textPos.y < 20 - AXES_EXTENT_PAST_DATA) {
-				// 	textPos.x = xScale(x1) - 10;
-				// 	textPos.y = yScale(y1) + 16;
-				// }
-
-				arrowheadX2 = x2 + arrowheadOffset;
-				arrowheadY2 = y2 + speed * arrowheadOffset;
-				axisSymbol = "𝑡";
-			} else {
-				throw new Error(`Unexpected axis ${d.axis}`);
-			}
-
-			[x1, x2] = [x1, x2].map(xScale);
-			[y1, y2] = [y1, y2].map(yScale);
-			arrowheadX2 = xScale(arrowheadX2);
-			arrowheadY2 = yScale(arrowheadY2);
-			return [
-				{
-					shape: "line",
-					attrs: {
-						x1: x1,
-						y1: y1,
-						x2: x2,
-						y2: y2,
-						stroke: lineColor,
-						"stroke-width": 2,
-						"stroke-dasharray": "3 3",
-					},
-				},
-				{
-					shape: "line",
-					attrs: {
-						x1: x2,
-						y1: y2,
-						x2: arrowheadX2,
-						y2: arrowheadY2,
-						stroke: lineColor,
-						"stroke-width": 2,
-						"marker-end": `url(#${LINE_ARROWHEAD_ID})`,
-					},
-				},
-				{
-					shape: "text",
-					text: `${axisSymbol}′ = ${index}`.replace("-", "−"),
-					attrs: {
-						...textPos,
-						fill: "white",
-						"font-size": "70%",
-						filter: `url(#text-bg)`,
-					},
-				},
-			];
-		})
+		.data(dataForGroup)
 		.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
 		.classed(lineElemsClass, true);
 

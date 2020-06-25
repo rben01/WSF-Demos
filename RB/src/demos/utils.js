@@ -2,6 +2,7 @@
 
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
+// eslint-disable-next-line no-unused-vars
 const HL_COLOR = "#5df";
 
 // https://stackoverflow.com/a/32538867
