@@ -64,6 +64,11 @@ body {
 	margin-right: 1px;
 }
 
+.operator {
+	margin-left: 3px;
+	margin-right: 3px;
+}
+
 input[type="radio"] {
 	position: relative;
 	bottom: 4px;
