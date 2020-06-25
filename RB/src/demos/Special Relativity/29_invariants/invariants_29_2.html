@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			body#bod {
+				width: 1000px;
+			}
+			.slider-label-custom {
+				text-align: left;
+				min-width: 7em;
+				padding-left: 3em;
+			}
+			.h-centered {
+				margin: auto;
+				text-align: center;
+			}
+			.text-div {
+				display: inline;
+				vertical-align: middle;
+			}
+
+			.coordinate-box {
+				display: inline-flex;
+				flex-direction: column;
+				padding-left: 20px;
+				height: 400px;
+			}
+
+			.pythagorean {
+				display: inline-block;
+				border-style: solid;
+				border-radius: 3px;
+				border-width: 2px;
+				border-color: white;
+				padding: 3px;
+				margin-top: 2px;
+				margin-left: -6px;
+				min-width: 315px;
+			}
+		</style>
+	</head>
+
+	<body id="bod">
+		<div class="top-sliders-sect">
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑥-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-x-coord"
+						name="input-x-coord"
+						oninput="updateAngle({x: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑦-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-y-coord"
+						name="input-y-coord"
+						oninput="updateAngle({y: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Angle (𝜃):
+					</span>
+					<input
+						type="range"
+						id="input-angle-rad"
+						name="input-angle-rad"
+						oninput="updateAngle({angleRad: +this.value})"
+					/>
+				</label>
+			</span>
+		</div>
+		<br />
+		<div
+			style="
+				display: inline-block;
+				vertical-align: bottom;
+				text-align: center;
+				width: 450px;
+			"
+		>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="viz-canvas"
+				style="margin: auto;"
+			></svg>
+			<br />
+
+			<span style="display: inline; text-align: center;"
+				><i
+					>Angle Between Coordinate Systems:
+					<span id="text-angle" class="highlighted-text">0</span>º</i
+				></span
+			>
+		</div>
+		<div class="coordinate-box">
+			<div style="height: 100px;"></div>
+			<div class="text-div" style="vertical-align: top;">
+				<span
+					>𝑥 = <span id="text-upright-x" class="highlighted-text"></span
+				></span>
+				<br />
+				<span
+					>𝑦 = <span id="text-upright-y" class="highlighted-text"></span
+				></span>
+				<br />
+				<span class="pythagorean"
+					>𝑥²<span class="operator">+</span>𝑦² =
+					<span id="text-upright-x-sq" class="highlighted-text"></span
+					><span class="operator">+</span
+					><span id="text-upright-y-sq" class="highlighted-text"></span> =
+					<span class="distance highlighted-text"></span
+				></span>
+			</div>
+
+			<div style="height: 50px; flex-grow: 1;"></div>
+			<div class="text-div" style="vertical-align: bottom;">
+				<span
+					><span class="primed-coord">𝑥′</span> =
+					<span id="text-transformed-x" class="highlighted-text"></span
+				></span>
+				<br />
+				<span
+					><span class="primed-coord">𝑦′</span> =
+					<span id="text-transformed-y" class="highlighted-text"></span
+				></span>
+				<br />
+				<span class="pythagorean"
+					>𝑥²<span class="operator">+</span>𝑦² =
+					<span id="text-transformed-x-sq" class="highlighted-text"></span
+					><span class="operator">+</span
+					><span id="text-transformed-y-sq" class="highlighted-text"></span> =
+					<span class="distance highlighted-text"></span
+				></span>
+			</div>
+			<div style="height: 100px;"></div>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./invariants_29_2.js"></script>
+	</body>
+</html>
