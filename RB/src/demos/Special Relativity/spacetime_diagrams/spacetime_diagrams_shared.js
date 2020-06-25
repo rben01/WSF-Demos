@@ -167,28 +167,33 @@ function _toggleSlices(
 		if (state === ANIM_STATES.after) {
 			t = t.transition().duration(200).style("opacity", 0);
 		}
+
 		state = ANIM_STATES.during;
 		t.transition()
 			.delay((d, i) => i * 400)
 			.duration(1000)
 			.style("opacity", 1)
-			.transition()
-			.on("end", () => {
+			.end()
+			.then(() => {
+				console.log("h");
 				state = ANIM_STATES.after;
 				call(afterFinishCallback);
-			});
+			})
+			.catch(() => {});
 	} else {
+		state = ANIM_STATES.before;
 		call(beforeCancelCallback);
 		svg.selectAll(`.${lineGroupsClass}`)
 			.filter(d => !d.alwaysVisible)
 			.transition()
-			.duration(200)
+			.duration(400)
 			.style("opacity", 0)
-			.transition()
-			.on("end", () => {
-				state = ANIM_STATES.before;
+
+			.end()
+			.then(() => {
 				call(afterCancelCallback);
-			});
+			})
+			.catch(() => {});
 	}
 }
 
@@ -245,6 +250,7 @@ function _updateDiagrams({
 			if (d.axis === "t") {
 				const x0 = index;
 				({ min: y1, max: y2 } = AXES.y);
+				[y1, y2] = [y1, y2].map(y => y * 1.2);
 				[x1, x2] = [y1, y2].map(y => speed * y + x0);
 
 				textPos = { x: xScale(x2) - 15, y: yScale(y2) - 14 };
@@ -259,6 +265,7 @@ function _updateDiagrams({
 			} else if (d.axis === "x") {
 				const y0 = index;
 				({ min: x1, max: x2 } = AXES.x);
+				[x1, x2] = [x1, x2].map(x => x * 1.2);
 				[y1, y2] = [x1, x2].map(x => speed * x + y0);
 
 				textPos = { x: xScale(x2) - 15, y: yScale(y2) - 10 };
