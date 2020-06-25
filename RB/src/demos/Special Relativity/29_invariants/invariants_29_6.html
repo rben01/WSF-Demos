@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 6em;
+				margin-left: 65px;
+			}
+
+			.reset-button {
+				margin-left: 65px;
+			}
+
+			.frames-box {
+				display: flex;
+				flex-direction: row;
+			}
+
+			.frame {
+				display: inline-block;
+				width: 300px;
+			}
+
+			.divider {
+				width: 50px;
+			}
+
+			.frame-title {
+				font-weight: bold;
+			}
+
+			.transformation {
+				margin-top: 30px;
+				margin-bottom: 30px;
+				width: 25em;
+				margin-left: auto;
+				margin-right: auto;
+			}
+
+			.operator {
+				margin-left: 3px;
+				margin-right: 3px;
+			}
+			.minus-sign {
+				margin-right: 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Time (𝑡):
+						</span>
+						<input
+							type="range"
+							id="input-t"
+							name="input-t"
+							min="0"
+							max="3"
+							step=".01"
+							value="0"
+							oninput="update({t: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Position (𝑥):
+						</span>
+						<input
+							type="range"
+							id="input-x"
+							name="input-x"
+							min="-3"
+							max="3"
+							step=".01"
+							value="0"
+							oninput="update({x: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Velocity (𝑣):
+						</span>
+						<input
+							type="range"
+							id="input-v"
+							name="input-v"
+							min="0"
+							max=".99"
+							step=".01"
+							value="0"
+							oninput="update({v: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<button class="play-button reset-button" onclick="reset()">
+					Reset
+				</button>
+			</div>
+			<br />
+			<div class="frames-box">
+				<div class="divider"></div>
+				<div class="frame">
+					<span
+						><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span
+					>
+					<br />
+					<table>
+						<tr>
+							<td class="eqn-left">𝑡</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num highlighted-text var-t">0</span
+								>years
+							</td>
+						</tr>
+						<tr>
+							<td class="eqn-left">𝑥</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num highlighted-text var-x">0</span
+								>lyrs
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="divider"></div>
+				<div class="frame">
+					<span
+						><span class="frame-title">Moving Frame: </span>𝑣 =
+						<span class="sci-num highlighted-text var-v">0</span>𝑐</span
+					>
+					<br />
+					<table>
+						<tr>
+							<td class="eqn-left">𝑡′</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num highlighted-text var-t-prime"
+									>0</span
+								>years
+							</td>
+						</tr>
+						<tr>
+							<td class="eqn-left">𝑥′</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num highlighted-text var-x-prime"
+									>0</span
+								>lyrs
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="divider"></div>
+			</div>
+			<br />
+			<div class="transformation">
+				<span class="frame-title">Transformation</span>
+				<table>
+					<tr>
+						<td class="eqn-left">𝑡′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							𝛾<span class="operator"></span>(𝑡<span class="operator"
+								>−</span
+							>𝑣𝑥<span class="operator">/</span>𝑐²)
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="sci-num"
+								><span class="var-gamma highlighted-text">0</span>
+								(<span class="var-t highlighted-text">0</span
+								><span class="operator">−</span
+								><span class="var-v highlighted-text">0</span
+								><span class="operator">·</span
+								><span class="var-x highlighted-text">0</span>)</span
+							>years
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑥′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							𝛾<span class="operator"></span>(𝑥<span class="operator"
+								>−</span
+							>𝑣𝑡)
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="sci-num"
+								><span class="var-gamma highlighted-text">0</span>
+								(<span class="var-x highlighted-text">0</span
+								><span class="operator">−</span
+								><span class="var-v highlighted-text">0</span
+								><span class="operator">·</span
+								><span class="var-t highlighted-text">0</span>)</span
+							>lyrs
+						</td>
+					</tr>
+				</table>
+			</div>
+			<br />
+			<div class="frames-box">
+				<div class="divider"></div>
+				<div class="frame">
+					<span
+						><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span
+					>
+					<br />
+					<table>
+						<tr>
+							<td class="eqn-left">𝑠²</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								𝑐²𝑡²<span class="operator">−</span>𝑥²
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num"
+									>(<span id="ct2" class="highlighted-text"></span
+									><span class="operator">−</span
+									><span id="x2" class="highlighted-text"></span
+									>)</span
+								>lyrs²
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span
+									class="st-interval sci-num highlighted-text"
+								></span
+								>lyrs²
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="divider"></div>
+				<div class="frame">
+					<span
+						><span class="frame-title">Moving Frame: </span>𝑣 =
+						<span class="sci-num highlighted-text var-v">0</span>𝑐</span
+					>
+					<br />
+					<table>
+						<tr>
+							<td class="eqn-left">𝑠²</td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								𝑐²(𝑡′)²<span class="operator">−</span>(𝑥′)²
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span class="sci-num"
+									>(<span id="ctp2" class="highlighted-text"></span
+									><span class="operator">−</span
+									><span id="xp2" class="highlighted-text"></span
+									>)</span
+								>lyrs²
+							</td>
+						</tr>
+						<tr>
+							<td></td>
+							<td class="eqn-middle">=</td>
+							<td class="eqn-right">
+								<span
+									class="st-interval sci-num highlighted-text"
+								></span
+								>lyrs²
+							</td>
+						</tr>
+					</table>
+				</div>
+				<div class="divider"></div>
+			</div>
+			<script type="text/javascript" src="../../utils.js"></script>
+			<script type="text/javascript" src="./invariants_29_6.js"></script>
+		</div>
+	</body>
+</html>

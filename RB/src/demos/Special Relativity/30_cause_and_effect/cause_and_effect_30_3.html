@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 6em;
+			}
+
+			.frames-box {
+				display: flex;
+				flex-direction: row;
+			}
+
+			.frame {
+				display: inline-block;
+				width: 300px;
+			}
+
+			.divider {
+				width: 50px;
+			}
+
+			.frame-title {
+				font-weight: bold;
+			}
+
+			.checkbox {
+				padding-left: 20px;
+				position: relative;
+				bottom: 2px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Time (𝑡):
+						</span>
+						<input
+							type="range"
+							id="input-t"
+							name="input-t"
+							min="-1"
+							max="1"
+							step=".01"
+							value="0"
+							oninput="update({t: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Position (𝑥):
+						</span>
+						<input
+							type="range"
+							id="input-x"
+							name="input-x"
+							min="-1"
+							max="1"
+							step=".01"
+							value="0"
+							oninput="update({x: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<div style="height: 20px;"></div>
+			</div>
+			<div>
+				<table style="display: inline-block; vertical-align: top;">
+					<tr>
+						<td id="option-causal">Causally connected</td>
+						<td class="checkbox">
+							<input
+								id="toggle-causal"
+								type="checkbox"
+								onchange=";update({showCausal:d3.select(this).property('checked')})"
+							/>
+						</td>
+					</tr>
+					<tr>
+						<td id="option-disconnected">Causally disconnected</td>
+						<td class="checkbox">
+							<input
+								id="toggle-disconnected"
+								type="checkbox"
+								onchange="update({showDisconnected:d3.select(this).property('checked')})"
+							/>
+						</td>
+					</tr>
+					<tr>
+						<td id="option-lightcone">Light cone</td>
+						<td class="checkbox">
+							<input
+								id="toggle-lightcone"
+								type="checkbox"
+								onchange="update({showLightCone:d3.select(this).property('checked')})"
+							/>
+						</td>
+					</tr>
+				</table>
+				<svg id="viz" style="display: inline-block;"></svg>
+			</div>
+			<script type="text/javascript" src="../../utils.js"></script>
+			<script type="text/javascript" src="./cause_and_effect_30_3.js"></script>
+		</div>
+	</body>
+</html>
