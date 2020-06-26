@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 10em;
+				margin-left: 0;
+			}
+
+			.reset-button {
+				margin-left: 65px;
+			}
+
+			.frames-box {
+				display: flex;
+				flex-direction: column;
+			}
+
+			.divider {
+				width: 50px;
+			}
+
+			.operator {
+				margin-left: 3px;
+				margin-right: 3px;
+			}
+			.minus-sign {
+				margin-right: 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div style="display: flex; flex-direction: row; align-items: center;">
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Velocity direction:
+						</span>
+					</label>
+				</span>
+				<div style="width: 10px;"></div>
+				<svg id="velocity-dir-input">
+					<defs>
+						<filter
+							id="knob-shadow"
+							x="-.5"
+							y="-.5"
+							width="200%"
+							height="200%"
+						>
+							<feGaussianBlur in="SourceAlpha" stdDeviation="3" />
+							<!-- stdDeviation is how much to blur -->
+							<feOffset dx="2" dy="2" result="offsetblur" />
+							<!-- how much to offset -->
+							<feComponentTransfer>
+								<feFuncA type="linear" slope="0.6" />
+								<!-- slope is the opacity of the shadow -->
+							</feComponentTransfer>
+							<feMerge>
+								<feMergeNode />
+								<!-- this contains the offset blurred image -->
+								<feMergeNode in="SourceGraphic" />
+								<!-- this contains the element that the filter is applied to -->
+							</feMerge>
+						</filter>
+					</defs>
+				</svg>
+			</div>
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Velocity magnitude (𝑣):
+					</span>
+					<input
+						type="range"
+						id="input-v"
+						name="input-v"
+						min="0"
+						max=".999"
+						step=".001"
+						value="0"
+						oninput="updateSpeed({speed: this.value, fromUserInteraction:true});stopAnimation();"
+					/>
+				</label>
+			</span>
+		</div>
+		<div style="display: flex; flex-direction: row;">
+			<div style="width: 6em;">
+				<span
+					><button
+						id="start-button"
+						class="play-button"
+						onclick="toggleAnimation();"
+					>
+						Start
+					</button></span
+				>
+				<div class="frames-box">
+					<div class="frame">
+						<table>
+							<tr>
+								<td class="eqn-left">𝑣</td>
+								<td class="eqn-middle">=</td>
+								<td class="eqn-right">
+									<span id="text-v" class="sci-num highlighted-text"
+										>0</span
+									>𝑐
+								</td>
+							</tr>
+							<tr>
+								<td class="eqn-left">𝛾</td>
+								<td class="eqn-middle">=</td>
+								<td class="eqn-right">
+									<span
+										id="text-gamma"
+										class="sci-num highlighted-text"
+										>0</span
+									>
+								</td>
+							</tr>
+						</table>
+					</div>
+
+					<div class="divider"></div>
+				</div>
+			</div>
+			<div class="divider"></div>
+			<div>
+				<div id="plot"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./torus.js"></script>
+		<script type="text/javascript" src="./lorentz_transformation_23_8.js"></script>
+	</body>
+</html>

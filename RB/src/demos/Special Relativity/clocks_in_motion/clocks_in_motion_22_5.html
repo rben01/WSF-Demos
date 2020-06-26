@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 9.1em;
+				text-align: left;
+			}
+
+			.spoke-button {
+				padding: 5px 10px;
+				margin: 0px;
+				font-size: 80%;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div style="padding-left: 2em;">
+				<span id="spoke-label">
+					<span class="slider-label slider-label-custom">
+						Number of spokes:
+					</span>
+				</span>
+				<br />
+				<span>
+					<label>
+						<span class="slider-label slider-label-custom">
+							Velocity (𝑣):
+						</span>
+						<input
+							type="range"
+							id="input-speed"
+							name="input-speed"
+							min="0"
+							max=".99"
+							step=".01"
+							value="0"
+							oninput="update({fracOfC: this.value})"
+						/>
+					</label>
+				</span>
+				<br />
+				<span
+					>𝑣 =
+					<span id="text-speed" class="highlighted-text sci-num">0</span
+					>𝑐</span
+				>
+			</div>
+			<div style="text-align: center;">
+				<svg id="viz-canvas"></svg>
+			</div>
+			<script type="text/javascript" src="../../utils.js"></script>
+			<script type="text/javascript" src="./clocks_in_motion_22_5.js"></script>
+		</div>
+	</body>
+</html>

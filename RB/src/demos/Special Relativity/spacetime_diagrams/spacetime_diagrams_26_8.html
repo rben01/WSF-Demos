@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				text-align: left;
+				min-width: 10.5em;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.smaller {
+				font-size: 70%;
+			}
+
+			.coord-container {
+				display: inline-block;
+				width: 150px;
+				margin: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<span
+				><label
+					><span class="slider-label slider-label-custom"
+						>Time coordinate (𝑡):</span
+					><input
+						type="range"
+						id="input-t"
+						min="-1.8"
+						max="1.8"
+						value="0"
+						step=".001"
+						oninput="update({t:this.value})" /></label
+			></span>
+			<br />
+			<span
+				><label
+					><span class="slider-label slider-label-custom"
+						>Position coordinate (𝑥):</span
+					><input
+						type="range"
+						id="input-x"
+						min="-1.8"
+						max="1.8"
+						value="0"
+						step=".001"
+						oninput="update({x:this.value})" /></label
+			></span>
+			<br />
+			<span
+				><label
+					><span class="slider-label slider-label-custom">Velocity (𝑣):</span
+					><input
+						type="range"
+						id="input-v"
+						min="0"
+						max=".55"
+						value="0"
+						step=".001"
+						oninput="update({v:this.value})" /></label
+			></span>
+			<br />
+			<span
+				>𝑣 =
+				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
+			>
+		</div>
+		<svg id="viz"></svg>
+		<div style="text-align: center; width: 400px; padding-left: 50px;">
+			<div class="coord-container">
+				<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span
+				><br /><span
+					>𝑥 = <span id="text-x" class="highlighted-text"></span
+				></span>
+			</div>
+			<div class="coord-container">
+				<span>𝑡′ = <span id="text-tp" class="highlighted-text"></span></span
+				><br /><span
+					>𝑥′ = <span id="text-xp" class="highlighted-text"></span
+				></span>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_shared.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_26_8.js"></script>
+	</body>
+</html>

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 13em;
+				text-align: left;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.smaller {
+				font-size: 70%;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Velocity of distant observer:<br /><span class="smaller"
+								>(Positive = away, negative = toward)</span
+							></span
+						><input
+							type="range"
+							id="input-speed"
+							min="-1"
+							max="1"
+							value="0"
+							step=".001"
+							style="vertical-align: top;"
+							oninput="update({speed:this.value})" /></label></span
+				><br /><span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Distance to distant observer:</span
+						><input
+							type="range"
+							id="input-distance"
+							min="1"
+							max="10"
+							value="1"
+							step=".01"
+							oninput="update({distance:this.value})" /></label
+				></span>
+			</div>
+			<br />
+			<div class="slider-label-custom" style="line-height: 1.9em;">
+				<span
+					>Velocity of distant observer:
+					<span id="obs-vel" class="highlighted-text sci-num">0</span
+					>m/s</span
+				><br />
+				<span
+					>Distance to distant observer:
+					<span id="obs-dist" class="highlighted-text sci-num">0</span>Billion
+					Lightyears</span
+				>
+			</div>
+		</div>
+		<svg id="viz"></svg>
+		<div>
+			<span
+				>Observer 2's notion of simultaneity: 𝑡 =
+				<span id="text-years-them" class="sci-num highlighted-text">0</span
+				>years</span
+			><br />
+			<span class="smaller"
+				>(From our perspective, that is
+				<span id="text-years-us" class="sci-num highlighted-text">0</span>years
+				in the <span id="past-future">past</span>)</span
+			>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./past_present_future_28_2.js"></script>
+	</body>
+</html>
