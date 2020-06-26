@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html>
+<head><title>Time Travel Graph</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+</head><body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.bottom,.fraction,.top{padding:0 5px}.fraction{display:inline-block;text-align:center}.bottom{border-top:1px solid white;display:block}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
+<div class="w3-content w3-container" id="formContainer">
+<form>
+<label for="duration" style="font-size: 20px;">Trip Duration (Earth)</label>
+<input id="duration" max="10" min="0" name="duration" oninput="t = duration.value;
+if(t &gt; 1){
+yearID.innerHTML='years'
+}
+else{
+yearID.innerHTML='year'
+}
+render();" step="0.01" style="width: 70%;" type="range" value="5"/>
+<br/>
+<label for="speed" style="font-size: 20px;">Velocity of the Rocket</label>
+<input id="speed" max="0.999" min="0" name="speed" oninput="v = speed.value;
+speedID.innerHTML = speed.value;
+render();" step="0.001" style="width: 70%;" type="range" value="0"/>
+<br/>
+<text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.001</span><i>c</i></text>
+<br/><br/>
+</form>
+</div>
+<div style="width: 950px;">
+<div id="graph"></div>
+</div>
+<div style="width: 950px;">
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px; margin-right: 20px;">
+<br/>
+<text style="font-size: 21px;"> Time Elapsed on Rocket = <span class="highlighted-text sci-num" id="rtime">1</span> years </text>
+<br/><br/>
+</div>
+<text></text>
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px;">
+<br/>
+<text style="font-size: 21px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">1</span>
+<span id="yearID">year</span> </text>
+<br/><br/>
+</div>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">var etime=document.getElementById("etime"),rtime=document.getElementById("rtime"),t=5,v=0,yp=0,toe={x:[0,1],y:[t,t],line:{color:"grey"}},tor={x:[],y:[],line:{color:"lightgrey"}},trace1={x:[],y:[],line:{dash:"dash",color:"yellow"}},trace2={x:[],y:[],line:{dash:"dash",color:"yellow"}},layout={title:{text:"Time on Rocket (years)",font:{color:"white"},x:0},xaxis:{range:[0,1],linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.2,.4,.6,.8,1]},yaxis:{range:[0,10],autorange:!1,linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[2,4,6,8,10]},paper_bgcolor:"black",plot_bgcolor:"black",showlegend:!1,annotations:[{xref:"paper",yref:"paper",x:1.04,y:-.05,xanchor:"right",yanchor:"bottom",text:"<sup>v</sup>/<sub>c</sub>",font:{color:"white",size:18},color:"white",showarrow:!1},{xref:"paper",yref:"paper",x:-0,y:-.1,text:"0",font:{color:"white",size:18},showarrow:!1},{xref:"paper",yref:"paper",x:.9,y:t,text:"Time on Earth",font:{color:"white",size:18},showarrow:!1}]};function render(){yp=t*Math.sqrt(1-v**2),etime.innerHTML=t,rtime.innerHTML=Math.floor(100*yp)/100,layout.annotations[2].y=t,toe.y=[t,t],tor.x=[],tor.y=[];for(var e=0;e<1;e+=.001)tor.x.push(e),tor.y.push(t*Math.sqrt(1-e**2));trace1.x=[0,v],trace1.y=[yp,yp],trace2.x=[v,v],trace2.y=[0,yp],Plotly.newPlot("graph",[toe,tor,trace1,trace2],layout)}render();</script></body></html>
