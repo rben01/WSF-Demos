@@ -648,7 +648,12 @@ function unhide(...visible) {
 function checkButton(buttonName) {
 	Object.entries(buttons).forEach(([thisButtonName, button]) => {
 		const text = buttonTitles[thisButtonName];
-		button.textContent = thisButtonName === buttonName ? `${text} ✓` : text;
+		const check = "✓";
+		const hiddenCheck = `<span style="opacity:0;">${check}</span>`;
+		button.innerHTML =
+			thisButtonName === buttonName
+				? `${hiddenCheck}${text} ${check}`
+				: `${hiddenCheck}${text} ${hiddenCheck}`;
 	});
 }
 
