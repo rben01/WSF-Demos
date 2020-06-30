@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 13em;
+				text-align: left;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.smaller {
+				font-size: 70%;
+			}
+			.demo-button {
+				width: unset;
+				margin: unset;
+				margin-right: 5px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div>
+				<span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Velocity (𝑣):</span
+						><input
+							type="range"
+							id="input-v"
+							min="0"
+							max=".99"
+							value=".5"
+							step=".01"
+							oninput="update({v:this.value})" /></label></span
+				><br /><span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Turn-around time (Earth) (𝑇<span class="operator">)</span
+							>:</span
+						><input
+							type="range"
+							id="input-t"
+							min=".12"
+							max=".8"
+							value="6"
+							step=".01"
+							oninput="update({t:this.value})" /></label
+				></span>
+			</div>
+			<br />
+			<div style="line-height: 2em;">
+				<span
+					><button
+						id="btn-e"
+						class="play-button demo-button"
+						onclick="clickButtonEarthPerspective()"
+					>
+						Earth Perspective
+					</button></span
+				>
+				<br />
+				<span
+					><button
+						id="btn-ss"
+						class="play-button demo-button"
+						onclick="clickSpaceshipPerspective()"
+					>
+						Spaceship Perspective</button
+					><button
+						id="btn-ob"
+						class="play-button demo-button"
+						onclick="clickOutboundPerspective()"
+					>
+						Outbound Journey</button
+					><button
+						id="btn-fc"
+						class="play-button demo-button"
+						onclick="clickFrameChangePerspective()"
+					>
+						Frame Change</button
+					><button
+						id="btn-ib"
+						class="play-button demo-button"
+						onclick="clickInboundPerspective()"
+					>
+						Inbound Journey
+					</button></span
+				>
+			</div>
+		</div>
+		<div>
+			<div style="display: inline-block;">
+				<div style="padding-left: 100px;">
+					<span
+						>𝑣 =
+						<span id="text-v" class="sci-num highlighted-text"></span
+						>𝑐</span
+					>
+				</div>
+				<svg id="viz" style="display: inline-block;"></svg>
+			</div>
+			<div style="display: inline-block; vertical-align: top;">
+				<table>
+					<tr>
+						<td class="eqn-left">𝑇</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-t" class="sci-num highlighted-text"></span
+							>yrs
+						</td>
+					</tr>
+					<tr id="row-t1">
+						<td class="eqn-left">𝑇₁</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-t1" class="sci-num highlighted-text"></span
+							>yrs
+						</td>
+					</tr>
+					<tr id="row-t2">
+						<td class="eqn-left">𝑇₂</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-t2" class="sci-num highlighted-text"></span
+							>yrs
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div style="padding-left: 300px;">
+			<span id="span-ss-time"
+				>Time on spaceship =
+				<span id="text-ss-time" class="sci-num highlighted-text"></span
+				>yrs</span
+			>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./twin_paradox_37_3.js"></script>
+	</body>
+</html>
