@@ -356,7 +356,7 @@ function getLinesData({
 	const cosThetaYAx = tfAxPosEndCoords.yAx.x / rYAx;
 	const sinThetaYAx = -tfAxPosEndCoords.yAx.y / rYAx;
 
-	const arrowDist = 0.0001;
+	const arrowDist = 0.001;
 
 	const tfAxesData = [
 		{

@@ -69,6 +69,11 @@ body {
 	margin-right: 3px;
 }
 
+button.depressed-button {
+	background-color: #555;
+	color: white;
+}
+
 input[type="radio"] {
 	position: relative;
 	bottom: 4px;

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 9em;
+				text-align: left;
+				margin-bottom: unset;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.smaller {
+				font-size: 70%;
+			}
+			.demo-button {
+				width: unset;
+				margin: unset;
+				margin-right: 5px;
+				position: relative;
+				bottom: 4px;
+			}
+			.subsubscript {
+				position: relative;
+				top: 0.6em;
+				left: 0em;
+				font-size: 65%;
+			}
+
+			svg {
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div style="line-height: 1em;">
+				<span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Relative velocity (𝑣):</span
+						><input
+							type="range"
+							id="input-v"
+							min=".1"
+							max=".99"
+							value=".7"
+							step=".01"
+							oninput="update({v:this.value})" /></label></span
+				><br />
+				<br />
+				<span
+					><span class="slider-label slider-label-custom">Perspective:</span
+					><button
+						id="btn-persp-barn"
+						class="play-button demo-button"
+						onclick="update({perspective:BARN})"
+					>
+						Barn</button
+					><button
+						id="btn-persp-pole"
+						class="play-button demo-button"
+						onclick="update({perspective:POLE})"
+					>
+						Pole
+					</button></span
+				><br />
+				<br />
+				<span
+					><span class="slider-label slider-label-custom"
+						>Spacial slices:</span
+					><button
+						id="btn-slice-barn"
+						class="play-button demo-button"
+						onclick="update({slicesToShow:BARN})"
+					>
+						Barn</button
+					><button
+						id="btn-slice-pole"
+						class="play-button demo-button"
+						onclick="update({slicesToShow:POLE})"
+					>
+						Pole</button
+					><button
+						id="btn-slice-both"
+						class="play-button demo-button"
+						onclick="update({slicesToShow:BOTH})"
+					>
+						Both
+					</button></span
+				>
+				<br /><span
+					><label
+						><span class="slider-label slider-label-custom">Time (𝑡):</span
+						><input
+							type="range"
+							id="input-t"
+							min="0"
+							max="1"
+							value="0"
+							step=".001"
+							oninput="update({t:this.value})" /></label
+				></span>
+				<br /><span
+					><button
+						id="play-pause"
+						class="play-button"
+						onclick="toggleAnimation()"
+					>
+						Play
+					</button></span
+				>
+			</div>
+		</div>
+		<div>
+			<svg id="viz" style="display: inline-block;"></svg>
+			<svg id="legend" style="display: inline-block; vertical-align: top;"></svg>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./pole_barn_spacetime_34_3.js"></script>
+	</body>
+</html>
