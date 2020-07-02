@@ -122,6 +122,11 @@ function reset() {
 	independentVarNames.forEach(iv => {
 		sliders[iv].value = 0;
 	});
+	const values = {};
+	for (const iv of independentVarNames) {
+		values[iv] = 0;
+	}
+	update(values);
 }
 
 update({});
