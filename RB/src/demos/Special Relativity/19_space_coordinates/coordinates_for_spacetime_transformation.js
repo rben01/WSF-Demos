@@ -552,6 +552,10 @@ function getLinesData({
 	};
 }
 
+function fmtFloat(x, precision) {
+	return (+x).toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+
 function updateAngle({
 	x,
 	y,
@@ -577,16 +581,16 @@ function updateAngle({
 		cssClass: "graph-obj",
 	});
 
-	textSpans.upright.x.textContent = (+sliders.x.value).toFixed(2);
-	textSpans.upright.y.textContent = (+sliders.y.value).toFixed(2);
-	textSpans.transformed.x.textContent = tfCoords.xAxXCoord.toFixed(2);
-	textSpans.transformed.y.textContent = tfCoords.yAxYCoord.toFixed(2);
+	textSpans.upright.x.innerHTML = fmtFloat(sliders.x.value, 2);
+	textSpans.upright.y.innerHTML = fmtFloat(sliders.y.value, 2);
+	textSpans.transformed.x.innerHTML = fmtFloat(tfCoords.xAxXCoord, 2);
+	textSpans.transformed.y.innerHTML = fmtFloat(tfCoords.yAxYCoord, 2);
 
 	if (!userInput || typeof angleRad !== "undefined") {
-		textSpans.angle.textContent = (angleIndex === (RANGES.angle.n - 1) / 2
-			? +0
-			: (angleRad * 180) / Math.PI
-		).toFixed(2);
+		textSpans.angle.innerHTML = fmtFloat(
+			angleIndex === (RANGES.angle.n - 1) / 2 ? +0 : (angleRad * 180) / Math.PI,
+			2,
+		);
 	}
 }
 
