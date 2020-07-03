@@ -1,4 +1,4 @@
-/* global Plotly lorentzFactor matMul ARROWHEAD_POINTS */
+/* global Plotly lorentzFactor matMul ARROWHEAD_POINTS STANDARD_COLORS */
 const STEP = 0.01;
 
 const variables = ["vx", "vy", "vz", "vr"];
@@ -34,7 +34,6 @@ const velocityVectorAttrs = {
 	type: "scatter3d",
 	mode: "lines",
 	line: {
-		color: "#4c3",
 		width: 5,
 	},
 };
@@ -136,13 +135,15 @@ function update(vars, { restoreCamera } = {}) {
 			velocity: [vx, vy, vz],
 			rotTrans: matMul(getRz(theta), getRy(-phi)),
 			scene: "scene1",
+			color: STANDARD_COLORS.highlighted,
 		},
 		{
 			velocity: [vxp, vyp, vzp],
 			rotTrans: matMul(getRz(primedTheta), getRy(-primedPhi)),
 			scene: "scene2",
+			color: STANDARD_COLORS.secondary,
 		},
-	].forEach(({ velocity, rotTrans, scene }) => {
+	].forEach(({ velocity, rotTrans, scene, color }) => {
 		const transArrowhead = { x: [], y: [], z: [] };
 		for (let i = 0; i < baseArrowhead.x.length; ++i) {
 			const coords = [baseArrowhead.x, baseArrowhead.y, baseArrowhead.z].map(
@@ -161,9 +162,7 @@ function update(vars, { restoreCamera } = {}) {
 		const i = baseArrowhead.simplices.map(s => s[0]);
 		const j = baseArrowhead.simplices.map(s => s[1]);
 		const k = baseArrowhead.simplices.map(s => s[2]);
-		const facecolor = baseArrowhead.simplices.map(
-			() => velocityVectorAttrs.line.color,
-		);
+		const facecolor = baseArrowhead.simplices.map(() => color);
 		arrowheads.push({
 			type: "mesh3d",
 			scene,
@@ -231,6 +230,10 @@ function update(vars, { restoreCamera } = {}) {
 			z: [0, vz],
 			scene: "scene1",
 			...velocityVectorAttrs,
+			line: {
+				...velocityVectorAttrs.line,
+				color: STANDARD_COLORS.highlighted,
+			},
 		},
 		{
 			x: [0, vxp],
@@ -238,6 +241,10 @@ function update(vars, { restoreCamera } = {}) {
 			z: [0, vzp],
 			scene: "scene2",
 			...velocityVectorAttrs,
+			line: {
+				...velocityVectorAttrs.line,
+				color: STANDARD_COLORS.secondary,
+			},
 		},
 	);
 	const sceneAttrs = (() => {
