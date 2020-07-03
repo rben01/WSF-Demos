@@ -4,18 +4,12 @@
 		<meta charset="UTF-8" />
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="./spacetime_diagrams_css.css" />
 		<style>
 			.slider-label-custom {
 				text-align: left;
 				min-width: 10.5em;
 			}
-			.viz-canvas {
-				padding-top: 5px;
-			}
-			.smaller {
-				font-size: 70%;
-			}
-
 			.coord-container {
 				display: inline-block;
 				width: 150px;
@@ -60,7 +54,7 @@
 						type="range"
 						id="input-v"
 						min="0"
-						max=".55"
+						max=".7"
 						value="0"
 						step=".001"
 						oninput="update({v:this.value})" /></label
@@ -80,9 +74,9 @@
 				></span>
 			</div>
 			<div class="coord-container">
-				<span>𝑡′ = <span id="text-tp" class="highlighted-text"></span></span
+				<span>𝑡′ = <span id="text-tp" class="secondary-text"></span></span
 				><br /><span
-					>𝑥′ = <span id="text-xp" class="highlighted-text"></span
+					>𝑥′ = <span id="text-xp" class="secondary-text"></span
 				></span>
 			</div>
 		</div>

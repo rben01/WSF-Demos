@@ -1,0 +1,12 @@
+body {
+	width: 550px;
+}
+.slider-label-custom {
+	text-align: left;
+}
+.viz-canvas {
+	padding-top: 5px;
+}
+.smaller {
+	font-size: 70%;
+}

@@ -290,7 +290,7 @@ function update({ speed }) {
 		applyDatum.call(this, d);
 	});
 
-	textSpans.speed.innerHTML = fmtFloat(speed, 3);
+	textSpans.speed.innerHTML = fmtFloat(speed, 2);
 }
 
 update({});

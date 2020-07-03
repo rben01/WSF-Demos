@@ -1,4 +1,4 @@
-/* global svg _updateDiagrams xScale yScale applyGraphicalObjs fmtFloat */
+/* global svg _updateDiagrams xScale yScale applyGraphicalObjs fmtFloat STANDARD_COLORS */
 
 const indVars = ["t", "x", "v"];
 const sliders = {};
@@ -36,9 +36,17 @@ function update({ t, x, v }) {
 	const tpx = v === 0 ? 0 : (t - x * v) / (1 / v - v);
 	const tp = v === 0 ? t : tpx / v;
 
-	const lineAttrs = { "stroke-width": 2, "stroke-dasharray": "2 2" };
-	const primedLineAttrs = { ...lineAttrs, stroke: "#f21" };
-	const unprimedLineAttrs = { ...lineAttrs, stroke: "#6f4" };
+	const lineAttrs = { "stroke-width": 3 };
+	const primedLineAttrs = {
+		...lineAttrs,
+		"stroke-dasharray": "1 1",
+		stroke: STANDARD_COLORS.secondary,
+	};
+	const unprimedLineAttrs = {
+		...lineAttrs,
+		"stroke-dasharray": "1 1",
+		stroke: STANDARD_COLORS.highlighted,
+	};
 
 	const lines = [
 		{

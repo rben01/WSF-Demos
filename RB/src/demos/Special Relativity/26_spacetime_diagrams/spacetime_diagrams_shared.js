@@ -1,4 +1,4 @@
-/* global HL_COLOR defineArrowhead applyDatum */
+/* global HL_COLOR defineArrowhead applyDatum lorentzFactor */
 
 const AXES = {
 	x: { min: -2, max: 2 },
@@ -69,6 +69,7 @@ const yScale = d3
 		MARGINS.t + AXES_EXTENT_PAST_DATA,
 	]);
 
+const ticks = d3.range(AXES.x.min, AXES.x.max + 0.001, 1);
 function drawAxes() {
 	svg.append("rect")
 		.attr("x", 0)
@@ -77,7 +78,6 @@ function drawAxes() {
 		.attr("height", HEIGHT)
 		.attr("fill", "black");
 
-	const ticks = d3.range(AXES.x.min, AXES.x.max + 0.001, 1);
 	svg.selectAll()
 		.data(ticks)
 		.join("line")
@@ -176,7 +176,6 @@ function _toggleSlices(
 			.end()
 			.then(
 				() => {
-					console.log("h");
 					state = ANIM_STATES.after;
 					call(afterFinishCallback);
 				},
@@ -236,45 +235,47 @@ function _updateDiagrams({
 			}),
 		)
 		.flat(Infinity);
+
+	const gamma = lorentzFactor({ fracOfC: speed });
 	const dataForGroup = d => {
 		const index = d.index;
 		const arrowheadOffset = 0.0001;
 		let x1, y1, x2, y2, textPos, arrowheadX2, arrowheadY2, axisSymbol;
 		if (d.axis === "t") {
-			const x0 = index;
-			({ min: y1, max: y2 } = AXES.y);
+			const x0 = index / gamma;
+			({ min: y2, max: y1 } = AXES.y);
 			[y1, y2] = [y1, y2].map(y => y * 1.2);
 			[x1, x2] = [y1, y2].map(y => speed * y + x0);
 
 			textPos = {
-				x: xScale(x2) - 15,
-				y: yScale(y2) - 14,
+				x: xScale(x1) - 15,
+				y: yScale(y1) - 14,
 			};
-			// if (textPos.x > xScale(AXES.x.max) - 20 + AXES_EXTENT_PAST_DATA) {
-			// 	textPos.x = xScale(x1) - 10;
-			// 	textPos.y = yScale(y1) + 16;
-			// }
+			if (textPos.x > xScale(AXES.x.max) - 20 + AXES_EXTENT_PAST_DATA) {
+				textPos.x = xScale(x2) - 10;
+				textPos.y = yScale(y2) + 16;
+			}
 
-			arrowheadX2 = x2 + speed * arrowheadOffset;
-			arrowheadY2 = y2 + arrowheadOffset;
+			arrowheadX2 = x1 + speed * arrowheadOffset;
+			arrowheadY2 = y1 + arrowheadOffset;
 			axisSymbol = "𝑥";
 		} else if (d.axis === "x") {
-			const y0 = index;
-			({ min: x1, max: x2 } = AXES.x);
+			const y0 = index / gamma;
+			({ min: x2, max: x1 } = AXES.x);
 			[x1, x2] = [x1, x2].map(x => x * 1.2);
 			[y1, y2] = [x1, x2].map(x => speed * x + y0);
 
 			textPos = {
-				x: xScale(x2) - 15,
-				y: yScale(y2) - 12,
+				x: xScale(x1) - 15,
+				y: yScale(y1) - 12,
 			};
-			// if (textPos.y < 20 - AXES_EXTENT_PAST_DATA) {
-			// 	textPos.x = xScale(x1) - 10;
-			// 	textPos.y = yScale(y1) + 16;
-			// }
+			if (textPos.y < yScale(AXES.y.max) + 20 - AXES_EXTENT_PAST_DATA) {
+				textPos.x = xScale(x2) - 10;
+				textPos.y = yScale(y2) + 16;
+			}
 
-			arrowheadX2 = x2 + arrowheadOffset;
-			arrowheadY2 = y2 + speed * arrowheadOffset;
+			arrowheadX2 = x1 + arrowheadOffset;
+			arrowheadY2 = y1 + speed * arrowheadOffset;
 			axisSymbol = "𝑡";
 		} else {
 			throw new Error(`Unexpected axis ${d.axis}`);
@@ -300,8 +301,8 @@ function _updateDiagrams({
 			{
 				shape: "line",
 				attrs: {
-					x1: x2,
-					y1: y2,
+					x1: x1,
+					y1: y1,
 					x2: arrowheadX2,
 					y2: arrowheadY2,
 					stroke: lineColor,

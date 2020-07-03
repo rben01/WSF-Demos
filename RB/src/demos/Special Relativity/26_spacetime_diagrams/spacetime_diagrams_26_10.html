@@ -20,12 +20,12 @@
 		<div>
 			<span
 				><label
-					><span class="slider-label slider-label-custom">Velocity (𝑣)</span
+					><span class="slider-label slider-label-custom">Velocity (𝑣):</span
 					><input
 						type="range"
 						id="input-speed"
 						min="0"
-						max=".9"
+						max=".7"
 						value="0"
 						step=".001"
 						oninput="update({speed:this.value})" /></label
@@ -35,6 +35,12 @@
 				>𝑣 =
 				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
 			>
+		</div>
+		<br />
+		<div style="padding-left: 125px;">
+			<span>Earth Perspective</span>
+			<div style="display: inline-block; width: 200px;"></div>
+			<span>Spaceship Perspective</span>
 		</div>
 		<svg id="viz"></svg>
 		<script type="text/javascript" src="../../utils.js"></script>
