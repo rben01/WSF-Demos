@@ -1,4 +1,4 @@
-/* globals applyDatum */
+/* globals applyDatum STANDARD_COLORS */
 
 "use strict";
 
@@ -337,8 +337,8 @@ function drawGraph({ baseObject }) {
 }
 
 const graphAttrs = {
-	[ROCKET]: { stroke: "#4c4f" },
-	[PROJECTILE]: { stroke: "red" },
+	[ROCKET]: { stroke: STANDARD_COLORS.tertiary },
+	[PROJECTILE]: { stroke: STANDARD_COLORS.secondary },
 	common: { "stroke-width": 4, fill: "#0000" },
 };
 function getGraphData({ baseObject }) {
@@ -416,6 +416,8 @@ function getGraphData({ baseObject }) {
 					d: curve(data),
 					...graphAttrs[baseObject],
 					...graphAttrs.common,
+					stroke: STANDARD_COLORS.highlighted,
+					// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 				},
 			},
 			{
@@ -454,7 +456,10 @@ function getGraphData({ baseObject }) {
 			}),
 		);
 
-		const fgColor = "#fd2f";
+		const fgColor =
+			baseObject === ROCKET
+				? graphAttrs[ROCKET].stroke
+				: graphAttrs[PROJECTILE].stroke;
 
 		const commonLineAttrs = {
 			"stroke-width": 2,
@@ -508,7 +513,8 @@ function getGraphData({ baseObject }) {
 					cx: x,
 					cy: galileanY,
 					r: 4,
-					fill: "#ddd",
+					fill: galileanFgColor,
+					stroke: "#bbb",
 				},
 			},
 			{
@@ -520,7 +526,7 @@ function getGraphData({ baseObject }) {
 					x2: x,
 					y1: y,
 					y2: y,
-					stroke: fgColor,
+					stroke: STANDARD_COLORS.secondary,
 					...commonLineAttrs,
 				},
 			},
@@ -533,7 +539,7 @@ function getGraphData({ baseObject }) {
 					x2: x,
 					y1: AX_BOUNDS.yMin,
 					y2: y,
-					stroke: fgColor,
+					stroke: STANDARD_COLORS.highlighted,
 					...commonLineAttrs,
 				},
 			},
@@ -544,7 +550,8 @@ function getGraphData({ baseObject }) {
 					cx: x,
 					cy: y,
 					r: 4,
-					fill: fgColor,
+					fill: STANDARD_COLORS.secondary,
+					stroke: "#ddd",
 				},
 			},
 		];
