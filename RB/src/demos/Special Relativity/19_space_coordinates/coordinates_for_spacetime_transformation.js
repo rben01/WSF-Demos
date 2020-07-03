@@ -1,4 +1,4 @@
-/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS */
+/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS defineArrowhead */
 "use strict";
 
 const RANGES = {
@@ -88,7 +88,7 @@ const textSpans = {
 	},
 };
 
-const primedAxesColor = STANDARD_COLORS.highlighted;
+const primedAxesColor = STANDARD_COLORS.quaternary;
 
 const canvas = d3
 	.select("#viz-canvas")
@@ -100,37 +100,52 @@ const ARROWHEAD_IDS = {
 	upright: "marker-arrowhead-upright",
 	transformed: "marker-arrowhead-transformed",
 };
-(() => {
-	const markerAttrs = {
-		attrs: {
-			refX: 4,
-			refY: 4,
-			markerUnits: "strokeWidth",
-			markerWidth: 10,
-			markerHeight: 8,
-			orient: "auto",
-		},
-	};
-	const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
-	const defs = canvas.append("svg:defs");
 
-	[
-		[ARROWHEAD_IDS.upright, "white"],
-		[ARROWHEAD_IDS.transformed, primedAxesColor],
-	].forEach(([id, color]) => {
-		defs.append("svg:marker")
-			.attr("id", id)
-			.each(function () {
-				applyDatum.call(this, markerAttrs);
-			})
-			.append("svg:path")
-			.each(function () {
-				applyDatum.call(this, pathAttrs);
-			})
-			.attr("stroke", color)
-			.attr("fill", color);
-	});
-})();
+const defs = canvas.append("defs");
+defineArrowhead(defs, {
+	id: ARROWHEAD_IDS.upright,
+	length: 20,
+	width: 16,
+	color: "white",
+});
+defineArrowhead(defs, {
+	id: ARROWHEAD_IDS.transformed,
+	length: 20,
+	width: 16,
+	color: primedAxesColor,
+});
+
+// (() => {
+// 	const markerAttrs = {
+// 		attrs: {
+// 			refX: 4,
+// 			refY: 4,
+// 			markerUnits: "strokeWidth",
+// 			markerWidth: 10,
+// 			markerHeight: 8,
+// 			orient: "auto",
+// 		},
+// 	};
+// 	const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
+// 	const defs = canvas.append("svg:defs");
+
+// 	[
+// 		[ARROWHEAD_IDS.upright, "white"],
+// 		[ARROWHEAD_IDS.transformed, primedAxesColor],
+// 	].forEach(([id, color]) => {
+// 		defs.append("svg:marker")
+// 			.attr("id", id)
+// 			.each(function () {
+// 				applyDatum.call(this, markerAttrs);
+// 			})
+// 			.append("svg:path")
+// 			.each(function () {
+// 				applyDatum.call(this, pathAttrs);
+// 			})
+// 			.attr("stroke", color)
+// 			.attr("fill", color);
+// 	});
+// })();
 
 const subcanvases = canvas
 	.data([

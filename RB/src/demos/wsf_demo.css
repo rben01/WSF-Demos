@@ -33,7 +33,11 @@ body {
 }
 
 .tiertiary-text {
-	color: #0f5;
+	color: #14c778;
+}
+
+.quaternary-text {
+	color: #e5d;
 }
 
 .viz-canvas {

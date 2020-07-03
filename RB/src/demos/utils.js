@@ -8,8 +8,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 	highlighted: "#5df", // cyan used for variables
 	secondary: "#f3c002", // yellow
-	tertiary: "#0f5", // green
-	quaternary: "#0af", // darker blue
+	tertiary: "#14c778", // green
+	quaternary: "#e5d", // pinkish
 };
 
 // https://stackoverflow.com/a/32538867
