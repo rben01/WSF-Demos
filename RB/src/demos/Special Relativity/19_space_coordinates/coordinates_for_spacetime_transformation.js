@@ -1,4 +1,4 @@
-/* global l2Norm applyDatum applyGraphicalObjs */
+/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS */
 "use strict";
 
 const RANGES = {
@@ -77,6 +77,7 @@ const CANVAS_BOUNDS = {
 
 const textSpans = {
 	angle: document.getElementById("text-angle"),
+	dx: document.getElementById("text-dx"),
 	upright: {
 		x: document.getElementById("text-upright-x"),
 		y: document.getElementById("text-upright-y"),
@@ -87,7 +88,7 @@ const textSpans = {
 	},
 };
 
-const primedAxesColor = "#4f7";
+const primedAxesColor = STANDARD_COLORS.highlighted;
 
 const canvas = d3
 	.select("#viz-canvas")
@@ -367,38 +368,6 @@ function getLinesData({
 		},
 	];
 
-	const uprightLinesAttrs = {
-		stroke: "white",
-		"stroke-width": 2,
-		"stroke-dasharray": "5 5",
-	};
-	const uprightLinesData = !shouldDrawUprightLines
-		? []
-		: [
-				{
-					shape: "line",
-					class: "upright-line-horizontal",
-					attrs: {
-						x1: xScale(RANGES.axis.mid),
-						y1: yScale(y),
-						x2: xScale(x),
-						y2: yScale(y),
-						...uprightLinesAttrs,
-					},
-				},
-				{
-					shape: "line",
-					class: "upright-line-vertical",
-					attrs: {
-						x1: xScale(x),
-						y1: yScale(RANGES.axis.mid),
-						x2: xScale(x),
-						y2: yScale(y),
-						...uprightLinesAttrs,
-					},
-				},
-		  ];
-
 	// Compute projection of point onto transformed axes by translating point and transformed axes back to origin, computing projection onto transformed axes (now rotated but not translated), and then translating back
 	const tfAxProjCoords = {};
 	Object.keys(tfAxPosEndCoords).forEach(ax => {
@@ -416,10 +385,46 @@ function getLinesData({
 		tfAxProjCoords[ax].dotProd = projectionDotProd;
 	});
 
-	const tfLinesAttrs = {
-		stroke: primedAxesColor,
+	const uprightLinesAttrs = {
+		stroke: STANDARD_COLORS.highlighted,
 		"stroke-width": 2,
 		"stroke-dasharray": "5 5",
+	};
+	const uprightLinesData = [
+		{
+			shape: "line",
+			class: "upright-line-horizontal",
+			attrs: {
+				x1: xScale(RANGES.axis.mid),
+				y1: yScale(y),
+				x2: xScale(x),
+				y2: yScale(y),
+				...uprightLinesAttrs,
+			},
+		},
+		{
+			shape: "line",
+			class: "upright-line-vertical",
+			attrs: {
+				x1: xScale(x),
+				y1: yScale(RANGES.axis.mid),
+				x2: xScale(x),
+				y2: yScale(y),
+				...uprightLinesAttrs,
+			},
+		},
+	];
+
+	if (!shouldDrawUprightLines) {
+		for (const line of uprightLinesData) {
+			line.attrs["stroke-dasharray"] = "2 3";
+		}
+	}
+
+	const tfLinesAttrs = {
+		stroke: STANDARD_COLORS.secondary,
+		"stroke-width": shouldDrawUprightLines ? 2 : 4,
+		"stroke-dasharray": shouldDrawUprightLines ? "5 5" : "5 10",
 	};
 	const tfLinesData = [
 		{
@@ -533,9 +538,34 @@ function getLinesData({
 			cx: xScale(x),
 			cy: yScale(y),
 			r: 4,
-			fill: "#fd0",
+			fill: "white",
 		},
 	};
+
+	const axesDots = shouldDrawUprightLines
+		? []
+		: [
+				{
+					shape: "circle",
+					attrs: {
+						cx: xScale(x),
+						cy: yScale(RANGES.axis.mid),
+						r: 4,
+						fill: STANDARD_COLORS.highlighted,
+						stroke: "#ddd",
+					},
+				},
+				{
+					shape: "circle",
+					attrs: {
+						cx: xScale(RANGES.axis.mid),
+						cy: yScale(y),
+						r: 4,
+						fill: STANDARD_COLORS.highlighted,
+						stroke: "#ddd",
+					},
+				},
+		  ];
 
 	return {
 		data: [
@@ -544,6 +574,7 @@ function getLinesData({
 			...tfAxesData,
 			...tfAxisLabelsData,
 			pointDatum,
+			...axesDots,
 		],
 		tfCoords: {
 			xAxXCoord: tfAxProjCoords.xAx.dotProd,
@@ -553,6 +584,9 @@ function getLinesData({
 }
 
 function fmtFloat(x, precision) {
+	if (Math.abs(x) < 0.000001) {
+		x = 0;
+	}
 	return (+x).toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 
@@ -562,7 +596,6 @@ function updateAngle({
 	angleIndex,
 	displacementX,
 	displacementY,
-	userInput = true,
 	shouldDrawUprightLines,
 } = {}) {
 	const angleRad = getAngleFromIndex(angleIndex);
@@ -586,11 +619,15 @@ function updateAngle({
 	textSpans.transformed.x.innerHTML = fmtFloat(tfCoords.xAxXCoord, 2);
 	textSpans.transformed.y.innerHTML = fmtFloat(tfCoords.yAxYCoord, 2);
 
-	if (!userInput || typeof angleRad !== "undefined") {
+	if (textSpans.angle !== null) {
 		textSpans.angle.innerHTML = fmtFloat(
 			angleIndex === (RANGES.angle.n - 1) / 2 ? +0 : (angleRad * 180) / Math.PI,
 			2,
 		);
+	}
+
+	if (textSpans.dx !== null) {
+		textSpans.dx.innerHTML = fmtFloat(sliders.displacement.x.value, 2);
 	}
 }
 
@@ -599,6 +636,5 @@ updateAngle({
 	angleRad: 0,
 	displacementX: 0,
 	displacementY: 0,
-	userInput: false,
 	shouldDrawUprightLines: sliders.angle !== null,
 });

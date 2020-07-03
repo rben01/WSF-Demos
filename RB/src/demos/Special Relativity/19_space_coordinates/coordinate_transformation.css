@@ -1,6 +1,6 @@
 .slider-label-custom {
 	text-align: right;
-	min-width: 11.2em;
+	min-width: 13em;
 }
 .h-centered {
 	margin: auto;
@@ -12,12 +12,12 @@
 }
 
 .coordinate-box {
-	display: inline-flex;
-	flex-direction: column;
-	padding-left: 20px;
+	padding-left: 0px;
 	height: 400px;
+	vertical-align: middle;
+	display: inline-table;
 }
 
-.primed-coord {
-	color: #4f7;
+.blank-row {
+	height: 40px;
 }

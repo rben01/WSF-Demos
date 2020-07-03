@@ -41,7 +41,7 @@
 			<span>
 				<label>
 					<span class="slider-label slider-label-custom">
-						Horizontal displacement:
+						Horizontal displacement (𝛥𝑥):
 					</span>
 					<input
 						type="range"
@@ -61,28 +61,54 @@
 			></svg>
 		</div>
 		<div class="coordinate-box">
-			<div style="height: 100px;"></div>
-			<div class="text-div" style="vertical-align: top;">
-				<span
-					>𝑥 = <span id="text-upright-x" class="highlighted-text"></span
-				></span>
-				<br />
-				<span
-					>𝑦 = <span id="text-upright-y" class="highlighted-text"></span
-				></span>
-			<div style="height: 50px; flex-grow: 1;"></div>
-			<div class="text-div" style="vertical-align: bottom;">
-				<span
-					><span class="primed-coord">𝑥′</span> =
-					<span id="text-transformed-x" class="highlighted-text"></span
-				></span>
-				<br />
-				<span
-					><span class="primed-coord">𝑦′</span> =
-					<span id="text-transformed-y" class="highlighted-text"></span
-				></span>
+			<div
+				style="
+					vertical-align: middle;
+					display: table-cell;
+					padding-top: auto;
+					padding-bottom: auto;
+				"
+			>
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="eqn-left">𝑥</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-x" class="highlighted-text"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑦</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-y" class="highlighted-text"></span>
+						</td>
+					</tr>
+					<tr class="blank-row"></tr>
+					<tr>
+						<td class="eqn-left">𝛥𝑥</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-dx" class="highlighted-text">0</span>
+						</td>
+					</tr>
+					<tr class="blank-row"></tr>
+					<tr>
+						<td class="eqn-left">𝑥′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-transformed-x" class="secondary-text"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑦′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-transformed-y" class="secondary-text"></span>
+						</td>
+					</tr>
+				</table>
 			</div>
-			<div style="height: 100px;"></div>
 		</div>
 
 		<script type="text/javascript" src="../../utils.js"></script>
