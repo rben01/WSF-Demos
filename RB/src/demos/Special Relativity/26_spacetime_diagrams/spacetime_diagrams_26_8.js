@@ -36,15 +36,15 @@ function update({ t, x, v }) {
 	const tpx = v === 0 ? 0 : (t - x * v) / (1 / v - v);
 	const tp = v === 0 ? t : tpx / v;
 
-	const lineAttrs = { "stroke-width": 3 };
+	const lineAttrs = { "stroke-width": 2.5 };
 	const primedLineAttrs = {
 		...lineAttrs,
-		"stroke-dasharray": "1 1",
-		stroke: STANDARD_COLORS.secondary,
+		"stroke-dasharray": "3 3",
+		stroke: STANDARD_COLORS.quaternary,
 	};
 	const unprimedLineAttrs = {
 		...lineAttrs,
-		"stroke-dasharray": "1 1",
+		"stroke-dasharray": "3 3",
 		stroke: STANDARD_COLORS.highlighted,
 	};
 

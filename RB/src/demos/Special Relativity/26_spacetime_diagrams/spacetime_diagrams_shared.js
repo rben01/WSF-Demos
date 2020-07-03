@@ -1,4 +1,4 @@
-/* global HL_COLOR defineArrowhead applyDatum lorentzFactor */
+/* global STANDARD_COLORS defineArrowhead applyDatum lorentzFactor */
 
 const AXES = {
 	x: { min: -2, max: 2 },
@@ -15,7 +15,7 @@ const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
 const AXIS_ARROWHEAD_ID = "arrowhead_axis_";
 const LINE_ARROWHEAD_ID = "arrowhead_line_";
 
-const lineColor = HL_COLOR;
+const lineColor = STANDARD_COLORS.secondary;
 
 // eslint-disable-next-line no-unused-vars
 function fmtFloat(x, precision) {
@@ -51,7 +51,7 @@ defineArrowhead(defs, {
 })();
 
 const axisColor = "#eee";
-const tickColor = "#999";
+const tickColor = "#ccc";
 const tickLength = 5;
 
 const xScale = d3
@@ -86,7 +86,7 @@ function drawAxes() {
 		.attr("y1", yScale(0) - tickLength / 2)
 		.attr("y2", yScale(0) + tickLength / 2)
 		.style("stroke", tickColor)
-		.style("stroke-width", 1);
+		.style("stroke-width", 1.5);
 
 	svg.selectAll()
 		.data(ticks)
@@ -96,7 +96,7 @@ function drawAxes() {
 		.attr("y1", yScale)
 		.attr("y2", yScale)
 		.style("stroke", tickColor)
-		.style("stroke-width", 1);
+		.style("stroke-width", 1.5);
 
 	svg.append("line")
 		.attr("x1", xScale(AXES.x.min) - AXES_EXTENT_PAST_DATA)

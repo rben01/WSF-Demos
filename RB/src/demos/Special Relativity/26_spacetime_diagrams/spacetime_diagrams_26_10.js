@@ -1,4 +1,4 @@
-/* global HL_COLOR defineArrowhead applyDatum */
+/* global STANDARD_COLORS defineArrowhead applyDatum */
 const AXES = {
 	x: { min: -2, max: 2 },
 	y: { min: -2, max: 2 },
@@ -19,7 +19,7 @@ const AXIS_ARROWHEAD_ID = "arrowhead_axis_";
 const LINE_ARROWHEAD_ID = "arrowhead_line_";
 
 const tickAlpha = "a";
-const lineColor = HL_COLOR;
+const lineColor = STANDARD_COLORS.secondary;
 const tickAccent = `${lineColor}${tickAlpha}`;
 const axisColor = "#eee";
 const tickColor = `#eee${tickAlpha}`;

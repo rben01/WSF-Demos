@@ -62,7 +62,7 @@ const ARROWTAIL_ID = "arrowtail_";
 const axisColor = "#666";
 const tickLength = 10;
 
-const colors = { obs1: STANDARD_COLORS.secondary, obs2: STANDARD_COLORS.quaternary };
+const colors = { obs1: STANDARD_COLORS.quaternary, obs2: STANDARD_COLORS.secondary };
 
 const xScale = d3
 	.scaleLinear()
