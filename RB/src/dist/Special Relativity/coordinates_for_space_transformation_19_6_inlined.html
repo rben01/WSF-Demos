@@ -4,7 +4,274 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
-<body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}.slider-label-custom{text-align:right;min-width:11.2em}.h-centered{margin:auto;text-align:center}.text-div{display:inline;vertical-align:middle}.coordinate-box{display:inline-flex;flex-direction:column;padding-left:20px;height:400px}.primed-coord{color:#4f7}</style>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+.slider-label-custom {
+text-align: right;
+min-width: 11.2em;
+}
+.h-centered {
+margin: auto;
+text-align: center;
+}
+.text-div {
+display: inline;
+vertical-align: middle;
+}
+.coordinate-box {
+display: inline-flex;
+flex-direction: column;
+padding-left: 20px;
+height: 400px;
+}
+.primed-coord {
+color: #4f7;
+}
+</style>
 <div class="top-sliders-sect">
 <span>
 <label>
@@ -67,5 +334,735 @@ Horizontal displacement:
 </div>
 <div style="height: 100px;"></div>
 </div>
-<script type="text/javascript">"use strict";const C=299792458;function isIterable(e){return null!=e&&"function"==typeof e[Symbol.iterator]}function applyDatum(e,{transition:t}={}){const a=d3.select(this).datum(e);void 0!==e.class&&a.classed(e.class,!0);const s=void 0===t?a:a.transition(t);Object.entries(e.attrs).forEach(([e,t])=>{s.attr(e,t)}),void 0!==e.text&&s.text(e.text)}function _addGraphicalObjs(e,t){return e.selectAll().data(t).enter().append(e=>d3.create(`svg:${e.shape}`).node()).each(applyDatum)}function applyGraphicalObjs(e,t,{selector:a,cssClass:s,transition:n}={}){const i=e.selectAll(a).data(t).join(e=>e.append(e=>d3.create(`svg:${e.shape}`).node())).each(function(e){applyDatum.call(this,e,{transition:n})});return void 0!==s&&i.classed(s,!0),i}function lorentzFactor({fracOfC:e}){return e||(e=0),1/Math.sqrt(1-e*e)}function sign(e,t){return void 0===t&&(t=1e-6),e<-t?-1:e<t?0:1}function l2Norm(...e){const t=e.reduce((e,t)=>e+t*t,0);return Math.sqrt(t)}const AESTHETIC={solidFill:"#4ff8",solidStroke:"#fff8",durationMSOfAnimationReset:300,easingForAnimationReset:d3.easePoly.exponent(2.5),configure:function(e,t){return Object.entries(t).forEach(([t,a])=>{if("attrs"===t){const t=a;Object.entries(t).forEach(([t,a])=>{e.attr(t,a)})}else{if("class"!==t)throw new Error(`Unexpected key ${t}`);e.classed(a,!0)}}),e}},RANGES={axis:{min:-20,max:20},angle:{min:-Math.PI,max:Math.PI,n:1001},displacement:{min:-5,max:5,n:1001}};(()=>{const e=RANGES.axis;e.mid=3*(e.max+e.min)/4,e.posDist=e.max-e.mid,e.negDist=e.mid-e.min,e.span=e.max-e.min})();const sliders={displacement:{}},MAX_DISPLACEMENT=5;["x","y"].forEach(e=>{const t=document.getElementById(`input-${e}-coord`);sliders[e]=t,t.min=-10,t.max=10,t.step=.001,t.value=0,sliders.displacement[e]=(()=>{const t=document.getElementById(`input-displacement-${e}`);return null!==t&&(t.min=-5,t.max=5,t.step=.001,t.value=0),t})()}),sliders.angle=(()=>{const e=document.getElementById("input-angle-rad");return null!==e&&(e.min=0,e.max=RANGES.angle.n-1,e.step=1,e.value=(RANGES.angle.n-1)/2),e})();const AXIS_MARGINS={top:.05,bottom:.05,left:(sliders.displacement.x,.2),right:null!==sliders.displacement.x?.2:.1},CANVAS_HEIGHT=400,CANVAS_WIDTH=400/(1-(AXIS_MARGINS.left+AXIS_MARGINS.right))*(1-(AXIS_MARGINS.top+AXIS_MARGINS.bottom)),CANVAS_BOUNDS={xMin:CANVAS_WIDTH*AXIS_MARGINS.left,xMax:CANVAS_WIDTH*(1-AXIS_MARGINS.right),yMin:400*(1-AXIS_MARGINS.bottom),yMax:400*AXIS_MARGINS.top},textSpans={angle:document.getElementById("text-angle"),upright:{x:document.getElementById("text-upright-x"),y:document.getElementById("text-upright-y")},transformed:{x:document.getElementById("text-transformed-x"),y:document.getElementById("text-transformed-y")}},primedAxesColor="#4f7",canvas=d3.select("#viz-canvas").attr("width",CANVAS_WIDTH).attr("height",400).attr("background-color","black"),ARROWHEAD_IDS={upright:"marker-arrowhead-upright",transformed:"marker-arrowhead-transformed"};(()=>{const e={attrs:{refX:4,refY:4,markerUnits:"strokeWidth",markerWidth:10,markerHeight:8,orient:"auto"}},t={attrs:{d:"M 0 0 L 10 4 L 0 8 L 4 4 z"}},a=canvas.append("svg:defs");[[ARROWHEAD_IDS.upright,"white"],[ARROWHEAD_IDS.transformed,primedAxesColor]].forEach(([s,n])=>{a.append("svg:marker").attr("id",s).each(function(){applyDatum.call(this,e)}).append("svg:path").each(function(){applyDatum.call(this,t)}).attr("stroke",n).attr("fill",n)})})();const subcanvases=canvas.data([{originX:0,originY:0,width:CANVAS_WIDTH,height:400}]).each(function(e){d3.select(this).append("g").attr("transform",`translate(0, ${e.originY})`).classed("subcanvas",!0)}).selectAll("g"),xScale=d3.scaleLinear().domain([RANGES.axis.min,RANGES.axis.max]).range([CANVAS_BOUNDS.xMin,CANVAS_BOUNDS.xMax]),yScale=d3.scaleLinear().domain([RANGES.axis.min,RANGES.axis.max]).range([CANVAS_BOUNDS.yMin,CANVAS_BOUNDS.yMax]);function getAngleFromIndex(e){if(void 0===e){if(null===sliders.angle)return 0;e=+sliders.angle.value}return-(RANGES.angle.min+e/(RANGES.angle.n-1)*(RANGES.angle.max-RANGES.angle.min))}const AXIS_LABEL_LOCS={xAx:{x:RANGES.axis.max,y:RANGES.axis.mid+.05*RANGES.axis.span},yAx:{x:RANGES.axis.mid+.05*RANGES.axis.span,y:RANGES.axis.max}};function drawGraph(){subcanvases.each(function(){const e=d3.select(this),t={stroke:"white","stroke-width":2,"marker-end":`url(#${ARROWHEAD_IDS.upright})`};e.selectAll().data([{shape:"line",class:"axis-x",attrs:{x1:xScale(RANGES.axis.min),x2:xScale(RANGES.axis.max),y1:yScale(RANGES.axis.mid),y2:yScale(RANGES.axis.mid),...t}},{shape:"line",class:"axis-y",attrs:{x1:xScale(RANGES.axis.mid),x2:xScale(RANGES.axis.mid),y1:yScale(RANGES.axis.min),y2:yScale(RANGES.axis.max),...t}}]).enter().append("svg:line").each(applyDatum),e.selectAll("text").data([{shape:"text",class:"axis-x-label",attrs:{x:xScale(AXIS_LABEL_LOCS.xAx.x),y:yScale(AXIS_LABEL_LOCS.xAx.y),fill:"white","text-anchor":"middle","dominant-baseline":"center"},text:"𝑥"},{shape:"text",class:"axis-y-label",attrs:{x:xScale(AXIS_LABEL_LOCS.yAx.x),y:yScale(AXIS_LABEL_LOCS.yAx.y),fill:"white","text-anchor":"middle","dominant-baseline":"center"},text:"𝑦"}]).enter().append("svg:text").each(applyDatum).text(e=>e.text)})}function getLinesData({x:e,y:t,angleRad:a,displacementX:s,displacementY:n,shouldDrawUprightLines:i}){void 0===e&&(e=+sliders.x.value),void 0===t&&(t=+sliders.y.value),void 0===a&&(a=null===sliders.angle?0:+getAngleFromIndex(sliders.angle.value)),void 0===s&&(s=null===sliders.displacement.x?0:sliders.displacement.x.value),s=+s,void 0===n&&(n=null===sliders.displacement.y?0:+sliders.displacement.y.value),n=+n,void 0===i&&(i=!0);const l=Math.sin(a),r=Math.cos(a),x={"stroke-width":2,"marker-end":`url(#${ARROWHEAD_IDS.transformed})`},o={x:RANGES.axis.mid+s,y:RANGES.axis.mid+n},c={pos:{xAx:{x:RANGES.axis.posDist*r,y:RANGES.axis.posDist*l},yAx:{x:-RANGES.axis.posDist*l,y:RANGES.axis.posDist*r}},neg:{xAx:{x:RANGES.axis.negDist*r,y:RANGES.axis.negDist*l},yAx:{x:-RANGES.axis.negDist*l,y:RANGES.axis.negDist*r}}},d={};Object.entries(c.pos).forEach(([e,t])=>{d[e]={},Object.entries(t).forEach(([t,a])=>{d[e][t]=o[t]+a})});const A=[{shape:"line",class:"tf-axis-x",attrs:{x1:xScale(o.x-c.neg.xAx.x),y1:yScale(o.y-c.neg.xAx.y),x2:xScale(d.xAx.x),y2:yScale(d.xAx.y),...x,stroke:primedAxesColor}},{shape:"line",class:"tf-axis-y",attrs:{x1:xScale(o.x-c.neg.yAx.x),y1:yScale(o.y-c.neg.yAx.y),x2:xScale(d.yAx.x),y2:yScale(d.yAx.y),...x,stroke:primedAxesColor}}],S={stroke:"white","stroke-width":2,"stroke-dasharray":"5 5"},m=i?[{shape:"line",class:"upright-line-horizontal",attrs:{x1:xScale(RANGES.axis.mid),y1:yScale(t),x2:xScale(e),y2:yScale(t),...S}},{shape:"line",class:"upright-line-vertical",attrs:{x1:xScale(e),y1:yScale(RANGES.axis.mid),x2:xScale(e),y2:yScale(t),...S}}]:[],p={};Object.keys(d).forEach(a=>{const s=c.pos[a].x,n=c.pos[a].y,i=l2Norm(s,n),l=s/i,r=n/i,x=(e-o.x)*l+(t-o.y)*r;p[a]={},p[a].x=o.x+x*l,p[a].y=o.y+x*r,p[a].dotProd=x});const y={stroke:primedAxesColor,"stroke-width":2,"stroke-dasharray":"5 5"},u=[{shape:"line",class:"tf-line-vertical",attrs:{x1:xScale(p.xAx.x),y1:yScale(p.xAx.y),x2:xScale(e),y2:yScale(t),...y}},{shape:"line",class:"tf-line-horizontal",attrs:{x1:xScale(p.yAx.x),y1:yScale(p.yAx.y),x2:xScale(e),y2:yScale(t),...y}}],h=.05*RANGES.axis.span,g={fill:primedAxesColor},E=(e,t)=>{const a=1/(.07-.05)*(Math.min(...["xAx","yAx"].map(a=>{return l2Norm(e-AXIS_LABEL_LOCS[a].x,t-AXIS_LABEL_LOCS[a].y)/RANGES.axis.span}))-.05);return Math.max(0,Math.min(a,1))};return{data:[...m,...u,...A,...[(()=>{const e=d.xAx.x+h*-l,t=(()=>{const e=d.xAx.y+h*r;return r<0?e+h*r*.9:e})(),a=E(e,t);return{shape:"text",class:"tf-x-axis-label",attrs:{x:xScale(e),y:yScale(t),opacity:a,...g,"text-anchor":"middle","dominant-baseline":"center"},text:"𝑥′"}})(),(()=>{const e=d.yAx.x+h*r*1.2,t=(()=>{const e=d.yAx.y+h*l;return l<0?e+h*l*.9:e})(),a=E(e,t);return{shape:"text",class:"tf-y-axis-label",attrs:{x:xScale(e),y:yScale(t),opacity:a,...g,"text-anchor":"middle","dominant-baseline":"center"},text:"𝑦′"}})()],{shape:"circle",class:"marked-point",attrs:{cx:xScale(e),cy:yScale(t),r:4,fill:"#fd0"}}],tfCoords:{xAxXCoord:p.xAx.dotProd,yAxYCoord:p.yAx.dotProd}}}function updateAngle({x:e,y:t,angleIndex:a,displacementX:s,displacementY:n,userInput:i=!0,shouldDrawUprightLines:l}={}){const r=getAngleFromIndex(a),{data:x,tfCoords:o}=getLinesData({x:e,y:t,angleRad:r,displacementX:s,displacementY:n,shouldDrawUprightLines:l});applyGraphicalObjs(subcanvases,()=>x,{selector:".graph-obj",cssClass:"graph-obj"}),textSpans.upright.x.textContent=(+sliders.x.value).toFixed(2),textSpans.upright.y.textContent=(+sliders.y.value).toFixed(2),textSpans.transformed.x.textContent=o.xAxXCoord.toFixed(2),textSpans.transformed.y.textContent=o.yAxYCoord.toFixed(2),i&&void 0===r||(textSpans.angle.textContent=(a===(RANGES.angle.n-1)/2?0:180*r/Math.PI).toFixed(2))}drawGraph(),updateAngle({angleRad:0,displacementX:0,displacementY:0,userInput:!1,shouldDrawUprightLines:null!==sliders.angle});</script></body>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#0f5", // green
+quaternary: "#0af", // darker blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this).datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (typeof datum.text !== "undefined") {
+t.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(t, () => datum.children, { transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+"use strict";
+// eslint-disable-next-line no-unused-vars
+const AESTHETIC = {
+solidFill: "#4ff8",
+solidStroke: "#fff8",
+durationMSOfAnimationReset: 300,
+easingForAnimationReset: d3.easePoly.exponent(2.5),
+configure: function (d3Obj, config) {
+Object.entries(config).forEach(([key, value]) => {
+if (key === "attrs") {
+const attrs = value;
+Object.entries(attrs).forEach(([attr, val]) => {
+d3Obj.attr(attr, val);
+});
+} else if (key === "class") {
+d3Obj.classed(value, true);
+} else {
+throw new Error(`Unexpected key ${key}`);
+}
+});
+return d3Obj;
+},
+};
+/* global l2Norm applyDatum applyGraphicalObjs */
+"use strict";
+const RANGES = {
+axis: { min: -20, max: 20 },
+angle: {
+min: -Math.PI,
+max: Math.PI,
+n: 1001,
+},
+displacement: {
+min: -5,
+max: 5,
+n: 1001,
+},
+};
+(() => {
+const v = RANGES["axis"];
+v.mid = ((v.max + v.min) * 3) / 4;
+v.posDist = v.max - v.mid;
+v.negDist = v.mid - v.min;
+v.span = v.max - v.min;
+})();
+const sliders = {};
+sliders.displacement = {};
+const MAX_DISPLACEMENT = 5;
+["x", "y"].forEach(v => {
+const slider = document.getElementById(`input-${v}-coord`);
+sliders[v] = slider;
+slider.min = -10;
+slider.max = 10;
+slider.step = 0.001;
+slider.value = 0;
+sliders.displacement[v] = (() => {
+const displacementSlider = document.getElementById(`input-displacement-${v}`);
+if (displacementSlider !== null) {
+displacementSlider.min = -MAX_DISPLACEMENT;
+displacementSlider.max = MAX_DISPLACEMENT;
+displacementSlider.step = 0.001;
+displacementSlider.value = 0;
+}
+return displacementSlider;
+})();
+});
+sliders.angle = (() => {
+const angleSlider = document.getElementById("input-angle-rad");
+if (angleSlider !== null) {
+angleSlider.min = 0;
+angleSlider.max = RANGES.angle.n - 1;
+angleSlider.step = 1;
+angleSlider.value = (RANGES.angle.n - 1) / 2;
+}
+return angleSlider;
+})();
+const AXIS_MARGINS = {
+top: 0.05,
+bottom: 0.05,
+left: sliders.displacement.x !== null ? 0.2 : 0.2,
+right: sliders.displacement.x !== null ? 0.2 : 0.1,
+};
+const CANVAS_HEIGHT = 400;
+const CANVAS_WIDTH =
+(CANVAS_HEIGHT / (1 - (AXIS_MARGINS.left + AXIS_MARGINS.right))) *
+(1 - (AXIS_MARGINS.top + AXIS_MARGINS.bottom));
+const CANVAS_BOUNDS = {
+xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
+xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
+yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
+yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
+};
+const textSpans = {
+angle: document.getElementById("text-angle"),
+upright: {
+x: document.getElementById("text-upright-x"),
+y: document.getElementById("text-upright-y"),
+},
+transformed: {
+x: document.getElementById("text-transformed-x"),
+y: document.getElementById("text-transformed-y"),
+},
+};
+const primedAxesColor = "#4f7";
+const canvas = d3
+.select("#viz-canvas")
+.attr("width", CANVAS_WIDTH)
+.attr("height", CANVAS_HEIGHT)
+.attr("background-color", "black");
+const ARROWHEAD_IDS = {
+upright: "marker-arrowhead-upright",
+transformed: "marker-arrowhead-transformed",
+};
+(() => {
+const markerAttrs = {
+attrs: {
+refX: 4,
+refY: 4,
+markerUnits: "strokeWidth",
+markerWidth: 10,
+markerHeight: 8,
+orient: "auto",
+},
+};
+const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
+const defs = canvas.append("svg:defs");
+[
+[ARROWHEAD_IDS.upright, "white"],
+[ARROWHEAD_IDS.transformed, primedAxesColor],
+].forEach(([id, color]) => {
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, pathAttrs);
+})
+.attr("stroke", color)
+.attr("fill", color);
+});
+})();
+const subcanvases = canvas
+.data([
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT,
+},
+])
+.each(function (d) {
+d3.select(this)
+.append("g")
+.attr("transform", `translate(0, ${d.originY})`)
+.classed("subcanvas", true);
+})
+.selectAll("g");
+const xScale = d3
+.scaleLinear()
+.domain([RANGES.axis.min, RANGES.axis.max])
+.range([CANVAS_BOUNDS.xMin, CANVAS_BOUNDS.xMax]);
+const yScale = d3
+.scaleLinear()
+.domain([RANGES.axis.min, RANGES.axis.max])
+.range([CANVAS_BOUNDS.yMin, CANVAS_BOUNDS.yMax]);
+function getAngleFromIndex(angleIndex) {
+if (typeof angleIndex === "undefined") {
+if (sliders.angle === null) {
+return 0;
+}
+angleIndex = +sliders.angle.value;
+}
+return -(
+RANGES.angle.min +
+(angleIndex / (RANGES.angle.n - 1)) * (RANGES.angle.max - RANGES.angle.min)
+);
+}
+const AXIS_LABEL_LOCS = {
+xAx: { x: RANGES.axis.max, y: RANGES.axis.mid + RANGES.axis.span * 0.05 },
+yAx: { x: RANGES.axis.mid + RANGES.axis.span * 0.05, y: RANGES.axis.max },
+};
+function drawGraph() {
+subcanvases.each(function () {
+const subcanvas = d3.select(this);
+const axisAttrs = {
+stroke: "white",
+"stroke-width": 2,
+"marker-end": `url(#${ARROWHEAD_IDS.upright})`,
+};
+subcanvas
+.selectAll()
+.data([
+{
+shape: "line",
+class: "axis-x",
+attrs: {
+x1: xScale(RANGES.axis.min),
+x2: xScale(RANGES.axis.max),
+y1: yScale(RANGES.axis.mid),
+y2: yScale(RANGES.axis.mid),
+...axisAttrs,
+},
+},
+{
+shape: "line",
+class: "axis-y",
+attrs: {
+x1: xScale(RANGES.axis.mid),
+x2: xScale(RANGES.axis.mid),
+y1: yScale(RANGES.axis.min),
+y2: yScale(RANGES.axis.max),
+...axisAttrs,
+},
+},
+])
+.enter()
+.append("svg:line")
+.each(applyDatum);
+subcanvas
+.selectAll("text")
+.data([
+{
+shape: "text",
+class: "axis-x-label",
+attrs: {
+x: xScale(AXIS_LABEL_LOCS.xAx.x),
+y: yScale(AXIS_LABEL_LOCS.xAx.y),
+fill: "white",
+"text-anchor": "middle",
+"dominant-baseline": "center",
+},
+text: "𝑥",
+},
+{
+shape: "text",
+class: "axis-y-label",
+attrs: {
+x: xScale(AXIS_LABEL_LOCS.yAx.x),
+y: yScale(AXIS_LABEL_LOCS.yAx.y),
+fill: "white",
+"text-anchor": "middle",
+"dominant-baseline": "center",
+},
+text: "𝑦",
+},
+])
+.enter()
+.append("svg:text")
+.each(applyDatum)
+.text(d => d.text);
+});
+}
+function getLinesData({
+x,
+y,
+angleRad,
+displacementX,
+displacementY,
+shouldDrawUprightLines,
+}) {
+if (typeof x === "undefined") {
+x = +sliders.x.value;
+}
+if (typeof y === "undefined") {
+y = +sliders.y.value;
+}
+if (typeof angleRad === "undefined") {
+if (sliders.angle === null) {
+angleRad = 0;
+} else {
+angleRad = +getAngleFromIndex(sliders.angle.value);
+}
+}
+if (typeof displacementX === "undefined") {
+if (sliders.displacement.x === null) {
+displacementX = 0;
+} else {
+displacementX = sliders.displacement.x.value;
+}
+}
+displacementX = +displacementX;
+if (typeof displacementY === "undefined") {
+if (sliders.displacement.y === null) {
+displacementY = 0;
+} else {
+displacementY = +sliders.displacement.y.value;
+}
+}
+displacementY = +displacementY;
+if (typeof shouldDrawUprightLines === "undefined") {
+shouldDrawUprightLines = true;
+}
+const sin = Math.sin(angleRad);
+const cos = Math.cos(angleRad);
+const tfAxesAttrs = {
+"stroke-width": 2,
+"marker-end": `url(#${ARROWHEAD_IDS.transformed})`,
+};
+const tfAxOrigin = {
+x: RANGES.axis.mid + displacementX,
+y: RANGES.axis.mid + displacementY,
+};
+const tfAxDisplacement = {
+pos: {
+xAx: {
+x: RANGES.axis.posDist * cos,
+y: RANGES.axis.posDist * sin,
+},
+yAx: {
+x: -RANGES.axis.posDist * sin,
+y: RANGES.axis.posDist * cos,
+},
+},
+neg: {
+xAx: {
+x: RANGES.axis.negDist * cos,
+y: RANGES.axis.negDist * sin,
+},
+yAx: {
+x: -RANGES.axis.negDist * sin,
+y: RANGES.axis.negDist * cos,
+},
+},
+};
+// Looks like {xAx: {x: y: }, {yAx: {x: y: }}}
+const tfAxPosEndCoords = {};
+Object.entries(tfAxDisplacement.pos).forEach(([ax, info]) => {
+tfAxPosEndCoords[ax] = {};
+Object.entries(info).forEach(([coord, dist]) => {
+tfAxPosEndCoords[ax][coord] = tfAxOrigin[coord] + dist;
+});
+});
+const tfAxesData = [
+{
+shape: "line",
+class: "tf-axis-x",
+attrs: {
+x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.xAx.x),
+y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.xAx.y),
+x2: xScale(tfAxPosEndCoords.xAx.x),
+y2: yScale(tfAxPosEndCoords.xAx.y),
+...tfAxesAttrs,
+stroke: primedAxesColor,
+},
+},
+{
+shape: "line",
+class: "tf-axis-y",
+attrs: {
+x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.yAx.x),
+y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.yAx.y),
+x2: xScale(tfAxPosEndCoords.yAx.x),
+y2: yScale(tfAxPosEndCoords.yAx.y),
+...tfAxesAttrs,
+stroke: primedAxesColor,
+},
+},
+];
+const uprightLinesAttrs = {
+stroke: "white",
+"stroke-width": 2,
+"stroke-dasharray": "5 5",
+};
+const uprightLinesData = !shouldDrawUprightLines
+? []
+: [
+{
+shape: "line",
+class: "upright-line-horizontal",
+attrs: {
+x1: xScale(RANGES.axis.mid),
+y1: yScale(y),
+x2: xScale(x),
+y2: yScale(y),
+...uprightLinesAttrs,
+},
+},
+{
+shape: "line",
+class: "upright-line-vertical",
+attrs: {
+x1: xScale(x),
+y1: yScale(RANGES.axis.mid),
+x2: xScale(x),
+y2: yScale(y),
+...uprightLinesAttrs,
+},
+},
+];
+// Compute projection of point onto transformed axes by translating point and transformed axes back to origin, computing projection onto transformed axes (now rotated but not translated), and then translating back
+const tfAxProjCoords = {};
+Object.keys(tfAxPosEndCoords).forEach(ax => {
+const tfAxPosEndDispX = tfAxDisplacement.pos[ax].x;
+const tfAxPosEndDispY = tfAxDisplacement.pos[ax].y;
+const posEndNorm = l2Norm(tfAxPosEndDispX, tfAxPosEndDispY);
+const posEndUnitVecX = tfAxPosEndDispX / posEndNorm;
+const posEndUnitVecY = tfAxPosEndDispY / posEndNorm;
+const projectionDotProd =
+(x - tfAxOrigin.x) * posEndUnitVecX + (y - tfAxOrigin.y) * posEndUnitVecY;
+tfAxProjCoords[ax] = {};
+tfAxProjCoords[ax].x = tfAxOrigin.x + projectionDotProd * posEndUnitVecX;
+tfAxProjCoords[ax].y = tfAxOrigin.y + projectionDotProd * posEndUnitVecY;
+tfAxProjCoords[ax].dotProd = projectionDotProd;
+});
+const tfLinesAttrs = {
+stroke: primedAxesColor,
+"stroke-width": 2,
+"stroke-dasharray": "5 5",
+};
+const tfLinesData = [
+{
+shape: "line",
+class: "tf-line-vertical",
+attrs: {
+x1: xScale(tfAxProjCoords.xAx.x),
+y1: yScale(tfAxProjCoords.xAx.y),
+x2: xScale(x),
+y2: yScale(y),
+...tfLinesAttrs,
+},
+},
+{
+shape: "line",
+class: "tf-line-horizontal",
+attrs: {
+x1: xScale(tfAxProjCoords.yAx.x),
+y1: yScale(tfAxProjCoords.yAx.y),
+x2: xScale(x),
+y2: yScale(y),
+...tfLinesAttrs,
+},
+},
+];
+const axisLabelDist = 0.05 * RANGES.axis.span;
+const axisLabelAttrs = {
+fill: primedAxesColor,
+};
+const getOpacity = (x, y) => {
+const minDistToUprightAxisLabel = Math.min(
+...["xAx", "yAx"].map(ax => {
+const distFromUprightAxisLabel = l2Norm(
+x - AXIS_LABEL_LOCS[ax].x,
+y - AXIS_LABEL_LOCS[ax].y,
+);
+return distFromUprightAxisLabel / RANGES.axis.span;
+}),
+);
+const beginAppearScaledDist = 0.05;
+const fullyAppearScaledDist = 0.07;
+const unadjustedOpacity =
+(1 / (fullyAppearScaledDist - beginAppearScaledDist)) *
+(minDistToUprightAxisLabel - beginAppearScaledDist);
+const opacity = Math.max(0, Math.min(unadjustedOpacity, 1));
+return opacity;
+};
+const tfAxisLabelsData = [
+(() => {
+// X axis label
+const x = tfAxPosEndCoords.xAx.x + axisLabelDist * -sin;
+const y = (() => {
+const y = tfAxPosEndCoords.xAx.y + axisLabelDist * cos;
+if (cos < 0) {
+return y + axisLabelDist * cos * 0.9;
+}
+return y;
+})();
+const opacity = getOpacity(x, y);
+return {
+shape: "text",
+class: "tf-x-axis-label",
+attrs: {
+x: xScale(x),
+y: yScale(y),
+opacity: opacity,
+...axisLabelAttrs,
+"text-anchor": "middle",
+"dominant-baseline": "center",
+},
+text: "𝑥′",
+};
+})(),
+(() => {
+// Y axis label
+const x = tfAxPosEndCoords.yAx.x + axisLabelDist * cos * 1.2;
+const y = (() => {
+const y = tfAxPosEndCoords.yAx.y + axisLabelDist * sin;
+if (sin < 0) {
+return y + axisLabelDist * sin * 0.9;
+}
+return y;
+})();
+const opacity = getOpacity(x, y);
+return {
+shape: "text",
+class: "tf-y-axis-label",
+attrs: {
+x: xScale(x),
+y: yScale(y),
+opacity: opacity,
+...axisLabelAttrs,
+"text-anchor": "middle",
+"dominant-baseline": "center",
+},
+text: "𝑦′",
+};
+})(),
+];
+const pointDatum = {
+shape: "circle",
+class: "marked-point",
+attrs: {
+cx: xScale(x),
+cy: yScale(y),
+r: 4,
+fill: "#fd0",
+},
+};
+return {
+data: [
+...uprightLinesData,
+...tfLinesData,
+...tfAxesData,
+...tfAxisLabelsData,
+pointDatum,
+],
+tfCoords: {
+xAxXCoord: tfAxProjCoords.xAx.dotProd,
+yAxYCoord: tfAxProjCoords.yAx.dotProd,
+},
+};
+}
+function fmtFloat(x, precision) {
+return (+x).toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+function updateAngle({
+x,
+y,
+angleIndex,
+displacementX,
+displacementY,
+userInput = true,
+shouldDrawUprightLines,
+} = {}) {
+const angleRad = getAngleFromIndex(angleIndex);
+const { data, tfCoords: tfCoords } = getLinesData({
+x,
+y,
+angleRad,
+displacementX,
+displacementY,
+shouldDrawUprightLines,
+});
+applyGraphicalObjs(subcanvases, () => data, {
+selector: ".graph-obj",
+cssClass: "graph-obj",
+});
+textSpans.upright.x.innerHTML = fmtFloat(sliders.x.value, 2);
+textSpans.upright.y.innerHTML = fmtFloat(sliders.y.value, 2);
+textSpans.transformed.x.innerHTML = fmtFloat(tfCoords.xAxXCoord, 2);
+textSpans.transformed.y.innerHTML = fmtFloat(tfCoords.yAxYCoord, 2);
+if (!userInput || typeof angleRad !== "undefined") {
+textSpans.angle.innerHTML = fmtFloat(
+angleIndex === (RANGES.angle.n - 1) / 2 ? +0 : (angleRad * 180) / Math.PI,
+2,
+);
+}
+}
+drawGraph();
+updateAngle({
+angleRad: 0,
+displacementX: 0,
+displacementY: 0,
+userInput: false,
+shouldDrawUprightLines: sliders.angle !== null,
+});
+</script></body>
 </html>

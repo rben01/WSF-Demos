@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
+</head>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+.slider-label-custom {
+min-width: 9em;
+text-align: left;
+margin-bottom: unset;
+}
+.viz-canvas {
+padding-top: 5px;
+}
+.smaller {
+font-size: 70%;
+}
+.demo-button {
+width: unset;
+margin: unset;
+margin-right: 5px;
+position: relative;
+bottom: 4px;
+}
+.subsubscript {
+position: relative;
+top: 0.6em;
+left: 0em;
+font-size: 65%;
+}
+svg {
+margin-top: 20px;
+}
+</style>
+<div>
+<div style="line-height: 1em;">
+<span><label><span class="slider-label slider-label-custom">Relative velocity (𝑣):</span><input id="input-v" max=".99" min=".1" oninput="update({v:this.value})" step=".01" type="range" value=".3"/></label></span><br/>
+<br/>
+<span><span class="slider-label slider-label-custom">Perspective:</span><button class="play-button demo-button" id="btn-persp-barn" onclick="update({perspective:BARN})">
+Barn</button><button class="play-button demo-button" id="btn-persp-pole" onclick="update({perspective:POLE})">
+Pole
+</button></span>
+<br/><span><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="0"/></label></span>
+<br/><span><button class="play-button" id="play-pause" onclick="toggleAnimation()">
+Play
+</button></span>
+</div>
+</div>
+<div>
+<svg id="viz" style="display: inline-block;"></svg>
+<svg id="legend" style="display: inline-block; vertical-align: top;"></svg>
+</div>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#0f5", // green
+quaternary: "#0af", // darker blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this).datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (typeof datum.text !== "undefined") {
+t.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(t, () => datum.children, { transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+/* global lorentzFactor applyGraphicalObjs applyDatum defineArrowhead */
+const AXES = {
+x: { min: -1, origin: 0, max: 1 },
+y: { min: -1, origin: 0, max: 1 },
+};
+const MARGINS = { t: 10, b: 10, l: 10, r: 10 };
+const HEIGHT = 500;
+const WIDTH = (HEIGHT * (AXES.x.max - AXES.x.min)) / (AXES.y.max - AXES.y.min);
+const colors = (() => {
+const makeTransparent = color => {
+const c = d3.color(color);
+c.opacity = 0.35;
+return c.formatRgb();
+};
+const barn = "#0af";
+const pole = "#fe2";
+return {
+barn,
+barnFill: makeTransparent(barn),
+pole,
+poleFill: makeTransparent(pole),
+backDoorOpens: "#f90",
+backDoorCloses: "#f00",
+frontDoorOpens: "#e4f",
+frontDoorCloses: "#0cf",
+};
+})();
+const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
+const ARROWHEAD_ID = "arrowhead_";
+const defs = svg.append("defs");
+defineArrowhead(defs, { id: ARROWHEAD_ID, length: 14, width: 12, color: "white" });
+defs.append("clipPath")
+.attr("id", "axes-clip")
+.append("rect")
+.attr("x", MARGINS.l)
+.attr("y", MARGINS.t)
+.attr("width", WIDTH - MARGINS.l - MARGINS.r)
+.attr("height", HEIGHT - MARGINS.t - MARGINS.b);
+const legend = (() => {
+const legendWidth = 150;
+const legendHeight = 300;
+const legend = d3
+.select("#legend")
+.attr("width", legendWidth)
+.attr("height", legendHeight);
+const strokeWidth = 3;
+const x1 = 10;
+const x2 = 25;
+const dy = 24;
+const textX = x2 + 10;
+const textAttrs = {
+fill: "white",
+"dominant-baseline": "middle",
+"text-anchor": "begin",
+"font-size": "small",
+};
+const lineData = [
+{ text: "Barn", color: colors.barn },
+{ text: "Pole", color: colors.pole },
+];
+const lines = lineData.map((ld, i) => ({
+shape: "line",
+attrs: {
+x1,
+x2,
+y1: (i + 1) * dy,
+y2: (i + 1) * dy,
+stroke: ld.color,
+"stroke-width": strokeWidth,
+},
+}));
+const lineText = lineData.map((ld, i) => ({
+shape: "text",
+text: ld.text,
+attrs: {
+x: textX,
+y: (i + 1) * dy,
+...textAttrs,
+},
+}));
+const cx = (x1 + x2) / 2;
+const r = 3;
+const events = [
+{ text: "Back door closes", color: colors.backDoorCloses },
+{ text: "Back door opens", color: colors.backDoorOpens },
+{ text: "Front door closes", color: colors.frontDoorCloses },
+{ text: "Front door opens", color: colors.frontDoorOpens },
+];
+const circles = events.map((event, i) => ({
+shape: "circle",
+attrs: {
+cx,
+cy: i * dy + 10,
+r,
+fill: event.color,
+id: event.text.replace(/ /g, "_"),
+},
+}));
+const circleText = events.map((event, i) => ({
+shape: "text",
+text: event.text,
+attrs: {
+x: textX,
+y: i * dy + 10,
+...textAttrs,
+},
+}));
+legend
+.selectAll()
+.data([
+{ ty: 0, class: "lines" },
+{ ty: 75, class: "events" },
+])
+.join("g")
+.each(function (d) {
+d3.select(this).classed(d.class, true);
+})
+.attr("transform", d => `translate(0 ${d.ty})`)
+.call(applyGraphicalObjs, (_, i) => {
+return i === 0
+? [...lines, ...lineText].map(obj => ({ ...obj, class: "l" }))
+: [...circles, ...circleText].map(obj => ({ ...obj, class: "k" }));
+});
+return legend;
+})();
+const axisColor = "#fff";
+const xScale = d3
+.scaleLinear()
+.domain([AXES.x.min, AXES.x.max])
+.range([MARGINS.l, WIDTH - MARGINS.r]);
+const yScale = d3
+.scaleLinear()
+.domain([AXES.y.min, AXES.y.max])
+.range([HEIGHT - MARGINS.b, MARGINS.t]);
+function getAxes() {
+return [
+{
+x1: xScale(AXES.x.min),
+y1: yScale(AXES.y.origin),
+x2: xScale(AXES.x.max),
+y2: yScale(AXES.y.origin),
+},
+{
+x1: xScale(AXES.x.origin),
+y1: yScale(AXES.y.min),
+x2: xScale(AXES.x.origin),
+y2: yScale(AXES.y.max),
+},
+].map(attrs => ({
+shape: "line",
+attrs: {
+...attrs,
+stroke: axisColor,
+"stroke-width": 2,
+"marker-end": `url(#${ARROWHEAD_ID})`,
+},
+}));
+}
+function fmtFloat(x, precision) {
+if (typeof precision === "undefined") {
+precision = 2;
+}
+return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+const barnLength = 0.3;
+const poleLength = 1.3 * barnLength;
+const radius = d3.scaleLinear().domain([0, 6]).range([7, 4]).clamp(true);
+const dashes = "4 4";
+const widths = { stationary: 5, moving: 2 };
+const line = d3
+.line()
+.x(p => xScale(p[0]))
+.y(p => yScale(p[1]));
+const yTimeScale = d3.scaleLinear().domain([0, 1]).range(yScale.domain());
+const sliders = {
+v: document.getElementById("input-v"),
+t: document.getElementById("input-t"),
+};
+const buttons = {
+perspective: {
+barn: document.getElementById("btn-persp-barn"),
+pole: document.getElementById("btn-persp-pole"),
+},
+slices: {
+both: document.getElementById("btn-slice-both"),
+barn: document.getElementById("btn-slice-barn"),
+pole: document.getElementById("btn-slice-pole"),
+},
+playPause: document.getElementById("play-pause"),
+};
+function makeSubscript(text) {
+return {
+shape: "tspan",
+class: "subsubscript",
+text,
+attrs: { "font-size": "65%", dy: ".3em" },
+};
+}
+const BARN = 0;
+const POLE = 1;
+const BOTH = 2;
+const NONE = 3;
+function getSlices({ v, slicesToShow, perspective }) {
+const dt = 0.23;
+const nSlicesAbove = Math.floor((AXES.y.max - AXES.y.origin) / dt) + 5;
+const nSlicesBelow = Math.floor((AXES.y.origin - AXES.y.min) / dt) + 5;
+const sliceYIntercepts = d3
+.range(-nSlicesBelow, nSlicesAbove + 0.1)
+.map(i => AXES.y.origin + i * dt);
+function _getSliceAttrs(slope) {
+return sliceYIntercepts.map(y0 => {
+const x1 = AXES.x.min;
+const x2 = AXES.x.max;
+return {
+shape: "line",
+class: "s",
+attrs: {
+x1: xScale(x1),
+y1: yScale(y0 + slope * x1),
+x2: xScale(x2),
+y2: yScale(y0 + slope * x2),
+stroke: "#fff5",
+"stroke-dasharray": dashes,
+"clip-path": `url(#axes-clip)`,
+},
+};
+});
+}
+function getBarnSliceAttrs() {
+const slope = perspective === BARN ? 0 : v;
+return _getSliceAttrs(slope);
+}
+function getPoleSliceAttrs() {
+const slope = perspective === BARN ? -v : 0;
+return _getSliceAttrs(slope);
+}
+if (slicesToShow === NONE) {
+return [];
+} else if (slicesToShow === BARN) {
+return getBarnSliceAttrs();
+} else if (slicesToShow === POLE) {
+return getPoleSliceAttrs();
+} else if (slicesToShow === BOTH) {
+return [...getBarnSliceAttrs(), ...getPoleSliceAttrs()];
+} else {
+throw new Error(`Unexpected which: ${slicesToShow}`);
+}
+}
+let futureOpacity = null;
+function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
+const transition = d3.transition().duration(150);
+const eventGroup = legend.selectAll(".events");
+if (poleRelLength > barnLength) {
+if (futureOpacity === null) {
+eventGroup.style("opacity", 0);
+futureOpacity = 0;
+} else if (futureOpacity !== 0) {
+eventGroup.transition(transition).style("opacity", 0);
+futureOpacity = 0;
+}
+return [];
+}
+if (futureOpacity === null) {
+eventGroup.style("opacity", 1);
+futureOpacity = 1;
+} else if (futureOpacity !== 1) {
+eventGroup.transition(transition).style("opacity", 1);
+futureOpacity = 1;
+}
+const scaledY = yScale(y);
+let frontDoorOpensX,
+frontDoorOpensT,
+frontDoorClosesX,
+frontDoorClosesT,
+backDoorOpensX,
+backDoorOpensT,
+backDoorClosesX,
+backDoorClosesT;
+if (perspective === BARN) {
+frontDoorOpensX = barnLength;
+frontDoorOpensT = AXES.y.origin;
+frontDoorClosesX = barnLength;
+frontDoorClosesT = -(frontDoorClosesX - poleRelLength) / v;
+backDoorOpensX = AXES.x.origin;
+backDoorOpensT = -backDoorOpensX / v;
+backDoorClosesX = AXES.x.origin;
+backDoorClosesT = -(frontDoorClosesX - poleRelLength) / v;
+} else if (perspective === POLE) {
+frontDoorOpensX = barnRelLength / (1 - v * v);
+frontDoorOpensT = (1 / v) * (frontDoorOpensX - barnRelLength);
+frontDoorClosesX = poleLength;
+frontDoorClosesT = (1 / v) * (frontDoorClosesX - barnRelLength);
+backDoorOpensX = AXES.x.origin;
+backDoorOpensT = AXES.y.origin;
+backDoorClosesX = (frontDoorClosesT - v * frontDoorClosesX) / (1 / v - v);
+backDoorClosesT = backDoorClosesX / v;
+} else {
+throw new Error(`Unexpected perspective ${perspective}`);
+}
+const frontDoorOpensAttrs = {
+cx: frontDoorOpensX,
+cy: frontDoorOpensT,
+fill: colors.frontDoorOpens,
+};
+const frontDoorClosesAttrs = {
+cx: frontDoorClosesX,
+cy: frontDoorClosesT,
+fill: colors.frontDoorCloses,
+};
+const backDoorOpensAttrs = {
+cx: backDoorOpensX,
+cy: backDoorOpensT,
+fill: colors.backDoorOpens,
+};
+const backDoorClosesAttrs = {
+cx: backDoorClosesX,
+cy: backDoorClosesT,
+fill: colors.backDoorCloses,
+};
+return [
+frontDoorOpensAttrs,
+frontDoorClosesAttrs,
+backDoorOpensAttrs,
+backDoorClosesAttrs,
+].map(attrs => {
+const scaledCy = yScale(attrs.cy);
+const r = radius(Math.abs(scaledCy - scaledY));
+legend
+.selectAll("circle.k")
+.filter(d => d.attrs.fill === attrs.fill)
+.attr("r", r);
+return {
+shape: "circle",
+attrs: {
+...attrs,
+cx: xScale(attrs.cx),
+cy: scaledCy,
+r,
+},
+};
+});
+}
+function getBarnPerspective({ v, t, slices }) {
+const barnRect = [
+...[AXES.y.min, AXES.y.max].map(y => [AXES.x.origin, y]),
+...[AXES.y.max, AXES.y.min].map(y => [AXES.x.origin + barnLength, y]),
+];
+const poleRelLength = poleLength / lorentzFactor({ fracOfC: v });
+const poleParallelogram = [
+...[AXES.y.min, AXES.y.max].map(y => [-v * y, y]),
+...[AXES.y.max, AXES.y.min].map(y => [-v * y + poleRelLength, y]),
+];
+const y = yTimeScale(t);
+const scaledY = yScale(y);
+const eventPoints = getEventPoints({
+v,
+y,
+poleRelLength,
+perspective: BARN,
+});
+const axisLabelSubscript = makeSubscript("𝖡");
+return [
+{
+shape: "path",
+attrs: {
+d: line(barnRect),
+fill: colors.barnFill,
+"stroke-opacity": 0,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "path",
+attrs: {
+d: line(poleParallelogram),
+fill: colors.poleFill,
+"stroke-opacity": 0,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "line",
+attrs: {
+x1: xScale(AXES.x.origin),
+x2: xScale(AXES.x.origin + barnLength),
+y1: scaledY,
+y2: scaledY,
+stroke: colors.barn,
+"stroke-width": widths.stationary,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "line",
+attrs: {
+x1: xScale(-v * y),
+x2: xScale(-v * y + poleRelLength),
+y1: scaledY,
+y2: scaledY,
+stroke: colors.pole,
+"stroke-width": widths.moving,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "text",
+text: "𝑡",
+attrs: {
+x: xScale(AXES.x.origin) + 12,
+y: yScale(AXES.y.max) + 5,
+fill: "white",
+"text-anchor": "begin",
+"dominant-baseline": "top",
+},
+children: [axisLabelSubscript],
+},
+{
+shape: "text",
+text: "𝑥",
+attrs: {
+x: xScale(AXES.x.max) - 15,
+y: yScale(AXES.y.origin) - 15,
+fill: "white",
+"text-anchor": "begin",
+"dominant-baseline": "bottom",
+},
+children: [axisLabelSubscript],
+},
+...getAxes(),
+...slices,
+...eventPoints,
+].map(obj => ({ class: "c", ...obj }));
+}
+function getPolePerspective({ v, t, slices }) {
+const poleRect = [
+...[AXES.y.min, AXES.y.max].map(y => [AXES.x.origin, y]),
+...[AXES.y.max, AXES.y.min].map(y => [AXES.x.origin + poleLength, y]),
+];
+const poleRelLength = poleLength / lorentzFactor({ fracOfC: v });
+const barnRelLength = barnLength / lorentzFactor({ fracOfC: v });
+const barnParallelogram = [
+...[AXES.y.min, AXES.y.max].map(y => [v * y, y]),
+...[AXES.y.max, AXES.y.min].map(y => [v * y + barnRelLength, y]),
+];
+const y = yTimeScale(t);
+const scaledY = yScale(y);
+const eventPoints = getEventPoints({
+v,
+y,
+barnRelLength,
+poleRelLength,
+perspective: POLE,
+});
+const axisLabelSubscript = makeSubscript("𝖯");
+return [
+{
+shape: "path",
+attrs: {
+d: line(barnParallelogram),
+fill: colors.barnFill,
+"stroke-opacity": 0,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "path",
+attrs: {
+d: line(poleRect),
+fill: colors.poleFill,
+"stroke-opacity": 0,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "line",
+attrs: {
+x1: xScale(AXES.x.origin),
+x2: xScale(AXES.x.origin + poleLength),
+y1: scaledY,
+y2: scaledY,
+stroke: colors.pole,
+"stroke-width": widths.moving,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "line",
+attrs: {
+x1: xScale(v * y),
+x2: xScale(v * y + barnRelLength),
+y1: scaledY,
+y2: scaledY,
+stroke: colors.barn,
+"stroke-width": widths.stationary,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "text",
+text: "𝑡",
+attrs: {
+x: xScale(AXES.x.origin) + 12,
+y: yScale(AXES.y.max) + 5,
+fill: "white",
+"text-anchor": "begin",
+"dominant-baseline": "top",
+},
+children: [axisLabelSubscript],
+},
+{
+shape: "text",
+text: "𝑥",
+attrs: {
+x: xScale(AXES.x.max) - 15,
+y: yScale(AXES.y.origin) - 15,
+fill: "white",
+"text-anchor": "begin",
+"dominant-baseline": "bottom",
+},
+children: [axisLabelSubscript],
+},
+...getAxes(),
+...slices,
+...eventPoints,
+].map(obj => ({ class: "c", ...obj }));
+}
+let currentPerspective = BARN;
+let currentSlices = BARN;
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+function getKeyFromDatum(d) {
+return `${d.shape}.${d.class}`;
+}
+const FPS = 37;
+const ANIMATION_DURATION_SEC = 5;
+const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
+const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
+const playbackInfo = {
+isPlaying: false,
+animationTimer: null,
+currFrame: 0,
+frameToTimeInterpolator: d3.scaleLinear(
+[0, N_FRAMES],
+[+sliders.t.min, +sliders.t.max],
+),
+_backupSinhINterpolator: (() => {
+const speed = 2;
+const frameToSinhDomainInterpolator = d3.scaleLinear(
+[0, N_FRAMES],
+[-speed, speed],
+);
+const sinhInterpolator = t => Math.sinh(t);
+const sinhRangeToTimeInterpolator = d3.scaleLinear(
+[Math.sinh(-speed), Math.sinh(speed)],
+[+sliders.t.min, +sliders.t.max],
+);
+const interpolator = function (frameIndex) {
+return sinhRangeToTimeInterpolator(
+sinhInterpolator(frameToSinhDomainInterpolator(frameIndex)),
+);
+};
+interpolator.invert = function (t) {
+const tInSinhRange = sinhRangeToTimeInterpolator.invert(t);
+const tInSinhDomain = Math.asinh(tInSinhRange);
+const frameIndex = frameToSinhDomainInterpolator.invert(tInSinhDomain);
+return frameIndex;
+};
+return interpolator;
+})(),
+};
+function stopAnimation() {
+playbackInfo.isPlaying = false;
+clearInterval(playbackInfo.animationTimer);
+buttons.playPause.innerText = "Start";
+}
+function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
+if (typeof v === "undefined") {
+v = sliders.v.value;
+}
+v = +v;
+if (typeof t === "undefined") {
+t = sliders.t.value;
+} else {
+sliders.t.value = t;
+if (typeof updatedFromTimer === "undefined" || !updatedFromTimer) {
+playbackInfo.currFrame = playbackInfo.frameToTimeInterpolator.invert(t);
+stopAnimation();
+}
+}
+t = +t;
+if (typeof perspective === "undefined") {
+perspective = currentPerspective;
+} else {
+currentPerspective = perspective;
+}
+if (typeof slicesToShow === "undefined") {
+slicesToShow = currentSlices;
+} else {
+currentSlices = slicesToShow;
+}
+const slices = getSlices({ v, perspective, slicesToShow });
+const data =
+perspective === BARN
+? getBarnPerspective({ v, t, slices })
+: getPolePerspective({ v, t, slices });
+const groups = groupBy(data, getKeyFromDatum, ["line.c", "path.c", "circle.c"]);
+for (const [selector, items] of groups) {
+applyGraphicalObjs(svg, items, {
+selector,
+});
+}
+buttons.perspective.barn.disabled = perspective === BARN;
+buttons.perspective.pole.disabled = perspective === POLE;
+try {
+buttons.slices.barn.disabled = slicesToShow === BARN;
+buttons.slices.pole.disabled = slicesToShow === POLE;
+buttons.slices.both.disabled = slicesToShow === BOTH;
+} catch {
+// No problem, those buttons just dont exist
+}
+}
+// eslint-disable-next-line no-unused-vars
+function toggleAnimation() {
+if (playbackInfo.isPlaying) {
+stopAnimation();
+return;
+}
+playbackInfo.isPlaying = true;
+buttons.playPause.innerText = "Pause";
+if (playbackInfo.currFrame >= N_FRAMES) {
+playbackInfo.currFrame = 0;
+}
+playbackInfo.animationTimer = setInterval(() => {
+if (playbackInfo.currFrame >= N_FRAMES) {
+update({ t: sliders.t.max });
+stopAnimation();
+return;
+}
+playbackInfo.currFrame += 1;
+const t = playbackInfo.frameToTimeInterpolator(playbackInfo.currFrame);
+update({ t, updatedFromTimer: true });
+}, ANIMATION_DURATION_MS / N_FRAMES);
+}
+/* global update sliders BARN NONE */
+update({
+v: sliders.v.value,
+t: sliders.t.value,
+perspective: BARN,
+slicesToShow: NONE,
+});
+</script></body>
+</html>

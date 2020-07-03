@@ -3,7 +3,130 @@
 <head>
 <meta charset="utf-8"/>
 </head>
-<body style="background-color: white; color: black;"><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
+<body style="background-color: white; color: black;"><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
 <div>
 <span><label>
 <span class="slider-label">
@@ -84,5 +207,61 @@ Rotation angle:
 <img id="img-64" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_0.png"/>
 </div>
 </div>
-<script type="text/javascript">const N_IMAGES=64,FRAME_DURATION=50;let currImgNum=0;const slider=document.getElementById("input-rotation-angle");function getImageID(e){return`img-${e}`}for(let e=0;e<=64;++e){const t=document.getElementById(getImageID(e));t.classList="spin-img",t.style.display=e===currImgNum?"block":"none"}let timer;function updateRotation(e,{animated:t=!1}={}){clearInterval(timer);const l=document.getElementsByClassName("spin-img");if(t){for(let e=0;e<l.length;++e){l.namedItem(getImageID(e)).style.display=+e==+currImgNum?"block":"none"}let t=+currImgNum;if(e===currImgNum)return;timer=e>currImgNum?setInterval(()=>{l[t].style.display="none",l[t+1].style.display="block",(t+=1)>=e&&clearInterval(timer),currImgNum=t,slider.value=currImgNum},FRAME_DURATION):setInterval(()=>{l[t].style.display="none",l[t-1].style.display="block",(t-=1)<=e&&clearInterval(timer),currImgNum=t,slider.value=currImgNum},FRAME_DURATION)}else{for(let t=0;t<l.length;++t){l.namedItem(getImageID(t)).style.display=+t==+e?"block":"none"}currImgNum=e}}</script></body>
+<script type="text/javascript">const N_IMAGES = 64;
+const FRAME_DURATION = 50;
+let currImgNum = 0;
+const slider = document.getElementById("input-rotation-angle");
+function getImageID(i) {
+return `img-${i}`;
+}
+for (let i = 0; i <= N_IMAGES; ++i) {
+const img = document.getElementById(getImageID(i));
+img.classList = "spin-img";
+img.style.display = i === currImgNum ? "block" : "none";
+}
+let timer;
+// eslint-disable-next-line no-unused-vars
+function updateRotation(imgNum, { animated = false } = {}) {
+clearInterval(timer);
+const imgs = document.getElementsByClassName("spin-img");
+if (animated) {
+for (let i = 0; i < imgs.length; ++i) {
+const img = imgs.namedItem(getImageID(i));
+img.style.display = +i === +currImgNum ? "block" : "none";
+}
+let i = +currImgNum;
+if (imgNum === currImgNum) {
+return;
+} else if (imgNum > currImgNum) {
+timer = setInterval(() => {
+imgs[i].style.display = "none";
+imgs[i + 1].style.display = "block";
+i += 1;
+if (i >= imgNum) {
+clearInterval(timer);
+}
+currImgNum = i;
+slider.value = currImgNum;
+}, FRAME_DURATION);
+} else {
+timer = setInterval(() => {
+imgs[i].style.display = "none";
+imgs[i - 1].style.display = "block";
+i -= 1;
+if (i <= imgNum) {
+clearInterval(timer);
+}
+currImgNum = i;
+slider.value = currImgNum;
+}, FRAME_DURATION);
+}
+} else {
+for (let i = 0; i < imgs.length; ++i) {
+const img = imgs.namedItem(getImageID(i));
+img.style.display = +i === +imgNum ? "block" : "none";
+}
+currImgNum = imgNum;
+}
+}
+</script></body>
 </html>

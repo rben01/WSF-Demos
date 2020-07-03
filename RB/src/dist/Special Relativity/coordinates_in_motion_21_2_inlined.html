@@ -4,7 +4,156 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
 </head>
-<body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}.slider-label-custom{min-width:9.1em;text-align:left;padding-left:2em}.viz-canvas{padding-top:5px}.frame-title-section{text-align:center}.frame-title{margin:0 auto;font-size:120%}.float-right{float:right;margin-right:100px}.float-left{float:left;margin-left:100px}.hidden{visibility:hidden}</style>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+.slider-label-custom {
+min-width: 9.1em;
+text-align: left;
+padding-left: 2em;
+}
+.viz-canvas {
+padding-top: 5px;
+}
+.frame-title-section {
+text-align: center;
+}
+.frame-title {
+margin: 0 auto;
+font-size: 120%;
+}
+.float-right {
+float: right;
+margin-right: 100px;
+}
+.float-left {
+float: left;
+margin-left: 100px;
+}
+.hidden {
+visibility: hidden;
+}
+</style>
 <div class="top-sliders-sect">
 <span>
 <label>
@@ -48,5 +197,471 @@ Relative speed (𝑣):
 <span class="highlighted-text sci-num frame-b-speed-placeholder">100</span>𝑐</span>
 </div>
 <svg class="viz-canvas" id="svg-frame-b"></svg>
-<script type="text/javascript">"use strict";const C=299792458;function isIterable(e){return null!=e&&"function"==typeof e[Symbol.iterator]}function applyDatum(e,{transition:t}={}){const a=d3.select(this).datum(e);void 0!==e.class&&a.classed(e.class,!0);const s=void 0===t?a:a.transition(t);Object.entries(e.attrs).forEach(([e,t])=>{s.attr(e,t)}),void 0!==e.text&&s.text(e.text)}function _addGraphicalObjs(e,t){return e.selectAll().data(t).enter().append(e=>d3.create(`svg:${e.shape}`).node()).each(applyDatum)}function applyGraphicalObjs(e,t,{selector:a,cssClass:s,transition:n}={}){const i=e.selectAll(a).data(t).join(e=>e.append(e=>d3.create(`svg:${e.shape}`).node())).each(function(e){applyDatum.call(this,e,{transition:n})});return void 0!==s&&i.classed(s,!0),i}function lorentzFactor({fracOfC:e}){return e||(e=0),1/Math.sqrt(1-e*e)}function sign(e,t){return void 0===t&&(t=1e-6),e<-t?-1:e<t?0:1}function l2Norm(...e){const t=e.reduce((e,t)=>e+t*t,0);return Math.sqrt(t)}const RANGES={x:{min:-11,max:11},y:{min:0,max:1}};Object.values(RANGES).forEach(e=>{e.mid=(e.max+e.min)/2,e.span=e.max-e.min});const speedSlider=document.getElementById("input-speed"),frameButtons={},speedPlaceholders={},speedSpans={},movingTextSpans={};["a","b"].forEach(e=>{frameButtons[e]=document.getElementById(`input-ref-frame-${e}`),speedPlaceholders[e]=document.getElementsByClassName(`frame-${e}-speed-placeholder`),speedSpans[e]=document.getElementById(`frame-${e}-speed`),movingTextSpans[e]=document.getElementById(`frame-${e}-moving-text`)});const AXIS_MARGINS={top:.05,bottom:.15,left:.05,right:.05},CANVAS_HEIGHT=150,CANVAS_WIDTH=800,AX_BOUNDS={xMin:800*AXIS_MARGINS.left,xMax:800*(1-AXIS_MARGINS.right),yMin:150*(1-AXIS_MARGINS.bottom),yMax:150*AXIS_MARGINS.top},highlightFGColor="#5df",canvases=d3.selectAll(".viz-canvas").attr("width",800).attr("height",150).attr("background-color","black"),ARROWHEAD_ID="marker-arrowhead";(()=>{const e={attrs:{refX:4,refY:2.5,markerUnits:"strokeWidth",markerWidth:7,markerHeight:5,orient:"auto"}},t={attrs:{d:"M 1 1 L 5 2.5 L 1 4 L 2 2.5 z","stroke-linejoin":"miter",stroke:"#5df",fill:"#5df"}};canvases.append("svg:defs").append("svg:marker").attr("id",ARROWHEAD_ID).each(function(){applyDatum.call(this,e)}).append("svg:path").each(function(){applyDatum.call(this,t)})})();const subcanvases=canvases.selectAll("g").data((e,t)=>[{originX:0,originY:0,width:800,height:150,isTopFrame:0===t}]).join("g").attr("transform",e=>`translate(0, ${e.originY})`).classed("subcanvas",!0),xScale=d3.scaleLinear().domain([RANGES.x.min,RANGES.x.max]).range([AX_BOUNDS.xMin,AX_BOUNDS.xMax]),yScale=d3.scaleLinear().domain([RANGES.y.min,RANGES.y.max]).range([AX_BOUNDS.yMin,AX_BOUNDS.yMax]),widthScale=d3.scaleLinear().domain([0,RANGES.x.span]).range([0,AX_BOUNDS.xMax-AX_BOUNDS.xMin]),heightScale=d3.scaleLinear().domain([0,RANGES.y.span]).range([0,AX_BOUNDS.yMin-AX_BOUNDS.yMax]);function getTimeDeltaMinutes({x:e,fracOfC:t}){return e*t}function getTextClassName(e){return`text-frame-${e}`}function getArrowClassName(e){return`arrow-frame-${e}`}function getGraphData(e){const t=yScale(0),a=e.isTopFrame?"a":"b";return[...function(){const e=[],s=[],n=[];return xScale.ticks(RANGES.x.span/2).forEach(i=>{e.push({shape:"rect",class:"box",attrs:{x:xScale(i-.9),y:yScale(.55),width:widthScale(1.8),height:heightScale(.25),stroke:"white","stroke-width":2,fill:"#5c4e29"}});const r=xScale(i);s.push({shape:"line",class:"box-line",attrs:{x1:r,y1:t,x2:r,y2:yScale(.3),stroke:"white","stroke-width":2}}),n.push({shape:"text",class:getTextClassName(a),text:"10:00",x:i,attrs:{x:r,y:yScale(.425),"font-size":18,fill:"#5f5","text-anchor":"middle","alignment-baseline":"middle"}})}),[...e,...s,...n]}(),{shape:"line",class:getArrowClassName(a),attrs:{x1:xScale(6*(e.isTopFrame?1:-1)),y1:yScale(.75),x2:xScale(2),y2:yScale(.75),opacity:0,stroke:"#5df","stroke-width":5,"marker-end":`url(#${ARROWHEAD_ID})`}},...function(){const[e,a]=xScale.domain().map(xScale);return[{class:"x-axis",shape:"line",attrs:{x1:e,y1:t,x2:a,y2:t,stroke:"#999","stroke-width":1}},...xScale.ticks(RANGES.x.span).map(e=>{const a=xScale(e);return{class:"x-axis-tick",shape:"line",attrs:{x1:a,y1:t,x2:a,y2:yScale(.03),stroke:"#999","stroke-width":1}}}),...xScale.ticks(5).map(e=>({class:"x-axis-label",shape:"text",text:`${e}`,attrs:{x:xScale(e),y:yScale(-AXIS_MARGINS.bottom/2),fill:"#999","font-size":12,"text-anchor":"middle","alignment-baseline":"middle"}}))]}()]}function timeToStr(e,t){t=Math.floor(t);const a=Math.floor(t/60),s=t-60*a;return`${(e+a).toFixed(0).padStart(2,"0")}:${s.toFixed(0).padStart(2,"0")}`}function updateClocks({fracOfC:e,referenceFrame:t}={}){void 0===e&&(e=speedSlider.value),e=+e,void 0===t&&(t=frameButtons.a.checked?"a":"b");const a="a"===t,s=a?["a","b"]:["b","a"],n=s.map(getArrowClassName),i=s.map(getTextClassName),[r,l]=n.map(e=>d3.selectAll(`.${e}`)),[o,c]=i.map(e=>d3.selectAll(`.${e}`));r.attr("opacity",0);const d=6.5+4*e;l.attr("x2",xScale((a?-1:1)*d)).attr("opacity",1),o.each(function(){d3.select(this).text(timeToStr(10,0))});const p=a?1:-1;c.each(function(t){const a=getTimeDeltaMinutes({x:t.x,fracOfC:p*e});d3.select(this).text(timeToStr(10,a))});const m=(a?"−  ":"")+e.toFixed(2),x=a?speedPlaceholders.b:speedPlaceholders.a;for(let e=0;e<x.length;++e){x[e].textContent=m}a?(speedSpans.a.style.visibility="hidden",speedSpans.b.style.visibility="visible",movingTextSpans.a.textContent="At Rest",movingTextSpans.b.textContent="Moving"):(speedSpans.a.style.visibility="visible",speedSpans.b.style.visibility="hidden",movingTextSpans.a.textContent="Moving",movingTextSpans.b.textContent="At Rest")}subcanvases.each(function(e){applyGraphicalObjs(d3.select(this),()=>getGraphData(e))}),updateClocks();</script></body>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#0f5", // green
+quaternary: "#0af", // darker blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this).datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (typeof datum.text !== "undefined") {
+t.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(t, () => datum.children, { transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+/* global C lorentzFactor applyDatum applyGraphicalObjs */
+"use strict";
+const RANGES = {
+x: { min: -11, max: 11 },
+y: { min: 0, max: 1 },
+};
+Object.values(RANGES).forEach(range => {
+range.mid = (range.max + range.min) / 2;
+range.span = range.max - range.min;
+});
+const speedSlider = document.getElementById("input-speed");
+const frameButtons = {};
+const speedPlaceholders = {};
+const speedSpans = {};
+const movingTextSpans = {};
+["a", "b"].forEach(frameLetter => {
+frameButtons[frameLetter] = document.getElementById(
+`input-ref-frame-${frameLetter}`,
+);
+speedPlaceholders[frameLetter] = document.getElementsByClassName(
+`frame-${frameLetter}-speed-placeholder`,
+);
+speedSpans[frameLetter] = document.getElementById(`frame-${frameLetter}-speed`);
+movingTextSpans[frameLetter] = document.getElementById(
+`frame-${frameLetter}-moving-text`,
+);
+});
+const AXIS_MARGINS = {
+top: 0.05,
+bottom: 0.15,
+left: 0.05,
+right: 0.05,
+};
+const CANVAS_HEIGHT = 150;
+const CANVAS_WIDTH = 800;
+const AX_BOUNDS = {
+xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
+xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
+yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
+yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
+};
+const highlightFGColor = "#5df";
+const canvases = d3
+.selectAll(".viz-canvas")
+.attr("width", CANVAS_WIDTH)
+.attr("height", CANVAS_HEIGHT)
+.attr("background-color", "black");
+const ARROWHEAD_ID = "marker-arrowhead";
+(() => {
+const markerAttrs = {
+attrs: {
+refX: 4,
+refY: 2.5,
+markerUnits: "strokeWidth",
+markerWidth: 7,
+markerHeight: 5,
+orient: "auto",
+},
+};
+const pathAttrs = {
+attrs: {
+d: "M 1 1 L 5 2.5 L 1 4 L 2 2.5 z",
+"stroke-linejoin": "miter",
+stroke: highlightFGColor,
+fill: highlightFGColor,
+},
+};
+const defs = canvases.append("svg:defs");
+defs.append("svg:marker")
+.attr("id", ARROWHEAD_ID)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, pathAttrs);
+});
+})();
+const subcanvases = canvases
+.selectAll("g")
+.data((_, index) => [
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT,
+isTopFrame: index === 0,
+},
+])
+.join("g")
+.attr("transform", d => `translate(0, ${d.originY})`)
+.classed("subcanvas", true);
+const xScale = d3
+.scaleLinear()
+.domain([RANGES.x.min, RANGES.x.max])
+.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const yScale = d3
+.scaleLinear()
+.domain([RANGES.y.min, RANGES.y.max])
+.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
+const widthScale = d3
+.scaleLinear()
+.domain([0, RANGES.x.span])
+.range([0, AX_BOUNDS.xMax - AX_BOUNDS.xMin]);
+const heightScale = d3
+.scaleLinear()
+.domain([0, RANGES.y.span])
+.range([0, AX_BOUNDS.yMin - AX_BOUNDS.yMax]);
+// x has units of light-minutes
+function getTimeDeltaMinutes({ x, fracOfC }) {
+return x * fracOfC;
+}
+function getTextClassName(frameName) {
+return `text-frame-${frameName}`;
+}
+function getArrowClassName(frameName) {
+return `arrow-frame-${frameName}`;
+}
+function getGraphData(d) {
+const y0s = yScale(0);
+const frameName = d.isTopFrame ? "a" : "b";
+function getBoxesAndTextData() {
+const lineColor = "white";
+const fillColor = "#5c4e29";
+const boxHeightAboveGround = 0.3;
+const boxData = [];
+const lineData = [];
+const textData = [];
+const boxXLocs = xScale.ticks(RANGES.x.span / 2);
+const boxWidth = 1.8;
+const boxHeight = 0.25;
+boxXLocs.forEach(x => {
+boxData.push({
+shape: "rect",
+class: "box",
+attrs: {
+x: xScale(x - boxWidth / 2),
+y: yScale(boxHeightAboveGround + boxHeight),
+width: widthScale(boxWidth),
+height: heightScale(boxHeight),
+stroke: lineColor,
+"stroke-width": 2,
+fill: fillColor,
+},
+});
+const xs = xScale(x);
+lineData.push({
+shape: "line",
+class: "box-line",
+attrs: {
+x1: xs,
+y1: y0s,
+x2: xs,
+y2: yScale(boxHeightAboveGround),
+stroke: lineColor,
+"stroke-width": 2,
+},
+});
+textData.push({
+shape: "text",
+class: getTextClassName(frameName),
+text: "10:00",
+x: x,
+attrs: {
+x: xs,
+y: yScale(boxHeightAboveGround + boxHeight / 2),
+"font-size": 18,
+fill: "#5f5",
+"text-anchor": "middle",
+"alignment-baseline": "middle",
+},
+});
+});
+return [...boxData, ...lineData, ...textData];
+}
+function getArrowDatum() {
+return {
+shape: "line",
+class: getArrowClassName(frameName),
+attrs: {
+x1: xScale((d.isTopFrame ? 1 : -1) * 6),
+y1: yScale(0.75),
+x2: xScale(2),
+y2: yScale(0.75),
+opacity: 0,
+stroke: "#5df",
+"stroke-width": 5,
+"marker-end": `url(#${ARROWHEAD_ID})`,
+},
+};
+}
+function getAxesData() {
+const axisColor = "#999";
+const [minX, maxX] = xScale.domain().map(xScale);
+const axisDatum = {
+class: "x-axis",
+shape: "line",
+attrs: {
+x1: minX,
+y1: y0s,
+x2: maxX,
+y2: y0s,
+stroke: axisColor,
+"stroke-width": 1,
+},
+};
+const ticksData = xScale.ticks(RANGES.x.span).map(x => {
+const xs = xScale(x);
+return {
+class: "x-axis-tick",
+shape: "line",
+attrs: {
+x1: xs,
+y1: y0s,
+x2: xs,
+y2: yScale(0.03),
+stroke: axisColor,
+"stroke-width": 1,
+},
+};
+});
+const labelsData = xScale.ticks(5).map(x => {
+const xs = xScale(x);
+return {
+class: "x-axis-label",
+shape: "text",
+text: `${x}`,
+attrs: {
+x: xs,
+y: yScale(-AXIS_MARGINS.bottom / 2),
+fill: axisColor,
+"font-size": 12,
+"text-anchor": "middle",
+"alignment-baseline": "middle",
+},
+};
+});
+return [axisDatum, ...ticksData, ...labelsData];
+}
+return [...getBoxesAndTextData(), getArrowDatum(), ...getAxesData()];
+}
+function timeToStr(referenceMinute, secondsAfterReferenceMinute) {
+secondsAfterReferenceMinute = Math.floor(secondsAfterReferenceMinute);
+const minutesAfterReferenceMinute = Math.floor(secondsAfterReferenceMinute / 60);
+const second = secondsAfterReferenceMinute - minutesAfterReferenceMinute * 60;
+const minute = referenceMinute + minutesAfterReferenceMinute;
+const minuteStr = minute.toFixed(0).padStart(2, "0");
+const secondStr = second.toFixed(0).padStart(2, "0");
+return `${minuteStr}:${secondStr}`;
+}
+function updateClocks({ fracOfC, referenceFrame } = {}) {
+if (typeof fracOfC === "undefined") {
+fracOfC = speedSlider.value;
+}
+fracOfC = +fracOfC;
+if (typeof referenceFrame === "undefined") {
+referenceFrame = frameButtons.a.checked ? "a" : "b";
+}
+const frameAIsStationary = referenceFrame === "a";
+const stationaryMovingFrameLetters = frameAIsStationary ? ["a", "b"] : ["b", "a"];
+const stationaryMovingArrowClasses = stationaryMovingFrameLetters.map(
+getArrowClassName,
+);
+const stationaryMovingTextClasses = stationaryMovingFrameLetters.map(
+getTextClassName,
+);
+const [stationaryArrow, movingArrow] = stationaryMovingArrowClasses.map(className =>
+d3.selectAll(`.${className}`),
+);
+const [stationaryText, movingText] = stationaryMovingTextClasses.map(className =>
+d3.selectAll(`.${className}`),
+);
+stationaryArrow.attr("opacity", 0);
+const movingArrowAbsX2 = 6.5 + fracOfC * 4;
+movingArrow
+.attr("x2", xScale((frameAIsStationary ? -1 : 1) * movingArrowAbsX2))
+.attr("opacity", 1);
+stationaryText.each(function () {
+const text = d3.select(this);
+text.text(timeToStr(10, 0));
+});
+const speedSign = frameAIsStationary ? 1 : -1;
+movingText.each(function (d) {
+const x = d.x;
+const dtSeconds = getTimeDeltaMinutes({ x: x, fracOfC: speedSign * fracOfC });
+const text = d3.select(this);
+text.text(timeToStr(10, dtSeconds));
+});
+const speedStr = (frameAIsStationary ? "−  " : "") + fracOfC.toFixed(2);
+const speedPlaceholdersToUpdate = frameAIsStationary
+? speedPlaceholders.b
+: speedPlaceholders.a;
+for (let i = 0; i < speedPlaceholdersToUpdate.length; ++i) {
+const placeholder = speedPlaceholdersToUpdate[i];
+placeholder.textContent = speedStr;
+}
+if (frameAIsStationary) {
+speedSpans.a.style.visibility = "hidden";
+speedSpans.b.style.visibility = "visible";
+movingTextSpans.a.textContent = "At Rest";
+movingTextSpans.b.textContent = "Moving";
+} else {
+speedSpans.a.style.visibility = "visible";
+speedSpans.b.style.visibility = "hidden";
+movingTextSpans.a.textContent = "Moving";
+movingTextSpans.b.textContent = "At Rest";
+}
+}
+subcanvases.each(function (d) {
+const subcanvas = d3.select(this);
+applyGraphicalObjs(subcanvas, () => getGraphData(d));
+});
+updateClocks();
+</script></body>
 </html>

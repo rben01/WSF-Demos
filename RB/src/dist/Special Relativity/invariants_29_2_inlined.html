@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
-<body><style>body {
+<body id="bod"><style>body {
 max-width: 800px;
 margin: 50px auto;
 padding: 0;
@@ -127,132 +127,13 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
-body {
-max-width: 800px;
-margin: 50px auto;
-padding: 0;
-background-color: black;
-color: white;
-font-size: 21px;
-font-family: sans-serif;
-}
-.play-button {
-margin-top: 1.5em;
-margin-bottom: 1em;
-width: 5em;
-font-size: 15px;
-}
-.slider-label {
-margin-right: 1em;
-display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
-}
-.highlighted-text {
-color: #5df;
-}
-.secondary-text {
-color: #f3c002;
-}
-.tiertiary-text {
-color: #0f5;
-}
-.viz-canvas {
-padding-top: 1em;
-}
-.sci-num {
-padding-right: 0.15em;
-}
-.eqn-left {
-text-align: right;
-}
-.eqn-middle {
-padding-left: 0.25em;
-padding-right: 0.25em;
-}
-.eqn-right {
-text-align: left;
-}
-.radio-label {
-padding-left: 3px;
-}
-.subscript {
-position: relative;
-top: 0.3em;
-left: 0em;
-font-size: 65%;
-}
-.minus-sign {
-margin-right: 1px;
-}
-.operator {
-margin-left: 3px;
-margin-right: 3px;
-}
-button.depressed-button {
-background-color: #555;
-color: white;
-}
-input[type="radio"] {
-position: relative;
-bottom: 4px;
-}
-input[type="range"] {
--webkit-appearance: none;
--moz-apperance: none;
-width: 40%;
-height: 8px;
-padding: 0 0px;
-background: #8b8f92;
-border-radius: 2px;
-margin-top: 25px;
-position: relative;
-bottom: 4px;
-}
-input[type="range"]::-webkit-slider-thumb {
--webkit-appearance: none;
--moz-apperance: none;
-width: 25px;
-height: 25px;
--webkit-border-radius: 20px;
--moz-border-radius: 20px;
--ms-border-radius: 20px;
--o-border-radius: 20px;
-border-radius: 20px;
-background-image: -webkit-gradient(
-linear,
-left top,
-left bottom,
-color-stop(0, #fefefe),
-color-stop(0.49, #d7d7d7),
-color-stop(0.51, #d1d1d1),
-color-stop(1, #c8c8c8)
-);
-border: 1px solid #787878;
-}
-input[type="range"]::-moz-range-thumb {
-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-border: 1px solid #000000;
-height: 20px;
-width: 20px;
-border-radius: 20px;
-background: #ffffff;
-cursor: pointer;
-}
-/* All the same stuff for IE */
-input[type="range"]::-ms-thumb {
-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
-border: 1px solid #000000;
-height: 20px;
-width: 20px;
-border-radius: 20px;
-background: #ffffff;
-cursor: pointer;
+body#bod {
+width: 1000px;
 }
 .slider-label-custom {
-text-align: right;
-min-width: 11.2em;
+text-align: left;
+min-width: 7em;
+padding-left: 3em;
 }
 .h-centered {
 margin: auto;
@@ -268,8 +149,17 @@ flex-direction: column;
 padding-left: 20px;
 height: 400px;
 }
-.primed-coord {
-color: #4f7;
+.pythagorean {
+display: inline-block;
+border-style: solid;
+border-radius: 3px;
+border-width: 2px;
+border-color: white;
+padding: 3px;
+padding-left: 8px;
+margin-top: 2px;
+margin-left: -11px;
+min-width: 315px;
 }
 </style>
 <div class="top-sliders-sect">
@@ -301,8 +191,16 @@ Angle (𝜃):
 </span>
 </div>
 <br/>
-<div style="display: inline-block; vertical-align: bottom;">
+<div style="
+display: inline-block;
+vertical-align: bottom;
+text-align: center;
+width: 450px;
+">
 <svg id="viz-canvas" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
+<br/>
+<span style="display: inline; text-align: center;"><i>Angle Between Coordinate Systems:
+<span class="highlighted-text" id="text-angle">0</span><span class="operator">º</span></i></span>
 </div>
 <div class="coordinate-box">
 <div style="height: 100px;"></div>
@@ -310,18 +208,22 @@ Angle (𝜃):
 <span>𝑥 = <span class="highlighted-text" id="text-upright-x"></span></span>
 <br/>
 <span>𝑦 = <span class="highlighted-text" id="text-upright-y"></span></span>
-</div>
-<div style="height: 50px; flex-grow: 1;"></div>
-<div class="text-div" style="vertical-align: middle;">
-<span>𝜃 = <span class="highlighted-text" id="text-angle">0</span><span class="operator">º</span></span>
+<br/>
+<span class="pythagorean">𝑥²<span class="operator">+</span>𝑦² =
+<span class="highlighted-text" id="text-upright-x-sq"></span><span class="operator">+</span><span class="highlighted-text" id="text-upright-y-sq"></span> =
+<span class="distance highlighted-text"></span></span>
 </div>
 <div style="height: 50px; flex-grow: 1;"></div>
 <div class="text-div" style="vertical-align: bottom;">
 <span><span class="primed-coord">𝑥′</span> =
-<span class="highlighted-text" id="text-transformed-x"></span></span>
+<span class="secondary-text" id="text-transformed-x"></span></span>
 <br/>
 <span><span class="primed-coord">𝑦′</span> =
-<span class="highlighted-text" id="text-transformed-y"></span></span>
+<span class="secondary-text" id="text-transformed-y"></span></span>
+<br/>
+<span class="pythagorean">𝑥²<span class="operator">+</span>𝑦² =
+<span class="secondary-text" id="text-transformed-x-sq"></span><span class="operator">+</span><span class="secondary-text" id="text-transformed-y-sq"></span> =
+<span class="distance secondary-text"></span></span>
 </div>
 <div style="height: 100px;"></div>
 </div>
@@ -478,30 +380,7 @@ applyDatum.call(this, markerAttrs);
 applyDatum.call(this, arrowheadAttrs);
 });
 }
-"use strict";
-// eslint-disable-next-line no-unused-vars
-const AESTHETIC = {
-solidFill: "#4ff8",
-solidStroke: "#fff8",
-durationMSOfAnimationReset: 300,
-easingForAnimationReset: d3.easePoly.exponent(2.5),
-configure: function (d3Obj, config) {
-Object.entries(config).forEach(([key, value]) => {
-if (key === "attrs") {
-const attrs = value;
-Object.entries(attrs).forEach(([attr, val]) => {
-d3Obj.attr(attr, val);
-});
-} else if (key === "class") {
-d3Obj.classed(value, true);
-} else {
-throw new Error(`Unexpected key ${key}`);
-}
-});
-return d3Obj;
-},
-};
-/* global l2Norm applyDatum applyGraphicalObjs */
+/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS */
 "use strict";
 const RANGES = {
 axis: { min: -20, max: 20 },
@@ -557,8 +436,8 @@ return angleSlider;
 const AXIS_MARGINS = {
 top: 0.05,
 bottom: 0.05,
-left: sliders.displacement.x !== null ? 0.2 : 0.2,
-right: sliders.displacement.x !== null ? 0.2 : 0.1,
+left: sliders.displacement.x !== null ? 0.05 : 0.05,
+right: sliders.displacement.x !== null ? 0.05 : 0.1,
 };
 const CANVAS_HEIGHT = 400;
 const CANVAS_WIDTH =
@@ -575,13 +454,18 @@ angle: document.getElementById("text-angle"),
 upright: {
 x: document.getElementById("text-upright-x"),
 y: document.getElementById("text-upright-y"),
+xSq: document.getElementById("text-upright-x-sq"),
+ySq: document.getElementById("text-upright-y-sq"),
 },
 transformed: {
 x: document.getElementById("text-transformed-x"),
 y: document.getElementById("text-transformed-y"),
+xSq: document.getElementById("text-transformed-x-sq"),
+ySq: document.getElementById("text-transformed-y-sq"),
 },
+squareds: document.getElementsByClassName("distance"),
 };
-const primedAxesColor = "#4f7";
+const primedAxesColor = STANDARD_COLORS.highlighted;
 const canvas = d3
 .select("#viz-canvas")
 .attr("width", CANVAS_WIDTH)
@@ -728,8 +612,7 @@ text: "𝑦",
 ])
 .enter()
 .append("svg:text")
-.each(applyDatum)
-.text(d => d.text);
+.each(applyDatum);
 });
 }
 function getLinesData({
@@ -776,7 +659,7 @@ const sin = Math.sin(angleRad);
 const cos = Math.cos(angleRad);
 const tfAxesAttrs = {
 "stroke-width": 2,
-"marker-end": `url(#${ARROWHEAD_IDS.transformed})`,
+stroke: primedAxesColor,
 };
 const tfAxOrigin = {
 x: RANGES.axis.mid + displacementX,
@@ -812,6 +695,17 @@ Object.entries(info).forEach(([coord, dist]) => {
 tfAxPosEndCoords[ax][coord] = tfAxOrigin[coord] + dist;
 });
 });
+const rXAx = Math.sqrt(
+Math.pow(tfAxPosEndCoords.xAx.x, 2) + Math.pow(tfAxPosEndCoords.xAx.y, 2),
+);
+const cosThetaXAx = tfAxPosEndCoords.xAx.x / rXAx;
+const sinThetaXAx = -tfAxPosEndCoords.xAx.y / rXAx;
+const rYAx = Math.sqrt(
+Math.pow(tfAxPosEndCoords.yAx.x, 2) + Math.pow(tfAxPosEndCoords.yAx.y, 2),
+);
+const cosThetaYAx = tfAxPosEndCoords.yAx.x / rYAx;
+const sinThetaYAx = -tfAxPosEndCoords.yAx.y / rYAx;
+const arrowDist = 0.001;
 const tfAxesData = [
 {
 shape: "line",
@@ -822,7 +716,19 @@ y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.xAx.y),
 x2: xScale(tfAxPosEndCoords.xAx.x),
 y2: yScale(tfAxPosEndCoords.xAx.y),
 ...tfAxesAttrs,
-stroke: primedAxesColor,
+"stroke-dasharray": "5 5",
+},
+},
+{
+shape: "line",
+class: "tf-axis-x-arrow",
+attrs: {
+x1: xScale(tfAxPosEndCoords.xAx.x),
+y1: yScale(tfAxPosEndCoords.xAx.y),
+x2: xScale(tfAxPosEndCoords.xAx.x) + arrowDist * cosThetaXAx,
+y2: yScale(tfAxPosEndCoords.xAx.y) + arrowDist * sinThetaXAx,
+...tfAxesAttrs,
+"marker-end": `url(#${ARROWHEAD_IDS.transformed})`,
 },
 },
 {
@@ -833,15 +739,27 @@ x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.yAx.x),
 y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.yAx.y),
 x2: xScale(tfAxPosEndCoords.yAx.x),
 y2: yScale(tfAxPosEndCoords.yAx.y),
+"stroke-dasharray": "5 5",
 ...tfAxesAttrs,
-stroke: primedAxesColor,
+},
+},
+{
+shape: "line",
+class: "tf-axis-y-arrow",
+attrs: {
+x1: xScale(tfAxPosEndCoords.yAx.x),
+y1: yScale(tfAxPosEndCoords.yAx.y),
+x2: xScale(tfAxPosEndCoords.yAx.x) + arrowDist * cosThetaYAx,
+y2: yScale(tfAxPosEndCoords.yAx.y) + arrowDist * sinThetaYAx,
+...tfAxesAttrs,
+"marker-end": `url(#${ARROWHEAD_IDS.transformed})`,
 },
 },
 ];
 const uprightLinesAttrs = {
-stroke: "white",
-"stroke-width": 2,
-"stroke-dasharray": "5 5",
+stroke: STANDARD_COLORS.highlighted,
+"stroke-width": 3,
+"stroke-dasharray": "1 1",
 };
 const uprightLinesData = !shouldDrawUprightLines
 ? []
@@ -885,9 +803,9 @@ tfAxProjCoords[ax].y = tfAxOrigin.y + projectionDotProd * posEndUnitVecY;
 tfAxProjCoords[ax].dotProd = projectionDotProd;
 });
 const tfLinesAttrs = {
-stroke: primedAxesColor,
-"stroke-width": 2,
-"stroke-dasharray": "5 5",
+stroke: STANDARD_COLORS.secondary,
+"stroke-width": 3,
+"stroke-dasharray": "1 1",
 };
 const tfLinesData = [
 {
@@ -994,7 +912,7 @@ attrs: {
 cx: xScale(x),
 cy: yScale(y),
 r: 4,
-fill: "#fd0",
+fill: "white",
 },
 };
 return {
@@ -1012,7 +930,7 @@ yAxYCoord: tfAxProjCoords.yAx.dotProd,
 };
 }
 function fmtFloat(x, precision) {
-return (+x).toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 function updateAngle({
 x,
@@ -1036,10 +954,20 @@ applyGraphicalObjs(subcanvases, () => data, {
 selector: ".graph-obj",
 cssClass: "graph-obj",
 });
-textSpans.upright.x.innerHTML = fmtFloat(sliders.x.value, 2);
-textSpans.upright.y.innerHTML = fmtFloat(sliders.y.value, 2);
-textSpans.transformed.x.innerHTML = fmtFloat(tfCoords.xAxXCoord, 2);
-textSpans.transformed.y.innerHTML = fmtFloat(tfCoords.yAxYCoord, 2);
+x = +sliders.x.value;
+y = +sliders.y.value;
+textSpans.upright.x.innerHTML = fmtFloat(+sliders.x.value, 2);
+textSpans.upright.y.innerHTML = fmtFloat(+sliders.y.value, 2);
+textSpans.transformed.x.innerHTML = fmtFloat(+tfCoords.xAxXCoord, 2);
+textSpans.transformed.y.innerHTML = fmtFloat(+tfCoords.yAxYCoord, 2);
+textSpans.upright.xSq.innerHTML = fmtFloat(Math.pow(x, 2), 2);
+textSpans.upright.ySq.innerHTML = fmtFloat(Math.pow(y, 2), 2);
+textSpans.transformed.xSq.innerHTML = fmtFloat(Math.pow(tfCoords.xAxXCoord, 2), 2);
+textSpans.transformed.ySq.innerHTML = fmtFloat(Math.pow(tfCoords.yAxYCoord, 2), 2);
+const dist = Math.pow(x, 2) + Math.pow(y, 2);
+for (let i = 0; i < textSpans.squareds.length; ++i) {
+textSpans.squareds[i].innerHTML = fmtFloat(dist, 2);
+}
 if (!userInput || typeof angleRad !== "undefined") {
 textSpans.angle.innerHTML = fmtFloat(
 angleIndex === (RANGES.angle.n - 1) / 2 ? +0 : (angleRad * 180) / Math.PI,

@@ -4,7 +4,152 @@
 <meta charset="utf-8"/>
 <script src="https://cdn.plot.ly/plotly-latest.min.js" type="text/javascript"></script>
 </head>
-<body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}body{color:#000;background-color:#fff}.slider-section{line-height:1.8em}.slider-label{margin-right:.8em}.custom-slider-label{min-width:6.5em}.subscript{position:relative;top:.3em;left:0;font-size:65%}.highlighted-text{color:#0084ac}</style>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+body {
+color: black;
+background-color: white;
+}
+.slider-section {
+line-height: 1.8em;
+}
+.slider-label {
+margin-right: 0.8em;
+}
+.custom-slider-label {
+min-width: 6.5em;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.highlighted-text {
+color: #0084ac;
+}
+</style>
 <div class="slider-section">
 <span>
 <label>
@@ -39,5 +184,628 @@ Higgs field (𝜙):
 <div id="content">
 <div id="graph-0" style="width: 800px; height: 500px;"></div>
 </div>
-<script type="text/javascript">"use strict";const C=299792458;function isIterable(e){return null!=e&&"function"==typeof e[Symbol.iterator]}function applyDatum(e,{transition:t}={}){const r=d3.select(this).datum(e);void 0!==e.class&&r.classed(e.class,!0);const a=void 0===t?r:r.transition(t);Object.entries(e.attrs).forEach(([e,t])=>{a.attr(e,t)}),void 0!==e.text&&a.text(e.text)}function _addGraphicalObjs(e,t){return e.selectAll().data(t).enter().append(e=>d3.create(`svg:${e.shape}`).node()).each(applyDatum)}function applyGraphicalObjs(e,t,{selector:r,cssClass:a,transition:s}={}){const n=e.selectAll(r).data(t).join(e=>e.append(e=>d3.create(`svg:${e.shape}`).node())).each(function(e){applyDatum.call(this,e,{transition:s})});return void 0!==a&&n.classed(a,!0),n}function lorentzFactor({fracOfC:e}){return e||(e=0),1/Math.sqrt(1-e*e)}function sign(e,t){return void 0===t&&(t=1e-6),e<-t?-1:e<t?0:1}function l2Norm(...e){const t=e.reduce((e,t)=>e+t*t,0);return Math.sqrt(t)}const EPSILON=1e-6,LAMBDA=.13,R_MAX=10,graphDiv=document.getElementById("graph-0"),temperatures=[];for(let e=3.6;e>0;e-=.05)temperatures.push(e);const temperatureSlider=document.getElementById("input-temp");temperatureSlider.min=0,temperatureSlider.max=temperatures.length-1,temperatureSlider.step=1,temperatureSlider.value=temperatureSlider.min;const T_CRIT_SLIDER_INDEX=(()=>{for(let e=0;e<temperatures.length;++e){const t=temperatures[e];if(Math.abs(t-1)<.01)return e}})(),temperatureTextSpan=document.getElementById("text-temp-inequality"),phiTextSpan=document.getElementById("text-phi"),phis=[];for(let e=-8.5;e<=8.5;e+=.1)phis.push(e);const phiSlider=document.getElementById("input-phi");phiSlider.min=0,phiSlider.max=phis.length-1,phiSlider.step=1,phiSlider.value=(phis.length-1)/2;const MAX_BEND_DESIRED=175,HAT_BEND_MAX_R=(()=>{const e=temperatures[0],t=e*e;return Math.sqrt((t-1)/(2*LAMBDA))})();function higgs(e,t,r){const a=e*e+t*t,s=a*a;return(r>=1?1:LAMBDA*R_MAX*R_MAX*(2-r)*.4)*(1-r*r)*a+Math.min(1,r)*LAMBDA*s}function phiAdjStr(e){return(MAX_BEND_DESIRED*e/HAT_BEND_MAX_R).toPrecision(4)}function getData({f:e,rMax:t,dx:r,dy:a,nCircularLines:s,nRadialLines:n}){const o={x:r,y:a},i={x:Math.ceil(t/r)+1,y:Math.ceil(t/a)+1},c={x:[],y:[],z:[]};["x","y"].forEach(e=>{for(let t=-i[e];t<=i[e];++t)c[e].push(t*o[e])});for(const t of c.x){const r=[];for(const a of c.y){const s=e(t,a);r.push(s)}c.z.push(r)}const h=Math.PI/n,l=[];for(let r=0;r<n;++r){const a={x:[],y:[],z:[]},s=r*h,n=.1,o=Math.ceil(t/n);for(let t=-o;t<=o;++t){const r=t*n,o=r*Math.cos(s),i=r*Math.sin(s);a.x.push(o),a.y.push(i),a.z.push(e(o,i))}l.push(a)}const p=t/s,d=[];for(let r=0;r<=s;++r){const a={x:[],y:[],z:[]},n=r<s?p*r:t,o=.02;for(let t=0;t<2*Math.PI+o;t+=o){const r=n*Math.cos(t),s=n*Math.sin(t);a.x.push(r),a.y.push(s),a.z.push(e(r,s))}d.push(a)}return{grid:c,radialLines:l,circularLines:d}}function getTraceDataForTemp({temperature:e,rMax:t,dx:r,dy:a,nCircularLines:s,nRadialLines:n}){const o=e*e,i=(t,r)=>higgs(t,r,e),{grid:c,radialLines:h,circularLines:l}=getData({f:i,rMax:t,dx:r,dy:a,nCircularLines:s,nRadialLines:n}),p=[];for(let e=0;e<c.x.length;++e){const t=c.x[e];if(p.push({x:t,z:i(t,0)}),e<c.x.length-1)for(let t=1;t<=0;++t){const r=((1-t)*c.x[e]+t*c.x[e+1])/1;p.push({x:r,z:i(r,0)})}}console.log(p);const d=(o-1)/(2*LAMBDA),u=Math.max(...p.filter(({x:e})=>e*e>d).map(({z:e})=>e));for(let e=0;e<c.z.length;++e){const t=c.x[e],r=t*t,a=c.z[e];for(let e=0;e<a.length;++e){const s=c.y[e],n=a[e];t>0&&s>0?a[e]=null:r+s*s>d&&n>u&&(a[e]=null)}}for(const e of[h,l])for(const t of e)for(let e=0;e<t.x.length;++e){const r=t.x[e],a=t.y[e];r>EPSILON&&a>EPSILON&&(t.z[e]=null)}const x=d>0?Math.sqrt(d):0;return{data2d:p,data3d:c,radialLines:h,circularLines:l,hatBendR:x,hatBendZ:i(x,0),zMax:i(t,0)}}function getParticleInfo({particlePhi:e}){const t=temperatures[+temperatureSlider.value],r=(()=>{if(t<=1)return 0;return Math.sqrt((t*t-1)/(2*LAMBDA))})(),a=Math.abs(2*(1-t*t)*e+4*LAMBDA*Math.pow(e,3)),s=higgs(R_MAX,0,t),n=higgs(e,0,t)+10+Math.pow(a,1.05)/7+300/s+.02*s-5;return{trace2d:{x:[e],y:[n],type:"scatter",mode:"markers",marker:{size:10,color:"red"},xaxis:"x2",yaxis:"y2"},trace3d:{x:[0],y:[e],z:[n+.1*Math.pow(Math.max(0,Math.abs(e)-r)/R_MAX,.8)*.9*Math.pow(s,.8)+Math.sin(Math.PI/1.5*1.2*Math.abs(e/2)/R_MAX)*a*.5*1e4/(s*s)+.01*a+(0===e?.001*s:0)],type:"scatter3d",mode:"markers",marker:{size:9,color:"red"},showscale:!1,scene:"scene1"}}}function getPlotInfo({temperature:e,phi:t,setCamera:r}){const a=[],{data2d:s,data3d:n,radialLines:o,circularLines:i,hatBendR:c,hatBendZ:h,zMax:l}=getTraceDataForTemp({temperature:e,rMax:R_MAX,dx:.3,dy:.3,nCircularLines:20,nRadialLines:18}),p={x:s.map(e=>e.x),y:s.map(e=>e.z),type:"line",showgrid:!1,showlegend:!1,xaxis:"x2",yaxis:"y2"};a.push(p);const d=getParticleInfo({particlePhi:t});a.push(d.trace2d);const u={...n,type:"surface",showscale:!1,scene:"scene1",colorscale:[[0,"rgba(0.3,0.3,0.4)"],[1,"rgb(0.7,0.8,0.9)"]],contours:{x:{highlight:!1},y:{highlight:!1},z:{show:!1}}};a.push(u),a.push(d.trace3d);for(const e of[...o,...i])a.push({type:"scatter3d",mode:"lines",...e,line:{color:"#ccc",width:2.5},showscale:!1,scene:"scene1"});const x={bordercolor:"black",borderwidth:1,bgcolor:"#fffde0"},f=[];if(c<EPSILON)f.push({x:0,y:-40,xref:"x2",yref:"y2",showarrow:!0,arrowhead:2,arrowcolor:"red",text:"Stable (𝜙 = 0 GeV)",yanchor:"top",ax:0,ay:20,...x});else{[-c,c].forEach((e,t)=>{const r=0===t?1:-1;f.push({x:e+r*c/50,y:h-45+1.2*Math.pow(c,1.7),xref:"x2",yref:"y2",showarrow:!0,arrowhead:2,ax:r*c*3,ay:5*Math.pow(c,.6)+18,arrowcolor:"red",text:"",yanchor:"top"})}),f.push({x:0,y:40+100/(Math.pow(c,1)+2),xref:"x2",yref:"y2",showarrow:!0,arrowhead:2,text:"Unstable (𝜙 = 0 GeV)",xanchor:"middle",yanchor:"bottom",arrowcolor:"red",ax:0,ay:-29,...x});const e=phiAdjStr(c);f.push({x:0,y:.65*h-163,xref:"x2",yref:"y2",showarrow:!1,text:`Stable (𝜙 = ±${e} GeV)`,xanchor:"middle",yanchor:"top",...x})}const m={showlegend:!1,showgrid:!1,hovermode:!1,yaxis2:{anchor:"x2",domain:[0,1],showgrid:!1,visible:!1,fixedrange:!0},xaxis2:{anchor:"y2",domain:[0,.45],showgrid:!1,visible:!1,fixedrange:!0},scene1:{domain:{x:[.55,1],y:[0,1]},xaxis:{showgrid:!1,visible:!1,showspikes:!1},yaxis:{showgrid:!1,visible:!1,showspikes:!1},zaxis:{showgrid:!1,visible:!1,showspikes:!1,range:[h,l]},margin:{t:0,b:0,l:0,r:0},hovermode:!1},annotations:f};m.scene1.camera=r?{up:{x:0,y:0,z:1},center:{x:0,y:0,z:0},eye:{x:1,y:1,z:.8},projection:{type:"perspective"}}:graphDiv._fullLayout.scene._scene.getCamera();return{traces:a,layout:m,config:{displayModeBar:!1,scrollZoom:!1}}}function update(){const e=temperatureSlider.value,t=(()=>{const e=phis[phiSlider.value];return Math.abs(e)<EPSILON?0:e})(),r=getPlotInfo({temperature:temperatures[e],phi:t,setCamera:!graphDiv.__hasBeenInitialized});Plotly.react(graphDiv,r.traces,r.layout,r.config),graphDiv.__hasBeenInitialized||(graphDiv.__hasBeenInitialized=!0),temperatureTextSpan.textContent=e<T_CRIT_SLIDER_INDEX?"<":e<T_CRIT_SLIDER_INDEX+2?"=":">";const a=(()=>{if(0===t)return` ${phiAdjStr(0)}`;const e=phiAdjStr(t);return e.startsWith("-")?e:`+${e}`})();phiTextSpan.textContent=a}update(),update();</script></body>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#0f5", // green
+quaternary: "#0af", // darker blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this).datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (typeof datum.text !== "undefined") {
+t.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(t, () => datum.children, { transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+/* global Plotly */
+const EPSILON = 0.000001;
+const LAMBDA = 0.13;
+const R_MAX = 10;
+const graphDiv = document.getElementById("graph-0");
+const temperatures = [];
+for (let t = 3.6; t > 0; t -= 0.05) {
+temperatures.push(t);
+}
+const temperatureSlider = document.getElementById("input-temp");
+temperatureSlider.min = 0;
+temperatureSlider.max = temperatures.length - 1;
+temperatureSlider.step = 1;
+temperatureSlider.value = temperatureSlider.min;
+const T_CRIT_SLIDER_INDEX = (() => {
+for (let i = 0; i < temperatures.length; ++i) {
+const t = temperatures[i];
+if (Math.abs(t - 1) < 0.01) {
+return i;
+}
+}
+})();
+const temperatureTextSpan = document.getElementById("text-temp-inequality");
+const phiTextSpan = document.getElementById("text-phi");
+const phis = [];
+for (let p = -8.5; p <= 8.5; p += 0.1) {
+phis.push(p);
+}
+const phiSlider = document.getElementById("input-phi");
+phiSlider.min = 0;
+phiSlider.max = phis.length - 1;
+phiSlider.step = 1;
+phiSlider.value = (phis.length - 1) / 2;
+const MAX_BEND_DESIRED = 175;
+const HAT_BEND_MAX_R = (() => {
+const temp = temperatures[0];
+const temp2 = temp * temp;
+return Math.sqrt((temp2 - 1) / (2 * LAMBDA));
+})();
+function higgs(x, y, temp) {
+const r2 = x * x + y * y;
+const r4 = r2 * r2;
+const a = temp >= 1 ? 1 : LAMBDA * R_MAX * R_MAX * (2 - temp) * 0.4;
+const b = Math.min(1, temp);
+return a * (1 - temp * temp) * r2 + b * LAMBDA * r4;
+}
+function phiAdjStr(phi) {
+return ((MAX_BEND_DESIRED * phi) / HAT_BEND_MAX_R).toPrecision(4);
+}
+function getData({ f, rMax, dx, dy, nCircularLines, nRadialLines }) {
+const d = { x: dx, y: dy };
+const n = { x: Math.ceil(rMax / dx) + 1, y: Math.ceil(rMax / dy) + 1 };
+const grid = { x: [], y: [], z: [] };
+["x", "y"].forEach(v => {
+for (let i = -n[v]; i <= n[v]; ++i) {
+grid[v].push(i * d[v]);
+}
+});
+for (const x of grid.x) {
+const zRow = [];
+for (const y of grid.y) {
+const z = f(x, y);
+zRow.push(z);
+}
+grid.z.push(zRow);
+}
+const dTheta = Math.PI / nRadialLines;
+const radialLines = [];
+for (let i = 0; i < nRadialLines; ++i) {
+const thisRadialLine = { x: [], y: [], z: [] };
+const theta = i * dTheta;
+const dr = 0.1;
+const nr = Math.ceil(rMax / dr);
+for (let ir = -nr; ir <= nr; ++ir) {
+const r = ir * dr;
+// if (r < -rMax - EPSILON || r > rMax + EPSILON) {
+// 	continue;
+// }
+const x = r * Math.cos(theta);
+const y = r * Math.sin(theta);
+thisRadialLine.x.push(x);
+thisRadialLine.y.push(y);
+thisRadialLine.z.push(f(x, y));
+}
+radialLines.push(thisRadialLine);
+}
+const dCircularLine = rMax / nCircularLines;
+const circularLines = [];
+for (let i = 0; i <= nCircularLines; ++i) {
+const thisCircularLine = { x: [], y: [], z: [] };
+const r = i < nCircularLines ? dCircularLine * i : rMax;
+const dTheta = 0.02;
+for (let theta = 0; theta < Math.PI * 2 + dTheta; theta += dTheta) {
+const x = r * Math.cos(theta);
+const y = r * Math.sin(theta);
+thisCircularLine.x.push(x);
+thisCircularLine.y.push(y);
+thisCircularLine.z.push(f(x, y));
+}
+circularLines.push(thisCircularLine);
+}
+return { grid, radialLines, circularLines };
+}
+function getTraceDataForTemp({
+temperature,
+rMax,
+dx,
+dy,
+nCircularLines,
+nRadialLines,
+}) {
+const temp2 = temperature * temperature;
+const f = (x, y) => higgs(x, y, temperature);
+const { grid, radialLines, circularLines } = getData({
+f,
+rMax,
+dx,
+dy,
+nCircularLines,
+nRadialLines,
+});
+const nInterpolatedPoints = 0;
+const data2d = [];
+for (let i = 0; i < grid.x.length; ++i) {
+const givenX = grid.x[i];
+data2d.push({ x: givenX, z: f(givenX, 0) });
+if (i < grid.x.length - 1) {
+for (let r = 1; r <= nInterpolatedPoints; ++r) {
+const l = nInterpolatedPoints + 1 - r;
+const interpolatedX =
+(l * grid.x[i] + r * grid.x[i + 1]) / (nInterpolatedPoints + 1);
+data2d.push({ x: interpolatedX, z: f(interpolatedX, 0) });
+}
+}
+// if (i < grid.x.length - 1) {
+// 	xs2d.push((grid.x[i] + grid.x[i + 1]) / 2);
+// }
+// data2d.push({ x: grid.x[i], z: middleZRow[i] });
+}
+console.log(data2d);
+const hatBendR2 = (temp2 - 1) / (2 * LAMBDA);
+const zMax2d = Math.max(
+...data2d.filter(({ x }) => x * x > hatBendR2).map(({ z }) => z),
+);
+for (let i = 0; i < grid.z.length; ++i) {
+const x = grid.x[i];
+const x2 = x * x;
+const zRow = grid.z[i];
+for (let j = 0; j < zRow.length; ++j) {
+const y = grid.y[j];
+const z = zRow[j];
+if (x > 0 && y > 0) {
+zRow[j] = null;
+continue;
+}
+const y2 = y * y;
+if (x2 + y2 > hatBendR2 && z > zMax2d) {
+zRow[j] = null;
+continue;
+}
+}
+}
+for (const lineList of [radialLines, circularLines]) {
+for (const line of lineList) {
+for (let i = 0; i < line.x.length; ++i) {
+const x = line.x[i];
+const y = line.y[i];
+if (x > EPSILON && y > EPSILON) {
+line.z[i] = null;
+}
+}
+}
+}
+const hatBendR = hatBendR2 > 0 ? Math.sqrt(hatBendR2) : 0;
+return {
+data2d,
+data3d: grid,
+radialLines,
+circularLines,
+hatBendR,
+hatBendZ: f(hatBendR, 0),
+zMax: f(rMax, 0),
+};
+}
+function getParticleInfo({ particlePhi }) {
+const particleRadius = 10;
+const currTemp = temperatures[+temperatureSlider.value];
+const hatBendR = (() => {
+if (currTemp <= 1) {
+return 0;
+}
+const r2 = Math.sqrt((currTemp * currTemp - 1) / (2 * LAMBDA));
+return r2;
+})();
+const slope = Math.abs(
+2 * (1 - currTemp * currTemp) * particlePhi +
+4 * LAMBDA * Math.pow(particlePhi, 3),
+);
+const maxHiggs = higgs(R_MAX, 0, currTemp);
+const z =
+higgs(particlePhi, 0, currTemp) +
+particleRadius +
+Math.pow(slope, 1.05) / 7 +
+300 / maxHiggs +
+maxHiggs * 0.02 -
+5;
+const particleTrace2d = {
+x: [particlePhi],
+y: [z],
+type: "scatter",
+mode: "markers",
+marker: { size: particleRadius, color: "red" },
+xaxis: "x2",
+yaxis: "y2",
+};
+const particleTrace3d = {
+x: [0],
+y: [particlePhi],
+z: [
+z +
+// Math.pow(slope, 1.05) / 40 +
+Math.pow(Math.max(0, Math.abs(particlePhi) - hatBendR) / R_MAX, 0.8) *
+0.1 *
+0.9 *
+Math.pow(maxHiggs, 0.8) +
+// (Math.abs(Math.abs(particlePhi) - hatBendR) / R_MAX) * 5 +
+// (Math.cos(((Math.PI / 2) * 1.2 * particlePhi) / R_MAX) * 20) /
+// 	Math.pow(maxHiggs, 0.5) +
+(Math.sin(((Math.PI / 1.5) * 1.2 * Math.abs(particlePhi / 2)) / R_MAX) *
+slope *
+0.5 *
+10000) /
+(maxHiggs * maxHiggs) +
+slope * 0.01 +
+(particlePhi === 0 ? maxHiggs * 0.001 : 0),
+],
+type: "scatter3d",
+mode: "markers",
+marker: { size: particleRadius * 0.9, color: "red" },
+showscale: false,
+scene: "scene1",
+};
+return { trace2d: particleTrace2d, trace3d: particleTrace3d };
+}
+function getPlotInfo({ temperature, phi, setCamera }) {
+const traces = [];
+const {
+data2d,
+data3d,
+radialLines,
+circularLines,
+hatBendR,
+hatBendZ,
+zMax,
+} = getTraceDataForTemp({
+temperature,
+rMax: R_MAX,
+dx: 0.3, // Minimum value to avoid spiky crown syndrome is ~0.3
+dy: 0.3,
+nCircularLines: 20,
+nRadialLines: 18,
+});
+const trace2d = {
+x: data2d.map(d => d.x),
+y: data2d.map(d => d.z),
+type: "line",
+showgrid: false,
+showlegend: false,
+xaxis: "x2",
+yaxis: "y2",
+};
+traces.push(trace2d);
+const particleInfo = getParticleInfo({ particlePhi: phi });
+traces.push(particleInfo.trace2d);
+const trace3d = {
+...data3d,
+type: "surface",
+showscale: false,
+scene: "scene1",
+// surfacecolor: data3d.z.map(zRow =>
+// 	zRow.map(() => {
+// 		return "rgb(0.1,0.1,0.1)";
+// 	}),
+// ),
+colorscale: [
+[0, "rgba(0.3,0.3,0.4)"],
+[1, "rgb(0.7,0.8,0.9)"],
+],
+contours: {
+x: { highlight: false },
+y: { highlight: false },
+z: { show: false },
+},
+// opacity: 0.999,
+};
+traces.push(trace3d);
+traces.push(particleInfo.trace3d);
+for (const line of [...radialLines, ...circularLines]) {
+traces.push({
+type: "scatter3d",
+mode: "lines",
+...line,
+line: {
+color: "#ccc",
+width: 2.5,
+},
+showscale: false,
+scene: "scene1",
+});
+}
+const isStable = hatBendR < EPSILON;
+const annotTextAttrs = {
+bordercolor: "black",
+borderwidth: 1,
+bgcolor: "#fffde0",
+};
+const yOffsetBottom = 163;
+const annotations = [];
+if (isStable) {
+annotations.push({
+x: 0,
+y: -40,
+xref: "x2",
+yref: "y2",
+showarrow: true,
+arrowhead: 2,
+arrowcolor: "red",
+text: "Stable (𝜙 = 0 GeV)",
+yanchor: "top",
+ax: 0,
+ay: 20,
+...annotTextAttrs,
+});
+} else {
+[-hatBendR, hatBendR].forEach((x, index) => {
+const sign = index === 0 ? 1 : -1;
+annotations.push({
+x: x + (sign * hatBendR) / 50,
+y: hatBendZ - 45 + Math.pow(hatBendR, 1.7) * 1.2,
+xref: "x2",
+yref: "y2",
+showarrow: true,
+arrowhead: 2,
+ax: sign * hatBendR * 3,
+ay: Math.pow(hatBendR, 0.6) * 5 + 18,
+arrowcolor: "red",
+text: "",
+yanchor: "top",
+});
+});
+annotations.push({
+x: 0,
+y: 40 + 100 / (Math.pow(hatBendR, 1) + 2),
+xref: "x2",
+yref: "y2",
+showarrow: true,
+arrowhead: 2,
+text: "Unstable (𝜙 = 0 GeV)",
+xanchor: "middle",
+yanchor: "bottom",
+arrowcolor: "red",
+ax: 0,
+ay: -29,
+...annotTextAttrs,
+});
+const phiStr = phiAdjStr(hatBendR);
+annotations.push({
+x: 0,
+y: hatBendZ * 0.65 - yOffsetBottom,
+xref: "x2",
+yref: "y2",
+showarrow: false,
+text: `Stable (𝜙 = ±${phiStr} GeV)`,
+xanchor: "middle",
+yanchor: "top",
+...annotTextAttrs,
+});
+}
+const layout = {
+showlegend: false,
+showgrid: false,
+hovermode: false,
+yaxis2: {
+anchor: "x2",
+domain: [0, 1],
+showgrid: false,
+visible: false,
+fixedrange: true,
+},
+xaxis2: {
+anchor: "y2",
+domain: [0, 0.45],
+showgrid: false,
+visible: false,
+fixedrange: true,
+},
+scene1: {
+domain: { x: [0.55, 1], y: [0, 1] },
+xaxis: { showgrid: false, visible: false, showspikes: false },
+yaxis: { showgrid: false, visible: false, showspikes: false },
+zaxis: {
+showgrid: false,
+visible: false,
+showspikes: false,
+range: [hatBendZ, zMax],
+},
+margin: { t: 0, b: 0, l: 0, r: 0 },
+hovermode: false,
+},
+annotations: annotations,
+// sliders: sliders,
+};
+if (setCamera) {
+layout.scene1.camera = {
+up: { x: 0, y: 0, z: 1 },
+center: { x: 0, y: 0, z: 0 },
+eye: {
+x: 1,
+y: 1,
+z: 0.8,
+},
+projection: { type: "perspective" },
+};
+} else {
+layout.scene1.camera = graphDiv._fullLayout.scene._scene.getCamera();
+}
+const config = { displayModeBar: false, scrollZoom: false };
+return { traces, layout, config };
+}
+// eslint-disable-next-line no-unused-vars
+function update() {
+const temperatureIndex = temperatureSlider.value;
+const phi = (() => {
+const p = phis[phiSlider.value];
+if (Math.abs(p) < EPSILON) {
+return 0;
+}
+return p;
+})();
+const plotInfo = getPlotInfo({
+temperature: temperatures[temperatureIndex],
+phi,
+setCamera: !graphDiv.__hasBeenInitialized,
+});
+Plotly.react(graphDiv, plotInfo.traces, plotInfo.layout, plotInfo.config);
+if (!graphDiv.__hasBeenInitialized) {
+graphDiv.__hasBeenInitialized = true;
+}
+if (temperatureIndex < T_CRIT_SLIDER_INDEX) {
+temperatureTextSpan.textContent = "<";
+} else if (temperatureIndex < T_CRIT_SLIDER_INDEX + 2) {
+temperatureTextSpan.textContent = "=";
+} else {
+temperatureTextSpan.textContent = ">";
+}
+const phiStr = (() => {
+if (phi === 0) {
+return ` ${phiAdjStr(0)}`;
+}
+const p = phiAdjStr(phi);
+if (!p.startsWith("-")) {
+return `+${p}`;
+}
+return p;
+})();
+phiTextSpan.textContent = phiStr;
+}
+update();
+// updateSelectedPhiIndex(0);
+update();
+</script></body>
 </html>

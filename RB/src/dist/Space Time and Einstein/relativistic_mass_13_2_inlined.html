@@ -4,7 +4,134 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
-<body><style>body{max-width:800px;margin:50px auto;padding:0;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;width:5em;font-size:15px}.slider-label{margin-right:1em;display:inline-block}.div-below-slider{padding-top:10px}.highlighted-text{color:#5df}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:40%;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}.h-centered{margin:auto;text-align:center}</style>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding: 0;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+width: 5em;
+font-size: 15px;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.div-below-slider {
+padding-top: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tiertiary-text {
+color: #0f5;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 40%;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+margin-top: 25px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+.h-centered {
+margin: auto;
+text-align: center;
+}
+</style>
 <div>
 <span>
 <label>
@@ -39,5 +166,487 @@
 <div>
 <svg class="viz-canvas" id="canvas-rel-mass" style="margin: auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
-<script type="text/javascript">"use strict";const C=299792458;function isIterable(t){return null!=t&&"function"==typeof t[Symbol.iterator]}function applyDatum(t,{transition:e}={}){const a=d3.select(this).datum(t);void 0!==t.class&&a.classed(t.class,!0);const s=void 0===e?a:a.transition(e);Object.entries(t.attrs).forEach(([t,e])=>{s.attr(t,e)}),void 0!==t.text&&s.text(t.text)}function _addGraphicalObjs(t,e){return t.selectAll().data(e).enter().append(t=>d3.create(`svg:${t.shape}`).node()).each(applyDatum)}function applyGraphicalObjs(t,e,{selector:a,cssClass:s,transition:n}={}){const i=t.selectAll(a).data(e).join(t=>t.append(t=>d3.create(`svg:${t.shape}`).node())).each(function(t){applyDatum.call(this,t,{transition:n})});return void 0!==s&&i.classed(s,!0),i}function lorentzFactor({fracOfC:t}){return t||(t=0),1/Math.sqrt(1-t*t)}function sign(t,e){return void 0===e&&(e=1e-6),t<-e?-1:t<e?0:1}function l2Norm(...t){const e=t.reduce((t,e)=>t+e*e,0);return Math.sqrt(e)}const AESTHETIC={solidFill:"#4ff8",solidStroke:"#fff8",durationMSOfAnimationReset:300,easingForAnimationReset:d3.easePoly.exponent(2.5),configure:function(t,e){return Object.entries(e).forEach(([e,a])=>{if("attrs"===e){const e=a;Object.entries(e).forEach(([e,a])=>{t.attr(e,a)})}else{if("class"!==e)throw new Error(`Unexpected key ${e}`);t.classed(a,!0)}}),t}},REST_MASS=5,CANVAS_WIDTH=600,CANVAS_HEIGHT=350,AXIS_MARGINS={top:.1,bottom:.1,left:.13,right:.06},AX_BOUNDS={xMin:600*AXIS_MARGINS.left,xMax:600*(1-AXIS_MARGINS.right),yMin:350*(1-AXIS_MARGINS.bottom),yMax:350*AXIS_MARGINS.top},canvas=d3.selectAll(".viz-canvas").attr("width",600).attr("height",350).attr("background-color","black"),subcanvases=canvas.data([{originX:0,originY:0,width:600,height:350}]).each(function(t){d3.select(this).append("g").attr("transform",`translate(0, ${t.originY})`).classed("subcanvas",!0)}).selectAll("g"),speedInputSlider=document.getElementById("input-particle-speed"),speedTextSpan=document.getElementById("particle-speed-text"),relMassTextSpan=document.getElementById("particle-rel-mass-text");function getSpeed(t){t=void 0!==t?t:speedInputSlider.value;const e=parseFloat(t);if(e<0||e>1)throw new Error(`Got invalid speed (outside [0,1]): ${e}`);return e}function getRelativisticMass({fracOfC:t,lf:e}){return void 0===e&&(e=lorentzFactor({fracOfC:t})),REST_MASS*e}const xScale=d3.scaleLinear().domain([0,1]).range([AX_BOUNDS.xMin,AX_BOUNDS.xMax]),yScale=d3.scaleLinear().domain([0,getRelativisticMass({fracOfC:speedInputSlider.max})]).range([AX_BOUNDS.yMin,AX_BOUNDS.yMax]),graphObjs={};function drawGraph(){const t=[[0,5]];t:for(let e=2;e<5;++e){const a=Math.pow(10,-e),s=2===e?Math.pow(10,-e):1-9*Math.pow(10,-e),n=2===e?Math.pow(10,e):10;for(let e=0;e<n-1;++e){const n=s+e*a,i=getRelativisticMass({fracOfC:n});if(i>Math.max(...yScale.domain()))break t;t.push([n,i,xScale(n),yScale(i)])}}console.log(t),subcanvases.each(function(){const e=d3.select(this),a=d3.line().x(t=>xScale(t[0])).y(t=>yScale(t[1])).curve(d3.curveCardinal);e.append("svg:path").attr("d",a(t)).attr("stroke","#fffd").attr("stroke-width",4);const s={stroke:"#fff3","stroke-width":2},n=[{class:"x-axis",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMax,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMin,...s}},{class:"y-axis",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMin,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMax,...s}}];e.selectAll().data(n).enter().append("svg:line").each(applyDatum);const i={stroke:"#fff4","stroke-width":1},r=xScale.ticks(21).map(t=>{const e=xScale(t);return{class:"x-tick",attrs:{x1:e,x2:e,y1:AX_BOUNDS.yMin,y2:AX_BOUNDS.yMin-3,...i}}}),c=yScale.ticks(21).map(t=>{const e=yScale(t);return{class:"y-tick",attrs:{x1:AX_BOUNDS.xMin,x2:AX_BOUNDS.xMin+3,y1:e,y2:e,...i}}});e.selectAll().data([...r,...c]).enter().append("svg:line").each(applyDatum);const l={"font-size":15,fill:"white"},o=xScale.ticks(6).map(t=>({class:"x-axis-label",text:t,attrs:{x:xScale(t),y:AX_BOUNDS.yMin+22,"text-anchor":"middle","dominant-baseline":"text-top",...l}})),d=yScale.ticks(4).map(t=>({class:"y-axis-label",text:t,attrs:{x:AX_BOUNDS.xMin-10,y:yScale(t),"text-anchor":"end","dominant-baseline":"central",...l}}));e.selectAll().data([...o,...d]).enter().append("svg:text").each(applyDatum).text(t=>t.text),e.append("text").selectAll().data([{char:"𝑣",height:1},{char:"＿",height:.7},{char:"𝑐",height:1}]).enter().append("tspan").attr("x",AX_BOUNDS.xMax+25).attr("y",AX_BOUNDS.yMin-16).attr("dy",(t,e)=>`${.6*e+t.height}em`).attr("font-size",21).attr("stroke","white").attr("fill","white").attr("text-anchor","middle").text(t=>t.char).classed("x-axis-unit",!0),e.append("svg:text").attr("x",AX_BOUNDS.xMin).attr("y",AX_BOUNDS.yMax-10).attr("font-size",21).attr("stroke","white").attr("fill","white").attr("text-anchor","middle").text("𝑚(𝑣)")})}function getGridlinesData({fracOfC:t}){void 0===t&&(t=.5);const e=xScale(t),a=yScale(getRelativisticMass({fracOfC:t})),s={stroke:"#fffb","stroke-width":3,"stroke-dasharray":"1.5 1.5"};return[{shape:"line",class:"gridline",type:"horizontal",attrs:{x1:AX_BOUNDS.xMin,x2:e,y1:a,y2:a,...s}},{shape:"line",class:"gridline",type:"vertical",attrs:{x1:e,x2:e,y1:AX_BOUNDS.yMin,y2:a,...s}},{shape:"circle",class:"gridline-dot",attrs:{cx:e,cy:a,r:4,fill:"white"}}]}function updateParticleSpeed(t,{fromUserInput:e=!0}={}){try{e||(speedInputSlider.value=t);const a=getSpeed(t);speedTextSpan.textContent=a.toFixed(3);const s=getRelativisticMass({fracOfC:a});relMassTextSpan.textContent=s.toFixed(2),graphObjs.gridLines.data(getGridlinesData({fracOfC:a})).each(function(t){const e=d3.select(this).transition().duration(10);Object.entries(t.attrs).forEach(([t,a])=>{e.attr(t,a)})})}catch(e){throw console.log(t),e}}drawGraph(),graphObjs.gridLines=_addGraphicalObjs(subcanvases,getGridlinesData),updateParticleSpeed(0,{fromUserInput:!1});</script></body>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#0f5", // green
+quaternary: "#0af", // darker blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this).datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (typeof datum.text !== "undefined") {
+t.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(t, () => datum.children, { transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+"use strict";
+// eslint-disable-next-line no-unused-vars
+const AESTHETIC = {
+solidFill: "#4ff8",
+solidStroke: "#fff8",
+durationMSOfAnimationReset: 300,
+easingForAnimationReset: d3.easePoly.exponent(2.5),
+configure: function (d3Obj, config) {
+Object.entries(config).forEach(([key, value]) => {
+if (key === "attrs") {
+const attrs = value;
+Object.entries(attrs).forEach(([attr, val]) => {
+d3Obj.attr(attr, val);
+});
+} else if (key === "class") {
+d3Obj.classed(value, true);
+} else {
+throw new Error(`Unexpected key ${key}`);
+}
+});
+return d3Obj;
+},
+};
+/* globals _addGraphicalObjs applyDatum lorentzFactor */
+"use strict";
+const REST_MASS = 5;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 350;
+const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
+const AX_BOUNDS = {
+xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
+xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
+yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
+yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
+};
+const canvas = d3
+.selectAll(".viz-canvas")
+.attr("width", CANVAS_WIDTH)
+.attr("height", CANVAS_HEIGHT)
+.attr("background-color", "black");
+const subcanvases = canvas
+.data([
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT,
+},
+])
+.each(function (d) {
+d3.select(this)
+.append("g")
+.attr("transform", `translate(0, ${d.originY})`)
+.classed("subcanvas", true);
+})
+.selectAll("g");
+const speedInputSlider = document.getElementById("input-particle-speed");
+const speedTextSpan = document.getElementById("particle-speed-text");
+const relMassTextSpan = document.getElementById("particle-rel-mass-text");
+function getSpeed(speedStr) {
+speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
+const floatVal = parseFloat(speedStr);
+if (floatVal < 0 || floatVal > 1) {
+throw new Error(`Got invalid speed (outside [0,1]): ${floatVal}`);
+}
+return floatVal;
+}
+function getRelativisticMass({ fracOfC, lf }) {
+if (typeof lf === "undefined") {
+lf = lorentzFactor({ fracOfC });
+}
+return REST_MASS * lf;
+}
+const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const yScale = d3
+.scaleLinear()
+.domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
+.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
+const graphObjs = {};
+function drawGraph() {
+const data = [[0, 5]];
+const base = 10;
+const startPrecision = 2;
+outer: for (let precision = startPrecision; precision < 5; ++precision) {
+const scale = Math.pow(base, -precision);
+const lower =
+precision === startPrecision
+? Math.pow(base, -precision)
+: 1 - Math.pow(base, -precision) * (base - 1);
+const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
+for (let i = 0; i < nNums - 1; ++i) {
+const x = lower + i * scale;
+const y = getRelativisticMass({ fracOfC: x });
+if (y > Math.max(...yScale.domain())) {
+break outer;
+}
+data.push([x, y, xScale(x), yScale(y)]);
+}
+}
+console.log(data);
+subcanvases.each(function () {
+const subcanvas = d3.select(this);
+const curve = d3
+.line()
+.x(xy => xScale(xy[0]))
+.y(xy => yScale(xy[1]))
+.curve(d3.curveCardinal);
+// Add main curve showing gamma
+subcanvas
+.append("svg:path")
+.attr("d", curve(data))
+.attr("stroke", "#fffd")
+.attr("stroke-width", 4);
+// Add axes
+const commonAxesAttrs = {
+stroke: "#fff3",
+"stroke-width": 2,
+};
+const axesAttrs = [
+{
+class: "x-axis",
+attrs: {
+x1: AX_BOUNDS.xMin,
+x2: AX_BOUNDS.xMax,
+y1: AX_BOUNDS.yMin,
+y2: AX_BOUNDS.yMin,
+...commonAxesAttrs,
+},
+},
+{
+class: "y-axis",
+attrs: {
+x1: AX_BOUNDS.xMin,
+x2: AX_BOUNDS.xMin,
+y1: AX_BOUNDS.yMin,
+y2: AX_BOUNDS.yMax,
+...commonAxesAttrs,
+},
+},
+];
+subcanvas
+.selectAll()
+.data(axesAttrs)
+.enter()
+.append("svg:line")
+.each(applyDatum);
+// Make ticks
+const minorTickLength = 3;
+const commonTickAttrs = {
+stroke: "#fff4",
+"stroke-width": 1,
+};
+const xTicksData = xScale.ticks(21).map(x => {
+const tickX = xScale(x);
+return {
+class: "x-tick",
+attrs: {
+x1: tickX,
+x2: tickX,
+y1: AX_BOUNDS.yMin,
+y2: AX_BOUNDS.yMin - minorTickLength,
+...commonTickAttrs,
+},
+};
+});
+const yTicksData = yScale.ticks(21).map(y => {
+const tickY = yScale(y);
+return {
+class: "y-tick",
+attrs: {
+x1: AX_BOUNDS.xMin,
+x2: AX_BOUNDS.xMin + minorTickLength,
+y1: tickY,
+y2: tickY,
+...commonTickAttrs,
+},
+};
+});
+subcanvas
+.selectAll()
+.data([...xTicksData, ...yTicksData])
+.enter()
+.append("svg:line")
+.each(applyDatum);
+// Add axis labels
+const commonAxisLabelAttrs = {
+"font-size": 15,
+fill: "white",
+};
+const xTickTextData = xScale.ticks(6).map(x => {
+return {
+class: "x-axis-label",
+text: x,
+attrs: {
+x: xScale(x),
+y: AX_BOUNDS.yMin + 22,
+"text-anchor": "middle",
+"dominant-baseline": "text-top",
+...commonAxisLabelAttrs,
+},
+};
+});
+const yTickTextData = yScale.ticks(4).map(y => {
+return {
+class: "y-axis-label",
+text: y,
+attrs: {
+x: AX_BOUNDS.xMin - 10,
+y: yScale(y),
+"text-anchor": "end",
+"dominant-baseline": "central",
+...commonAxisLabelAttrs,
+},
+};
+});
+subcanvas
+.selectAll()
+.data([...xTickTextData, ...yTickTextData])
+.enter()
+.append("svg:text")
+.each(applyDatum)
+.text(d => d.text);
+// Add v/c label to x axis
+// https://stackoverflow.com/a/22085843
+subcanvas
+.append("text")
+.selectAll()
+.data([
+{ char: "𝑣", height: 1 },
+{ char: "＿", height: 0.7 },
+{ char: "𝑐", height: 1 },
+])
+.enter()
+.append("tspan")
+.attr("x", AX_BOUNDS.xMax + 25)
+.attr("y", AX_BOUNDS.yMin - 16)
+.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
+.attr("font-size", 21)
+.attr("stroke", "white")
+.attr("fill", "white")
+.attr("text-anchor", "middle")
+.text(d => d.char)
+.classed("x-axis-unit", true);
+// Add distance label to y axis
+subcanvas
+.append("svg:text")
+.attr("x", AX_BOUNDS.xMin)
+.attr("y", AX_BOUNDS.yMax - 10)
+.attr("font-size", 21)
+.attr("stroke", "white")
+.attr("fill", "white")
+.attr("text-anchor", "middle")
+.text("𝑚(𝑣)");
+});
+}
+function getGridlinesData({ fracOfC }) {
+if (typeof fracOfC === "undefined") {
+fracOfC = 0.5;
+}
+const x = xScale(fracOfC);
+const y = yScale(getRelativisticMass({ fracOfC }));
+const commonLineAttrs = {
+stroke: "#fffb",
+"stroke-width": 3,
+"stroke-dasharray": "1.5 1.5",
+};
+return [
+{
+shape: "line",
+class: "gridline",
+type: "horizontal",
+attrs: {
+x1: AX_BOUNDS.xMin,
+x2: x,
+y1: y,
+y2: y,
+...commonLineAttrs,
+},
+},
+{
+shape: "line",
+class: "gridline",
+type: "vertical",
+attrs: {
+x1: x,
+x2: x,
+y1: AX_BOUNDS.yMin,
+y2: y,
+...commonLineAttrs,
+},
+},
+{
+shape: "circle",
+class: "gridline-dot",
+attrs: {
+cx: x,
+cy: y,
+r: 4,
+fill: "white",
+},
+},
+];
+}
+drawGraph();
+graphObjs.gridLines = _addGraphicalObjs(subcanvases, getGridlinesData);
+// eslint-disable-next-line no-unused-vars
+function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
+try {
+if (!fromUserInput) {
+speedInputSlider.value = speedStr;
+}
+const speed = getSpeed(speedStr);
+speedTextSpan.textContent = speed.toFixed(3);
+const relMass = getRelativisticMass({ fracOfC: speed });
+relMassTextSpan.textContent = relMass.toFixed(2);
+graphObjs.gridLines
+.data(getGridlinesData({ fracOfC: speed }))
+.each(function (d) {
+const transition = d3.select(this).transition().duration(10);
+Object.entries(d.attrs).forEach(([key, val]) => {
+transition.attr(key, val);
+});
+});
+} catch (e) {
+console.log(speedStr);
+throw e;
+}
+}
+updateParticleSpeed(0, { fromUserInput: false });
+</script></body>
 </html>
