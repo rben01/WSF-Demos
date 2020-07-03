@@ -1,4 +1,4 @@
-/* global applyDatum applyGraphicalObjs C fmtFloat */
+/* global applyDatum applyGraphicalObjs C STANDARD_COLORS */
 
 const AXES = {
 	x: { min: -2.5, max: 10 },
@@ -62,7 +62,7 @@ const ARROWTAIL_ID = "arrowtail_";
 const axisColor = "#666";
 const tickLength = 10;
 
-const colors = { obs1: "#f3d022", obs2: "#f21" };
+const colors = { obs1: STANDARD_COLORS.secondary, obs2: STANDARD_COLORS.quaternary };
 
 const xScale = d3
 	.scaleLinear()
@@ -117,7 +117,17 @@ function drawGraph() {
 		.attr("y", yScale(AXES.y.max) - 20)
 		.attr("fill", "white")
 		.attr("text-anchor", "middle")
-		.attr("dominant-baseline", "bottom");
+		.attr("dominant-baseline", "bottom")
+		.attr("font-size", "smaller");
+
+	svg.append("text")
+		.text("𝑥 (lyrs)")
+		.attr("x", xScale(AXES.x.max) - 30)
+		.attr("y", yScale(0) + 30)
+		.attr("fill", "white")
+		.attr("text-anchor", "middle")
+		.attr("dominant-baseline", "bottom")
+		.attr("font-size", "smaller");
 
 	svg.selectAll()
 		.data(yTicks)
@@ -183,8 +193,20 @@ function update({ speed, distance }) {
 		{
 			shape: "line",
 			attrs: {
-				x1: xScale(x1),
-				y1: yScale(t1),
+				x1: xScale(distance),
+				y1: yScale(0),
+				x2: xScale(x1),
+				y2: yScale(t1),
+				stroke: colors.obs2,
+				"stroke-width": 2,
+				"stroke-dasharray": "3 3",
+			},
+		},
+		{
+			shape: "line",
+			attrs: {
+				x1: xScale(distance),
+				y1: yScale(0),
 				x2: xScale(x2),
 				y2: yScale(t2),
 				stroke: colors.obs2,
