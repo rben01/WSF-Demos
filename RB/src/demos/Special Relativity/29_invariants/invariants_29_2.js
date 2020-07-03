@@ -1,4 +1,4 @@
-/* global l2Norm applyDatum applyGraphicalObjs */
+/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS */
 "use strict";
 
 const RANGES = {
@@ -92,7 +92,7 @@ const textSpans = {
 	squareds: document.getElementsByClassName("distance"),
 };
 
-const primedAxesColor = "#5df";
+const primedAxesColor = STANDARD_COLORS.highlighted;
 
 const canvas = d3
 	.select("#viz-canvas")
@@ -410,8 +410,8 @@ function getLinesData({
 	];
 
 	const uprightLinesAttrs = {
-		stroke: "white",
-		"stroke-width": 2,
+		stroke: STANDARD_COLORS.highlighted,
+		"stroke-width": 3,
 		"stroke-dasharray": "1 1",
 	};
 	const uprightLinesData = !shouldDrawUprightLines
@@ -459,8 +459,8 @@ function getLinesData({
 	});
 
 	const tfLinesAttrs = {
-		stroke: primedAxesColor,
-		"stroke-width": 2,
+		stroke: STANDARD_COLORS.secondary,
+		"stroke-width": 3,
 		"stroke-dasharray": "1 1",
 	};
 	const tfLinesData = [
@@ -575,7 +575,7 @@ function getLinesData({
 			cx: xScale(x),
 			cy: yScale(y),
 			r: 4,
-			fill: "#fd0",
+			fill: "white",
 		},
 	};
 
