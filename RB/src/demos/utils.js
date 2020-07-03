@@ -4,6 +4,13 @@
 const C = 299792458;
 // eslint-disable-next-line no-unused-vars
 const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+	highlighted: "#5df", // cyan used for variables
+	secondary: "#f3c002", // yellow
+	tertiary: "#0f5", // green
+	quaternary: "#0af", // darker blue
+};
 
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars

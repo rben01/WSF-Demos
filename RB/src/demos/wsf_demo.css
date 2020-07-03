@@ -28,6 +28,14 @@ body {
 	color: #5df;
 }
 
+.secondary-text {
+	color: #f3c002;
+}
+
+.tiertiary-text {
+	color: #0f5;
+}
+
 .viz-canvas {
 	padding-top: 1em;
 }
