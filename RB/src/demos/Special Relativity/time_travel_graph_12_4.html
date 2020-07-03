@@ -11,28 +11,22 @@
 <body>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed" style="font-size: 20px;">Speed of Rocket</label>
-            <input type="range" id="speed" name="speed" min="0" max="0.999" step="0.001" value="0" style="width: 70%;"
-                oninput="speedID.innerHTML = speed.value;
-                yp = 1 / Math.sqrt(1-speed.value**2);
-                etime.innerHTML = numberWithCommas(Math.floor(yp * 100) / 100); 
-                if(Math.floor(yp * 100) / 100 > 1){
+            <label for="duration" style="font-size: 20px;">Trip Duration (Earth)</label>
+            <input type="range" id="duration" name="duration" min="0" max="10" value="5" step="0.01" style="width: 70%;"
+                oninput="t = duration.value;
+                if(t > 1){
                     yearID.innerHTML='years'
                     } 
                 else{
                     yearID.innerHTML='year'
                 }
-                trace1 = {
-                    x: [0,speed.value],
-                    y: [yp, yp],
-                    line: {dash: 'dash', color: 'white'}
-                }
-                trace2 = {
-                    x: [speed.value, speed.value],
-                    y: [0, yp],
-                    line: {dash: 'dash', color: 'white'}
-                }
-                Plotly.newPlot('graph', [g, trace1, trace2], layout)">
+                render();">
+            <br>
+            <label for="speed" style="font-size: 20px;">Velocity of the Rocket</label>
+            <input type="range" id="speed" name="speed" min="0" max="0.999" step="0.001" value="0" style="width: 70%;"
+                oninput="v = speed.value;
+                speedID.innerHTML = speed.value;
+                render();">
             <br>
             <text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num"
                     id="speedID">0.001</span><i>c</i></text>
@@ -48,7 +42,8 @@
         <div
             style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px; margin-right: 20px;">
             <br>
-            <text style="font-size: 21px;"> Time Elapsed on Rocket = 1 year </text>
+            <text style="font-size: 21px;"> Time Elapsed on Rocket = <span class="highlighted-text sci-num"
+                    id="rtime">1</span> years </text>
             <br><br>
         </div>
         <text></text>
@@ -65,27 +60,34 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript">
-        var x = [];
-        var y = [];
+        var etime = document.getElementById('etime');
+        var rtime = document.getElementById('rtime');
+        var t = 5;
+        var v = 0;
         var yp = 0;
-        var trace1 = {};
-        var trace2 = {};
-        for (var i = 0; i < 1; i += 0.0001) {
-            x.push(i);
-            y.push(1 / Math.sqrt(1 - i ** 2));
+        var toe = {
+            x: [0, 1],
+            y: [t, t],
+            line: { color: 'grey' }
         }
-        var g = {
-            x: x,
-            y: y,
-            type: 'scatter',
-            line: {
-                color: 'lightgrey',
-                width: 4,
-            }
+        var tor = {
+            x: [],
+            y: [],
+            line: { color: 'lightgrey' }
+        }
+        var trace1 = {
+            x: [],
+            y: [],
+            line: { dash: "dash", color: 'yellow' }
+        };
+        var trace2 = {
+            x: [],
+            y: [],
+            line: { dash: "dash", color: 'yellow' }
         };
         var layout = {
             title: {
-                text: 'Earth Years',
+                text: 'Time on Rocket (years)',
                 font: { color: 'white' },
                 x: 0,
             },
@@ -97,12 +99,12 @@
                 tickvals: [0.2, 0.4, 0.6, 0.8, 1]
             },
             yaxis: {
-                range: [0, 25],
+                range: [0, 10],
                 autorange: false,
                 linecolor: 'white',
                 tickcolor: 'black',
                 tickfont: { color: 'white', family: 'sans-serif', size: 18 },
-                tickvals: [5, 10, 15, 20, 25]
+                tickvals: [2, 4, 6, 8, 10]
             },
             paper_bgcolor: 'black',
             plot_bgcolor: 'black',
@@ -128,14 +130,39 @@
                     text: '0',
                     font: { color: 'white', size: 18 },
                     showarrow: false
+                },
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 0.9,
+                    y: t,
+                    text: 'Time on Earth',
+                    font: { color: 'white', size: 18 },
+                    showarrow: false
                 }
             ]
         }
-        Plotly.newPlot('graph', [g], layout);
 
-        function numberWithCommas(n) {
-            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        function render() {
+            yp = t * Math.sqrt(1 - v ** 2);
+            etime.innerHTML = t;
+            rtime.innerHTML = Math.floor(yp * 100) / 100;
+            layout.annotations[2].y = t;
+            toe.y = [t, t];
+            tor.x = [];
+            tor.y = [];
+            for (var i = 0; i < 1; i += 0.001) {
+                tor.x.push(i);
+                tor.y.push(t * Math.sqrt(1 - i ** 2));
+            }
+            trace1.x = [0, v];
+            trace1.y = [yp, yp];
+            trace2.x = [v, v];
+            trace2.y = [0, yp];
+            Plotly.newPlot('graph', [toe, tor, trace1, trace2], layout);
         }
+
+        render();
     </script>
 
 </body>
