@@ -23,10 +23,10 @@ const colors = (() => {
 		barnFill: makeTransparent(barn),
 		pole,
 		poleFill: makeTransparent(pole),
-		backDoorOpens: "#3fa",
+		backDoorOpens: "#2f2",
 		backDoorCloses: "#f90",
 		frontDoorOpens: "#e4f",
-		frontDoorCloses: "#3ff",
+		frontDoorCloses: "#ff0",
 	};
 })();
 
