@@ -4,36 +4,11 @@
 		<meta charset="UTF-8" />
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
-		<style>
-			.slider-label-custom {
-				min-width: 9em;
-				text-align: left;
-				margin-bottom: unset;
-			}
-			.viz-canvas {
-				padding-top: 5px;
-			}
-			.smaller {
-				font-size: 70%;
-			}
-			.demo-button {
-				width: unset;
-				margin: unset;
-				margin-right: 5px;
-				position: relative;
-				bottom: 4px;
-			}
-			.subsubscript {
-				position: relative;
-				top: 0.6em;
-				left: 0em;
-				font-size: 65%;
-			}
-
-			svg {
-				margin-top: 20px;
-			}
-		</style>
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./pole_barn_spacetime_34_shared.css"
+		/>
 	</head>
 	<body>
 		<div>
@@ -47,7 +22,7 @@
 							id="input-v"
 							min=".1"
 							max=".95"
-							value=".95"
+							value=".1"
 							step=".01"
 							oninput="update({v:this.value})" /></label></span
 				><br />
