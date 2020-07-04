@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -159,6 +162,9 @@ margin-top: 2em;
 margin: auto;
 text-align: center;
 }
+.galilean {
+color: #aaaf;
+}
 .slider-label-custom {
 min-width: 12.5em;
 }
@@ -223,7 +229,7 @@ Hide Galilean Prediction
 </td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num highlighted-text" id="text-ground-frame-projectile-speed">0.00</span>𝑐
+<span class="sci-num secondary-text" id="text-ground-frame-projectile-speed">0.00</span>𝑐
 </td>
 </tr>
 </table>
@@ -235,7 +241,7 @@ Hide Galilean Prediction
 <div class="h-centered" id="text-galilean-prediction" style="margin-top: 2em; font-size: smaller;">
 <i>The Galilean prediction for the projectile velocity as seen in the
 ground frame is
-<span class="sci-num highlighted-text" id="text-galilean-speed-prediction">0</span>𝑐</i>
+<span class="sci-num galilean" id="text-galilean-speed-prediction">0</span>𝑐</i>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -246,8 +252,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -413,7 +419,7 @@ throw new Error(`Unexpected key ${key}`);
 return d3Obj;
 },
 };
-/* globals applyDatum */
+/* globals applyDatum STANDARD_COLORS */
 "use strict";
 const CANVAS_WIDTH = 500;
 const CANVAS_HEIGHT = 450;
@@ -720,8 +726,8 @@ subcanvas
 });
 }
 const graphAttrs = {
-[ROCKET]: { stroke: "#4c4f" },
-[PROJECTILE]: { stroke: "red" },
+[ROCKET]: { stroke: STANDARD_COLORS.tertiary },
+[PROJECTILE]: { stroke: STANDARD_COLORS.secondary },
 common: { "stroke-width": 4, fill: "#0000" },
 };
 function getGraphData({ baseObject }) {
@@ -791,6 +797,8 @@ attrs: {
 d: curve(data),
 ...graphAttrs[baseObject],
 ...graphAttrs.common,
+stroke: STANDARD_COLORS.highlighted,
+// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 },
 },
 {
@@ -827,7 +835,10 @@ rocketFracOfC: speeds[ROCKET],
 projectileFracOfCRelativeToRocket: speeds[PROJECTILE],
 }),
 );
-const fgColor = "#fd2f";
+const fgColor =
+baseObject === ROCKET
+? graphAttrs[ROCKET].stroke
+: graphAttrs[PROJECTILE].stroke;
 const commonLineAttrs = {
 "stroke-width": 2,
 "stroke-dasharray": "1.5 1.5",
@@ -878,7 +889,8 @@ attrs: {
 cx: x,
 cy: galileanY,
 r: 4,
-fill: "#ddd",
+fill: galileanFgColor,
+stroke: "#bbb",
 },
 },
 {
@@ -890,7 +902,7 @@ x1: AX_BOUNDS.xMin,
 x2: x,
 y1: y,
 y2: y,
-stroke: fgColor,
+stroke: STANDARD_COLORS.secondary,
 ...commonLineAttrs,
 },
 },
@@ -903,7 +915,7 @@ x1: x,
 x2: x,
 y1: AX_BOUNDS.yMin,
 y2: y,
-stroke: fgColor,
+stroke: STANDARD_COLORS.highlighted,
 ...commonLineAttrs,
 },
 },
@@ -914,7 +926,8 @@ attrs: {
 cx: x,
 cy: y,
 r: 4,
-fill: fgColor,
+fill: STANDARD_COLORS.secondary,
+stroke: "#ddd",
 },
 },
 ];

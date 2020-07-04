@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -145,9 +148,22 @@ width: 50px;
 font-weight: bold;
 }
 .checkbox {
-padding-left: 20px;
+padding-left: 13px;
+margin-bottom: 20px;
+}
+td {
+vertical-align: middle;
+line-height: 24px;
+}
+input[type="checkbox"] {
+vertical-align: middle;
 position: relative;
-bottom: 2px;
+bottom: 3px;
+}
+.checkbox-container {
+min-width: 14px;
+min-height: 14px;
+padding: 5px;
 }
 </style>
 <div>
@@ -170,26 +186,36 @@ Position (𝑥):
 </label>
 </span>
 <br/>
-<div style="height: 20px;"></div>
+<div style="height: 40px;"></div>
 </div>
 <div>
-<table style="display: inline-block; vertical-align: top;">
-<tr>
+<table style="
+display: inline-block;
+vertical-align: top;
+margin-right: 30px;
+">
+<tr class="row">
 <td id="option-causal">Causally connected</td>
 <td class="checkbox">
+<div class="checkbox-container">
 <input id="toggle-causal" onchange=";update({showCausal:d3.select(this).property('checked')})" type="checkbox"/>
+</div>
 </td>
 </tr>
 <tr>
 <td id="option-disconnected">Causally disconnected</td>
 <td class="checkbox">
+<div class="checkbox-container">
 <input id="toggle-disconnected" onchange="update({showDisconnected:d3.select(this).property('checked')})" type="checkbox"/>
+</div>
 </td>
 </tr>
 <tr>
 <td id="option-lightcone">Light cone</td>
 <td class="checkbox">
+<div class="checkbox-container">
 <input id="toggle-lightcone" onchange="update({showLightCone:d3.select(this).property('checked')})" type="checkbox"/>
+</div>
 </td>
 </tr>
 </table>
@@ -205,8 +231,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -349,7 +375,7 @@ applyDatum.call(this, markerAttrs);
 applyDatum.call(this, arrowheadAttrs);
 });
 }
-/* global defineArrowhead */
+/* global defineArrowhead STANDARD_COLORS */
 const AXES = {
 x: { min: -1, max: 1, mid: 0, span: 2 },
 y: { min: -1, max: 1, mid: 0, span: 2 },
@@ -388,8 +414,8 @@ const line = d3
 const causalID = "causally-connected-id";
 const disconnectedID = "casaully-disconnected-id";
 const lightConeClass = "light-cone-class";
-const causalColor = "#f0c105";
-const disconnectedColor = "#f72500";
+const causalColor = STANDARD_COLORS.secondary;
+const disconnectedColor = STANDARD_COLORS.quaternary;
 document.getElementById("option-causal").style.color = causalColor;
 document.getElementById("option-disconnected").style.color = disconnectedColor;
 const opacity = 0.75;
@@ -465,13 +491,13 @@ svg.selectAll()
 .attr("y2", d => canvasYScale(d.y2))
 .attr("stroke", axisColor)
 .attr("opacity", 0)
-.attr("stroke-width", 1);
+.attr("stroke-width", 4);
 svg.append("circle")
 .classed(lightConeObjsClass, true)
 .attr("cx", graphXScale(AXES.x.mid))
 .attr("cy", graphYScale(AXES.y.mid))
-.attr("r", 3)
-.attr("fill", "white");
+.attr("r", 5)
+.attr("fill", STANDARD_COLORS.highlighted);
 }
 drawGraph();
 const lightConeObjs = {
@@ -527,7 +553,7 @@ lightConeObjs.disconnected
 .attr("opacity", showDisconnected ? opacity : 0);
 lightConeObjs.lightCone
 .transition(transition)
-.attr("opacity", showLightCone ? 0.8 : 0);
+.attr("opacity", showLightCone ? 0.9 : 0);
 }
 </script></body>
 </html>

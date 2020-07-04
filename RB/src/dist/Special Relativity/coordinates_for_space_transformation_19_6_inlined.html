@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -155,8 +158,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -252,7 +258,7 @@ cursor: pointer;
 }
 .slider-label-custom {
 text-align: right;
-min-width: 11.2em;
+min-width: 13em;
 }
 .h-centered {
 margin: auto;
@@ -263,13 +269,13 @@ display: inline;
 vertical-align: middle;
 }
 .coordinate-box {
-display: inline-flex;
-flex-direction: column;
-padding-left: 20px;
+padding-left: 0px;
 height: 400px;
+vertical-align: middle;
+display: inline-table;
 }
-.primed-coord {
-color: #4f7;
+.blank-row {
+height: 40px;
 }
 </style>
 <div class="top-sliders-sect">
@@ -303,7 +309,7 @@ Angle (𝜃):
 <span>
 <label>
 <span class="slider-label slider-label-custom">
-Horizontal displacement:
+Horizontal displacement (𝛥𝑥):
 </span>
 <input id="input-displacement-x" name="input-displacement-x" oninput="updateAngle({displacementX: this.value})" type="range"/>
 </label>
@@ -314,25 +320,59 @@ Horizontal displacement:
 <svg id="viz-canvas" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
 <div class="coordinate-box">
-<div style="height: 100px;"></div>
-<div class="text-div" style="vertical-align: top;">
-<span>𝑥 = <span class="highlighted-text" id="text-upright-x"></span></span>
-<br/>
-<span>𝑦 = <span class="highlighted-text" id="text-upright-y"></span></span>
+<div style="
+vertical-align: middle;
+display: table-cell;
+padding-top: auto;
+padding-bottom: auto;
+">
+<table cellpadding="0" cellspacing="0">
+<tr>
+<td class="eqn-left">𝑥</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="highlighted-text" id="text-upright-x"></span>
+</td>
+</tr>
+<tr>
+<td class="eqn-left">𝑦</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="highlighted-text" id="text-upright-y"></span>
+</td>
+</tr>
+<tr class="blank-row"></tr>
+<tr>
+<td class="eqn-left">𝜃</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="quaternary-text" id="text-angle">0</span><span class="operator">º</span>
+</td>
+</tr>
+<tr>
+<td class="eqn-left">𝛥𝑥</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="quaternary-text" id="text-dx">0</span>
+</td>
+</tr>
+<tr class="blank-row"></tr>
+<tr>
+<td class="eqn-left">𝑥′</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="secondary-text" id="text-transformed-x"></span>
+</td>
+</tr>
+<tr>
+<td class="eqn-left">𝑦′</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="secondary-text" id="text-transformed-y"></span>
+</td>
+</tr>
+</table>
 </div>
-<div style="height: 50px; flex-grow: 1;"></div>
-<div class="text-div" style="vertical-align: middle;">
-<span>𝜃 = <span class="highlighted-text" id="text-angle">0</span> º</span>
-</div>
-<div style="height: 50px; flex-grow: 1;"></div>
-<div class="text-div" style="vertical-align: bottom;">
-<span><span class="primed-coord">𝑥′</span> =
-<span class="highlighted-text" id="text-transformed-x"></span></span>
-<br/>
-<span><span class="primed-coord">𝑦′</span> =
-<span class="highlighted-text" id="text-transformed-y"></span></span>
-</div>
-<div style="height: 100px;"></div>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -343,8 +383,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -510,7 +550,7 @@ throw new Error(`Unexpected key ${key}`);
 return d3Obj;
 },
 };
-/* global l2Norm applyDatum applyGraphicalObjs */
+/* global l2Norm applyDatum applyGraphicalObjs STANDARD_COLORS defineArrowhead */
 "use strict";
 const RANGES = {
 axis: { min: -20, max: 20 },
@@ -581,6 +621,7 @@ yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
 };
 const textSpans = {
 angle: document.getElementById("text-angle"),
+dx: document.getElementById("text-dx"),
 upright: {
 x: document.getElementById("text-upright-x"),
 y: document.getElementById("text-upright-y"),
@@ -590,7 +631,7 @@ x: document.getElementById("text-transformed-x"),
 y: document.getElementById("text-transformed-y"),
 },
 };
-const primedAxesColor = "#4f7";
+const primedAxesColor = STANDARD_COLORS.quaternary;
 const canvas = d3
 .select("#viz-canvas")
 .attr("width", CANVAS_WIDTH)
@@ -600,36 +641,49 @@ const ARROWHEAD_IDS = {
 upright: "marker-arrowhead-upright",
 transformed: "marker-arrowhead-transformed",
 };
-(() => {
-const markerAttrs = {
-attrs: {
-refX: 4,
-refY: 4,
-markerUnits: "strokeWidth",
-markerWidth: 10,
-markerHeight: 8,
-orient: "auto",
-},
-};
-const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
-const defs = canvas.append("svg:defs");
-[
-[ARROWHEAD_IDS.upright, "white"],
-[ARROWHEAD_IDS.transformed, primedAxesColor],
-].forEach(([id, color]) => {
-defs.append("svg:marker")
-.attr("id", id)
-.each(function () {
-applyDatum.call(this, markerAttrs);
-})
-.append("svg:path")
-.each(function () {
-applyDatum.call(this, pathAttrs);
-})
-.attr("stroke", color)
-.attr("fill", color);
+const defs = canvas.append("defs");
+defineArrowhead(defs, {
+id: ARROWHEAD_IDS.upright,
+length: 20,
+width: 16,
+color: "white",
 });
-})();
+defineArrowhead(defs, {
+id: ARROWHEAD_IDS.transformed,
+length: 20,
+width: 16,
+color: primedAxesColor,
+});
+// (() => {
+// 	const markerAttrs = {
+// 		attrs: {
+// 			refX: 4,
+// 			refY: 4,
+// 			markerUnits: "strokeWidth",
+// 			markerWidth: 10,
+// 			markerHeight: 8,
+// 			orient: "auto",
+// 		},
+// 	};
+// 	const pathAttrs = { attrs: { d: "M 0 0 L 10 4 L 0 8 L 4 4 z" } };
+// 	const defs = canvas.append("svg:defs");
+// 	[
+// 		[ARROWHEAD_IDS.upright, "white"],
+// 		[ARROWHEAD_IDS.transformed, primedAxesColor],
+// 	].forEach(([id, color]) => {
+// 		defs.append("svg:marker")
+// 			.attr("id", id)
+// 			.each(function () {
+// 				applyDatum.call(this, markerAttrs);
+// 			})
+// 			.append("svg:path")
+// 			.each(function () {
+// 				applyDatum.call(this, pathAttrs);
+// 			})
+// 			.attr("stroke", color)
+// 			.attr("fill", color);
+// 	});
+// })();
 const subcanvases = canvas
 .data([
 {
@@ -847,14 +901,27 @@ stroke: primedAxesColor,
 },
 },
 ];
+// Compute projection of point onto transformed axes by translating point and transformed axes back to origin, computing projection onto transformed axes (now rotated but not translated), and then translating back
+const tfAxProjCoords = {};
+Object.keys(tfAxPosEndCoords).forEach(ax => {
+const tfAxPosEndDispX = tfAxDisplacement.pos[ax].x;
+const tfAxPosEndDispY = tfAxDisplacement.pos[ax].y;
+const posEndNorm = l2Norm(tfAxPosEndDispX, tfAxPosEndDispY);
+const posEndUnitVecX = tfAxPosEndDispX / posEndNorm;
+const posEndUnitVecY = tfAxPosEndDispY / posEndNorm;
+const projectionDotProd =
+(x - tfAxOrigin.x) * posEndUnitVecX + (y - tfAxOrigin.y) * posEndUnitVecY;
+tfAxProjCoords[ax] = {};
+tfAxProjCoords[ax].x = tfAxOrigin.x + projectionDotProd * posEndUnitVecX;
+tfAxProjCoords[ax].y = tfAxOrigin.y + projectionDotProd * posEndUnitVecY;
+tfAxProjCoords[ax].dotProd = projectionDotProd;
+});
 const uprightLinesAttrs = {
-stroke: "white",
+stroke: STANDARD_COLORS.highlighted,
 "stroke-width": 2,
 "stroke-dasharray": "5 5",
 };
-const uprightLinesData = !shouldDrawUprightLines
-? []
-: [
+const uprightLinesData = [
 {
 shape: "line",
 class: "upright-line-horizontal",
@@ -878,25 +945,15 @@ y2: yScale(y),
 },
 },
 ];
-// Compute projection of point onto transformed axes by translating point and transformed axes back to origin, computing projection onto transformed axes (now rotated but not translated), and then translating back
-const tfAxProjCoords = {};
-Object.keys(tfAxPosEndCoords).forEach(ax => {
-const tfAxPosEndDispX = tfAxDisplacement.pos[ax].x;
-const tfAxPosEndDispY = tfAxDisplacement.pos[ax].y;
-const posEndNorm = l2Norm(tfAxPosEndDispX, tfAxPosEndDispY);
-const posEndUnitVecX = tfAxPosEndDispX / posEndNorm;
-const posEndUnitVecY = tfAxPosEndDispY / posEndNorm;
-const projectionDotProd =
-(x - tfAxOrigin.x) * posEndUnitVecX + (y - tfAxOrigin.y) * posEndUnitVecY;
-tfAxProjCoords[ax] = {};
-tfAxProjCoords[ax].x = tfAxOrigin.x + projectionDotProd * posEndUnitVecX;
-tfAxProjCoords[ax].y = tfAxOrigin.y + projectionDotProd * posEndUnitVecY;
-tfAxProjCoords[ax].dotProd = projectionDotProd;
-});
+if (!shouldDrawUprightLines) {
+for (const line of uprightLinesData) {
+line.attrs["stroke-dasharray"] = "2 3";
+}
+}
 const tfLinesAttrs = {
-stroke: primedAxesColor,
-"stroke-width": 2,
-"stroke-dasharray": "5 5",
+stroke: STANDARD_COLORS.secondary,
+"stroke-width": shouldDrawUprightLines ? 2 : 4,
+"stroke-dasharray": shouldDrawUprightLines ? "5 5" : "5 10",
 };
 const tfLinesData = [
 {
@@ -1003,9 +1060,33 @@ attrs: {
 cx: xScale(x),
 cy: yScale(y),
 r: 4,
-fill: "#fd0",
+fill: "white",
 },
 };
+const axesDots = shouldDrawUprightLines
+? []
+: [
+{
+shape: "circle",
+attrs: {
+cx: xScale(x),
+cy: yScale(RANGES.axis.mid),
+r: 4,
+fill: STANDARD_COLORS.highlighted,
+stroke: "#ddd",
+},
+},
+{
+shape: "circle",
+attrs: {
+cx: xScale(RANGES.axis.mid),
+cy: yScale(y),
+r: 4,
+fill: STANDARD_COLORS.highlighted,
+stroke: "#ddd",
+},
+},
+];
 return {
 data: [
 ...uprightLinesData,
@@ -1013,6 +1094,7 @@ data: [
 ...tfAxesData,
 ...tfAxisLabelsData,
 pointDatum,
+...axesDots,
 ],
 tfCoords: {
 xAxXCoord: tfAxProjCoords.xAx.dotProd,
@@ -1021,6 +1103,9 @@ yAxYCoord: tfAxProjCoords.yAx.dotProd,
 };
 }
 function fmtFloat(x, precision) {
+if (Math.abs(x) < 0.000001) {
+x = 0;
+}
 return (+x).toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 function updateAngle({
@@ -1029,7 +1114,6 @@ y,
 angleIndex,
 displacementX,
 displacementY,
-userInput = true,
 shouldDrawUprightLines,
 } = {}) {
 const angleRad = getAngleFromIndex(angleIndex);
@@ -1049,11 +1133,14 @@ textSpans.upright.x.innerHTML = fmtFloat(sliders.x.value, 2);
 textSpans.upright.y.innerHTML = fmtFloat(sliders.y.value, 2);
 textSpans.transformed.x.innerHTML = fmtFloat(tfCoords.xAxXCoord, 2);
 textSpans.transformed.y.innerHTML = fmtFloat(tfCoords.yAxYCoord, 2);
-if (!userInput || typeof angleRad !== "undefined") {
+if (textSpans.angle !== null) {
 textSpans.angle.innerHTML = fmtFloat(
 angleIndex === (RANGES.angle.n - 1) / 2 ? +0 : (angleRad * 180) / Math.PI,
 2,
 );
+}
+if (textSpans.dx !== null) {
+textSpans.dx.innerHTML = fmtFloat(sliders.displacement.x.value, 2);
 }
 }
 drawGraph();
@@ -1061,7 +1148,6 @@ updateAngle({
 angleRad: 0,
 displacementX: 0,
 displacementY: 0,
-userInput: false,
 shouldDrawUprightLines: sliders.angle !== null,
 });
 </script></body>

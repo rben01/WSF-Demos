@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -220,9 +223,9 @@ Relative Velocity Between Frames (𝑣):
 <span class="highlighted-text" id="text-vz">0</span>)</span>𝑐</span>
 <div style="display: inline-block; width: 200px;"></div>
 <span class="velocity">𝑢<span class="prime">′</span> =
-<span class="sci-num">(<span class="highlighted-text" id="text-vxp">0</span>,
-<span class="highlighted-text" id="text-vyp">0</span>,
-<span class="highlighted-text" id="text-vzp">0</span>)</span>𝑐</span>
+<span class="sci-num">(<span class="secondary-text" id="text-vxp">0</span>,
+<span class="secondary-text" id="text-vyp">0</span>,
+<span class="secondary-text" id="text-vzp">0</span>)</span>𝑐</span>
 </div>
 <div>
 <span><i>The moving frame of reference is moving along the positive
@@ -240,8 +243,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -634,7 +637,7 @@ const ARROWHEAD_POINTS = {
 ]
 }
 }
-/* global Plotly lorentzFactor matMul ARROWHEAD_POINTS */
+/* global Plotly lorentzFactor matMul ARROWHEAD_POINTS STANDARD_COLORS */
 const STEP = 0.01;
 const variables = ["vx", "vy", "vz", "vr"];
 const sliders = {};
@@ -664,7 +667,6 @@ const velocityVectorAttrs = {
 type: "scatter3d",
 mode: "lines",
 line: {
-color: "#4c3",
 width: 5,
 },
 };
@@ -750,13 +752,15 @@ const arrowheads = [];
 velocity: [vx, vy, vz],
 rotTrans: matMul(getRz(theta), getRy(-phi)),
 scene: "scene1",
+color: STANDARD_COLORS.highlighted,
 },
 {
 velocity: [vxp, vyp, vzp],
 rotTrans: matMul(getRz(primedTheta), getRy(-primedPhi)),
 scene: "scene2",
+color: STANDARD_COLORS.secondary,
 },
-].forEach(({ velocity, rotTrans, scene }) => {
+].forEach(({ velocity, rotTrans, scene, color }) => {
 const transArrowhead = { x: [], y: [], z: [] };
 for (let i = 0; i < baseArrowhead.x.length; ++i) {
 const coords = [baseArrowhead.x, baseArrowhead.y, baseArrowhead.z].map(
@@ -773,9 +777,7 @@ transArrowhead.z.push(newPoint[2]);
 const i = baseArrowhead.simplices.map(s => s[0]);
 const j = baseArrowhead.simplices.map(s => s[1]);
 const k = baseArrowhead.simplices.map(s => s[2]);
-const facecolor = baseArrowhead.simplices.map(
-() => velocityVectorAttrs.line.color,
-);
+const facecolor = baseArrowhead.simplices.map(() => color);
 arrowheads.push({
 type: "mesh3d",
 scene,
@@ -839,6 +841,10 @@ y: [0, vy],
 z: [0, vz],
 scene: "scene1",
 ...velocityVectorAttrs,
+line: {
+...velocityVectorAttrs.line,
+color: STANDARD_COLORS.highlighted,
+},
 },
 {
 x: [0, vxp],
@@ -846,6 +852,10 @@ y: [0, vyp],
 z: [0, vzp],
 scene: "scene2",
 ...velocityVectorAttrs,
+line: {
+...velocityVectorAttrs.line,
+color: STANDARD_COLORS.secondary,
+},
 },
 );
 const sceneAttrs = (() => {

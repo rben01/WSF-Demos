@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -154,10 +157,10 @@ Lightyears</span>
 <svg id="viz"></svg>
 <div>
 <span>Observer 2's notion of simultaneity: 𝑡 =
-<span class="sci-num highlighted-text" id="text-years-them">0</span>years</span><br/>
+<span class="sci-num secondary-text" id="text-years-them">0</span>years</span><br/>
 <span class="smaller">(From our perspective, that is
-<span class="sci-num highlighted-text" id="text-years-us">0</span>years
-in the <span id="past-future">past</span>)</span>
+<span class="sci-num secondary-text" id="text-years-us">0</span>years in
+the <span id="past-future">past</span>)</span>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -168,8 +171,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
@@ -369,7 +372,7 @@ applyDatum.call(this, attrs);
 })();
 const axisColor = "#666";
 const tickLength = 10;
-const colors = { obs1: STANDARD_COLORS.secondary, obs2: STANDARD_COLORS.quaternary };
+const colors = { obs1: STANDARD_COLORS.quaternary, obs2: STANDARD_COLORS.secondary };
 const xScale = d3
 .scaleLinear()
 .domain([AXES.x.min, AXES.x.max])

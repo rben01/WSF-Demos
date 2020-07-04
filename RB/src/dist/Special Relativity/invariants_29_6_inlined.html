@@ -32,8 +32,11 @@ color: #5df;
 .secondary-text {
 color: #f3c002;
 }
-.tiertiary-text {
-color: #0f5;
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
 }
 .viz-canvas {
 padding-top: 1em;
@@ -170,7 +173,7 @@ margin-right: 1px;
 <span class="slider-label slider-label-custom">
 Time (𝑡):
 </span>
-<input id="input-t" max="3" min="0" name="input-t" oninput="update({t: this.value})" step=".01" type="range" value="0"/>
+<input id="input-t" max="3" min="-3" name="input-t" oninput="update({t: this.value})" step=".01" type="range" value="0"/>
 </label>
 </span>
 <br/>
@@ -229,14 +232,14 @@ Reset
 <td class="eqn-left">𝑡′</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num highlighted-text var-t-prime">0</span>years
+<span class="sci-num secondary-text var-t-prime">0</span>years
 </td>
 </tr>
 <tr>
 <td class="eqn-left">𝑥′</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num highlighted-text var-x-prime">0</span>lyrs
+<span class="sci-num secondary-text var-x-prime">0</span>lyrs
 </td>
 </tr>
 </table>
@@ -320,14 +323,14 @@ Reset
 <td></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num">(<span class="highlighted-text" id="ctp2"></span><span class="operator">−</span><span class="highlighted-text" id="xp2"></span>)</span>lyrs²
+<span class="sci-num">(<span class="secondary-text" id="ctp2"></span><span class="operator">−</span><span class="secondary-text" id="xp2"></span>)</span>lyrs²
 </td>
 </tr>
 <tr>
 <td></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="st-interval sci-num highlighted-text"></span>lyrs²
+<span class="st-interval sci-num secondary-text"></span>lyrs²
 </td>
 </tr>
 </table>
@@ -344,8 +347,8 @@ const HL_COLOR = "#5df";
 const STANDARD_COLORS = {
 highlighted: "#5df", // cyan used for variables
 secondary: "#f3c002", // yellow
-tertiary: "#0f5", // green
-quaternary: "#0af", // darker blue
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
 };
 // https://stackoverflow.com/a/32538867
 // eslint-disable-next-line no-unused-vars
