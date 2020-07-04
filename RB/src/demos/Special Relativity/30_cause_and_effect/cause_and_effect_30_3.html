@@ -28,9 +28,22 @@
 			}
 
 			.checkbox {
-				padding-left: 20px;
+				padding-left: 13px;
+				margin-bottom: 20px;
+			}
+			td {
+				vertical-align: middle;
+				line-height: 24px;
+			}
+			input[type="checkbox"] {
+				vertical-align: middle;
 				position: relative;
-				bottom: 2px;
+				bottom: 3px;
+			}
+			.checkbox-container {
+				min-width: 14px;
+				min-height: 14px;
+				padding: 5px;
 			}
 		</style>
 	</head>
@@ -73,38 +86,50 @@
 					</label>
 				</span>
 				<br />
-				<div style="height: 20px;"></div>
+				<div style="height: 40px;"></div>
 			</div>
 			<div>
-				<table style="display: inline-block; vertical-align: top;">
-					<tr>
+				<table
+					style="
+						display: inline-block;
+						vertical-align: top;
+						margin-right: 30px;
+					"
+				>
+					<tr class="row">
 						<td id="option-causal">Causally connected</td>
 						<td class="checkbox">
-							<input
-								id="toggle-causal"
-								type="checkbox"
-								onchange=";update({showCausal:d3.select(this).property('checked')})"
-							/>
+							<div class="checkbox-container">
+								<input
+									id="toggle-causal"
+									type="checkbox"
+									onchange=";update({showCausal:d3.select(this).property('checked')})"
+								/>
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<td id="option-disconnected">Causally disconnected</td>
 						<td class="checkbox">
-							<input
-								id="toggle-disconnected"
-								type="checkbox"
-								onchange="update({showDisconnected:d3.select(this).property('checked')})"
-							/>
+							<div class="checkbox-container">
+								<input
+									id="toggle-disconnected"
+									type="checkbox"
+									onchange="update({showDisconnected:d3.select(this).property('checked')})"
+								/>
+							</div>
 						</td>
 					</tr>
 					<tr>
 						<td id="option-lightcone">Light cone</td>
 						<td class="checkbox">
-							<input
-								id="toggle-lightcone"
-								type="checkbox"
-								onchange="update({showLightCone:d3.select(this).property('checked')})"
-							/>
+							<div class="checkbox-container">
+								<input
+									id="toggle-lightcone"
+									type="checkbox"
+									onchange="update({showLightCone:d3.select(this).property('checked')})"
+								/>
+							</div>
 						</td>
 					</tr>
 				</table>

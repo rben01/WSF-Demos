@@ -1,4 +1,4 @@
-/* global defineArrowhead */
+/* global defineArrowhead STANDARD_COLORS */
 
 const AXES = {
 	x: { min: -1, max: 1, mid: 0, span: 2 },
@@ -48,8 +48,8 @@ const causalID = "causally-connected-id";
 const disconnectedID = "casaully-disconnected-id";
 const lightConeClass = "light-cone-class";
 
-const causalColor = "#f0c105";
-const disconnectedColor = "#f72500";
+const causalColor = STANDARD_COLORS.secondary;
+const disconnectedColor = STANDARD_COLORS.quaternary;
 
 document.getElementById("option-causal").style.color = causalColor;
 document.getElementById("option-disconnected").style.color = disconnectedColor;
@@ -131,13 +131,13 @@ function drawGraph() {
 		.attr("y2", d => canvasYScale(d.y2))
 		.attr("stroke", axisColor)
 		.attr("opacity", 0)
-		.attr("stroke-width", 1);
+		.attr("stroke-width", 4);
 	svg.append("circle")
 		.classed(lightConeObjsClass, true)
 		.attr("cx", graphXScale(AXES.x.mid))
 		.attr("cy", graphYScale(AXES.y.mid))
-		.attr("r", 3)
-		.attr("fill", "white");
+		.attr("r", 5)
+		.attr("fill", STANDARD_COLORS.highlighted);
 }
 drawGraph();
 
@@ -203,5 +203,5 @@ function update({ x, t, showCausal, showDisconnected, showLightCone }) {
 		.attr("opacity", showDisconnected ? opacity : 0);
 	lightConeObjs.lightCone
 		.transition(transition)
-		.attr("opacity", showLightCone ? 0.8 : 0);
+		.attr("opacity", showLightCone ? 0.9 : 0);
 }

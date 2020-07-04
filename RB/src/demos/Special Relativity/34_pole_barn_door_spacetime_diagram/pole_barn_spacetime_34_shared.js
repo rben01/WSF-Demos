@@ -1,4 +1,4 @@
-/* global lorentzFactor applyGraphicalObjs applyDatum defineArrowhead */
+/* global lorentzFactor applyGraphicalObjs STANDARD_COLORS defineArrowhead */
 
 const AXES = {
 	x: { min: -1, origin: 0, max: 1 },
@@ -23,10 +23,10 @@ const colors = (() => {
 		barnFill: makeTransparent(barn),
 		pole,
 		poleFill: makeTransparent(pole),
-		backDoorOpens: "#f90",
-		backDoorCloses: "#f00",
+		backDoorOpens: "#3fa",
+		backDoorCloses: "#f90",
 		frontDoorOpens: "#e4f",
-		frontDoorCloses: "#0cf",
+		frontDoorCloses: "#3ff",
 	};
 })();
 
@@ -41,6 +41,90 @@ defs.append("clipPath")
 	.attr("y", MARGINS.t)
 	.attr("width", WIDTH - MARGINS.l - MARGINS.r)
 	.attr("height", HEIGHT - MARGINS.t - MARGINS.b);
+
+const symbolWidth = 15;
+const symbolHeight = 15;
+const symbols = (() => {
+	const symbols = {};
+	const makeSymbol = (id, constructor) => {
+		symbols[id] = {
+			id,
+			symbol: defs
+				.append("symbol")
+				.attr("id", id)
+				.attr(
+					"viewbox",
+					`${-symbolWidth / 2} ${
+						-symbolHeight / 2
+					} ${symbolWidth} ${symbolHeight}`,
+				)
+				.call(constructor),
+		};
+	};
+	makeSymbol("frontDoorCloses", selection => {
+		const strokeWidth = 3;
+		const xmin = 3;
+		const xmax = symbolWidth - xmin;
+		const ymin = 3;
+		const ymax = symbolHeight - ymin;
+		selection
+			.append("line")
+			.attr("x1", xmin)
+			.attr("y1", ymin)
+			.attr("x2", xmax)
+			.attr("y2", ymax)
+			.attr("stroke-width", strokeWidth);
+		selection
+			.append("line")
+			.attr("x1", xmin)
+			.attr("y1", ymax)
+			.attr("x2", xmax)
+			.attr("y2", ymin)
+			.attr("stroke-width", strokeWidth);
+	});
+	makeSymbol("backDoorCloses", selection => {
+		const strokeWidth = 4;
+		const xmin = 1;
+		const xmax = symbolWidth - xmin;
+		const xmid = (xmin + xmax) / 2;
+		const ymin = 1;
+		const ymax = symbolHeight - ymin;
+		const ymid = (ymin + ymax) / 2;
+		selection
+			.append("line")
+			.attr("x1", xmin)
+			.attr("y1", ymid)
+			.attr("x2", xmax)
+			.attr("y2", ymid)
+			.attr("stroke-width", strokeWidth);
+		selection
+			.append("line")
+			.attr("x1", xmid)
+			.attr("y1", ymin)
+			.attr("x2", xmid)
+			.attr("y2", ymax)
+			.attr("stroke-width", strokeWidth);
+	});
+	makeSymbol("frontDoorOpens", selection => {
+		selection
+			.append("circle")
+			.attr("r", 5)
+			.attr("cx", symbolWidth / 2)
+			.attr("cy", symbolHeight / 2);
+	});
+	makeSymbol("backDoorOpens", selection => {
+		const width = 10;
+		const height = 10;
+		selection
+			.append("rect")
+			.attr("x", (symbolWidth - width) / 2)
+			.attr("y", (symbolHeight - height) / 2)
+			.attr("width", width)
+			.attr("height", height);
+	});
+
+	return symbols;
+})();
 
 const legend = (() => {
 	const legendWidth = 150;
@@ -91,23 +175,45 @@ const legend = (() => {
 	}));
 
 	const cx = (x1 + x2) / 2;
-	const r = 3;
 	const events = [
-		{ text: "Back door closes", color: colors.backDoorCloses },
-		{ text: "Back door opens", color: colors.backDoorOpens },
-		{ text: "Front door closes", color: colors.frontDoorCloses },
-		{ text: "Front door opens", color: colors.frontDoorOpens },
-	];
-	const circles = events.map((event, i) => ({
-		shape: "circle",
-		attrs: {
-			cx,
-			cy: i * dy + 10,
-			r,
-			fill: event.color,
-			id: event.text.replace(/ /g, "_"),
+		{
+			text: "Back door closes",
+			symbol: symbols.backDoorCloses,
+			color: colors.backDoorCloses,
 		},
-	}));
+		{
+			text: "Back door opens",
+			symbol: symbols.backDoorOpens,
+			color: colors.backDoorOpens,
+		},
+		{
+			text: "Front door closes",
+			symbol: symbols.frontDoorCloses,
+			color: colors.frontDoorCloses,
+		},
+		{
+			text: "Front door opens",
+			symbol: symbols.frontDoorOpens,
+			color: colors.frontDoorOpens,
+		},
+	];
+	const markers = events.map((event, i) => {
+		const _x = cx;
+		const _y = i * dy + 10;
+
+		const transform = `translate(${_x - symbolWidth / 2},${_y - symbolHeight / 2})`;
+		return {
+			shape: "use",
+			attrs: {
+				"xlink:href": `#${event.symbol.id}`,
+				_x,
+				_y,
+				transform,
+				fill: event.color,
+				stroke: event.color,
+			},
+		};
+	});
 	const circleText = events.map((event, i) => ({
 		shape: "text",
 		text: event.text,
@@ -132,7 +238,10 @@ const legend = (() => {
 		.call(applyGraphicalObjs, (_, i) => {
 			return i === 0
 				? [...lines, ...lineText].map(obj => ({ ...obj, class: "l" }))
-				: [...circles, ...circleText].map(obj => ({ ...obj, class: "k" }));
+				: [
+						...markers.map(obj => ({ ...obj, class: "k sym" })),
+						...circleText.map(obj => ({ ...obj, class: "k" })),
+				  ];
 		});
 
 	return legend;
@@ -174,17 +283,10 @@ function getAxes() {
 	}));
 }
 
-function fmtFloat(x, precision) {
-	if (typeof precision === "undefined") {
-		precision = 2;
-	}
-	return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
-}
-
 const barnLength = 0.3;
 const poleLength = 1.3 * barnLength;
 
-const radius = d3.scaleLinear().domain([0, 6]).range([7, 4]).clamp(true);
+const radius = d3.scaleLinear().domain([0, 8]).range([1.75, 1]).clamp(true);
 
 const dashes = "4 4";
 
@@ -231,13 +333,14 @@ const NONE = 3;
 
 function getSlices({ v, slicesToShow, perspective }) {
 	const dt = 0.23;
-	const nSlicesAbove = Math.floor((AXES.y.max - AXES.y.origin) / dt) + 5;
-	const nSlicesBelow = Math.floor((AXES.y.origin - AXES.y.min) / dt) + 5;
-	const sliceYIntercepts = d3
-		.range(-nSlicesBelow, nSlicesAbove + 0.1)
-		.map(i => AXES.y.origin + i * dt);
+	const nSlicesAbove = Math.floor((AXES.y.max - AXES.y.origin) / dt) + 30;
+	const nSlicesBelow = Math.floor((AXES.y.origin - AXES.y.min) / dt) + 30;
 
-	function _getSliceAttrs(slope) {
+	function _getSliceAttrs(slope, gamma) {
+		const sliceYIntercepts = d3
+			.range(-nSlicesBelow, nSlicesAbove + 0.1)
+			.map(i => AXES.y.origin + (i * dt) / gamma);
+
 		return sliceYIntercepts.map(y0 => {
 			const x1 = AXES.x.min;
 			const x2 = AXES.x.max;
@@ -257,14 +360,18 @@ function getSlices({ v, slicesToShow, perspective }) {
 		});
 	}
 
+	const gamma = lorentzFactor({ fracOfC: v });
+	const gammaBarn = perspective === BARN ? 1 : gamma;
+	const gammaPole = perspective === POLE ? 1 : gamma;
+
 	function getBarnSliceAttrs() {
 		const slope = perspective === BARN ? 0 : v;
-		return _getSliceAttrs(slope);
+		return _getSliceAttrs(slope, gammaBarn);
 	}
 
 	function getPoleSliceAttrs() {
 		const slope = perspective === BARN ? -v : 0;
-		return _getSliceAttrs(slope);
+		return _getSliceAttrs(slope, gammaPole);
 	}
 
 	if (slicesToShow === NONE) {
@@ -342,51 +449,68 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 		throw new Error(`Unexpected perspective ${perspective}`);
 	}
 
-	const frontDoorOpensAttrs = {
-		cx: frontDoorOpensX,
-		cy: frontDoorOpensT,
-		fill: colors.frontDoorOpens,
-	};
-	const frontDoorClosesAttrs = {
-		cx: frontDoorClosesX,
-		cy: frontDoorClosesT,
-		fill: colors.frontDoorCloses,
-	};
-
-	const backDoorOpensAttrs = {
-		cx: backDoorOpensX,
-		cy: backDoorOpensT,
-		fill: colors.backDoorOpens,
-	};
-
-	const backDoorClosesAttrs = {
-		cx: backDoorClosesX,
-		cy: backDoorClosesT,
-		fill: colors.backDoorCloses,
-	};
-
 	return [
-		frontDoorOpensAttrs,
-		frontDoorClosesAttrs,
-		backDoorOpensAttrs,
-		backDoorClosesAttrs,
+		{
+			"xlink:href": `#${symbols.frontDoorOpens.id}`,
+			_x: frontDoorOpensX,
+			_y: frontDoorOpensT,
+			transform: `translate(${xScale(frontDoorOpensX) - symbolWidth / 2},${
+				yScale(frontDoorOpensT) - symbolHeight / 2
+			})`,
+			fill: colors.frontDoorOpens,
+			stroke: colors.frontDoorOpens,
+		},
+		{
+			"xlink:href": `#${symbols.frontDoorCloses.id}`,
+			_x: frontDoorClosesX,
+			_y: frontDoorClosesT,
+			transform: `translate(${xScale(frontDoorClosesX) - symbolWidth / 2},${
+				yScale(frontDoorClosesT) - symbolHeight / 2
+			})`,
+			fill: colors.frontDoorCloses,
+			stroke: colors.frontDoorCloses,
+		},
+		{
+			"xlink:href": `#${symbols.backDoorOpens.id}`,
+			_x: backDoorOpensX,
+			_y: backDoorOpensT,
+			transform: `translate(${xScale(backDoorOpensX) - symbolWidth / 2},${
+				yScale(backDoorOpensT) - symbolHeight / 2
+			})`,
+			fill: colors.backDoorOpens,
+			stroke: colors.backDoorOpens,
+		},
+		{
+			"xlink:href": `#${symbols.backDoorCloses.id}`,
+			_x: backDoorClosesX,
+			_y: backDoorClosesT,
+			transform: `translate(${xScale(backDoorClosesX) - symbolWidth / 2},${
+				yScale(backDoorClosesT) - symbolHeight / 2
+			})`,
+			fill: colors.backDoorCloses,
+			stroke: colors.backDoorCloses,
+		},
 	].map(attrs => {
-		const scaledCy = yScale(attrs.cy);
-		const r = radius(Math.abs(scaledCy - scaledY));
-
+		const scaledSymbolYCenter = yScale(attrs._y);
+		const scale = radius(Math.abs(scaledSymbolYCenter - scaledY));
 		legend
-			.selectAll("circle.k")
-			.filter(d => d.attrs.fill === attrs.fill)
-			.attr("r", r);
-		return {
-			shape: "circle",
-			attrs: {
-				...attrs,
-				cx: xScale(attrs.cx),
-				cy: scaledCy,
-				r,
-			},
+			.selectAll(".k.sym")
+			.filter(d => d.attrs.stroke === attrs.stroke)
+			.attr(
+				"transform",
+				d =>
+					`translate(${d.attrs._x - (scale * symbolWidth) / 2},${
+						d.attrs._y - (scale * symbolHeight) / 2
+					}) scale(${scale},${scale})`,
+			);
+		const translation = `translate(${
+			xScale(attrs._x) - (scale * symbolWidth) / 2
+		},${scaledSymbolYCenter - (scale * symbolHeight) / 2})`;
+		attrs = {
+			...attrs,
+			transform: `${translation} scale(${scale}, ${scale})`,
 		};
+		return { shape: "use", class: "eventMarker", attrs };
 	});
 }
 
@@ -661,11 +785,18 @@ function stopAnimation() {
 	buttons.playPause.innerText = "Start";
 }
 
+const speedSpan = document.getElementById("text-v");
+function fmtFloat(x, precision) {
+	return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+
 function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 	if (typeof v === "undefined") {
 		v = sliders.v.value;
 	}
 	v = +v;
+
+	speedSpan.innerHTML = fmtFloat(v, 2);
 
 	if (typeof t === "undefined") {
 		t = sliders.t.value;
@@ -696,7 +827,12 @@ function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 			? getBarnPerspective({ v, t, slices })
 			: getPolePerspective({ v, t, slices });
 
-	const groups = groupBy(data, getKeyFromDatum, ["line.c", "path.c", "circle.c"]);
+	const groups = groupBy(data, getKeyFromDatum, [
+		"line.c",
+		"path.c",
+		"circle.c",
+		"use.eventMarker",
+	]);
 
 	for (const [selector, items] of groups) {
 		applyGraphicalObjs(svg, items, {
