@@ -1,4 +1,4 @@
-/* global lorentzFactor applyGraphicalObjs defineArrowhead */
+/* global lorentzFactor applyGraphicalObjs defineArrowhead STANDARD_COLORS */
 
 const AXES = {
 	x: { min: -0.5, max: 1.6 },
@@ -69,12 +69,12 @@ function fmtFloat(x, precision) {
 	return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 
-const dotRadius = 3;
+const dotRadius = 4;
 const colors = {
-	path: "#fc0",
-	jump: "#41ff25",
-	awayTime: "#ff9100",
-	towardTime: "#f6392b",
+	path: STANDARD_COLORS.secondary,
+	jump: STANDARD_COLORS.tertiary,
+	awayTime: STANDARD_COLORS.quaternary,
+	towardTime: "#aaa",
 };
 const dashes = "4 4";
 
@@ -91,6 +91,7 @@ function getPathObjects({ v, t, extraLines, extraTexts, circleToKeep }) {
 		const commonAttrs = {
 			fill: colors.path,
 			r: dotRadius,
+			stroke: "#ddd",
 		};
 
 		const allCirclesData = [
@@ -345,7 +346,7 @@ function getOutboundPerspective({ v, t }) {
 }
 
 function getInboundJourneyObjs({ v, t, circleToKeep }) {
-	const { turnaround, end } = getPathPoints({ v, t });
+	const { origin, turnaround, end } = getPathPoints({ v, t });
 	const { extraLines, extraTexts } = (() => {
 		const EPS = 0.01;
 		const spacetimeLineLength = 1.7 * t;
@@ -424,9 +425,62 @@ function getInboundJourneyObjs({ v, t, circleToKeep }) {
 		const tObjs = getLine(1 / v);
 		const xObjs = getLine(v);
 
+		const timeSliceSlope = v;
+		const timeSliceMinYIntercept =
+			yScale.invert(turnaround.t) + timeSliceSlope * xScale.invert(turnaround.x);
+		const awayYIntercept =
+			yScale.invert(turnaround.t) - timeSliceSlope * xScale.invert(turnaround.x);
 		return {
-			extraLines: [...tObjs.extraLines, ...xObjs.extraLines],
-			extraTexts: [...tObjs.extraTexts, ...xObjs.extraTexts],
+			extraLines: [
+				...tObjs.extraLines,
+				...xObjs.extraLines,
+				{
+					x1: origin.x,
+					y1: origin.t,
+					x2: origin.x,
+					y2: yScale(awayYIntercept),
+					"stroke-width": 2,
+					stroke: colors.awayTime,
+					"stroke-dasharray": null,
+				},
+				{
+					x1: origin.x,
+					y1: yScale(awayYIntercept),
+					x2: origin.x,
+					y2: yScale(timeSliceMinYIntercept),
+					"stroke-width": 2,
+					stroke: colors.jump,
+					"stroke-dasharray": null,
+				},
+			],
+			extraTexts: [
+				...tObjs.extraTexts,
+				...xObjs.extraTexts,
+				{
+					shape: "text",
+					class: "c",
+					text: "𝑇₁",
+					attrs: {
+						x: xScale(0) - 10,
+						y: yScale(awayYIntercept),
+						fill: colors.awayTime,
+						"dominant-baseline": "bottom",
+						"text-anchor": "end",
+					},
+				},
+				{
+					shape: "text",
+					class: "c",
+					text: "𝑇₂",
+					attrs: {
+						x: xScale(0) - 10,
+						y: yScale(timeSliceMinYIntercept),
+						fill: colors.jump,
+						"dominant-baseline": "bottom",
+						"text-anchor": "end",
+					},
+				},
+			],
 		};
 	})();
 
@@ -440,7 +494,7 @@ function getInboundJourneyObjs({ v, t, circleToKeep }) {
 }
 
 function getFrameChangePerspective({ v, t }) {
-	const { circles, lines, texts } = getInboundJourneyObjs({ v, t, circleToKeep: 2 });
+	const { circles, lines, texts } = getInboundJourneyObjs({ v, t, circleToKeep: 1 });
 	return [lines, circles, texts];
 }
 
@@ -472,29 +526,11 @@ function getInboundPerspective({ v, t }) {
 		};
 	});
 
-	const awayYIntercept =
-		yScale.invert(turnaround.t) - timeSliceSlope * xScale.invert(turnaround.x);
 	const tAxisLines = [
 		{
 			x1: origin.x,
-			y1: origin.t,
-			x2: origin.x,
-			y2: yScale(awayYIntercept),
-			"stroke-width": 2,
-			stroke: colors.awayTime,
-		},
-		{
-			x1: origin.x,
-			y1: yScale(awayYIntercept),
-			x2: origin.x,
-			y2: yScale(timeSliceMinYIntercept),
-			"stroke-width": 2,
-			stroke: colors.jump,
-		},
-		{
-			x1: xScale(0),
 			y1: yScale(timeSliceMinYIntercept),
-			x2: xScale(0),
+			x2: origin.x,
 			y2: end.t,
 			"stroke-width": 2,
 		},
@@ -508,32 +544,7 @@ function getInboundPerspective({ v, t }) {
 		})),
 	);
 
-	texts.data.push(
-		{
-			shape: "text",
-			class: "c",
-			text: "𝑇₁",
-			attrs: {
-				x: xScale(0) - 10,
-				y: yScale(awayYIntercept),
-				fill: colors.awayTime,
-				"dominant-baseline": "bottom",
-				"text-anchor": "end",
-			},
-		},
-		{
-			shape: "text",
-			class: "c",
-			text: "𝑇₂",
-			attrs: {
-				x: xScale(0) - 10,
-				y: yScale(timeSliceMinYIntercept),
-				fill: colors.jump,
-				"dominant-baseline": "bottom",
-				"text-anchor": "end",
-			},
-		},
-	);
+	texts.data.push();
 
 	return [lines, circles, texts];
 }
@@ -629,7 +640,9 @@ function update({ v, t, func }) {
 	const t2 = yScale.invert(turnaround.t) + v * xScale.invert(turnaround.x);
 	textItems.t2.innerHTML = fmtFloat(timeScale(t2), 2);
 
-	const ssTime = (2 * t) / lorentzFactor({ fracOfC: v });
+	const ssTime =
+		((func === persepctiveFuncs.inbound ? 2 : 1) * t) /
+		lorentzFactor({ fracOfC: v });
 	textItems.ssTime.innerHTML = fmtFloat(timeScale(ssTime), 2);
 }
 
@@ -700,7 +713,7 @@ function clickInboundPerspective() {
 	checkButton("inbound");
 }
 
-hidables.t1.style.color = colors.awayTime;
-hidables.t2.style.color = colors.jump;
+// hidables.t1.style.color = colors.awayTime;
+// hidables.t2.style.color = colors.jump;
 
 clickButtonEarthPerspective();
