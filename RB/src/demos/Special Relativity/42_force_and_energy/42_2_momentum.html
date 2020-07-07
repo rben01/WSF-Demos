@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.h-centered {
+				margin: auto;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body style="width: 700px;">
+		<div style="padding-left: 50px;">
+			<div>
+				<span>
+					<label>
+						<span class="slider-label">Speed of particle:</span>
+						<input
+							type="range"
+							id="input-particle-speed"
+							name="input-particle-speed"
+							min="0.0"
+							max="0.99"
+							step=".001"
+							value="0"
+							style="width: 350px !important;"
+							oninput="updateParticleSpeed(this.value)"
+						/>
+					</label>
+				</span>
+			</div>
+			<div class="div-below-slider">
+				<table>
+					<tr>
+						<td class="eqn-left">𝑣</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="particle-speed-text"
+								class="highlighted-text sci-num"
+								>0</span
+							>𝑐
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">Rest mass</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right"><span class="sci-num">5.00</span>kg</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑝(𝑣)</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="particle-rel-mass-text"
+								class="secondary-text sci-num"
+								>5.00</span
+							>𝑐<span class="operator">·</span>kg
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="canvas-rel-mass"
+				class="viz-canvas"
+				style="margin: auto; display: block;"
+			></svg>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script type="text/javascript" src="./42_2_momentum.js"></script>
+		<script type="text/javascript">
+			updateParticleSpeed(0, { fromUserInput: false });
+		</script>
+	</body>
+</html>
