@@ -27,7 +27,12 @@ function applyDatum(datum, { transition } = {}) {
 
 	if (typeof datum.class !== "undefined") {
 		d3Obj.classed(datum.class, true);
+	} else if (typeof datum.classes !== "undefined") {
+		for (const c of datum.classes) {
+			d3Obj.classed(c, true);
+		}
 	}
+
 	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
 	Object.entries(datum.attrs).forEach(([key, val]) => {
 		t.attr(key, val);
@@ -171,4 +176,28 @@ function defineArrowhead(defs, { id, length, width, color, attrs }) {
 		.each(function () {
 			applyDatum.call(this, arrowheadAttrs);
 		});
+}
+
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+	const grouped = {};
+	for (const elem of array) {
+		const key = keyFunc(elem);
+		if (key in grouped) {
+			grouped[key].push(elem);
+		} else {
+			grouped[key] = [elem];
+		}
+	}
+
+	for (const k of expectedKeys) {
+		if (!(k in grouped)) {
+			grouped[k] = [];
+		}
+	}
+
+	if (asArray) {
+		return Object.entries(grouped);
+	}
+	return grouped;
 }
