@@ -292,7 +292,7 @@ const flashCounts = {
 };
 
 const FPS = 37;
-const ANIMATION_DURATION_SEC = 8;
+const ANIMATION_DURATION_SEC = 10;
 const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
 const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
 const playbackInfo = {
