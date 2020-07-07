@@ -136,44 +136,106 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+.top-sliders-sect {
+padding-bottom: 1em;
+}
+.subscript {
+position: relative;
+top: 0.4em;
+left: 0.1em;
+font-size: 65%;
+}
+.primed-subscript {
+position: relative;
+left: -0.25em;
+}
+.rva-button {
+width: 13em;
+padding-top: 5px;
+padding-bottom: 5px;
+padding-left: 2px;
+padding-right: 2px;
+}
+.slider-label {
+display: inline-block;
+min-width: 9em;
+}
+.heading {
+margin-bottom: 0.5em;
+margin-top: 2em;
+}
 .h-centered {
 margin: auto;
 text-align: center;
 }
+.galilean {
+color: #aaaf;
+}
+.slider-label-custom {
+min-width: 6em;
+}
+td {
+height: 1.6em;
+}
 </style>
-<div>
+<div class="top-sliders-sect">
 <span>
 <label>
-<span class="slider-label">Speed of particle:</span>
-<input id="input-particle-speed" max="0.99" min="0.0" name="input-particle-speed" oninput="updateParticleSpeed(this.value)" step=".0005" type="range" value="0"/>
+<span class="slider-label slider-label-custom">
+Mass (𝑚):
+</span>
+<input id="input-m" max="2" min="1" name="input-m" oninput="update({m:this.value})" step=".001" type="range" value="1"/>
+</label> </span><br/><span>
+<label>
+<span class="slider-label slider-label-custom">
+Velocity (𝑣):
+</span>
+<input id="input-v" max="0.98" min="0.0" name="input-v" oninput="update({v:this.value})" step=".001" type="range" value="0"/>
 </label>
 </span>
 </div>
-<div class="div-below-slider">
+<div>
+<div style="display: inline-block; vertical-align: top; width: 10em;">
+<div style="height: 100px;"></div>
 <table>
+<tr>
+<td class="eqn-left">𝑚<span class="subscript">0</span></td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="sci-num" id="text-m">0.000</span>kg
+</td>
+</tr>
 <tr>
 <td class="eqn-left">𝑣</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="highlighted-text sci-num" id="particle-speed-text">0</span>𝑐
+<span class="sci-num highlighted-text" id="text-v">0.000</span>𝑐
 </td>
 </tr>
 <tr>
-<td class="eqn-left">Rest mass</td>
-<td class="eqn-middle">=</td>
-<td class="eqn-right"><span class="sci-num">5.00</span>kg</td>
+<td style="height: 50px;"></td>
 </tr>
 <tr>
-<td class="eqn-left">𝑚(𝑣)</td>
+<td class="eqn-left">KE<span class="subscript">SR</span></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="highlighted-text sci-num" id="particle-rel-mass-text">5.00</span>kg
+<span class="secondary-text sci-num" id="text-ke-sr">0.000<span class="operator">·</span>10<span class="superscript">17</span></span>J
+</td>
+</tr>
+<tr>
+<td class="eqn-left">
+KE<span class="subscript">Newton</span>
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="sci-num" id="text-ke-newton" style="color: #bbb;">0.000<span class="operator">·</span>10<span class="superscript">17</span></span>J
 </td>
 </tr>
 </table>
 </div>
-<div>
-<svg class="viz-canvas" id="canvas-rel-mass" style="margin: auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
+<div style="display: inline-block; vertical-align: bottom;">
+<svg class="viz-canvas" id="viz" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -376,96 +438,52 @@ throw new Error(`Unexpected key ${key}`);
 return d3Obj;
 },
 };
-/* globals _addGraphicalObjs applyDatum lorentzFactor */
+/* globals applyDatum C groupBy applyGraphicalObjs lorentzFactor STANDARD_COLORS */
 "use strict";
-const REST_MASS = 5;
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 350;
-const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
+const CANVAS_WIDTH = 550;
+const CANVAS_HEIGHT = 500;
+const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {
 xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
 yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
 yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
 };
-const canvas = d3
-.selectAll(".viz-canvas")
+const galileanFgColor = "#bbb";
+const svg = d3
+.select("#viz")
 .attr("width", CANVAS_WIDTH)
 .attr("height", CANVAS_HEIGHT)
 .attr("background-color", "black");
-const subcanvases = canvas
-.data([
-{
-originX: 0,
-originY: 0,
-width: CANVAS_WIDTH,
-height: CANVAS_HEIGHT,
-},
-])
-.each(function (d) {
-d3.select(this)
-.append("g")
-.attr("transform", `translate(0, ${d.originY})`)
-.classed("subcanvas", true);
-})
-.selectAll("g");
-const speedInputSlider = document.getElementById("input-particle-speed");
-const speedTextSpan = document.getElementById("particle-speed-text");
-const relMassTextSpan = document.getElementById("particle-rel-mass-text");
-function getSpeed(speedStr) {
-speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
-const floatVal = parseFloat(speedStr);
-if (floatVal < 0 || floatVal > 1) {
-throw new Error(`Got invalid speed (outside [0,1]): ${floatVal}`);
+function getRelativisticKineticEnergy(fracOfC, mass) {
+const gamma = lorentzFactor({ fracOfC });
+return (mass * (C / 1e8) * (C / 1e8) * (gamma - 1)) / 10;
 }
-return floatVal;
+function getNewtonianKineticEnergy(fracOfC, mass) {
+return (0.5 * mass * fracOfC * fracOfC * (C / 1e8) * (C / 1e8)) / 10;
 }
-function getRelativisticMass({ fracOfC, lf }) {
-if (typeof lf === "undefined") {
-lf = lorentzFactor({ fracOfC });
-}
-return REST_MASS * lf;
-}
-const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const sliders = {
+v: document.getElementById("input-v"),
+m: document.getElementById("input-m"),
+};
+const xScale = d3
+.scaleLinear()
+.domain([-0.03, 1])
+.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 const yScale = d3
 .scaleLinear()
-.domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
+.domain([-0.15, +getRelativisticKineticEnergy(+sliders.v.max, +sliders.m.max)])
 .range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
-const graphObjs = {};
+const defs = svg.append("defs");
+defs.append("clipPath")
+.attr("id", "graph-clip")
+.append("rect")
+.attr("x", xScale(0))
+.attr("y", yScale.range()[1])
+.attr("width", Math.abs(xScale.range()[1] - xScale.range()[0]))
+.attr("height", Math.abs(yScale.range()[1] - yScale.range()[0]));
+// eslint-disable-next-line no-unused-vars
 function drawGraph() {
-const data = [[0, 5]];
-const base = 10;
-const startPrecision = 2;
-outer: for (let precision = startPrecision; precision < 5; ++precision) {
-const scale = Math.pow(base, -precision);
-const lower =
-precision === startPrecision
-? Math.pow(base, -precision)
-: 1 - Math.pow(base, -precision) * (base - 1);
-const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
-for (let i = 0; i < nNums - 1; ++i) {
-const x = lower + i * scale;
-const y = getRelativisticMass({ fracOfC: x });
-if (y > Math.max(...yScale.domain())) {
-break outer;
-}
-data.push([x, y, xScale(x), yScale(y)]);
-}
-}
-console.log(data);
-subcanvases.each(function () {
-const subcanvas = d3.select(this);
-const curve = d3
-.line()
-.x(xy => xScale(xy[0]))
-.y(xy => yScale(xy[1]))
-.curve(d3.curveCardinal);
-// Add main curve showing gamma
-subcanvas
-.append("svg:path")
-.attr("d", curve(data))
-.attr("stroke", "#fffd")
-.attr("stroke-width", 4);
 // Add axes
 const commonAxesAttrs = {
 stroke: "#fff3",
@@ -493,12 +511,7 @@ y2: AX_BOUNDS.yMax,
 },
 },
 ];
-subcanvas
-.selectAll()
-.data(axesAttrs)
-.enter()
-.append("svg:line")
-.each(applyDatum);
+svg.selectAll().data(axesAttrs).enter().append("svg:line").each(applyDatum);
 // Make ticks
 const minorTickLength = 3;
 const commonTickAttrs = {
@@ -531,8 +544,7 @@ y2: tickY,
 },
 };
 });
-subcanvas
-.selectAll()
+svg.selectAll()
 .data([...xTicksData, ...yTicksData])
 .enter()
 .append("svg:line")
@@ -555,7 +567,7 @@ y: AX_BOUNDS.yMin + 22,
 },
 };
 });
-const yTickTextData = yScale.ticks(4).map(y => {
+const yTickTextData = yScale.ticks(7).map(y => {
 return {
 class: "y-axis-label",
 text: y,
@@ -568,58 +580,185 @@ y: yScale(y),
 },
 };
 });
-subcanvas
-.selectAll()
+svg.selectAll()
 .data([...xTickTextData, ...yTickTextData])
 .enter()
 .append("svg:text")
 .each(applyDatum)
 .text(d => d.text);
-// Add v/c label to x axis
+// Add v/c label to x and y axes
+// const apostropheWidth = 3;
+// const subscriptXOffset = 4;
+// const subscriptYOffset = 2;
+const fracBarYOffset = 7;
+const fracBarWidth = 19;
+const denominatorYOffset = 20;
+// x axis
+const xLabelX = xScale.range()[1] + 30;
+const xLabelY = AX_BOUNDS.yMin;
 // https://stackoverflow.com/a/22085843
-subcanvas
+const xAxisText = svg
 .append("text")
-.selectAll()
-.data([
-{ char: "𝑣", height: 1 },
-{ char: "＿", height: 0.7 },
-{ char: "𝑐", height: 1 },
-])
-.enter()
-.append("tspan")
-.attr("x", AX_BOUNDS.xMax + 25)
-.attr("y", AX_BOUNDS.yMin - 16)
-.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
+.attr("x", xLabelX)
+.attr("y", xLabelY)
 .attr("font-size", 21)
 .attr("stroke", "white")
 .attr("fill", "white")
-.attr("text-anchor", "middle")
-.text(d => d.char)
-.classed("x-axis-unit", true);
+.attr("text-anchor", "middle");
+// .attr("text-rendering", "geometricPrecision");
+xAxisText.append("tspan").attr("x", xLabelX).text(`𝑣`);
+xAxisText
+.append("svg:tspan")
+.text("𝑐")
+.attr("x", xLabelX)
+.attr("dy", denominatorYOffset);
+svg.append("line")
+.attr("x1", xLabelX - fracBarWidth / 2)
+.attr("x2", xLabelX + fracBarWidth / 2)
+.attr("y1", xLabelY + fracBarYOffset)
+.attr("y2", xLabelY + fracBarYOffset)
+.attr("stroke", "white")
+.attr("stroke-width", 2);
 // Add distance label to y axis
-subcanvas
-.append("svg:text")
-.attr("x", AX_BOUNDS.xMin)
-.attr("y", AX_BOUNDS.yMax - 10)
-.attr("font-size", 21)
-.attr("stroke", "white")
+const yLabelX = AX_BOUNDS.xMin - 5;
+const yLabelY = AX_BOUNDS.yMax - 55;
+const yAxisText = svg
+.append("text")
+.attr("x", yLabelX)
+.attr("y", yLabelY)
+.attr("font-size", 18)
 .attr("fill", "white")
-.attr("text-anchor", "middle")
-.text("𝑚(𝑣)");
-});
+.attr("text-anchor", "middle");
+yAxisText
+.append("tspan")
+.text("KE")
+.attr("x", yLabelX + 12);
+yAxisText.append("svg:tspan").text("10").attr("x", yLabelX).attr("dy", 28);
+yAxisText
+.append("svg:tspan")
+.text("17")
+.attr("x", yLabelX + 17)
+.attr("dy", -8)
+.attr("font-size", "small");
+yAxisText
+.append("svg:tspan")
+.text("J")
+.attr("x", yLabelX + 30)
+.attr("dy", 7.5);
+svg.append("line")
+.attr("x1", yLabelX - fracBarWidth / 2)
+.attr("x2", yLabelX + 34)
+.attr("y1", yLabelY + fracBarYOffset)
+.attr("y2", yLabelY + fracBarYOffset)
+.attr("stroke", "white")
+.attr("stroke-width", 2);
 }
-function getGridlinesData({ fracOfC }) {
-if (typeof fracOfC === "undefined") {
-fracOfC = 0.5;
+const graphAttrs = {
+common: { stroke: STANDARD_COLORS.highlighted, "stroke-width": 4, fill: "#0000" },
+};
+function getGraphData(speed, mass) {
+const xBounds = {
+min: 0,
+max: Math.max(...xScale.domain()),
+};
+const yBounds = {
+min: 0,
+max: Math.max(...yScale.domain()),
+};
+function getCurveData() {
+const relativisticData = [[0, getRelativisticKineticEnergy(0, mass)]];
+const newtonianData = [[0, getNewtonianKineticEnergy(0, mass)]];
+const base = 10;
+const startPrecision = 2;
+for (let precision = startPrecision; precision < 5; ++precision) {
+const scale = Math.pow(base, -precision);
+const lower =
+precision === startPrecision
+? Math.pow(base, -precision)
+: 1 - Math.pow(base, -precision) * (base - 1);
+const nNums =
+precision === startPrecision ? Math.pow(base, precision) : base;
+for (let i = 0; i < nNums - 1; ++i) {
+const x = lower + i * scale;
+const yRelativistic = getRelativisticKineticEnergy(x, mass);
+const yNewtonian = getNewtonianKineticEnergy(x, mass);
+relativisticData.push([
+x,
+yRelativistic,
+xScale(x),
+yScale(yRelativistic),
+]);
+newtonianData.push([x, yNewtonian]);
 }
-const x = xScale(fracOfC);
-const y = yScale(getRelativisticMass({ fracOfC }));
+}
+const curve = d3
+.line()
+.x(xy => xScale(xy[0]))
+.y(xy => yScale(xy[1]));
+// .curve(d3.curveCardinal);
+return [
+{
+shape: "path",
+class: "curve",
+attrs: {
+d: curve(newtonianData),
+...graphAttrs,
+...graphAttrs.common,
+stroke: galileanFgColor,
+"clip-path": "url(#graph-clip)",
+// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
+},
+},
+{
+shape: "path",
+class: "curve",
+attrs: {
+d: curve(relativisticData),
+...graphAttrs,
+...graphAttrs.common,
+stroke: STANDARD_COLORS.highlighted,
+"clip-path": "url(#graph-clip)",
+// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
+},
+},
+];
+}
+function getGridlinesData() {
+const x = xScale(speed);
+const y = yScale(getRelativisticKineticEnergy(speed, mass));
 const commonLineAttrs = {
-stroke: "#fffb",
-"stroke-width": 3,
+"stroke-width": 2,
 "stroke-dasharray": "1.5 1.5",
 };
+const galileanY = yScale(getNewtonianKineticEnergy(speed, mass));
+// Galilean line must go first so that it's drawn over by the other line
 return [
+{
+shape: "line",
+class: "galilean galilean-gridline",
+galilean: true,
+type: "horizontal",
+attrs: {
+x1: AX_BOUNDS.xMin,
+x2: x,
+y1: galileanY,
+y2: galileanY,
+stroke: galileanFgColor,
+...commonLineAttrs,
+},
+},
+{
+shape: "circle",
+galilean: true,
+class: "galilean galilean-gridline-dot",
+attrs: {
+cx: x,
+cy: galileanY,
+r: 4,
+fill: galileanFgColor,
+stroke: "#bbb",
+},
+},
 {
 shape: "line",
 class: "gridline",
@@ -629,6 +768,7 @@ x1: AX_BOUNDS.xMin,
 x2: x,
 y1: y,
 y2: y,
+stroke: STANDARD_COLORS.secondary,
 ...commonLineAttrs,
 },
 },
@@ -641,6 +781,7 @@ x1: x,
 x2: x,
 y1: AX_BOUNDS.yMin,
 y2: y,
+stroke: STANDARD_COLORS.highlighted,
 ...commonLineAttrs,
 },
 },
@@ -651,36 +792,72 @@ attrs: {
 cx: x,
 cy: y,
 r: 4,
-fill: "white",
+fill: STANDARD_COLORS.secondary,
+stroke: "#ddd",
 },
 },
 ];
 }
+return [...getCurveData(), ...getGridlinesData()].map(o => {
+const classes = [...o.class.split(/ +/g), "c"];
+delete o.class;
+o.classes = classes;
+return o;
+});
+}
 drawGraph();
-graphObjs.gridLines = _addGraphicalObjs(subcanvases, getGridlinesData);
-// eslint-disable-next-line no-unused-vars
-function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
-try {
-if (!fromUserInput) {
-speedInputSlider.value = speedStr;
+const textSpans = {
+v: document.getElementById("text-v"),
+m: document.getElementById("text-m"),
+keRltv: document.getElementById("text-ke-sr"),
+keNtwn: document.getElementById("text-ke-newton"),
+};
+function fmtFloat(x, precision) {
+return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
-const speed = getSpeed(speedStr);
-speedTextSpan.textContent = speed.toFixed(3);
-const relMass = getRelativisticMass({ fracOfC: speed });
-relMassTextSpan.textContent = relMass.toFixed(2);
-graphObjs.gridLines
-.data(getGridlinesData({ fracOfC: speed }))
-.each(function (d) {
-const transition = d3.select(this).transition().duration(10);
-Object.entries(d.attrs).forEach(([key, val]) => {
-transition.attr(key, val);
-});
-});
-} catch (e) {
-console.log(speedStr);
-throw e;
+function fmtPow10(x, precision, defaultPower) {
+if (x === 0) {
+return `<span class="sci-num">${fmtFloat(x, precision)}</span>`;
+}
+let power = defaultPower;
+while (x < 1) {
+x *= 10;
+power -= 1;
+}
+return `<span class="sci-num">${fmtFloat(
+x,
+precision,
+)}<span class="operator">·</span>10<span class="superscript">${power}</span></span>`;
+}
+function update({ v, m }) {
+if (v === undefined) {
+v = sliders.v.value;
+} else {
+sliders.v.value = v;
+}
+v = +v;
+if (m === undefined) {
+m = sliders.m.value;
+} else {
+sliders.m.value = m;
+}
+m = +m;
+textSpans.v.innerHTML = fmtFloat(v, 2);
+textSpans.m.innerHTML = fmtFloat(m, 2);
+const keRltv = getRelativisticKineticEnergy(v, m);
+const keNtwn = getNewtonianKineticEnergy(v, m);
+textSpans.keRltv.innerHTML = fmtPow10(keRltv, 2, 17);
+textSpans.keNtwn.innerHTML = fmtPow10(keNtwn, 2, 17);
+const allData = getGraphData(v, m);
+const shapes = groupBy(
+allData,
+d => `${d.shape}.c`,
+["line", "circle", "path"].map(shape => `${shape}.c`),
+);
+for (const [selector, data] of shapes) {
+applyGraphicalObjs(svg, data, { selector });
 }
 }
-updateParticleSpeed(0, { fromUserInput: false });
+update({ v: 0, m: 1 });
 </script></body>
 </html>
