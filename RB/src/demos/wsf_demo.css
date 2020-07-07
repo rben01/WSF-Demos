@@ -72,6 +72,13 @@ body {
 	font-size: 65%;
 }
 
+.superscript {
+	position: relative;
+	bottom: 0.8em;
+	left: 0em;
+	font-size: 65%;
+}
+
 .minus-sign {
 	margin-right: 1px;
 }
