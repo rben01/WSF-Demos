@@ -36,12 +36,12 @@
         var L = 10000;
         var v = 0;
         var dt = 0;
-        var toe = {
-            x: [0, 1],
-            y: [t, t],
+        var dtline = {
+            x: [],
+            y: [],
             line: { color: 'grey' }
         }
-        var tor = {
+        var ypos = {
             x: [],
             y: [],
             line: { color: 'lightgrey' }
@@ -120,18 +120,15 @@
 
         function render() {
             dt = L * v / (1 - v ** 2);
-            toe.y = [t, t];
-            tor.x = [];
-            tor.y = [];
             for (var i = 0; i < 1; i += 0.001) {
-                tor.x.push(i);
-                tor.y.push(t * Math.sqrt(1 - i ** 2));
+                dtline.x.push(i);
+                dtline.y.push(L * i / (1 - i ** 2));
             }
             trace1.x = [0, v];
-            trace1.y = [yp, yp];
+            trace1.y = [dt, dt];
             trace2.x = [v, v];
-            trace2.y = [0, yp];
-            Plotly.newPlot('graph', [toe, tor, trace1, trace2], layout);
+            trace2.y = [0, dt];
+            Plotly.newPlot('graph', [dtline, ypos, trace1, trace2], layout);
         }
 
         render();
