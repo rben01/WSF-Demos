@@ -33,6 +33,7 @@
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <script type="text/javascript">
+        var c = 299792000;
         var L = 10000;
         var v = 0;
         var dt = 0;
@@ -65,12 +66,12 @@
                 tickvals: [0.2, 0.4, 0.6, 0.8, 1]
             },
             yaxis: {
-                range: [0, 10],
+                range: [0, 0.02],
                 autorange: false,
                 linecolor: 'white',
                 tickcolor: 'black',
                 tickfont: { color: 'white', family: 'sans-serif', size: 18 },
-                tickvals: [2, 4, 6, 8, 10]
+                tickvals: [0.005, 0.01, 0.015]
             },
             paper_bgcolor: 'black',
             plot_bgcolor: 'black',
@@ -114,10 +115,10 @@
         }
 
         function render() {
-            dt = L * v / (1 - v ** 2);
+            dt = L / c * v / (1 - v ** 2);
             for (var i = 0; i < 1; i += 0.001) {
                 dtline.x.push(i);
-                dtline.y.push(L * i / (1 - i ** 2));
+                dtline.y.push(L / c * i / (1 - i ** 2));
             }
             trace1.x = [0, v];
             trace1.y = [dt, dt];
