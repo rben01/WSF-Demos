@@ -116,6 +116,8 @@
 
         function render() {
             dt = L / c * v / (1 - v ** 2);
+            dtline.x = [];
+            dtline.y = [];
             for (var i = 0; i < 1; i += 0.001) {
                 dtline.x.push(i);
                 dtline.y.push(L / c * i / (1 - i ** 2));
