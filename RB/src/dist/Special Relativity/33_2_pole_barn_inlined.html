@@ -820,11 +820,20 @@ const flash = subcanvas
 .attr("r", 3)
 .attr("fill", STANDARD_COLORS.secondary)
 .attr("opacity", 1);
-flash.transition("radius").duration(1500).ease(d3.easeExpOut).attr("r", 22);
+const durationMS = 800;
+flash
+.transition("radius")
+.duration(durationMS)
+.ease(d3.easeLinear)
+.attr("r", 20);
+const opaqueProptn = 0.3;
+const e = d3.easePolyIn.exponent(1.8);
+const opacityEase = t =>
+t < opaqueProptn ? 0 : e((t - opaqueProptn) / (1 - opaqueProptn));
 flash
 .transition("opacity")
-.duration(1500)
-.ease(d3.easeCubic)
+.duration(durationMS)
+.ease(opacityEase)
 .attr("opacity", 0)
 .remove();
 }, timeout);
