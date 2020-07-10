@@ -27,7 +27,7 @@
         </form>
     </div>
 
-    <div style="width: 950px;">
+    <div style="width: 950px; height: 600px;">
         <div id="graph"></div>
     </div>
 
@@ -73,6 +73,7 @@
                 tickfont: { color: 'white', family: 'sans-serif', size: 18 },
                 tickvals: [0.005, 0.01, 0.015]
             },
+            height: 600,
             paper_bgcolor: 'black',
             plot_bgcolor: 'black',
             showlegend: false,
@@ -103,7 +104,7 @@
                     yref: 'paper',
                     x: 0.5,
                     y: 0.5,
-                    text: 'Time on Earth',
+                    text: "Δt = 0",
                     font: { color: 'white', size: 18 },
                     showarrow: false
                 }
@@ -116,6 +117,7 @@
 
         function render() {
             dt = L / c * v / (1 - v ** 2);
+            layout.annotations[2].text = ("Δt = <span color: #5df>" + dt).substr(0, 31) + "</span> s";
             dtline.x = [];
             dtline.y = [];
             for (var i = 0; i < 1; i += 0.001) {
