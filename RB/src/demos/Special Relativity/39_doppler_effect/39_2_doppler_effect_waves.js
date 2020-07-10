@@ -136,7 +136,7 @@ function getThetas(nTotal, sparsityFunc) {
 }
 
 const WAVE_INTERVAL_T = 0.08212873612836; // To avoid FP error, it's crucial that this not even come close to dividing any t that will be passed to this function
-function getWavesData({ lambda, v, t }) {
+function getFlashesData({ lambda, v, t }) {
 	const data = [
 		{
 			shape: "circle",
@@ -261,7 +261,7 @@ function update({ lambda, v, t, fromUserInput } = {}) {
 	}
 	t = +t;
 
-	const allData = getWavesData({ lambda, v, t });
+	const allData = getFlashesData({ lambda, v, t });
 	const shapes = groupBy(allData, d => `${d.shape}.${d.class}`, [
 		"path.wave-line",
 		"circle.source",
@@ -314,5 +314,3 @@ function toggleAnimation() {
 }
 
 update({ lambda: 0.5, v: 0.0, t: 1 });
-
-console.log(getThetas(100));

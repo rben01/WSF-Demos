@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<script
+			type="text/javascript"
+			src="https://d3js.org/d3-array.v2.min.js"
+		></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.slider-label-custom {
+				min-width: 10em;
+				text-align: left;
+			}
+			.viz-canvas {
+				padding-top: 5px;
+			}
+			.smaller {
+				font-size: 70%;
+			}
+			.demo-button {
+				width: unset;
+				margin: unset;
+				margin-right: 5px;
+			}
+		</style>
+	</head>
+	<body style="width: 700px !important;">
+		<div>
+			<div>
+				<span
+					><label
+						><span class="slider-label slider-label-custom"
+							>Source speed (𝑣<span class="subscript">source</span
+							>):</span
+						><input
+							type="range"
+							id="input-v"
+							min="0"
+							max=".99"
+							value="0"
+							step=".001"
+							oninput="update({v:this.value})" /></label></span
+				><br /><span
+					><label
+						><span class="slider-label slider-label-custom">Time (𝑡):</span
+						><input
+							type="range"
+							id="input-t"
+							min="0"
+							max="1"
+							value="0"
+							step=".001"
+							oninput="update({t:this.value})" /></label
+				></span>
+			</div>
+			<div>
+				<button id="play-pause" class="play-button" onclick="toggleAnimation()">
+					Start
+				</button>
+			</div>
+			<div style="display: inline-block; vertical-align: top;">
+				<table>
+					<tr>
+						<td class="eqn-left">𝑣<span class="subscript">source</span></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-v" class="sci-num highlighted-text"></span>𝑐
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div>
+				<svg id="viz" style="display: inline-block;"></svg>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./39_3_doppler_effect_flashes.js"></script>
+	</body>
+</html>
