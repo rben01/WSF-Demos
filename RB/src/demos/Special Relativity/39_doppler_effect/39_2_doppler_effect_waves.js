@@ -97,19 +97,19 @@ const colorScale = (() => {
 	const innerScale = d3.interpolateSinebow;
 	const outerScale = d3
 		.scaleLinear()
-		.domain([-10, -3, 0, 0.1, lowerCutoff, upperCutoff, 1.1, 1.5, 5])
+		.domain([-10, -3, 0, 0.1, lowerCutoff, upperCutoff, 1.2, 1.6, 1.9])
 		.range([
 			"#3c0000",
 			"#530000",
 			"#e00",
 			"#f22",
 			innerScale(0),
-			innerScale(0.75),
-			"#90a",
-			"#506",
-			"#102",
+			innerScale(0.7),
+			"#409",
+			"#308",
+			"#206",
 		]);
-	const innerScaleScale = d3.scaleLinear([lowerCutoff, upperCutoff], [0, 0.75]);
+	const innerScaleScale = d3.scaleLinear([lowerCutoff, upperCutoff], [0, 0.7]);
 	return t => {
 		const x =
 			lowerCutoff <= t && t <= upperCutoff
