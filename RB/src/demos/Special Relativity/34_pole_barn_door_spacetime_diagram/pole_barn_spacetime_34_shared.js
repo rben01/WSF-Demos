@@ -548,20 +548,12 @@ function getBarnPerspective({ v, t, slices }) {
 	const axisLabelSubscript = makeSubscript("𝖡");
 
 	return [
+		...getAxes(),
 		{
 			shape: "path",
 			attrs: {
 				d: line(barnRect),
 				fill: colors.barnFill,
-				"stroke-opacity": 0,
-				"clip-path": "url(#axes-clip)",
-			},
-		},
-		{
-			shape: "path",
-			attrs: {
-				d: line(poleParallelogram),
-				fill: colors.poleFill,
 				"stroke-opacity": 0,
 				"clip-path": "url(#axes-clip)",
 			},
@@ -575,6 +567,15 @@ function getBarnPerspective({ v, t, slices }) {
 				y2: scaledY,
 				stroke: colors.barn,
 				"stroke-width": widths.stationary,
+				"clip-path": "url(#axes-clip)",
+			},
+		},
+		{
+			shape: "path",
+			attrs: {
+				d: line(poleParallelogram),
+				fill: colors.poleFill,
+				"stroke-opacity": 0,
 				"clip-path": "url(#axes-clip)",
 			},
 		},
@@ -614,7 +615,6 @@ function getBarnPerspective({ v, t, slices }) {
 			},
 			children: [axisLabelSubscript],
 		},
-		...getAxes(),
 		...slices,
 		...eventPoints,
 	].map(obj => ({ class: "c", ...obj }));
@@ -647,6 +647,7 @@ function getPolePerspective({ v, t, slices }) {
 	const axisLabelSubscript = makeSubscript("𝖯");
 
 	return [
+		...getAxes(),
 		{
 			shape: "path",
 			attrs: {
@@ -713,7 +714,6 @@ function getPolePerspective({ v, t, slices }) {
 			},
 			children: [axisLabelSubscript],
 		},
-		...getAxes(),
 		...slices,
 		...eventPoints,
 	].map(obj => ({ class: "c", ...obj }));
@@ -723,24 +723,27 @@ let currentPerspective = BARN;
 let currentSlices = BARN;
 
 function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+	const keys = [];
 	const grouped = {};
 	for (const elem of array) {
 		const key = keyFunc(elem);
 		if (key in grouped) {
 			grouped[key].push(elem);
 		} else {
+			keys.push(key);
 			grouped[key] = [elem];
 		}
 	}
 
 	for (const k of expectedKeys) {
 		if (!(k in grouped)) {
+			keys.push(k);
 			grouped[k] = [];
 		}
 	}
 
 	if (asArray) {
-		return Object.entries(grouped);
+		return keys.map(k => [k, grouped[k]]);
 	}
 	return grouped;
 }
@@ -836,17 +839,19 @@ function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 			? getBarnPerspective({ v, t, slices })
 			: getPolePerspective({ v, t, slices });
 
-	const groups = groupBy(data, getKeyFromDatum, [
-		"line.c",
-		"path.c",
-		"circle.c",
-		"use.eventMarker",
-	]);
+	if (svg.selectAll(".c").size() === 0) {
+		applyGraphicalObjs(svg, data);
+	} else {
+		const groups = groupBy(data, getKeyFromDatum, [
+			"line.c",
+			"path.c",
+			"circle.c",
+			"use.eventMarker",
+		]);
 
-	for (const [selector, items] of groups) {
-		applyGraphicalObjs(svg, items, {
-			selector,
-		});
+		for (const [selector, items] of groups) {
+			applyGraphicalObjs(svg, items, { selector });
+		}
 	}
 
 	buttons.perspective.barn.disabled = perspective === BARN;

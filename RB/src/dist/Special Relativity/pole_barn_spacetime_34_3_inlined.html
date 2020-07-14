@@ -869,20 +869,12 @@ perspective: BARN,
 });
 const axisLabelSubscript = makeSubscript("𝖡");
 return [
+...getAxes(),
 {
 shape: "path",
 attrs: {
 d: line(barnRect),
 fill: colors.barnFill,
-"stroke-opacity": 0,
-"clip-path": "url(#axes-clip)",
-},
-},
-{
-shape: "path",
-attrs: {
-d: line(poleParallelogram),
-fill: colors.poleFill,
 "stroke-opacity": 0,
 "clip-path": "url(#axes-clip)",
 },
@@ -896,6 +888,15 @@ y1: scaledY,
 y2: scaledY,
 stroke: colors.barn,
 "stroke-width": widths.stationary,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "path",
+attrs: {
+d: line(poleParallelogram),
+fill: colors.poleFill,
+"stroke-opacity": 0,
 "clip-path": "url(#axes-clip)",
 },
 },
@@ -935,7 +936,6 @@ fill: "white",
 },
 children: [axisLabelSubscript],
 },
-...getAxes(),
 ...slices,
 ...eventPoints,
 ].map(obj => ({ class: "c", ...obj }));
@@ -962,6 +962,7 @@ perspective: POLE,
 });
 const axisLabelSubscript = makeSubscript("𝖯");
 return [
+...getAxes(),
 {
 shape: "path",
 attrs: {
@@ -1028,7 +1029,6 @@ fill: "white",
 },
 children: [axisLabelSubscript],
 },
-...getAxes(),
 ...slices,
 ...eventPoints,
 ].map(obj => ({ class: "c", ...obj }));
@@ -1036,22 +1036,25 @@ children: [axisLabelSubscript],
 let currentPerspective = BARN;
 let currentSlices = BARN;
 function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const keys = [];
 const grouped = {};
 for (const elem of array) {
 const key = keyFunc(elem);
 if (key in grouped) {
 grouped[key].push(elem);
 } else {
+keys.push(key);
 grouped[key] = [elem];
 }
 }
 for (const k of expectedKeys) {
 if (!(k in grouped)) {
+keys.push(k);
 grouped[k] = [];
 }
 }
 if (asArray) {
-return Object.entries(grouped);
+return keys.map(k => [k, grouped[k]]);
 }
 return grouped;
 }
@@ -1135,6 +1138,9 @@ const data =
 perspective === BARN
 ? getBarnPerspective({ v, t, slices })
 : getPolePerspective({ v, t, slices });
+if (svg.selectAll(".c").size() === 0) {
+applyGraphicalObjs(svg, data);
+} else {
 const groups = groupBy(data, getKeyFromDatum, [
 "line.c",
 "path.c",
@@ -1142,9 +1148,8 @@ const groups = groupBy(data, getKeyFromDatum, [
 "use.eventMarker",
 ]);
 for (const [selector, items] of groups) {
-applyGraphicalObjs(svg, items, {
-selector,
-});
+applyGraphicalObjs(svg, items, { selector });
+}
 }
 buttons.perspective.barn.disabled = perspective === BARN;
 buttons.perspective.pole.disabled = perspective === POLE;
