@@ -309,6 +309,7 @@ function getOutboundPerspective({ v, t }) {
 			y1: yScale(line(minX)),
 			x2: xScale(maxX),
 			y2: yScale(line(maxX)),
+			"stroke-width": 1,
 			"stroke-dasharray": dashes,
 		};
 	});
@@ -522,6 +523,7 @@ function getInboundPerspective({ v, t }) {
 			y1: yScale(line(minX)),
 			x2: xScale(maxX),
 			y2: yScale(line(maxX)),
+			"stroke-width": 1,
 			"stroke-dasharray": dashes,
 		};
 	});
