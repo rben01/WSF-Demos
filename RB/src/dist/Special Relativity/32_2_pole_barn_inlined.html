@@ -594,90 +594,16 @@ stroke: "white",
 },
 ];
 }
-function _getBarnDoorsData(
-canvasInfo,
-{ fracOfC, progress = 0, barnData, poleData } = {},
-) {
-const barnDatum = barnData
-? barnData[0]
-: _getBarnData(canvasInfo, { fracOfC, progress })[0];
-const poleDatum = poleData
-? poleData[0]
-: _getPoleData(canvasInfo, { fracOfC, progress })[0];
-const { x, y, width, height } = barnDatum.attrs;
-const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
-const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
-const doorMaxCanvasY = doorMinCanvasY + doorCanvasHeight;
-const doorCommonAttrs = {
-class: "barn-door",
-barn: barnDatum,
-shape: "line",
-closed: {
-y1: doorMinCanvasY,
-y2: doorMaxCanvasY,
-},
-open: {
-y1: doorMaxCanvasY,
-y2: doorMaxCanvasY + doorCanvasHeight,
-},
-};
-const doorCommonAttrAttrs = {
-stroke: "white",
-"stroke-width": 4,
-};
-const leftDoorX = x - BARN_DOOR_OFFSET;
-const rightDoorX = x + width + BARN_DOOR_OFFSET;
-const leftDoorIsClosed =
-poleDatum.attrs.x2 < leftDoorX || poleDatum.attrs.x1 > leftDoorX;
-const rightDoorIsClosed =
-poleDatum.attrs.x1 > rightDoorX || poleDatum.attrs.x2 < rightDoorX;
-// https://stackoverflow.com/a/39333479
-const getYs = ({ y1, y2 }) => ({ y1, y2 });
-const leftDoorY = leftDoorIsClosed
-? getYs(doorCommonAttrs.closed)
-: getYs(doorCommonAttrs.open);
-const rightDoorY = rightDoorIsClosed
-? getYs(doorCommonAttrs.closed)
-: getYs(doorCommonAttrs.open);
-return [
-{
-...doorCommonAttrs,
-baseX: leftDoorX,
-side: "left",
-isOpen: !leftDoorIsClosed,
-attrs: {
-x1: leftDoorX,
-x2: leftDoorX,
-...leftDoorY,
-...doorCommonAttrAttrs,
-},
-},
-{
-...doorCommonAttrs,
-baseX: rightDoorX,
-side: "right",
-isOpen: !rightDoorIsClosed,
-attrs: {
-x1: rightDoorX,
-x2: rightDoorX,
-...rightDoorY,
-...doorCommonAttrAttrs,
-},
-},
-];
-}
 function _getBarnAndPoleData(canvasInfo, { progress = 0 } = {}) {
 const fracOfC = getSpeed();
 const barnData = _getBarnData(canvasInfo, { fracOfC, progress });
-const barnDoorsData = _getBarnDoorsData(canvasInfo, { fracOfC, progress });
 const poleData = _getPoleData(canvasInfo, { fracOfC, progress });
 return {
 objects: {
 barnData: barnData,
-barnDoorsData: barnDoorsData,
 poleData,
 },
-data: [...barnData, ...barnDoorsData, ...poleData],
+data: [...barnData, ...poleData],
 };
 }
 function addBarnsAndPoles(subcanvases) {
@@ -782,10 +708,6 @@ progress,
 }),
 [movingObjKey]: getMovingObjDataFunc(d, { fracOfC: speed, progress }),
 };
-dataMap[".barn-door"] = _getBarnDoorsData(d, {
-barnData: dataMap[BARN],
-poleData: dataMap[POLE],
-});
 document.getElementById(textFieldID).textContent = apparentWidthStr.toFixed(
 2,
 );
@@ -810,33 +732,6 @@ throw e;
 }
 function getDurationMS(speed) {
 return TIME_FOR_LIGHT_TO_TRAVERSE_MS / speed;
-}
-function makeFlash(subcanvas, { timeout, x, subcanvasInfo }) {
-return setTimeout(() => {
-const flash = subcanvas
-.append("circle")
-.attr("cx", x)
-.attr("cy", transAxisToCanvas(subcanvasInfo, { y: AX_MID_Y }).y)
-.attr("r", 3)
-.attr("fill", STANDARD_COLORS.secondary)
-.attr("opacity", 1);
-const durationMS = 800;
-flash
-.transition("radius")
-.duration(durationMS)
-.ease(d3.easeLinear)
-.attr("r", 20);
-const opaqueProptn = 0.3;
-const e = d3.easePolyIn.exponent(1.8);
-const opacityEase = t =>
-t < opaqueProptn ? 0 : e((t - opaqueProptn) / (1 - opaqueProptn));
-flash
-.transition("opacity")
-.duration(durationMS)
-.ease(opacityEase)
-.attr("opacity", 0)
-.remove();
-}, timeout);
 }
 // eslint-disable-next-line no-unused-vars
 function beginAnimation(playbackInfo) {
@@ -876,7 +771,6 @@ const getNetDistTraveledMap = {
 [BARN]: ({ datum, minCanvasXf }) => minCanvasXf - datum.attrs.x,
 [POLE]: ({ datum, minCanvasXf }) => datum.attrs.x1 - minCanvasXf,
 };
-const lf = lorentzFactor({ fracOfC: speed });
 subcanvases
 .filter(d => d.observerIsStandingOn === stationaryObject)
 .each(function (d) {
@@ -898,7 +792,6 @@ datum: movingObjDatum,
 minCanvasXf,
 });
 let poleFinalPos, poleDatum, getBarnDoorXf;
-const barnDatum = subcanvas.selectAll(BARN).datum();
 if (onBarn) {
 const poleX1f = minCanvasXf;
 const poleX2f = minCanvasXf + movingObjCanvasWidth;
@@ -915,27 +808,6 @@ movingObj
 poleFinalPos = { x1: poleX1f, x2: poleX2f };
 poleDatum = movingObjDatum;
 getBarnDoorXf = baseX => baseX;
-const flash1x = barnDatum.attrs.x + barnDatum.attrs.width;
-const flash1tMS =
-(netDurationMS * Math.abs(flash1x - movingObjDatum.attrs.x2)) /
-netDistTraveled;
-const flash2TailX = flash1x - speed * speed * lf * movingObjCanvasWidth;
-const flash2x = flash2TailX - movingObjCanvasWidth;
-const flash2tMS =
-(netDurationMS * Math.abs(flash2TailX - movingObjDatum.attrs.x2)) /
-netDistTraveled;
-playbackInfo.flashTimers.push(
-makeFlash(subcanvas, {
-timeout: flash1tMS,
-x: flash1x,
-subcanvasInfo: d,
-}),
-makeFlash(subcanvas, {
-timeout: flash2tMS,
-x: flash2x,
-subcanvasInfo: d,
-}),
-);
 } else {
 movingObj
 .transition()
@@ -948,27 +820,6 @@ movingObj
 poleDatum = d3.select(subcanvas.selectAll(POLE).node()).datum();
 poleFinalPos = { x1: poleDatum.attrs.x1, x2: poleDatum.attrs.x2 };
 getBarnDoorXf = baseX => baseX + netDistTraveled;
-const flash1x = poleDatum.attrs.x2;
-const flash_tMS =
-(netDurationMS *
-Math.abs(
-flash1x -
-(movingObjDatum.attrs.x + movingObjDatum.attrs.width),
-)) /
-netDistTraveled;
-const flash2x = flash1x - Math.abs(poleFinalPos.x1 - poleFinalPos.x2);
-playbackInfo.flashTimers.push(
-makeFlash(subcanvas, {
-timeout: flash_tMS,
-x: flash1x,
-subcanvasInfo: d,
-}),
-makeFlash(subcanvas, {
-timeout: flash_tMS,
-x: flash2x,
-subcanvasInfo: d,
-}),
-);
 }
 subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
 const barnDoor = d3.select(this);

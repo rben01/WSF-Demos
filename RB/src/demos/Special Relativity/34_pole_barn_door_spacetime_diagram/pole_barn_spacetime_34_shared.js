@@ -23,10 +23,10 @@ const colors = (() => {
 		barnFill: makeTransparent(barn),
 		pole,
 		poleFill: makeTransparent(pole),
-		backDoorOpens: "#2f2",
-		backDoorCloses: "#f90",
-		frontDoorOpens: "#e4f",
-		frontDoorCloses: "#ff0",
+		backDoorOpens: "#6f2", //"#2f2",
+		backDoorCloses: "#6f2",
+		frontDoorOpens: "#f5f",
+		frontDoorCloses: "#f5f", // "#ff0",
 	};
 })();
 
@@ -61,11 +61,11 @@ const symbols = (() => {
 				.call(constructor),
 		};
 	};
-	makeSymbol("frontDoorCloses", selection => {
+	makeSymbol("backDoorCloses", selection => {
 		const strokeWidth = 3;
-		const xmin = 3;
+		const xmin = 2;
 		const xmax = symbolWidth - xmin;
-		const ymin = 3;
+		const ymin = 2;
 		const ymax = symbolHeight - ymin;
 		selection
 			.append("line")
@@ -82,7 +82,7 @@ const symbols = (() => {
 			.attr("y2", ymin)
 			.attr("stroke-width", strokeWidth);
 	});
-	makeSymbol("backDoorCloses", selection => {
+	makeSymbol("frontDoorCloses", selection => {
 		const strokeWidth = 4;
 		const xmin = 1;
 		const xmax = symbolWidth - xmin;
@@ -178,21 +178,25 @@ const legend = (() => {
 	const events = [
 		{
 			text: "Back door closes",
+			key: symbols.backDoorCloses.id,
 			symbol: symbols.backDoorCloses,
 			color: colors.backDoorCloses,
 		},
 		{
 			text: "Back door opens",
+			key: symbols.backDoorOpens.id,
 			symbol: symbols.backDoorOpens,
 			color: colors.backDoorOpens,
 		},
 		{
 			text: "Front door closes",
+			key: symbols.frontDoorCloses.id,
 			symbol: symbols.frontDoorCloses,
 			color: colors.frontDoorCloses,
 		},
 		{
 			text: "Front door opens",
+			key: symbols.frontDoorOpens.id,
 			symbol: symbols.frontDoorOpens,
 			color: colors.frontDoorOpens,
 		},
@@ -204,6 +208,7 @@ const legend = (() => {
 		const transform = `translate(${_x - symbolWidth / 2},${_y - symbolHeight / 2})`;
 		return {
 			shape: "use",
+			key: event.key,
 			attrs: {
 				"xlink:href": `#${event.symbol.id}`,
 				_x,
@@ -452,6 +457,7 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 	return [
 		{
 			"xlink:href": `#${symbols.frontDoorOpens.id}`,
+			key: symbols.frontDoorOpens.id,
 			_x: frontDoorOpensX,
 			_y: frontDoorOpensT,
 			transform: `translate(${xScale(frontDoorOpensX) - symbolWidth / 2},${
@@ -462,6 +468,7 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 		},
 		{
 			"xlink:href": `#${symbols.frontDoorCloses.id}`,
+			key: symbols.frontDoorCloses.id,
 			_x: frontDoorClosesX,
 			_y: frontDoorClosesT,
 			transform: `translate(${xScale(frontDoorClosesX) - symbolWidth / 2},${
@@ -472,6 +479,7 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 		},
 		{
 			"xlink:href": `#${symbols.backDoorOpens.id}`,
+			key: symbols.backDoorOpens.id,
 			_x: backDoorOpensX,
 			_y: backDoorOpensT,
 			transform: `translate(${xScale(backDoorOpensX) - symbolWidth / 2},${
@@ -482,6 +490,7 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 		},
 		{
 			"xlink:href": `#${symbols.backDoorCloses.id}`,
+			key: symbols.backDoorCloses.id,
 			_x: backDoorClosesX,
 			_y: backDoorClosesT,
 			transform: `translate(${xScale(backDoorClosesX) - symbolWidth / 2},${
@@ -495,7 +504,7 @@ function getEventPoints({ v, y, barnRelLength, poleRelLength, perspective }) {
 		const scale = radius(Math.abs(scaledSymbolYCenter - scaledY));
 		legend
 			.selectAll(".k.sym")
-			.filter(d => d.attrs.stroke === attrs.stroke)
+			.filter(d => d.key === attrs.key)
 			.attr(
 				"transform",
 				d =>
