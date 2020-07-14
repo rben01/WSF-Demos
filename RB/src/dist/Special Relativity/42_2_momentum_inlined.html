@@ -145,7 +145,7 @@ text-align: center;
 <div>
 <span>
 <label>
-<span class="slider-label">Speed of particle:</span>
+<span class="slider-label">Speed of particle (𝑣):</span>
 <input id="input-particle-speed" max="0.99" min="0.0" name="input-particle-speed" oninput="updateParticleSpeed(this.value)" step=".001" style="width: 350px !important;" type="range" value="0"/>
 </label>
 </span>
@@ -669,7 +669,7 @@ if (!fromUserInput) {
 speedInputSlider.value = speedStr;
 }
 const speed = getSpeed(speedStr);
-speedTextSpan.textContent = speed.toFixed(2);
+speedTextSpan.textContent = speed.toFixed(3);
 const relMomentum = getRelativisticMomentum({ fracOfC: speed });
 relMomentumTextSpan.textContent = relMomentum.toFixed(2);
 graphObjs.gridLines

@@ -2,7 +2,7 @@
 
 "use strict";
 
-const CANVAS_WIDTH = 550;
+const CANVAS_WIDTH = 580;
 const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {

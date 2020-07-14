@@ -324,7 +324,7 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		}
 
 		const speed = getSpeed(speedStr);
-		speedTextSpan.textContent = speed.toFixed(2);
+		speedTextSpan.textContent = speed.toFixed(3);
 
 		const relMomentum = getRelativisticMomentum({ fracOfC: speed });
 		relMomentumTextSpan.textContent = relMomentum.toFixed(2);

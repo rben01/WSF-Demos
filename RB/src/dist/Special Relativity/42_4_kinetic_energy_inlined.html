@@ -177,6 +177,9 @@ min-width: 7.6em;
 td {
 height: 1.6em;
 }
+.top-sliders-sect {
+padding-left: 50px;
+}
 </style>
 <div class="top-sliders-sect">
 <span>
@@ -202,7 +205,7 @@ Velocity (𝑣):
 <td class="eqn-left">𝑚<span class="subscript">0</span></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num" id="text-m">0.000</span>kg
+<span class="sci-num highlighted-text" id="text-m">0.000</span>kg
 </td>
 </tr>
 <tr>
@@ -440,7 +443,7 @@ return d3Obj;
 };
 /* globals applyDatum C groupBy applyGraphicalObjs lorentzFactor STANDARD_COLORS */
 "use strict";
-const CANVAS_WIDTH = 550;
+const CANVAS_WIDTH = 580;
 const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {
