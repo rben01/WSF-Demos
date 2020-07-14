@@ -155,7 +155,7 @@ vertical-align: middle;
 .coordinate-box {
 display: inline-flex;
 flex-direction: column;
-padding-left: 20px;
+padding-left: 15px;
 height: 400px;
 }
 .pythagorean {
@@ -200,16 +200,8 @@ Angle (𝜃):
 </span>
 </div>
 <br/>
-<div style="
-display: inline-block;
-vertical-align: bottom;
-text-align: center;
-width: 450px;
-">
+<div style="display: inline-block; vertical-align: bottom; text-align: center;">
 <svg id="viz-canvas" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
-<br/>
-<span style="display: inline; text-align: center;"><i>Angle Between Coordinate Systems:
-<span class="quaternary-text" id="text-angle">0</span><span class="operator">º</span></i></span>
 </div>
 <div class="coordinate-box">
 <div style="height: 100px;"></div>
@@ -222,7 +214,9 @@ width: 450px;
 <span class="highlighted-text" id="text-upright-x-sq"></span><span class="operator">+</span><span class="highlighted-text" id="text-upright-y-sq"></span> =
 <span class="distance highlighted-text"></span></span>
 </div>
-<div style="height: 50px; flex-grow: 1;"></div>
+<div style="height: 100px; flex-grow: 1;"></div>
+<span style="display: inline;">𝜃 = <span class="quaternary-text" id="text-angle">0</span><span class="operator">º</span></span>
+<div style="height: 100px; flex-grow: 1;"></div>
 <div class="text-div" style="vertical-align: bottom;">
 <span><span class="primed-coord">𝑥′</span> =
 <span class="secondary-text" id="text-transformed-x"></span></span>

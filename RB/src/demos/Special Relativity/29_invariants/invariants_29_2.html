@@ -25,7 +25,7 @@
 			.coordinate-box {
 				display: inline-flex;
 				flex-direction: column;
-				padding-left: 20px;
+				padding-left: 15px;
 				height: 400px;
 			}
 
@@ -89,28 +89,12 @@
 			</span>
 		</div>
 		<br />
-		<div
-			style="
-				display: inline-block;
-				vertical-align: bottom;
-				text-align: center;
-				width: 450px;
-			"
-		>
+		<div style="display: inline-block; vertical-align: bottom; text-align: center;">
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				id="viz-canvas"
 				style="margin: auto;"
 			></svg>
-			<br />
-
-			<span style="display: inline; text-align: center;"
-				><i
-					>Angle Between Coordinate Systems:
-					<span id="text-angle" class="quaternary-text">0</span
-					><span class="operator">º</span></i
-				></span
-			>
 		</div>
 		<div class="coordinate-box">
 			<div style="height: 100px;"></div>
@@ -131,8 +115,12 @@
 					<span class="distance highlighted-text"></span
 				></span>
 			</div>
-
-			<div style="height: 50px; flex-grow: 1;"></div>
+			<div style="height: 100px; flex-grow: 1;"></div>
+			<span style="display: inline;"
+				>𝜃 = <span id="text-angle" class="quaternary-text">0</span
+				><span class="operator">º</span></span
+			>
+			<div style="height: 100px; flex-grow: 1;"></div>
 			<div class="text-div" style="vertical-align: bottom;">
 				<span
 					><span class="primed-coord">𝑥′</span> =
