@@ -59,9 +59,9 @@ function getFlashesData({ v, t }) {
 				attrs: {
 					cx: xScale(x),
 					cy: yScale(0),
-					r: 3,
+					r: 4,
 					fill: "white",
-					stroke: "white",
+					stroke: "black",
 				},
 			})),
 		);
@@ -73,7 +73,7 @@ function getFlashesData({ v, t }) {
 		attrs: {
 			cx: xScale(v * t + sourceOriginX),
 			cy: yScale(0),
-			r: 9,
+			r: 10,
 			fill: STANDARD_COLORS.secondary,
 		},
 	});
@@ -81,9 +81,9 @@ function getFlashesData({ v, t }) {
 	return data;
 }
 
-const ANIMATION_DURATION_SEC = 10;
+const ANIMATION_DURATION_SEC = 7;
 const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
-const FPS = 23;
+const FPS = 29;
 const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
 
 const playbackInfo = {
