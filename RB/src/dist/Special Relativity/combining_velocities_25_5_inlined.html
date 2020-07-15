@@ -215,6 +215,13 @@ Relative Velocity Between Frames (𝑣):
 <input id="input-vr" max=".99" min="-.99" name="input-vr" oninput="update({vr:this.value})" step=".01" type="range" value="0"/>
 </label>
 </span>
+<br/>
+<br/>
+<span class="slider-label" style="font-size: smaller;">
+The moving frame of reference is moving along the positive 𝑥 axis of the
+stationary frame with a speed 𝑣 =
+<span class="highlighted-text sci-num" id="text-vr"></span>𝑐
+</span>
 </div>
 <div>
 <span class="plot-title">Velocity as Seen in Stationary Frame</span><button class="play-button reset-button" onclick="reset()">Reset</button><span class="plot-title">Velocity as Seen in Moving Frame</span>
@@ -233,11 +240,7 @@ Relative Velocity Between Frames (𝑣):
 <span class="secondary-text" id="text-vyp">0</span>,
 <span class="secondary-text" id="text-vzp">0</span>)</span>𝑐</span>
 </div>
-<div>
-<span><i>The moving frame of reference is moving along the positive
-𝑥 axis of the stationary frame with a speed 𝑣 =
-<span class="highlighted-text sci-num" id="text-vr"></span>𝑐</i></span>
-</div>
+<div></div>
 </div>
 </div>
 <script type="text/javascript">"use strict";

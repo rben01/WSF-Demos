@@ -4,7 +4,7 @@ const ANIMATION_DURATION_SEC = 5;
 const ANIMATION_DURATION_MS = ANIMATION_DURATION_SEC * 1000;
 const FPS = 37;
 const N_FRAMES = ANIMATION_DURATION_SEC * FPS;
-const N_DIGITS_DISPLAYED = 4;
+const N_DIGITS_DISPLAYED = 3;
 
 const speedInputSlider = document.getElementById("input-taxi-speed");
 const speedTextSpan = document.getElementById("taxi-speed-text");

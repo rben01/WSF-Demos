@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			.toggle-button {
+				width: 200px;
+			}
+
+			.h-centered {
+				margin: auto;
+				text-align: center;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div>
+			<span>
+				<label>
+					<span class="slider-label">Speed of muon:</span>
+					<input
+						type="range"
+						id="input-muon-speed"
+						name="input-muon-speed"
+						min="0.0"
+						max="0.99"
+						step=".0005"
+						value="0"
+						oninput="updateMuonSpeed(this.value)"
+					/>
+				</label>
+			</span>
+		</div>
+		<button
+			id="btn-toggle-show-newtonian"
+			onclick="hideNewtonianLine()"
+			class="play-button toggle-button"
+		>
+			Hide Newtonian Answer
+		</button>
+
+		<div>
+			<table>
+				<tr>
+					<td class="eqn-left">𝑣</td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="muon-speed-text" class="highlighted-text sci-num"
+							>0</span
+						>𝑐
+					</td>
+				</tr>
+				<tr>
+					<td class="eqn-left">𝛾</td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="lorentz-factor-text" class="highlighted-text">1</span>
+					</td>
+				</tr>
+			</table>
+			<br />
+			<div>
+				<span>
+					Disintegration Distance for Muon =
+					<span id="text-disintegration-dist" class="secondary-text sci-num"
+						>0</span
+					>m</span
+				>
+			</div>
+		</div>
+		<div>
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="canvas-muon-travel-distance"
+				class="viz-canvas"
+				style="margin: auto; display: block;"
+			></svg>
+		</div>
+
+		<div id="sect-newtonian-answer" class="h-centered" style="padding: 10px;">
+			<i
+				>Newtonian Answer =
+				<span id="text-newtonian-answer" class="sci-num" style="color: #bbb;"
+					>0</span
+				>m</i
+			>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script type="text/javascript" src="./13_4_muon_travel_distance.js"></script>
+		<script type="text/javascript">
+			updateMuonSpeed(0, { fromUserInput: false });
+		</script>
+	</body>
+</html>
