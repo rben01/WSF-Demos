@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<style>
+			body {
+				margin: auto;
+				max-width: 1000px;
+				padding-top: 50px;
+			}
+			#containers {
+				white-space: nowrap;
+				overflow: hidden;
+			}
+			svg.container {
+				display: inline-block;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="containers">
+			<svg id="container-1" class="container"></svg>
+			<svg id="container-2" class="container"></svg>
+			<svg id="container-3" class="container"></svg>
+		</div>
+		<svg id="energy-graph"></svg>
+		<script type="text/javascript" src="../utils.js"></script>
+		<script type="text/javascript" src="./dipeptide.js"></script>
+	</body>
+</html>
