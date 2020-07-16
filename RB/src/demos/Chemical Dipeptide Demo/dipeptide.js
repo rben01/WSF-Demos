@@ -198,63 +198,100 @@ function makeDipeptideChain(
 	return data;
 }
 
-const basicDipeptides = [
-	makeDipeptideChain(
-		{ x: beakerXScale(0.2), y: beakerYScale(0.3) },
-		[Math.PI / 4],
-		[COLORS.blue, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.4), y: beakerYScale(0.58) },
-		[Math.PI / 8],
-		[COLORS.purple, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.71), y: beakerYScale(0.2) },
-		[Math.PI / 2.3],
-		[COLORS.green, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.6), y: beakerYScale(0.4) },
-		[Math.PI / 0.9],
-		[COLORS.blue, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.42), y: beakerYScale(0.2) },
-		[Math.PI * (1 + 1 / 1.1)],
-		[COLORS.purple, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.8), y: beakerYScale(0.4) },
-		[Math.PI / 1.5],
-		[COLORS.blue, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.38), y: beakerYScale(0.43) },
-		[Math.PI / 1.1],
-		[COLORS.green, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.5), y: beakerYScale(0.1) },
-		[Math.PI * (1 + 1 / 1.1)],
-		[COLORS.green, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.6), y: beakerYScale(0.28) },
-		[Math.PI / 1.2],
-		[COLORS.purple, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.7), y: beakerYScale(0.52) },
-		[Math.PI / 1.4],
-		[COLORS.green, null],
-	),
-	makeDipeptideChain(
-		{ x: beakerXScale(0.3), y: beakerYScale(0.1) },
-		[0.4],
-		[COLORS.blue, null],
-	),
+const basicDipeptideChainInfo = [
+	{
+		x: beakerXScale(0.2),
+		y: beakerYScale(0.3),
+		angles: [Math.PI / 4],
+		colors: [COLORS.blue, null],
+		graphX: 0.515,
+		graphY: 0.62,
+	},
+	{
+		x: beakerXScale(0.4),
+		y: beakerYScale(0.58),
+		angles: [Math.PI / 8],
+		colors: [COLORS.purple, null],
+		graphX: 0.52,
+		graphY: 0.73,
+	},
+	{
+		x: beakerXScale(0.71),
+		y: beakerYScale(0.2),
+		angles: [Math.PI / 2.3],
+		colors: [COLORS.green, null],
+		graphX: 0.493,
+		graphY: 0.63,
+	},
+	{
+		x: beakerXScale(0.6),
+		y: beakerYScale(0.4),
+		angles: [Math.PI / 0.9],
+		colors: [COLORS.blue, null],
+		graphX: 0.52,
+		graphY: 0.87,
+	},
+	{
+		x: beakerXScale(0.42),
+		y: beakerYScale(0.2),
+		angles: [Math.PI * (1 + 1 / 1.1)],
+		colors: [COLORS.purple, null],
+		graphX: 0.48,
+		graphY: 0.8,
+	},
+	{
+		x: beakerXScale(0.8),
+		y: beakerYScale(0.4),
+		angles: [Math.PI / 1.5],
+		colors: [COLORS.blue, null],
+		graphX: 0.475,
+		graphY: 0.68,
+	},
+	{
+		x: beakerXScale(0.38),
+		y: beakerYScale(0.43),
+		angles: [Math.PI / 1.1],
+		colors: [COLORS.green, null],
+		graphX: 0.48,
+		graphY: 0.9,
+	},
+	{
+		x: beakerXScale(0.5),
+		y: beakerYScale(0.1),
+		angles: [Math.PI * (1 + 1 / 1.1)],
+		colors: [COLORS.green, null],
+		graphX: 0.54,
+		graphY: 0.83,
+	},
+	{
+		x: beakerXScale(0.6),
+		y: beakerYScale(0.28),
+		angles: [Math.PI / 1.2],
+		colors: [COLORS.purple, null],
+		graphX: 0.53,
+		graphY: 0.93,
+	},
+	{
+		x: beakerXScale(0.7),
+		y: beakerYScale(0.52),
+		angles: [Math.PI / 1.4],
+		colors: [COLORS.green, null],
+		graphX: 0.45,
+		graphY: 0.85,
+	},
+	{
+		x: beakerXScale(0.3),
+		y: beakerYScale(0.1),
+		angles: [0.4],
+		colors: [COLORS.blue, null],
+		graphX: 0.56,
+		graphY: 0.9,
+	},
 ];
+
+const basicDipeptides = basicDipeptideChainInfo.map(d =>
+	makeDipeptideChain({ x: d.x, y: d.y }, d.angles, d.colors),
+);
 
 // precondition: joinAngles.length === 2 * (indices.length - 1) (one index per joined chain, two joinAngles per adjacent pair of joined chains)
 function joinBasicDipeptides(newP0, indices, joinAngles, drawEncirclingLine = false) {
@@ -371,7 +408,7 @@ defineArrowhead(defs, { id: arrowheadID, length: 18, width: 14, color: "black" }
 
 const graphMiddlePortion = [
 	[0.4, 0.9],
-	[0.5, 0.6],
+	[0.5, 0.55],
 	[0.6, 0.9],
 ];
 function getEnergyCurvePoints(stage) {
@@ -408,7 +445,7 @@ function getEnergyCurvePoints(stage) {
 
 const DASHARRAY_INITIAL_GAP_TO_STAGE_1 = 362;
 const DASHARRAY_INITIAL_GAP_FROM_2 = 476;
-const DASHARRAY_MIDDLE_WIDTH = 210;
+const DASHARRAY_MIDDLE_WIDTH = 228;
 const DASHARRAY_STAGE_1_LENGTH = 900;
 const DASHARRAY_STAGE_2_LENGTH = 1000;
 function getEnergyCurveDasharray(stage) {
@@ -474,6 +511,24 @@ function initialize() {
 		},
 	]);
 	applyGraphicalObjs(graph, getGraphData(0));
+	const graphDipeptides = basicDipeptideChainInfo
+		.map(bd => {
+			console.log(bd);
+			const data = makeDipeptideChain(
+				{
+					x: graphXScale(bd.graphX),
+					y: graphYScale(bd.graphY),
+				},
+				bd.angles,
+				bd.colors,
+			);
+			for (const datum of data) {
+				datum.class = "graph-dipeptide";
+			}
+			return data;
+		})
+		.flat(Infinity);
+	applyGraphicalObjs(graph, graphDipeptides);
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -495,20 +550,21 @@ function update(stage) {
 	const baseTransition = d3.transition().duration(700);
 
 	if (stage === 0) {
+		const duration = 200;
 		beaker
 			.selectAll(`${pathSelector}.enzyme-exterior`)
 			.transition()
-			.duration(200)
+			.duration(duration)
 			.style("opacity", 0)
 			.end()
 			.then(() => {
 				beaker.selectAll(pathSelector).remove();
-				applyGraphicalObjs(beaker, circleData, {
-					selector: circleSelector,
-					key: d => d.id,
-					transition: d3.transition("x").duration(500),
-				});
 			});
+		applyGraphicalObjs(beaker, circleData, {
+			selector: circleSelector,
+			key: d => d.id,
+			transition: d3.transition("x").delay(duration).duration(500),
+		});
 	} else if (stage === 1) {
 		applyGraphicalObjs(beaker, circleData, {
 			selector: circleSelector,
@@ -528,6 +584,7 @@ function update(stage) {
 
 		applyGraphicalObjs(beaker, pathData, {
 			selector: pathSelector,
+			transition: baseTransition,
 		});
 
 		beaker.selectAll(`${pathSelector}.enzyme-exterior`).style("opacity", 0);
@@ -545,26 +602,6 @@ function update(stage) {
 		});
 		firstDipeptide.parentNode.insertBefore(fragment, firstDipeptide);
 	}
-
-	const dasharrayTween = function () {
-		let leftScale, middleScale;
-		if (stage === 0) {
-			leftScale = d3.scaleLinear([0, 1], [0, DASHARRAY_INITIAL_GAP_FROM_2]);
-			middleScale = d3.scaleLinear(
-				[0, 1],
-				[DASHARRAY_STAGE_2_LENGTH, DASHARRAY_MIDDLE_WIDTH],
-			);
-		} else if (stage === 1) {
-			leftScale = d3.scaleLinear([0, 1], [DASHARRAY_INITIAL_GAP_TO_STAGE_1, 0]);
-			middleScale = d3.scaleLinear(
-				[0, 1],
-				[DASHARRAY_MIDDLE_WIDTH, DASHARRAY_STAGE_1_LENGTH],
-			);
-		}
-		return t => {
-			return `0 ${leftScale(t)} ${middleScale(t)} 100000`;
-		};
-	};
 
 	const energyCurve = graph.selectAll(".energy-curve");
 	const graphTransition = d3.transition().duration(1000);
@@ -586,8 +623,51 @@ function update(stage) {
 			.attr("d", graphLine(getEnergyCurvePoints(stage)))
 			.transition(graphTransition)
 			.delay(delay)
-			.attrTween("stroke-dasharray", dasharrayTween);
+			.attrTween("stroke-dasharray", () => {
+				let leftScale, middleScale;
+				if (stage === 0) {
+					leftScale = d3.scaleLinear(
+						[0, 1],
+						[0, DASHARRAY_INITIAL_GAP_FROM_2],
+					);
+					middleScale = d3.scaleLinear(
+						[0, 1],
+						[DASHARRAY_STAGE_2_LENGTH, DASHARRAY_MIDDLE_WIDTH],
+					);
+				} else if (stage === 1) {
+					leftScale = d3.scaleLinear(
+						[0, 1],
+						[DASHARRAY_INITIAL_GAP_TO_STAGE_1, 0],
+					);
+					middleScale = d3.scaleLinear(
+						[0, 1],
+						[DASHARRAY_MIDDLE_WIDTH, DASHARRAY_STAGE_1_LENGTH],
+					);
+				}
+				return t => {
+					return `0 ${leftScale(t)} ${middleScale(t)} 100000`;
+				};
+			});
 	}
+
+	// const graphDipeptides = basicDipeptideChainInfo
+	// 	.map((bd, i) => {
+	// 		console.log(bd);
+	// 		const data = makeDipeptideChain(
+	// 			{
+	// 				x: graphXScale(initialGraphDipeptideLocations[i][0]),
+	// 				y: graphYScale(initialGraphDipeptideLocations[i][1]),
+	// 			},
+	// 			bd.angles,
+	// 			bd.colors,
+	// 		);
+	// 		for (const datum of data) {
+	// 			datum.class = "graph-dipeptide";
+	// 		}
+	// 		return data;
+	// 	})
+	// 	.flat(Infinity);
+	// applyGraphicalObjs(graph, graphDipeptides);
 }
 
 initialize();
