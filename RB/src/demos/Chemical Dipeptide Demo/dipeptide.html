@@ -8,23 +8,57 @@
 				margin: auto;
 				max-width: 1000px;
 				padding-top: 50px;
+				font-family: sans-serif;
 			}
 			#containers {
 				white-space: nowrap;
 				overflow: hidden;
+				text-align: center;
 			}
 			svg.container {
 				display: inline-block;
+				vertical-align: middle;
+			}
+			.play-button {
+				font-size: 15px;
+				width: 7.2em;
 			}
 		</style>
 	</head>
 	<body>
 		<div id="containers">
 			<svg id="container-1" class="container"></svg>
-			<svg id="container-2" class="container"></svg>
-			<svg id="container-3" class="container"></svg>
+			<div style="display: inline-block; vertical-align: middle;">
+				<table>
+					<tr>
+						<td>
+							<button class="play-button" onclick="update(1)">
+								Add Enzyme
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="play-button" onclick="update(2)">
+								Add Ligand
+							</button>
+						</td>
+					</tr>
+					<tr>
+						<td>
+							<button class="play-button" onclick="update(0)">
+								Reset
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<!-- <svg id="container-2" class="container"></svg>
+			<svg id="container-3" class="container"></svg> -->
 		</div>
-		<svg id="energy-graph"></svg>
+		<div style="text-align: center;">
+			<svg id="energy-graph"></svg>
+		</div>
 		<script type="text/javascript" src="../utils.js"></script>
 		<script type="text/javascript" src="./dipeptide.js"></script>
 	</body>
