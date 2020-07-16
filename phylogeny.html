@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<title>Phylogeny</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=720 height=480></svg>
+    <script type="text/javascript">
+        var svg = d3.select('svg');
+        var chordata = {};
+        var data = d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
+            data.forEach(function (d) {
+                if (!(d.Class in chordata)) {
+                    chordata[d.Class] = []
+                }
+                if (!(chordata[d.Class].includes(d.Order))) {
+                    chordata[d.Class].push(d.Order)
+                }
+            });
+        });
+        var orders = 146;
+        var theta = -Math.PI / 2;
+        var arcgen = d3.arc();
+        arcgen.innerRadius(100).outerRadius(102);
+        var o;
+        for (var c in chordata) {
+            o = chordata[c].length;
+            svg.append("path").attr("d", arcgen({
+                startAngle: theta,
+                endAngle: theta + Math.PI / orders,
+            }));
+            theta += Math.PI * o / 292;
+            svg.append("line").attr("x1", 360).attr("y1", 480).attr("x2", 360 + 100 * Math.sin(theta)).attr("y2", 480 - 100 * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
+            theta += Math.PI * o / 292;
+        }
+    </script>
+</body>
