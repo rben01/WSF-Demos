@@ -19,21 +19,33 @@
                     chordata[d.Class].push(d.Order)
                 }
             });
+            render();
         });
-        var orders = 146;
-        var theta = -Math.PI / 2;
-        var arcgen = d3.arc();
-        arcgen.innerRadius(100).outerRadius(102);
-        var o;
-        for (var c in chordata) {
-            o = chordata[c].length;
-            svg.append("path").attr("d", arcgen({
-                startAngle: theta + 0.01,
-                endAngle: theta + Math.PI * o / orders - 0.01,
-            })).attr("transform", "translate(360, 480)");
-            theta += Math.PI * o / 292;
-            svg.append("line").attr("x1", 360).attr("y1", 480).attr("x2", 360 + 100 * Math.sin(theta)).attr("y2", 480 - 100 * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
-            theta += Math.PI * o / 292;
+
+        function render() {
+            var orders = 146;
+            var linelen = 150;
+            var theta = -Math.PI / 2;
+            var arcgen = d3.arc();
+            arcgen.innerRadius(linelen).outerRadius(linelen + 2);
+            var o;
+            var dtheta;
+            for (var c in chordata) {
+                o = chordata[c].length - 1;
+                dtheta = Math.PI * o / orders - 0.02;
+                theta += Math.PI * o / 292;
+                svg.append("line").attr("x1", 360).attr("y1", 480).attr("x2", 360 + linelen * Math.sin(theta)).attr("y2", 480 - linelen * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
+                theta -= Math.PI * o / 292 - 0.01;
+                svg.append("path").attr("d", arcgen({
+                    startAngle: theta,
+                    endAngle: theta + dtheta,
+                })).attr("transform", "translate(360, 480)");
+                for (order in chordata[c]) {
+                    svg.append("line").attr("x1", 360 + linelen * Math.sin(theta)).attr("y1", 480 - linelen * Math.cos(theta)).attr("x2", 360 + 2 * linelen * Math.sin(theta)).attr("y2", 480 - 2 * linelen * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
+                    theta += dtheta / o;
+                }
+                theta += 0.01;
+            }
         }
     </script>
 </body>
