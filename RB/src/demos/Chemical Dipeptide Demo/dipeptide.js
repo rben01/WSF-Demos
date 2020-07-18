@@ -169,7 +169,7 @@ function makeDipeptideChain(
 		data.push(
 			{
 				shape: "path",
-				class: "enzyme-exterior",
+				class: "ligand-exterior",
 				attrs: {
 					d: beakerLine(centerPoints),
 					"stroke-width": r * 2 + 9,
@@ -181,7 +181,7 @@ function makeDipeptideChain(
 			},
 			{
 				shape: "path",
-				class: "enzyme-interior",
+				class: "ligand-interior",
 				attrs: {
 					d: beakerLine(centerPoints),
 					"stroke-width": r * 2 + 7,
@@ -633,16 +633,16 @@ function initialize() {
 }
 
 const dipeptideSelector = "circle.chemical-obj";
-const enzymeSelector = "path.chemical-obj";
+const ligandSelector = "path.chemical-obj";
 
-function fadeEnzymes(svg, fadeDuration) {
-	svg.selectAll(`${enzymeSelector}.enzyme-exterior`)
+function fadeligands(svg, fadeDuration) {
+	svg.selectAll(`${ligandSelector}.ligand-exterior`)
 		.transition()
 		.duration(fadeDuration)
 		.style("opacity", 0)
 		.end()
 		.then(() => {
-			svg.selectAll(enzymeSelector)
+			svg.selectAll(ligandSelector)
 				.transition()
 				.duration(100)
 				.attr("stroke-width", 0)
@@ -653,21 +653,21 @@ function fadeEnzymes(svg, fadeDuration) {
 function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
-		[enzymeSelector]: enzymeData,
+		[ligandSelector]: ligandData,
 	} = groupBy(
 		data,
 		d => `${d.shape}.chemical-obj`,
-		[dipeptideSelector, enzymeSelector],
+		[dipeptideSelector, ligandSelector],
 		false,
 	);
 
-	const enzymeExteriorAppearTransition = d3.transition().duration(700);
-	const enzymeFadeDuration = 200;
+	const ligandExteriorAppearTransition = d3.transition().duration(700);
+	const ligandFadeDuration = 200;
 
 	const dipeptideMovementDelay = stage === 0 ? 0 : 500;
 	const dipeptideMovementDuration = 1500;
 	const dipeptideResetDuration = 700;
-	const dipeptideResetDelay = enzymeFadeDuration;
+	const dipeptideResetDelay = ligandFadeDuration;
 	const dipeptideMovementTransition = d3
 		.transition()
 		.delay(dipeptideMovementDelay)
@@ -675,7 +675,7 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 
 	// Animate the dipeptides moving
 	if (stage === 0) {
-		fadeEnzymes(svg, enzymeFadeDuration);
+		fadeligands(svg, ligandFadeDuration);
 		applyGraphicalObjs(svg, dipeptideData, {
 			selector: dipeptideSelector,
 			key: d => d.id,
@@ -690,10 +690,10 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 			key: d => d.id,
 			transition: d3.transition(dipeptideMovementTransition),
 		});
-		// Only for testing; in the actual demo enzymes don't appear at this stage
-		applyGraphicalObjs(svg, enzymeData, {
-			selector: enzymeSelector,
-			transition: d3.transition(enzymeExteriorAppearTransition),
+		// Only for testing; in the actual demo ligands don't appear at this stage
+		applyGraphicalObjs(svg, ligandData, {
+			selector: ligandSelector,
+			transition: d3.transition(ligandExteriorAppearTransition),
 		});
 	} else if (stage === 2) {
 		applyGraphicalObjs(svg, dipeptideData, {
@@ -702,23 +702,23 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 			transition: d3.transition(dipeptideMovementTransition),
 		});
 
-		applyGraphicalObjs(svg, enzymeData, {
-			selector: enzymeSelector,
+		applyGraphicalObjs(svg, ligandData, {
+			selector: ligandSelector,
 			transition: d3
-				.transition(enzymeExteriorAppearTransition)
+				.transition(ligandExteriorAppearTransition)
 				.delay(dipeptideMovementDelay + dipeptideMovementDuration * 0.6),
 		});
 
-		svg.selectAll(`${enzymeSelector}.enzyme-exterior`).style("opacity", 0);
-		svg.selectAll(`${enzymeSelector}.enzyme-interior`).style("opacity", 1);
-		svg.selectAll(`${enzymeSelector}.enzyme-exterior`)
-			.transition(enzymeExteriorAppearTransition)
-			.transition(enzymeExteriorAppearTransition)
+		svg.selectAll(`${ligandSelector}.ligand-exterior`).style("opacity", 0);
+		svg.selectAll(`${ligandSelector}.ligand-interior`).style("opacity", 1);
+		svg.selectAll(`${ligandSelector}.ligand-exterior`)
+			.transition(ligandExteriorAppearTransition)
+			.transition(ligandExteriorAppearTransition)
 			.style("opacity", 1);
 
 		const firstDipeptide = svg.selectAll(dipeptideSelector).node();
 		const fragment = document.createDocumentFragment();
-		svg.selectAll(enzymeSelector).each(function () {
+		svg.selectAll(ligandSelector).each(function () {
 			fragment.appendChild(this);
 		});
 		firstDipeptide.parentNode.insertBefore(fragment, firstDipeptide);
