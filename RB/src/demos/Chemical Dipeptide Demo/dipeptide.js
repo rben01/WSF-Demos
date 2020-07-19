@@ -23,6 +23,10 @@ const beaker = d3
 	.selectAll(".container")
 	.attr("width", CONFIG.containerSVGWidth)
 	.attr("height", CONFIG.containerSVGHeight);
+const graph = d3
+	.select("#energy-graph")
+	.attr("width", CONFIG.graphSVGWidth)
+	.attr("height", CONFIG.graphSVGHeight);
 
 (() => {
 	const { symbolSize: size, symbolPad: pad } = CONFIG;
@@ -511,10 +515,6 @@ function getLengthAtX(pathNode, x) {
 	return (leftLength + rightLength) / 2;
 }
 
-const graph = d3
-	.select("#energy-graph")
-	.attr("width", CONFIG.graphSVGWidth)
-	.attr("height", CONFIG.graphSVGHeight);
 const graphXScale = d3.scaleLinear([-0.1, 1], [0, CONFIG.graphSVGWidth]);
 const graphYScale = d3.scaleLinear([-0.1, 1.1], [CONFIG.graphSVGHeight, 0]);
 const graphLine = d3
@@ -572,9 +572,9 @@ function getEnergyCurvePoints(stage) {
 	return points;
 }
 
-const DASHARRAY_INITIAL_GAP_FROM_2 = 552.0046;
+const DASHARRAY_INITIAL_GAP_FROM_2 = 551;
 const DASHARRAY_MIDDLE_WIDTH = 233.764;
-const DASHARRAY_LENGTH_DIFF = 159;
+const DASHARRAY_LENGTH_DIFF = 159.5;
 function getEnergyCurveDasharray(stage) {
 	if (stage === 0) {
 		return `0 ${DASHARRAY_INITIAL_GAP_FROM_2} ${DASHARRAY_MIDDLE_WIDTH} 100000`;
@@ -676,7 +676,17 @@ function precomputeAndCachePathPoints(pathNode, nPoints) {
 	pathNode.__cachedPoints = points;
 }
 
+const buttons = {
+	addEnzyme: document.getElementById("btn-add-enzyme"),
+	addLigand: document.getElementById("btn-add-ligand"),
+	reset: document.getElementById("btn-reset"),
+};
 function initialize() {
+	// Disable buttons
+	buttons.addEnzyme.disabled = false;
+	buttons.addLigand.disabled = true;
+	buttons.reset.disabled = true;
+
 	const { background, foreground } = getBeakerOutlineData();
 
 	applyGraphicalObjs(beaker, background);
@@ -759,7 +769,8 @@ function dropSubstanceIntoBeaker(stage) {
 		])
 		.join(enter => enter.insert("use", ".beaker-lid-front"))
 		.attr("xlink:href", symbol)
-		.attr("transform", d => `translate(${beakerXScale(d.x)} -50)`);
+		.attr("transform", d => `translate(${beakerXScale(d.x)} -50)`)
+		.attr("fill-opacity", 1);
 
 	symbols
 		.transition()
@@ -775,15 +786,15 @@ function dropSubstanceIntoBeaker(stage) {
 		)
 		.transition()
 		.ease(d3.easeCubicOut)
-		.duration(1500)
+		.duration(1200)
 		.attr(
 			"transform",
 			d =>
 				`translate(${beakerXScale(d.x)} ${beakerYScale(
-					CONFIG.fluidHeight - 0.2,
+					CONFIG.fluidHeight - 0.1,
 				)})`,
 		)
-		.style("opacity", 0)
+		.attr("fill-opacity", 0)
 		.remove();
 }
 
@@ -903,12 +914,6 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 
 	return totalTransitionDuration - 100;
 }
-
-const buttons = {
-	addEnzyme: document.getElementById("btn-add-enzyme"),
-	addLigand: document.getElementById("btn-add-ligand"),
-	reset: document.getElementById("btn-reset"),
-};
 
 // eslint-disable-next-line no-unused-vars
 function update(stage) {
