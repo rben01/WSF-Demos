@@ -7,6 +7,9 @@ const CONFIG = {
 	graphSVGHeight: 300,
 	dipeptideRadius: 7,
 	fluidColor: "#e6f7ff",
+	fluidHeight: 0.6,
+	symbolSize: 50,
+	symbolPad: 4,
 };
 
 const COLORS = {
@@ -21,6 +24,58 @@ const beaker = d3
 	.attr("width", CONFIG.containerSVGWidth)
 	.attr("height", CONFIG.containerSVGHeight);
 
+(() => {
+	const { symbolSize: size, symbolPad: pad } = CONFIG;
+	const symbolViewbox = `${-size / 2} ${-size / 2} ${size} ${size}`;
+
+	const crescentScale = d3.scaleLinear([0, 1], [pad, size - pad]);
+	const crescentOuterRadius = (size - 2 * pad) * 0.4;
+	const crescentInnerRadius = (size - 2 * pad) * 0.28;
+	beaker
+		.append("symbol")
+		.attr("viewbox", symbolViewbox)
+		.attr("id", "symbol-enzyme")
+		.append("path")
+		.attr(
+			"d",
+			`
+			M ${crescentScale(0.75)} ${crescentScale(0.25)}
+			A ${crescentOuterRadius} ${crescentOuterRadius} 0 1 0 ${crescentScale(
+				0.75,
+			)} ${crescentScale(0.75)}
+			A ${crescentInnerRadius} ${crescentInnerRadius} 0 1 1 ${crescentScale(
+				0.75,
+			)} ${crescentScale(0.25)}
+			`,
+		)
+		.attr("fill", "blue")
+		.attr("stroke-opacity", 0);
+
+	const starXScale = d3.scaleLinear([-1, 1], [pad, size - pad]);
+	const starYScale = d3.scaleLinear([-1, 1], [size - pad, pad]);
+	const starOuterRadius = 0.9;
+	const starInnerRadius = 0.5;
+	const starPoints = d3.range(10).map(i => {
+		const r = i % 2 === 0 ? starOuterRadius : starInnerRadius;
+		const angle = (2 * Math.PI * i) / 10;
+		// Looks backwards, but it's correct; we want the star to start at (0,1) and be traced out clockwise
+		return [starXScale(r * Math.sin(angle)), starYScale(r * Math.cos(angle))];
+	});
+	beaker
+		.append("symbol")
+		.attr("viewbox", symbolViewbox)
+		.attr("id", "symbol-ligand")
+		.append("path")
+		.attr(
+			"d",
+			`M ${starXScale(0)} ${starYScale(starOuterRadius)}
+			${starPoints.map(([x, y]) => `L ${x} ${y}`).join(" ")}
+				Z`,
+		)
+		.attr("fill", "#fc3")
+		.attr("stroke-opacity", 0);
+})();
+
 const beakerXScale = d3.scaleLinear([0, 1], [0, CONFIG.containerSVGWidth]);
 const beakerYScale = d3.scaleLinear([0, 1], [CONFIG.containerSVGHeight, 0]);
 const beakerLine = d3
@@ -34,11 +89,11 @@ function getBeakerOutlineData() {
 	const leftX = beakerXScale(0.1);
 	const rightX = beakerXScale(0.9);
 	const topLeftY = beakerYScale(0.9);
-	const midLeftY = beakerYScale(0.6);
+	const midLeftY = beakerYScale(CONFIG.fluidHeight);
 	const botLeftY = beakerYScale(0.1);
 	const beakerColor = "#047";
 	const fluidColor = CONFIG.fluidColor;
-	const strokeWidth = 2;
+	const strokeWidth = 1;
 
 	function getEllipsePath(leftY, topHalf) {
 		const orientation = topHalf ? 1 : 0;
@@ -50,21 +105,34 @@ function getBeakerOutlineData() {
 
 	const beakerOutline = {
 		shape: "path",
-		class: "beaker-top",
+		class: "beaker-top-back",
 		attrs: {
 			d: `
 			M ${leftX} ${botLeftY}
 			V ${topLeftY}
 			M ${rightX} ${botLeftY}
 			V ${topLeftY}
-			${getEllipsePath(topLeftY, false)}
 			${getEllipsePath(topLeftY, true)}
 			${getEllipsePath(midLeftY, false)}
 			${getEllipsePath(midLeftY, true)}
 			${getEllipsePath(botLeftY, false)}
 			`,
 			stroke: beakerColor,
-			"stoke-width": strokeWidth,
+			"stroke-width": strokeWidth,
+			"fill-opacity": 0,
+		},
+	};
+
+	const beakerLidFront = {
+		shape: "path",
+		class: "beaker-lid-front",
+		attrs: {
+			d: `
+			M ${rightX} ${topLeftY}
+			${getEllipsePath(topLeftY, false)}
+			`,
+			stroke: beakerColor,
+			"stroke-width": strokeWidth,
 			"fill-opacity": 0,
 		},
 	};
@@ -78,7 +146,7 @@ function getBeakerOutlineData() {
 			${getEllipsePath(botLeftY, true)}
 			`,
 			stroke: d3.interpolate(beakerColor, fluidColor)(0.8),
-			"stoke-width": strokeWidth,
+			"stroke-width": strokeWidth,
 			"fill-opacity": 0,
 		},
 	};
@@ -96,14 +164,14 @@ function getBeakerOutlineData() {
 			Z
 			`,
 			"stroke-opacity": 0,
-			"stoke-width": strokeWidth,
+			"stroke-width": strokeWidth,
 			fill: fluidColor,
 		},
 	};
 
 	return {
 		background: [beakerFluid, beakerBackOutline],
-		foreground: [beakerOutline],
+		foreground: [beakerOutline, beakerLidFront],
 	};
 }
 
@@ -506,6 +574,7 @@ function getEnergyCurvePoints(stage) {
 
 const DASHARRAY_INITIAL_GAP_FROM_2 = 552.0046;
 const DASHARRAY_MIDDLE_WIDTH = 233.764;
+const DASHARRAY_LENGTH_DIFF = 159;
 function getEnergyCurveDasharray(stage) {
 	if (stage === 0) {
 		return `0 ${DASHARRAY_INITIAL_GAP_FROM_2} ${DASHARRAY_MIDDLE_WIDTH} 100000`;
@@ -587,6 +656,24 @@ function getGraphData(stage) {
 	}
 }
 
+const N_PRECOMPUTED_PATH_POINTS = 1000;
+// https://stackoverflow.com/a/52291755
+function precomputeAndCachePathPoints(pathNode, nPoints) {
+	const points = {};
+	for (const stage of [0, 2]) {
+		pathNode.setAttribute("d", graphLine(getEnergyCurvePoints(stage)));
+		const step = pathNode.getTotalLength() / nPoints;
+		points[stage] = [];
+		for (let i = 0; i < nPoints; ++i) {
+			const length = step * i;
+			const { x, y } = pathNode.getPointAtLength(length);
+			points[stage].push([x, y]);
+		}
+	}
+	points[1] = points[0];
+	pathNode.__cachedPoints = points;
+}
+
 function initialize() {
 	const { background, foreground } = getBeakerOutlineData();
 
@@ -626,7 +713,8 @@ function initialize() {
 		},
 	]);
 	// Initial energy curve
-	applyGraphicalObjs(graph, getEnergyCurveData(0));
+	const energyCurve = applyGraphicalObjs(graph, getEnergyCurveData(0));
+	precomputeAndCachePathPoints(energyCurve.node(), N_PRECOMPUTED_PATH_POINTS);
 
 	// Initial dipeptides on the graph
 	applyGraphicalObjs(graph, graphDipeptides.flat(Infinity));
@@ -650,6 +738,54 @@ function fadeligands(svg, fadeDuration) {
 		});
 }
 
+const substanceDropDuration = 800;
+function dropSubstanceIntoBeaker(stage) {
+	if (stage === 0) {
+		return;
+	}
+	if (!(stage === 1 || stage === 2)) {
+		throw new Error(`Invalid stage ${stage}`);
+	}
+	const symbol = stage === 1 ? "#symbol-enzyme" : "#symbol-ligand";
+	const symbols = beaker
+		.selectAll("use")
+		.data([
+			{ x: 0.2, delay: stage === 1 ? 200 : 500 },
+			{ x: 0.4, delay: 0 },
+			{ x: 0.65, delay: stage === 1 ? 400 : 150 },
+		])
+		.join(enter => enter.insert("use", ".beaker-lid-front"))
+		.attr("xlink:href", symbol)
+		.attr("transform", d => `translate(${beakerXScale(d.x)} -50)`);
+
+	symbols
+		.transition()
+		.ease(d3.easeCubicIn)
+		.duration(substanceDropDuration)
+		.delay(d => d.delay)
+		.attr(
+			"transform",
+			d =>
+				`translate(${beakerXScale(d.x)} ${beakerYScale(
+					CONFIG.fluidHeight + 0.1,
+				)})`,
+		)
+		.transition()
+		.ease(d3.easeCubicOut)
+		.duration(1500)
+		.attr(
+			"transform",
+			d =>
+				`translate(${beakerXScale(d.x)} ${beakerYScale(
+					CONFIG.fluidHeight - 0.2,
+				)})`,
+		)
+		.style("opacity", 0)
+		.remove();
+}
+
+const energyCurveChangeDelay = 200;
+const energyCurveChangeDuration = 1000;
 function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
@@ -661,10 +797,10 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 		false,
 	);
 
-	const ligandExteriorAppearTransition = d3.transition().duration(700);
+	const ligandAppearDuration = 700;
 	const ligandFadeDuration = 200;
 
-	const dipeptideMovementDelay = stage === 0 ? 0 : 500;
+	const dipeptideMovementDelay = stage === 0 ? 0 : 500 + substanceDropDuration;
 	const dipeptideMovementDuration = 1500;
 	const dipeptideResetDuration = 700;
 	const dipeptideResetDelay = ligandFadeDuration;
@@ -672,6 +808,8 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 		.transition()
 		.delay(dipeptideMovementDelay)
 		.duration(dipeptideMovementDuration);
+
+	let totalTransitionDuration;
 
 	// Animate the dipeptides moving
 	if (stage === 0) {
@@ -684,6 +822,12 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 				.delay(dipeptideResetDelay)
 				.duration(dipeptideResetDuration),
 		});
+		totalTransitionDuration =
+			dipeptideResetDelay +
+			dipeptideResetDuration +
+			energyCurveChangeDuration -
+			ligandFadeDuration -
+			energyCurveChangeDelay;
 	} else if (stage === 1) {
 		applyGraphicalObjs(svg, dipeptideData, {
 			selector: dipeptideSelector,
@@ -693,8 +837,9 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 		// Only for testing; in the actual demo ligands don't appear at this stage
 		applyGraphicalObjs(svg, ligandData, {
 			selector: ligandSelector,
-			transition: d3.transition(ligandExteriorAppearTransition),
+			transition: d3.transition().duration(ligandAppearDuration),
 		});
+		totalTransitionDuration = dipeptideMovementDelay + dipeptideMovementDuration;
 	} else if (stage === 2) {
 		applyGraphicalObjs(svg, dipeptideData, {
 			selector: dipeptideSelector,
@@ -705,15 +850,17 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 		applyGraphicalObjs(svg, ligandData, {
 			selector: ligandSelector,
 			transition: d3
-				.transition(ligandExteriorAppearTransition)
-				.delay(dipeptideMovementDelay + dipeptideMovementDuration * 0.6),
+				.transition()
+				.delay(dipeptideMovementDelay + dipeptideMovementDuration * 0.6)
+				.duration(ligandAppearDuration),
 		});
 
 		svg.selectAll(`${ligandSelector}.ligand-exterior`).style("opacity", 0);
 		svg.selectAll(`${ligandSelector}.ligand-interior`).style("opacity", 1);
 		svg.selectAll(`${ligandSelector}.ligand-exterior`)
-			.transition(ligandExteriorAppearTransition)
-			.transition(ligandExteriorAppearTransition)
+			.transition("exterior")
+			.delay(dipeptideMovementDelay + dipeptideMovementDuration - 300)
+			.duration(ligandAppearDuration)
 			.style("opacity", 1);
 
 		const firstDipeptide = svg.selectAll(dipeptideSelector).node();
@@ -722,6 +869,11 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 			fragment.appendChild(this);
 		});
 		firstDipeptide.parentNode.insertBefore(fragment, firstDipeptide);
+
+		totalTransitionDuration =
+			dipeptideMovementDelay +
+			dipeptideMovementDuration * 0.6 +
+			ligandAppearDuration;
 	} else {
 		throw new Error(`Invalid stage ${stage}`);
 	}
@@ -737,6 +889,7 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 					stage === 0 ? dipeptideResetDuration : dipeptideMovementDuration,
 				)
 				.attrTween(attr, tween);
+
 			if (thens !== undefined && thens[attr] !== undefined) {
 				console.log(thens[attr]);
 				t.end()
@@ -745,22 +898,36 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 			}
 		}
 	}
+
+	return totalTransitionDuration - 100;
 }
+
+const buttons = {
+	addEnzyme: document.getElementById("btn-add-enzyme"),
+	addLigand: document.getElementById("btn-add-ligand"),
+	reset: document.getElementById("btn-reset"),
+};
 
 // eslint-disable-next-line no-unused-vars
 function update(stage) {
+	for (const button of Object.values(buttons)) {
+		button.disabled = true;
+	}
+
+	dropSubstanceIntoBeaker(stage);
+
 	applyDataToSvg(beaker, { stage, data: getBeakerData(stage) });
 
 	// Animate the energy curve itself
 	const energyCurve = graph.selectAll(".energy-curve");
-	const initialEnergyCurveNode = energyCurve.node();
-	const totalLenth = initialEnergyCurveNode.getTotalLength();
+	const energyCurveNode = energyCurve.node();
+	const totalLength = energyCurveNode.getTotalLength();
 	const initialMiddlePortionLeftLength = getLengthAtX(
-		initialEnergyCurveNode,
+		energyCurveNode,
 		graphXScale(graphMiddlePortion[0][0]),
 	);
 	const initialMiddlePortionRightLength = getLengthAtX(
-		initialEnergyCurveNode,
+		energyCurveNode,
 		graphXScale(graphMiddlePortion[graphMiddlePortion.length - 1][0]),
 	);
 	const middlePortionLength =
@@ -768,49 +935,44 @@ function update(stage) {
 
 	const finalEnergyCurvePathString = graphLine(getEnergyCurvePoints(stage));
 
-	const graphTransition = d3.transition().duration(1000);
+	const graphTransition = d3.transition().duration(energyCurveChangeDuration);
 	if (stage === 2) {
 		energyCurve
 			.attr("stroke-dasharray", null)
 			.transition(graphTransition)
+			.delay(substanceDropDuration)
 			.attr("d", finalEnergyCurvePathString);
 	} else {
-		const delay = stage === 0 ? 200 : 0;
+		energyCurveNode.setAttribute("d", finalEnergyCurvePathString);
+
+		const delay = stage === 0 ? energyCurveChangeDelay : substanceDropDuration;
+
 		if (stage === 1) {
-			energyCurve.attr(
+			energyCurveNode.setAttribute(
 				"stroke-dasharray",
-				`0 ${initialMiddlePortionLeftLength} ${middlePortionLength} 10000`,
+				`0 ${
+					initialMiddlePortionLeftLength - DASHARRAY_LENGTH_DIFF
+				} ${middlePortionLength} 10000`,
 			);
 		}
 
 		energyCurve
-			.attr("d", finalEnergyCurvePathString)
 			.transition(graphTransition)
 			.delay(delay)
 			.attrTween("stroke-dasharray", () => {
-				let leftScale, middleScale;
-				if (stage === 0) {
-					leftScale = d3.scaleLinear(
-						[0, 1],
-						[0, initialMiddlePortionLeftLength],
-					);
-					middleScale = d3.scaleLinear(
-						[0, 1],
-						[totalLenth, middlePortionLength],
-					);
-				} else if (stage === 1) {
-					leftScale = d3.scaleLinear(
-						[0, 1],
-						[initialMiddlePortionLeftLength - 159, 0], // 159 = length difference between long curve and short curve
-					);
-					middleScale = d3.scaleLinear(
-						[0, 1],
-						[middlePortionLength, totalLenth],
-					);
-				}
-				return t => {
-					return `0 ${leftScale(t)} ${middleScale(t)} 100000`;
-				};
+				const leftScaleRange =
+					stage === 0
+						? [0, initialMiddlePortionLeftLength]
+						: [initialMiddlePortionLeftLength - DASHARRAY_LENGTH_DIFF, 0];
+				const middleScaleRange =
+					stage === 0
+						? [totalLength, middlePortionLength]
+						: [middlePortionLength, totalLength];
+
+				const leftScale = d3.scaleLinear([0, 1], leftScaleRange);
+				const middleScale = d3.scaleLinear([0, 1], middleScaleRange);
+
+				return t => `0 ${leftScale(t)} ${middleScale(t)} 10000`;
 			});
 	}
 
@@ -819,15 +981,15 @@ function update(stage) {
 	function cyTween(d) {
 		if (stage === 0) {
 			const initialLength = getLengthAtX(
-				initialEnergyCurveNode,
+				energyCurveNode,
 				this.getAttribute("cx"),
 			);
-			const initialPoint = initialEnergyCurveNode.getPointAtLength(initialLength);
+			const initialPoint = energyCurveNode.getPointAtLength(initialLength);
 			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
 			const { cx, cy } = d.attrs;
-			const finalLength = getLengthAtX(initialEnergyCurveNode, cx);
-			const finalPoint = initialEnergyCurveNode.getPointAtLength(finalLength);
+			const finalLength = getLengthAtX(energyCurveNode, cx);
+			const finalPoint = energyCurveNode.getPointAtLength(finalLength);
 			const finalDistAboveCurve = cy - finalPoint.y;
 
 			const distAboveCurveScale = d3.scaleLinear(
@@ -837,7 +999,7 @@ function update(stage) {
 
 			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
 
-			const initialEnergyCurveNodeCopy = initialEnergyCurveNode.cloneNode();
+			const initialEnergyCurveNodeCopy = energyCurveNode.cloneNode();
 
 			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
 			return t => {
@@ -874,18 +1036,30 @@ function update(stage) {
 
 			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
 
+			const indexScale = d3
+				.scaleLinear()
+				.domain([0, totalLength])
+				.rangeRound([0, N_PRECOMPUTED_PATH_POINTS - 1]);
+
 			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
+			const thisPathPoints = energyCurveNode.__cachedPoints[stage];
 			return t => {
+				// const length = lengthScale(t);
+				// const point = tempFinalPathNode.getPointAtLength(length);
+				// const curveY = point.y;
+				// const distAboveCurve = distAboveCurveScale(t);
+				// return curveY + distAboveCurve;
+
 				const length = lengthScale(t);
-				const point = tempFinalPathNode.getPointAtLength(length);
-				const curveY = point.y;
+				const pointIndex = indexScale(length);
+				const curveY = thisPathPoints[pointIndex][1];
 				const distAboveCurve = distAboveCurveScale(t);
 				return curveY + distAboveCurve;
 			};
 		}
 	}
 
-	applyDataToSvg(graph, {
+	const totalTransitionDuration = applyDataToSvg(graph, {
 		stage,
 		data: graphData,
 		attrTweens: { cy: cyTween },
@@ -895,6 +1069,16 @@ function update(stage) {
 			},
 		},
 	});
+
+	setTimeout(() => {
+		const nextButton =
+			stage === 0
+				? buttons.addEnzyme
+				: stage === 1
+				? buttons.addLigand
+				: buttons.reset;
+		nextButton.disabled = false;
+	}, totalTransitionDuration);
 }
 
 initialize();
