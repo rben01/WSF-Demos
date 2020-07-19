@@ -656,21 +656,23 @@ function getGraphData(stage) {
 	}
 }
 
-const N_PRECOMPUTED_PATH_POINTS = 1000;
-// https://stackoverflow.com/a/52291755
+const N_PRECOMPUTED_PATH_POINTS = 3000;
+// Adapted https://stackoverflow.com/a/52291755
+// Compute an array arr of path [x,y] pairs such that arr[i] === pathNode.getPointAtLength(i/(N_PRECOMPUTED_PATH_POINTS-1) * pathNode.getTotalLength())
 function precomputeAndCachePathPoints(pathNode, nPoints) {
 	const points = {};
-	for (const stage of [0, 2]) {
+	for (const stage of [1, 2]) {
 		pathNode.setAttribute("d", graphLine(getEnergyCurvePoints(stage)));
-		const step = pathNode.getTotalLength() / nPoints;
+
+		const step = pathNode.getTotalLength() / (nPoints - 1);
 		points[stage] = [];
 		for (let i = 0; i < nPoints; ++i) {
-			const length = step * i;
+			const length = i * step;
 			const { x, y } = pathNode.getPointAtLength(length);
 			points[stage].push([x, y]);
 		}
 	}
-	points[1] = points[0];
+	points[0] = points[2];
 	pathNode.__cachedPoints = points;
 }
 
@@ -715,6 +717,7 @@ function initialize() {
 	// Initial energy curve
 	const energyCurve = applyGraphicalObjs(graph, getEnergyCurveData(0));
 	precomputeAndCachePathPoints(energyCurve.node(), N_PRECOMPUTED_PATH_POINTS);
+	energyCurve.attr("d", graphLine(getEnergyCurvePoints(0)));
 
 	// Initial dipeptides on the graph
 	applyGraphicalObjs(graph, graphDipeptides.flat(Infinity));
@@ -786,7 +789,7 @@ function dropSubstanceIntoBeaker(stage) {
 
 const energyCurveChangeDelay = 200;
 const energyCurveChangeDuration = 1000;
-function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
+function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
 		[ligandSelector]: ligandData,
@@ -878,22 +881,21 @@ function applyDataToSvg(svg, { stage, data, attrTweens, thens }) {
 		throw new Error(`Invalid stage ${stage}`);
 	}
 
-	if (attrTweens !== undefined) {
-		for (const [attr, tween] of Object.entries(attrTweens)) {
-			console.log(stage);
+	if (tweens !== undefined) {
+		for (const [name, tween] of Object.entries(tweens)) {
 			const t = svg
 				.selectAll(dipeptideSelector)
-				.transition(attr)
+				.transition(name)
 				.delay(stage === 0 ? dipeptideResetDelay : dipeptideMovementDelay)
 				.duration(
 					stage === 0 ? dipeptideResetDuration : dipeptideMovementDuration,
 				)
-				.attrTween(attr, tween);
+				.tween(name, tween);
 
-			if (thens !== undefined && thens[attr] !== undefined) {
-				console.log(thens[attr]);
+			if (thens !== undefined && thens[name] !== undefined) {
+				console.log(thens[name]);
 				t.end()
-					.then(thens[attr])
+					.then(thens[name])
 					.catch(() => {});
 			}
 		}
@@ -978,7 +980,8 @@ function update(stage) {
 
 	// Animate the dipeptides moving along the energy curve
 	const graphData = getGraphData(stage);
-	function cyTween(d) {
+	function graphDipeptideTween(d) {
+		const { cx: finalCx, cy: finalCy } = d.attrs;
 		if (stage === 0) {
 			const initialLength = getLengthAtX(
 				energyCurveNode,
@@ -987,10 +990,9 @@ function update(stage) {
 			const initialPoint = energyCurveNode.getPointAtLength(initialLength);
 			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const { cx, cy } = d.attrs;
-			const finalLength = getLengthAtX(energyCurveNode, cx);
+			const finalLength = getLengthAtX(energyCurveNode, finalCx);
 			const finalPoint = energyCurveNode.getPointAtLength(finalLength);
-			const finalDistAboveCurve = cy - finalPoint.y;
+			const finalDistAboveCurve = finalCy - finalPoint.y;
 
 			const distAboveCurveScale = d3.scaleLinear(
 				[0, 1],
@@ -1004,10 +1006,10 @@ function update(stage) {
 			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
 			return t => {
 				const length = lengthScale(t);
-				const point = initialEnergyCurveNodeCopy.getPointAtLength(length);
-				const curveY = point.y;
+				const { x, y } = initialEnergyCurveNodeCopy.getPointAtLength(length);
 				const distAboveCurve = distAboveCurveScale(t);
-				return curveY + distAboveCurve;
+				this.setAttribute("cx", x);
+				this.setAttribute("cy", y + distAboveCurve);
 			};
 		} else {
 			const tempFinalPath = graph
@@ -1017,6 +1019,12 @@ function update(stage) {
 				.attr("d", finalEnergyCurvePathString);
 			const tempFinalPathNode = tempFinalPath.node();
 
+			const indexScale = d3
+				.scaleLinear()
+				.domain([0, tempFinalPathNode.getTotalLength()])
+				.rangeRound([0, N_PRECOMPUTED_PATH_POINTS - 1]);
+			const thisPathPoints = energyCurveNode.__cachedPoints[stage];
+
 			const initialLength = getLengthAtX(
 				tempFinalPathNode,
 				this.getAttribute("cx"),
@@ -1024,10 +1032,9 @@ function update(stage) {
 			const initialPoint = tempFinalPathNode.getPointAtLength(initialLength);
 			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const { cx, cy } = d.attrs;
-			const finalLength = getLengthAtX(tempFinalPathNode, cx);
+			const finalLength = getLengthAtX(tempFinalPathNode, finalCx);
 			const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
-			const finalDistAboveCurve = cy - finalPoint.y;
+			const finalDistAboveCurve = finalCy - finalPoint.y;
 
 			const distAboveCurveScale = d3.scaleLinear(
 				[0, 1],
@@ -1036,13 +1043,7 @@ function update(stage) {
 
 			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
 
-			const indexScale = d3
-				.scaleLinear()
-				.domain([0, totalLength])
-				.rangeRound([0, N_PRECOMPUTED_PATH_POINTS - 1]);
-
 			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
-			const thisPathPoints = energyCurveNode.__cachedPoints[stage];
 			return t => {
 				// const length = lengthScale(t);
 				// const point = tempFinalPathNode.getPointAtLength(length);
@@ -1052,9 +1053,9 @@ function update(stage) {
 
 				const length = lengthScale(t);
 				const pointIndex = indexScale(length);
-				const curveY = thisPathPoints[pointIndex][1];
-				const distAboveCurve = distAboveCurveScale(t);
-				return curveY + distAboveCurve;
+				const [x, y] = thisPathPoints[pointIndex];
+				this.setAttribute("cx", x);
+				this.setAttribute("cy", y + distAboveCurveScale(t));
 			};
 		}
 	}
@@ -1062,7 +1063,7 @@ function update(stage) {
 	const totalTransitionDuration = applyDataToSvg(graph, {
 		stage,
 		data: graphData,
-		attrTweens: { cy: cyTween },
+		tweens: { "graph-dipeptide-position": graphDipeptideTween },
 		thens: {
 			cy: () => {
 				graph.selectAll(".temp-path").remove();
