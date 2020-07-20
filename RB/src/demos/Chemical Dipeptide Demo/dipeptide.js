@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs applyDatum defineArrowhead groupBy */
+/* global applyGraphicalObjs defineArrowhead groupBy */
 
 const CONFIG = {
 	containerSVGWidth: 250,
@@ -69,7 +69,7 @@ const STAGES = {
 	const starXScale = d3.scaleLinear([-1, 1], [pad, size - pad]);
 	const starYScale = d3.scaleLinear([-1, 1], [size - pad, pad]);
 	const starOuterRadius = 0.9;
-	const starInnerRadius = 0.5;
+	const starInnerRadius = 0.4;
 	const starPoints = d3.range(10).map(i => {
 		const r = i % 2 === 0 ? starOuterRadius : starInnerRadius;
 		const angle = (2 * Math.PI * i) / 10;
@@ -765,6 +765,10 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 		const cx1 = cx0 - sign * i * 2 * r;
 		const cx2 = cx1 - sign * 2 * r;
 		const cy1 = cy0 - i * (2 * r + verticalDistanceBetweenDipeptides);
+
+		const peptideColor = preconfiguredDipeptides[i].color;
+		const fill1 = index < 0 ? peptideColor : COLORS.orange;
+		const fill2 = index < 0 ? COLORS.orange : peptideColor;
 		circles.push(
 			{
 				shape: "circle",
@@ -774,7 +778,7 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 				attrs: {
 					cx: cx1,
 					cy: cy1,
-					fill: preconfiguredDipeptides[i].color,
+					fill: fill1,
 					r,
 				},
 			},
@@ -786,7 +790,7 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 				attrs: {
 					cx: cx2,
 					cy: cy1,
-					fill: COLORS.orange,
+					fill: fill2,
 					r,
 				},
 			},
@@ -813,7 +817,9 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 	}
 
 	const surroundingLines = [];
+	const ligandData = [];
 	if (indexMag === 2) {
+		const opacity = drawEncirclingLine ? 1 : 0;
 		const line = d3
 			.line()
 			.x(p => p[0])
@@ -834,9 +840,60 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 				d.class === "ligand-interior" || drawEncirclingLine ? 1 : 0;
 		}
 		surroundingLines.push(...elData);
+
+		const ligandTx = 120;
+		const ligandTy = 15;
+		ligandData.push(
+			{
+				shape: "use",
+				id: "ligand-a",
+				class: "eqn-chain",
+				attrs: {
+					"xlink:href": "#symbol-ligand",
+					transform: `translate(${ligandTx},${ligandTy})`,
+				},
+				styles: { opacity },
+			},
+			...[
+				{
+					x1: ligandTx + 16,
+					y1: ligandTy + 42,
+					x2: indexToCxScale(-2) - 40,
+					y2:
+						CONFIG.equationSVGHeight / 2 +
+						indexMag * (verticalDistanceBetweenDipeptides / 2 + r) -
+						15,
+				},
+				{
+					x1: ligandTx + 38,
+					y1: ligandTy + 42,
+					x2: indexToCxScale(-2) - 25,
+					y2: CONFIG.equationSVGHeight / 2 - 14,
+				},
+				{
+					x1: ligandTx + 45,
+					y1: ligandTy + 20,
+					x2: indexToCxScale(-2) - 12,
+					y2: CONFIG.equationSVGHeight / 2 - 38,
+				},
+			].map((attrs, i) => ({
+				shape: "line",
+				class: "eqn-chain",
+				id: `ligand-connector-${i}-a`,
+				attrs: {
+					...attrs,
+					stroke: "black",
+					"stroke-width": 2,
+					"stroke-dasharray": 4,
+				},
+				styles: { opacity },
+			})),
+		);
 	}
 
-	return [...surroundingLines, ...connectingLines, ...circles];
+	console.log(ligandData);
+
+	return [...surroundingLines, ...ligandData, ...connectingLines, ...circles];
 }
 function getEquationChainData(stage) {
 	const indices = d3.range(-2, 2 + 1);
@@ -1330,28 +1387,22 @@ function update(stage) {
 	equation
 		.selectAll(".eqn-chain")
 		.data(eqnData, d => `${d.shape}.${d.id}`)
-		.join(
-			enter =>
-				enter.append(d => {
-					console.log(d);
-					return d3.create(`svg:${d.shape}`).node();
-				}),
-			update =>
-				update
-					.transition()
-					.delay(
-						stage === STAGES.enzyme || stage === STAGES.ligand
-							? dipeptideMovementDelayIfNotResetting +
-									dipeptideMovementDuration -
-									ligandExteriorAppearPreappearTime
-							: 0,
-					)
-					.duration(
-						stage === STAGES.initial
-							? dipeptideResetDuration
-							: ligandAppearDuration,
-					)
-					.style("opacity", d => d.styles.opacity),
+		.join(undefined, update =>
+			update
+				.transition()
+				.delay(
+					stage === STAGES.enzyme || stage === STAGES.ligand
+						? dipeptideMovementDelayIfNotResetting +
+								dipeptideMovementDuration -
+								ligandExteriorAppearPreappearTime
+						: 0,
+				)
+				.duration(
+					stage === STAGES.initial
+						? dipeptideResetDuration
+						: ligandAppearDuration,
+				)
+				.style("opacity", d => d.styles.opacity),
 		);
 }
 
