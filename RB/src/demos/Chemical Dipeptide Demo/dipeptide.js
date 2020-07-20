@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs defineArrowhead groupBy */
+/* global applyGraphicalObjs applyDatum defineArrowhead groupBy */
 
 const CONFIG = {
 	containerSVGWidth: 250,
@@ -138,11 +138,6 @@ const STAGES = {
 			.attr("stroke-linejoin", "round");
 	}
 })();
-
-equation
-	.append("use")
-	.attr("xlink:href", "#symbol-eqn-arrow")
-	.attr("transform", "translate(100,50)");
 
 const beakerXScale = d3.scaleLinear([0, 1], [0, CONFIG.containerSVGWidth]);
 const beakerYScale = d3.scaleLinear([0, 1], [CONFIG.containerSVGHeight, 0]);
@@ -733,11 +728,11 @@ const equationDipeptides = [
 	[{ color: COLORS.green }, { color: COLORS.purple }, { color: COLORS.blue }],
 ];
 
-const indexToCxScale = d3.scaleLinear([-2, 2], [100, 700]);
+const indexToCxScale = d3.scaleLinear([-2, 2], [200, 700]);
 // -2 <= index <= 2
 // We draw the chain from the bottom left corner up to the top right corner
-function makeEquationDipeptideChain(index) {
-	const verticalDistanceBetweenDipeptides = 30;
+function getEquationDipeptideData(index) {
+	const verticalDistanceBetweenDipeptides = 10;
 	const r = CONFIG.dipeptideRadius;
 
 	const sign = index < 0 ? -1 : 1;
@@ -746,14 +741,100 @@ function makeEquationDipeptideChain(index) {
 	const chainCy = CONFIG.equationSVGHeight / 2;
 
 	// Compute center x and y of very first circle in the chain (lower left corner)
-	const cx0 = chainCx + sign * (indexMag + 1) * r;
+	const cx0 = chainCx + sign * (indexMag + 1) * r - r;
 	const cy0 = chainCy + ((verticalDistanceBetweenDipeptides + r) * indexMag) / 2;
-}
-function getEquationData(stage) {
-	const peptides = equationDipeptides[stage];
-	if (stage === 0) {
-		const dipeptides = makeDipeptideChain();
+
+	const circles = [];
+	const connectingLines = [];
+
+	const preconfiguredDipeptides = equationDipeptides[index + 2];
+	// Walk the chain up and to the right
+	for (let i = 0; i <= indexMag; ++i) {
+		const cx1 = cx0 - sign * i * 2 * r;
+		const cx2 = cx1 - sign * 2 * r;
+		const cy1 = cy0 - i * (2 * r + verticalDistanceBetweenDipeptides);
+		circles.push(
+			{
+				shape: "circle",
+				classes: ["eqn-chain", "peptide"],
+				id: `${sign}_${i}_${index}_a`,
+				index,
+				attrs: {
+					cx: cx1,
+					cy: cy1,
+					fill: preconfiguredDipeptides[i].color,
+					r,
+				},
+			},
+			{
+				shape: "circle",
+				classes: ["eqn-chain", "peptide"],
+				id: `${sign}_${i}_${index}_b`,
+				index,
+				attrs: {
+					cx: cx2,
+					cy: cy1,
+					fill: COLORS.orange,
+					r,
+				},
+			},
+		);
+		if (i !== indexMag) {
+			const cy2 = cy1 - 2 * r - verticalDistanceBetweenDipeptides;
+			connectingLines.push({
+				shape: "line",
+				classes: ["eqn-chain", "connector"],
+				id: `${sign}_${i}_${index}_c`,
+				index,
+				attrs: {
+					x1: cx2,
+					x2: cx2,
+					y1: cy1 - r,
+					y2: cy2 + r,
+					stroke: "#469",
+					"stroke-width": 2,
+				},
+			});
+		}
 	}
+
+	return [...connectingLines, ...circles];
+}
+function getEquationChainData(stage) {
+	const indices = d3.range(-2, 2 + 1); // [-k, -k+1, ..., 0, ..., k-1, k]
+	const chains = indices
+		.map(getEquationDipeptideData)
+		.flat(Infinity)
+		.sort((a, b) => {
+			const aVal = a.shape === "line" ? 1 : 0;
+			const bVal = b.shape === "line" ? 1 : 0;
+			return bVal - aVal;
+		});
+
+	const maxIndex = stage === STAGES.initial ? 0 : 2;
+
+	for (const chain of chains) {
+		chain.styles = chain.styles || {};
+		chain.styles.opacity = Math.abs(chain.index) <= maxIndex ? 1 : 0;
+	}
+
+	const arrowCenterIndices = indices.slice(0, -1).map(i => i + 0.5);
+	const arrows = arrowCenterIndices.map(i => ({
+		shape: "use",
+		classes: ["eqn-chain", "eqn-arrow"],
+		id: `arrow-${i.toFixed(3)}`,
+		attrs: {
+			"xlink:href": "#symbol-eqn-arrow",
+			transform: `translate(${indexToCxScale(i) - CONFIG.symbolSize / 2}, ${
+				CONFIG.equationSVGHeight / 2 - CONFIG.symbolSize / 2
+			})`,
+		},
+		styles: {
+			opacity: Math.abs(i) <= maxIndex ? 1 : 0,
+		},
+	}));
+
+	return [...chains, ...arrows];
 }
 
 const N_PRECOMPUTED_PATH_POINTS = 3000;
@@ -831,6 +912,8 @@ function initialize() {
 
 	// Initial dipeptides on the graph
 	applyGraphicalObjs(graph, graphDipeptides.flat(Infinity));
+
+	applyGraphicalObjs(equation, getEquationChainData(STAGES.initial));
 }
 
 const dipeptideSelector = "circle.chemical-obj";
@@ -897,6 +980,7 @@ function dropSubstanceIntoBeaker(stage) {
 
 const energyCurveChangeDelay = 200;
 const energyCurveChangeDuration = 1000;
+const dipeptideMovementDuration = 1500;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
@@ -913,7 +997,6 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 
 	const dipeptideMovementDelay =
 		stage === STAGES.initial ? 0 : 500 + substanceDropDuration;
-	const dipeptideMovementDuration = 1500;
 	const dipeptideResetDuration = 700;
 	const dipeptideResetDelay = ligandFadeDuration;
 	const dipeptideMovementTransition = d3
@@ -1192,6 +1275,23 @@ function update(stage) {
 				: null;
 		nextButton.disabled = false;
 	}, totalTransitionDuration);
+
+	// Do the chemical equation at the bottom
+	const eqnData = getEquationChainData(stage);
+	equation
+		.selectAll(".eqn-chain")
+		.data(eqnData, d => `${d.shape}.${d.id}`)
+		.join(undefined, update =>
+			update
+				.transition()
+				.delay(
+					stage === STAGES.enzyme || stage === STAGES.ligand
+						? substanceDropDuration + dipeptideMovementDuration
+						: 0,
+				)
+				.duration(500)
+				.style("opacity", d => d.styles.opacity),
+		);
 }
 
 initialize();
