@@ -240,6 +240,34 @@ function getBeakerOutlineData() {
 
 let baseID = 0;
 
+function getEncirclingLineData(points, lineFunc, opaqueEncirclingLineBg) {
+	const r = CONFIG.dipeptideRadius;
+	return [
+		{
+			shape: "path",
+			class: "ligand-exterior",
+			attrs: {
+				d: lineFunc(points),
+				"stroke-width": r * 2 + 9,
+				stroke: "black",
+				"stroke-linecap": "round",
+				"stroke-linejoin": "round",
+			},
+		},
+		{
+			shape: "path",
+			class: "ligand-interior",
+			attrs: {
+				d: lineFunc(points),
+				"stroke-width": r * 2 + 7,
+				stroke: opaqueEncirclingLineBg ? CONFIG.fluidColor : "white",
+				"stroke-linecap": "round",
+				"stroke-linejoin": "round",
+			},
+		},
+	];
+}
+
 // p0 is the center {x,y} of the first dot in the chain
 // angles is a list of relative angles for the next dot in the chain to appear relative to the previous one (e.g., four Math.PI/2's would do a full circle)
 // colors contains the colors of the dots; a null entry indicates use the default orange color
@@ -297,32 +325,15 @@ function makeDipeptideChain(
 	const data = [];
 
 	if (drawEncirclingLine) {
-		data.push(
-			{
-				shape: "path",
-				class: "ligand-exterior",
-				attrs: {
-					d: beakerLine(centerPoints),
-					"stroke-width": r * 2 + 9,
-					stroke: "black",
-					"fill-opacity": 0,
-					"stroke-linecap": "round",
-					"stroke-linejoin": "round",
-				},
-			},
-			{
-				shape: "path",
-				class: "ligand-interior",
-				attrs: {
-					d: beakerLine(centerPoints),
-					"stroke-width": r * 2 + 7,
-					stroke: opaqueEncirclingLineBg ? CONFIG.fluidColor : "white",
-					"fill-opacity": 0,
-					"stroke-linecap": "round",
-					"stroke-linejoin": "round",
-				},
-			},
+		const encirclingLineData = getEncirclingLineData(
+			centerPoints,
+			beakerLine,
+			opaqueEncirclingLineBg,
 		);
+		for (const d of encirclingLineData) {
+			d.attrs["fill-opacity"] = 0;
+		}
+		data.push(...encirclingLineData);
 	}
 
 	data.push(...chain);
@@ -731,7 +742,7 @@ const equationDipeptides = [
 const indexToCxScale = d3.scaleLinear([-2, 2], [200, 700]);
 // -2 <= index <= 2
 // We draw the chain from the bottom left corner up to the top right corner
-function getEquationDipeptideData(index) {
+function getEquationDipeptideData(index, drawEncirclingLine = false) {
 	const verticalDistanceBetweenDipeptides = 10;
 	const r = CONFIG.dipeptideRadius;
 
@@ -749,6 +760,7 @@ function getEquationDipeptideData(index) {
 
 	const preconfiguredDipeptides = equationDipeptides[index + 2];
 	// Walk the chain up and to the right
+	const dipeptidePoints = [];
 	for (let i = 0; i <= indexMag; ++i) {
 		const cx1 = cx0 - sign * i * 2 * r;
 		const cx2 = cx1 - sign * 2 * r;
@@ -779,6 +791,8 @@ function getEquationDipeptideData(index) {
 				},
 			},
 		);
+		dipeptidePoints.push([cx1, cy1], [cx2, cy1]);
+
 		if (i !== indexMag) {
 			const cy2 = cy1 - 2 * r - verticalDistanceBetweenDipeptides;
 			connectingLines.push({
@@ -798,16 +812,43 @@ function getEquationDipeptideData(index) {
 		}
 	}
 
-	return [...connectingLines, ...circles];
+	const surroundingLines = [];
+	if (indexMag === 2) {
+		const line = d3
+			.line()
+			.x(p => p[0])
+			.y(p => p[1]);
+
+		const elData = getEncirclingLineData(dipeptidePoints, line, false);
+
+		for (let i = 0; i < elData.length; ++i) {
+			const d = elData[i];
+
+			d.id = `${sign}_${i}_${index}_d`;
+
+			d.classes = d.classes || [];
+			d.classes.push("eqn-chain");
+
+			d.styles = d.styles || {};
+			d.styles.opacity =
+				d.class === "ligand-interior" || drawEncirclingLine ? 1 : 0;
+		}
+		surroundingLines.push(...elData);
+	}
+
+	return [...surroundingLines, ...connectingLines, ...circles];
 }
 function getEquationChainData(stage) {
-	const indices = d3.range(-2, 2 + 1); // [-k, -k+1, ..., 0, ..., k-1, k]
+	const indices = d3.range(-2, 2 + 1);
+	console.log(stage === STAGES.ligand);
 	const chains = indices
-		.map(getEquationDipeptideData)
+		.map(i => getEquationDipeptideData(i, stage === STAGES.ligand))
 		.flat(Infinity)
 		.sort((a, b) => {
-			const aVal = a.shape === "line" ? 1 : 0;
-			const bVal = b.shape === "line" ? 1 : 0;
+			const shapeToNum = shape =>
+				shape === "path" ? 2 : shape === "line" ? 1 : 0;
+			const aVal = shapeToNum(a.shape);
+			const bVal = shapeToNum(b.shape);
 			return bVal - aVal;
 		});
 
@@ -815,7 +856,9 @@ function getEquationChainData(stage) {
 
 	for (const chain of chains) {
 		chain.styles = chain.styles || {};
-		chain.styles.opacity = Math.abs(chain.index) <= maxIndex ? 1 : 0;
+		if (chain.styles.opacity === undefined) {
+			chain.styles.opacity = Math.abs(chain.index) <= maxIndex ? 1 : 0;
+		}
 	}
 
 	const arrowCenterIndices = indices.slice(0, -1).map(i => i + 0.5);
@@ -980,7 +1023,11 @@ function dropSubstanceIntoBeaker(stage) {
 
 const energyCurveChangeDelay = 200;
 const energyCurveChangeDuration = 1000;
+const dipeptideResetDuration = 700;
 const dipeptideMovementDuration = 1500;
+const dipeptideMovementDelayIfNotResetting = 500 + substanceDropDuration;
+const ligandAppearDuration = 700;
+const ligandExteriorAppearPreappearTime = 300;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
@@ -992,12 +1039,10 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 		false,
 	);
 
-	const ligandAppearDuration = 700;
 	const ligandFadeDuration = 200;
 
 	const dipeptideMovementDelay =
-		stage === STAGES.initial ? 0 : 500 + substanceDropDuration;
-	const dipeptideResetDuration = 700;
+		stage === STAGES.initial ? 0 : dipeptideMovementDelayIfNotResetting;
 	const dipeptideResetDelay = ligandFadeDuration;
 	const dipeptideMovementTransition = d3
 		.transition()
@@ -1054,7 +1099,11 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 		svg.selectAll(`${ligandSelector}.ligand-interior`).style("opacity", 1);
 		svg.selectAll(`${ligandSelector}.ligand-exterior`)
 			.transition("exterior")
-			.delay(dipeptideMovementDelay + dipeptideMovementDuration - 300)
+			.delay(
+				dipeptideMovementDelay +
+					dipeptideMovementDuration -
+					ligandExteriorAppearPreappearTime,
+			)
 			.duration(ligandAppearDuration)
 			.style("opacity", 1);
 
@@ -1281,16 +1330,28 @@ function update(stage) {
 	equation
 		.selectAll(".eqn-chain")
 		.data(eqnData, d => `${d.shape}.${d.id}`)
-		.join(undefined, update =>
-			update
-				.transition()
-				.delay(
-					stage === STAGES.enzyme || stage === STAGES.ligand
-						? substanceDropDuration + dipeptideMovementDuration
-						: 0,
-				)
-				.duration(500)
-				.style("opacity", d => d.styles.opacity),
+		.join(
+			enter =>
+				enter.append(d => {
+					console.log(d);
+					return d3.create(`svg:${d.shape}`).node();
+				}),
+			update =>
+				update
+					.transition()
+					.delay(
+						stage === STAGES.enzyme || stage === STAGES.ligand
+							? dipeptideMovementDelayIfNotResetting +
+									dipeptideMovementDuration -
+									ligandExteriorAppearPreappearTime
+							: 0,
+					)
+					.duration(
+						stage === STAGES.initial
+							? dipeptideResetDuration
+							: ligandAppearDuration,
+					)
+					.style("opacity", d => d.styles.opacity),
 		);
 }
 
