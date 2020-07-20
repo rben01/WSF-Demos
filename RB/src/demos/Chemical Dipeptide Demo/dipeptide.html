@@ -27,50 +27,62 @@
 		</style>
 	</head>
 	<body>
-		<div id="containers">
-			<svg id="container-1" class="container"></svg>
-			<div style="display: inline-block; vertical-align: middle;">
-				<table>
-					<tr>
-						<td>
-							<button
-								id="btn-add-enzyme"
-								class="play-button"
-								onclick="update(1)"
-							>
-								1. Add Enzyme
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<button
-								id="btn-add-ligand"
-								class="play-button"
-								onclick="update(2)"
-							>
-								2. Add Ligand
-							</button>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							<button
-								id="btn-reset"
-								class="play-button"
-								onclick="update(0)"
-							>
-								3. Reset
-							</button>
-						</td>
-					</tr>
-				</table>
-			</div>
-			<!-- <svg id="container-2" class="container"></svg>
+		<div>
+			<div id="containers">
+				<svg id="container-1" class="container"></svg>
+				<div style="display: inline-block; vertical-align: middle;">
+					<table>
+						<tr>
+							<td>
+								<button
+									id="btn-add-enzyme"
+									class="play-button"
+									onclick="update(STAGES.enzyme)"
+								>
+									1. Add Enzyme
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button
+									id="btn-add-ligand"
+									class="play-button"
+									onclick="update(STAGES.ligand)"
+								>
+									2. Add Ligand
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button id="btn-energy-well" class="play-button">
+									3. Show Energy Well
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button
+									id="btn-reset"
+									class="play-button"
+									onclick="update(STAGES.initial)"
+								>
+									4. Reset
+								</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<!-- <svg id="container-2" class="container"></svg>
 			<svg id="container-3" class="container"></svg> -->
-		</div>
-		<div style="text-align: center;">
-			<svg id="energy-graph"></svg>
+			</div>
+			<div style="text-align: center;">
+				<svg id="energy-graph"></svg>
+			</div>
+			<div style="text-align: center;">
+				<svg id="dipeptide-equation"></svg>
+			</div>
 		</div>
 		<script type="text/javascript" src="../utils.js"></script>
 		<script type="text/javascript" src="./dipeptide.js"></script>
