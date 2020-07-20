@@ -30,19 +30,39 @@
             arcgen.innerRadius(linelen).outerRadius(linelen + 2);
             var o;
             var dtheta;
+            var r;
+            var sin;
+            var cos;
             for (var c in chordata) {
                 o = chordata[c].length - 1;
-                dtheta = Math.PI * o / orders - 0.02;
-                theta += Math.PI * o / 292;
+                dtheta = Math.max(Math.PI * o / orders - 0.02, 0);
+                theta += 0.01;
+                theta += Math.PI * dtheta / 2;
                 svg.append("line").attr("x1", 360).attr("y1", 480).attr("x2", 360 + linelen * Math.sin(theta)).attr("y2", 480 - linelen * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
-                theta -= Math.PI * o / 292 - 0.01;
+                theta -= Math.PI * dtheta / 2;
                 svg.append("path").attr("d", arcgen({
                     startAngle: theta,
                     endAngle: theta + dtheta,
                 })).attr("transform", "translate(360, 480)");
                 for (order in chordata[c]) {
-                    svg.append("line").attr("x1", 360 + linelen * Math.sin(theta)).attr("y1", 480 - linelen * Math.cos(theta)).attr("x2", 360 + 2 * linelen * Math.sin(theta)).attr("y2", 480 - 2 * linelen * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
-                    theta += dtheta / o;
+                    sin = Math.sin(theta);
+                    cos = Math.cos(theta);
+                    svg.append("line").attr("x1", 360 + linelen * sin).attr("y1", 480 - linelen * cos).attr("x2", 360 + 2 * linelen * sin).attr("y2", 480 - 2 * linelen * cos).attr("stroke-width", 2).attr("stroke", "black");
+                    if (theta > 0) {
+                        r = theta * 180 / Math.PI - 90;
+                    }
+                    else {
+                        r = theta * 180 / Math.PI + 90;
+                    }
+                    if (theta > 0) {
+                        svg.append("text").attr("transform", "translate(" + (360 + 2 * linelen * sin) + "," + (480 - 2 * linelen * cos) + ")rotate(" + r + ")").attr("style", "font-size:9px").attr("text-anchor", "start").text(chordata[c][order]);
+                    }
+                    else {
+                        svg.append("text").attr("transform", "translate(" + (360 + 2 * linelen * sin) + "," + (480 - 2 * linelen * cos) + ")rotate(" + r + ")").attr("style", "font-size:9px").attr("text-anchor", "end").text(chordata[c][order]);
+                    }
+                    if (o > 0) {
+                        theta += dtheta / o;
+                    }
                 }
                 theta += 0.01;
             }
