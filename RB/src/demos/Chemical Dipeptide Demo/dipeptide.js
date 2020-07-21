@@ -1215,7 +1215,10 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	return totalTransitionDuration - 100;
 }
 
-const energyWellGraph = d3.select("#energy-well-plot").style("opacity", 0);
+const energyWellGraph = d3
+	.select("#energy-well-plot")
+	.style("display", "none")
+	.style("opacity", 0);
 const bottomGraphContainer = d3
 	.select("#bottom-graph-container")
 	.style("transform", "translate(0 0)");
@@ -1275,6 +1278,7 @@ function update(stage) {
 			.ease(d3.easeCubicOut)
 			.attr("stroke-dashoffset", 0);
 		energyWellGraph
+			.style("display", "initial")
 			.transition()
 			.delay(arcSweepDuration)
 			.duration(energyWellFadeDuration)
@@ -1301,7 +1305,12 @@ function update(stage) {
 			.transition()
 			.duration(energyWellFadeDuration)
 			.style("transform", null);
-		energyWellGraph.transition().duration(300).style("opacity", 0);
+		energyWellGraph
+			.transition()
+			.duration(300)
+			.style("opacity", 0)
+			.transition()
+			.style("display", "none");
 	}
 
 	dropSubstanceIntoBeaker(stage);
@@ -1478,9 +1487,10 @@ function update(stage) {
 
 	// Do the chemical equation at the bottom
 	const eqnData = getEquationChainData(stage);
+	console.log(eqnData);
 	equation
 		.selectAll(".eqn-chain")
-		.data(eqnData, d => `${d.shape}.${d.id}`)
+		.data(eqnData)
 		.join(
 			enter => enter,
 			update =>
@@ -1504,12 +1514,32 @@ function update(stage) {
 
 initialize();
 
+function get3DSphereDatum({ cx, cy, cz, color, lighting, peptide }) {
+	return {
+		type: "mesh3d",
+		x: peptide.x.map(x => cx + x),
+		y: peptide.y.map(y => cy + y),
+		z: peptide.z.map(z => cz + z),
+		i: peptide.simplices.map(s => s[0]),
+		j: peptide.simplices.map(s => s[1]),
+		k: peptide.simplices.map(s => s[2]),
+		facecolor: peptide.simplices.map(() => color || COLORS.orange),
+		lighting,
+	};
+}
+
 function plotEnergyWell() {
-	const lighting = {
-		ambient: 0.6,
+	const surfaceLighting = {
+		ambient: 0.7,
 		roughness: 0.8,
-		diffuse: 0.6,
+		diffuse: 0.8,
 		specular: 0.7,
+	};
+	const sphereLighting = {
+		ambient: 0.5,
+		roughness: 1,
+		diffuse: 0.6,
+		specular: 0.5,
 	};
 	const { well, peptide } = DIPEPTIDE_WELL;
 	const data = [
@@ -1522,7 +1552,7 @@ function plotEnergyWell() {
 			j: well.simplices.map(s => s[1]),
 			k: well.simplices.map(s => s[2]),
 			facecolor: well.simplices.map(() => "#234"),
-			lighting,
+			lighting: surfaceLighting,
 		},
 		...well.gridlines.map(gridline => ({
 			type: "scatter3d",
@@ -1534,42 +1564,74 @@ function plotEnergyWell() {
 				width: 2,
 				color: "#89a",
 			},
-			lighting,
+			lighting: surfaceLighting,
 		})),
 	];
 
 	const diameter = 1;
 
-	// [theta, phi, color]
-	const intersphereInfo = [
-		[0.2, 0.3, COLORS.blue],
-		[0.6, 0.9, null],
-		[1, 1, COLORS.green],
-		[1.5, 0.9, null],
-		[2, 0.4, COLORS.purple],
+	// rest is [dtheta, dphi, color]
+	const chainsInfo = [
+		{
+			initial: { cx: 0, cy: 0, cz: -5.3, color: null },
+			rest: [
+				[0.2, 0.5, COLORS.blue],
+				[0.4, 0.4, null],
+				[0.4, 0.1, COLORS.green],
+				[0.5, -0.1, null],
+				[0.5, -0.3, COLORS.purple],
+			],
+		},
+		{
+			initial: { cx: -8, cy: 8, cz: -0.2, color: null },
+			rest: [[0.2, 0.3, COLORS.blue]],
+		},
+		{
+			initial: { cx: 0, cy: -8, cz: -2.5, color: null },
+			rest: [
+				[1.8, 0.1, COLORS.purple],
+				[-1, 0.1, null],
+				[-0.6, 0.6, COLORS.green],
+			],
+		},
+		{
+			initial: { cx: 8, cy: 0, cz: -2.8, color: null },
+			rest: [[1.8, 0.5, COLORS.purple]],
+		},
 	];
 
-	const spheres = [{ cx: 0, cy: 0, cz: -5, color: null }];
-	for (const [theta, phi, color] of intersphereInfo) {
-		const { cx: prevCx, cy: prevCy, cz: prevCz } = spheres[spheres.length - 1];
-		const cx = prevCx + diameter * Math.cos(theta) * Math.cos(phi);
-		const cy = prevCy + diameter * Math.sin(theta) * Math.cos(phi);
-		const cz = prevCz + diameter * Math.sin(phi);
-		spheres.push({ cx, cy, cz, color });
-	}
+	for (const { initial, rest } of chainsInfo) {
+		let { cx, cy, cz } = initial;
+		data.push(
+			get3DSphereDatum({
+				cx,
+				cy,
+				cz,
+				color: initial.color,
+				lighting: sphereLighting,
+				peptide,
+			}),
+		);
 
-	for (const { cx, cy, cz, color } of spheres) {
-		data.push({
-			type: "mesh3d",
-			x: peptide.x.map(x => cx + x),
-			y: peptide.y.map(y => cy + y),
-			z: peptide.z.map(z => cz + z),
-			i: peptide.simplices.map(s => s[0]),
-			j: peptide.simplices.map(s => s[1]),
-			k: peptide.simplices.map(s => s[2]),
-			facecolor: peptide.simplices.map(() => color || COLORS.orange),
-			lighting,
-		});
+		let theta = 0,
+			phi = 0;
+		for (const [dTheta, dPhi, color] of rest) {
+			theta += dTheta;
+			phi += dPhi;
+			cx += diameter * Math.cos(theta) * Math.cos(phi);
+			cy += diameter * Math.sin(theta) * Math.cos(phi);
+			cz += diameter * Math.sin(phi);
+			data.push(
+				get3DSphereDatum({
+					cx,
+					cy,
+					cz,
+					color,
+					lighting: sphereLighting,
+					peptide,
+				}),
+			);
+		}
 	}
 
 	const axesAttrs = {

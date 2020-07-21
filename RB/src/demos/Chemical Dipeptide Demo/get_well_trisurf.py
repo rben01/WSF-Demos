@@ -67,8 +67,8 @@ def get_well_trisurf():
 
 
 def get_peptide_sphere_surface(radius):
-    theta_vals = np.linspace(0, np.pi, N_POINTS)
-    phi_vals = np.linspace(0, 2 * np.pi, N_POINTS)
+    theta_vals = np.linspace(0, 2 * np.pi, 21)
+    phi_vals = np.linspace(-np.pi / 2, np.pi / 2, 21)
 
     theta, phi = np.meshgrid(theta_vals, phi_vals)
     theta_flat = theta.ravel()
