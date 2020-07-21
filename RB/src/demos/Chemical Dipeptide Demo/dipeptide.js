@@ -754,7 +754,7 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 
 	// Compute center x and y of very first circle in the chain (lower left corner)
 	const cx0 = chainCx + sign * (indexMag + 1) * r - r;
-	const cy0 = chainCy + ((verticalDistanceBetweenDipeptides + r) * indexMag) / 2;
+	const cy0 = chainCy + (verticalDistanceBetweenDipeptides / 2 + r) * indexMag;
 
 	const circles = [];
 	const connectingLines = [];
@@ -923,9 +923,9 @@ function getEquationChainData(stage) {
 		id: `arrow-${i.toFixed(3)}`,
 		attrs: {
 			"xlink:href": "#symbol-eqn-arrow",
-			transform: `translate(${indexToCxScale(i) - CONFIG.symbolSize / 2}, ${
-				CONFIG.equationSVGHeight / 2 - CONFIG.symbolSize / 2
-			})`,
+			transform: `translate(${
+				indexToCxScale(i) - CONFIG.symbolSize / 2 - CONFIG.dipeptideRadius
+			}, ${CONFIG.equationSVGHeight / 2 - CONFIG.symbolSize / 2})`,
 		},
 		styles: {
 			opacity: Math.abs(i) <= maxIndex ? 1 : 0,
@@ -1019,9 +1019,13 @@ function initialize() {
 const dipeptideSelector = "circle.chemical-obj";
 const ligandSelector = "path.chemical-obj";
 
-function fadeligands(svg, fadeDuration) {
+function fadeligands(svg, fadeDuration, fadeDelay) {
+	if (fadeDelay === undefined) {
+		fadeDelay = 0;
+	}
 	svg.selectAll(`${ligandSelector}.ligand-exterior`)
 		.transition()
+		.delay(fadeDelay)
 		.duration(fadeDuration)
 		.style("opacity", 0)
 		.end()
@@ -1086,6 +1090,7 @@ const dipeptideMovementDelayIfNotResetting = 500 + substanceDropDuration;
 const ligandAppearDuration = 700;
 const ligandExteriorAppearPreappearTime = 300;
 const energyWellFadeDuration = 700;
+const graphRecedeDuration = 500;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
@@ -1113,7 +1118,7 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 
 	// Animate the dipeptides moving
 	if (stage === STAGES.initial) {
-		fadeligands(svg, ligandFadeDuration);
+		fadeligands(svg, ligandFadeDuration, graphRecedeDuration);
 		applyGraphicalObjs(svg, dipeptideData, {
 			selector: dipeptideSelector,
 			key: d => d.id,
@@ -1214,14 +1219,12 @@ const energyWellGraph = d3.select("#energy-well-plot").style("opacity", 0);
 const bottomGraphContainer = d3
 	.select("#bottom-graph-container")
 	.style("transform", "translate(0 0)");
-
 // eslint-disable-next-line no-unused-vars
 function update(stage) {
 	for (const button of Object.values(buttons)) {
 		button.disabled = true;
 	}
 
-	const fadeOutDuration = 500;
 	if (stage === STAGES.energyWell) {
 		const wellCenterX = graphXScale(0.16);
 		const wellCenterY = graphYScale(0);
@@ -1279,7 +1282,7 @@ function update(stage) {
 		bottomGraphContainer
 			.transition()
 			.delay(arcSweepDuration)
-			.duration(fadeOutDuration)
+			.duration(graphRecedeDuration)
 			.style("transform", "translate(-200px,0px)");
 
 		setTimeout(() => {
@@ -1291,7 +1294,7 @@ function update(stage) {
 			.selectAll(".well-circle")
 			.transition()
 			.delay(energyWellFadeDuration)
-			.duration(fadeOutDuration)
+			.duration(graphRecedeDuration)
 			.style("opacity", 0)
 			.remove();
 		bottomGraphContainer
@@ -1453,7 +1456,7 @@ function update(stage) {
 		data: graphData,
 		tweens: { "graph-dipeptide-position": graphDipeptideTween },
 		thens: {
-			cy: () => {
+			"graph-dipeptide-position": () => {
 				graph.selectAll(".temp-path").remove();
 			},
 		},
@@ -1478,22 +1481,24 @@ function update(stage) {
 	equation
 		.selectAll(".eqn-chain")
 		.data(eqnData, d => `${d.shape}.${d.id}`)
-		.join(undefined, update =>
-			update
-				.transition()
-				.delay(
-					stage === STAGES.enzyme || stage === STAGES.ligand
-						? dipeptideMovementDelayIfNotResetting +
-								dipeptideMovementDuration -
-								ligandExteriorAppearPreappearTime
-						: energyWellFadeDuration,
-				)
-				.duration(
-					stage === STAGES.initial
-						? dipeptideResetDuration
-						: ligandAppearDuration,
-				)
-				.style("opacity", d => d.styles.opacity),
+		.join(
+			enter => enter,
+			update =>
+				update
+					.transition()
+					.delay(
+						stage === STAGES.enzyme || stage === STAGES.ligand
+							? dipeptideMovementDelayIfNotResetting +
+									dipeptideMovementDuration -
+									ligandExteriorAppearPreappearTime
+							: energyWellFadeDuration,
+					)
+					.duration(
+						stage === STAGES.initial
+							? dipeptideResetDuration
+							: ligandAppearDuration,
+					)
+					.style("opacity", d => d.styles.opacity),
 		);
 }
 
@@ -1504,7 +1509,7 @@ function plotEnergyWell() {
 		ambient: 0.6,
 		roughness: 0.8,
 		diffuse: 0.6,
-		specular: 0.6,
+		specular: 0.7,
 	};
 	const { well, peptide } = DIPEPTIDE_WELL;
 	const data = [
