@@ -9,6 +9,8 @@ dependencies:
   - ipykernel
   - jupyter
   - pandas >=1.0
+  - numpy
+  - scipy
   - plotly
   - dash
   - ffmpeg

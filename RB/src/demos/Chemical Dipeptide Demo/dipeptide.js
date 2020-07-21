@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs defineArrowhead groupBy */
+/* global applyGraphicalObjs defineArrowhead groupBy Plotly DIPEPTIDE_WELL */
 
 const CONFIG = {
 	containerSVGWidth: 250,
@@ -12,6 +12,7 @@ const CONFIG = {
 	fluidHeight: 0.6,
 	symbolSize: 50,
 	symbolPad: 4,
+	beakerColor: "#047",
 };
 
 const COLORS = {
@@ -147,6 +148,7 @@ const beakerLine = d3
 	.y(p => p[1]);
 
 function getBeakerOutlineData() {
+	const beakerColor = CONFIG.beakerColor;
 	const ellipseWidth = beakerXScale(0.8) - beakerXScale(0);
 	const ellipseHeight = beakerYScale(0.15) - beakerYScale(0);
 	const leftX = beakerXScale(0.1);
@@ -154,7 +156,6 @@ function getBeakerOutlineData() {
 	const topLeftY = beakerYScale(0.9);
 	const midLeftY = beakerYScale(CONFIG.fluidHeight);
 	const botLeftY = beakerYScale(0.1);
-	const beakerColor = "#047";
 	const fluidColor = CONFIG.fluidColor;
 	const strokeWidth = 1;
 
@@ -891,13 +892,10 @@ function getEquationDipeptideData(index, drawEncirclingLine = false) {
 		);
 	}
 
-	console.log(ligandData);
-
 	return [...surroundingLines, ...ligandData, ...connectingLines, ...circles];
 }
 function getEquationChainData(stage) {
 	const indices = d3.range(-2, 2 + 1);
-	console.log(stage === STAGES.ligand);
 	const chains = indices
 		.map(i => getEquationDipeptideData(i, stage === STAGES.ligand))
 		.flat(Infinity)
@@ -960,6 +958,7 @@ function precomputeAndCachePathPoints(pathNode, nPoints) {
 const buttons = {
 	addEnzyme: document.getElementById("btn-add-enzyme"),
 	addLigand: document.getElementById("btn-add-ligand"),
+	energyWell: document.getElementById("btn-energy-well"),
 	reset: document.getElementById("btn-reset"),
 };
 function initialize() {
@@ -967,6 +966,7 @@ function initialize() {
 	buttons.addEnzyme.disabled = false;
 	buttons.addLigand.disabled = true;
 	buttons.reset.disabled = true;
+	buttons.energyWell.disabled = true;
 
 	const { background, foreground } = getBeakerOutlineData();
 
@@ -1085,6 +1085,7 @@ const dipeptideMovementDuration = 1500;
 const dipeptideMovementDelayIfNotResetting = 500 + substanceDropDuration;
 const ligandAppearDuration = 700;
 const ligandExteriorAppearPreappearTime = 300;
+const energyWellFadeDuration = 700;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
 		[dipeptideSelector]: dipeptideData,
@@ -1099,8 +1100,10 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const ligandFadeDuration = 200;
 
 	const dipeptideMovementDelay =
-		stage === STAGES.initial ? 0 : dipeptideMovementDelayIfNotResetting;
-	const dipeptideResetDelay = ligandFadeDuration;
+		stage === STAGES.initial
+			? energyWellFadeDuration
+			: dipeptideMovementDelayIfNotResetting;
+	const dipeptideResetDelay = energyWellFadeDuration + ligandFadeDuration;
 	const dipeptideMovementTransition = d3
 		.transition()
 		.delay(dipeptideMovementDelay)
@@ -1197,7 +1200,6 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 				.tween(name, tween);
 
 			if (thens !== undefined && thens[name] !== undefined) {
-				console.log(thens[name]);
 				t.end()
 					.then(thens[name])
 					.catch(() => {});
@@ -1208,10 +1210,95 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	return totalTransitionDuration - 100;
 }
 
+const energyWellGraph = d3.select("#energy-well-plot").style("opacity", 0);
+const bottomGraphContainer = d3
+	.select("#bottom-graph-container")
+	.style("transform", "translate(0 0)");
+
 // eslint-disable-next-line no-unused-vars
 function update(stage) {
 	for (const button of Object.values(buttons)) {
 		button.disabled = true;
+	}
+
+	const fadeOutDuration = 500;
+	if (stage === STAGES.energyWell) {
+		const wellCenterX = graphXScale(0.16);
+		const wellCenterY = graphYScale(0);
+		const wellEllipseRx = 60;
+		const wellEllipseRy = 10;
+		const wellEllipseCy = wellCenterY - 40;
+		const arcSweepDuration = 2000;
+		const ellipseCircumference = 255; // Trial and error
+		const halfCircumference = ellipseCircumference / 2;
+		const sweepColor = "#579";
+		graph
+			.append("path")
+			.classed("well-circle", true)
+			.attr(
+				"d",
+				`
+				M ${wellCenterX - wellEllipseRx} ${wellEllipseCy}
+				a ${wellEllipseRx} ${wellEllipseRy} 0 0 0 ${2 * wellEllipseRx} 0
+			`,
+			)
+			.attr("stroke-dasharray", halfCircumference)
+			.attr("stroke-dashoffset", halfCircumference)
+			.attr("stroke", sweepColor)
+			.attr("stroke-width", 2)
+			.attr("fill-opacity", 0)
+			.transition()
+			.duration(arcSweepDuration / 2)
+			.ease(d3.easeCubicIn)
+			.attr("stroke-dashoffset", 0);
+		graph
+			.insert("path", ".energy-curve")
+			.classed("well-circle", true)
+			.attr(
+				"d",
+				`
+				M ${wellCenterX + wellEllipseRx} ${wellEllipseCy}
+				a ${wellEllipseRx} ${wellEllipseRy} 0 1 0 ${-2 * wellEllipseRx} 0
+			`,
+			)
+			.attr("stroke-dasharray", halfCircumference)
+			.attr("stroke-dashoffset", halfCircumference)
+			.attr("stroke", sweepColor)
+			.attr("stroke-width", 2)
+			.attr("fill-opacity", 0)
+			.transition()
+			.delay(arcSweepDuration / 2)
+			.duration(arcSweepDuration / 2)
+			.ease(d3.easeCubicOut)
+			.attr("stroke-dashoffset", 0);
+		energyWellGraph
+			.transition()
+			.delay(arcSweepDuration)
+			.duration(energyWellFadeDuration)
+			.style("opacity", 1);
+		bottomGraphContainer
+			.transition()
+			.delay(arcSweepDuration)
+			.duration(fadeOutDuration)
+			.style("transform", "translate(-200px,0px)");
+
+		setTimeout(() => {
+			buttons.reset.disabled = false;
+		}, energyWellFadeDuration);
+		return;
+	} else if (stage === STAGES.initial) {
+		graph
+			.selectAll(".well-circle")
+			.transition()
+			.delay(energyWellFadeDuration)
+			.duration(fadeOutDuration)
+			.style("opacity", 0)
+			.remove();
+		bottomGraphContainer
+			.transition()
+			.duration(energyWellFadeDuration)
+			.style("transform", null);
+		energyWellGraph.transition().duration(300).style("opacity", 0);
 	}
 
 	dropSubstanceIntoBeaker(stage);
@@ -1246,7 +1333,9 @@ function update(stage) {
 		energyCurveNode.setAttribute("d", finalEnergyCurvePathString);
 
 		const delay =
-			stage === STAGES.initial ? energyCurveChangeDelay : substanceDropDuration;
+			stage === STAGES.initial
+				? energyWellFadeDuration + energyCurveChangeDelay
+				: substanceDropDuration;
 
 		if (stage === STAGES.enzyme) {
 			energyCurveNode.setAttribute(
@@ -1377,6 +1466,8 @@ function update(stage) {
 				: stage === STAGES.enzyme
 				? buttons.addLigand
 				: stage === STAGES.ligand
+				? buttons.energyWell
+				: stage === STAGES.energyWell
 				? buttons.reset
 				: null;
 		nextButton.disabled = false;
@@ -1395,7 +1486,7 @@ function update(stage) {
 						? dipeptideMovementDelayIfNotResetting +
 								dipeptideMovementDuration -
 								ligandExteriorAppearPreappearTime
-						: 0,
+						: energyWellFadeDuration,
 				)
 				.duration(
 					stage === STAGES.initial
@@ -1407,3 +1498,106 @@ function update(stage) {
 }
 
 initialize();
+
+function plotEnergyWell() {
+	const lighting = {
+		ambient: 0.6,
+		roughness: 0.8,
+		diffuse: 0.6,
+		specular: 0.6,
+	};
+	const { well, peptide } = DIPEPTIDE_WELL;
+	const data = [
+		{
+			type: "mesh3d",
+			x: well.x,
+			y: well.y,
+			z: well.z,
+			i: well.simplices.map(s => s[0]),
+			j: well.simplices.map(s => s[1]),
+			k: well.simplices.map(s => s[2]),
+			facecolor: well.simplices.map(() => "#234"),
+			lighting,
+		},
+		...well.gridlines.map(gridline => ({
+			type: "scatter3d",
+			mode: "lines",
+			x: gridline.map(p => p[0]),
+			y: gridline.map(p => p[1]),
+			z: gridline.map(p => p[2]),
+			line: {
+				width: 2,
+				color: "#89a",
+			},
+			lighting,
+		})),
+	];
+
+	const diameter = 1;
+
+	// [theta, phi, color]
+	const intersphereInfo = [
+		[0.2, 0.3, COLORS.blue],
+		[0.6, 0.9, null],
+		[1, 1, COLORS.green],
+		[1.5, 0.9, null],
+		[2, 0.4, COLORS.purple],
+	];
+
+	const spheres = [{ cx: 0, cy: 0, cz: -5, color: null }];
+	for (const [theta, phi, color] of intersphereInfo) {
+		const { cx: prevCx, cy: prevCy, cz: prevCz } = spheres[spheres.length - 1];
+		const cx = prevCx + diameter * Math.cos(theta) * Math.cos(phi);
+		const cy = prevCy + diameter * Math.sin(theta) * Math.cos(phi);
+		const cz = prevCz + diameter * Math.sin(phi);
+		spheres.push({ cx, cy, cz, color });
+	}
+
+	for (const { cx, cy, cz, color } of spheres) {
+		data.push({
+			type: "mesh3d",
+			x: peptide.x.map(x => cx + x),
+			y: peptide.y.map(y => cy + y),
+			z: peptide.z.map(z => cz + z),
+			i: peptide.simplices.map(s => s[0]),
+			j: peptide.simplices.map(s => s[1]),
+			k: peptide.simplices.map(s => s[2]),
+			facecolor: peptide.simplices.map(() => color || COLORS.orange),
+			lighting,
+		});
+	}
+
+	const axesAttrs = {
+		showgrid: false,
+		visible: false,
+		showspikes: false,
+	};
+
+	const layout = {
+		margin: { t: 0, b: 0, l: 0, r: 0 },
+		hovermode: false,
+		showlegend: false,
+		scene: {
+			aspectmode: "data",
+			xaxis: axesAttrs,
+			yaxis: axesAttrs,
+			zaxis: axesAttrs,
+			camera: {
+				up: { x: 0, y: 0, z: 1 },
+				center: { x: 0, y: 0, z: 0 },
+				eye: {
+					x: -0.48577809539281663,
+					y: -1.450278208976746,
+					z: 1.631169138564033,
+				},
+				projection: { type: "perspective" },
+			},
+		},
+	};
+
+	const config = { displayModeBar: false, scrollZoom: false };
+
+	Plotly.react("energy-well-plot", data, layout, config);
+}
+
+plotEnergyWell();
