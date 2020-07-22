@@ -33,15 +33,12 @@ def get_zs(xs, ys, x_major):
 
 # An arrow pointing in the +x dir
 def get_well_trisurf():
-    x_gridlines = np.linspace(XMIN, XMAX, N_POINTS)
-    y_gridlines = np.linspace(YMIN, YMAX, N_POINTS)
-    gridlines = [
-        *get_zs(x_gridlines, y_gridlines, True),
-        *get_zs(x_gridlines, y_gridlines, False),
-    ]
-
     x_vals = np.linspace(XMIN, XMAX, N_POINTS)
     y_vals = np.linspace(YMIN, YMAX, N_POINTS)
+    gridlines = [
+        *get_zs(x_vals, y_vals, True),
+        *get_zs(x_vals, y_vals, False),
+    ]
 
     x, y = np.meshgrid(x_vals, y_vals)
     x_flat = x.ravel()
