@@ -377,17 +377,25 @@ function reset() {
 		.style("opacity", 1);
 
 	const flashes = subcanvases.selectAll(".light-flash");
-	flashes.transition("o").duration(50).attr("opacity", 0.8);
-	const t = flashes
-		.transition("x")
-		.duration(200)
-		.ease(d3.easeLinear)
-		.attr("cx", xScale(RANGES.x.mid));
-	t.transition().duration(50).attr("opacity", 0).remove();
+	flashes
+		.transition("o")
+		.duration(300)
+		.attr("opacity", 0)
+		.on("end", function (_, i) {
+			d3.select(this)
+				.transition("x")
+				.duration(0)
+				.attr("cx", xScale(RANGES.x.mid))
+				.end()
+				.then(() => {
+					if (i === 0) {
+						buttons.playPause.disabled = false;
+					}
+				});
+		});
 
-	t.end().then(() => {
-		buttons.playPause.disabled = false;
-	});
+	// t.end().then(() => {
+	// });
 }
 
 function updateClocks({ clockIndex, t } = {}) {

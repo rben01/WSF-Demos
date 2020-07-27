@@ -4,8 +4,8 @@
 
 const REST_MASS = 5;
 
-const CANVAS_WIDTH = 700;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 350;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
@@ -39,7 +39,7 @@ const subcanvases = canvas
 
 const speedInputSlider = document.getElementById("input-particle-speed");
 const speedTextSpan = document.getElementById("particle-speed-text");
-const relMomentumTextSpan = document.getElementById("particle-rel-mass-text");
+const relMassTextSpan = document.getElementById("particle-rel-mass-text");
 
 function getSpeed(speedStr) {
 	speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
@@ -51,25 +51,24 @@ function getSpeed(speedStr) {
 	return floatVal;
 }
 
-function getRelativisticMomentum({ fracOfC }) {
-	const lf = lorentzFactor({ fracOfC });
-	return REST_MASS * fracOfC * lf;
+function getRelativisticMass({ fracOfC, lf }) {
+	if (typeof lf === "undefined") {
+		lf = lorentzFactor({ fracOfC });
+	}
+	return REST_MASS * lf;
 }
 
-const xScale = d3
-	.scaleLinear()
-	.domain([-0.02, 1])
-	.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 
 const yScale = d3
 	.scaleLinear()
-	.domain([-1, getRelativisticMomentum({ fracOfC: speedInputSlider.max }) * 1.05])
+	.domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
 const graphObjs = {};
 
 function drawGraph() {
-	const data = [[0, getRelativisticMomentum({ fracOfC: 0 })]];
+	const data = [[0, 5]];
 
 	const base = 10;
 	const startPrecision = 2;
@@ -83,7 +82,7 @@ function drawGraph() {
 		const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
 		for (let i = 0; i < nNums - 1; ++i) {
 			const x = lower + i * scale;
-			const y = getRelativisticMomentum({ fracOfC: x });
+			const y = getRelativisticMass({ fracOfC: x });
 
 			if (y > Math.max(...yScale.domain())) {
 				break outer;
@@ -92,6 +91,7 @@ function drawGraph() {
 			data.push([x, y, xScale(x), yScale(y)]);
 		}
 	}
+
 	console.log(data);
 
 	subcanvases.each(function () {
@@ -204,7 +204,7 @@ function drawGraph() {
 			};
 		});
 
-		const yTickTextData = yScale.ticks(8).map(y => {
+		const yTickTextData = yScale.ticks(4).map(y => {
 			return {
 				class: "y-axis-label",
 				text: y,
@@ -257,7 +257,7 @@ function drawGraph() {
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
-			.text("𝑝(𝑣)");
+			.text("𝑚(𝑣)");
 	});
 }
 
@@ -267,7 +267,7 @@ function getGridlinesData({ fracOfC }) {
 	}
 
 	const x = xScale(fracOfC);
-	const y = yScale(getRelativisticMomentum({ fracOfC }));
+	const y = yScale(getRelativisticMass({ fracOfC }));
 
 	const commonLineAttrs = {
 		"stroke-width": 3,
@@ -306,7 +306,7 @@ function getGridlinesData({ fracOfC }) {
 			attrs: {
 				cx: x,
 				cy: y,
-				r: 5,
+				r: 4,
 				fill: "white",
 			},
 		},
@@ -326,8 +326,8 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		const speed = getSpeed(speedStr);
 		speedTextSpan.textContent = speed.toFixed(3);
 
-		const relMomentum = getRelativisticMomentum({ fracOfC: speed });
-		relMomentumTextSpan.textContent = relMomentum.toFixed(2);
+		const relMass = getRelativisticMass({ fracOfC: speed });
+		relMassTextSpan.textContent = relMass.toFixed(2);
 
 		graphObjs.gridLines
 			.data(getGridlinesData({ fracOfC: speed }))

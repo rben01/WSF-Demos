@@ -27,7 +27,8 @@ function applyDatum(datum, { transition } = {}) {
 
 	if (typeof datum.class !== "undefined") {
 		d3Obj.classed(datum.class, true);
-	} else if (typeof datum.classes !== "undefined") {
+	}
+	if (typeof datum.classes !== "undefined") {
 		for (const c of datum.classes) {
 			d3Obj.classed(c, true);
 		}
@@ -37,6 +38,12 @@ function applyDatum(datum, { transition } = {}) {
 	Object.entries(datum.attrs).forEach(([key, val]) => {
 		t.attr(key, val);
 	});
+
+	if (datum.styles !== undefined) {
+		Object.entries(datum.styles).forEach(([key, val]) => {
+			t.style(key, val);
+		});
+	}
 
 	if (typeof datum.text !== "undefined") {
 		t.text(datum.text);

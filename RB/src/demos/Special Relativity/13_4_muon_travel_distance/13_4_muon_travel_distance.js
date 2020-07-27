@@ -1,17 +1,21 @@
-/* globals _addGraphicalObjs applyDatum lorentzFactor STANDARD_COLORS */
+/* globals _addGraphicalObjs applyDatum lorentzFactor C STANDARD_COLORS */
 
 "use strict";
 
-const REST_MASS = 5;
+const MUON_BASE_LIFESPAN = 2.19e-6;
 
-const CANVAS_WIDTH = 700;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 600;
+const CANVAS_HEIGHT = 350;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
 	xMax: CANVAS_WIDTH * (1 - AXIS_MARGINS.right),
 	yMin: CANVAS_HEIGHT * (1 - AXIS_MARGINS.bottom),
 	yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
+};
+
+const USER_INFO = {
+	newtonianLineIsVisible: true,
 };
 
 const canvas = d3
@@ -37,9 +41,15 @@ const subcanvases = canvas
 	})
 	.selectAll("g");
 
-const speedInputSlider = document.getElementById("input-particle-speed");
-const speedTextSpan = document.getElementById("particle-speed-text");
-const relMomentumTextSpan = document.getElementById("particle-rel-mass-text");
+const newtonianAnswerSection = document.getElementById("sect-newtonian-answer");
+const toggleNewtonianButton = document.getElementById("btn-toggle-show-newtonian");
+const speedInputSlider = document.getElementById("input-muon-speed");
+const speedTextSpan = document.getElementById("muon-speed-text");
+const lfTextSpan = document.getElementById("lorentz-factor-text");
+const disintegrationDistTextSpan = document.getElementById("text-disintegration-dist");
+const newtonianDistTextSpan = document.getElementById("text-newtonian-answer");
+
+const newtonianLineColor = "#777f";
 
 function getSpeed(speedStr) {
 	speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
@@ -51,25 +61,28 @@ function getSpeed(speedStr) {
 	return floatVal;
 }
 
-function getRelativisticMomentum({ fracOfC }) {
-	const lf = lorentzFactor({ fracOfC });
-	return REST_MASS * fracOfC * lf;
+function nonRelativisticMuonDistTraveled({ fracOfC }) {
+	return fracOfC * C * MUON_BASE_LIFESPAN;
 }
 
-const xScale = d3
-	.scaleLinear()
-	.domain([-0.02, 1])
-	.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+function muonDistTraveled({ fracOfC, lf }) {
+	if (typeof lf === "undefined") {
+		lf = lorentzFactor({ fracOfC });
+	}
+	return fracOfC * C * MUON_BASE_LIFESPAN * lf;
+}
+
+const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 
 const yScale = d3
 	.scaleLinear()
-	.domain([-1, getRelativisticMomentum({ fracOfC: speedInputSlider.max }) * 1.05])
+	.domain([0, muonDistTraveled({ fracOfC: speedInputSlider.max })])
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
 const graphObjs = {};
 
 function drawGraph() {
-	const data = [[0, getRelativisticMomentum({ fracOfC: 0 })]];
+	const data = [[0, 0]];
 
 	const base = 10;
 	const startPrecision = 2;
@@ -83,7 +96,7 @@ function drawGraph() {
 		const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
 		for (let i = 0; i < nNums - 1; ++i) {
 			const x = lower + i * scale;
-			const y = getRelativisticMomentum({ fracOfC: x });
+			const y = muonDistTraveled({ fracOfC: x });
 
 			if (y > Math.max(...yScale.domain())) {
 				break outer;
@@ -92,6 +105,7 @@ function drawGraph() {
 			data.push([x, y, xScale(x), yScale(y)]);
 		}
 	}
+
 	console.log(data);
 
 	subcanvases.each(function () {
@@ -108,6 +122,32 @@ function drawGraph() {
 			.attr("d", curve(data))
 			.attr("stroke", "#fffd")
 			.attr("stroke-width", 4);
+
+		// Add line for Newtonian prediction
+		graphObjs.newtonianLine = subcanvas
+			.append("svg:line")
+			.attr("x1", AX_BOUNDS.xMin)
+			.attr("x2", AX_BOUNDS.xMax)
+			.attr(
+				"y1",
+				yScale(
+					nonRelativisticMuonDistTraveled({
+						fracOfC: 0,
+					}),
+				),
+			)
+			.attr(
+				"y2",
+				yScale(
+					nonRelativisticMuonDistTraveled({
+						fracOfC: 1,
+					}),
+				),
+			)
+			.attr("stroke", newtonianLineColor)
+			.attr("stroke-width", 2)
+			.attr("stroke-dasharray", "5 5")
+			.classed("newtonian-prediction", true);
 
 		// Add axes
 		const commonAxesAttrs = {
@@ -204,7 +244,7 @@ function drawGraph() {
 			};
 		});
 
-		const yTickTextData = yScale.ticks(8).map(y => {
+		const yTickTextData = yScale.ticks(4).map(y => {
 			return {
 				class: "y-axis-label",
 				text: y,
@@ -253,11 +293,10 @@ function drawGraph() {
 			.append("svg:text")
 			.attr("x", AX_BOUNDS.xMin)
 			.attr("y", AX_BOUNDS.yMax - 10)
-			.attr("font-size", 21)
-			.attr("stroke", "white")
+			.attr("font-size", 19)
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
-			.text("𝑝(𝑣)");
+			.text("Distance (meters)");
 	});
 }
 
@@ -267,7 +306,7 @@ function getGridlinesData({ fracOfC }) {
 	}
 
 	const x = xScale(fracOfC);
-	const y = yScale(getRelativisticMomentum({ fracOfC }));
+	const y = yScale(muonDistTraveled({ fracOfC }));
 
 	const commonLineAttrs = {
 		"stroke-width": 3,
@@ -306,7 +345,7 @@ function getGridlinesData({ fracOfC }) {
 			attrs: {
 				cx: x,
 				cy: y,
-				r: 5,
+				r: 4,
 				fill: "white",
 			},
 		},
@@ -317,7 +356,7 @@ drawGraph();
 graphObjs.gridLines = _addGraphicalObjs(subcanvases, getGridlinesData);
 
 // eslint-disable-next-line no-unused-vars
-function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
+function updateMuonSpeed(speedStr, { fromUserInput = true } = {}) {
 	try {
 		if (!fromUserInput) {
 			speedInputSlider.value = speedStr;
@@ -326,8 +365,14 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		const speed = getSpeed(speedStr);
 		speedTextSpan.textContent = speed.toFixed(3);
 
-		const relMomentum = getRelativisticMomentum({ fracOfC: speed });
-		relMomentumTextSpan.textContent = relMomentum.toFixed(2);
+		const lf = lorentzFactor({ fracOfC: speed });
+		lfTextSpan.textContent = lf.toFixed(3);
+
+		const newtonianDistTraveled = speed * C * MUON_BASE_LIFESPAN;
+		newtonianDistTextSpan.textContent = newtonianDistTraveled.toFixed(2);
+
+		const trueDistTraveled = newtonianDistTraveled * lf;
+		disintegrationDistTextSpan.textContent = trueDistTraveled.toFixed(2);
 
 		graphObjs.gridLines
 			.data(getGridlinesData({ fracOfC: speed }))
@@ -341,4 +386,29 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		console.log(speedStr);
 		throw e;
 	}
+}
+
+// eslint-disable-next-line no-unused-vars
+function hideNewtonianLine() {
+	const transitionDurationMS = 150;
+
+	USER_INFO.newtonianLineIsVisible = !USER_INFO.newtonianLineIsVisible;
+	let opacity;
+	if (USER_INFO.newtonianLineIsVisible) {
+		toggleNewtonianButton.textContent = "Hide Newtonian Answer";
+		opacity = 1;
+	} else {
+		toggleNewtonianButton.textContent = "Show Newtonian Answer";
+		opacity = 0;
+	}
+	d3.select(newtonianAnswerSection)
+		.transition()
+		.duration(transitionDurationMS)
+		.style("opacity", opacity);
+
+	const color = USER_INFO.newtonianLineIsVisible ? newtonianLineColor : "#0000";
+	graphObjs.newtonianLine
+		.transition()
+		.duration(transitionDurationMS)
+		.attr("stroke", color);
 }
