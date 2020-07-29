@@ -1335,7 +1335,6 @@ function update(stage) {
 		graph
 			.selectAll(".well-circle")
 			.transition()
-			.delay(prevStage === STAGES.energyWell ? defaultEnergyWellFadeDuration : 0)
 			.duration(graphRecedeDuration)
 			.style("opacity", 0)
 			.remove();
