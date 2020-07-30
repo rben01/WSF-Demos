@@ -108,69 +108,14 @@
                 }
                 theta += 0.02;
             }
-
-            /* var ar = [{ id: "Chordata" }];
-            for (var c in chordata) {
-                ar.push({ id: c, parentId: "Chordata" });
-                for (var o in chordata[c]) {
-                    ar.push({ id: chordata[c][o], parentId: c });
-                }
-            }
-            var h = d3.stratify()(ar);
-            h = d3.cluster().nodeSize([10, 200])(h);
-            h.dx = 10;
-            h.dy = 200;
-            h.x = 240;
-            var hier = d3.select("#hier")
-            hier.append("g")
-                .attr("fill", "none")
-                .attr("stroke", "#555")
-                .attr("stroke-opacity", 0.4)
-                .attr("stroke-width", 1.5)
-                .selectAll("path")
-                .data(h.links())
-                .join("path")
-                .attr("d", d3.linkRadial()
-                    .angle(d => d.x)
-                    .radius(d => d.y));
-
-            hier.append("g")
-                .selectAll("circle")
-                .data(h.descendants())
-                .join("circle")
-                .attr("transform", d => `
-                    rotate(${d.x * 180 / Math.PI - 90})
-                    translate(${d.y},0)
-                `)
-                .attr("fill", d => d.children ? "#555" : "#999")
-                .attr("r", 2.5);
-
-            hier.append("g")
-                .attr("font-family", "sans-serif")
-                .attr("font-size", 10)
-                .attr("stroke-linejoin", "round")
-                .attr("stroke-width", 3)
-                .selectAll("text")
-                .data(h.descendants())
-                .join("text")
-                .attr("transform", d => `
-                    rotate(${d.x * 180 / Math.PI - 90}) 
-                    translate(${d.y},0) 
-                    rotate(${d.x >= Math.PI ? 180 : 0})
-                `)
-                .attr("dy", "0.31em")
-                .attr("x", d => d.x < Math.PI === !d.children ? 6 : -6)
-                .attr("text-anchor", d => d.x < Math.PI === !d.children ? "start" : "end")
-                .text(d => d.data.name)
-                .clone(true).lower()
-                .attr("stroke", "white"); */
         }
 
         function rend2() {
             var svg = d3.select("svg"),
                 width = +svg.attr("width"),
                 height = +svg.attr("height"),
-                g = svg.append("g").attr("transform", "translate(" + (width / 2 - 15) + "," + (height / 2 + 25) + ")");
+                g = svg.append("g").attr("transform", "translate(" + (width / 2 - 15) + "," + (height / 2 + 25) + ")"),
+                arcgen = d3.arc();
 
             var stratify = d3.stratify()
                 .parentId(function (d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
@@ -184,14 +129,12 @@
 
                 var link = g.selectAll(".link")
                     .data(root.descendants().slice(1))
-                    .enter().append("path")
+                    .enter().append("line")
                     .attr("class", "link")
-                    .attr("d", function (d) {
-                        return "M" + project(d.x, d.y)
-                            + "C" + project(d.x, (d.y + d.parent.y) / 2)
-                            + " " + project(d.parent.x, (d.y + d.parent.y) / 2)
-                            + " " + project(d.parent.x, d.parent.y);
-                    });
+                    .attr("x1", function (d) { return project(d.x, d.y)[0]; })
+                    .attr("y1", function (d) { return project(d.x, d.y)[1]; })
+                    .attr("x2", function (d) { return project(d.x, d.parent.y)[0]; })
+                    .attr("y2", function (d) { return project(d.x, d.parent.y)[1]; });
 
                 var node = g.selectAll(".node")
                     .data(root.descendants())
@@ -199,7 +142,18 @@
                     .attr("class", function (d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
                     .attr("transform", function (d) { return "translate(" + project(d.x, d.y) + ")"; });
 
-                node.append("circle")
+                var arcs = g.selectAll(".node--internal").data().forEach(d => g.append("path")
+                    .attr("d",
+                        arcgen({
+                            startAngle: Math.min(...d.children.map(c => (c.x) / 180 * Math.PI)),
+                            endAngle: Math.max(...d.children.map(c => (c.x) / 180 * Math.PI)),
+                            innerRadius: d.y,
+                            outerRadius: d.y + 2,
+                        })
+                    )
+                    .attr("class", "link"));
+
+                g.selectAll(".node--leaf").append("circle")
                     .attr("r", 2.5);
 
                 /* node.append("text")
