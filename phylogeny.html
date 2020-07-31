@@ -34,7 +34,7 @@
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=720 height=960></svg>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
     <svg xmlns="https://www.w3.org/2000/svg" id="hier" width=720 height=1000></svg>
     <script type="text/javascript">
         var svg = d3.select('svg');
@@ -140,7 +140,8 @@
                     .data(root.descendants())
                     .enter().append("g")
                     .attr("class", function (d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
-                    .attr("transform", function (d) { return "translate(" + project(d.x, d.y) + ")"; });
+                    .attr("transform", function (d) { return "translate(" + project(d.x, d.y) + ")"; })
+                    .attr("id", function (d) { return d.data.id; });
 
                 var arcs = g.selectAll(".node--internal").data().forEach(d => g.append("path")
                     .attr("d",
@@ -154,14 +155,15 @@
                     .attr("class", "link"));
 
                 g.selectAll(".node--leaf").append("circle")
-                    .attr("r", 2.5);
+                    .attr("r", 2.5)
 
-                /* node.append("text")
+                g.selectAll(".node--leaf")
+                    .append("text")
                     .attr("dy", ".31em")
                     .attr("x", function (d) { return d.x < 180 === !d.children ? 6 : -6; })
                     .style("text-anchor", function (d) { return d.x < 180 === !d.children ? "start" : "end"; })
                     .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
-                    .text(function (d) { return d.id.substring(d.id.lastIndexOf(".") + 1); }); */
+                    .text(function (d) { return d.data.id; });
             });
 
             function project(x, y) {
