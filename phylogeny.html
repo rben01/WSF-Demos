@@ -177,14 +177,17 @@
             var g = d3.select("g"),
                 c,
                 links = [],
-                nodes = a.path(b).map(n => "#" + (n.children ? "N" + n.data.id.slice(1, -1) : n.data.id));
+                nodes = a.path(b);
 
-            nodes.forEach(function (n) {
+            c = "#N" + nodes.reduce(function (prev, current) { return (prev.depth < current.depth ? prev : current) }).data.id.slice(1, -1);
+
+            nodes.map(n => "#" + (n.children ? "N" + n.data.id.slice(1, -1) : n.data.id)).forEach(function (n) {
                 var node = d3.select(n).data()[0];
                 d3.select(n).append("circle")
                     .attr("r", 2.5)
                     .attr("class", "highlight")
-                    .style("fill", d3.color("green"));
+                    .style("fill", "#0F0");
+                if (n == c) { return; }
                 g.append("line")
                     .attr("class", "highlight")
                     .attr("x1", project(node.x, node.y)[0])
@@ -201,6 +204,7 @@
                         outerRadius: node.parent.y + 2,
                     })
                     )
+                    .style("fill", "#0F0")
             })
         }
     </script>
