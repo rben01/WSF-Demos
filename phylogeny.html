@@ -135,7 +135,7 @@
                     .enter().append("g")
                     .attr("class", function (d) { return "node" + (d.children ? " node--internal" : " node--leaf"); })
                     .attr("transform", function (d) { return "translate(" + project(d.x, d.y) + ")"; })
-                    .attr("id", function (d) { return d.data.id; });
+                    .attr("id", function (d) { return d.children ? d.data.id.slice(1, -1) : d.data.id; });
 
                 var arcs = g.selectAll(".node--internal").data().forEach(d => g.append("path")
                     .attr("d",
