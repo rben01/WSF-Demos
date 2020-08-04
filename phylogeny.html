@@ -139,7 +139,7 @@
                     .attr("y1", project(node.x, node.y)[1])
                     .attr("x2", project(node.x, node.parent.y)[0])
                     .attr("y2", project(node.x, node.parent.y)[1])
-                    .style("fill", d3.color("green"));
+                    .style("fill", "#0F0");
                 g.append("path")
                     .attr("class", "highlight")
                     .attr("d", arcgen({
