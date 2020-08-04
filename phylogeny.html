@@ -40,26 +40,22 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
     <svg xmlns="https://www.w3.org/2000/svg" id="hier" width=720 height=1000></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
+            g,
             root,
             arcgen = d3.arc();
 
         var data = d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
-            $.getJSON('https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/chordata_order.json', function (d) {
-                chordata = d;
-            });
             rend2();
         }
 
         );
 
         function rend2() {
-            var svg = d3.select("svg"),
-                width = +svg.attr("width"),
+            var width = +svg.attr("width"),
                 height = +svg.attr("height"),
                 g = svg.append("g").attr("transform", "translate(" + (width / 2 - 15) + "," + (height / 2 + 25) + ")");
 
