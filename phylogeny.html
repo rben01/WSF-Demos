@@ -49,15 +49,6 @@
             arcgen = d3.arc();
 
         var data = d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
-            /*data.forEach(function (d) {
-                if (!(d.Class in chordata)) {
-                    chordata[d.Class] = []
-                }
-                if (!(chordata[d.Class].includes(d.Order))) {
-                    chordata[d.Class].push(d.Order)
-                }
-            });
-            render(); */
             $.getJSON('https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/chordata_order.json', function (d) {
                 chordata = d;
             });
@@ -65,52 +56,6 @@
         }
 
         );
-
-        function render() {
-            var orders = 146;
-            var linelen = 150;
-            var theta = -Math.PI / 2;
-            var arcgen = d3.arc();
-            arcgen.innerRadius(linelen).outerRadius(linelen + 2);
-            var o;
-            var dtheta;
-            var r;
-            var sin;
-            var cos;
-            for (var c in chordata) {
-                o = chordata[c].length - 1;
-                dtheta = Math.max(2 * Math.PI * o / orders - 0.02, 0);
-                theta += 0.02;
-                theta += dtheta / 2;
-                svg.append("line").attr("x1", 360).attr("y1", 480).attr("x2", 360 + linelen * Math.sin(theta)).attr("y2", 480 - linelen * Math.cos(theta)).attr("stroke-width", 2).attr("stroke", "black");
-                theta -= dtheta / 2;
-                svg.append("path").attr("d", arcgen({
-                    startAngle: theta,
-                    endAngle: theta + dtheta,
-                })).attr("transform", "translate(360, 480)");
-                for (order in chordata[c]) {
-                    sin = Math.sin(theta);
-                    cos = Math.cos(theta);
-                    svg.append("line").attr("x1", 360 + linelen * sin).attr("y1", 480 - linelen * cos).attr("x2", 360 + 2 * linelen * sin).attr("y2", 480 - 2 * linelen * cos).attr("stroke-width", 2).attr("stroke", "black");
-                    if (theta > 0) {
-                        r = theta * 180 / Math.PI - 90;
-                    }
-                    else {
-                        r = theta * 180 / Math.PI + 90;
-                    }
-                    if (theta > 0) {
-                        svg.append("text").attr("transform", "translate(" + (360 + 2 * linelen * sin) + "," + (480 - 2 * linelen * cos) + ")rotate(" + r + ")").attr("style", "font-size:9px").attr("text-anchor", "start").text(chordata[c][order]);
-                    }
-                    else {
-                        svg.append("text").attr("transform", "translate(" + (360 + 2 * linelen * sin) + "," + (480 - 2 * linelen * cos) + ")rotate(" + r + ")").attr("style", "font-size:9px").attr("text-anchor", "end").text(chordata[c][order]);
-                    }
-                    if (o > 0) {
-                        theta += dtheta / o;
-                    }
-                }
-                theta += 0.02;
-            }
-        }
 
         function rend2() {
             var svg = d3.select("svg"),
