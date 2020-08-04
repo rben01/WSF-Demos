@@ -45,6 +45,7 @@
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
+            selected,
             root,
             arcgen = d3.arc();
 
@@ -98,6 +99,7 @@
 
                 g.selectAll(".node--leaf").append("circle")
                     .attr("r", 2.5)
+                    .on("click", function (d) { click(d.data.id) })
 
                 g.selectAll(".node--leaf")
                     .append("text")
@@ -147,6 +149,21 @@
                     )
                     .style("fill", "#0F0")
             })
+        }
+
+        function click(o) {
+            if (selected) {
+                connect(selected, root.leaves().filter(n => n.data.id == o)[0]);
+                selected = null;
+            }
+            else {
+                svg.selectAll(".highlight").remove();
+                selected = root.leaves().filter(n => n.data.id == o)[0];
+                d3.select("#" + o).append("circle")
+                    .attr("class", "highligh")
+                    .attr("r", 2.5)
+                    .style("fill", "#0F0");
+            }
         }
     </script>
 </body>
