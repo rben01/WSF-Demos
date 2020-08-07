@@ -164,7 +164,7 @@
                 svg.selectAll(".highlight").remove();
                 selected = root.leaves().filter(n => n.data.id == o)[0];
                 d3.select("#" + o).append("circle")
-                    .attr("class", "highligh")
+                    .attr("class", "highlight")
                     .attr("r", 2.5)
                     .style("fill", "#0F0");
             }
