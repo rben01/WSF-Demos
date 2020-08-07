@@ -30,6 +30,7 @@
         }
 
         .highlight {
+            fill: #0F0;
             stroke: #0F0;
             stroke-opacity: 0.4;
             stroke-width: 1.5px;
@@ -40,16 +41,18 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
+    <input type="text" id="input" oninput="text_input(this.value)">
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
-    <svg xmlns="https://www.w3.org/2000/svg" id="hier" width=720 height=1000></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
             selected,
             root,
+            taxonomy,
             arcgen = d3.arc();
 
-        var data = d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
+        d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
+            taxonomy = data;
             rend2();
         }
 
@@ -164,6 +167,11 @@
                     .attr("r", 2.5)
                     .style("fill", "#0F0");
             }
+        }
+
+        function text_input(s) {
+            var o = taxonomy.filter(d => d.Species == s)[0].Order;
+            click(o)
         }
     </script>
 </body>
