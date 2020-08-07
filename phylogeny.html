@@ -41,7 +41,8 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <input type="text" id="input" oninput="text_input(this.value)">
+    <input type="text" id="input">
+    <button id="submit" onclick="text_input()">Submit</button>
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
@@ -169,7 +170,8 @@
             }
         }
 
-        function text_input(s) {
+        function text_input() {
+            var s = document.getElementById("input").value;
             var o = taxonomy.filter(d => d.Species == s)[0].Order;
             click(o)
         }
