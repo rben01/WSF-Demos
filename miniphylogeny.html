@@ -43,7 +43,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <input type="text" id="input">
     <button id="submit" onclick="text_input()">Submit</button>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1200></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
@@ -68,7 +68,7 @@
                 .parentId(function (d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
 
             var tree = d3.cluster()
-                .size([360, 390])
+                .size([360, 460])
                 .separation(function (a, b) { return (a.parentId == b.parentId ? 1 : 2) / a.depth; });
 
             d3.json("chordata_order.json").then(function (data) {
