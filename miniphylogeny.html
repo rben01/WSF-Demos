@@ -145,8 +145,8 @@
                 g.append("path")
                     .attr("class", "highlight")
                     .attr("d", arcgen({
-                        startAngle: node.x / 180 * Math.PI,
-                        endAngle: node.parent.x / 180 * Math.PI,
+                        startAngle: (node.x - 180) / 360 * Math.PI,
+                        endAngle: (node.parent.x - 180) / 360 * Math.PI,
                         innerRadius: node.parent.y,
                         outerRadius: node.parent.y + 2,
                     })
