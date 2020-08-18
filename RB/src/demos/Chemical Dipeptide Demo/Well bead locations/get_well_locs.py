@@ -83,11 +83,11 @@ def process_pixel_locs(stage):
         y_scaler = make_scaler(y_domain, (-18, 307))
 
         x_dist_scale = 1.1
-        y_dist_scale = 0.9
+        y_dist_scale = 1
 
     elif stage == "ligand":
-        x_scaler = make_scaler(x_domain, (40, 825))
-        y_scaler = make_scaler(y_domain, (-18, 307))
+        x_scaler = make_scaler(x_domain, (36, 832))
+        y_scaler = make_scaler(y_domain, (-17, 307))
 
         x_dist_scale = 1.1
         y_dist_scale = 0.9

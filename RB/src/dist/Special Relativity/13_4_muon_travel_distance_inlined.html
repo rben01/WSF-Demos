@@ -7,7 +7,8 @@
 <body><style>body {
 max-width: 800px;
 margin: 50px auto;
-padding: 0;
+padding-left: auto;
+padding-right: auto;
 background-color: black;
 color: white;
 font-size: 21px;
@@ -16,15 +17,36 @@ font-family: sans-serif;
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
+margin-right: 3px;
+margin-left: 3px;
 width: 5em;
+height: 30px;
 font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
 }
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
+padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -87,7 +109,7 @@ bottom: 4px;
 input[type="range"] {
 -webkit-appearance: none;
 -moz-apperance: none;
-width: 40%;
+width: 320px;
 height: 8px;
 padding: 0 0px;
 background: #8b8f92;
@@ -140,7 +162,8 @@ cursor: pointer;
 width: 200px;
 }
 .h-centered {
-margin: auto;
+margin-left: auto;
+margin-right: auto;
 text-align: center;
 }
 </style>
@@ -152,9 +175,6 @@ text-align: center;
 </label>
 </span>
 </div>
-<button class="play-button toggle-button" id="btn-toggle-show-newtonian" onclick="hideNewtonianLine()">
-Hide Newtonian Answer
-</button>
 <div>
 <table>
 <tr>
@@ -168,19 +188,20 @@ Hide Newtonian Answer
 <td class="eqn-left">𝛾</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="highlighted-text" id="lorentz-factor-text">1</span>
+<span class="quaternary-text" id="lorentz-factor-text">1</span>
 </td>
 </tr>
 </table>
 <br/>
-<div>
 <span>
 Disintegration Distance for Muon =
 <span class="secondary-text sci-num" id="text-disintegration-dist">0</span>m</span>
 </div>
-</div>
+<button class="play-button toggle-button" id="btn-toggle-show-newtonian" onclick="hideNewtonianLine()">
+Hide Newtonian Answer
+</button>
 <div>
-<svg class="viz-canvas" id="canvas-muon-travel-distance" style="margin: auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
+<svg class="viz-canvas h-centered" id="canvas-muon-travel-distance" style="display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
 <div class="h-centered" id="sect-newtonian-answer" style="padding: 10px;">
 <i>Newtonian Answer =
@@ -211,7 +232,8 @@ function applyDatum(datum, { transition } = {}) {
 const d3Obj = d3.select(this).datum(datum);
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
-} else if (typeof datum.classes !== "undefined") {
+}
+if (typeof datum.classes !== "undefined") {
 for (const c of datum.classes) {
 d3Obj.classed(c, true);
 }
@@ -220,6 +242,11 @@ const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transitio
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
 if (typeof datum.text !== "undefined") {
 t.text(datum.text);
 }
@@ -656,10 +683,11 @@ subcanvas
 }
 function getGridlinesData({ fracOfC }) {
 if (typeof fracOfC === "undefined") {
-fracOfC = 0.5;
+fracOfC = 0;
 }
 const x = xScale(fracOfC);
 const y = yScale(muonDistTraveled({ fracOfC }));
+const yNewtonian = yScale(fracOfC * C * MUON_BASE_LIFESPAN);
 const commonLineAttrs = {
 "stroke-width": 3,
 "stroke-dasharray": "1.5 1.5",
@@ -699,6 +727,16 @@ cx: x,
 cy: y,
 r: 4,
 fill: "white",
+},
+},
+{
+shape: "circle",
+class: "newtonian-dot",
+attrs: {
+cx: x,
+cy: yNewtonian,
+r: 4,
+fill: d3.interpolateRgb(newtonianLineColor, "#fff")(0.5),
 },
 },
 ];
@@ -753,6 +791,11 @@ graphObjs.newtonianLine
 .transition()
 .duration(transitionDurationMS)
 .attr("stroke", color);
+subcanvases
+.selectAll(".newtonian-dot")
+.transition()
+.duration(transitionDurationMS)
+.attr("opacity", opacity);
 }
 updateMuonSpeed(0, { fromUserInput: false });
 </script></body>

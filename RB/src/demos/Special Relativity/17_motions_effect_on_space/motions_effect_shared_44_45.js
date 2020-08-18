@@ -315,11 +315,13 @@ function _getTracksData(canvasInfo, v) {
 		canvasInfo.observerIsStandingOn === "ground"
 			? CONFIG.nTiesVisible + 10
 			: Math.ceil(
-					CONFIG.nTiesVisible * gamma +
+					CONFIG.nTiesVisible * lorentzFactor({ fracOfC: 0.991 }) +
 						20 +
 						axDistTraveled({ fracOfC: CONFIG.maxTrainSpeed }) /
 							axDistBtwnTies,
 			  );
+
+	console.log(nTiesTotal, v);
 
 	// make ties
 	const data = [];
@@ -408,17 +410,33 @@ function addTracks(subcanvases, { selector } = {}) {
 	});
 }
 
-function addTrainAndLightSources(subcanvases, { selector } = {}) {
+function addTrain(subcanvases, { selector } = {}) {
 	const v = +sliders.v.value;
 	return _addGraphicalObjs(
 		subcanvases,
-		canvasInfo => _getTrainAndLightSourcesData(canvasInfo, v),
+		canvasInfo =>
+			_getTrainAndLightSourcesData(canvasInfo, v).filter(
+				d => d.class === CONFIG.trainCar.class,
+			),
 		{ selector, classes: ["train"] },
 	);
 }
 
+function addLights(subcanvases, { selector } = {}) {
+	const v = +sliders.v.value;
+	return _addGraphicalObjs(
+		subcanvases,
+		canvasInfo =>
+			_getTrainAndLightSourcesData(canvasInfo, v).filter(
+				d => d.class !== CONFIG.trainCar.class,
+			),
+		{ selector, classes: ["light"] },
+	);
+}
+
 let tracks = addTracks(subcanvases);
-let trainAndLightSources = addTrainAndLightSources(subcanvases);
+let trains = addTrain(subcanvases);
+let lights = addLights(subcanvases);
 
 const playbackInfo = {
 	animationStartDate: null,
@@ -428,6 +446,8 @@ const playbackInfo = {
 	beginButton: document.getElementById("btn-run-animation"),
 	resetButton: document.getElementById("btn-reset-animation"),
 };
+
+let timer = null;
 
 // eslint-disable-next-line no-unused-vars
 function updateTrainSpeed(speed) {
@@ -447,14 +467,110 @@ function updateTrainSpeed(speed) {
 			"train-speed-text",
 		).textContent = (+trainSpeedInputValue).toFixed(3);
 
-		if (playbackInfo.isInitialized) {
-			subcanvases.selectAll(".tracks").remove();
-			subcanvases.selectAll(".train").remove();
-			tracks = addTracks(subcanvases, { selector: ".tracks" });
-			trainAndLightSources = addTrainAndLightSources(subcanvases, {
-				selector: ".train",
-			});
-		}
+		clearTimeout(timer);
+		const timeElapsedMS = new Date() - playbackInfo.animationStartDate;
+
+		const animationWasPlaying = playbackInfo.animationIsPlaying;
+		timer = setTimeout(
+			() => {
+				subcanvases.each(function (canvasInfo) {
+					const subcanvas = d3.select(this);
+					const tracksData = _getTracksData(
+						canvasInfo,
+						+trainSpeedInputValue,
+					);
+					const ties = tracksData.filter(d => d.class === "railroad-tie");
+					subcanvas
+						.selectAll(".railroad-tie")
+						.data(ties)
+						.join(
+							enter =>
+								enter
+									.append("line")
+									.attr("stroke", d => d.attrs.stroke)
+									.classed("railroad-tie", true),
+							update => update,
+							exit => exit.remove(),
+						)
+						.transition()
+						.duration(animationWasPlaying ? 200 : 0)
+						.attr("x1", d => d.attrs.x1)
+						.attr("x2", d => d.attrs.x2)
+						.attr("y1", d => d.attrs.y1)
+						.attr("y2", d => d.attrs.y2)
+						.attr("stroke-width", d => d.attrs["stroke-width"]);
+
+					const trainAndLightsData = _getTrainAndLightSourcesData(
+						canvasInfo,
+						+trainSpeedInputValue,
+					);
+					const trainData = trainAndLightsData.filter(
+						d => d.class === CONFIG.trainCar.class,
+					);
+					const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
+						dx: axDistTraveled({ fracOfC: +clamped }),
+					}).dx;
+					subcanvas
+						.selectAll(".train-car")
+						.data(trainData)
+						.join(
+							enter =>
+								enter
+									.append("rect")
+									.attr("fill", d => d.attrs.fill)
+									.attr("stroke", d => d.attrs.stroke)
+									.attr("y", d => d.attrs.y)
+									.attr("height", d => d.attrs.height)
+									.classed("train-car", true),
+							update => update,
+							exit => exit.remove(),
+						)
+						.transition()
+						.duration(animationWasPlaying ? 200 : 0)
+						.attr(
+							"x",
+							d =>
+								d.x0 +
+								(canvasInfo.observerIsStandingOn === "ground" &&
+								!playbackInfo.isInitialized
+									? distanceTrainTravels
+									: 0),
+						)
+						.attr("width", d => d.attrs.width);
+
+					const lightSourceData = trainAndLightsData.filter(
+						d => d.class === "train-light-source",
+					);
+					subcanvas
+						.selectAll(".train-light-source")
+						.data(lightSourceData)
+						.join(
+							enter =>
+								enter
+									.append("circle")
+									.attr("fill", d => d.attrs.fill)
+									.attr("stroke", d => d.attrs.stroke)
+									.attr("cy", d => d.attrs.cy)
+									.attr("r", d => d.attrs.r)
+									.classed("train-car", true),
+							update => update,
+							exit => exit.remove(),
+						)
+						.transition()
+						.duration(animationWasPlaying ? 200 : 0)
+						.attr(
+							"cx",
+							d =>
+								d.x0 +
+								(canvasInfo.observerIsStandingOn === "ground" &&
+								!playbackInfo.isInitialized
+									? distanceTrainTravels
+									: 0),
+						);
+				});
+			},
+			animationWasPlaying ? TOTAL_DURATION_MS - timeElapsedMS : 0,
+		);
 	} catch (e) {
 		console.log(trainSpeedInputValue);
 	}
@@ -479,16 +595,6 @@ function stopAnimation() {
 
 	setTimeout(() => {
 		playbackInfo.isInitialized = true;
-
-		subcanvases.selectAll(".tracks").remove();
-		subcanvases.selectAll(".train").remove();
-
-		tracks = addTracks(subcanvases, {
-			selector: ".tracks",
-		});
-		trainAndLightSources = addTrainAndLightSources(subcanvases, {
-			selector: ".train",
-		});
 	}, durationMS + 10);
 
 	tracks
@@ -504,11 +610,13 @@ function stopAnimation() {
 		.attr("x1", d => d.x0)
 		.attr("x2", d => d.x0);
 
-	trainAndLightSources.each(function (d) {
-		d3.select(this)
-			.transition()
-			.duration(durationMS)
-			.ease(easing)
-			.attr(d.originXAttr, d.x0);
-	});
+	for (const objs of [trains, lights]) {
+		objs.each(function (d) {
+			d3.select(this)
+				.transition()
+				.duration(durationMS)
+				.ease(easing)
+				.attr(d.originXAttr, d.x0);
+		});
+	}
 }

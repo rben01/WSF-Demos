@@ -37,9 +37,10 @@
 				border-color: white;
 				padding: 3px;
 				padding-left: 8px;
+				padding-right: 8px;
 				margin-top: 2px;
-				margin-left: -11px;
-				min-width: 315px;
+				margin-left: -14px;
+				min-width: 285px;
 			}
 		</style>
 	</head>
@@ -107,13 +108,28 @@
 					>𝑦 = <span id="text-upright-y" class="highlighted-text"></span
 				></span>
 				<br />
-				<span class="pythagorean"
-					>𝑥²<span class="operator">+</span>𝑦² =
-					<span id="text-upright-x-sq" class="highlighted-text"></span
-					><span class="operator">+</span
-					><span id="text-upright-y-sq" class="highlighted-text"></span> =
-					<span class="distance highlighted-text"></span
-				></span>
+
+				<table class="pythagorean">
+					<tr>
+						<td class="eqn-left">𝑥²<span class="operator">+</span>𝑦²</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-x-sq" class="highlighted-text"></span
+							><span class="operator">+</span
+							><span
+								id="text-upright-y-sq"
+								class="highlighted-text"
+							></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left"></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="distance highlighted-text"></span>
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div style="height: 100px; flex-grow: 1;"></div>
 			<span style="display: inline;"
@@ -132,13 +148,32 @@
 					<span id="text-transformed-y" class="secondary-text"></span
 				></span>
 				<br />
-				<span class="pythagorean"
-					>𝑥²<span class="operator">+</span>𝑦² =
-					<span id="text-transformed-x-sq" class="secondary-text"></span
-					><span class="operator">+</span
-					><span id="text-transformed-y-sq" class="secondary-text"></span> =
-					<span class="distance secondary-text"></span
-				></span>
+				<table class="pythagorean">
+					<tr>
+						<td class="eqn-left">
+							(𝑥′)²<span class="operator">+</span>(𝑦′)²
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="text-transformed-x-sq"
+								class="secondary-text"
+							></span
+							><span class="operator">+</span
+							><span
+								id="text-transformed-y-sq"
+								class="secondary-text"
+							></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left"></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="distance secondary-text"></span>
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div style="height: 100px;"></div>
 		</div>

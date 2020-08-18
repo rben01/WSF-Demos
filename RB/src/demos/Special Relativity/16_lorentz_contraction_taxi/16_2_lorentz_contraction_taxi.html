@@ -5,11 +5,11 @@
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 	</head>
 
-	<body>
+	<body style="max-width: 650px;">
 		<div>
 			<span>
 				<label>
-					<span class="slider-label">Speed of cab:</span>
+					<span class="slider-label">Speed of cab (𝑣):</span>
 					<input
 						type="range"
 						id="input-taxi-speed"
@@ -20,18 +20,6 @@
 						value="0"
 						oninput="updateTaxiSpeed(this.value, true);stopAnimation()"
 					/>
-				</label>
-			</span>
-			<div>
-				<br />
-				<div style="float: left; min-width: 150px;">
-					<button
-						id="btn-run-animation"
-						onclick="toggleAnimation()"
-						class="play-button"
-					>
-						Start
-					</button>
 					<br />
 					<span>
 						𝑣 =
@@ -42,16 +30,28 @@
 					<br />
 					<span
 						>𝛾 =
-						<span id="taxi-lorentz-factor-text" class="highlighted-text"
+						<span id="taxi-lorentz-factor-text" class="quaternary-text"
 							>1.000</span
 						></span
 					>
+				</label>
+			</span>
+			<div>
+				<div style="float: left; min-width: 150px;">
+					<button
+						id="btn-run-animation"
+						onclick="toggleAnimation()"
+						class="play-button"
+					>
+						Start
+					</button>
+					<br />
 				</div>
 				<img
 					src="./lorentz_contraction_taxi.png"
 					id="img-taxi"
 					width="500px"
-					style="margin-left: 100px; transform-origin: center;"
+					style="margin-left: 0px; transform-origin: center;"
 				/>
 			</div>
 		</div>

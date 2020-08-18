@@ -40,7 +40,7 @@ const STAGES = {
 	enzyme: 1,
 	ligand: 2,
 };
-let prevStage = null;
+let prevStage = STAGES.initial;
 const verticalDistanceBetweenDipeptides = 10;
 
 // Create enzyme and ligand symbols
@@ -669,7 +669,7 @@ function getEnergyCurveData(stage) {
 function getGraphData(stage) {
 	const k = getPointKey(stage);
 	return graphBeadLocs
-		.map((point, i) => {
+		.map(point => {
 			const { x, y } = point[k];
 			return [
 				{
@@ -684,20 +684,19 @@ function getGraphData(stage) {
 						fill: "#fff",
 					},
 				},
-
-				{
-					shape: "text",
-					class: "graph-bead-text",
-					text: i,
-					attrs: {
-						fill: "black",
-						"text-anchor": "middle",
-						"dominant-baseline": "middle",
-						"font-size": 8,
-						x,
-						y,
-					},
-				},
+				// {
+				// 	shape: "text",
+				// 	class: "graph-bead-text",
+				// 	text: i,
+				// 	attrs: {
+				// 		fill: "black",
+				// 		"text-anchor": "middle",
+				// 		"dominant-baseline": "middle",
+				// 		"font-size": 8,
+				// 		x,
+				// 		y,
+				// 	},
+				// },
 			];
 		})
 		.flat(Infinity);
@@ -955,7 +954,7 @@ function fadeligands(svg, fadeDuration, fadeDelay) {
 		});
 }
 
-const substanceDropDuration = 800;
+const substanceDropDuration = 1000;
 function dropSubstanceIntoBeaker(stage) {
 	if (stage === STAGES.initial) {
 		return;
@@ -970,6 +969,7 @@ function dropSubstanceIntoBeaker(stage) {
 			{ ...ligandLocs[2], delay: stage === STAGES.enzyme ? 400 : 150 },
 		])
 		.join(enter => enter.insert("use", ".beaker-lid-front"))
+		.classed("beaker-dropped-substance", true)
 		.attr("xlink:href", symbol)
 		.attr("transform", d => `translate(${beakerXScale(d.x)} ${ty})`)
 		.style("opacity", 1);
@@ -1024,16 +1024,16 @@ function dropSubstanceIntoBeaker(stage) {
 	}
 }
 
-const energyCurveChangeDelay = 200;
-const energyCurveChangeDuration = 1000;
-const dipeptideResetDuration = 700;
-const dipeptideMovementDuration = 1500;
-const dipeptideMovementDelayAfterEnzyme = 650 + substanceDropDuration;
-const dipeptideMovementDelayAfterLigand = 1150 + substanceDropDuration;
+const energyCurveChangeDelay = 500;
+const energyCurveChangeDuration = 1500;
+const dipeptideResetDuration = 1500;
+const dipeptideMovementDuration = 4000;
+const dipeptideMovementDelayAfterEnzyme = 750 + substanceDropDuration;
+const dipeptideMovementDelayAfterLigand = 1350 + substanceDropDuration;
 const ligandAppearDuration = 700;
 const ligandExteriorAppearPreappearTime = 300;
 const ligandFadeDuration = 200;
-const defaultEnergyWellFadeDuration = 700;
+const defaultEnergyWellFadeDuration = 900;
 const graphRecedeDuration = 500;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
@@ -1085,6 +1085,7 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 		} else if (stage === STAGES.enzyme) {
 			applyGraphicalObjs(svg, dipeptideData, {
 				selector: DIPEPTIDE_SELECTOR,
+				key: d => d.id,
 				transition: d3.transition(dipeptideMovementTransition),
 			});
 
@@ -1265,6 +1266,12 @@ function update(stage) {
 			.duration(graphRecedeDuration)
 			.style("opacity", 0)
 			.remove();
+		beaker
+			.selectAll(".beaker-dropped-substance")
+			.transition()
+			.delay(energyCurveChangeDelay)
+			.duration(dipeptideResetDuration / 2)
+			.style("opacity", 0);
 		bottomGraphContainer
 			.transition()
 			.duration(defaultEnergyWellFadeDuration)
@@ -1284,7 +1291,6 @@ function update(stage) {
 
 	// Animate the energy curve itself
 	const energyCurve = graph.selectAll(".energy-curve");
-	const energyCurveNode = energyCurve.node();
 
 	const finalEnergyCurvePathString = graphLine(getEnergyCurvePoints(stage));
 
@@ -1340,75 +1346,38 @@ function update(stage) {
 	const graphData = getGraphData(stage);
 	function graphDipeptideTween(d) {
 		const { cx: finalCx, cy: finalCy } = d.attrs;
-		if (stage === STAGES.initial) {
-			const initialLength = getLengthAtX(
-				energyCurveNode,
-				this.getAttribute("cx"),
-			);
-			const initialPoint = energyCurveNode.getPointAtLength(initialLength);
-			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const finalLength = getLengthAtX(energyCurveNode, finalCx);
+		const initialLength = getLengthAtX(tempFinalPathNode, this.getAttribute("cx"));
+		const initialPoint = tempFinalPathNode.getPointAtLength(initialLength);
+		const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const distAboveCurveScale = d3.scaleLinear(
-				[0, 1],
-				[
-					initialDistAboveCurve,
-					graphYScale(energyCurvePadAbove) - graphYScale(0),
-				],
-			);
+		const finalLength = getLengthAtX(tempFinalPathNode, finalCx);
+		const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
+		const finalDistAboveCurve = finalCy - finalPoint.y;
 
-			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
+		const distAboveCurveScale = d3
+			.scalePow([0, 1], [initialDistAboveCurve, finalDistAboveCurve])
+			.exponent(0.5);
 
-			const initialEnergyCurveNodeCopy = energyCurveNode.cloneNode();
+		const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
 
-			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
-			const y0 = graphYScale(initialEnergy);
-			return t => {
-				const length = lengthScale(t);
-				const { x, y } = initialEnergyCurveNodeCopy.getPointAtLength(length);
-				const compressedY = y0 + (y - y0) * (1 - t);
-				const distAboveCurve = distAboveCurveScale(t);
-				this.setAttribute("cx", x);
-				this.setAttribute("cy", compressedY + distAboveCurve);
-			};
-		} else {
-			const initialLength = getLengthAtX(
-				tempFinalPathNode,
-				this.getAttribute("cx"),
-			);
-			const initialPoint = tempFinalPathNode.getPointAtLength(initialLength);
-			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
+		// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
+		return t => {
+			// const length = lengthScale(t);
+			// const point = tempFinalPathNode.getPointAtLength(length);
+			// const curveY = point.y;
+			// const distAboveCurve = distAboveCurveScale(t);
+			// return curveY + distAboveCurve;
 
-			const finalLength = getLengthAtX(tempFinalPathNode, finalCx);
-			const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
-			const finalDistAboveCurve = finalCy - finalPoint.y;
+			const length = lengthScale(t);
+			const pointIndex = indexScale(length);
+			const [x, y] = thisPathPoints[pointIndex];
 
-			const distAboveCurveScale = d3.scaleLinear(
-				[0, 1],
-				[initialDistAboveCurve, finalDistAboveCurve],
-			);
-
-			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
-
-			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
-			return t => {
-				// const length = lengthScale(t);
-				// const point = tempFinalPathNode.getPointAtLength(length);
-				// const curveY = point.y;
-				// const distAboveCurve = distAboveCurveScale(t);
-				// return curveY + distAboveCurve;
-
-				const length = lengthScale(t);
-				const pointIndex = indexScale(length);
-				const [x, y] = thisPathPoints[pointIndex];
-				this.setAttribute("cx", x);
-				this.setAttribute("cy", y + distAboveCurveScale(t));
-			};
-		}
+			this.setAttribute("cx", x);
+			this.setAttribute("cy", y + distAboveCurveScale(t));
+		};
 	}
 
-	console.log("x", graphData);
 	const totalTransitionDuration = applyDataToSvg(graph, {
 		stage,
 		data: graphData,
