@@ -43,7 +43,7 @@
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <input type="text" id="input">
     <button id="submit" onclick="text_input()">Submit</button>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=960 height=1200></svg>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1200></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
@@ -68,7 +68,7 @@
                 .parentId(function (d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
 
             var tree = d3.cluster()
-                .size([360, 390])
+                .size([360, 460])
                 .separation(function (a, b) { return (a.parentId == b.parentId ? 1 : 2) / a.depth; });
 
             d3.json("chordata_order.json").then(function (data) {
@@ -93,8 +93,8 @@
                 var arcs = g.selectAll(".node--internal").data().forEach(d => g.append("path")
                     .attr("d",
                         arcgen({
-                            startAngle: Math.min(...d.children.map(c => (c.x) / 180 * Math.PI)),
-                            endAngle: Math.max(...d.children.map(c => (c.x) / 180 * Math.PI)),
+                            startAngle: Math.min(...d.children.map(c => (c.x - 180) / 360 * Math.PI)),
+                            endAngle: Math.max(...d.children.map(c => (c.x - 180) / 360 * Math.PI)),
                             innerRadius: d.y,
                             outerRadius: d.y + 2,
                         })
@@ -108,15 +108,15 @@
                 g.selectAll(".node--leaf")
                     .append("text")
                     .attr("dy", ".31em")
-                    .attr("x", function (d) { return d.x < 180 === !d.children ? 6 : -6; })
-                    .style("text-anchor", function (d) { return d.x < 180 === !d.children ? "start" : "end"; })
-                    .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x - 90 : d.x + 90) + ")"; })
+                    .attr("x", function (d) { return d.x < 180 === !d.children ? -6 : 6; })
+                    .style("text-anchor", function (d) { return d.x < 180 === !d.children ? "end" : "start"; })
+                    .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                     .text(function (d) { return d.data.id; });
             });
         }
 
         function project(x, y) {
-            var angle = (x - 90) / 180 * Math.PI, radius = y;
+            var angle = (x - 360) / 360 * Math.PI, radius = y;
             return [radius * Math.cos(angle), radius * Math.sin(angle)];
         }
 
@@ -145,8 +145,8 @@
                 g.append("path")
                     .attr("class", "highlight")
                     .attr("d", arcgen({
-                        startAngle: node.x / 180 * Math.PI,
-                        endAngle: node.parent.x / 180 * Math.PI,
+                        startAngle: (node.x - 180) / 360 * Math.PI,
+                        endAngle: (node.parent.x - 180) / 360 * Math.PI,
                         innerRadius: node.parent.y,
                         outerRadius: node.parent.y + 2,
                     })
