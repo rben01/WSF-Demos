@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
 </head>
-<body style="width: 700px;"><style>body {
+<body><style>body {
 max-width: 800px;
 margin: 50px auto;
 padding-left: auto;
@@ -13,6 +13,9 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+}
+.slider-container {
+line-height: 1em;
 }
 .play-button {
 margin-top: 1.5em;
@@ -157,6 +160,10 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+body {
+width: 1000px !important;
+max-width: unset;
+}
 .slider-label-custom {
 min-width: 6em;
 margin-left: 65px;
@@ -170,20 +177,32 @@ flex-direction: row;
 }
 .frame {
 display: inline-block;
-width: 300px;
+text-align: center;
 }
 .divider {
 width: 50px;
+flex-grow: 100;
 }
 .frame-title {
 font-weight: bold;
+font-size: 110%;
+}
+.frame-table {
+padding-left: 2.4em;
+}
+.interval-table {
+padding-left: 4.6em;
 }
 .transformation {
 margin-top: 30px;
 margin-bottom: 30px;
-width: 25em;
+width: 27em;
 margin-left: auto;
 margin-right: auto;
+text-align: center;
+}
+.transformation > table {
+margin-left: 3em;
 }
 .operator {
 margin-left: 3px;
@@ -200,7 +219,7 @@ margin-right: 1px;
 <span class="slider-label slider-label-custom">
 Time (𝑡):
 </span>
-<input id="input-t" max="3" min="-3" name="input-t" oninput="update({t: this.value})" step=".01" type="range" value="0"/>
+<input id="input-t" max="3" min="0" name="input-t" oninput="update({t: this.value})" step=".01" type="range" value="0"/>
 </label>
 </span>
 <br/>
@@ -232,7 +251,7 @@ Reset
 <div class="frame">
 <span><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span>
 <br/>
-<table>
+<table class="frame-table">
 <tr>
 <td class="eqn-left">𝑡</td>
 <td class="eqn-middle">=</td>
@@ -254,7 +273,7 @@ Reset
 <span><span class="frame-title">Moving Frame: </span>𝑣 =
 <span class="sci-num highlighted-text var-v">0</span>𝑐</span>
 <br/>
-<table>
+<table class="frame-table">
 <tr>
 <td class="eqn-left">𝑡′</td>
 <td class="eqn-middle">=</td>
@@ -307,9 +326,9 @@ Reset
 <div class="frames-box">
 <div class="divider"></div>
 <div class="frame">
-<span><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span>
+<span><span class="frame-title">Spacetime Interval (Stationary): </span>𝑣 = 0</span>
 <br/>
-<table>
+<table class="interval-table">
 <tr>
 <td class="eqn-left">𝑠²</td>
 <td class="eqn-middle">=</td>
@@ -335,10 +354,10 @@ Reset
 </div>
 <div class="divider"></div>
 <div class="frame">
-<span><span class="frame-title">Moving Frame: </span>𝑣 =
-<span class="sci-num highlighted-text var-v">0</span>𝑐</span>
+<span><span class="frame-title">Spacetime Interval (Moving): </span>𝑣
+= <span class="sci-num highlighted-text var-v">0</span>𝑐</span>
 <br/>
-<table>
+<table class="interval-table">
 <tr>
 <td class="eqn-left">𝑠²</td>
 <td class="eqn-middle">=</td>

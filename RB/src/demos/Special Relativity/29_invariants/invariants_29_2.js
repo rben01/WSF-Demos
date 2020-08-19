@@ -351,7 +351,6 @@ function getLinesData({
 				x2: xScale(tfAxPosEndCoords.xAx.x),
 				y2: yScale(tfAxPosEndCoords.xAx.y),
 				...tfAxesAttrs,
-				"stroke-dasharray": "5 5",
 			},
 		},
 		{
@@ -374,7 +373,6 @@ function getLinesData({
 				y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.yAx.y),
 				x2: xScale(tfAxPosEndCoords.yAx.x),
 				y2: yScale(tfAxPosEndCoords.yAx.y),
-				"stroke-dasharray": "5 5",
 				...tfAxesAttrs,
 			},
 		},
@@ -392,10 +390,12 @@ function getLinesData({
 		},
 	];
 
+	const dashLength = 3.5;
+
 	const uprightLinesAttrs = {
 		stroke: STANDARD_COLORS.highlighted,
 		"stroke-width": 3,
-		"stroke-dasharray": "3 3",
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 	};
 	const uprightLinesData = !shouldDrawUprightLines
 		? []
@@ -444,7 +444,8 @@ function getLinesData({
 	const tfLinesAttrs = {
 		stroke: STANDARD_COLORS.secondary,
 		"stroke-width": 3,
-		"stroke-dasharray": "3 3",
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
+		"stroke-dashoffset": dashLength,
 	};
 	const tfLinesData = [
 		{

@@ -500,7 +500,7 @@ function makeFlash(subcanvas, { timeout, x, subcanvasInfo }) {
 			.append("circle")
 			.attr("cx", x)
 			.attr("cy", transAxisToCanvas(subcanvasInfo, { y: AX_MID_Y }).y)
-			.attr("r", 3)
+			.attr("r", 10)
 			.attr("fill", STANDARD_COLORS.secondary)
 			.attr("opacity", 1);
 
@@ -509,10 +509,10 @@ function makeFlash(subcanvas, { timeout, x, subcanvasInfo }) {
 			.transition("radius")
 			.duration(durationMS)
 			.ease(d3.easeLinear)
-			.attr("r", 20);
+			.attr("r", 23);
 
 		const opaqueProptn = 0.3;
-		const e = d3.easePolyIn.exponent(1.8);
+		const e = d3.easePolyIn.exponent(1);
 		const opacityEase = t =>
 			t < opaqueProptn ? 0 : e((t - opaqueProptn) / (1 - opaqueProptn));
 		flash

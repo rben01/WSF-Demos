@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
 </head>
-<body style="width: 700px;"><style>body {
+<body><style>body {
 max-width: 800px;
 margin: 50px auto;
 padding-left: auto;
@@ -13,6 +13,9 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+}
+.slider-container {
+line-height: 1em;
 }
 .play-button {
 margin-top: 1.5em;
@@ -157,6 +160,9 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+body {
+width: 750px;
+}
 .slider-label-custom {
 min-width: 6em;
 }
@@ -178,9 +184,18 @@ font-weight: bold;
 padding-left: 13px;
 margin-bottom: 20px;
 }
+tr {
+padding-left: 0;
+padding-top: 0;
+margin-top: 0;
+}
 td {
 vertical-align: middle;
 line-height: 24px;
+padding-left: 0;
+padding-top: 0;
+margin-top: 0;
+padding-bottom: 12px;
 }
 input[type="checkbox"] {
 vertical-align: middle;
@@ -189,8 +204,6 @@ bottom: 3px;
 }
 .checkbox-container {
 min-width: 14px;
-min-height: 14px;
-padding: 5px;
 }
 </style>
 <div>
@@ -440,8 +453,8 @@ y: { min: -1, max: 1, mid: 0, span: 2 },
 };
 const MARGINS = { t: 20, b: 20, l: 20, r: 20 };
 const ARROWHEAD_ID = "arrowhead_";
-const WIDTH = 400,
-HEIGHT = 400;
+const WIDTH = 450,
+HEIGHT = 450;
 const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
 const sliders = {
 x: document.getElementById("input-x"),
@@ -602,7 +615,7 @@ d3.selectAll(`.${lightConeObjsClass}`).attr(
 "transform",
 `translate(${transX},${transY})`,
 );
-const transition = d3.transition().duration(400);
+const transition = d3.transition().duration(350);
 lightConeObjs.causal
 .transition(transition)
 .attr("opacity", showCausal ? opacity : 0);

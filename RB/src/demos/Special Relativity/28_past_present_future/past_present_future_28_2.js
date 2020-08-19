@@ -60,7 +60,7 @@ const ARROWTAIL_ID = "arrowtail_";
 })();
 
 const axisColor = "#666";
-const tickLength = 10;
+const tickLength = 6;
 
 const colors = { obs1: STANDARD_COLORS.quaternary, obs2: STANDARD_COLORS.secondary };
 
@@ -96,7 +96,7 @@ function drawGraph() {
 		.attr("x1", xScale)
 		.attr("x2", xScale)
 		.attr("y1", yScale(0))
-		.attr("y2", yScale(0) + tickLength)
+		.attr("y2", yScale(0) - tickLength)
 		.style("stroke", axisColor)
 		.style("stroke-width", 1);
 
@@ -121,7 +121,7 @@ function drawGraph() {
 		.attr("font-size", "smaller");
 
 	svg.append("text")
-		.text("𝑥 (lyrs)")
+		.text("𝑑 (lyrs)")
 		.attr("x", xScale(AXES.x.max) - 30)
 		.attr("y", yScale(0) + 30)
 		.attr("fill", "white")
@@ -138,12 +138,12 @@ function drawGraph() {
 			}
 			return "";
 		})
-		.attr("x", xScale(0) - 3)
+		.attr("x", xScale(0) - 10)
 		.attr("y", yScale)
 		.attr("text-anchor", "end")
 		.attr("dominant-baseline", "middle")
 		.attr("fill", "white")
-		.attr("font-size", "50%");
+		.attr("font-size", "70%");
 }
 
 drawGraph();
@@ -189,24 +189,13 @@ function update({ speed, distance }) {
 
 	const radius = 5;
 	const distArrowY = 400;
+	const t0 = line(0);
 	const data = [
 		{
 			shape: "line",
 			attrs: {
-				x1: xScale(distance),
-				y1: yScale(0),
-				x2: xScale(x1),
-				y2: yScale(t1),
-				stroke: colors.obs2,
-				"stroke-width": 2,
-				"stroke-dasharray": "3 3",
-			},
-		},
-		{
-			shape: "line",
-			attrs: {
-				x1: xScale(distance),
-				y1: yScale(0),
+				x1: xScale(x1),
+				y1: yScale(t1),
 				x2: xScale(x2),
 				y2: yScale(t2),
 				stroke: colors.obs2,
@@ -214,13 +203,51 @@ function update({ speed, distance }) {
 				"stroke-dasharray": "3 3",
 			},
 		},
+		// {
+		// 	shape: "line",
+		// 	attrs: {
+		// 		x1: xScale(distance),
+		// 		y1: yScale(0),
+		// 		x2: xScale(x2),
+		// 		y2: yScale(t2),
+		// 		stroke: colors.obs2,
+		// 		"stroke-width": 2,
+		// 		"stroke-dasharray": "3 3",
+		// 	},
+		// },
+		{
+			shape: "line",
+			attrs: {
+				x1: xScale(AXES.x.min),
+				y1: yScale(0),
+				x2: xScale(AXES.x.max),
+				y2: yScale(0),
+				stroke: colors.obs1,
+				"stroke-width": 2,
+				"stroke-dasharray": "3 3",
+				"stroke-dashoffset": 3,
+			},
+		},
+		// {
+		// 	shape: "line",
+		// 	attrs: {
+		// 		x2: xScale(distance),
+		// 		y1: yScale(0),
+		// 		x1: xScale(AXES.x.max),
+		// 		y2: yScale(0),
+		// 		stroke: colors.obs1,
+		// 		"stroke-width": 2,
+		// 		"stroke-dasharray": "3 3",
+		// 		"stroke-dashoffset": 3,
+		// 	},
+		// },
 		{
 			shape: "circle",
 			attrs: {
 				cx: xScale(0),
-				cy: yScale(0),
+				cy: yScale(t0),
 				r: radius,
-				fill: colors.obs1,
+				fill: colors.obs2,
 			},
 		},
 		{
@@ -230,6 +257,15 @@ function update({ speed, distance }) {
 				cy: yScale(0),
 				r: radius,
 				fill: colors.obs2,
+			},
+		},
+		{
+			shape: "circle",
+			attrs: {
+				cx: xScale(0),
+				cy: yScale(0),
+				r: radius,
+				fill: colors.obs1,
 			},
 		},
 		{
@@ -309,20 +345,12 @@ function update({ speed, distance }) {
 	textSpans.vel.innerHTML = fmtFloat(speed, 3);
 	textSpans.dist.innerHTML = fmtFloat(distance, 3);
 
-	const t0 = line(0);
 	textSpans.yearsThem.innerHTML = fmtFloat(t0, 4);
-	textSpans.yearsUs.innerHTML = fmtFloat(Math.abs(t0), 4);
-	textSpans.pastFuture.innerHTML = t0 < 0 ? "past" : "future";
+	// textSpans.yearsUs.innerHTML = fmtFloat(Math.abs(t0), 4);
+	// textSpans.pastFuture.innerHTML = t0 < 0 ? "past" : "future";
 }
 
 update({});
-
-svg.append("rect")
-	.attr("x", 10)
-	.attr("width", 90)
-	.attr("y", 65)
-	.attr("height", 40)
-	.attr("fill", "black");
 
 const legend = svg
 	.selectAll()
@@ -331,7 +359,7 @@ const legend = svg
 		{ color: colors.obs2, text: "Observer 2" },
 	])
 	.join("g")
-	.attr("transform", `translate(${xScale(AXES.x.min) + 10}, ${yScale(1750)})`)
+	.attr("transform", `translate(${xScale(AXES.x.min) + 450}, ${yScale(1750)})`)
 	.attr("background", "black");
 
 legend
@@ -349,7 +377,7 @@ legend
 	.attr("y", (_, i) => 5 + i * 20)
 	.text(d => d.text)
 	.attr("fill", "white")
-	.attr("font-size", "12px")
+	.attr("font-size", "16px")
 	.attr("dy", ".5px")
 	.attr("text-anchor", "begin")
 	.attr("dominant-baseline", "middle");
