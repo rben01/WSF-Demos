@@ -6,10 +6,10 @@ const AXES = {
 };
 
 const MARGINS = { t: 10, b: 10, l: 10, r: 10 };
-const AXES_EXTENT_PAST_DATA = 150;
+const AXES_EXTENT_PAST_DATA = 90;
 
-const WIDTH = 600,
-	HEIGHT = 600;
+const WIDTH = 550,
+	HEIGHT = 550;
 
 const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
 const AXIS_ARROWHEAD_ID = "arrowhead_axis_";
@@ -20,7 +20,7 @@ const lineColor = STANDARD_COLORS.secondary;
 (() => {
 	const speedSlider = document.getElementById("input-speed");
 	if (speedSlider) {
-		speedSlider.max = 0.99;
+		speedSlider.max = 0.7;
 	}
 })();
 
@@ -76,7 +76,7 @@ const yScale = d3
 		MARGINS.t + AXES_EXTENT_PAST_DATA,
 	]);
 
-const ticks = d3.range(-3, 3 + 0.001, 1);
+const ticks = d3.range(-2, 2 + 0.001, 1);
 function drawAxes() {
 	svg.append("rect")
 		.attr("x", 0)
@@ -259,7 +259,7 @@ function _updateDiagrams({
 		const arrowheadOffset = 0.0001;
 		let x1, y1, x2, y2, axisSymbol;
 
-		const vectorScale = 3.4;
+		const vectorScale = 2.3;
 		if (d.axis === "t") {
 			const x0 = index / gamma;
 			({ min: y2, max: y1 } = AXES.y);
@@ -302,8 +302,8 @@ function _updateDiagrams({
 			throw new Error(`Unexpected axis ${d.axis}`);
 		}
 
-		const dx = d.axis === "t" ? -20 : -15;
-		const dy = d.axis === "t" ? -14 : -12;
+		const dx = d.axis === "t" ? 0 : -15;
+		const dy = d.axis === "t" ? -15 : -12;
 		const textPos = {
 			x: xScale(x1) + dx,
 			y: yScale(y1) + dy,
@@ -363,7 +363,9 @@ function _updateDiagrams({
 				attrs: {
 					...textPos,
 					fill: "white",
-					"font-size": "70%",
+					"font-size": 17,
+					"text-anchor": d.axis === "t" ? "middle" : "begin",
+					"dominant-baseline": d.axis === "t" ? "bottom" : "center",
 					filter: `url(#text-bg)`,
 				},
 			},

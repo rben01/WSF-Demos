@@ -1,4 +1,4 @@
-/* global svg _updateDiagrams xScale yScale applyGraphicalObjs fmtFloat STANDARD_COLORS */
+/* global svg _updateDiagrams xScale yScale applyGraphicalObjs fmtFloat STANDARD_COLORS lorentzFactor */
 
 const indVars = ["t", "x", "v"];
 const sliders = {};
@@ -30,21 +30,28 @@ function update({ t, x, v }) {
 		hideSecondaryAxesByDefault: false,
 	});
 
-	const xp = v === 0 ? x : (x / v - t) / (1 / v - v);
-	const xpt = v === 0 ? 0 : xp * v;
+	const lf = lorentzFactor({ fracOfC: v });
 
-	const tpx = v === 0 ? 0 : (t - x * v) / (1 / v - v);
-	const tp = v === 0 ? t : tpx / v;
+	const xp = lf * (x - v * t);
+	const xpx = xp * lf;
+	const xpt = xpx * v;
+
+	const tp = lf * (t - v * x);
+	const tpt = tp * lf;
+	const tpx = tpt * v;
+
+	const dashLength = 3.5;
 
 	const lineAttrs = { "stroke-width": 2.5 };
 	const primedLineAttrs = {
 		...lineAttrs,
-		"stroke-dasharray": "3 3",
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 		stroke: STANDARD_COLORS.quaternary,
 	};
 	const unprimedLineAttrs = {
 		...lineAttrs,
-		"stroke-dasharray": "3 3",
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
+		"stroke-dashoffset": dashLength,
 		stroke: STANDARD_COLORS.highlighted,
 	};
 
@@ -53,18 +60,18 @@ function update({ t, x, v }) {
 			shape: "line",
 			attrs: {
 				x1: xScale(x),
-				y1: yScale(0),
-				x2: xScale(x),
-				y2: yScale(t),
-				...unprimedLineAttrs,
-			},
-		},
-		{
-			shape: "line",
-			attrs: {
-				x1: xScale(0),
 				y1: yScale(t),
 				x2: xScale(x),
+				y2: yScale(0),
+				...unprimedLineAttrs,
+			},
+		},
+		{
+			shape: "line",
+			attrs: {
+				x1: xScale(x),
+				y1: yScale(t),
+				x2: xScale(0),
 				y2: yScale(t),
 				...unprimedLineAttrs,
 			},
@@ -72,20 +79,20 @@ function update({ t, x, v }) {
 		{
 			shape: "line",
 			attrs: {
-				x1: xScale(xp),
-				y1: yScale(xpt),
-				x2: xScale(x),
-				y2: yScale(t),
+				x1: xScale(x),
+				y1: yScale(t),
+				x2: xScale(xpx),
+				y2: yScale(xpt),
 				...primedLineAttrs,
 			},
 		},
 		{
 			shape: "line",
 			attrs: {
-				x1: xScale(tpx),
-				y1: yScale(tp),
-				x2: xScale(x),
-				y2: yScale(t),
+				x1: xScale(x),
+				y1: yScale(t),
+				x2: xScale(tpx),
+				y2: yScale(tpt),
 				...primedLineAttrs,
 			},
 		},

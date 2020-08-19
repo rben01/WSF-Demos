@@ -401,19 +401,21 @@ function getLinesData({
 		tfAxProjCoords[ax].dotProd = projectionDotProd;
 	});
 
+	const dashLength = 5;
+
 	const uprightLinesAttrs = {
 		stroke: STANDARD_COLORS.highlighted,
-		"stroke-width": 2,
-		"stroke-dasharray": "5 5",
+		"stroke-width": 3,
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 	};
 	const uprightLinesData = [
 		{
 			shape: "line",
 			class: "upright-line-horizontal",
 			attrs: {
-				x1: xScale(RANGES.axis.mid),
+				x1: xScale(x),
 				y1: yScale(y),
-				x2: xScale(x),
+				x2: xScale(RANGES.axis.mid),
 				y2: yScale(y),
 				...uprightLinesAttrs,
 			},
@@ -423,9 +425,9 @@ function getLinesData({
 			class: "upright-line-vertical",
 			attrs: {
 				x1: xScale(x),
-				y1: yScale(RANGES.axis.mid),
+				y1: yScale(y),
 				x2: xScale(x),
-				y2: yScale(y),
+				y2: yScale(RANGES.axis.mid),
 				...uprightLinesAttrs,
 			},
 		},
@@ -433,24 +435,24 @@ function getLinesData({
 
 	if (!shouldDrawUprightLines) {
 		for (const line of uprightLinesData) {
-			line.attrs["stroke-dasharray"] = "2 3";
+			line.attrs["stroke-dashoffset"] = dashLength;
 		}
 	}
 
 	const tfLinesAttrs = {
 		stroke: STANDARD_COLORS.secondary,
-		"stroke-width": shouldDrawUprightLines ? 3 : 2,
-		"stroke-dasharray": shouldDrawUprightLines ? "5 5" : "5 10",
+		"stroke-width": 3,
+		"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 	};
 	const tfLinesData = [
 		{
 			shape: "line",
 			class: "tf-line-vertical",
 			attrs: {
-				x1: xScale(tfAxProjCoords.xAx.x),
-				y1: yScale(tfAxProjCoords.xAx.y),
-				x2: xScale(x),
-				y2: yScale(y),
+				x1: xScale(x),
+				y1: yScale(y),
+				x2: xScale(tfAxProjCoords.xAx.x),
+				y2: yScale(tfAxProjCoords.xAx.y),
 				...tfLinesAttrs,
 			},
 		},
@@ -458,10 +460,10 @@ function getLinesData({
 			shape: "line",
 			class: "tf-line-horizontal",
 			attrs: {
-				x1: xScale(tfAxProjCoords.yAx.x),
-				y1: yScale(tfAxProjCoords.yAx.y),
-				x2: xScale(x),
-				y2: yScale(y),
+				x1: xScale(x),
+				y1: yScale(y),
+				x2: xScale(tfAxProjCoords.yAx.x),
+				y2: yScale(tfAxProjCoords.yAx.y),
 				...tfLinesAttrs,
 			},
 		},
