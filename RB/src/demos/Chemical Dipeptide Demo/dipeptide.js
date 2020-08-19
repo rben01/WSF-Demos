@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs defineArrowhead groupBy Plotly DIPEPTIDE_WELL */
+/* global applyGraphicalObjs defineArrowhead groupBy Plotly DIPEPTIDE_WELL graphBeadLocs */
 
 const CONFIG = {
 	containerSVGWidth: 250,
@@ -39,15 +39,15 @@ const STAGES = {
 	initial: 0,
 	enzyme: 1,
 	ligand: 2,
-	energyWell: 3,
 };
-let prevStage = null;
+let prevStage = STAGES.initial;
 const verticalDistanceBetweenDipeptides = 10;
 
 // Create enzyme and ligand symbols
 (() => {
 	const { symbolSize: size, symbolPad: pad } = CONFIG;
 
+	// Enzyme
 	const crescentScale = d3.scaleLinear([0, 1], [pad, size - pad]);
 	const crescentOuterRadius = (size - 2 * pad) * 0.4;
 	const crescentInnerRadius = (size - 2 * pad) * 0.28;
@@ -70,72 +70,29 @@ const verticalDistanceBetweenDipeptides = 10;
 		.attr("fill", "blue")
 		.attr("stroke-opacity", 0);
 
-	// Assuming the squiggle lives in a 1*1 box (which we'll rescale later)
-	const squiggleScale = 1.15;
-	const squiggleXScale = d3.scaleLinear([0, 1], [pad, squiggleScale * size - pad]);
-	const squiggleYScale = d3.scaleLinear([0, 1], [squiggleScale * size - pad, pad]);
-	const squiggleDistScale = d3.scaleLinear(
-		[0, 1],
-		[0, squiggleScale * size - 2 * pad],
-	);
-
-	const squiggleRadius = 0.15;
-	function arcTo(x, y, { r, angle, largeArcFlag, sweepFlag }) {
-		if (r === undefined) {
-			r = squiggleRadius;
-		}
-		r = squiggleDistScale(r);
-
-		if (largeArcFlag === undefined) {
-			largeArcFlag = 0;
-		}
-
-		if (angle === undefined) {
-			angle = 0;
-		}
-
-		x = squiggleXScale(x);
-		y = squiggleYScale(y);
-
-		return `A ${r} ${r} ${angle} ${largeArcFlag} ${sweepFlag} ${x} ${y}`;
-	}
-	function moveTo(x, y) {
-		return `M ${squiggleXScale(x)} ${squiggleYScale(y)}`;
-	}
-	function lineTo(x, y) {
-		return `L ${squiggleXScale(x)} ${squiggleYScale(y)}`;
-	}
-
-	const [x0, x1, x2, x3] = [-1.5, -0.5, 0.5, 1.5].map(i => 0.5 + i * squiggleRadius);
-	const [y0, y1, y2, yMid, y4, y5, y6] = d3
-		.range(-3, 4)
-		.map(i => 0.5 + i * squiggleRadius);
-	const squiggleArcPoints = [
-		moveTo(x2, y6),
-		lineTo(x3, y6),
-		arcTo(x3, y4, { sweepFlag: 1 }),
-		lineTo(x3, yMid),
-		arcTo(x2, y2, { sweepFlag: 1 }),
-		lineTo(x2, y1),
-		arcTo(x1, y0, { sweepFlag: 1 }),
-		lineTo(x0, y0),
-		arcTo(x0, y2, { sweepFlag: 1 }),
-		lineTo(x0, yMid),
-		arcTo(x1, y4, { sweepFlag: 1 }),
-		lineTo(x1, y5),
-		arcTo(x2, y6, { sweepFlag: 1 }),
-	];
-
+	// Ligand
+	const triangleXScale = d3.scaleLinear([-1, 1], [pad, size - pad]);
+	const triangleYScale = d3.scaleLinear([-1, 1], [size - pad, pad]);
+	const triangleRadius = 0.9;
+	const vertices = d3.range(3).map(i => {
+		const angle = (2 * Math.PI * i) / 3;
+		return [
+			triangleXScale(triangleRadius * Math.sin(angle)),
+			triangleYScale(triangleRadius * Math.cos(angle)),
+		];
+	});
 	beaker
 		.append("symbol")
 		.attr("id", "symbol-ligand")
 		.append("path")
-		// .attr("d", squiggleArcPoints.join(" "))
-		.attr("d", squiggleArcPoints.join(" "))
-		.attr("fill-opacity", 0)
-		.attr("stroke", "black")
-		.attr("stroke-width", 1)
-		.attr("stroke-opacity", 1);
+		.attr(
+			"d",
+			`M ${triangleXScale(0)} ${triangleYScale(triangleRadius)}
+			${vertices.map(([x, y]) => `L ${x} ${y}`).join(" ")}
+				Z`,
+		)
+		.attr("fill", "#fc3")
+		.attr("stroke-opacity", 0);
 })();
 
 // Create chemical equation "equilibrium" arrows
@@ -224,7 +181,6 @@ function getBeakerOutlineData() {
 			M ${rightX} ${botLeftY}
 			V ${topLeftY}
 			${getEllipsePath(topLeftY, true)}
-			${getEllipsePath(midLeftY, false)}
 			${getEllipsePath(midLeftY, true)}
 			${getEllipsePath(botLeftY, false)}
 			`,
@@ -242,6 +198,17 @@ function getBeakerOutlineData() {
 			M ${rightX} ${topLeftY}
 			${getEllipsePath(topLeftY, false)}
 			`,
+			stroke: beakerColor,
+			"stroke-width": strokeWidth,
+			"fill-opacity": 0,
+		},
+	};
+
+	const beakerWaterLevelFront = {
+		shape: "path",
+		class: "beaker-water-surface-front",
+		attrs: {
+			d: `${getEllipsePath(midLeftY, false)}`,
 			stroke: beakerColor,
 			"stroke-width": strokeWidth,
 			"fill-opacity": 0,
@@ -282,7 +249,7 @@ function getBeakerOutlineData() {
 
 	return {
 		background: [beakerFluid, beakerBackOutline],
-		foreground: [beakerOutline, beakerLidFront],
+		foreground: [beakerOutline, beakerLidFront, beakerWaterLevelFront],
 	};
 }
 
@@ -425,7 +392,7 @@ const basicDipeptideChainInfo = [
 		graphY: dipeptideCurveInitialY,
 	},
 	{
-		x: beakerXScale(0.6),
+		x: beakerXScale(0.63),
 		y: beakerYScale(0.4),
 		angles: [Math.PI / 0.9],
 		colors: [COLORS.blue, null],
@@ -434,18 +401,10 @@ const basicDipeptideChainInfo = [
 	},
 	{
 		x: beakerXScale(0.42),
-		y: beakerYScale(0.2),
+		y: beakerYScale(0.25),
 		angles: [Math.PI * (1 + 1 / 1.1)],
 		colors: [COLORS.purple, null],
 		graphX: 0.41,
-		graphY: dipeptideCurveInitialY,
-	},
-	{
-		x: beakerXScale(0.8),
-		y: beakerYScale(0.4),
-		angles: [Math.PI / 1.5],
-		colors: [COLORS.blue, null],
-		graphX: 0.5,
 		graphY: dipeptideCurveInitialY,
 	},
 	{
@@ -457,35 +416,27 @@ const basicDipeptideChainInfo = [
 		graphY: dipeptideCurveInitialY,
 	},
 	{
-		x: beakerXScale(0.5),
+		x: beakerXScale(0.3),
 		y: beakerYScale(0.1),
-		angles: [Math.PI * (1 + 1 / 1.1)],
-		colors: [COLORS.green, null],
-		graphX: 0.25,
+		angles: [0.4],
+		colors: [COLORS.blue, null],
+		graphX: 0.9,
 		graphY: dipeptideCurveInitialY,
 	},
 	{
-		x: beakerXScale(0.6),
-		y: beakerYScale(0.26),
+		x: beakerXScale(0.8),
+		y: beakerYScale(0.5),
 		angles: [1.9],
 		colors: [COLORS.purple, null],
 		graphX: 0.74,
 		graphY: dipeptideCurveInitialY,
 	},
 	{
-		x: beakerXScale(0.7),
-		y: beakerYScale(0.52),
-		angles: [Math.PI / 1.4],
-		colors: [COLORS.green, null],
-		graphX: 0.58,
-		graphY: dipeptideCurveInitialY,
-	},
-	{
-		x: beakerXScale(0.3),
+		x: beakerXScale(0.5),
 		y: beakerYScale(0.1),
-		angles: [0.4],
-		colors: [COLORS.blue, null],
-		graphX: 0.9,
+		angles: [Math.PI * (1 + 1 / 1.1)],
+		colors: [COLORS.green, null],
+		graphX: 0.25,
 		graphY: dipeptideCurveInitialY,
 	},
 ];
@@ -497,6 +448,7 @@ const basicDipeptides = basicDipeptideChainInfo.map(d =>
 // precondition: joinAngles.length === 2 * (indices.length - 1) (one index per joined chain, two joinAngles per adjacent pair of joined chains)
 function joinBasicDipeptides({
 	newP0,
+	theta0,
 	indices,
 	joinAngles,
 	drawEncirclingLine,
@@ -521,6 +473,10 @@ function joinBasicDipeptides({
 		if (j !== indices.length - 1) {
 			angles.push(joinAngles[2 * j], joinAngles[2 * j + 1]);
 		}
+	}
+
+	if (theta0 !== undefined) {
+		angles[0] = theta0;
 	}
 
 	return makeDipeptideChain(newP0, angles, colors, {
@@ -557,34 +513,31 @@ const randomJoinAngles = [
 
 const stageJoinIndices = {
 	[STAGES.initial]: d3.range(basicDipeptides.length).map(i => [i]),
-	[STAGES.enzyme]: [
-		[0, 7],
-		[1, 8],
-		[3, 2],
-		[4, 5, 6],
-		...d3.range(9, basicDipeptides.length).map(i => [i]),
-	],
+	[STAGES.enzyme]: [[8], [0], [3, 7], [2, 1], [4, 5, 6]],
 	[STAGES.ligand]: [
-		[0, 7, 9, 2],
-		[4, 5, 1, 10],
-		[8, 6, 3, ...d3.range(11, basicDipeptides.length)],
+		[0, 1, 2],
+		[3, 4, 5],
+		[6, 7, 8],
 	],
 };
 
 function indicesToDipeptideChain({
 	indices,
 	newP0,
+	theta0,
 	drawEncirclingLine,
 	opaqueEncirclingLineBg,
 	dipeptides,
+	joinAngles,
 }) {
 	const allButFirstJoinIndex = indices.slice(1);
-	const joinAngles = [
+	joinAngles = joinAngles ?? [
 		...allButFirstJoinIndex.map(j => randomJoinAngles[2 * j]),
 		...allButFirstJoinIndex.map(j => randomJoinAngles[2 * j + 1]),
 	];
 	return joinBasicDipeptides({
 		newP0,
+		theta0,
 		indices,
 		joinAngles,
 		drawEncirclingLine,
@@ -593,27 +546,44 @@ function indicesToDipeptideChain({
 	});
 }
 
+const ligandLocs = [
+	{ x: 0.2, y: 0.33 },
+	{ x: 0.4, y: 0.5 },
+	{ x: 0.62, y: 0.3 },
+];
+
 function getBeakerData(stage) {
 	if (stage === STAGES.initial) {
 		return basicDipeptides.flat(Infinity);
 	} else if (stage === STAGES.enzyme) {
-		return stageJoinIndices[stage]
-			.map(indices =>
-				indicesToDipeptideChain({ indices, dipeptides: basicDipeptides }),
-			)
-			.flat(Infinity);
-	} else if (stage === STAGES.ligand) {
 		const newP0s = [
-			{ x: beakerXScale(0.2), y: beakerYScale(0.3) },
-			{ x: beakerXScale(0.4), y: beakerYScale(0.2) },
-			{ x: beakerXScale(0.75), y: beakerYScale(0.3) },
-		];
+			{ x: 0.7, y: 0.53 },
+			{ x: 0.24, y: 0.24 },
+			{ x: 0.55, y: 0.2 },
+			{ x: 0.7, y: 0.3 },
+			{ x: 0.25, y: 0.5 },
+		].map(({ x, y }) => ({ x: beakerXScale(x), y: beakerYScale(y) }));
 		return stageJoinIndices[stage]
 			.map((indices, j) =>
 				indicesToDipeptideChain({
 					indices,
 					newP0: newP0s[j],
-					drawEncirclingLine: true,
+					dipeptides: basicDipeptides,
+				}),
+			)
+			.flat(Infinity);
+	} else if (stage === STAGES.ligand) {
+		const newP0s = ligandLocs.map(({ x, y }) => ({
+			x: beakerXScale(x) + CONFIG.symbolPad + 11,
+			y: beakerYScale(y) + CONFIG.symbolSize - CONFIG.dipeptideRadius + 1,
+		}));
+		return stageJoinIndices[stage]
+			.map((indices, j) =>
+				indicesToDipeptideChain({
+					indices,
+					newP0: newP0s[j],
+					theta0: 0,
+					joinAngles: [0, Math.PI / 3, Math.PI / 3, 0],
 					dipeptides: basicDipeptides,
 				}),
 			)
@@ -649,54 +619,36 @@ const defs = graph.append("defs");
 const arrowheadID = "arrowhead";
 defineArrowhead(defs, { id: arrowheadID, length: 18, width: 14, color: "black" });
 
-const graphEnzymeStageLeftPortion = [
-	[0.05, 0.7],
-	[0.1, 0.7],
-	[0.17, 0.6],
-	[0.25, 0.8],
-	[0.32, 0.5],
-];
-const graphLigandStageLeftPortion = [
-	[0.05, 0.7],
-	[0.1, 0.4],
-	[0.17, 0],
-	[0.25, 0.6],
-	[0.32, 0.5],
-];
-const graphMiddlePortion = [
-	[0.4, 0.9],
-	[0.5, 0.55],
-	[0.6, 0.9],
-];
-const graphRightPortion = [
-	[0.69, 0.7],
-	[0.75, 0.65],
-	[0.82, 0.8],
-	[0.89, 0.7],
-	[0.95, 0.7],
-	[0.99, 0.8],
+function getPointKey(stage) {
+	return stage === STAGES.initial
+		? "initial"
+		: stage === STAGES.enzyme
+		? "enzyme"
+		: stage === STAGES.ligand
+		? "ligand"
+		: null;
+}
+
+const energyCurvePoints = [
+	{ x: 0.05, initial: 0.7, enzyme: 0.7, ligand: 0.7 },
+	{ x: 0.05, initial: 0.7, enzyme: 0.7, ligand: 0.7 },
+	{ x: 0.1, initial: 0.7, enzyme: 0.6, ligand: 0.6 },
+	{ x: 0.17, initial: 0.5, enzyme: 0.5, ligand: 0.08 },
+	{ x: 0.25, initial: 0.83, enzyme: 0.62, ligand: 0.62 },
+	{ x: 0.32, initial: 0.5, enzyme: 0.5, ligand: 0.5 },
+	{ x: 0.4, initial: 0.92, enzyme: 0.65, ligand: 0.65 },
+	{ x: 0.5, initial: 0.38, enzyme: 0.38, ligand: 0.38 },
+	{ x: 0.6, initial: 0.92, enzyme: 0.65, ligand: 0.65 },
+	{ x: 0.7, initial: 0.55, enzyme: 0.55, ligand: 0.55 },
+	{ x: 0.78, initial: 0.84, enzyme: 0.62, ligand: 0.62 },
+	{ x: 0.88, initial: 0.5, enzyme: 0.5, ligand: 0.5 },
+	{ x: 0.95, initial: 0.7, enzyme: 0.6, ligand: 0.6 },
+	{ x: 0.99, initial: 0.8, enzyme: 0.7, ligand: 0.7 },
 ];
 
 function getEnergyCurvePoints(stage) {
-	if (stage === STAGES.ligand) {
-		return [
-			...graphLigandStageLeftPortion,
-			...graphMiddlePortion,
-			...graphRightPortion,
-		];
-	} else {
-		const points = [
-			...graphEnzymeStageLeftPortion,
-			...graphMiddlePortion,
-			...graphRightPortion,
-		];
-
-		if (stage === STAGES.initial) {
-			return points.map(([x, _]) => [x, initialEnergy]);
-		}
-
-		return points;
-	}
+	const k = getPointKey(stage);
+	return energyCurvePoints.map(point => [point.x, point[k]]);
 }
 
 function getEnergyCurveData(stage) {
@@ -714,107 +666,40 @@ function getEnergyCurveData(stage) {
 	];
 }
 
-function getGraphDipeptides() {
-	return basicDipeptideChainInfo.map(bd => {
-		const data = makeDipeptideChain(
-			{
-				x: graphXScale(bd.graphX),
-				y: graphYScale(bd.graphY),
-			},
-			bd.angles,
-			bd.colors,
-		);
-		for (const datum of data) {
-			datum.class = "graph-dipeptide";
-		}
-		return data;
-	});
-}
-const angledGraphDipeptides = getGraphDipeptides();
-const horizontalGraphDipeptides = angledGraphDipeptides.map(([dp1, dp2]) => {
-	const angle = dp2.angle > Math.PI ? 0 : Math.PI; // All horizontal, oriented one way or the other
-	const { cx: cx1, cy: cy1 } = dp1.attrs;
-	const dp3 = {
-		...dp2,
-		angle,
-		attrs: {
-			...dp2.attrs,
-			cx: cx1 + 2 * CONFIG.dipeptideRadius * Math.cos(angle),
-			cy: cy1,
-		},
-	};
-	return [dp1, dp3];
-});
-
-const graphDataCache = {};
 function getGraphData(stage) {
-	if (stage in graphDataCache) {
-		return graphDataCache[stage];
-	}
-
-	let chains;
-	if (stage === STAGES.initial) {
-		chains = horizontalGraphDipeptides;
-	} else if (stage === STAGES.enzyme) {
-		const finalEnergyCurvePathString = graphLine(getEnergyCurvePoints(stage));
-		const indices = stageJoinIndices[stage];
-		const xLocs = [0.15, 0.29, 0.765, 0.45, 0.32, 0.5];
-		const tempFinalPath = graph
-			.append("path")
-			.style("opacity", 0)
-			.attr("d", finalEnergyCurvePathString);
-		const tempFinalPathNode = tempFinalPath.node();
-		const tempFinalPathEndpoints = xLocs.map(xLoc =>
-			tempFinalPathNode.getPointAtLength(
-				getLengthAtX(tempFinalPathNode, graphXScale(xLoc)),
-			),
-		);
-		chains = indices.map((idxs, j) =>
-			indicesToDipeptideChain({
-				indices: idxs,
-				newP0: {
-					x: tempFinalPathEndpoints[j].x,
-					y: tempFinalPathEndpoints[j].y - 20,
+	const k = getPointKey(stage);
+	return graphBeadLocs
+		.map(point => {
+			const { x, y } = point[k];
+			return [
+				{
+					shape: "circle",
+					class: "graph-bead",
+					attrs: {
+						cx: x,
+						cy: y,
+						r: CONFIG.dipeptideRadius - 1,
+						stroke: "#333",
+						"stroke-width": 1,
+						fill: "#fff",
+					},
 				},
-				dipeptides: angledGraphDipeptides,
-				drawEncirclingLine: false,
-				opaqueEncirclingLineBg: false,
-			}),
-		);
-		for (const chain of chains) {
-			for (const elem of chain) {
-				elem.class = "graph-dipeptide";
-			}
-		}
-
-		tempFinalPath.remove();
-	} else {
-		const xLocs = [0.15, 0.155, 0.14].map(graphXScale);
-		const yLocs = [0.12, 0.52, 0.21].map(graphYScale);
-		const indices = stageJoinIndices[stage];
-		console.log(indices);
-		chains = indices.map((idxs, j) =>
-			indicesToDipeptideChain({
-				indices: idxs,
-				newP0: {
-					x: xLocs[j],
-					y: yLocs[j],
-				},
-				dipeptides: angledGraphDipeptides,
-				drawEncirclingLine: true,
-				opaqueEncirclingLineBg: false,
-			}),
-		);
-		for (const chain of chains) {
-			for (const elem of chain) {
-				elem.class = "graph-dipeptide";
-			}
-		}
-	}
-
-	chains = chains.flat(Infinity);
-	graphDataCache[stage] = chains;
-	return chains;
+				// {
+				// 	shape: "text",
+				// 	class: "graph-bead-text",
+				// 	text: i,
+				// 	attrs: {
+				// 		fill: "black",
+				// 		"text-anchor": "middle",
+				// 		"dominant-baseline": "middle",
+				// 		"font-size": 8,
+				// 		x,
+				// 		y,
+				// 	},
+				// },
+			];
+		})
+		.flat(Infinity);
 }
 
 const equationDipeptides = [
@@ -969,23 +854,22 @@ function getEquationChainData(stage) {
 	return [...chains, ...arrows];
 }
 
-const N_PRECOMPUTED_PATH_POINTS = 3000;
 // Adapted https://stackoverflow.com/a/52291755
 // Compute an array arr of path [x,y] pairs such that arr[i] === pathNode.getPointAtLength(i/(N_PRECOMPUTED_PATH_POINTS-1) * pathNode.getTotalLength())
+const N_PRECOMPUTED_PATH_POINTS = 3000;
+const energyCurvePathPoints = {};
 function precomputeAndCachePathPoints(pathNode, nPoints) {
-	const points = {};
 	for (const stage of [STAGES.initial, STAGES.enzyme, STAGES.ligand]) {
 		pathNode.setAttribute("d", graphLine(getEnergyCurvePoints(stage)));
 
 		const step = pathNode.getTotalLength() / (nPoints - 1);
-		points[stage] = [];
+		energyCurvePathPoints[stage] = [];
 		for (let i = 0; i < nPoints; ++i) {
 			const length = i * step;
 			const { x, y } = pathNode.getPointAtLength(length);
-			points[stage].push([x, y]);
+			energyCurvePathPoints[stage].push([x, y]);
 		}
 	}
-	pathNode.__cachedPoints = points;
 }
 
 const buttons = {
@@ -1044,26 +928,25 @@ function initialize() {
 	energyCurve.attr("d", graphLine(getEnergyCurvePoints(0)));
 
 	// Initial dipeptides on the graph
-	applyGraphicalObjs(graph, horizontalGraphDipeptides.flat(Infinity));
+	applyGraphicalObjs(graph, getGraphData(STAGES.initial));
 
 	applyGraphicalObjs(equation, getEquationChainData(STAGES.initial));
 }
 
-const dipeptideSelector = "circle.chemical-obj";
-const ligandSelector = "path.chemical-obj";
+const DIPEPTIDE_SELECTOR = "circle.chemical-obj";
+const LIGAND_SELECTOR = "path.chemical-obj";
 
 function fadeligands(svg, fadeDuration, fadeDelay) {
-	if (fadeDelay === undefined) {
-		fadeDelay = 0;
-	}
-	svg.selectAll(`${ligandSelector}.ligand-exterior`)
+	fadeDelay = fadeDelay ?? 0;
+
+	svg.selectAll(`${LIGAND_SELECTOR}.ligand-exterior`)
 		.transition()
 		.delay(fadeDelay)
 		.duration(fadeDuration)
 		.style("opacity", 0)
 		.end()
 		.then(() => {
-			svg.selectAll(ligandSelector)
+			svg.selectAll(LIGAND_SELECTOR)
 				.transition()
 				.duration(100)
 				.attr("stroke-width", 0)
@@ -1071,26 +954,28 @@ function fadeligands(svg, fadeDuration, fadeDelay) {
 		});
 }
 
-const substanceDropDuration = 800;
+const substanceDropDuration = 1000;
 function dropSubstanceIntoBeaker(stage) {
 	if (stage === STAGES.initial) {
 		return;
 	}
 	const symbol = stage === STAGES.enzyme ? "#symbol-enzyme" : "#symbol-ligand";
-	const ty = stage === STAGES.enzyme ? -50 : -75;
+	const ty = -50;
 	const symbols = beaker
 		.selectAll("use")
 		.data([
-			{ x: 0.2, delay: stage === STAGES.enzyme ? 200 : 450 },
-			{ x: 0.4, delay: 0 },
-			{ x: 0.65, delay: stage === STAGES.enzyme ? 400 : 150 },
+			{ ...ligandLocs[0], delay: stage === STAGES.enzyme ? 200 : 450 },
+			{ ...ligandLocs[1], delay: 0 },
+			{ ...ligandLocs[2], delay: stage === STAGES.enzyme ? 400 : 150 },
 		])
 		.join(enter => enter.insert("use", ".beaker-lid-front"))
+		.classed("beaker-dropped-substance", true)
 		.attr("xlink:href", symbol)
 		.attr("transform", d => `translate(${beakerXScale(d.x)} ${ty})`)
 		.style("opacity", 1);
 
-	symbols
+	const dropEndY = CONFIG.fluidHeight;
+	const t = symbols
 		.transition()
 		.ease(d3.easeCubicIn)
 		.duration(substanceDropDuration)
@@ -1101,39 +986,63 @@ function dropSubstanceIntoBeaker(stage) {
 				`translate(${beakerXScale(d.x)} ${beakerYScale(
 					CONFIG.fluidHeight + 0.1,
 				)})`,
-		)
-		.transition()
-		.ease(d3.easeCubicOut)
-		.duration(1200)
-		.attr(
-			"transform",
-			d =>
-				`translate(${beakerXScale(d.x)} ${beakerYScale(
-					CONFIG.fluidHeight - 0.1,
-				)})`,
-		)
-		.style("opacity", 0)
-		.remove();
+		);
+
+	if (stage === STAGES.enzyme) {
+		t.transition()
+			.ease(d3.easePolyOut.exponent(2.3))
+			.duration(1200)
+			.attr(
+				"transform",
+				d => `
+					translate(
+						${beakerXScale(d.x)}
+						${beakerYScale(dropEndY - 0.1)})`,
+			)
+			.style("opacity", 0);
+	} else {
+		t.transition()
+			.ease(d3.easePolyOut.exponent(1.2))
+			.duration(450)
+			.attr(
+				"transform",
+				d => `
+					translate(
+						${beakerXScale(d.x)}
+						${beakerYScale(dropEndY - 0.06)})`,
+			)
+			.transition()
+			.ease(d3.easeCubicOut)
+			.duration(d => 9000 * Math.abs(dropEndY - d.y))
+			.attr(
+				"transform",
+				d => `
+					translate(
+						${beakerXScale(d.x)}
+						${beakerYScale(d.y)})`,
+			);
+	}
 }
 
-const energyCurveChangeDelay = 200;
-const energyCurveChangeDuration = 1000;
-const dipeptideResetDuration = 700;
-const dipeptideMovementDuration = 1500;
-const dipeptideMovementDelayIfNotResetting = 550 + substanceDropDuration;
+const energyCurveChangeDelay = 500;
+const energyCurveChangeDuration = 1500;
+const dipeptideResetDuration = 1500;
+const dipeptideMovementDuration = 4000;
+const dipeptideMovementDelayAfterEnzyme = 750 + substanceDropDuration;
+const dipeptideMovementDelayAfterLigand = 1350 + substanceDropDuration;
 const ligandAppearDuration = 700;
 const ligandExteriorAppearPreappearTime = 300;
 const ligandFadeDuration = 200;
-const defaultEnergyWellFadeDuration = 700;
+const defaultEnergyWellFadeDuration = 900;
 const graphRecedeDuration = 500;
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
-		[dipeptideSelector]: dipeptideData,
-		[ligandSelector]: ligandData,
+		[DIPEPTIDE_SELECTOR]: dipeptideData,
+		[LIGAND_SELECTOR]: ligandData,
 	} = groupBy(
 		data,
 		d => `${d.shape}.chemical-obj`,
-		[dipeptideSelector, ligandSelector],
+		[DIPEPTIDE_SELECTOR, LIGAND_SELECTOR],
 		false,
 	);
 
@@ -1144,7 +1053,9 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const dipeptideMovementDelay =
 		stage === STAGES.initial && prevStage === STAGES.energyWell
 			? energyWellFadeDuration
-			: dipeptideMovementDelayIfNotResetting;
+			: stage === STAGES.enzyme
+			? dipeptideMovementDelayAfterEnzyme
+			: dipeptideMovementDelayAfterLigand;
 	const dipeptideResetDelay = energyWellFadeDuration + ligandFadeDuration;
 	const dipeptideMovementTransition = d3
 		.transition()
@@ -1153,73 +1064,90 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 
 	let totalTransitionDuration;
 
-	// Animate the dipeptides moving
-	if (stage === STAGES.initial) {
-		fadeligands(svg, ligandFadeDuration, energyWellFadeDuration);
-		applyGraphicalObjs(svg, dipeptideData, {
-			selector: dipeptideSelector,
-			key: d => d.id,
-			transition: d3
-				.transition("dipeptideReset")
-				.delay(dipeptideResetDelay)
-				.duration(dipeptideResetDuration),
-		});
-		totalTransitionDuration =
-			(prevStage === STAGES.energyWell ? energyWellFadeDuration : 0) +
-			energyCurveChangeDelay +
-			energyCurveChangeDuration;
-	} else if (stage === STAGES.enzyme) {
-		applyGraphicalObjs(svg, dipeptideData, {
-			selector: dipeptideSelector,
-			key: d => d.id,
-			transition: d3.transition(dipeptideMovementTransition),
-		});
-		// Only for testing; in the actual demo ligands don't appear at this stage
-		applyGraphicalObjs(svg, ligandData, {
-			selector: ligandSelector,
-			transition: d3.transition().duration(ligandAppearDuration),
-		});
-		totalTransitionDuration = dipeptideMovementDelay + dipeptideMovementDuration;
-	} else if (stage === STAGES.ligand) {
-		applyGraphicalObjs(svg, dipeptideData, {
-			selector: dipeptideSelector,
-			key: d => d.id,
-			transition: d3.transition(dipeptideMovementTransition),
-		});
+	const dipeptideSelector = svg === beaker ? DIPEPTIDE_SELECTOR : ".graph-bead";
 
-		applyGraphicalObjs(svg, ligandData, {
-			selector: ligandSelector,
-			transition: d3
-				.transition()
-				.delay(dipeptideMovementDelay + dipeptideMovementDuration * 0.6)
-				.duration(ligandAppearDuration),
-		});
+	if (svg === beaker) {
+		// Animate the dipeptides moving
+		if (stage === STAGES.initial) {
+			fadeligands(svg, ligandFadeDuration, energyWellFadeDuration);
+			applyGraphicalObjs(svg, dipeptideData, {
+				selector: dipeptideSelector,
+				key: d => d.id,
+				transition: d3
+					.transition("dipeptideReset")
+					.delay(dipeptideResetDelay)
+					.duration(dipeptideResetDuration),
+			});
+			totalTransitionDuration =
+				(prevStage === STAGES.energyWell ? energyWellFadeDuration : 0) +
+				energyCurveChangeDelay +
+				energyCurveChangeDuration;
+		} else if (stage === STAGES.enzyme) {
+			applyGraphicalObjs(svg, dipeptideData, {
+				selector: DIPEPTIDE_SELECTOR,
+				key: d => d.id,
+				transition: d3.transition(dipeptideMovementTransition),
+			});
 
-		svg.selectAll(`${ligandSelector}.ligand-exterior`).style("opacity", 0);
-		svg.selectAll(`${ligandSelector}.ligand-interior`).style("opacity", 1);
-		svg.selectAll(`${ligandSelector}.ligand-exterior`)
-			.transition("exterior")
-			.delay(
+			// Only for testing; in the actual demo ligands don't appear at this stage
+			applyGraphicalObjs(svg, ligandData, {
+				selector: LIGAND_SELECTOR,
+				transition: d3.transition().duration(ligandAppearDuration),
+			});
+			totalTransitionDuration =
+				dipeptideMovementDelay + dipeptideMovementDuration;
+		} else if (stage === STAGES.ligand) {
+			applyGraphicalObjs(svg, dipeptideData, {
+				selector: DIPEPTIDE_SELECTOR,
+				key: d => d.id,
+				transition: d3.transition(dipeptideMovementTransition),
+			});
+			applyGraphicalObjs(svg, ligandData, {
+				selector: LIGAND_SELECTOR,
+				transition: d3
+					.transition()
+					.delay(dipeptideMovementDelay + dipeptideMovementDuration * 0.6)
+					.duration(ligandAppearDuration),
+			});
+			svg.selectAll(`${LIGAND_SELECTOR}.ligand-exterior`).style("opacity", 0);
+			svg.selectAll(`${LIGAND_SELECTOR}.ligand-interior`).style("opacity", 1);
+			svg.selectAll(`${LIGAND_SELECTOR}.ligand-exterior`)
+				.transition("exterior")
+				.delay(
+					dipeptideMovementDelay +
+						dipeptideMovementDuration -
+						ligandExteriorAppearPreappearTime,
+				)
+				.duration(ligandAppearDuration)
+				.style("opacity", 1);
+
+			const firstDipeptide = svg.selectAll(DIPEPTIDE_SELECTOR).node();
+			const fragment = document.createDocumentFragment();
+			svg.selectAll(LIGAND_SELECTOR).each(function () {
+				fragment.appendChild(this);
+			});
+			firstDipeptide.parentNode.insertBefore(fragment, firstDipeptide);
+
+			totalTransitionDuration =
 				dipeptideMovementDelay +
-					dipeptideMovementDuration -
-					ligandExteriorAppearPreappearTime,
-			)
-			.duration(ligandAppearDuration)
-			.style("opacity", 1);
-
-		const firstDipeptide = svg.selectAll(dipeptideSelector).node();
-		const fragment = document.createDocumentFragment();
-		svg.selectAll(ligandSelector).each(function () {
-			fragment.appendChild(this);
-		});
-		firstDipeptide.parentNode.insertBefore(fragment, firstDipeptide);
-
-		totalTransitionDuration =
-			dipeptideMovementDelay +
-			dipeptideMovementDuration * 0.6 +
-			ligandAppearDuration;
+				dipeptideMovementDuration * 0.6 +
+				ligandAppearDuration;
+		} else {
+			throw new Error(`Invalid stage ${stage}`);
+		}
 	} else {
-		throw new Error(`Invalid stage ${stage}`);
+		const [beads, text] = groupBy(data, d => d.shape, ["circle", "text"], true).map(
+			pair => pair[1],
+		);
+
+		applyGraphicalObjs(svg, beads, {
+			selector: dipeptideSelector,
+			transition: d3.transition(dipeptideMovementTransition),
+		});
+		applyGraphicalObjs(svg, text, {
+			selector: ".graph-bead-text",
+			transition: d3.transition(dipeptideMovementTransition),
+		});
 	}
 
 	if (tweens !== undefined) {
@@ -1338,6 +1266,12 @@ function update(stage) {
 			.duration(graphRecedeDuration)
 			.style("opacity", 0)
 			.remove();
+		beaker
+			.selectAll(".beaker-dropped-substance")
+			.transition()
+			.delay(energyCurveChangeDelay)
+			.duration(dipeptideResetDuration / 2)
+			.style("opacity", 0);
 		bottomGraphContainer
 			.transition()
 			.duration(defaultEnergyWellFadeDuration)
@@ -1352,11 +1286,11 @@ function update(stage) {
 
 	dropSubstanceIntoBeaker(stage);
 
+	console.log(getBeakerData(stage));
 	applyDataToSvg(beaker, { stage, data: getBeakerData(stage) });
 
 	// Animate the energy curve itself
 	const energyCurve = graph.selectAll(".energy-curve");
-	const energyCurveNode = energyCurve.node();
 
 	const finalEnergyCurvePathString = graphLine(getEnergyCurvePoints(stage));
 
@@ -1386,98 +1320,62 @@ function update(stage) {
 		.domain([0, tempFinalPathNode.getTotalLength()])
 		.rangeRound([0, N_PRECOMPUTED_PATH_POINTS - 1]);
 
-	const thisPathPoints = energyCurveNode.__cachedPoints[stage];
+	const thisPathPoints = energyCurvePathPoints[stage];
 	// Animate the dipeptides moving along the energy curve
 
 	// Animate them moving vertically as the curve changes shape
-	if (stage === STAGES.enzyme) {
-		for (const dipeptide of horizontalGraphDipeptides) {
-			const cxs = dipeptide.map(dp => dp.attrs.cx);
-			const lengths = cxs.map(cx => getLengthAtX(tempFinalPathNode, cx));
-			const pointIndices = lengths.map(l => indexScale(l));
-			const cys = pointIndices.map(pi => thisPathPoints[pi][1]);
-			const cy = Math.min(...cys) - 20;
+	// if (stage === STAGES.enzyme) {
+	// 	for (const dipeptide of horizontalGraphDipeptides) {
+	// 		const cxs = dipeptide.map(dp => dp.attrs.cx);
+	// 		const lengths = cxs.map(cx => getLengthAtX(tempFinalPathNode, cx));
+	// 		const pointIndices = lengths.map(l => indexScale(l));
+	// 		const cys = pointIndices.map(pi => thisPathPoints[pi][1]);
+	// 		const cy = Math.min(...cys) - 20;
 
-			const [dp1, dp2] = dipeptide;
-			graph
-				.selectAll(".graph-dipeptide")
-				.filter(d => d.id === dp1.id || d.id === dp2.id)
-				.transition()
-				.delay(energyCurveDelay)
-				.duration(energyCurveChangeDuration * 0.97)
-				.attr("cy", cy);
-		}
-	}
+	// 		const [dp1, dp2] = dipeptide;
+	// 		graph
+	// 			.selectAll(".graph-dipeptide")
+	// 			.filter(d => d.id === dp1.id || d.id === dp2.id)
+	// 			.transition()
+	// 			.delay(energyCurveDelay)
+	// 			.duration(energyCurveChangeDuration * 0.97)
+	// 			.attr("cy", cy);
+	// 	}
+	// }
 
 	const graphData = getGraphData(stage);
 	function graphDipeptideTween(d) {
 		const { cx: finalCx, cy: finalCy } = d.attrs;
-		if (stage === STAGES.initial) {
-			const initialLength = getLengthAtX(
-				energyCurveNode,
-				this.getAttribute("cx"),
-			);
-			const initialPoint = energyCurveNode.getPointAtLength(initialLength);
-			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const finalLength = getLengthAtX(energyCurveNode, finalCx);
+		const initialLength = getLengthAtX(tempFinalPathNode, this.getAttribute("cx"));
+		const initialPoint = tempFinalPathNode.getPointAtLength(initialLength);
+		const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
 
-			const distAboveCurveScale = d3.scaleLinear(
-				[0, 1],
-				[
-					initialDistAboveCurve,
-					graphYScale(energyCurvePadAbove) - graphYScale(0),
-				],
-			);
+		const finalLength = getLengthAtX(tempFinalPathNode, finalCx);
+		const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
+		const finalDistAboveCurve = finalCy - finalPoint.y;
 
-			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
+		const distAboveCurveScale = d3
+			.scalePow([0, 1], [initialDistAboveCurve, finalDistAboveCurve])
+			.exponent(0.5);
 
-			const initialEnergyCurveNodeCopy = energyCurveNode.cloneNode();
+		const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
 
-			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
-			const y0 = graphYScale(initialEnergy);
-			return t => {
-				const length = lengthScale(t);
-				const { x, y } = initialEnergyCurveNodeCopy.getPointAtLength(length);
-				const compressedY = y0 + (y - y0) * (1 - t);
-				const distAboveCurve = distAboveCurveScale(t);
-				this.setAttribute("cx", x);
-				this.setAttribute("cy", compressedY + distAboveCurve);
-			};
-		} else {
-			const initialLength = getLengthAtX(
-				tempFinalPathNode,
-				this.getAttribute("cx"),
-			);
-			const initialPoint = tempFinalPathNode.getPointAtLength(initialLength);
-			const initialDistAboveCurve = this.getAttribute("cy") - initialPoint.y;
+		// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
+		return t => {
+			// const length = lengthScale(t);
+			// const point = tempFinalPathNode.getPointAtLength(length);
+			// const curveY = point.y;
+			// const distAboveCurve = distAboveCurveScale(t);
+			// return curveY + distAboveCurve;
 
-			const finalLength = getLengthAtX(tempFinalPathNode, finalCx);
-			const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
-			const finalDistAboveCurve = finalCy - finalPoint.y;
+			const length = lengthScale(t);
+			const pointIndex = indexScale(length);
+			const [x, y] = thisPathPoints[pointIndex];
 
-			const distAboveCurveScale = d3.scaleLinear(
-				[0, 1],
-				[initialDistAboveCurve, finalDistAboveCurve],
-			);
-
-			const lengthScale = d3.scaleLinear([0, 1], [initialLength, finalLength]);
-
-			// const yScale = d3.scaleLinear([0, 1], [cy, this.getAttribute("cy")]);
-			return t => {
-				// const length = lengthScale(t);
-				// const point = tempFinalPathNode.getPointAtLength(length);
-				// const curveY = point.y;
-				// const distAboveCurve = distAboveCurveScale(t);
-				// return curveY + distAboveCurve;
-
-				const length = lengthScale(t);
-				const pointIndex = indexScale(length);
-				const [x, y] = thisPathPoints[pointIndex];
-				this.setAttribute("cx", x);
-				this.setAttribute("cy", y + distAboveCurveScale(t));
-			};
-		}
+			this.setAttribute("cx", x);
+			this.setAttribute("cy", y + distAboveCurveScale(t));
+		};
 	}
 
 	const totalTransitionDuration = applyDataToSvg(graph, {
@@ -1518,7 +1416,7 @@ function update(stage) {
 					.transition()
 					.delay(
 						stage === STAGES.enzyme || stage === STAGES.ligand
-							? dipeptideMovementDelayIfNotResetting +
+							? dipeptideMovementDelayAfterEnzyme +
 									dipeptideMovementDuration -
 									ligandExteriorAppearPreappearTime
 							: prevStage === STAGES.energyWell

@@ -2,7 +2,9 @@
 
 const STEP = 0.01;
 
-const independentVarNames = ["t", "x", "y", "z", "vx", "vy", "vz"];
+const positionVarNames = ["t", "x", "y", "z"];
+const velocityVarNames = ["vx", "vy", "vz"];
+const independentVarNames = [...positionVarNames, ...velocityVarNames];
 const dependentVarNames = ["t", "x", "y", "z"].map(v => `${v}-prime`);
 
 const sliders = {};
@@ -117,16 +119,25 @@ function update(values) {
 	});
 }
 
-// eslint-disable-next-line no-unused-vars
-function reset() {
-	independentVarNames.forEach(iv => {
+function __reset(varNames) {
+	varNames.forEach(iv => {
 		sliders[iv].value = 0;
 	});
 	const values = {};
-	for (const iv of independentVarNames) {
+	for (const iv of varNames) {
 		values[iv] = 0;
 	}
 	update(values);
+}
+
+// eslint-disable-next-line no-unused-vars
+function resetCoordinates() {
+	__reset(positionVarNames);
+}
+
+// eslint-disable-next-line no-unused-vars
+function resetVelocities() {
+	__reset(velocityVarNames);
 }
 
 update({});

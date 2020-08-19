@@ -19,15 +19,33 @@ function update({ speed }) {
 
 update({ axes: ["x", "t"] });
 
-const buttons = { stop: document.getElementById("button") };
-const buttonText = "Show Spatial and Temporal Slices";
-buttons.stop.textContent = buttonText;
+const buttons = {
+	spatial: document.getElementById("button-spatial"),
+	temporal: document.getElementById("button-temporal"),
+};
+
+buttons.spatial.textContent = "Show Spatial Slices";
+
+function _toggle(sliceType) {
+	const b = sliceType === "spatial" ? buttons.spatial : buttons.temporal;
+	const buttonText = sliceType.charAt(0).toUpperCase() + sliceType.slice(1);
+	_toggleSlices(svg, b, {
+		sliceType,
+		afterFinishCallback: () => {
+			b.innerText = `Hide ${buttonText} Slices`;
+		},
+		afterResetCallback: () => {
+			b.innerText = `Show ${buttonText} Slices`;
+		},
+	});
+}
 
 // eslint-disable-next-line no-unused-vars
-function toggle() {
-	_toggleSlices(svg, {
-		beforeBeginCallback: () => (buttons.stop.innerText = "Stop"),
-		afterFinishCallback: () => (buttons.stop.innerText = buttonText),
-		beforeCancelCallback: () => (buttons.stop.innerText = buttonText),
-	});
+function toggleSpatial() {
+	_toggle("spatial");
+}
+
+// eslint-disable-next-line no-unused-vars
+function toggleTemporal() {
+	_toggle("temporal");
 }

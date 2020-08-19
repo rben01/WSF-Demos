@@ -1,6 +1,3 @@
-body {
-	width: 550px;
-}
 .slider-label-custom {
 	text-align: left;
 }
@@ -9,4 +6,8 @@ body {
 }
 .smaller {
 	font-size: 70%;
+}
+
+.play-button {
+	width: 13em;
 }

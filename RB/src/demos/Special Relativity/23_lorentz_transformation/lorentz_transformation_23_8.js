@@ -10,6 +10,7 @@ const MINOR_RADIUS = 1.5001;
 
 const XMIN = -1;
 const XMAX = 1;
+const XMID = (XMIN + XMAX) / 2;
 const YMIN = -1;
 const YMAX = 1;
 const YMID = (YMIN + YMAX) / 2;
@@ -28,7 +29,7 @@ const joystickAttrs = {
 const xScale = d3.scaleLinear().domain([XMIN, XMAX]).range([0, joystickAttrs.width]);
 const yScale = d3.scaleLinear().domain([YMIN, YMAX]).range([joystickAttrs.height, 0]);
 
-const knobCoords = { x: XMIN + KNOB_RADIUS, y: YMID };
+const knobCoords = { x: XMID, y: YMID };
 const thetaScale = d3
 	.scaleLinear()
 	.domain([XMIN + KNOB_RADIUS, XMAX - KNOB_RADIUS])
@@ -202,7 +203,7 @@ function plotTorus({ speed, theta, phi, restoreCamera } = {}) {
 			i: TORUS_POINTS.simplices.map(s => s[0]),
 			j: TORUS_POINTS.simplices.map(s => s[1]),
 			k: TORUS_POINTS.simplices.map(s => s[2]),
-			facecolor: TORUS_POINTS.simplices.map(() => "#f21200"),
+			facecolor: TORUS_POINTS.simplices.map(() => "#ffc010"), // Old color: #f21200
 			lighting,
 			lightposition: null,
 

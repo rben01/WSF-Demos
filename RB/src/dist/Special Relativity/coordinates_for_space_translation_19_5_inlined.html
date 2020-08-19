@@ -7,7 +7,8 @@
 <body><style>body {
 max-width: 800px;
 margin: 50px auto;
-padding: 0;
+padding-left: auto;
+padding-right: auto;
 background-color: black;
 color: white;
 font-size: 21px;
@@ -16,15 +17,35 @@ font-family: sans-serif;
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
+margin-right: 3px;
 width: 5em;
+height: 30px;
 font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
 }
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
+padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -87,7 +108,7 @@ bottom: 4px;
 input[type="range"] {
 -webkit-appearance: none;
 -moz-apperance: none;
-width: 40%;
+width: 320px;
 height: 8px;
 padding: 0 0px;
 background: #8b8f92;
@@ -139,7 +160,8 @@ cursor: pointer;
 body {
 max-width: 800px;
 margin: 50px auto;
-padding: 0;
+padding-left: auto;
+padding-right: auto;
 background-color: black;
 color: white;
 font-size: 21px;
@@ -148,15 +170,35 @@ font-family: sans-serif;
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
+margin-right: 3px;
 width: 5em;
+height: 30px;
 font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
 }
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
+padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -219,7 +261,7 @@ bottom: 4px;
 input[type="range"] {
 -webkit-appearance: none;
 -moz-apperance: none;
-width: 40%;
+width: 320px;
 height: 8px;
 padding: 0 0px;
 background: #8b8f92;
@@ -395,7 +437,8 @@ function applyDatum(datum, { transition } = {}) {
 const d3Obj = d3.select(this).datum(datum);
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
-} else if (typeof datum.classes !== "undefined") {
+}
+if (typeof datum.classes !== "undefined") {
 for (const c of datum.classes) {
 d3Obj.classed(c, true);
 }
@@ -404,6 +447,11 @@ const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transitio
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
 if (typeof datum.text !== "undefined") {
 t.text(datum.text);
 }
@@ -853,9 +901,10 @@ displacementY = +sliders.displacement.y.value;
 }
 }
 displacementY = +displacementY;
-if (typeof shouldDrawUprightLines === "undefined") {
-shouldDrawUprightLines = true;
-}
+// if (typeof shouldDrawUprightLines === "undefined") {
+// 	shouldDrawUprightLines = true;
+// }
+shouldDrawUprightLines = false;
 const sin = Math.sin(angleRad);
 const cos = Math.cos(angleRad);
 const tfAxesAttrs = {
@@ -937,19 +986,20 @@ tfAxProjCoords[ax].x = tfAxOrigin.x + projectionDotProd * posEndUnitVecX;
 tfAxProjCoords[ax].y = tfAxOrigin.y + projectionDotProd * posEndUnitVecY;
 tfAxProjCoords[ax].dotProd = projectionDotProd;
 });
+const dashLength = 5;
 const uprightLinesAttrs = {
 stroke: STANDARD_COLORS.highlighted,
-"stroke-width": 2,
-"stroke-dasharray": "5 5",
+"stroke-width": 3,
+"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 };
 const uprightLinesData = [
 {
 shape: "line",
 class: "upright-line-horizontal",
 attrs: {
-x1: xScale(RANGES.axis.mid),
+x1: xScale(x),
 y1: yScale(y),
-x2: xScale(x),
+x2: xScale(RANGES.axis.mid),
 y2: yScale(y),
 ...uprightLinesAttrs,
 },
@@ -959,32 +1009,32 @@ shape: "line",
 class: "upright-line-vertical",
 attrs: {
 x1: xScale(x),
-y1: yScale(RANGES.axis.mid),
+y1: yScale(y),
 x2: xScale(x),
-y2: yScale(y),
+y2: yScale(RANGES.axis.mid),
 ...uprightLinesAttrs,
 },
 },
 ];
 if (!shouldDrawUprightLines) {
 for (const line of uprightLinesData) {
-line.attrs["stroke-dasharray"] = "2 3";
+line.attrs["stroke-dashoffset"] = dashLength;
 }
 }
 const tfLinesAttrs = {
 stroke: STANDARD_COLORS.secondary,
-"stroke-width": shouldDrawUprightLines ? 2 : 4,
-"stroke-dasharray": shouldDrawUprightLines ? "5 5" : "5 10",
+"stroke-width": 3,
+"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 };
 const tfLinesData = [
 {
 shape: "line",
 class: "tf-line-vertical",
 attrs: {
-x1: xScale(tfAxProjCoords.xAx.x),
-y1: yScale(tfAxProjCoords.xAx.y),
-x2: xScale(x),
-y2: yScale(y),
+x1: xScale(x),
+y1: yScale(y),
+x2: xScale(tfAxProjCoords.xAx.x),
+y2: yScale(tfAxProjCoords.xAx.y),
 ...tfLinesAttrs,
 },
 },
@@ -992,10 +1042,10 @@ y2: yScale(y),
 shape: "line",
 class: "tf-line-horizontal",
 attrs: {
-x1: xScale(tfAxProjCoords.yAx.x),
-y1: yScale(tfAxProjCoords.yAx.y),
-x2: xScale(x),
-y2: yScale(y),
+x1: xScale(x),
+y1: yScale(y),
+x2: xScale(tfAxProjCoords.yAx.x),
+y2: yScale(tfAxProjCoords.yAx.y),
 ...tfLinesAttrs,
 },
 },
@@ -1084,30 +1134,31 @@ r: 4,
 fill: "white",
 },
 };
-const axesDots = shouldDrawUprightLines
-? []
-: [
-{
-shape: "circle",
-attrs: {
-cx: xScale(x),
-cy: yScale(RANGES.axis.mid),
-r: 4,
-fill: STANDARD_COLORS.highlighted,
-stroke: "#ddd",
-},
-},
-{
-shape: "circle",
-attrs: {
-cx: xScale(RANGES.axis.mid),
-cy: yScale(y),
-r: 4,
-fill: STANDARD_COLORS.highlighted,
-stroke: "#ddd",
-},
-},
-];
+const axesDots = [];
+// shouldDrawUprightLines
+// 	? []
+// 	: [
+// 			{
+// 				shape: "circle",
+// 				attrs: {
+// 					cx: xScale(x),
+// 					cy: yScale(RANGES.axis.mid),
+// 					r: 4,
+// 					fill: STANDARD_COLORS.highlighted,
+// 					stroke: "#ddd",
+// 				},
+// 			},
+// 			{
+// 				shape: "circle",
+// 				attrs: {
+// 					cx: xScale(RANGES.axis.mid),
+// 					cy: yScale(y),
+// 					r: 4,
+// 					fill: STANDARD_COLORS.highlighted,
+// 					stroke: "#ddd",
+// 				},
+// 			},
+// 	  ];
 return {
 data: [
 ...uprightLinesData,

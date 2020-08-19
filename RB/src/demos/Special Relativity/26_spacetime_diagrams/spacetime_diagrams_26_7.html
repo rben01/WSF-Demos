@@ -5,6 +5,11 @@
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<link rel="stylesheet" type="text/css" href="./spacetime_diagrams_css.css" />
+		<style>
+			body {
+				width: 550px;
+			}
+		</style>
 	</head>
 	<body>
 		<div>
@@ -21,19 +26,17 @@
 						oninput="update({speed:this.value})" /></label
 			></span>
 			<br />
-			<button
-				id="button"
-				class="play-button"
-				style="width: 17em;"
-				onclick="toggle()"
-			>
-				Show Temporal Slices
-			</button>
-			<br />
 			<span
 				>𝑣 =
 				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
 			>
+			<br />
+			<button id="button-spatial" class="play-button" onclick="toggleSpatial()">
+				Show Spatial Slices
+			</button>
+			<button id="button-temporal" class="play-button" onclick="toggleTemporal()">
+				Show Temporal Slices
+			</button>
 		</div>
 		<svg id="viz"></svg>
 		<script type="text/javascript" src="../../utils.js"></script>

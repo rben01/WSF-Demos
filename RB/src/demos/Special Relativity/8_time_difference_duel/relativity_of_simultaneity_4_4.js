@@ -82,9 +82,15 @@ function beginAnimation() {
 					const rightCollisionXs = [];
 					let currDirection = d.direction;
 					return t => {
-						let x = xInterpolator(t);
 						const leftWall = +train.attr("x");
 						const rightWall = leftWall + trainWidth;
+						if (
+							leftCollisionXs.length >= 1 &&
+							rightCollisionXs.length >= 1
+						) {
+							return d.direction === "left" ? rightWall : leftWall;
+						}
+						let x = xInterpolator(t);
 						for (let i = 0; !(leftWall <= x && x <= rightWall); ++i) {
 							let collisionX;
 							const index = Math.floor(i / 2);

@@ -10,10 +10,11 @@ const textSpans = {
 
 // Draw gridlines
 (() => {
+	const ticks = d3.range(-2, 2 + 0.000001, 1);
 	const nonzeroTicks = ticks.filter(t => t !== 0);
 	const lines = [
-		...nonzeroTicks.map(x => ({ x1: x, x2: x, y1: AXES.y.min, y2: AXES.y.max })),
-		...nonzeroTicks.map(y => ({ x1: AXES.x.min, x2: AXES.x.max, y1: y, y2: y })),
+		...nonzeroTicks.map(x => ({ x1: x, x2: x, y1: -2.2, y2: 2.2 })),
+		...nonzeroTicks.map(y => ({ x1: -2.2, x2: 2.2, y1: y, y2: y })),
 	].map(attrs => ({
 		shape: "line",
 		attrs: {

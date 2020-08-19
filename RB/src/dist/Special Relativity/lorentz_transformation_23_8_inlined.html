@@ -8,7 +8,8 @@
 <body><style>body {
 max-width: 800px;
 margin: 50px auto;
-padding: 0;
+padding-left: auto;
+padding-right: auto;
 background-color: black;
 color: white;
 font-size: 21px;
@@ -17,15 +18,35 @@ font-family: sans-serif;
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
+margin-right: 3px;
 width: 5em;
+height: 30px;
 font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
 }
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
+padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -88,7 +109,7 @@ bottom: 4px;
 input[type="range"] {
 -webkit-appearance: none;
 -moz-apperance: none;
-width: 40%;
+width: 320px;
 height: 8px;
 padding: 0 0px;
 background: #8b8f92;
@@ -201,9 +222,6 @@ Velocity magnitude (𝑣):
 </div>
 <div style="display: flex; flex-direction: row;">
 <div style="width: 6em;">
-<span><button class="play-button" id="start-button" onclick="toggleAnimation();">
-Start
-</button></span>
 <div class="frames-box">
 <div class="frame">
 <table>
@@ -225,6 +243,9 @@ Start
 </div>
 <div class="divider"></div>
 </div>
+<span><button class="play-button" id="start-button" onclick="toggleAnimation();">
+Start
+</button></span>
 </div>
 <div class="divider"></div>
 <div>
@@ -256,7 +277,8 @@ function applyDatum(datum, { transition } = {}) {
 const d3Obj = d3.select(this).datum(datum);
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
-} else if (typeof datum.classes !== "undefined") {
+}
+if (typeof datum.classes !== "undefined") {
 for (const c of datum.classes) {
 d3Obj.classed(c, true);
 }
@@ -265,6 +287,11 @@ const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transitio
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
 if (typeof datum.text !== "undefined") {
 t.text(datum.text);
 }
@@ -32187,6 +32214,7 @@ const MAJOR_RADIUS = 3;
 const MINOR_RADIUS = 1.5001;
 const XMIN = -1;
 const XMAX = 1;
+const XMID = (XMIN + XMAX) / 2;
 const YMIN = -1;
 const YMAX = 1;
 const YMID = (YMIN + YMAX) / 2;
@@ -32202,7 +32230,7 @@ knobOutline: "#aaa",
 };
 const xScale = d3.scaleLinear().domain([XMIN, XMAX]).range([0, joystickAttrs.width]);
 const yScale = d3.scaleLinear().domain([YMIN, YMAX]).range([joystickAttrs.height, 0]);
-const knobCoords = { x: XMIN + KNOB_RADIUS, y: YMID };
+const knobCoords = { x: XMID, y: YMID };
 const thetaScale = d3
 .scaleLinear()
 .domain([XMIN + KNOB_RADIUS, XMAX - KNOB_RADIUS])
@@ -32352,7 +32380,7 @@ z: torusPrime.z,
 i: TORUS_POINTS.simplices.map(s => s[0]),
 j: TORUS_POINTS.simplices.map(s => s[1]),
 k: TORUS_POINTS.simplices.map(s => s[2]),
-facecolor: TORUS_POINTS.simplices.map(() => "#f21200"),
+facecolor: TORUS_POINTS.simplices.map(() => "#ffc010"), // Old color: #f21200
 lighting,
 lightposition: null,
 // marker: { size: 1, color: "red" },

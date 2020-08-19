@@ -7,7 +7,8 @@
 <body id="bod"><style>body {
 max-width: 800px;
 margin: 50px auto;
-padding: 0;
+padding-left: auto;
+padding-right: auto;
 background-color: black;
 color: white;
 font-size: 21px;
@@ -16,15 +17,35 @@ font-family: sans-serif;
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
+margin-right: 3px;
 width: 5em;
+height: 30px;
 font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
 }
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-}
-.div-below-slider {
-padding-top: 10px;
+padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -87,7 +108,7 @@ bottom: 4px;
 input[type="range"] {
 -webkit-appearance: none;
 -moz-apperance: none;
-width: 40%;
+width: 320px;
 height: 8px;
 padding: 0 0px;
 background: #8b8f92;
@@ -166,9 +187,10 @@ border-width: 2px;
 border-color: white;
 padding: 3px;
 padding-left: 8px;
+padding-right: 8px;
 margin-top: 2px;
-margin-left: -11px;
-min-width: 315px;
+margin-left: -14px;
+min-width: 285px;
 }
 </style>
 <div class="top-sliders-sect">
@@ -210,9 +232,22 @@ Angle (𝜃):
 <br/>
 <span>𝑦 = <span class="highlighted-text" id="text-upright-y"></span></span>
 <br/>
-<span class="pythagorean">𝑥²<span class="operator">+</span>𝑦² =
-<span class="highlighted-text" id="text-upright-x-sq"></span><span class="operator">+</span><span class="highlighted-text" id="text-upright-y-sq"></span> =
-<span class="distance highlighted-text"></span></span>
+<table class="pythagorean">
+<tr>
+<td class="eqn-left">𝑥²<span class="operator">+</span>𝑦²</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="highlighted-text" id="text-upright-x-sq"></span><span class="operator">+</span><span class="highlighted-text" id="text-upright-y-sq"></span>
+</td>
+</tr>
+<tr>
+<td class="eqn-left"></td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="distance highlighted-text"></span>
+</td>
+</tr>
+</table>
 </div>
 <div style="height: 100px; flex-grow: 1;"></div>
 <span style="display: inline;">𝜃 = <span class="quaternary-text" id="text-angle">0</span><span class="operator">º</span></span>
@@ -224,9 +259,24 @@ Angle (𝜃):
 <span><span class="primed-coord">𝑦′</span> =
 <span class="secondary-text" id="text-transformed-y"></span></span>
 <br/>
-<span class="pythagorean">𝑥²<span class="operator">+</span>𝑦² =
-<span class="secondary-text" id="text-transformed-x-sq"></span><span class="operator">+</span><span class="secondary-text" id="text-transformed-y-sq"></span> =
-<span class="distance secondary-text"></span></span>
+<table class="pythagorean">
+<tr>
+<td class="eqn-left">
+(𝑥′)²<span class="operator">+</span>(𝑦′)²
+</td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="secondary-text" id="text-transformed-x-sq"></span><span class="operator">+</span><span class="secondary-text" id="text-transformed-y-sq"></span>
+</td>
+</tr>
+<tr>
+<td class="eqn-left"></td>
+<td class="eqn-middle">=</td>
+<td class="eqn-right">
+<span class="distance secondary-text"></span>
+</td>
+</tr>
+</table>
 </div>
 <div style="height: 100px;"></div>
 </div>
@@ -255,7 +305,8 @@ function applyDatum(datum, { transition } = {}) {
 const d3Obj = d3.select(this).datum(datum);
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
-} else if (typeof datum.classes !== "undefined") {
+}
+if (typeof datum.classes !== "undefined") {
 for (const c of datum.classes) {
 d3Obj.classed(c, true);
 }
@@ -264,6 +315,11 @@ const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transitio
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
 if (typeof datum.text !== "undefined") {
 t.text(datum.text);
 }

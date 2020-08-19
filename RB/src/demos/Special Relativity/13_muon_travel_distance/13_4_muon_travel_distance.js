@@ -302,11 +302,12 @@ function drawGraph() {
 
 function getGridlinesData({ fracOfC }) {
 	if (typeof fracOfC === "undefined") {
-		fracOfC = 0.5;
+		fracOfC = 0;
 	}
 
 	const x = xScale(fracOfC);
 	const y = yScale(muonDistTraveled({ fracOfC }));
+	const yNewtonian = yScale(fracOfC * C * MUON_BASE_LIFESPAN);
 
 	const commonLineAttrs = {
 		"stroke-width": 3,
@@ -347,6 +348,16 @@ function getGridlinesData({ fracOfC }) {
 				cy: y,
 				r: 4,
 				fill: "white",
+			},
+		},
+		{
+			shape: "circle",
+			class: "newtonian-dot",
+			attrs: {
+				cx: x,
+				cy: yNewtonian,
+				r: 4,
+				fill: d3.interpolateRgb(newtonianLineColor, "#fff")(0.5),
 			},
 		},
 	];
@@ -411,4 +422,9 @@ function hideNewtonianLine() {
 		.transition()
 		.duration(transitionDurationMS)
 		.attr("stroke", color);
+	subcanvases
+		.selectAll(".newtonian-dot")
+		.transition()
+		.duration(transitionDurationMS)
+		.attr("opacity", opacity);
 }

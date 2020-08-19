@@ -22,9 +22,14 @@ update({});
 const buttons = { stop: document.getElementById("button") };
 // eslint-disable-next-line no-unused-vars
 function toggle() {
-	_toggleSlices(svg, {
-		beforeBeginCallback: () => (buttons.stop.innerText = "Stop"),
-		afterFinishCallback: () => (buttons.stop.innerText = "Show Spatial Slices"),
-		beforeCancelCallback: () => (buttons.stop.innerText = "Show Spatial Slices"),
+	const b = buttons.stop;
+	_toggleSlices(svg, b, {
+		sliceType: "temporal",
+		afterFinishCallback: () => {
+			b.innerText = "Hide Temporal Slices";
+		},
+		afterResetCallback: () => {
+			b.innerText = "Show Temporal Slices";
+		},
 	});
 }
