@@ -18,7 +18,6 @@ font-family: sans-serif;
 margin-top: 1.5em;
 margin-bottom: 1em;
 margin-right: 3px;
-margin-left: 3px;
 width: 5em;
 height: 30px;
 font-size: 15px;
@@ -158,6 +157,9 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+body {
+width: 800px;
+}
 .slider-label-custom {
 min-width: 6em;
 margin-left: 65px;
@@ -172,9 +174,13 @@ flex-direction: row;
 .frame {
 display: inline-block;
 width: 300px;
+text-align: center;
+}
+.eqn-table {
+padding-left: 3.2em;
 }
 .divider {
-width: 50px;
+width: 36px;
 }
 .frame-title {
 font-weight: bold;
@@ -232,7 +238,7 @@ Reset
 <div class="frame">
 <span><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span>
 <br/>
-<table>
+<table class="eqn-table">
 <tr>
 <td class="eqn-left">𝑡</td>
 <td class="eqn-middle">=</td>
@@ -249,12 +255,12 @@ Reset
 </tr>
 </table>
 </div>
-<div class="divider"></div>
+<div class="divider" style="flex-grow: 1000;"></div>
 <div class="frame">
 <span><span class="frame-title">Moving Frame: </span>𝑣 =
 <span class="sci-num highlighted-text var-v">0</span>𝑐</span>
 <br/>
-<table>
+<table class="eqn-table">
 <tr>
 <td class="eqn-left">𝑡′</td>
 <td class="eqn-middle">=</td>
@@ -274,9 +280,9 @@ Reset
 <div class="divider"></div>
 </div>
 <br/>
-<div class="transformation">
+<div class="transformation frame" style="display: block;">
 <span class="frame-title">Transformation</span>
-<table>
+<table style="padding-left: 1.5em;">
 <tr>
 <td class="eqn-left">𝑡′</td>
 <td class="eqn-middle">=</td>

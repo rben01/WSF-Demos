@@ -6,9 +6,14 @@
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<link rel="stylesheet" type="text/css" href="./spacetime_diagrams_css.css" />
 		<style>
+			body {
+				width: 575px;
+				line-height: 1em;
+			}
 			.slider-label-custom {
 				text-align: left;
 				min-width: 10.5em;
+				margin-top: 20px;
 			}
 			.coord-container {
 				display: inline-block;
@@ -33,6 +38,8 @@
 						oninput="update({t:this.value})" /></label
 			></span>
 			<br />
+			<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span>
+			<br />
 			<span
 				><label
 					><span class="slider-label slider-label-custom"
@@ -46,6 +53,8 @@
 						step=".001"
 						oninput="update({x:this.value})" /></label
 			></span>
+			<br />
+			<span>𝑥 = <span id="text-x" class="highlighted-text"></span></span>
 			<br />
 			<span
 				><label
@@ -64,22 +73,15 @@
 				>𝑣 =
 				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
 			>
+			<br />
+			<br />
+			<div style="line-height: 1.4em;">
+				<span>𝑡′ = <span id="text-tp" class="quaternary-text"></span></span>
+				<br />
+				<span>𝑥′ = <span id="text-xp" class="quaternary-text"></span></span>
+			</div>
 		</div>
 		<svg id="viz"></svg>
-		<div style="text-align: center; width: 400px; padding-left: 50px;">
-			<div class="coord-container">
-				<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span
-				><br /><span
-					>𝑥 = <span id="text-x" class="highlighted-text"></span
-				></span>
-			</div>
-			<div class="coord-container">
-				<span>𝑡′ = <span id="text-tp" class="quaternary-text"></span></span
-				><br /><span
-					>𝑥′ = <span id="text-xp" class="quaternary-text"></span
-				></span>
-			</div>
-		</div>
 		<script type="text/javascript" src="../../utils.js"></script>
 		<script type="text/javascript" src="./spacetime_diagrams_shared.js"></script>
 		<script type="text/javascript" src="./spacetime_diagrams_26_8.js"></script>

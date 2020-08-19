@@ -17,7 +17,6 @@ font-family: sans-serif;
 margin-top: 1.5em;
 margin-bottom: 1em;
 margin-right: 3px;
-margin-left: 3px;
 width: 5em;
 height: 30px;
 font-size: 15px;
@@ -157,8 +156,8 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
-input[type="range"] {
-width: 80%;
+body {
+width: 740px;
 }
 .slider-label-custom {
 min-width: 1em;
@@ -166,11 +165,14 @@ min-width: 1em;
 .slider-label {
 margin-right: 0.2em;
 }
+.play-button {
+width: unset;
+}
 .ib {
 display: inline-block;
 margin-top: auto;
 margin-bottom: auto;
-vertical-align: middle;
+vertical-align: top;
 }
 .flex-row {
 display: inline-block;
@@ -194,17 +196,20 @@ padding: 0px;
 margin: 0px;
 margin-right: -2px;
 }
-/* .result {
-width: 100px;
-} */
+.result {
+margin-left: 130px;
+}
+.header {
+display: inline-block;
+margin-bottom: 10px;
+}
 /* .operator {
 margin-left: 3px;
 margin-right: 3px;
 } */
 </style>
 <div style="padding-top: auto; padding-bottom: auto;">
-<div class="controls ib">
-<div>
+<div class="ib">
 <span class="header">Coordinates in Stationary Frame:</span>
 <br/>
 <label>
@@ -233,35 +238,11 @@ margin-right: 3px;
 </span>
 <input id="input-z" max="10" min="-10" name="input-z" oninput="update({z: this.value})" step=".01" type="range" value="0"/>
 </label>
+<br/>
+<button class="play-button" onclick="resetCoordinates()">
+Reset Coordinates
+</button>
 </div>
-<br/>
-<span class="header">Velocity of Other Frame:</span>
-<br/>
-<label>
-<span class="slider-label slider-label-custom">
-𝑣<span class="subscript">𝑥</span>
-</span>
-<input id="input-vx" max=".99" min="0" name="input-vx" oninput="update({vx: this.value})" step=".01" type="range" value="0"/>
-</label>
-<br/>
-<label>
-<span class="slider-label slider-label-custom">
-𝑣<span class="subscript">𝑦</span>
-</span>
-<input id="input-vy" max=".99" min="0" name="input-vy" oninput="update({vy: this.value})" step=".01" type="range" value="0"/>
-</label>
-<br/>
-<label>
-<span class="slider-label slider-label-custom">
-𝑣<span class="subscript">𝑧</span>
-</span>
-<input id="input-vz" max=".99" min="0" name="input-vz" oninput="update({vz: this.value})" step=".01" type="range" value="0"/>
-</label>
-</div>
-<div class="ib" style="width: 20px;"></div>
-<div class="ib">
-<button class="play-button" onclick="reset()">Reset</button>
-<div>
 <div class="result ib">
 <span class="header">Stationary Frame:</span>
 <br/>
@@ -301,7 +282,37 @@ margin-right: 3px;
 </tr>
 </table>
 </div>
-<div class="ib" style="width: 20px;"></div>
+<div style="height: 30px;"></div>
+<div>
+<div class="ib">
+<span class="header">Velocity of Moving Frame:</span>
+<br/>
+<label>
+<span class="slider-label slider-label-custom">
+𝑣<span class="subscript">𝑥</span>
+</span>
+<input id="input-vx" max=".99" min="0" name="input-vx" oninput="update({vx: this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<label>
+<span class="slider-label slider-label-custom">
+𝑣<span class="subscript">𝑦</span>
+</span>
+<input id="input-vy" max=".99" min="0" name="input-vy" oninput="update({vy: this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<label>
+<span class="slider-label slider-label-custom">
+𝑣<span class="subscript">𝑧</span>
+</span>
+<input id="input-vz" max=".99" min="0" name="input-vz" oninput="update({vz: this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<button class="play-button" onclick="resetVelocities()">
+Reset Velocities
+</button>
+</div>
+<div class="ib">
 <div class="result ib">
 <span class="header">Moving Frame:</span>
 <br/>
@@ -534,7 +545,9 @@ return grouped;
 }
 /* global lorentzFactor matMul */
 const STEP = 0.01;
-const independentVarNames = ["t", "x", "y", "z", "vx", "vy", "vz"];
+const positionVarNames = ["t", "x", "y", "z"];
+const velocityVarNames = ["vx", "vy", "vz"];
+const independentVarNames = [...positionVarNames, ...velocityVarNames];
 const dependentVarNames = ["t", "x", "y", "z"].map(v => `${v}-prime`);
 const sliders = {};
 const textSpans = {};
@@ -630,16 +643,23 @@ Object.entries(variables).forEach(([v, value]) => {
 textSpans[v].innerHTML = fmtFloat(value);
 });
 }
-// eslint-disable-next-line no-unused-vars
-function reset() {
-independentVarNames.forEach(iv => {
+function __reset(varNames) {
+varNames.forEach(iv => {
 sliders[iv].value = 0;
 });
 const values = {};
-for (const iv of independentVarNames) {
+for (const iv of varNames) {
 values[iv] = 0;
 }
 update(values);
+}
+// eslint-disable-next-line no-unused-vars
+function resetCoordinates() {
+__reset(positionVarNames);
+}
+// eslint-disable-next-line no-unused-vars
+function resetVelocities() {
+__reset(velocityVarNames);
 }
 update({});
 </script></body>

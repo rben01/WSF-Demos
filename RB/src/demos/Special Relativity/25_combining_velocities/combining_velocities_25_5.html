@@ -8,9 +8,12 @@
 			src="https://cdn.plot.ly/plotly-latest.min.js"
 		></script>
 		<style>
+			body {
+				width: 740px;
+			}
+
 			.slider-label-custom {
-				min-width: 25em;
-				font-size: 80%;
+				min-width: 16em;
 				margin-right: 0.2em;
 			}
 
@@ -56,17 +59,30 @@
 			}
 
 			.reset-button {
-				margin-left: 20px;
-				margin-right: 20px;
+				margin-bottom: 20px;
+			}
+
+			.slider-section {
+				line-height: 0.2em;
+			}
+
+			.plot-title {
+				display: inline-block;
+			}
+
+			#plot {
+				margin-left: 30px;
+				margin-right: auto;
 			}
 		</style>
 	</head>
 	<body>
-		<div>
-			<span>
+		<div style="line-height: 1.3em;">
+			<span class="slider-section">
 				<label>
 					<span class="slider-label slider-label-custom">
-						𝑥-Component of Speed of Object in Stationary Frame:
+						Object's speed in 𝑥-direction (𝑢<span class="subscript">𝑥</span
+						>):
 					</span>
 					<input
 						type="range"
@@ -79,12 +95,17 @@
 						oninput="update({vx:this.value})"
 					/>
 				</label>
+				<br />
+				<span class="eqn-left">𝑢<span class="subscript">𝑥</span></span
+				><span class="eqn-middle">=</span
+				><span class="sci-num highlighted-text eqn-right text-vx">1</span>𝑐
 			</span>
 			<br />
-			<span>
+			<span class="slider-section">
 				<label>
 					<span class="slider-label slider-label-custom">
-						𝑦-Component of Speed of Object in Stationary Frame:
+						Object's speed in 𝑦-direction (𝑢<span class="subscript">𝑦</span
+						>):
 					</span>
 					<input
 						type="range"
@@ -97,12 +118,17 @@
 						oninput="update({vy:this.value})"
 					/>
 				</label>
+				<br />
+				<span class="eqn-left">𝑢<span class="subscript">𝑦</span></span
+				><span class="eqn-middle">=</span
+				><span class="sci-num highlighted-text eqn-right text-vy">1</span>𝑐
 			</span>
 			<br />
-			<span>
+			<span class="slider-section">
 				<label>
 					<span class="slider-label slider-label-custom">
-						𝑧-Component of Speed of Object in Stationary Frame:
+						Object's speed in 𝑧-direction (𝑢<span class="subscript">𝑧</span
+						>):
 					</span>
 					<input
 						type="range"
@@ -115,12 +141,16 @@
 						oninput="update({vz:this.value})"
 					/>
 				</label>
+				<br />
+				<span class="eqn-left">𝑢<span class="subscript">𝑧</span></span
+				><span class="eqn-middle">=</span
+				><span class="sci-num highlighted-text eqn-right text-vz">1</span>𝑐
 			</span>
 			<br />
-			<span>
+			<span class="slider-section">
 				<label>
 					<span class="slider-label slider-label-custom">
-						Relative Velocity Between Frames (𝑣):
+						Relative velocity along 𝑥-axis (𝑣):
 					</span>
 					<input
 						type="range"
@@ -133,39 +163,37 @@
 						oninput="update({vr:this.value})"
 					/>
 				</label>
+				<br />
+				<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
+				><span class="sci-num highlighted-text eqn-right text-vr">1</span>𝑐
 			</span>
 			<br />
-			<br />
-			<span class="slider-label" style="font-size: smaller;">
-				The moving frame of reference is moving along the positive 𝑥 axis of the
-				stationary frame with a speed 𝑣 =
-				<span id="text-vr" class="highlighted-text sci-num"></span>𝑐
-			</span>
+			<button class="play-button reset-button" onclick="reset()">Reset</button>
 		</div>
 		<div>
 			<span class="plot-title">Velocity as Seen in Stationary Frame</span
-			><button class="play-button reset-button" onclick="reset()">Reset</button
+			><span class="plot-title" style="width: 50px;"></span
 			><span class="plot-title">Velocity as Seen in Moving Frame</span>
 		</div>
 		<div>
 			<div class="plot-container">
 				<div id="plot"></div>
 				<div>
-					<span class="velocity"
+					<span class="velocity" style="margin-left: 20px;"
 						>𝑢 =
 						<span class="sci-num"
-							>(<span id="text-vx" class="highlighted-text">0</span>,
-							<span id="text-vy" class="highlighted-text">0</span>,
-							<span id="text-vz" class="highlighted-text">0</span>)</span
+							>(<span class="text-vx highlighted-text">0</span>,
+							<span class="text-vy highlighted-text">0</span>,
+							<span class="text-vz highlighted-text">0</span>)</span
 						>𝑐</span
 					>
-					<div style="display: inline-block; width: 200px;"></div>
+					<div style="display: inline-block; width: 160px;"></div>
 					<span class="velocity"
 						>𝑢<span class="prime">′</span> =
 						<span class="sci-num"
-							>(<span id="text-vxp" class="secondary-text">0</span>,
-							<span id="text-vyp" class="secondary-text">0</span>,
-							<span id="text-vzp" class="secondary-text">0</span>)</span
+							>(<span class="text-vxp secondary-text">0</span>,
+							<span class="text-vyp secondary-text">0</span>,
+							<span class="text-vzp secondary-text">0</span>)</span
 						>𝑐</span
 					>
 				</div>

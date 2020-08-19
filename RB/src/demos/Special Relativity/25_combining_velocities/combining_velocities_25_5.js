@@ -263,7 +263,7 @@ function update(vars, { restoreCamera } = {}) {
 	})();
 	const layout = {
 		width: 700,
-		height: 300,
+		height: 400,
 		hovermode: false,
 		showlegend: false,
 		margin: { t: 0, b: 0, l: 0, r: 0 },
@@ -291,9 +291,9 @@ function update(vars, { restoreCamera } = {}) {
 				up: { x: 0, y: 0, z: 1 },
 				center: { x: 0, y: 0, z: 0 },
 				eye: {
-					x: 0.3,
-					y: -1,
-					z: 0.9,
+					x: 0.88,
+					y: -0.88,
+					z: 0.98,
 				},
 				projection: { type: "perspective" },
 			};
@@ -304,7 +304,11 @@ function update(vars, { restoreCamera } = {}) {
 
 	const velocities = { vx, vy, vz, vxp, vyp, vzp, vr };
 	Object.entries(velocities).forEach(([k, v]) => {
-		document.getElementById(`text-${k}`).innerHTML = fmtFloat(v);
+		const textSpans = document.getElementsByClassName(`text-${k}`);
+		const text = fmtFloat(v);
+		for (let i = 0; i < textSpans.length; ++i) {
+			textSpans[i].innerHTML = text;
+		}
 	});
 }
 

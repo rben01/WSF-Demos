@@ -19,7 +19,6 @@ font-family: sans-serif;
 margin-top: 1.5em;
 margin-bottom: 1em;
 margin-right: 3px;
-margin-left: 3px;
 width: 5em;
 height: 30px;
 font-size: 15px;
@@ -223,9 +222,6 @@ Velocity magnitude (𝑣):
 </div>
 <div style="display: flex; flex-direction: row;">
 <div style="width: 6em;">
-<span><button class="play-button" id="start-button" onclick="toggleAnimation();">
-Start
-</button></span>
 <div class="frames-box">
 <div class="frame">
 <table>
@@ -247,6 +243,9 @@ Start
 </div>
 <div class="divider"></div>
 </div>
+<span><button class="play-button" id="start-button" onclick="toggleAnimation();">
+Start
+</button></span>
 </div>
 <div class="divider"></div>
 <div>
@@ -32215,6 +32214,7 @@ const MAJOR_RADIUS = 3;
 const MINOR_RADIUS = 1.5001;
 const XMIN = -1;
 const XMAX = 1;
+const XMID = (XMIN + XMAX) / 2;
 const YMIN = -1;
 const YMAX = 1;
 const YMID = (YMIN + YMAX) / 2;
@@ -32230,7 +32230,7 @@ knobOutline: "#aaa",
 };
 const xScale = d3.scaleLinear().domain([XMIN, XMAX]).range([0, joystickAttrs.width]);
 const yScale = d3.scaleLinear().domain([YMIN, YMAX]).range([joystickAttrs.height, 0]);
-const knobCoords = { x: XMIN + KNOB_RADIUS, y: YMID };
+const knobCoords = { x: XMID, y: YMID };
 const thetaScale = d3
 .scaleLinear()
 .domain([XMIN + KNOB_RADIUS, XMAX - KNOB_RADIUS])
@@ -32380,7 +32380,7 @@ z: torusPrime.z,
 i: TORUS_POINTS.simplices.map(s => s[0]),
 j: TORUS_POINTS.simplices.map(s => s[1]),
 k: TORUS_POINTS.simplices.map(s => s[2]),
-facecolor: TORUS_POINTS.simplices.map(() => "#f21200"),
+facecolor: TORUS_POINTS.simplices.map(() => "#ffc010"), // Old color: #f21200
 lighting,
 lightposition: null,
 // marker: { size: 1, color: "red" },

@@ -256,9 +256,9 @@ function getGraphData(d) {
 				text: `${x}`,
 				attrs: {
 					x: xs,
-					y: yScale(-AXIS_MARGINS.bottom / 2),
-					fill: axisColor,
-					"font-size": 12,
+					y: yScale(-AXIS_MARGINS.bottom / 2) + 4,
+					fill: d3.interpolateRgb(axisColor, "white")(0.3),
+					"font-size": 17,
 					"text-anchor": "middle",
 					"alignment-baseline": "middle",
 				},

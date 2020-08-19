@@ -5,6 +5,10 @@
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<style>
+			body {
+				width: 800px;
+			}
+
 			.slider-label-custom {
 				min-width: 6em;
 				margin-left: 65px;
@@ -22,10 +26,15 @@
 			.frame {
 				display: inline-block;
 				width: 300px;
+				text-align: center;
+			}
+
+			.eqn-table {
+				padding-left: 3.2em;
 			}
 
 			.divider {
-				width: 50px;
+				width: 36px;
 			}
 
 			.frame-title {
@@ -117,7 +126,7 @@
 						><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span
 					>
 					<br />
-					<table>
+					<table class="eqn-table">
 						<tr>
 							<td class="eqn-left">𝑡</td>
 							<td class="eqn-middle">=</td>
@@ -136,14 +145,14 @@
 						</tr>
 					</table>
 				</div>
-				<div class="divider"></div>
+				<div class="divider" style="flex-grow: 1000;"></div>
 				<div class="frame">
 					<span
 						><span class="frame-title">Moving Frame: </span>𝑣 =
 						<span class="sci-num highlighted-text var-v">0</span>𝑐</span
 					>
 					<br />
-					<table>
+					<table class="eqn-table">
 						<tr>
 							<td class="eqn-left">𝑡′</td>
 							<td class="eqn-middle">=</td>
@@ -165,9 +174,9 @@
 				<div class="divider"></div>
 			</div>
 			<br />
-			<div class="transformation">
+			<div class="transformation frame" style="display: block;">
 				<span class="frame-title">Transformation</span>
-				<table>
+				<table style="padding-left: 1.5em;">
 					<tr>
 						<td class="eqn-left">𝑡′</td>
 						<td class="eqn-middle">=</td>

@@ -18,11 +18,11 @@ const svg = d3
 const AXIS_ARROWHEAD_ID = "arrowhead_axis_";
 const LINE_ARROWHEAD_ID = "arrowhead_line_";
 
-const tickAlpha = "a";
+const tickAlpha = "aa";
 const lineColor = STANDARD_COLORS.secondary;
 const tickAccent = `${lineColor}${tickAlpha}`;
 const axisColor = "#eee";
-const tickColor = `#eee${tickAlpha}`;
+const tickColor = `#eeeeee${tickAlpha}`;
 const tickLength = 7;
 
 // eslint-disable-next-line no-unused-vars
@@ -171,7 +171,7 @@ function update({ speed }) {
 	}
 	speed = +speed;
 
-	const getLines = d => {
+	function getLines(d) {
 		const lineAttrs = {
 			stroke: d.left ? lineColor : axisColor,
 			"marker-end": `url(#${d.left ? LINE_ARROWHEAD_ID : AXIS_ARROWHEAD_ID})`,
@@ -183,6 +183,11 @@ function update({ speed }) {
 		const thetaX = Math.atan(slope);
 		lines.x.x1 = AXES.x.min * Math.cos(thetaX);
 		lines.x.x2 = AXES.x.max * Math.cos(thetaX);
+
+		if (!d.left) {
+			[lines.x.x1, lines.x.x2] = [lines.x.x2, lines.x.x1];
+		}
+
 		[lines.x.y1, lines.x.y2] = [lines.x.x1, lines.x.x2].map(x => slope * x);
 		const lineX = {
 			shape: "line",
@@ -210,54 +215,57 @@ function update({ speed }) {
 			},
 		};
 
-		const tickStroke = d.left ? tickAccent : tickColor;
+		// const tickStroke = tickAccent;
 
-		const lineXTicks = xTicks
-			.filter(x => {
-				x = xScale.invert(x);
-				return AXES.x.min < x && x < AXES.x.max;
-			})
-			.map(dist => {
-				const x = xScale.invert(dist) * Math.cos(thetaX);
-				const y = slope * x;
-				const dx = (tickLength / 2) * Math.sin(thetaX);
-				const dy = (tickLength / 2) * Math.cos(thetaX);
+		// const lineXTicks = xTicks
+		// 	.filter(x => {
+		// 		x = xScale.invert(x);
+		// 		return AXES.x.min < x && x < AXES.x.max;
+		// 	})
+		// 	.map(dist => {
+		// 		const x = xScale.invert(dist) * Math.cos(thetaX);
+		// 		const y = slope * x;
+		// 		const dx = (tickLength / 2) * Math.sin(thetaX);
+		// 		const dy = (tickLength / 2) * Math.cos(thetaX);
 
-				return {
-					shape: "line",
-					attrs: {
-						x1: xScale(x) - dx,
-						y1: yScale(y) - dy,
-						x2: xScale(x) + dx,
-						y2: yScale(y) + dy,
-						stroke: tickStroke,
-					},
-				};
-			});
-		const lineYTicks = yTicks
-			.filter(y => {
-				y = yScale.invert(y);
-				return AXES.y.min < y && y < AXES.y.max;
-			})
-			.map(dist => {
-				const y = yScale.invert(dist) * Math.sin(thetaY);
-				const x = slope * y;
-				const dx = (tickLength / 2) * Math.sin(thetaY);
-				const dy = (tickLength / 2) * Math.cos(thetaY) * (d.left ? 1 : -1);
+		// 		return {
+		// 			shape: "line",
+		// 			attrs: {
+		// 				x1: xScale(x) - dx,
+		// 				y1: yScale(y) - dy,
+		// 				x2: xScale(x) + dx,
+		// 				y2: yScale(y) + dy,
+		// 				stroke: tickStroke,
+		// 			},
+		// 		};
+		// 	});
+		// const lineYTicks = yTicks
+		// 	.filter(y => {
+		// 		y = yScale.invert(y);
+		// 		return AXES.y.min < y && y < AXES.y.max;
+		// 	})
+		// 	.map(dist => {
+		// 		const y = yScale.invert(dist) * Math.sin(thetaY);
+		// 		const x = slope * y;
+		// 		const dx = (tickLength / 2) * Math.sin(thetaY);
+		// 		const dy = (tickLength / 2) * Math.cos(thetaY) * (d.left ? 1 : -1);
 
-				return {
-					shape: "line",
-					attrs: {
-						x1: xScale(x) - dx,
-						y1: yScale(y) - dy,
-						x2: xScale(x) + dx,
-						y2: yScale(y) + dy,
-						stroke: tickStroke,
-					},
-				};
-			});
+		// 		return {
+		// 			shape: "line",
+		// 			attrs: {
+		// 				x1: xScale(x) - dx,
+		// 				y1: yScale(y) - dy,
+		// 				x2: xScale(x) + dx,
+		// 				y2: yScale(y) + dy,
+		// 				stroke: tickStroke,
+		// 			},
+		// 		};
+		// 	});
 
-		const textAttrs = { fill: "white", filter: `url(#text-bg)` };
+		const textAttrs = {
+			fill: "white",
+			filter: `url(#text-bg)`,
+		};
 		const xLabel = {
 			shape: "text",
 			text: d.left ? "𝑥′" : "𝑥",
@@ -271,15 +279,15 @@ function update({ speed }) {
 			shape: "text",
 			text: d.left ? "𝑡′" : "𝑡",
 			attrs: {
-				x: xScale(lines.t.x2) + -15,
-				y: yScale(lines.t.y2) + 10,
+				x: xScale(lines.t.x2) + (d.left ? -15 : 25),
+				y: yScale(lines.t.y2) + (d.left ? 10 : 4),
 				"text-anchor": "end",
 				...textAttrs,
 			},
 		};
 
-		return [lineX, lineT, xLabel, tLabel, ...lineXTicks, ...lineYTicks];
-	};
+		return [lineX, lineT, xLabel, tLabel]; //...lineXTicks, ...lineYTicks
+	}
 	const lines = graphs
 		.selectAll(`.${lineClass}`)
 		.data(getLines)

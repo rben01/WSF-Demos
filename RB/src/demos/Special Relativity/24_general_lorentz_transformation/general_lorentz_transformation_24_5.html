@@ -4,8 +4,8 @@
 		<meta charset="UTF-8" />
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<style>
-			input[type="range"] {
-				width: 80%;
+			body {
+				width: 740px;
 			}
 
 			.slider-label-custom {
@@ -16,11 +16,15 @@
 				margin-right: 0.2em;
 			}
 
+			.play-button {
+				width: unset;
+			}
+
 			.ib {
 				display: inline-block;
 				margin-top: auto;
 				margin-bottom: auto;
-				vertical-align: middle;
+				vertical-align: top;
 			}
 
 			.flex-row {
@@ -51,9 +55,14 @@
 				margin-right: -2px;
 			}
 
-			/* .result {
-				width: 100px;
-			} */
+			.result {
+				margin-left: 130px;
+			}
+
+			.header {
+				display: inline-block;
+				margin-bottom: 10px;
+			}
 
 			/* .operator {
 				margin-left: 3px;
@@ -63,176 +72,177 @@
 	</head>
 	<body>
 		<div style="padding-top: auto; padding-bottom: auto;">
-			<div class="controls ib">
-				<div>
-					<span class="header">Coordinates in Stationary Frame:</span>
-					<br />
-					<label>
-						<span class="slider-label slider-label-custom">
-							𝑡
-						</span>
-						<input
-							type="range"
-							id="input-t"
-							name="input-t"
-							min="-10"
-							max="10"
-							step=".01"
-							value="0"
-							oninput="update({t:this.value})"
-						/>
-					</label>
-					<br />
-					<label>
-						<span class="slider-label slider-label-custom">
-							𝑥
-						</span>
-						<input
-							type="range"
-							id="input-x"
-							name="input-x"
-							min="-10"
-							max="10"
-							step=".01"
-							value="0"
-							oninput="update({x:this.value})"
-						/>
-					</label>
-					<br /><label>
-						<span class="slider-label slider-label-custom">
-							𝑦
-						</span>
-						<input
-							type="range"
-							id="input-y"
-							name="input-y"
-							min="-10"
-							max="10"
-							step=".01"
-							value="0"
-							oninput="update({y: this.value})"
-						/>
-					</label>
-					<br />
-					<label>
-						<span class="slider-label slider-label-custom">
-							𝑧
-						</span>
-						<input
-							type="range"
-							id="input-z"
-							name="input-z"
-							min="-10"
-							max="10"
-							step=".01"
-							value="0"
-							oninput="update({z: this.value})"
-						/>
-					</label>
-				</div>
-				<br />
-				<span class="header">Velocity of Other Frame:</span>
-				<br />
-				<label>
-					<span class="slider-label slider-label-custom">
-						𝑣<span class="subscript">𝑥</span>
-					</span>
-					<input
-						type="range"
-						id="input-vx"
-						name="input-vx"
-						min="0"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vx: this.value})"
-					/>
-				</label>
-				<br />
-				<label>
-					<span class="slider-label slider-label-custom">
-						𝑣<span class="subscript">𝑦</span>
-					</span>
-					<input
-						type="range"
-						id="input-vy"
-						name="input-vy"
-						min="0"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vy: this.value})"
-					/>
-				</label>
-				<br />
-				<label>
-					<span class="slider-label slider-label-custom">
-						𝑣<span class="subscript">𝑧</span>
-					</span>
-					<input
-						type="range"
-						id="input-vz"
-						name="input-vz"
-						min="0"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vz: this.value})"
-					/>
-				</label>
-			</div>
-			<div class="ib" style="width: 20px;"></div>
 			<div class="ib">
-				<button class="play-button" onclick="reset()">Reset</button>
-				<div>
-					<div class="result ib">
-						<span class="header">Stationary Frame:</span>
-						<br />
-						<table>
-							<tr>
-								<td class="eqn-left">𝑣</td>
-								<td class="eqn-middle">=</td>
-								<td class="eqn-right">0</td>
-							</tr>
-							<tr>
-								<td class="eqn-left">𝑡</td>
-								<td class="eqn-middle">=</td>
-								<td class="eqn-right">
-									<span id="text-t" class="highlighted-text sci-num"
-										>0</span
-									>years
-								</td>
-							</tr>
-							<tr>
-								<td class="eqn-left">𝑥</td>
-								<td class="eqn-middle">=</td>
-								<td class="eqn-right">
-									<span id="text-x" class="highlighted-text sci-num"
-										>0</span
-									>lyrs
-								</td>
-							</tr>
-							<tr>
-								<td class="eqn-left">𝑦</td>
-								<td class="eqn-middle">=</td>
-								<td class="eqn-right">
-									<span id="text-y" class="highlighted-text sci-num"
-										>0</span
-									>lyrs
-								</td>
-							</tr>
-							<tr>
-								<td class="eqn-left">𝑧</td>
-								<td class="eqn-middle">=</td>
-								<td class="eqn-right">
-									<span id="text-z" class="highlighted-text sci-num"
-										>0</span
-									>lyrs
-								</td>
-							</tr>
-						</table>
-					</div>
-					<div class="ib" style="width: 20px;"></div>
+				<span class="header">Coordinates in Stationary Frame:</span>
+				<br />
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑡
+					</span>
+					<input
+						type="range"
+						id="input-t"
+						name="input-t"
+						min="-10"
+						max="10"
+						step=".01"
+						value="0"
+						oninput="update({t:this.value})"
+					/>
+				</label>
+				<br />
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑥
+					</span>
+					<input
+						type="range"
+						id="input-x"
+						name="input-x"
+						min="-10"
+						max="10"
+						step=".01"
+						value="0"
+						oninput="update({x:this.value})"
+					/>
+				</label>
+				<br /><label>
+					<span class="slider-label slider-label-custom">
+						𝑦
+					</span>
+					<input
+						type="range"
+						id="input-y"
+						name="input-y"
+						min="-10"
+						max="10"
+						step=".01"
+						value="0"
+						oninput="update({y: this.value})"
+					/>
+				</label>
+				<br />
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑧
+					</span>
+					<input
+						type="range"
+						id="input-z"
+						name="input-z"
+						min="-10"
+						max="10"
+						step=".01"
+						value="0"
+						oninput="update({z: this.value})"
+					/>
+				</label>
+				<br />
+				<button class="play-button" onclick="resetCoordinates()">
+					Reset Coordinates
+				</button>
+			</div>
+			<div class="result ib">
+				<span class="header">Stationary Frame:</span>
+				<br />
+				<table>
+					<tr>
+						<td class="eqn-left">𝑣</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">0</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑡</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-t" class="highlighted-text sci-num">0</span
+							>years
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑥</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-x" class="highlighted-text sci-num">0</span
+							>lyrs
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑦</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-y" class="highlighted-text sci-num">0</span
+							>lyrs
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑧</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-z" class="highlighted-text sci-num">0</span
+							>lyrs
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="height: 30px;"></div>
+			<div>
+				<div class="ib">
+					<span class="header">Velocity of Moving Frame:</span>
+					<br />
+					<label>
+						<span class="slider-label slider-label-custom">
+							𝑣<span class="subscript">𝑥</span>
+						</span>
+						<input
+							type="range"
+							id="input-vx"
+							name="input-vx"
+							min="0"
+							max=".99"
+							step=".01"
+							value="0"
+							oninput="update({vx: this.value})"
+						/>
+					</label>
+					<br />
+					<label>
+						<span class="slider-label slider-label-custom">
+							𝑣<span class="subscript">𝑦</span>
+						</span>
+						<input
+							type="range"
+							id="input-vy"
+							name="input-vy"
+							min="0"
+							max=".99"
+							step=".01"
+							value="0"
+							oninput="update({vy: this.value})"
+						/>
+					</label>
+					<br />
+					<label>
+						<span class="slider-label slider-label-custom">
+							𝑣<span class="subscript">𝑧</span>
+						</span>
+						<input
+							type="range"
+							id="input-vz"
+							name="input-vz"
+							min="0"
+							max=".99"
+							step=".01"
+							value="0"
+							oninput="update({vz: this.value})"
+						/>
+					</label>
+					<br />
+					<button class="play-button" onclick="resetVelocities()">
+						Reset Velocities
+					</button>
+				</div>
+				<div class="ib">
 					<div class="result ib">
 						<span class="header">Moving Frame:</span>
 						<br />

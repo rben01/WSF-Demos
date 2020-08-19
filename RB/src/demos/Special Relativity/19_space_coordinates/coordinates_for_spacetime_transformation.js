@@ -307,9 +307,10 @@ function getLinesData({
 	}
 	displacementY = +displacementY;
 
-	if (typeof shouldDrawUprightLines === "undefined") {
-		shouldDrawUprightLines = true;
-	}
+	// if (typeof shouldDrawUprightLines === "undefined") {
+	// 	shouldDrawUprightLines = true;
+	// }
+	shouldDrawUprightLines = false;
 
 	const sin = Math.sin(angleRad);
 	const cos = Math.cos(angleRad);
@@ -438,7 +439,7 @@ function getLinesData({
 
 	const tfLinesAttrs = {
 		stroke: STANDARD_COLORS.secondary,
-		"stroke-width": shouldDrawUprightLines ? 2 : 4,
+		"stroke-width": shouldDrawUprightLines ? 3 : 2,
 		"stroke-dasharray": shouldDrawUprightLines ? "5 5" : "5 10",
 	};
 	const tfLinesData = [
@@ -557,30 +558,31 @@ function getLinesData({
 		},
 	};
 
-	const axesDots = shouldDrawUprightLines
-		? []
-		: [
-				{
-					shape: "circle",
-					attrs: {
-						cx: xScale(x),
-						cy: yScale(RANGES.axis.mid),
-						r: 4,
-						fill: STANDARD_COLORS.highlighted,
-						stroke: "#ddd",
-					},
-				},
-				{
-					shape: "circle",
-					attrs: {
-						cx: xScale(RANGES.axis.mid),
-						cy: yScale(y),
-						r: 4,
-						fill: STANDARD_COLORS.highlighted,
-						stroke: "#ddd",
-					},
-				},
-		  ];
+	const axesDots = [];
+	// shouldDrawUprightLines
+	// 	? []
+	// 	: [
+	// 			{
+	// 				shape: "circle",
+	// 				attrs: {
+	// 					cx: xScale(x),
+	// 					cy: yScale(RANGES.axis.mid),
+	// 					r: 4,
+	// 					fill: STANDARD_COLORS.highlighted,
+	// 					stroke: "#ddd",
+	// 				},
+	// 			},
+	// 			{
+	// 				shape: "circle",
+	// 				attrs: {
+	// 					cx: xScale(RANGES.axis.mid),
+	// 					cy: yScale(y),
+	// 					r: 4,
+	// 					fill: STANDARD_COLORS.highlighted,
+	// 					stroke: "#ddd",
+	// 				},
+	// 			},
+	// 	  ];
 
 	return {
 		data: [
