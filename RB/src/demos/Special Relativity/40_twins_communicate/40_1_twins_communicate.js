@@ -1,4 +1,4 @@
-/* global groupBy applyGraphicalObjs defineArrowhead STANDARD_COLORS */
+/* global groupBy applyGraphicalObjs defineArrowhead lorentzFactor STANDARD_COLORS */
 
 const AXES = {
 	x: { min: -0.05, max: 0.6 },
@@ -74,8 +74,8 @@ function fmtFloat(x, precision) {
 
 const dotRadius = 4;
 const colors = {
-	light: STANDARD_COLORS.secondary,
-	lighterLight: d3.interpolateRgb(STANDARD_COLORS.secondary, "white")(0.6),
+	earthLight: STANDARD_COLORS.secondary,
+	spaceshipLight: STANDARD_COLORS.highlighted,
 	earth: STANDARD_COLORS.tertiary,
 	ship: STANDARD_COLORS.quaternary,
 };
@@ -85,6 +85,8 @@ const line = d3
 	.line()
 	.x(p => p[0])
 	.y(p => p[1]);
+
+const N_EARTH_YEARS = 26;
 
 function getData({ v, t, showEarthSignals, showSpaceshipSignals }) {
 	const turnaroundTime = AXES.t.max / 2;
@@ -142,34 +144,34 @@ function getData({ v, t, showEarthSignals, showSpaceshipSignals }) {
 	};
 	data.push(earthPath, shipPath);
 
-	const photonAttrs = { stroke: colors.light, "stroke-width": 1.5 };
+	const photonAttrs = { stroke: colors.earthLight, "stroke-width": 1.5 };
 
 	const signals = {
 		earth: { sent: 0, received: 0 },
 		ship: { sent: 0, received: 0 },
 	};
 
-	if (showEarthSignals) {
-		const nPhotonsEmittedTotal = 27;
-		for (let i = 1; i / nPhotonsEmittedTotal < t; ++i) {
-			const photonYIntercept = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
-			const photonIntersectsOutboundX = photonYIntercept / (1 / v - 1);
-			const photonIntersectsInboundX = (1 - photonYIntercept) / (1 / v + 1);
+	const nPhotonsEmittedByEarthTotal = N_EARTH_YEARS + 1;
+	for (let i = 1; i / nPhotonsEmittedByEarthTotal < t; ++i) {
+		const photonYIntercept =
+			(i / nPhotonsEmittedByEarthTotal) * tToYScale(AXES.t.max);
+		const photonIntersectsOutboundX = photonYIntercept / (1 / v - 1);
+		const photonIntersectsInboundX = (1 - photonYIntercept) / (1 / v + 1);
 
-			const naivePhotonX2 = Math.min(
-				photonIntersectsOutboundX,
-				photonIntersectsInboundX,
-			);
+		const naivePhotonX2 = Math.min(
+			photonIntersectsOutboundX,
+			photonIntersectsInboundX,
+		);
 
-			signals.earth.sent += 1;
-			const naivePhotonY2 = naivePhotonX2 + photonYIntercept;
-			if (naivePhotonY2 < y) {
-				signals.ship.received += 1;
-			}
+		signals.earth.sent += 1;
+		const naivePhotonY2 = naivePhotonX2 + photonYIntercept;
+		if (naivePhotonY2 < y) {
+			signals.ship.received += 1;
+		}
 
+		if (showEarthSignals) {
 			const photonY2 = Math.min(naivePhotonY2, y);
 			const photonX2 = photonY2 - photonYIntercept;
-
 			data.push({
 				shape: "line",
 				classes: [],
@@ -184,27 +186,27 @@ function getData({ v, t, showEarthSignals, showSpaceshipSignals }) {
 		}
 	}
 
-	if (showSpaceshipSignals) {
-		const spaceshipPhotonAttrs = [];
-		const nPhotonsEmittedTotal = 11;
-		const xOrigin = xScale.invert(origin.x);
+	const spaceshipPhotonAttrs = [];
+	const nPhotonsEmittedByShipTotal = N_EARTH_YEARS / lorentzFactor({ fracOfC: v });
+	const xOrigin = xScale.invert(origin.x);
 
-		for (let i = 1; i / nPhotonsEmittedTotal < t; ++i) {
-			let x1, y1;
-			if (i / nPhotonsEmittedTotal < turnaroundTime) {
-				y1 = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
-				x1 = y1 * v;
-			} else {
-				y1 = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
-				x1 = xOrigin + (y1 - AXES.t.max) * -v;
-			}
+	for (let i = 1; i / nPhotonsEmittedByShipTotal < t; ++i) {
+		let x1, y1;
+		if (i / nPhotonsEmittedByShipTotal < turnaroundTime) {
+			y1 = (i / nPhotonsEmittedByShipTotal) * tToYScale(AXES.t.max);
+			x1 = y1 * v;
+		} else {
+			y1 = (i / nPhotonsEmittedByShipTotal) * tToYScale(AXES.t.max);
+			x1 = xOrigin + (y1 - AXES.t.max) * -v;
+		}
 
-			signals.ship.sent += 1;
-			const naivePhotonY2 = -(xOrigin - x1) + y1;
-			if (naivePhotonY2 < y) {
-				signals.earth.received += 1;
-			}
+		signals.ship.sent += 1;
+		const naivePhotonY2 = -(xOrigin - x1) + y1;
+		if (naivePhotonY2 < y) {
+			signals.earth.received += 1;
+		}
 
+		if (showSpaceshipSignals) {
 			const y2 = Math.min(naivePhotonY2, y);
 			const x2 = -(y2 - y1) + x1;
 			spaceshipPhotonAttrs.push({
@@ -220,9 +222,10 @@ function getData({ v, t, showEarthSignals, showSpaceshipSignals }) {
 				shape: "line",
 				classes: [],
 				attrs: {
-					...attrs,
 					...photonAttrs,
-					stroke: colors.lighterLight,
+					...attrs,
+					"stroke-width": 1,
+					stroke: colors.spaceshipLight,
 				},
 			})),
 		);
@@ -305,6 +308,11 @@ const playbackInfo = {
 	),
 };
 
+const buttons = {
+	playPause: document.getElementById("btn-play-pause"),
+	reset: document.getElementById("btn-reset"),
+};
+
 function update({ v, t, showEarthSignals, showSpaceshipSignals, userInput }) {
 	if (userInput === undefined) {
 		userInput = true;
@@ -317,7 +325,7 @@ function update({ v, t, showEarthSignals, showSpaceshipSignals, userInput }) {
 	}
 	v = +v;
 	valueText.v.innerHTML = fmtFloat(v, 3);
-	valueText.t.innerHTML = fmtFloat(v * 10, 2);
+	valueText.t.innerHTML = fmtFloat(v * 13, 2);
 
 	if (t === undefined) {
 		t = sliders.t.value;
@@ -331,6 +339,8 @@ function update({ v, t, showEarthSignals, showSpaceshipSignals, userInput }) {
 		}
 	}
 	t = +t;
+
+	buttons.reset.disabled = t <= 0;
 
 	if (showEarthSignals === undefined) {
 		showEarthSignals = checkboxes.earthSignals.checked;
@@ -379,14 +389,9 @@ function update({ v, t, showEarthSignals, showSpaceshipSignals, userInput }) {
 		}
 	}
 
-	divs.earthSignals.style.visibility = showEarthSignals ? "visible" : "hidden";
-	divs.shipSignals.style.visibility = showSpaceshipSignals ? "visible" : "hidden";
+	// divs.earthSignals.style.visibility = showEarthSignals ? "visible" : "hidden";
+	// divs.shipSignals.style.visibility = showSpaceshipSignals ? "visible" : "hidden";
 }
-
-const buttons = {
-	playPause: document.getElementById("btn-play-pause"),
-	reset: document.getElementById("btn-reset"),
-};
 
 function stopAnimation() {
 	playbackInfo.isPlaying = false;

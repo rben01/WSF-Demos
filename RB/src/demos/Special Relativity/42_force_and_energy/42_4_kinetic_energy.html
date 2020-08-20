@@ -6,11 +6,24 @@
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<link rel="stylesheet" type="text/css" href="./42_4_kinetic_energy.css" />
 		<style>
+			body {
+				width: 700px;
+			}
 			.slider-label-custom {
 				min-width: 7.6em;
 			}
 			td {
 				height: 1.6em;
+				padding-left: 0;
+				margin-left: 0;
+			}
+			tr {
+				padding-left: 0;
+				margin-left: 0;
+			}
+			table {
+				padding-left: 0;
+				margin-left: -1px;
 			}
 			.top-sliders-sect {
 				padding-left: 50px;
@@ -20,7 +33,7 @@
 
 	<body>
 		<div class="top-sliders-sect">
-			<span>
+			<span class="slider-container">
 				<label>
 					<span class="slider-label slider-label-custom">
 						Rest mass (𝑚<span class="subscript">0</span
@@ -35,9 +48,13 @@
 						step=".001"
 						value="1"
 						oninput="update({m:this.value})"
-					/>
-				</label> </span
-			><br /><span>
+					/> </label
+				><br /><span
+					>𝑚<span class="subscript">0</span> =
+					<span id="text-m" class="sci-num highlighted-text">0.000</span
+					>kg</span
+				></span
+			><br /><span class="slider-container">
 				<label>
 					<span class="slider-label slider-label-custom">
 						Velocity (𝑣):
@@ -51,66 +68,42 @@
 						step=".001"
 						value="0"
 						oninput="update({v:this.value})"
-					/>
-				</label>
-			</span>
+					/> </label
+				><br />
+				<span
+					>𝑣 =
+					<span id="text-v" class="sci-num highlighted-text">0.000</span
+					>𝑐</span
+				></span
+			>
+			<table style="margin-top: 15px;">
+				<tr>
+					<td class="eqn-left">KE<span class="subscript">Einstein</span></td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="text-ke-sr" class="secondary-text sci-num"
+							>0.000<span class="operator">·</span>10<span
+								class="superscript"
+								>17</span
+							></span
+						>J
+					</td>
+				</tr>
+				<tr>
+					<td class="">KE<span class="subscript">Newton</span></td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="text-ke-newton" class="sci-num quaternary-text"
+							>0.000<span class="operator">·</span>10<span
+								class="superscript"
+								>17</span
+							></span
+						>J
+					</td>
+				</tr>
+			</table>
 		</div>
-		<div>
-			<div style="display: inline-block; vertical-align: top; width: 10em;">
-				<div style="height: 100px;"></div>
-				<table>
-					<tr>
-						<td class="eqn-left">𝑚<span class="subscript">0</span></td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-m" class="sci-num highlighted-text"
-								>0.000</span
-							>kg
-						</td>
-					</tr>
-					<tr>
-						<td class="eqn-left">𝑣</td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-v" class="sci-num highlighted-text"
-								>0.000</span
-							>𝑐
-						</td>
-					</tr>
-					<tr>
-						<td style="height: 50px;"></td>
-					</tr>
-					<tr>
-						<td class="eqn-left">KE<span class="subscript">SR</span></td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-ke-sr" class="secondary-text sci-num"
-								>0.000<span class="operator">·</span>10<span
-									class="superscript"
-									>17</span
-								></span
-							>J
-						</td>
-					</tr>
-					<tr>
-						<td class="eqn-left">
-							KE<span class="subscript">Newton</span>
-						</td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span
-								id="text-ke-newton"
-								style="color: #bbb;"
-								class="sci-num"
-								>0.000<span class="operator">·</span>10<span
-									class="superscript"
-									>17</span
-								></span
-							>J
-						</td>
-					</tr>
-				</table>
-			</div>
+		<div style="text-align: center; margin-top: 20px;">
 			<div style="display: inline-block; vertical-align: bottom;">
 				<svg
 					xmlns="http://www.w3.org/2000/svg"

@@ -190,6 +190,15 @@ function getEarthPerspective({ v, t }) {
 				stroke: "#bbb",
 			},
 		],
+		extraTexts: [
+			{
+				text: "𝑇",
+				attrs: {
+					x: origin.x - 10,
+					y: turnaround.t,
+				},
+			},
+		],
 	});
 
 	return [lines, circles, texts];
@@ -401,7 +410,7 @@ function getInboundJourneyObjs({ v, t, circleToKeep }) {
 			const texts = [
 				slope < 1
 					? {
-							text: "𝑥′′",
+							text: "𝑥″",
 							attrs: {
 								x: xScale(lineEndX - textDx * 0.8),
 								y: yScale(lineEndY - textDy * 2),
@@ -410,7 +419,7 @@ function getInboundJourneyObjs({ v, t, circleToKeep }) {
 							},
 					  }
 					: {
-							text: "𝑡′′",
+							text: "𝑡″",
 							attrs: {
 								x: xScale(lineEndX + textDx * 0.8),
 								y: yScale(lineEndY + textDy * 0.5),
@@ -575,7 +584,7 @@ const buttons = {
 
 const buttonTitles = {
 	earth: "Earth Perspective",
-	spaceship: "Spaceship Perspective",
+	spaceship: "Spaceship Axes",
 	outbound: "Outbound Perspective",
 	frameChange: "Frame Change",
 	inbound: "Inbound Perspective",
@@ -597,8 +606,8 @@ const hidables = {
 
 const timeScale = d3
 	.scaleLinear()
-	.domain([0, +sliders.t.max])
-	.range([0, 15]);
+	.domain([+sliders.t.min, +sliders.t.max])
+	.range([5, 15]);
 
 function update({ v, t, func }) {
 	if (typeof v === "undefined") {
@@ -634,6 +643,7 @@ function update({ v, t, func }) {
 
 	textItems.v.innerHTML = fmtFloat(v, 2);
 	textItems.t.innerHTML = fmtFloat(timeScale(t), 2);
+	console.log(t, timeScale(t));
 
 	const { turnaround } = getPathPoints({ v, t });
 	const t1 = yScale.invert(turnaround.t) - v * xScale.invert(turnaround.x);

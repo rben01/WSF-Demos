@@ -12,7 +12,7 @@
 	</head>
 	<body>
 		<div>
-			<div style="line-height: 1em;">
+			<div>
 				<span
 					><label
 						><span class="slider-label slider-label-custom"
@@ -26,23 +26,27 @@
 							step=".01"
 							oninput="update({v:this.value})" /></label></span
 				><br />
-				<br />
 				<span
 					><span class="slider-label slider-label-custom">Perspective:</span
-					><button
-						id="btn-persp-barn"
-						class="play-button demo-button"
-						onclick="update({perspective:BARN})"
-					>
-						Barn</button
-					><button
-						id="btn-persp-pole"
-						class="play-button demo-button"
-						onclick="update({perspective:POLE})"
-					>
+					><label class="radio">
+						<input
+							type="radio"
+							id="radio-perspective-barn"
+							name="perspective"
+							onclick="update({perspective:BARN})"
+						/>
+						Barn
+					</label>
+					<label class="radio">
+						<input
+							type="radio"
+							id="radio-perspective-pole"
+							name="perspective"
+							onclick="update({perspective:POLE})"
+						/>
 						Pole
-					</button></span
-				>
+					</label>
+				</span>
 				<br /><span
 					><label
 						><span class="slider-label slider-label-custom">Time (𝑡):</span
@@ -66,7 +70,9 @@
 						class="play-button"
 						onclick="toggleAnimation()"
 					>
-						Play
+						Play</button
+					><button id="btn-reset" class="play-button" onclick="reset()">
+						Reset
 					</button></span
 				>
 			</div>

@@ -6,7 +6,162 @@
 <link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
-</head><body><style>body{max-width:800px;margin:50px auto;padding-left:auto;padding-right:auto;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif}.play-button{margin-top:1.5em;margin-bottom:1em;margin-right:3px;width:5em;height:30px;font-size:15px;border-radius:4px;background:#ccc;background-image:-webkit-linear-gradient(top,#fff,#aaa);color:#000;text-shadow:1px 1px #ddd}.play-button:hover{cursor:pointer}.play-button:active{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#fff);color:#333}.play-button:disabled{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#aaa);color:#444;text-shadow:1px 1px #ccc;cursor:default}.slider-label{margin-right:1em;display:inline-block;padding-bottom:10px}.highlighted-text{color:#5df}.secondary-text{color:#f3c002}.tertiary-text{color:#14c778}.quaternary-text{color:#e5d}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}.subscript{position:relative;top:.3em;left:0;font-size:65%}.superscript{position:relative;bottom:.8em;left:0;font-size:65%}.minus-sign{margin-right:1px}.operator{margin-left:3px;margin-right:3px}button.depressed-button{background-color:#555;color:#fff}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:320px;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;margin-top:25px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style>
+</head><body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+}
+.slider-container {
+line-height: 1em;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+padding-bottom: 10px;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
 <div class="w3-content w3-container" id="formContainer">
 <form>
 <label for="speed" style="font-size: 20px;">Speed of Train</label>
@@ -28,4 +183,101 @@ m</text>
 <div id="graph"></div>
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script type="text/javascript">var c=299792e3,L=1e4,v=0,dt=0,dtline={x:[],y:[],line:{color:"grey"}},trace1={x:[],y:[],line:{dash:"dash",color:"yellow"}},trace2={x:[],y:[],line:{dash:"dash",color:"yellow"}},layout={title:{text:"Time Difference (s)",font:{color:"white"},x:0},xaxis:{range:[0,1],linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.2,.4,.6,.8,1]},yaxis:{range:[0,.02],autorange:!1,linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.005,.01,.015]},height:600,paper_bgcolor:"black",plot_bgcolor:"black",showlegend:!1,annotations:[{xref:"paper",yref:"paper",x:1.04,y:-.05,xanchor:"right",yanchor:"bottom",text:"<sup>v</sup>/<sub>c</sub>",font:{color:"white",size:20,family:"sans-serif"},color:"white",showarrow:!1},{xref:"paper",yref:"paper",x:-0,y:-.1,text:"0",font:{color:"white",size:18,family:"sans-serif"},showarrow:!1},{xref:"paper",yref:"paper",x:.5,y:.5,text:"Δt = 0",font:{color:"white",size:18,family:"sans-serif"},showarrow:!1}]};function numberWithCommas(e){return e.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}function render(){dt=L/c*v/(1-v**2),layout.annotations[2].text=("Δt = <span style='color:#5df'>"+dt).substr(0,38)+"</span> s",dtline.x=[],dtline.y=[];for(var e=0;e<1;e+=.001)dtline.x.push(e),dtline.y.push(L/c*e/(1-e**2));trace1.x=[0,v],trace1.y=[dt,dt],trace2.x=[v,v],trace2.y=[0,dt],Plotly.newPlot("graph",[dtline,trace1,trace2],layout)}render();</script></body></html>
+<script type="text/javascript">
+var c = 299792000;
+var L = 10000;
+var v = 0;
+var dt = 0;
+var dtline = {
+x: [],
+y: [],
+line: { color: 'grey' }
+}
+var trace1 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var trace2 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var layout = {
+title: {
+text: 'Time Difference (s)',
+font: { color: 'white' },
+x: 0,
+},
+xaxis: {
+range: [0, 1],
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [0.2, 0.4, 0.6, 0.8, 1]
+},
+yaxis: {
+range: [0, 0.02],
+autorange: false,
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [0.005, 0.01, 0.015]
+},
+height: 600,
+paper_bgcolor: 'black',
+plot_bgcolor: 'black',
+showlegend: false,
+annotations: [
+{
+xref: 'paper',
+yref: 'paper',
+x: 1.04,
+y: -0.05,
+xanchor: 'right',
+yanchor: 'bottom',
+text: '<sup>v</sup>/<sub>c</sub>',
+font: { color: 'white', size: 20, family: 'sans-serif' },
+color: 'white',
+showarrow: false,
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: -0.0,
+y: -0.1,
+text: '0',
+font: { color: 'white', size: 18, family: 'sans-serif' },
+showarrow: false
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: 0.5,
+y: 0.5,
+text: "Δt = 0",
+font: { color: 'white', size: 18, family: 'sans-serif' },
+showarrow: false
+}
+]
+}
+function numberWithCommas(n) {
+return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function render() {
+dt = L / c * v / (1 - v ** 2);
+layout.annotations[2].text = ("Δt = <span style='color:#5df'>" + dt).substr(0, 38) + "</span> s";
+dtline.x = [];
+dtline.y = [];
+for (var i = 0; i < 1; i += 0.001) {
+dtline.x.push(i);
+dtline.y.push(L / c * i / (1 - i ** 2));
+}
+trace1.x = [0, v];
+trace1.y = [dt, dt];
+trace2.x = [v, v];
+trace2.y = [0, dt];
+Plotly.newPlot('graph', [dtline, trace1, trace2], layout);
+}
+render();
+</script></body></html>

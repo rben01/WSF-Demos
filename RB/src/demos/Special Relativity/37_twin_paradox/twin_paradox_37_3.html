@@ -25,7 +25,7 @@
 	<body>
 		<div>
 			<div>
-				<span
+				<span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom"
 							>Velocity (𝑣):</span
@@ -36,21 +36,33 @@
 							max=".99"
 							value=".5"
 							step=".01"
-							oninput="update({v:this.value})" /></label></span
-				><br /><span
+							oninput="update({v:this.value})"
+					/></label>
+					<br />
+					<span
+						>𝑣 = ±
+						<span id="text-v" class="sci-num highlighted-text"></span
+						>𝑐</span
+					></span
+				><br /><span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom"
-							>Turn-around time (Earth) (𝑇<span class="operator">)</span
+							>Turnaround time (Earth) (𝑇<span class="operator">)</span
 							>:</span
 						><input
 							type="range"
 							id="input-t"
-							min=".12"
+							min=".24"
 							max=".8"
-							value="6"
+							value="0"
 							step=".01"
 							oninput="update({t:this.value})" /></label
-				></span>
+					><br /><span
+						>𝑇 =
+						<span id="text-t" class="sci-num highlighted-text"></span
+						>yrs</span
+					>
+				</span>
 			</div>
 			<br />
 			<div style="line-height: 2em;">
@@ -62,15 +74,15 @@
 					>
 						Earth Perspective
 					</button></span
+				><button
+					id="btn-ss"
+					class="play-button demo-button"
+					onclick="clickSpaceshipPerspective()"
 				>
+					Spaceship Axes
+				</button>
 				<br />
 				<span
-					><button
-						id="btn-ss"
-						class="play-button demo-button"
-						onclick="clickSpaceshipPerspective()"
-					>
-						Spaceship Perspective</button
 					><button
 						id="btn-ob"
 						class="play-button demo-button"
@@ -95,25 +107,10 @@
 		</div>
 		<div>
 			<div style="display: inline-block;">
-				<div style="padding-left: 200px;">
-					<span
-						>𝑣 =
-						<span id="text-v" class="sci-num highlighted-text"></span
-						>𝑐</span
-					>
-				</div>
 				<svg id="viz" style="display: inline-block;"></svg>
 			</div>
 			<div style="display: inline-block; vertical-align: top;">
 				<table>
-					<tr>
-						<td class="eqn-left">𝑇</td>
-						<td class="eqn-middle">=</td>
-						<td class="eqn-right">
-							<span id="text-t" class="sci-num highlighted-text"></span
-							>yrs
-						</td>
-					</tr>
 					<tr id="row-t1">
 						<td class="eqn-left">𝑇₁</td>
 						<td class="eqn-middle">=</td>

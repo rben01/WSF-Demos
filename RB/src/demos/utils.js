@@ -51,7 +51,7 @@ function applyDatum(datum, { transition } = {}) {
 
 	if (typeof datum.children !== "undefined") {
 		// eslint-disable-next-line no-use-before-define
-		applyGraphicalObjs(t, () => datum.children, { transition });
+		applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 	}
 }
 

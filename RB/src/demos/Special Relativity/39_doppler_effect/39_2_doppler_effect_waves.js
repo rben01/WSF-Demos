@@ -1,13 +1,13 @@
 /* global applyGraphicalObjs  groupBy */
 
 const AXES = {
-	x: { min: -1, max: 1.2 },
+	x: { min: -1, max: 1.1 },
 	y: { min: -1, max: 1 },
 };
 
 const MARGINS = { t: 5, b: 5, l: 5, r: 5 };
 
-const HEIGHT = 400;
+const HEIGHT = 450;
 const WIDTH =
 	((HEIGHT - MARGINS.t - MARGINS.b) * (AXES.x.max - AXES.x.min)) /
 	(AXES.y.max - AXES.y.min);
@@ -144,7 +144,7 @@ function getFlashesData({ lambda, v, t }) {
 			attrs: {
 				cx: xScale(v * t),
 				cy: yScale(0),
-				r: 8,
+				r: 11,
 				fill: colorScale(lambda),
 			},
 		},
@@ -230,7 +230,9 @@ const playbackInfo = {
 	animationTimer: null,
 	currFrame: 0,
 };
-function update({ lambda, v, t, fromUserInput } = {}) {
+const playButton = document.getElementById("play-pause");
+const resetButton = document.getElementById("btn-reset");
+function update({ lambda, v, t, fromUserInput, transition } = {}) {
 	if (fromUserInput === undefined) {
 		fromUserInput = true;
 	}
@@ -261,6 +263,8 @@ function update({ lambda, v, t, fromUserInput } = {}) {
 	}
 	t = +t;
 
+	resetButton.disabled = t <= 0;
+
 	const allData = getFlashesData({ lambda, v, t });
 	const shapes = groupBy(allData, d => `${d.shape}.${d.class}`, [
 		"path.wave-line",
@@ -268,7 +272,7 @@ function update({ lambda, v, t, fromUserInput } = {}) {
 	]);
 
 	for (const [selector, data] of shapes) {
-		applyGraphicalObjs(svg, data, { selector });
+		applyGraphicalObjs(svg, data, { selector, transition });
 	}
 	// svg.node().appendChild(svg.selectAll("circle.source").node());
 
@@ -276,8 +280,6 @@ function update({ lambda, v, t, fromUserInput } = {}) {
 	textSpans.v.innerText = fmtFloat(v, 2);
 	// blocks.color.style.backgroundColor = colorScale(lambda);
 }
-
-const playButton = document.getElementById("play-pause");
 
 function stopAnimation() {
 	playbackInfo.animationIsPlaying = false;
@@ -313,4 +315,10 @@ function toggleAnimation() {
 	}, ANIMATION_DURATION_MS / N_FRAMES);
 }
 
-update({ lambda: 0.5, v: 0.0, t: 1 });
+// eslint-disable-next-line no-unused-vars
+function reset() {
+	stopAnimation();
+	update({ t: 0, transition: d3.transition().duration(100) });
+}
+
+update({ lambda: 0.5, v: 0.0, t: 0 });

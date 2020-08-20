@@ -20,6 +20,9 @@
 				margin: unset;
 				margin-right: 5px;
 			} */
+			.align-right {
+				text-align: right;
+			}
 			tr {
 				padding-left: 0px;
 			}
@@ -37,16 +40,12 @@
 			.header {
 				font-size: larger;
 			}
-			.signal-cell-desc {
-				display: inline-block;
-				min-width: 13em;
-			}
 		</style>
 	</head>
 	<body style="width: 700px;">
 		<div>
 			<div>
-				<span
+				<span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom"
 							>Spaceship velocity (𝑣):</span
@@ -54,13 +53,24 @@
 							type="range"
 							id="input-v"
 							min=".1"
-							max=".90"
+							max=".9"
 							value=".1"
 							step=".001"
 							oninput="update({v:this.value})" /></label
-				></span>
+					><br /><span
+						>𝑣 =
+						<span id="text-v" class="sci-num highlighted-text"></span
+						>𝑐</span
+					>
+					<div style="height: 7px;"></div>
+					<span
+						>Distance to turnaround =
+						<span id="text-t" class="sci-num highlighted-text"></span
+						>lyrs</span
+					></span
+				>
 				<br />
-				<span
+				<span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom">Time (𝑡):</span
 						><input
@@ -75,53 +85,16 @@
 			</div>
 		</div>
 		<div>
-			<div style="display: inline-block;">
-				<svg id="viz" style="display: inline-block;"></svg>
-			</div>
 			<div style="display: inline-block; vertical-align: top;">
-				<span
-					>𝑣 =
-					<span id="text-v" class="sci-num highlighted-text"></span>𝑐</span
-				>
-				<br />
-				<span
-					>Distance to turnaround =
-					<span id="text-t" class="sci-num highlighted-text"></span>lyrs</span
-				>
-				<br />
-				<br />
-				<table style="margin-left: 0px;">
-					<tr>
-						<td>View flashes sent by twin on Earth</td>
-						<td>
-							<input
-								id="checkbox-earth-signals"
-								type="checkbox"
-								onchange="update({showEarthSignals: this.checked})"
-							/>
-						</td>
-					</tr>
-					<tr>
-						<td>
-							View flashes sent by twin on spaceship
-						</td>
-						<td>
-							<input
-								id="checkbox-ship-signals"
-								type="checkbox"
-								onchange="update({showShipSignals: this.checked})"
-							/>
-						</td>
-					</tr>
-				</table>
 				<span
 					><button
 						id="btn-play-pause"
 						class="play-button"
 						onclick="toggleAnimation()"
 					>
-						Start</button
-					><button
+						Start
+					</button>
+					<button
 						id="btn-reset"
 						class="play-button"
 						onclick="resetAnimation()"
@@ -132,50 +105,85 @@
 				<br />
 				<br />
 				<div style="line-height: 1.3em;">
-					<div id="earth-flashes-section">
-						<span class="header tertiary-text">Earth Flashes</span>
-						<br />
-						<span
-							><span class="signal-cell-desc"
-								>Flashes sent from Earth:</span
-							>
-							<span id="flashes-sent-from-earth" class="secondary-text"
-								>0</span
-							></span
-						>
-						<br />
-						<span
-							><span class="signal-cell-desc"
-								>Flashes received on ship:</span
-							>
-							<span id="flashes-received-on-ship" class="secondary-text"
-								>0</span
-							></span
-						>
-					</div>
-					<br />
-					<div id="ship-flashes-section">
-						<span class="header quaternary-text">Spaceship Flashes</span>
-						<br />
-						<span
-							><span class="signal-cell-desc"
-								>Flashes sent from ship:</span
-							>
-							<span id="flashes-sent-from-ship" class="secondary-text"
-								>0</span
-							></span
-						>
-						<br />
-						<span
-							><span class="signal-cell-desc"
-								>Flashes received on Earth:</span
-							>
-							<span id="flashes-received-on-earth" class="secondary-text"
-								>0</span
-							></span
-						>
+					<div>
+						<table>
+							<tr>
+								<td>
+									<span class="header tertiary-text"
+										>Earth Flashes</span
+									>
+								</td>
+								<td>
+									<input
+										id="checkbox-earth-signals"
+										type="checkbox"
+										onchange="update({showEarthSignals: this.checked})"
+									/>
+								</td>
+							</tr>
+							<tr>
+								<td>Flashes sent from Earth:</td>
+								<td class="align-right">
+									<span
+										id="flashes-sent-from-earth"
+										class="secondary-text"
+										>0</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Flashes received on ship:</td>
+								<td class="align-right">
+									<span
+										id="flashes-received-on-ship"
+										class="secondary-text"
+										>0</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>
+									<span class="header quaternary-text"
+										>Spaceship Flashes</span
+									>
+								</td>
+								<td>
+									<input
+										id="checkbox-ship-signals"
+										type="checkbox"
+										onchange="update({showShipSignals: this.checked})"
+									/>
+								</td>
+							</tr>
+							<tr>
+								<td>Flashes sent from ship:</td>
+								<td class="align-right">
+									<span
+										id="flashes-sent-from-ship"
+										class="highlighted-text"
+										>0</span
+									>
+								</td>
+							</tr>
+							<tr>
+								<td>Flashes received on Earth:</td>
+								<td class="align-right">
+									<span
+										id="flashes-received-on-earth"
+										class="highlighted-text"
+										>0</span
+									>
+								</td>
+							</tr>
+						</table>
 					</div>
 				</div>
+			</div>
+			<div style="display: inline-block; margin-left: 100px;">
+				<svg id="viz" style="display: inline-block;"></svg>
 			</div>
 		</div>
 		<script type="text/javascript" src="../../utils.js"></script>

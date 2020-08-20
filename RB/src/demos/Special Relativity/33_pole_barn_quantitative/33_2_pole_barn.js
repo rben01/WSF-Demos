@@ -284,10 +284,8 @@ function _getBarnDoorsData(
 	const leftDoorX = x - BARN_DOOR_OFFSET;
 	const rightDoorX = x + width + BARN_DOOR_OFFSET;
 
-	const leftDoorIsClosed =
-		poleDatum.attrs.x2 < leftDoorX || poleDatum.attrs.x1 > leftDoorX;
-	const rightDoorIsClosed =
-		poleDatum.attrs.x1 > rightDoorX || poleDatum.attrs.x2 < rightDoorX;
+	const leftDoorIsClosed = false; //poleDatum.attrs.x2 < leftDoorX || poleDatum.attrs.x1 > leftDoorX;
+	const rightDoorIsClosed = false; //poleDatum.attrs.x1 > rightDoorX || poleDatum.attrs.x2 < rightDoorX;
 
 	// https://stackoverflow.com/a/39333479
 	const getYs = ({ y1, y2 }) => ({ y1, y2 });
@@ -683,24 +681,43 @@ function beginAnimation(playbackInfo) {
 				);
 			}
 
-			subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
+			const barnDoors = subcanvas.selectAll(".barn-door");
+			const enterBaseX = barnDoors.filter(d => d.side === "right").data()[0]
+				.baseX;
+			const leaveBaseX = barnDoors.filter(d => d.side === "left").data()[0].baseX;
+			const distToPole = {
+				// Magic numbers here (everything after /\w+baseX/) were chosen so that they'd look good with the chosen value of doorChangeStateDurationMS
+				foreEndIn:
+					poleDatum.attrs.x1 - enterBaseX - 3 * BARN_DOOR_OFFSET * speed,
+				aftEndIn:
+					poleDatum.attrs.x2 - enterBaseX - 1 * BARN_DOOR_OFFSET * speed,
+				foreEndOut:
+					poleDatum.attrs.x1 - leaveBaseX - 3 * BARN_DOOR_OFFSET * speed,
+				aftEndOut:
+					poleDatum.attrs.x2 - leaveBaseX - 1 * BARN_DOOR_OFFSET * speed,
+			};
+
+			barnDoors.each(function (barnDoorDatum) {
 				const barnDoor = d3.select(this);
 				const baseX = barnDoorDatum.baseX;
+				// const baseX = barnDoorDatum.baseX;
 
-				const distToPole = {
-					// Magic numbers here were chosen so that they'd look good with the chosen value of doorChangeStateDurationMS
-					enter: poleDatum.attrs.x1 - baseX - 3 * BARN_DOOR_OFFSET * speed,
-					leave:
-						poleDatum.attrs.x2 -
-						baseX -
-						(barnDoorDatum.side === "left" ? 1 : 2) *
-							BARN_DOOR_OFFSET *
-							speed,
-				};
+				// const distToPole = {
+				// 	// Magic numbers here were chosen so that they'd look good with the chosen value of doorChangeStateDurationMS
+				// 	enter: poleDatum.attrs.x1 - baseX - 3 * BARN_DOOR_OFFSET * speed,
+				// 	leave:
+				// 		poleDatum.attrs.x2 -
+				// 		baseX -
+				// 		(barnDoorDatum.side === "left" ? 1 : 2) *
+				// 			BARN_DOOR_OFFSET *
+				// 			speed,
+				// };
 
 				const fracToPole = {
-					enter: distToPole.enter / netDistTraveled,
-					leave: distToPole.leave / netDistTraveled,
+					foreEndIn: distToPole.foreEndIn / netDistTraveled,
+					aftEndIn: distToPole.aftEndIn / netDistTraveled,
+					foreEndOut: distToPole.foreEndOut / netDistTraveled,
+					aftEndOut: distToPole.aftEndOut / netDistTraveled,
 				};
 
 				const doorChangeStateFrac = doorChangeStateDurationMS / netDurationMS;
@@ -709,38 +726,107 @@ function beginAnimation(playbackInfo) {
 				const doorIsOpenWhenFinished =
 					poleFinalPos.x1 <= xf && xf <= poleFinalPos.x2;
 
-				const yTweener = function (attr) {
+				function yTweener(attr) {
 					const yClosed = barnDoorDatum.closed[attr];
 					const yOpen = barnDoorDatum.open[attr];
 					const doorOpenInterpolator = d3.interpolateNumber(yClosed, yOpen);
 					const doorCloseEasing =
-						fracToPole.leave < 1 ? d3.easeCubicInOut : d3.easeCubicIn;
+						fracToPole.aftEndOut < 1 ? d3.easeCubicInOut : d3.easeCubicIn;
 
-					const enterTime = fracToPole.enter;
-					const leaveTime = fracToPole.leave;
-
-					return function () {
-						return t => {
-							if (t < enterTime) {
-								return yClosed;
-							} else if (t < enterTime + doorChangeStateFrac) {
-								const openFrac = (t - enterTime) / doorChangeStateFrac;
-								return doorOpenInterpolator(
-									d3.easeCubicInOut(openFrac),
-								);
-							} else if (t < leaveTime || doorIsOpenWhenFinished) {
-								return yOpen;
-							} else if (t < leaveTime + doorChangeStateFrac) {
-								const closeFrac = (t - leaveTime) / doorChangeStateFrac;
-								return doorOpenInterpolator(
-									doorCloseEasing(1 - closeFrac),
-								);
-							} else {
-								return yClosed;
-							}
+					const poleFits = BARN_PHYSICAL_SIZE > POLE_PHYSICAL_SIZE / lf;
+					if (onBarn) {
+						const enterTime = fracToPole.aftEndIn;
+						const leaveTime = fracToPole.foreEndOut;
+						return function () {
+							return t => {
+								if (t < enterTime) {
+									return yOpen;
+								} else if (
+									poleFits &&
+									t < enterTime + doorChangeStateFrac
+								) {
+									const closeFrac =
+										(t - enterTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										d3.easeCubicInOut(1 - closeFrac),
+									);
+								} else if (
+									poleFits &&
+									(t < leaveTime || doorIsOpenWhenFinished)
+								) {
+									return yClosed;
+								} else if (
+									poleFits &&
+									t < leaveTime + doorChangeStateFrac
+								) {
+									const closeFrac =
+										(t - leaveTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										doorCloseEasing(closeFrac),
+									);
+								} else {
+									return yOpen;
+								}
+							};
 						};
-					};
-				};
+					} else if (barnDoorDatum.side === "left") {
+						const closeTime = fracToPole.foreEndIn;
+						const openTime = fracToPole.foreEndOut;
+						return function () {
+							return t => {
+								if (!poleFits) {
+									return yOpen;
+								} else if (t < closeTime) {
+									return yOpen;
+								} else if (t < closeTime + doorChangeStateFrac) {
+									const closeFrac =
+										(t - closeTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										d3.easeCubicInOut(1 - closeFrac),
+									);
+								} else if (t < openTime) {
+									return yClosed;
+								} else if (t < openTime + doorChangeStateFrac) {
+									const closeFrac =
+										(t - openTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										doorCloseEasing(closeFrac),
+									);
+								} else {
+									return yOpen;
+								}
+							};
+						};
+					} else if (barnDoorDatum.side === "right") {
+						const closeTime = fracToPole.aftEndIn;
+						const openTime = fracToPole.aftEndOut;
+						return function () {
+							return t => {
+								if (!poleFits) {
+									return yOpen;
+								} else if (t < closeTime) {
+									return yOpen;
+								} else if (t < closeTime + doorChangeStateFrac) {
+									const closeFrac =
+										(t - closeTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										d3.easeCubicInOut(1 - closeFrac),
+									);
+								} else if (t < openTime) {
+									return yClosed;
+								} else if (t < openTime + doorChangeStateFrac) {
+									const closeFrac =
+										(t - openTime) / doorChangeStateFrac;
+									return doorOpenInterpolator(
+										doorCloseEasing(closeFrac),
+									);
+								} else {
+									return yOpen;
+								}
+							};
+						};
+					}
+				}
 
 				const transition = barnDoor
 					.transition()
@@ -764,22 +850,22 @@ function beginAnimation(playbackInfo) {
 					transition.attrTween("x1", xTweener).attrTween("x2", xTweener);
 				}
 
-				transition
-					.transition()
-					.duration(100)
-					.ease(d3.easeCubicOut)
-					.attr(
-						"y1",
-						doorIsOpenWhenFinished
-							? barnDoorDatum.open.y1
-							: barnDoorDatum.closed.y1,
-					)
-					.attr(
-						"y2",
-						doorIsOpenWhenFinished
-							? barnDoorDatum.open.y2
-							: barnDoorDatum.closed.y2,
-					);
+				// transition
+				// 	.transition()
+				// 	.duration(100)
+				// 	.ease(d3.easeCubicOut)
+				// 	.attr(
+				// 		"y1",
+				// 		doorIsOpenWhenFinished
+				// 			? barnDoorDatum.open.y1
+				// 			: barnDoorDatum.closed.y1,
+				// 	)
+				// 	.attr(
+				// 		"y2",
+				// 		doorIsOpenWhenFinished
+				// 			? barnDoorDatum.open.y2
+				// 			: barnDoorDatum.closed.y2,
+				// 	);
 			});
 		});
 }
