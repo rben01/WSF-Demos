@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -218,20 +220,23 @@ padding-left: 50px;
 }
 </style>
 <div class="top-sliders-sect">
-<span class="slider-container">
+<div class="slider-container">
 <label>
 <span class="slider-label slider-label-custom">
 Rest mass (𝑚<span class="subscript">0</span><span class="operator">)</span>:
 </span>
 <input id="input-m" max="2" min="1" name="input-m" oninput="update({m:this.value})" step=".001" type="range" value="1"/> </label><br/><span>𝑚<span class="subscript">0</span> =
-<span class="sci-num highlighted-text" id="text-m">0.000</span>kg</span></span><br/><span class="slider-container">
+<span class="sci-num highlighted-text" id="text-m">0.000</span>kg</span>
+</div>
+<div class="slider-container">
 <label>
 <span class="slider-label slider-label-custom">
 Velocity (𝑣):
 </span>
 <input id="input-v" max="0.98" min="0.0" name="input-v" oninput="update({v:this.value})" step=".001" type="range" value="0"/> </label><br/>
 <span>𝑣 =
-<span class="sci-num highlighted-text" id="text-v">0.000</span>𝑐</span></span>
+<span class="sci-num highlighted-text" id="text-v">0.000</span>𝑐</span>
+</div>
 <table style="margin-top: 15px;">
 <tr>
 <td class="eqn-left">KE<span class="subscript">Einstein</span></td>

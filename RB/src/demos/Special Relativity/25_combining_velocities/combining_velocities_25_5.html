@@ -62,10 +62,6 @@
 				margin-bottom: 20px;
 			}
 
-			.slider-section {
-				line-height: 0.2em;
-			}
-
 			.plot-title {
 				display: inline-block;
 			}
@@ -77,99 +73,91 @@
 		</style>
 	</head>
 	<body>
-		<div style="line-height: 1.3em;">
-			<span class="slider-section">
-				<label>
-					<span class="slider-label slider-label-custom">
-						Object's speed in 𝑥-direction (𝑢<span class="subscript">𝑥</span
-						>):
-					</span>
-					<input
-						type="range"
-						id="input-vx"
-						name="input-vx"
-						min="-.99"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vx:this.value})"
-					/>
-				</label>
-				<br />
-				<span class="eqn-left">𝑢<span class="subscript">𝑥</span></span
-				><span class="eqn-middle">=</span
-				><span class="sci-num highlighted-text eqn-right text-vx">1</span>𝑐
-			</span>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑥-direction (𝑢<span class="subscript">𝑥</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vx"
+					name="input-vx"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vx:this.value})"
+				/>
+			</label>
 			<br />
-			<span class="slider-section">
-				<label>
-					<span class="slider-label slider-label-custom">
-						Object's speed in 𝑦-direction (𝑢<span class="subscript">𝑦</span
-						>):
-					</span>
-					<input
-						type="range"
-						id="input-vy"
-						name="input-vy"
-						min="-.99"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vy:this.value})"
-					/>
-				</label>
-				<br />
-				<span class="eqn-left">𝑢<span class="subscript">𝑦</span></span
-				><span class="eqn-middle">=</span
-				><span class="sci-num highlighted-text eqn-right text-vy">1</span>𝑐
-			</span>
-			<br />
-			<span class="slider-section">
-				<label>
-					<span class="slider-label slider-label-custom">
-						Object's speed in 𝑧-direction (𝑢<span class="subscript">𝑧</span
-						>):
-					</span>
-					<input
-						type="range"
-						id="input-vz"
-						name="input-vz"
-						min="-.99"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vz:this.value})"
-					/>
-				</label>
-				<br />
-				<span class="eqn-left">𝑢<span class="subscript">𝑧</span></span
-				><span class="eqn-middle">=</span
-				><span class="sci-num highlighted-text eqn-right text-vz">1</span>𝑐
-			</span>
-			<br />
-			<span class="slider-section">
-				<label>
-					<span class="slider-label slider-label-custom">
-						Relative velocity along 𝑥-axis (𝑣):
-					</span>
-					<input
-						type="range"
-						id="input-vr"
-						name="input-vr"
-						min="-.99"
-						max=".99"
-						step=".01"
-						value="0"
-						oninput="update({vr:this.value})"
-					/>
-				</label>
-				<br />
-				<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
-				><span class="sci-num highlighted-text eqn-right text-vr">1</span>𝑐
-			</span>
-			<br />
-			<button class="play-button reset-button" onclick="reset()">Reset</button>
+			<span class="eqn-left">𝑢<span class="subscript">𝑥</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vx">1</span>𝑐
 		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑦-direction (𝑢<span class="subscript">𝑦</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vy"
+					name="input-vy"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vy:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑢<span class="subscript">𝑦</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vy">1</span>𝑐
+		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑧-direction (𝑢<span class="subscript">𝑧</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vz"
+					name="input-vz"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vz:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑢<span class="subscript">𝑧</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vz">1</span>𝑐
+		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Relative velocity along 𝑥-axis (𝑣):
+				</span>
+				<input
+					type="range"
+					id="input-vr"
+					name="input-vr"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vr:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vr">1</span>𝑐
+		</div>
+		<button class="play-button reset-button" onclick="reset()">Reset</button>
+
 		<div>
 			<span class="plot-title">Velocity as Seen in Stationary Frame</span
 			><span class="plot-title" style="width: 50px;"></span

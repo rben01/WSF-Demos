@@ -13,7 +13,6 @@
 			.slider-label-custom {
 				text-align: left;
 				min-width: 10.5em;
-				margin-top: 20px;
 			}
 			.coord-container {
 				display: inline-block;
@@ -24,8 +23,8 @@
 	</head>
 	<body>
 		<div>
-			<span
-				><label
+			<div class="slider-container">
+				<label
 					><span class="slider-label slider-label-custom"
 						>Time coordinate (𝑡):</span
 					><input
@@ -36,12 +35,11 @@
 						value="0"
 						step=".001"
 						oninput="update({t:this.value})" /></label
-			></span>
-			<br />
-			<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span>
-			<br />
-			<span
-				><label
+				><br />
+				<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span>
+			</div>
+			<div class="slider-container">
+				<label
 					><span class="slider-label slider-label-custom"
 						>Position coordinate (𝑥):</span
 					><input
@@ -51,13 +49,13 @@
 						max="1.8"
 						value="0"
 						step=".001"
-						oninput="update({x:this.value})" /></label
-			></span>
-			<br />
-			<span>𝑥 = <span id="text-x" class="highlighted-text"></span></span>
-			<br />
-			<span
-				><label
+						oninput="update({x:this.value})"
+				/></label>
+				<br />
+				<span>𝑥 = <span id="text-x" class="highlighted-text"></span></span>
+			</div>
+			<div class="slider-container">
+				<label
 					><span class="slider-label slider-label-custom">Velocity (𝑣):</span
 					><input
 						type="range"
@@ -67,14 +65,13 @@
 						value="0"
 						step=".001"
 						oninput="update({v:this.value})" /></label
-			></span>
-			<br />
-			<span
-				>𝑣 =
-				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
-			>
-			<br />
-			<br />
+				><br />
+				<span
+					>𝑣 =
+					<span id="text-speed" class="sci-num highlighted-text">0</span
+					>𝑐</span
+				>
+			</div>
 			<div style="line-height: 1.4em;">
 				<span>𝑡′ = <span id="text-tp" class="quaternary-text"></span></span>
 				<br />

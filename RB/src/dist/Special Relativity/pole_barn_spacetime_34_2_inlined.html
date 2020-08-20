@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -195,7 +197,8 @@ width: 725px;
 </style>
 <div>
 <div>
-<span><label><span class="slider-label slider-label-custom">Relative velocity (𝑣):</span><input id="input-v" max=".95" min=".1" oninput="update({v:this.value})" step=".01" type="range" value=".1"/></label></span><br/>
+<span class="slider-container"><label><span class="slider-label slider-label-custom">Relative velocity (𝑣):</span><input id="input-v" max=".95" min=".1" oninput="update({v:this.value})" step=".01" type="range" value=".1"/></label><br/><span>𝑣 =
+<span class="highlighted-text sci-num" id="text-v"></span>𝑐</span></span><br/>
 <span><span class="slider-label slider-label-custom">Perspective:</span><label class="radio">
 <input id="radio-perspective-barn" name="perspective" onclick="update({perspective:BARN})" type="radio"/>
 Barn
@@ -208,8 +211,7 @@ Pole
 <br/><span><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="0"/></label></span>
 <br/>
 <br/>
-<span>𝑣 =
-<span class="highlighted-text sci-num" id="text-v"></span>𝑐</span><br/><span><button class="play-button" id="play-pause" onclick="toggleAnimation()">
+<br/><span><button class="play-button" id="play-pause" onclick="toggleAnimation()">
 Play</button><button class="play-button" id="btn-reset" onclick="reset()">
 Reset
 </button></span>
@@ -1141,9 +1143,14 @@ const speedSpan = document.getElementById("text-v");
 function fmtFloat(x, precision) {
 return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
-const radioButtons = {
-barn: document.getElementById("radio-perspective-barn"),
-pole: document.getElementById("radio-perspective-pole"),
+const perspectiveButtons = {
+[BARN]: document.getElementById("radio-perspective-barn"),
+[POLE]: document.getElementById("radio-perspective-pole"),
+};
+const sliceButtons = {
+[BARN]: document.getElementById("radio-slices-barn"),
+[POLE]: document.getElementById("radio-slices-pole"),
+[BOTH]: document.getElementById("radio-slices-both"),
 };
 function update({
 v,
@@ -1172,16 +1179,13 @@ if (typeof perspective === "undefined") {
 perspective = currentPerspective;
 } else {
 currentPerspective = perspective;
-if (perspective === BARN) {
-radioButtons.barn.checked = true;
-} else {
-radioButtons.pole.checked = true;
-}
+perspectiveButtons[perspective].checked = true;
 }
 if (typeof slicesToShow === "undefined") {
 slicesToShow = currentSlices;
 } else {
 currentSlices = slicesToShow;
+sliceButtons[slicesToShow].checked = true;
 }
 const slices = getSlices({ v, perspective, slicesToShow });
 const data =

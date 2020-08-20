@@ -808,9 +808,15 @@ function fmtFloat(x, precision) {
 	return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 
-const radioButtons = {
-	barn: document.getElementById("radio-perspective-barn"),
-	pole: document.getElementById("radio-perspective-pole"),
+const perspectiveButtons = {
+	[BARN]: document.getElementById("radio-perspective-barn"),
+	[POLE]: document.getElementById("radio-perspective-pole"),
+};
+
+const sliceButtons = {
+	[BARN]: document.getElementById("radio-slices-barn"),
+	[POLE]: document.getElementById("radio-slices-pole"),
+	[BOTH]: document.getElementById("radio-slices-both"),
 };
 
 function update({
@@ -843,17 +849,17 @@ function update({
 		perspective = currentPerspective;
 	} else {
 		currentPerspective = perspective;
-		if (perspective === BARN) {
-			radioButtons.barn.checked = true;
-		} else {
-			radioButtons.pole.checked = true;
-		}
+		perspectiveButtons[perspective].checked = true;
 	}
 
 	if (typeof slicesToShow === "undefined") {
 		slicesToShow = currentSlices;
 	} else {
 		currentSlices = slicesToShow;
+		try {
+			sliceButtons[slicesToShow].checked = true;
+			// eslint-disable-next-line no-empty
+		} catch {}
 	}
 
 	const slices = getSlices({ v, perspective, slicesToShow });
@@ -879,14 +885,6 @@ function update({
 
 	if (buttons.reset !== null) {
 		buttons.reset.disabled = t === 0;
-	}
-
-	try {
-		buttons.slices.barn.disabled = slicesToShow === BARN;
-		buttons.slices.pole.disabled = slicesToShow === POLE;
-		buttons.slices.both.disabled = slicesToShow === BOTH;
-	} catch {
-		// No problem, those buttons just dont exist
 	}
 }
 

@@ -45,8 +45,8 @@
 	<body style="width: 700px;">
 		<div>
 			<div>
-				<span class="slider-container"
-					><label
+				<div class="slider-container"></div>
+					<label
 						><span class="slider-label slider-label-custom"
 							>Spaceship velocity (𝑣):</span
 						><input
@@ -62,16 +62,15 @@
 						<span id="text-v" class="sci-num highlighted-text"></span
 						>𝑐</span
 					>
-					<div style="height: 7px;"></div>
+					<br>
 					<span
 						>Distance to turnaround =
 						<span id="text-t" class="sci-num highlighted-text"></span
 						>lyrs</span
-					></span
-				>
-				<br />
-				<span class="slider-container"
-					><label
+					>
+				</div>
+				<div class="slider-container">
+					<label
 						><span class="slider-label slider-label-custom">Time (𝑡):</span
 						><input
 							type="range"
@@ -80,8 +79,9 @@
 							max="1"
 							value="=0"
 							step=".001"
-							oninput="update({t:this.value})" /></label
-				></span>
+							oninput="update({t:this.value})"
+					/></label>
+				</div>
 			</div>
 		</div>
 		<div>

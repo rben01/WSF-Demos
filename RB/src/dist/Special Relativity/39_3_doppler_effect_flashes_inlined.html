@@ -14,9 +14,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -49,7 +52,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -176,15 +178,16 @@ margin: unset;
 margin-right: 5px;
 }
 </style>
-<div>
-<div>
-<span class="slider-container"><label><span class="slider-label slider-label-custom">Source speed (𝑣<span class="subscript">source</span>):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".001" type="range" value="0"/></label>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Source speed (𝑣<span class="subscript">source</span>):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".001" type="range" value="0"/></label>
 <br/>
 <span>𝑣<span class="subscript">source</span> =
-<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span></span><br/>
-<div style="height: 10px;"></div>
-<span><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="0"/></label></span>
+<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span>
 </div>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="0"/></label>
+</div>
+<div style="height: 10px;"></div>
 <div>
 <button class="play-button" id="play-pause" onclick="toggleAnimation()">
 Start
@@ -196,7 +199,6 @@ Reset
 <div style="display: inline-block; vertical-align: top;"></div>
 <div>
 <svg id="viz" style="display: inline-block;"></svg>
-</div>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars

@@ -7,10 +7,13 @@ body {
 	color: white;
 	font-size: 21px;
 	font-family: sans-serif;
+	line-height: 1.8em;
 }
 
 .slider-container {
-	line-height: 1em;
+	line-height: 1.4em;
+	display: block;
+	margin-bottom: 10px;
 }
 
 .play-button {
@@ -48,7 +51,6 @@ body {
 .slider-label {
 	margin-right: 1em;
 	display: inline-block;
-	padding-bottom: 10px;
 }
 
 .highlighted-text {

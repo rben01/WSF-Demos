@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -196,13 +198,15 @@ font-size: larger;
 </style>
 <div>
 <div>
-<span class="slider-container"><label><span class="slider-label slider-label-custom">Spaceship velocity (𝑣):</span><input id="input-v" max=".9" min=".1" oninput="update({v:this.value})" step=".001" type="range" value=".1"/></label><br/><span>𝑣 =
+<div class="slider-container"></div>
+<label><span class="slider-label slider-label-custom">Spaceship velocity (𝑣):</span><input id="input-v" max=".9" min=".1" oninput="update({v:this.value})" step=".001" type="range" value=".1"/></label><br/><span>𝑣 =
 <span class="sci-num highlighted-text" id="text-v"></span>𝑐</span>
-<div style="height: 7px;"></div>
-<span>Distance to turnaround =
-<span class="sci-num highlighted-text" id="text-t"></span>lyrs</span></span>
 <br/>
-<span class="slider-container"><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="=0"/></label></span>
+<span>Distance to turnaround =
+<span class="sci-num highlighted-text" id="text-t"></span>lyrs</span>
+</div>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="=0"/></label>
 </div>
 </div>
 <div>

@@ -13,8 +13,8 @@
 	<body>
 		<div>
 			<div>
-				<span
-					><label
+				<div class="slider-container">
+					<label
 						><span class="slider-label slider-label-custom"
 							>Relative velocity (𝑣):</span
 						><input
@@ -24,10 +24,15 @@
 							max=".95"
 							value=".1"
 							step=".01"
-							oninput="update({v:this.value})" /></label></span
-				><br />
-				<span
-					><span class="slider-label slider-label-custom">Perspective:</span
+							oninput="update({v:this.value})" /></label
+					><br /><span
+						>𝑣 =
+						<span id="text-v" class="highlighted-text sci-num"></span
+						>𝑐</span
+					>
+				</div>
+				<div>
+					<span class="slider-label slider-label-custom">Perspective:</span
 					><label class="radio">
 						<input
 							type="radio"
@@ -46,9 +51,9 @@
 						/>
 						Pole
 					</label>
-				</span>
-				<br /><span
-					><label
+				</div>
+				<div>
+					<label
 						><span class="slider-label slider-label-custom">Time (𝑡):</span
 						><input
 							type="range"
@@ -57,24 +62,22 @@
 							max="1"
 							value="0"
 							step=".001"
-							oninput="update({t:this.value})" /></label
-				></span>
-				<br />
-				<br />
-				<span
-					>𝑣 =
-					<span id="text-v" class="highlighted-text sci-num"></span>𝑐</span
-				><br /><span
-					><button
-						id="play-pause"
-						class="play-button"
-						onclick="toggleAnimation()"
+							oninput="update({t:this.value})"
+					/></label>
+				</div>
+				<div>
+					<span
+						><button
+							id="play-pause"
+							class="play-button"
+							onclick="toggleAnimation()"
+						>
+							Play</button
+						><button id="btn-reset" class="play-button" onclick="reset()">
+							Reset
+						</button></span
 					>
-						Play</button
-					><button id="btn-reset" class="play-button" onclick="reset()">
-						Reset
-					</button></span
-				>
+				</div>
 			</div>
 		</div>
 		<div>
