@@ -11,18 +11,22 @@
 <body>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed" style="font-size: 20px;">Speed of Train</label>
-            <input type="range" id="speed" name="speed" min="0" max="0.99" step="0.01" value="0" oninput="v = speed.value;
+            <label for="speed" style="font-size: 20px;"><span class="slider-label">Speed of Train (<i>v</i>):</span>
+            </label>
+            <input type="range" id="speed" name="speed" min="0" max="0.999" step="0.01" value="0" oninput="v = speed.value;
                 speedID.innerHTML = speed.value;
                 render();">
+            <br>
             <text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num"
                     id="speedID">0.01</span><i>c</i></text>
             <br>
-            <label for="length" style="font-size: 20px;">Length of Train</label>
+            <label for="length" style="font-size: 20px;"><span class="slider-label">Length of Train (<i>L</i>):</span>
+            </label>
             <input type="range" id="length" name="length" min="1000" max="100000" value="10000" step="1" oninput="L = length.value;
                 lengthID.innerHTML = numberWithCommas(length.value);
                 render();">
-            <text style="font-size:20px"> L = <span class="highlighted-text sci-num" id="lengthID">10,000</span>
+            <br>
+            <text style="font-size:20px"> <i>L</i> = <span class="highlighted-text sci-num" id="lengthID">10,000</span>
                 m</text>
             <br><br>
         </form>
