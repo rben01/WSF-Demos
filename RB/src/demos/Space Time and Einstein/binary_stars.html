@@ -11,13 +11,13 @@
 <body>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed">Angular Speed (<i>v</i>):
+            <label for="speed"><span class="slider-label">Angular Speed (<i>v</i>):</span>
                 <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
                     oninput="speedID.innerHTML = speed.value"></label>
             <br>
             <text><i>v</i> = <span id="speedID" class="highlighted-text sci-num"></span><i>c</i></text>
             <br>
-            <label for="distance">Distance from Earth (<i>d</i>):
+            <label for="distance"> <span class="slider-label">Distance from Earth (<i>d</i>):</span>
                 <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="5"
                     oninput="distanceID.innerHTML = distance.value; dist_change();"></label>
             <br>
