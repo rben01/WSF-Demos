@@ -13,14 +13,14 @@
     <br><br>
     <div id='formContainer' class='w3-content w3-container'>
         <form>
-            <label for="speed" style="font-size: 20px;">Speed of Rocket
+            <label for="speed" style="font-size: 20px;"><span class="slider-label">Speed of Rocket (<i>v</i>):</span>
                 <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
                     oninput="speedID.innerHTML = speed.value"></label>
             <br>
             <text style="font-size:20px"><i>v</i> = <span class="highlighted-text" id="speedID"></span> <i>c</i></text>
-            <br><br>
-            <input type="button" id="start" value="Start">
-            <input type="button" id="reset" value="Reset">
+            <br>
+            <input type="button" class="play-button" id="start" value="Start">
+            <input type="button" class="play-button" id="reset" value="Reset">
         </form>
         <br>
     </div>
