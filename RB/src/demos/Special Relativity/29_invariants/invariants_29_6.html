@@ -5,6 +5,11 @@
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<style>
+			body {
+				width: 1000px !important;
+				max-width: unset;
+			}
+
 			.slider-label-custom {
 				min-width: 6em;
 				margin-left: 65px;
@@ -21,23 +26,38 @@
 
 			.frame {
 				display: inline-block;
-				width: 300px;
+				text-align: center;
 			}
 
 			.divider {
 				width: 50px;
+				flex-grow: 100;
 			}
 
 			.frame-title {
 				font-weight: bold;
+				font-size: 110%;
+			}
+
+			.frame-table {
+				padding-left: 2.4em;
+			}
+
+			.interval-table {
+				padding-left: 4.6em;
 			}
 
 			.transformation {
 				margin-top: 30px;
 				margin-bottom: 30px;
-				width: 25em;
+				width: 27em;
 				margin-left: auto;
 				margin-right: auto;
+				text-align: center;
+			}
+
+			.transformation > table {
+				margin-left: 3em;
 			}
 
 			.operator {
@@ -49,7 +69,7 @@
 			}
 		</style>
 	</head>
-	<body style="width: 700px;">
+	<body>
 		<div>
 			<div>
 				<span>
@@ -61,7 +81,7 @@
 							type="range"
 							id="input-t"
 							name="input-t"
-							min="-3"
+							min="0"
 							max="3"
 							step=".01"
 							value="0"
@@ -118,7 +138,7 @@
 						><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span
 					>
 					<br />
-					<table>
+					<table class="frame-table">
 						<tr>
 							<td class="eqn-left">𝑡</td>
 							<td class="eqn-middle">=</td>
@@ -144,7 +164,7 @@
 						<span class="sci-num highlighted-text var-v">0</span>𝑐</span
 					>
 					<br />
-					<table>
+					<table class="frame-table">
 						<tr>
 							<td class="eqn-left">𝑡′</td>
 							<td class="eqn-middle">=</td>
@@ -216,10 +236,12 @@
 				<div class="divider"></div>
 				<div class="frame">
 					<span
-						><span class="frame-title">Stationary Frame: </span>𝑣 = 0</span
+						><span class="frame-title"
+							>Spacetime Interval (Stationary): </span
+						>𝑣 = 0</span
 					>
 					<br />
-					<table>
+					<table class="interval-table">
 						<tr>
 							<td class="eqn-left">𝑠²</td>
 							<td class="eqn-middle">=</td>
@@ -254,11 +276,11 @@
 				<div class="divider"></div>
 				<div class="frame">
 					<span
-						><span class="frame-title">Moving Frame: </span>𝑣 =
-						<span class="sci-num highlighted-text var-v">0</span>𝑐</span
+						><span class="frame-title">Spacetime Interval (Moving): </span>𝑣
+						= <span class="sci-num highlighted-text var-v">0</span>𝑐</span
 					>
 					<br />
-					<table>
+					<table class="interval-table">
 						<tr>
 							<td class="eqn-left">𝑠²</td>
 							<td class="eqn-middle">=</td>

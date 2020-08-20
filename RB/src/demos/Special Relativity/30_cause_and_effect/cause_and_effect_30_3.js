@@ -9,8 +9,8 @@ const MARGINS = { t: 20, b: 20, l: 20, r: 20 };
 
 const ARROWHEAD_ID = "arrowhead_";
 
-const WIDTH = 400,
-	HEIGHT = 400;
+const WIDTH = 450,
+	HEIGHT = 450;
 const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
 
 const sliders = {
@@ -194,7 +194,7 @@ function update({ x, t, showCausal, showDisconnected, showLightCone }) {
 		`translate(${transX},${transY})`,
 	);
 
-	const transition = d3.transition().duration(400);
+	const transition = d3.transition().duration(350);
 	lightConeObjs.causal
 		.transition(transition)
 		.attr("opacity", showCausal ? opacity : 0);

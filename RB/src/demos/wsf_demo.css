@@ -9,6 +9,10 @@ body {
 	font-family: sans-serif;
 }
 
+.slider-container {
+	line-height: 1em;
+}
+
 .play-button {
 	margin-top: 1.5em;
 	margin-bottom: 1em;

@@ -14,6 +14,9 @@ color: white;
 font-size: 21px;
 font-family: sans-serif;
 }
+.slider-container {
+line-height: 1em;
+}
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
@@ -157,8 +160,8 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
-body#bod {
-width: 1000px;
+body {
+width: 750px;
 }
 .slider-label-custom {
 text-align: left;
@@ -783,7 +786,6 @@ y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.xAx.y),
 x2: xScale(tfAxPosEndCoords.xAx.x),
 y2: yScale(tfAxPosEndCoords.xAx.y),
 ...tfAxesAttrs,
-"stroke-dasharray": "5 5",
 },
 },
 {
@@ -806,7 +808,6 @@ x1: xScale(tfAxOrigin.x - tfAxDisplacement.neg.yAx.x),
 y1: yScale(tfAxOrigin.y - tfAxDisplacement.neg.yAx.y),
 x2: xScale(tfAxPosEndCoords.yAx.x),
 y2: yScale(tfAxPosEndCoords.yAx.y),
-"stroke-dasharray": "5 5",
 ...tfAxesAttrs,
 },
 },
@@ -823,10 +824,11 @@ y2: yScale(tfAxPosEndCoords.yAx.y) + arrowDist * sinThetaYAx,
 },
 },
 ];
+const dashLength = 3.5;
 const uprightLinesAttrs = {
 stroke: STANDARD_COLORS.highlighted,
 "stroke-width": 3,
-"stroke-dasharray": "3 3",
+"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
 };
 const uprightLinesData = !shouldDrawUprightLines
 ? []
@@ -872,7 +874,8 @@ tfAxProjCoords[ax].dotProd = projectionDotProd;
 const tfLinesAttrs = {
 stroke: STANDARD_COLORS.secondary,
 "stroke-width": 3,
-"stroke-dasharray": "3 3",
+"stroke-dasharray": `${dashLength - 0.5} ${dashLength + 0.5}`,
+"stroke-dashoffset": dashLength,
 };
 const tfLinesData = [
 {

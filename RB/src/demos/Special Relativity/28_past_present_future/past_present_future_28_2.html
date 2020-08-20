@@ -5,6 +5,9 @@
 		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
 		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
 		<style>
+			body {
+				width: 630px;
+			}
 			.slider-label-custom {
 				min-width: 13em;
 				text-align: left;
@@ -20,12 +23,10 @@
 	<body>
 		<div>
 			<div>
-				<span
+				<span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom"
-							>Velocity of distant observer:<br /><span class="smaller"
-								>(Positive = away, negative = toward)</span
-							></span
+							>Velocity of Observer 2 (𝑣):</span
 						><input
 							type="range"
 							id="input-speed"
@@ -33,12 +34,16 @@
 							max="1"
 							value="0"
 							step=".001"
-							style="vertical-align: top;"
-							oninput="update({speed:this.value})" /></label></span
-				><br /><span
+							oninput="update({speed:this.value})" /></label
+					><br /><span
+						>𝑣 =
+						<span id="obs-vel" class="highlighted-text sci-num">0</span
+						>m/s</span
+					></span
+				><br /><span class="slider-container"
 					><label
 						><span class="slider-label slider-label-custom"
-							>Distance to distant observer:</span
+							>Distance from Observer 2 (𝑑):</span
 						><input
 							type="range"
 							id="input-distance"
@@ -47,33 +52,21 @@
 							value="1"
 							step=".01"
 							oninput="update({distance:this.value})" /></label
-				></span>
-			</div>
-			<br />
-			<div class="slider-label-custom" style="line-height: 1.9em;">
-				<span
-					>Velocity of distant observer:
-					<span id="obs-vel" class="highlighted-text sci-num">0</span
-					>m/s</span
-				><br />
-				<span
-					>Distance to distant observer:
-					<span id="obs-dist" class="highlighted-text sci-num">0</span>Billion
-					Lightyears</span
+					><br /><span
+						>𝑑 =
+						<span id="obs-dist" class="highlighted-text sci-num">0</span>
+						billion light-years (in Observer 1's
+						<span class="quaternary-text">future/past</span>)</span
+					></span
 				>
 			</div>
 		</div>
 		<svg id="viz"></svg>
-		<div>
+		<div style="padding-top: 40px;">
 			<span
 				>Observer 2's notion of simultaneity: 𝑡 =
 				<span id="text-years-them" class="sci-num secondary-text">0</span
 				>years</span
-			><br />
-			<span class="smaller"
-				>(From our perspective, that is
-				<span id="text-years-us" class="sci-num secondary-text">0</span>years in
-				the <span id="past-future">past</span>)</span
 			>
 		</div>
 		<script type="text/javascript" src="../../utils.js"></script>

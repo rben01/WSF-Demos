@@ -14,6 +14,9 @@ color: white;
 font-size: 21px;
 font-family: sans-serif;
 }
+.slider-container {
+line-height: 1em;
+}
 .play-button {
 margin-top: 1.5em;
 margin-bottom: 1em;
@@ -157,6 +160,9 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+body {
+width: 630px;
+}
 .slider-label-custom {
 min-width: 13em;
 text-align: left;
@@ -170,24 +176,17 @@ font-size: 70%;
 </style>
 <div>
 <div>
-<span><label><span class="slider-label slider-label-custom">Velocity of distant observer:<br/><span class="smaller">(Positive = away, negative = toward)</span></span><input id="input-speed" max="1" min="-1" oninput="update({speed:this.value})" step=".001" style="vertical-align: top;" type="range" value="0"/></label></span><br/><span><label><span class="slider-label slider-label-custom">Distance to distant observer:</span><input id="input-distance" max="10" min="1" oninput="update({distance:this.value})" step=".01" type="range" value="1"/></label></span>
-</div>
-<br/>
-<div class="slider-label-custom" style="line-height: 1.9em;">
-<span>Velocity of distant observer:
-<span class="highlighted-text sci-num" id="obs-vel">0</span>m/s</span><br/>
-<span>Distance to distant observer:
-<span class="highlighted-text sci-num" id="obs-dist">0</span>Billion
-Lightyears</span>
+<span class="slider-container"><label><span class="slider-label slider-label-custom">Velocity of Observer 2 (𝑣):</span><input id="input-speed" max="1" min="-1" oninput="update({speed:this.value})" step=".001" type="range" value="0"/></label><br/><span>𝑣 =
+<span class="highlighted-text sci-num" id="obs-vel">0</span>m/s</span></span><br/><span class="slider-container"><label><span class="slider-label slider-label-custom">Distance from Observer 2 (𝑑):</span><input id="input-distance" max="10" min="1" oninput="update({distance:this.value})" step=".01" type="range" value="1"/></label><br/><span>𝑑 =
+<span class="highlighted-text sci-num" id="obs-dist">0</span>
+billion light-years (in Observer 1's
+<span class="quaternary-text">future/past</span>)</span></span>
 </div>
 </div>
 <svg id="viz"></svg>
-<div>
+<div style="padding-top: 40px;">
 <span>Observer 2's notion of simultaneity: 𝑡 =
-<span class="sci-num secondary-text" id="text-years-them">0</span>years</span><br/>
-<span class="smaller">(From our perspective, that is
-<span class="sci-num secondary-text" id="text-years-us">0</span>years in
-the <span id="past-future">past</span>)</span>
+<span class="sci-num secondary-text" id="text-years-them">0</span>years</span>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -429,7 +428,7 @@ applyDatum.call(this, attrs);
 }
 })();
 const axisColor = "#666";
-const tickLength = 10;
+const tickLength = 6;
 const colors = { obs1: STANDARD_COLORS.quaternary, obs2: STANDARD_COLORS.secondary };
 const xScale = d3
 .scaleLinear()
@@ -461,7 +460,7 @@ svg.selectAll()
 .attr("x1", xScale)
 .attr("x2", xScale)
 .attr("y1", yScale(0))
-.attr("y2", yScale(0) + tickLength)
+.attr("y2", yScale(0) - tickLength)
 .style("stroke", axisColor)
 .style("stroke-width", 1);
 const yTicks = yScale.ticks(20);
@@ -483,7 +482,7 @@ svg.append("text")
 .attr("dominant-baseline", "bottom")
 .attr("font-size", "smaller");
 svg.append("text")
-.text("𝑥 (lyrs)")
+.text("𝑑 (lyrs)")
 .attr("x", xScale(AXES.x.max) - 30)
 .attr("y", yScale(0) + 30)
 .attr("fill", "white")
@@ -499,12 +498,12 @@ return `${t}`;
 }
 return "";
 })
-.attr("x", xScale(0) - 3)
+.attr("x", xScale(0) - 10)
 .attr("y", yScale)
 .attr("text-anchor", "end")
 .attr("dominant-baseline", "middle")
 .attr("fill", "white")
-.attr("font-size", "50%");
+.attr("font-size", "70%");
 }
 drawGraph();
 function fmtFloat(x, precision) {
@@ -541,24 +540,13 @@ const [t1, t2] = [x1, x2].map(line);
 // console.log([0].map(x => slope * x * C + y0));
 const radius = 5;
 const distArrowY = 400;
+const t0 = line(0);
 const data = [
 {
 shape: "line",
 attrs: {
-x1: xScale(distance),
-y1: yScale(0),
-x2: xScale(x1),
-y2: yScale(t1),
-stroke: colors.obs2,
-"stroke-width": 2,
-"stroke-dasharray": "3 3",
-},
-},
-{
-shape: "line",
-attrs: {
-x1: xScale(distance),
-y1: yScale(0),
+x1: xScale(x1),
+y1: yScale(t1),
 x2: xScale(x2),
 y2: yScale(t2),
 stroke: colors.obs2,
@@ -566,13 +554,51 @@ stroke: colors.obs2,
 "stroke-dasharray": "3 3",
 },
 },
+// {
+// 	shape: "line",
+// 	attrs: {
+// 		x1: xScale(distance),
+// 		y1: yScale(0),
+// 		x2: xScale(x2),
+// 		y2: yScale(t2),
+// 		stroke: colors.obs2,
+// 		"stroke-width": 2,
+// 		"stroke-dasharray": "3 3",
+// 	},
+// },
+{
+shape: "line",
+attrs: {
+x1: xScale(AXES.x.min),
+y1: yScale(0),
+x2: xScale(AXES.x.max),
+y2: yScale(0),
+stroke: colors.obs1,
+"stroke-width": 2,
+"stroke-dasharray": "3 3",
+"stroke-dashoffset": 3,
+},
+},
+// {
+// 	shape: "line",
+// 	attrs: {
+// 		x2: xScale(distance),
+// 		y1: yScale(0),
+// 		x1: xScale(AXES.x.max),
+// 		y2: yScale(0),
+// 		stroke: colors.obs1,
+// 		"stroke-width": 2,
+// 		"stroke-dasharray": "3 3",
+// 		"stroke-dashoffset": 3,
+// 	},
+// },
 {
 shape: "circle",
 attrs: {
 cx: xScale(0),
-cy: yScale(0),
+cy: yScale(t0),
 r: radius,
-fill: colors.obs1,
+fill: colors.obs2,
 },
 },
 {
@@ -582,6 +608,15 @@ cx: xScale(distance),
 cy: yScale(0),
 r: radius,
 fill: colors.obs2,
+},
+},
+{
+shape: "circle",
+attrs: {
+cx: xScale(0),
+cy: yScale(0),
+r: radius,
+fill: colors.obs1,
 },
 },
 {
@@ -656,18 +691,11 @@ t.attr(key, value);
 }
 textSpans.vel.innerHTML = fmtFloat(speed, 3);
 textSpans.dist.innerHTML = fmtFloat(distance, 3);
-const t0 = line(0);
 textSpans.yearsThem.innerHTML = fmtFloat(t0, 4);
-textSpans.yearsUs.innerHTML = fmtFloat(Math.abs(t0), 4);
-textSpans.pastFuture.innerHTML = t0 < 0 ? "past" : "future";
+// textSpans.yearsUs.innerHTML = fmtFloat(Math.abs(t0), 4);
+// textSpans.pastFuture.innerHTML = t0 < 0 ? "past" : "future";
 }
 update({});
-svg.append("rect")
-.attr("x", 10)
-.attr("width", 90)
-.attr("y", 65)
-.attr("height", 40)
-.attr("fill", "black");
 const legend = svg
 .selectAll()
 .data([
@@ -675,7 +703,7 @@ const legend = svg
 { color: colors.obs2, text: "Observer 2" },
 ])
 .join("g")
-.attr("transform", `translate(${xScale(AXES.x.min) + 10}, ${yScale(1750)})`)
+.attr("transform", `translate(${xScale(AXES.x.min) + 450}, ${yScale(1750)})`)
 .attr("background", "black");
 legend
 .append("rect")
@@ -692,7 +720,7 @@ legend
 .attr("y", (_, i) => 5 + i * 20)
 .text(d => d.text)
 .attr("fill", "white")
-.attr("font-size", "12px")
+.attr("font-size", "16px")
 .attr("dy", ".5px")
 .attr("text-anchor", "begin")
 .attr("dominant-baseline", "middle");
