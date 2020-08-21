@@ -32,4 +32,101 @@ m</text>
 <div id="graph"></div>
 </div>
 <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
-<script type="text/javascript">var c=299792e3,L=1e4,v=0,dt=0,dtline={x:[],y:[],line:{color:"grey"}},trace1={x:[],y:[],line:{dash:"dash",color:"yellow"}},trace2={x:[],y:[],line:{dash:"dash",color:"yellow"}},layout={title:{text:"Time Difference (s)",font:{color:"white"},x:0},xaxis:{range:[0,1],linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.2,.4,.6,.8,1]},yaxis:{range:[0,.02],autorange:!1,linecolor:"white",tickcolor:"black",tickfont:{color:"white",family:"sans-serif",size:18},tickvals:[.005,.01,.015]},height:600,paper_bgcolor:"black",plot_bgcolor:"black",showlegend:!1,annotations:[{xref:"paper",yref:"paper",x:1.04,y:-.05,xanchor:"right",yanchor:"bottom",text:"<sup>v</sup>/<sub>c</sub>",font:{color:"white",size:20,family:"sans-serif"},color:"white",showarrow:!1},{xref:"paper",yref:"paper",x:-0,y:-.1,text:"0",font:{color:"white",size:18,family:"sans-serif"},showarrow:!1},{xref:"paper",yref:"paper",x:.5,y:.5,text:"Δt = 0",font:{color:"white",size:18,family:"sans-serif"},showarrow:!1}]};function numberWithCommas(e){return e.toString().replace(/\B(?=(\d{3})+(?!\d))/g,",")}function render(){dt=L/c*v/(1-v**2),layout.annotations[2].text=("Δt = <span style='color:#5df'>"+dt).substr(0,38)+"</span> s",dtline.x=[],dtline.y=[];for(var e=0;e<1;e+=.001)dtline.x.push(e),dtline.y.push(L/c*e/(1-e**2));trace1.x=[0,v],trace1.y=[dt,dt],trace2.x=[v,v],trace2.y=[0,dt],Plotly.newPlot("graph",[dtline,trace1,trace2],layout)}render();</script></body></html>
+<script type="text/javascript">
+var c = 299792000;
+var L = 10000;
+var v = 0;
+var dt = 0;
+var dtline = {
+x: [],
+y: [],
+line: { color: 'grey' }
+}
+var trace1 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var trace2 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var layout = {
+title: {
+text: 'Time Difference (s)',
+font: { color: 'white' },
+x: 0,
+},
+xaxis: {
+range: [0, 1],
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [0.2, 0.4, 0.6, 0.8, 1]
+},
+yaxis: {
+range: [0, 0.02],
+autorange: false,
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [0.005, 0.01, 0.015]
+},
+height: 600,
+paper_bgcolor: 'black',
+plot_bgcolor: 'black',
+showlegend: false,
+annotations: [
+{
+xref: 'paper',
+yref: 'paper',
+x: 1.04,
+y: -0.05,
+xanchor: 'right',
+yanchor: 'bottom',
+text: '<sup>v</sup>/<sub>c</sub>',
+font: { color: 'white', size: 20, family: 'sans-serif' },
+color: 'white',
+showarrow: false,
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: -0.0,
+y: -0.1,
+text: '0',
+font: { color: 'white', size: 18, family: 'sans-serif' },
+showarrow: false
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: 0.5,
+y: 0.5,
+text: "Δt = 0",
+font: { color: 'white', size: 18, family: 'sans-serif' },
+showarrow: false
+}
+]
+}
+function numberWithCommas(n) {
+return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+function render() {
+dt = L / c * v / (1 - v ** 2);
+layout.annotations[2].text = ("Δt = <span style='color:#5df'>" + dt).substr(0, 38) + "</span> s";
+dtline.x = [];
+dtline.y = [];
+for (var i = 0; i < 1; i += 0.001) {
+dtline.x.push(i);
+dtline.y.push(L / c * i / (1 - i ** 2));
+}
+trace1.x = [0, v];
+trace1.y = [dt, dt];
+trace2.x = [v, v];
+trace2.y = [0, dt];
+Plotly.newPlot('graph', [dtline, trace1, trace2], layout);
+}
+render();
+</script></body></html>

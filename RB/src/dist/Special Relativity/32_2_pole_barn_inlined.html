@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -256,7 +257,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars

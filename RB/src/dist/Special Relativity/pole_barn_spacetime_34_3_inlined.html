@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -184,33 +185,50 @@ top: 0.6em;
 left: 0em;
 font-size: 65%;
 }
+.radio {
+margin-right: 20px;
+}
 svg {
 margin-top: 20px;
 }
 body {
-width: 700px;
+width: 725px;
 }
 </style>
 <div>
-<div style="line-height: 1em;">
-<span><label><span class="slider-label slider-label-custom">Relative velocity (𝑣):</span><input id="input-v" max=".95" min=".1" oninput="update({v:this.value})" step=".01" type="range" value=".1"/></label></span><br/>
-<br/>
-<span><span class="slider-label slider-label-custom">Perspective:</span><button class="play-button demo-button" id="btn-persp-barn" onclick="update({perspective:BARN})">
-Barn</button><button class="play-button demo-button" id="btn-persp-pole" onclick="update({perspective:POLE})">
+<div>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Relative velocity (𝑣):</span><input id="input-v" max=".95" min=".1" oninput="update({v:this.value})" step=".01" type="range" value=".1"/></label><br/><span>𝑣 =
+<span class="highlighted-text sci-num" id="text-v"></span>𝑐</span>
+</div>
+<span><span class="slider-label slider-label-custom">Perspective:</span><label class="radio">
+<input id="radio-perspective-barn" name="perspective" onclick="update({perspective:BARN})" type="radio"/>
+Barn
+</label>
+<label class="radio">
+<input id="radio-perspective-pole" name="perspective" onclick="update({perspective:POLE})" type="radio"/>
 Pole
-</button></span><br/>
+</label>
+</span>
 <br/>
-<span><span class="slider-label slider-label-custom">Spacial slices:</span><button class="play-button demo-button" id="btn-slice-barn" onclick="update({slicesToShow:BARN})">
-Barn</button><button class="play-button demo-button" id="btn-slice-pole" onclick="update({slicesToShow:POLE})">
-Pole</button><button class="play-button demo-button" id="btn-slice-both" onclick="update({slicesToShow:BOTH})">
+<span><span class="slider-label slider-label-custom">Spacial slices:</span>
+<label class="radio">
+<input id="radio-slices-barn" name="slices" onclick="update({slicesToShow:BARN})" type="radio"/>
+Barn
+</label>
+<label class="radio">
+<input id="radio-slices-pole" name="slices" onclick="update({slicesToShow:POLE})" type="radio"/>
+Pole
+</label>
+<label class="radio">
+<input id="radio-slices-both" name="slices" onclick="update({slicesToShow:BOTH})" type="radio"/>
 Both
-</button></span>
+</label>
+</span>
 <br/>
 <div style="height: 0.2em;"></div>
 <span><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="0"/></label></span>
 <br/><br/>
-<span>𝑣 =
-<span class="highlighted-text sci-num" id="text-v"></span>𝑐</span>
 <br/><span><button class="play-button" id="play-pause" onclick="toggleAnimation()">
 Start
 </button></span>
@@ -265,7 +283,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -412,6 +430,7 @@ y: { min: -1, origin: 0, max: 1 },
 const MARGINS = { t: 10, b: 10, l: 10, r: 10 };
 const HEIGHT = 500;
 const WIDTH = (HEIGHT * (AXES.x.max - AXES.x.min)) / (AXES.y.max - AXES.y.min);
+const widths = { stationary: 8, moving: 2 };
 const colors = (() => {
 const makeTransparent = color => {
 const c = d3.color(color);
@@ -525,13 +544,12 @@ selection
 return symbols;
 })();
 const legend = (() => {
-const legendWidth = 150;
+const legendWidth = 175;
 const legendHeight = 300;
 const legend = d3
 .select("#legend")
 .attr("width", legendWidth)
 .attr("height", legendHeight);
-const strokeWidth = 3;
 const x1 = 10;
 const x2 = 25;
 const dy = 24;
@@ -540,7 +558,7 @@ const textAttrs = {
 fill: "white",
 "dominant-baseline": "middle",
 "text-anchor": "begin",
-"font-size": "small",
+"font-size": "smaller",
 };
 const lineData = [
 { text: "Barn", color: colors.barn },
@@ -554,7 +572,7 @@ x2,
 y1: (i + 1) * dy,
 y2: (i + 1) * dy,
 stroke: ld.color,
-"stroke-width": strokeWidth,
+"stroke-width": i === 0 ? widths.stationary : widths.moving,
 },
 }));
 const lineText = lineData.map((ld, i) => ({
@@ -677,7 +695,6 @@ const barnLength = 0.3;
 const poleLength = 1.3 * barnLength;
 const radius = d3.scaleLinear().domain([0, 8]).range([1.75, 1]).clamp(true);
 const dashes = "4 4";
-const widths = { stationary: 5, moving: 2 };
 const line = d3
 .line()
 .x(p => xScale(p[0]))
@@ -698,6 +715,7 @@ barn: document.getElementById("btn-slice-barn"),
 pole: document.getElementById("btn-slice-pole"),
 },
 playPause: document.getElementById("play-pause"),
+reset: document.getElementById("btn-reset"),
 };
 function makeSubscript(text) {
 return {
@@ -715,10 +733,14 @@ function getSlices({ v, slicesToShow, perspective }) {
 const dt = 0.23;
 const nSlicesAbove = Math.floor((AXES.y.max - AXES.y.origin) / dt) + 30;
 const nSlicesBelow = Math.floor((AXES.y.origin - AXES.y.min) / dt) + 30;
-function _getSliceAttrs(slope, gamma) {
+function _getSliceAttrs(slope, gamma, isBarn) {
 const sliceYIntercepts = d3
 .range(-nSlicesBelow, nSlicesAbove + 0.1)
 .map(i => AXES.y.origin + (i * dt) / gamma);
+const stroke = d3.interpolateRgb(
+isBarn ? colors.barn : colors.pole,
+"black",
+)(isBarn ? 0.4 : 0.5);
 return sliceYIntercepts.map(y0 => {
 const x1 = AXES.x.min;
 const x2 = AXES.x.max;
@@ -730,8 +752,9 @@ x1: xScale(x1),
 y1: yScale(y0 + slope * x1),
 x2: xScale(x2),
 y2: yScale(y0 + slope * x2),
-stroke: "#fff5",
-"stroke-dasharray": dashes,
+stroke: stroke,
+"stroke-width": 1.5,
+"stroke-dasharray": "5 7",
 "clip-path": `url(#axes-clip)`,
 },
 };
@@ -742,11 +765,11 @@ const gammaBarn = perspective === BARN ? 1 : gamma;
 const gammaPole = perspective === POLE ? 1 : gamma;
 function getBarnSliceAttrs() {
 const slope = perspective === BARN ? 0 : v;
-return _getSliceAttrs(slope, gammaBarn);
+return _getSliceAttrs(slope, gammaBarn, true);
 }
 function getPoleSliceAttrs() {
 const slope = perspective === BARN ? -v : 0;
-return _getSliceAttrs(slope, gammaPole);
+return _getSliceAttrs(slope, gammaPole, false);
 }
 if (slicesToShow === NONE) {
 return [];
@@ -900,6 +923,7 @@ perspective: BARN,
 const axisLabelSubscript = makeSubscript("𝖡");
 return [
 ...getAxes(),
+...slices,
 {
 shape: "path",
 attrs: {
@@ -966,7 +990,6 @@ fill: "white",
 },
 children: [axisLabelSubscript],
 },
-...slices,
 ...eventPoints,
 ].map(obj => ({ class: "c", ...obj }));
 }
@@ -1014,24 +1037,24 @@ fill: colors.poleFill,
 {
 shape: "line",
 attrs: {
-x1: xScale(AXES.x.origin),
-x2: xScale(AXES.x.origin + poleLength),
-y1: scaledY,
-y2: scaledY,
-stroke: colors.pole,
-"stroke-width": widths.moving,
-"clip-path": "url(#axes-clip)",
-},
-},
-{
-shape: "line",
-attrs: {
 x1: xScale(v * y),
 x2: xScale(v * y + barnRelLength),
 y1: scaledY,
 y2: scaledY,
 stroke: colors.barn,
 "stroke-width": widths.stationary,
+"clip-path": "url(#axes-clip)",
+},
+},
+{
+shape: "line",
+attrs: {
+x1: xScale(AXES.x.origin),
+x2: xScale(AXES.x.origin + poleLength),
+y1: scaledY,
+y2: scaledY,
+stroke: colors.pole,
+"stroke-width": widths.moving,
 "clip-path": "url(#axes-clip)",
 },
 },
@@ -1137,7 +1160,23 @@ const speedSpan = document.getElementById("text-v");
 function fmtFloat(x, precision) {
 return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
-function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
+const perspectiveButtons = {
+[BARN]: document.getElementById("radio-perspective-barn"),
+[POLE]: document.getElementById("radio-perspective-pole"),
+};
+const sliceButtons = {
+[BARN]: document.getElementById("radio-slices-barn"),
+[POLE]: document.getElementById("radio-slices-pole"),
+[BOTH]: document.getElementById("radio-slices-both"),
+};
+function update({
+v,
+t,
+perspective,
+slicesToShow,
+updatedFromTimer,
+transition,
+} = {}) {
 if (typeof v === "undefined") {
 v = sliders.v.value;
 }
@@ -1157,11 +1196,13 @@ if (typeof perspective === "undefined") {
 perspective = currentPerspective;
 } else {
 currentPerspective = perspective;
+perspectiveButtons[perspective].checked = true;
 }
 if (typeof slicesToShow === "undefined") {
 slicesToShow = currentSlices;
 } else {
 currentSlices = slicesToShow;
+sliceButtons[slicesToShow].checked = true;
 }
 const slices = getSlices({ v, perspective, slicesToShow });
 const data =
@@ -1169,7 +1210,7 @@ perspective === BARN
 ? getBarnPerspective({ v, t, slices })
 : getPolePerspective({ v, t, slices });
 if (svg.selectAll(".c").size() === 0) {
-applyGraphicalObjs(svg, data);
+applyGraphicalObjs(svg, data, { transition });
 } else {
 const groups = groupBy(data, getKeyFromDatum, [
 "line.c",
@@ -1178,11 +1219,12 @@ const groups = groupBy(data, getKeyFromDatum, [
 "use.eventMarker",
 ]);
 for (const [selector, items] of groups) {
-applyGraphicalObjs(svg, items, { selector });
+applyGraphicalObjs(svg, items, { selector, transition });
 }
 }
-buttons.perspective.barn.disabled = perspective === BARN;
-buttons.perspective.pole.disabled = perspective === POLE;
+if (buttons.reset !== null) {
+buttons.reset.disabled = t === 0;
+}
 try {
 buttons.slices.barn.disabled = slicesToShow === BARN;
 buttons.slices.pole.disabled = slicesToShow === POLE;
@@ -1212,6 +1254,17 @@ playbackInfo.currFrame += 1;
 const t = playbackInfo.frameToTimeInterpolator(playbackInfo.currFrame);
 update({ t, updatedFromTimer: true });
 }, ANIMATION_DURATION_MS / N_FRAMES);
+}
+// eslint-disable-next-line no-unused-vars
+function reset() {
+if (playbackInfo.isPlaying) {
+stopAnimation();
+}
+const duration = 200;
+update({
+t: 0,
+transition: d3.transition().duration(duration),
+});
 }
 /* global update sliders BARN BOTH */
 update({

@@ -4,7 +4,7 @@
 <meta charset="utf-8"/>
 <script src="https://d3js.org/d3.v5.min.js"></script>
 </head>
-<body style="width: 650px;"><style>body {
+<body style="width: 675px;"><style>body {
 max-width: 800px;
 margin: 50px auto;
 padding-left: auto;
@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -173,7 +174,7 @@ text-align: center;
 </label>
 </span>
 </div>
-<div class="div-below-slider">
+<div class="div-below-slider" style="margin-top: -13px;">
 <table>
 <tr>
 <td class="eqn-left">𝑣</td>
@@ -181,6 +182,9 @@ text-align: center;
 <td class="eqn-right">
 <span class="highlighted-text sci-num" id="particle-speed-text">0</span>𝑐
 </td>
+</tr>
+<tr>
+<td style="height: 15px;"></td>
 </tr>
 <tr>
 <td class="eqn-left">Rest mass</td>
@@ -191,7 +195,7 @@ text-align: center;
 <td class="eqn-left">𝑚(𝑣)</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="secondary-text sci-num" id="particle-rel-mass-text">5.00</span>kg
+<span class="secondary-text sci-num" id="particle-rel-mass-text">5.00</span>𝑐<span class="operator">·</span>kg
 </td>
 </tr>
 </table>
@@ -244,7 +248,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -409,8 +413,8 @@ return d3Obj;
 /* globals _addGraphicalObjs applyDatum lorentzFactor STANDARD_COLORS */
 "use strict";
 const REST_MASS = 5;
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 350;
+const CANVAS_WIDTH = 700;
+const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
 const AX_BOUNDS = {
 xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
@@ -456,7 +460,10 @@ lf = lorentzFactor({ fracOfC });
 }
 return REST_MASS * lf;
 }
-const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const xScale = d3
+.scaleLinear()
+.domain([-0.02, 1])
+.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 const yScale = d3
 .scaleLinear()
 .domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
@@ -617,8 +624,8 @@ subcanvas
 ])
 .enter()
 .append("tspan")
-.attr("x", AX_BOUNDS.xMax + 25)
-.attr("y", AX_BOUNDS.yMin - 16)
+.attr("x", AX_BOUNDS.xMax + 30)
+.attr("y", AX_BOUNDS.yMin - 24)
 .attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
 .attr("font-size", 21)
 .attr("stroke", "white")
@@ -630,7 +637,7 @@ subcanvas
 subcanvas
 .append("svg:text")
 .attr("x", AX_BOUNDS.xMin)
-.attr("y", AX_BOUNDS.yMax - 10)
+.attr("y", AX_BOUNDS.yMax - 25)
 .attr("font-size", 21)
 .attr("stroke", "white")
 .attr("fill", "white")

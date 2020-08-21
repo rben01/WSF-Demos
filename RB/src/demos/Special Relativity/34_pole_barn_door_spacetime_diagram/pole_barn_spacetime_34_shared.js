@@ -10,6 +10,8 @@ const MARGINS = { t: 10, b: 10, l: 10, r: 10 };
 const HEIGHT = 500;
 const WIDTH = (HEIGHT * (AXES.x.max - AXES.x.min)) / (AXES.y.max - AXES.y.min);
 
+const widths = { stationary: 8, moving: 2 };
+
 const colors = (() => {
 	const makeTransparent = color => {
 		const c = d3.color(color);
@@ -127,14 +129,13 @@ const symbols = (() => {
 })();
 
 const legend = (() => {
-	const legendWidth = 150;
+	const legendWidth = 175;
 	const legendHeight = 300;
 	const legend = d3
 		.select("#legend")
 		.attr("width", legendWidth)
 		.attr("height", legendHeight);
 
-	const strokeWidth = 3;
 	const x1 = 10;
 	const x2 = 25;
 	const dy = 24;
@@ -144,7 +145,7 @@ const legend = (() => {
 		fill: "white",
 		"dominant-baseline": "middle",
 		"text-anchor": "begin",
-		"font-size": "small",
+		"font-size": "smaller",
 	};
 
 	const lineData = [
@@ -160,7 +161,7 @@ const legend = (() => {
 			y1: (i + 1) * dy,
 			y2: (i + 1) * dy,
 			stroke: ld.color,
-			"stroke-width": strokeWidth,
+			"stroke-width": i === 0 ? widths.stationary : widths.moving,
 		},
 	}));
 
@@ -295,8 +296,6 @@ const radius = d3.scaleLinear().domain([0, 8]).range([1.75, 1]).clamp(true);
 
 const dashes = "4 4";
 
-const widths = { stationary: 5, moving: 2 };
-
 const line = d3
 	.line()
 	.x(p => xScale(p[0]))
@@ -320,6 +319,7 @@ const buttons = {
 		pole: document.getElementById("btn-slice-pole"),
 	},
 	playPause: document.getElementById("play-pause"),
+	reset: document.getElementById("btn-reset"),
 };
 
 function makeSubscript(text) {
@@ -341,10 +341,15 @@ function getSlices({ v, slicesToShow, perspective }) {
 	const nSlicesAbove = Math.floor((AXES.y.max - AXES.y.origin) / dt) + 30;
 	const nSlicesBelow = Math.floor((AXES.y.origin - AXES.y.min) / dt) + 30;
 
-	function _getSliceAttrs(slope, gamma) {
+	function _getSliceAttrs(slope, gamma, isBarn) {
 		const sliceYIntercepts = d3
 			.range(-nSlicesBelow, nSlicesAbove + 0.1)
 			.map(i => AXES.y.origin + (i * dt) / gamma);
+
+		const stroke = d3.interpolateRgb(
+			isBarn ? colors.barn : colors.pole,
+			"black",
+		)(isBarn ? 0.4 : 0.5);
 
 		return sliceYIntercepts.map(y0 => {
 			const x1 = AXES.x.min;
@@ -357,8 +362,9 @@ function getSlices({ v, slicesToShow, perspective }) {
 					y1: yScale(y0 + slope * x1),
 					x2: xScale(x2),
 					y2: yScale(y0 + slope * x2),
-					stroke: "#fff5",
-					"stroke-dasharray": dashes,
+					stroke: stroke,
+					"stroke-width": 1.5,
+					"stroke-dasharray": "5 7",
 					"clip-path": `url(#axes-clip)`,
 				},
 			};
@@ -371,12 +377,12 @@ function getSlices({ v, slicesToShow, perspective }) {
 
 	function getBarnSliceAttrs() {
 		const slope = perspective === BARN ? 0 : v;
-		return _getSliceAttrs(slope, gammaBarn);
+		return _getSliceAttrs(slope, gammaBarn, true);
 	}
 
 	function getPoleSliceAttrs() {
 		const slope = perspective === BARN ? -v : 0;
-		return _getSliceAttrs(slope, gammaPole);
+		return _getSliceAttrs(slope, gammaPole, false);
 	}
 
 	if (slicesToShow === NONE) {
@@ -549,6 +555,7 @@ function getBarnPerspective({ v, t, slices }) {
 
 	return [
 		...getAxes(),
+		...slices,
 		{
 			shape: "path",
 			attrs: {
@@ -615,7 +622,6 @@ function getBarnPerspective({ v, t, slices }) {
 			},
 			children: [axisLabelSubscript],
 		},
-		...slices,
 		...eventPoints,
 	].map(obj => ({ class: "c", ...obj }));
 }
@@ -669,24 +675,24 @@ function getPolePerspective({ v, t, slices }) {
 		{
 			shape: "line",
 			attrs: {
-				x1: xScale(AXES.x.origin),
-				x2: xScale(AXES.x.origin + poleLength),
-				y1: scaledY,
-				y2: scaledY,
-				stroke: colors.pole,
-				"stroke-width": widths.moving,
-				"clip-path": "url(#axes-clip)",
-			},
-		},
-		{
-			shape: "line",
-			attrs: {
 				x1: xScale(v * y),
 				x2: xScale(v * y + barnRelLength),
 				y1: scaledY,
 				y2: scaledY,
 				stroke: colors.barn,
 				"stroke-width": widths.stationary,
+				"clip-path": "url(#axes-clip)",
+			},
+		},
+		{
+			shape: "line",
+			attrs: {
+				x1: xScale(AXES.x.origin),
+				x2: xScale(AXES.x.origin + poleLength),
+				y1: scaledY,
+				y2: scaledY,
+				stroke: colors.pole,
+				"stroke-width": widths.moving,
 				"clip-path": "url(#axes-clip)",
 			},
 		},
@@ -802,7 +808,25 @@ function fmtFloat(x, precision) {
 	return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
 }
 
-function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
+const perspectiveButtons = {
+	[BARN]: document.getElementById("radio-perspective-barn"),
+	[POLE]: document.getElementById("radio-perspective-pole"),
+};
+
+const sliceButtons = {
+	[BARN]: document.getElementById("radio-slices-barn"),
+	[POLE]: document.getElementById("radio-slices-pole"),
+	[BOTH]: document.getElementById("radio-slices-both"),
+};
+
+function update({
+	v,
+	t,
+	perspective,
+	slicesToShow,
+	updatedFromTimer,
+	transition,
+} = {}) {
 	if (typeof v === "undefined") {
 		v = sliders.v.value;
 	}
@@ -825,12 +849,17 @@ function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 		perspective = currentPerspective;
 	} else {
 		currentPerspective = perspective;
+		perspectiveButtons[perspective].checked = true;
 	}
 
 	if (typeof slicesToShow === "undefined") {
 		slicesToShow = currentSlices;
 	} else {
 		currentSlices = slicesToShow;
+		try {
+			sliceButtons[slicesToShow].checked = true;
+			// eslint-disable-next-line no-empty
+		} catch {}
 	}
 
 	const slices = getSlices({ v, perspective, slicesToShow });
@@ -840,7 +869,7 @@ function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 			: getPolePerspective({ v, t, slices });
 
 	if (svg.selectAll(".c").size() === 0) {
-		applyGraphicalObjs(svg, data);
+		applyGraphicalObjs(svg, data, { transition });
 	} else {
 		const groups = groupBy(data, getKeyFromDatum, [
 			"line.c",
@@ -850,19 +879,12 @@ function update({ v, t, perspective, slicesToShow, updatedFromTimer } = {}) {
 		]);
 
 		for (const [selector, items] of groups) {
-			applyGraphicalObjs(svg, items, { selector });
+			applyGraphicalObjs(svg, items, { selector, transition });
 		}
 	}
 
-	buttons.perspective.barn.disabled = perspective === BARN;
-	buttons.perspective.pole.disabled = perspective === POLE;
-
-	try {
-		buttons.slices.barn.disabled = slicesToShow === BARN;
-		buttons.slices.pole.disabled = slicesToShow === POLE;
-		buttons.slices.both.disabled = slicesToShow === BOTH;
-	} catch {
-		// No problem, those buttons just dont exist
+	if (buttons.reset !== null) {
+		buttons.reset.disabled = t === 0;
 	}
 }
 
@@ -890,4 +912,17 @@ function toggleAnimation() {
 		const t = playbackInfo.frameToTimeInterpolator(playbackInfo.currFrame);
 		update({ t, updatedFromTimer: true });
 	}, ANIMATION_DURATION_MS / N_FRAMES);
+}
+
+// eslint-disable-next-line no-unused-vars
+function reset() {
+	if (playbackInfo.isPlaying) {
+		stopAnimation();
+	}
+
+	const duration = 200;
+	update({
+		t: 0,
+		transition: d3.transition().duration(duration),
+	});
 }

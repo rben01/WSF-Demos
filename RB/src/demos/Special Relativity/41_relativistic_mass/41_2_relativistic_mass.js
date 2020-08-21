@@ -4,8 +4,8 @@
 
 const REST_MASS = 5;
 
-const CANVAS_WIDTH = 600;
-const CANVAS_HEIGHT = 350;
+const CANVAS_WIDTH = 700;
+const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
@@ -58,7 +58,10 @@ function getRelativisticMass({ fracOfC, lf }) {
 	return REST_MASS * lf;
 }
 
-const xScale = d3.scaleLinear().domain([0, 1]).range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
+const xScale = d3
+	.scaleLinear()
+	.domain([-0.02, 1])
+	.range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 
 const yScale = d3
 	.scaleLinear()
@@ -238,8 +241,8 @@ function drawGraph() {
 			])
 			.enter()
 			.append("tspan")
-			.attr("x", AX_BOUNDS.xMax + 25)
-			.attr("y", AX_BOUNDS.yMin - 16)
+			.attr("x", AX_BOUNDS.xMax + 30)
+			.attr("y", AX_BOUNDS.yMin - 24)
 			.attr("dy", (d, i) => `${i * 0.6 + d.height}em`)
 			.attr("font-size", 21)
 			.attr("stroke", "white")
@@ -252,7 +255,7 @@ function drawGraph() {
 		subcanvas
 			.append("svg:text")
 			.attr("x", AX_BOUNDS.xMin)
-			.attr("y", AX_BOUNDS.yMax - 10)
+			.attr("y", AX_BOUNDS.yMax - 25)
 			.attr("font-size", 21)
 			.attr("stroke", "white")
 			.attr("fill", "white")

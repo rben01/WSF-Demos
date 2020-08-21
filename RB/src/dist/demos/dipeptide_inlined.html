@@ -43943,7 +43943,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars

@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -175,6 +176,9 @@ width: unset;
 margin: unset;
 margin-right: 5px;
 } */
+.align-right {
+text-align: right;
+}
 tr {
 padding-left: 0px;
 }
@@ -191,73 +195,82 @@ padding: 0px;
 .header {
 font-size: larger;
 }
-.signal-cell-desc {
-display: inline-block;
-min-width: 13em;
-}
 </style>
 <div>
 <div>
-<span><label><span class="slider-label slider-label-custom">Spaceship velocity (𝑣):</span><input id="input-v" max=".90" min=".1" oninput="update({v:this.value})" step=".001" type="range" value=".1"/></label></span>
-<br/>
-<span><label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="=0"/></label></span>
-</div>
-</div>
-<div>
-<div style="display: inline-block;">
-<svg id="viz" style="display: inline-block;"></svg>
-</div>
-<div style="display: inline-block; vertical-align: top;">
-<span>𝑣 =
+<div class="slider-container"></div>
+<label><span class="slider-label slider-label-custom">Spaceship velocity (𝑣):</span><input id="input-v" max=".9" min=".1" oninput="update({v:this.value})" step=".001" type="range" value=".1"/></label><br/><span>𝑣 =
 <span class="sci-num highlighted-text" id="text-v"></span>𝑐</span>
 <br/>
 <span>Distance to turnaround =
 <span class="sci-num highlighted-text" id="text-t"></span>lyrs</span>
-<br/>
-<br/>
-<table style="margin-left: 0px;">
-<tr>
-<td>View flashes sent by twin on Earth</td>
-<td>
-<input id="checkbox-earth-signals" onchange="update({showEarthSignals: this.checked})" type="checkbox"/>
-</td>
-</tr>
-<tr>
-<td>
-View flashes sent by twin on spaceship
-</td>
-<td>
-<input id="checkbox-ship-signals" onchange="update({showShipSignals: this.checked})" type="checkbox"/>
-</td>
-</tr>
-</table>
+</div>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Time (𝑡):</span><input id="input-t" max="1" min="0" oninput="update({t:this.value})" step=".001" type="range" value="=0"/></label>
+</div>
+</div>
+<div>
+<div style="display: inline-block; vertical-align: top;">
 <span><button class="play-button" id="btn-play-pause" onclick="toggleAnimation()">
-Start</button><button class="play-button" id="btn-reset" onclick="resetAnimation()">
+Start
+</button>
+<button class="play-button" id="btn-reset" onclick="resetAnimation()">
 Reset
 </button></span>
 <br/>
 <br/>
 <div style="line-height: 1.3em;">
-<div id="earth-flashes-section">
+<div>
+<table>
+<tr>
+<td>
 <span class="header tertiary-text">Earth Flashes</span>
-<br/>
-<span><span class="signal-cell-desc">Flashes sent from Earth:</span>
-<span class="secondary-text" id="flashes-sent-from-earth">0</span></span>
-<br/>
-<span><span class="signal-cell-desc">Flashes received on ship:</span>
-<span class="secondary-text" id="flashes-received-on-ship">0</span></span>
-</div>
-<br/>
-<div id="ship-flashes-section">
+</td>
+<td>
+<input id="checkbox-earth-signals" onchange="update({showEarthSignals: this.checked})" type="checkbox"/>
+</td>
+</tr>
+<tr>
+<td>Flashes sent from Earth:</td>
+<td class="align-right">
+<span class="secondary-text" id="flashes-sent-from-earth">0</span>
+</td>
+</tr>
+<tr>
+<td>Flashes received on ship:</td>
+<td class="align-right">
+<span class="secondary-text" id="flashes-received-on-ship">0</span>
+</td>
+</tr>
+<tr>
+<td> </td>
+</tr>
+<tr>
+<td>
 <span class="header quaternary-text">Spaceship Flashes</span>
-<br/>
-<span><span class="signal-cell-desc">Flashes sent from ship:</span>
-<span class="secondary-text" id="flashes-sent-from-ship">0</span></span>
-<br/>
-<span><span class="signal-cell-desc">Flashes received on Earth:</span>
-<span class="secondary-text" id="flashes-received-on-earth">0</span></span>
+</td>
+<td>
+<input id="checkbox-ship-signals" onchange="update({showShipSignals: this.checked})" type="checkbox"/>
+</td>
+</tr>
+<tr>
+<td>Flashes sent from ship:</td>
+<td class="align-right">
+<span class="highlighted-text" id="flashes-sent-from-ship">0</span>
+</td>
+</tr>
+<tr>
+<td>Flashes received on Earth:</td>
+<td class="align-right">
+<span class="highlighted-text" id="flashes-received-on-earth">0</span>
+</td>
+</tr>
+</table>
 </div>
 </div>
+</div>
+<div style="display: inline-block; margin-left: 100px;">
+<svg id="viz" style="display: inline-block;"></svg>
 </div>
 </div>
 <script type="text/javascript">"use strict";
@@ -305,7 +318,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -444,7 +457,7 @@ return Object.entries(grouped);
 }
 return grouped;
 }
-/* global groupBy applyGraphicalObjs defineArrowhead STANDARD_COLORS */
+/* global groupBy applyGraphicalObjs defineArrowhead lorentzFactor STANDARD_COLORS */
 const AXES = {
 x: { min: -0.05, max: 0.6 },
 y: { min: -0.05, max: 1.1 },
@@ -509,8 +522,8 @@ return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>')
 }
 const dotRadius = 4;
 const colors = {
-light: STANDARD_COLORS.secondary,
-lighterLight: d3.interpolateRgb(STANDARD_COLORS.secondary, "white")(0.6),
+earthLight: STANDARD_COLORS.secondary,
+spaceshipLight: STANDARD_COLORS.highlighted,
 earth: STANDARD_COLORS.tertiary,
 ship: STANDARD_COLORS.quaternary,
 };
@@ -519,6 +532,7 @@ const line = d3
 .line()
 .x(p => p[0])
 .y(p => p[1]);
+const N_EARTH_YEARS = 26;
 function getData({ v, t, showEarthSignals, showSpaceshipSignals }) {
 const turnaroundTime = AXES.t.max / 2;
 const hasTurnedAround = t > turnaroundTime;
@@ -568,15 +582,15 @@ stroke: colors.ship,
 },
 };
 data.push(earthPath, shipPath);
-const photonAttrs = { stroke: colors.light, "stroke-width": 1.5 };
+const photonAttrs = { stroke: colors.earthLight, "stroke-width": 1.5 };
 const signals = {
 earth: { sent: 0, received: 0 },
 ship: { sent: 0, received: 0 },
 };
-if (showEarthSignals) {
-const nPhotonsEmittedTotal = 27;
-for (let i = 1; i / nPhotonsEmittedTotal < t; ++i) {
-const photonYIntercept = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
+const nPhotonsEmittedByEarthTotal = N_EARTH_YEARS + 1;
+for (let i = 1; i / nPhotonsEmittedByEarthTotal < t; ++i) {
+const photonYIntercept =
+(i / nPhotonsEmittedByEarthTotal) * tToYScale(AXES.t.max);
 const photonIntersectsOutboundX = photonYIntercept / (1 / v - 1);
 const photonIntersectsInboundX = (1 - photonYIntercept) / (1 / v + 1);
 const naivePhotonX2 = Math.min(
@@ -588,6 +602,7 @@ const naivePhotonY2 = naivePhotonX2 + photonYIntercept;
 if (naivePhotonY2 < y) {
 signals.ship.received += 1;
 }
+if (showEarthSignals) {
 const photonY2 = Math.min(naivePhotonY2, y);
 const photonX2 = photonY2 - photonYIntercept;
 data.push({
@@ -603,17 +618,16 @@ y2: yScale(photonY2),
 });
 }
 }
-if (showSpaceshipSignals) {
 const spaceshipPhotonAttrs = [];
-const nPhotonsEmittedTotal = 11;
+const nPhotonsEmittedByShipTotal = N_EARTH_YEARS / lorentzFactor({ fracOfC: v });
 const xOrigin = xScale.invert(origin.x);
-for (let i = 1; i / nPhotonsEmittedTotal < t; ++i) {
+for (let i = 1; i / nPhotonsEmittedByShipTotal < t; ++i) {
 let x1, y1;
-if (i / nPhotonsEmittedTotal < turnaroundTime) {
-y1 = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
+if (i / nPhotonsEmittedByShipTotal < turnaroundTime) {
+y1 = (i / nPhotonsEmittedByShipTotal) * tToYScale(AXES.t.max);
 x1 = y1 * v;
 } else {
-y1 = (i / nPhotonsEmittedTotal) * tToYScale(AXES.t.max);
+y1 = (i / nPhotonsEmittedByShipTotal) * tToYScale(AXES.t.max);
 x1 = xOrigin + (y1 - AXES.t.max) * -v;
 }
 signals.ship.sent += 1;
@@ -621,6 +635,7 @@ const naivePhotonY2 = -(xOrigin - x1) + y1;
 if (naivePhotonY2 < y) {
 signals.earth.received += 1;
 }
+if (showSpaceshipSignals) {
 const y2 = Math.min(naivePhotonY2, y);
 const x2 = -(y2 - y1) + x1;
 spaceshipPhotonAttrs.push({
@@ -635,9 +650,10 @@ data.push(
 shape: "line",
 classes: [],
 attrs: {
-...attrs,
 ...photonAttrs,
-stroke: colors.lighterLight,
+...attrs,
+"stroke-width": 1,
+stroke: colors.spaceshipLight,
 },
 })),
 );
@@ -710,6 +726,10 @@ frameToTimeInterpolator: d3.scaleLinear(
 [+sliders.t.min, +sliders.t.max],
 ),
 };
+const buttons = {
+playPause: document.getElementById("btn-play-pause"),
+reset: document.getElementById("btn-reset"),
+};
 function update({ v, t, showEarthSignals, showSpaceshipSignals, userInput }) {
 if (userInput === undefined) {
 userInput = true;
@@ -721,7 +741,7 @@ sliders.v.value = v;
 }
 v = +v;
 valueText.v.innerHTML = fmtFloat(v, 3);
-valueText.t.innerHTML = fmtFloat(v * 10, 2);
+valueText.t.innerHTML = fmtFloat(v * 13, 2);
 if (t === undefined) {
 t = sliders.t.value;
 } else {
@@ -734,6 +754,7 @@ stopAnimation();
 }
 }
 t = +t;
+buttons.reset.disabled = t <= 0;
 if (showEarthSignals === undefined) {
 showEarthSignals = checkboxes.earthSignals.checked;
 } else if (!userInput) {
@@ -773,13 +794,9 @@ span.innerText = count;
 // }
 }
 }
-divs.earthSignals.style.visibility = showEarthSignals ? "visible" : "hidden";
-divs.shipSignals.style.visibility = showSpaceshipSignals ? "visible" : "hidden";
+// divs.earthSignals.style.visibility = showEarthSignals ? "visible" : "hidden";
+// divs.shipSignals.style.visibility = showSpaceshipSignals ? "visible" : "hidden";
 }
-const buttons = {
-playPause: document.getElementById("btn-play-pause"),
-reset: document.getElementById("btn-reset"),
-};
 function stopAnimation() {
 playbackInfo.isPlaying = false;
 clearInterval(playbackInfo.animationTimer);

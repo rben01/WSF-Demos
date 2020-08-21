@@ -2,8 +2,8 @@
 
 "use strict";
 
-const CANVAS_WIDTH = 580;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 700;
+const CANVAS_HEIGHT = 400;
 const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {
 	xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
@@ -19,12 +19,20 @@ const svg = d3
 	.attr("height", CANVAS_HEIGHT)
 	.attr("background-color", "black");
 
-function getRelativisticKineticEnergy(fracOfC, mass) {
+function getRelativisticKineticEnergy(fracOfC, mass, fudge) {
+	if (fudge) {
+		fracOfC = parseFloat(fracOfC.toFixed(2));
+		mass = parseFloat(mass.toFixed(2));
+	}
 	const gamma = lorentzFactor({ fracOfC });
 	return (mass * (C / 1e8) * (C / 1e8) * (gamma - 1)) / 10;
 }
 
-function getNewtonianKineticEnergy(fracOfC, mass) {
+function getNewtonianKineticEnergy(fracOfC, mass, fudge) {
+	if (fudge) {
+		fracOfC = parseFloat(fracOfC.toFixed(2));
+		mass = parseFloat(mass.toFixed(2));
+	}
 	return (0.5 * mass * fracOfC * fracOfC * (C / 1e8) * (C / 1e8)) / 10;
 }
 
@@ -292,7 +300,7 @@ function getGraphData(speed, mass) {
 					d: curve(newtonianData),
 					...graphAttrs,
 					...graphAttrs.common,
-					stroke: galileanFgColor,
+					stroke: "#888",
 					"clip-path": "url(#graph-clip)",
 					// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 				},
@@ -304,7 +312,7 @@ function getGraphData(speed, mass) {
 					d: curve(relativisticData),
 					...graphAttrs,
 					...graphAttrs.common,
-					stroke: STANDARD_COLORS.highlighted,
+					stroke: "#eee",
 					"clip-path": "url(#graph-clip)",
 					// "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 				},
@@ -335,7 +343,7 @@ function getGraphData(speed, mass) {
 					x2: x,
 					y1: galileanY,
 					y2: galileanY,
-					stroke: galileanFgColor,
+					stroke: STANDARD_COLORS.quaternary,
 					...commonLineAttrs,
 				},
 			},
@@ -347,8 +355,8 @@ function getGraphData(speed, mass) {
 					cx: x,
 					cy: galileanY,
 					r: 4,
-					fill: galileanFgColor,
-					stroke: "#bbb",
+					fill: "white",
+					stroke: "#ddd",
 				},
 			},
 			{
@@ -384,7 +392,7 @@ function getGraphData(speed, mass) {
 					cx: x,
 					cy: y,
 					r: 4,
-					fill: STANDARD_COLORS.secondary,
+					fill: "white",
 					stroke: "#ddd",
 				},
 			},
@@ -445,8 +453,8 @@ function update({ v, m }) {
 	textSpans.v.innerHTML = fmtFloat(v, 2);
 	textSpans.m.innerHTML = fmtFloat(m, 2);
 
-	const keRltv = getRelativisticKineticEnergy(v, m);
-	const keNtwn = getNewtonianKineticEnergy(v, m);
+	const keRltv = getRelativisticKineticEnergy(v, m, true);
+	const keNtwn = getNewtonianKineticEnergy(v, m, true);
 
 	textSpans.keRltv.innerHTML = fmtPow10(keRltv, 2, 17);
 	textSpans.keNtwn.innerHTML = fmtPow10(keNtwn, 2, 17);

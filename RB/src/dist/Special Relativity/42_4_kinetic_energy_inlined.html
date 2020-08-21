@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -195,71 +196,65 @@ text-align: center;
 .galilean {
 color: #aaaf;
 }
+body {
+width: 700px;
+}
 .slider-label-custom {
 min-width: 7.6em;
 }
 td {
 height: 1.6em;
+padding-left: 0;
+margin-left: 0;
+}
+tr {
+padding-left: 0;
+margin-left: 0;
+}
+table {
+padding-left: 0;
+margin-left: -1px;
 }
 .top-sliders-sect {
 padding-left: 50px;
 }
 </style>
 <div class="top-sliders-sect">
-<span>
+<div class="slider-container">
 <label>
 <span class="slider-label slider-label-custom">
 Rest mass (𝑚<span class="subscript">0</span><span class="operator">)</span>:
 </span>
-<input id="input-m" max="2" min="1" name="input-m" oninput="update({m:this.value})" step=".001" type="range" value="1"/>
-</label> </span><br/><span>
+<input id="input-m" max="2" min="1" name="input-m" oninput="update({m:this.value})" step=".001" type="range" value="1"/> </label><br/><span>𝑚<span class="subscript">0</span> =
+<span class="sci-num highlighted-text" id="text-m">0.000</span>kg</span>
+</div>
+<div class="slider-container">
 <label>
 <span class="slider-label slider-label-custom">
 Velocity (𝑣):
 </span>
-<input id="input-v" max="0.98" min="0.0" name="input-v" oninput="update({v:this.value})" step=".001" type="range" value="0"/>
-</label>
-</span>
+<input id="input-v" max="0.98" min="0.0" name="input-v" oninput="update({v:this.value})" step=".001" type="range" value="0"/> </label><br/>
+<span>𝑣 =
+<span class="sci-num highlighted-text" id="text-v">0.000</span>𝑐</span>
 </div>
-<div>
-<div style="display: inline-block; vertical-align: top; width: 10em;">
-<div style="height: 100px;"></div>
-<table>
+<table style="margin-top: 15px;">
 <tr>
-<td class="eqn-left">𝑚<span class="subscript">0</span></td>
-<td class="eqn-middle">=</td>
-<td class="eqn-right">
-<span class="sci-num highlighted-text" id="text-m">0.000</span>kg
-</td>
-</tr>
-<tr>
-<td class="eqn-left">𝑣</td>
-<td class="eqn-middle">=</td>
-<td class="eqn-right">
-<span class="sci-num highlighted-text" id="text-v">0.000</span>𝑐
-</td>
-</tr>
-<tr>
-<td style="height: 50px;"></td>
-</tr>
-<tr>
-<td class="eqn-left">KE<span class="subscript">SR</span></td>
+<td class="eqn-left">KE<span class="subscript">Einstein</span></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
 <span class="secondary-text sci-num" id="text-ke-sr">0.000<span class="operator">·</span>10<span class="superscript">17</span></span>J
 </td>
 </tr>
 <tr>
-<td class="eqn-left">
-KE<span class="subscript">Newton</span>
-</td>
+<td class="">KE<span class="subscript">Newton</span></td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="sci-num" id="text-ke-newton" style="color: #bbb;">0.000<span class="operator">·</span>10<span class="superscript">17</span></span>J
+<span class="sci-num quaternary-text" id="text-ke-newton">0.000<span class="operator">·</span>10<span class="superscript">17</span></span>J
 </td>
 </tr>
 </table>
 </div>
+<div style="text-align: center; margin-top: 20px;">
 <div style="display: inline-block; vertical-align: bottom;">
 <svg class="viz-canvas" id="viz" style="margin: auto;" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
@@ -309,7 +304,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -473,8 +468,8 @@ return d3Obj;
 };
 /* globals applyDatum C groupBy applyGraphicalObjs lorentzFactor STANDARD_COLORS */
 "use strict";
-const CANVAS_WIDTH = 580;
-const CANVAS_HEIGHT = 500;
+const CANVAS_WIDTH = 700;
+const CANVAS_HEIGHT = 400;
 const AXIS_MARGINS = { top: 0.13, bottom: 0.08, left: 0.13, right: 0.17 };
 const AX_BOUNDS = {
 xMin: CANVAS_WIDTH * AXIS_MARGINS.left,
@@ -488,11 +483,19 @@ const svg = d3
 .attr("width", CANVAS_WIDTH)
 .attr("height", CANVAS_HEIGHT)
 .attr("background-color", "black");
-function getRelativisticKineticEnergy(fracOfC, mass) {
+function getRelativisticKineticEnergy(fracOfC, mass, fudge) {
+if (fudge) {
+fracOfC = parseFloat(fracOfC.toFixed(2));
+mass = parseFloat(mass.toFixed(2));
+}
 const gamma = lorentzFactor({ fracOfC });
 return (mass * (C / 1e8) * (C / 1e8) * (gamma - 1)) / 10;
 }
-function getNewtonianKineticEnergy(fracOfC, mass) {
+function getNewtonianKineticEnergy(fracOfC, mass, fudge) {
+if (fudge) {
+fracOfC = parseFloat(fracOfC.toFixed(2));
+mass = parseFloat(mass.toFixed(2));
+}
 return (0.5 * mass * fracOfC * fracOfC * (C / 1e8) * (C / 1e8)) / 10;
 }
 const sliders = {
@@ -737,7 +740,7 @@ attrs: {
 d: curve(newtonianData),
 ...graphAttrs,
 ...graphAttrs.common,
-stroke: galileanFgColor,
+stroke: "#888",
 "clip-path": "url(#graph-clip)",
 // "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 },
@@ -749,7 +752,7 @@ attrs: {
 d: curve(relativisticData),
 ...graphAttrs,
 ...graphAttrs.common,
-stroke: STANDARD_COLORS.highlighted,
+stroke: "#eee",
 "clip-path": "url(#graph-clip)",
 // "stroke-dasharray": baseObject === ROCKET ? null : "3 1",
 },
@@ -776,7 +779,7 @@ x1: AX_BOUNDS.xMin,
 x2: x,
 y1: galileanY,
 y2: galileanY,
-stroke: galileanFgColor,
+stroke: STANDARD_COLORS.quaternary,
 ...commonLineAttrs,
 },
 },
@@ -788,8 +791,8 @@ attrs: {
 cx: x,
 cy: galileanY,
 r: 4,
-fill: galileanFgColor,
-stroke: "#bbb",
+fill: "white",
+stroke: "#ddd",
 },
 },
 {
@@ -825,7 +828,7 @@ attrs: {
 cx: x,
 cy: y,
 r: 4,
-fill: STANDARD_COLORS.secondary,
+fill: "white",
 stroke: "#ddd",
 },
 },
@@ -877,8 +880,8 @@ sliders.m.value = m;
 m = +m;
 textSpans.v.innerHTML = fmtFloat(v, 2);
 textSpans.m.innerHTML = fmtFloat(m, 2);
-const keRltv = getRelativisticKineticEnergy(v, m);
-const keNtwn = getNewtonianKineticEnergy(v, m);
+const keRltv = getRelativisticKineticEnergy(v, m, true);
+const keNtwn = getNewtonianKineticEnergy(v, m, true);
 textSpans.keRltv.innerHTML = fmtPow10(keRltv, 2, 17);
 textSpans.keNtwn.innerHTML = fmtPow10(keNtwn, 2, 17);
 const allData = getGraphData(v, m);

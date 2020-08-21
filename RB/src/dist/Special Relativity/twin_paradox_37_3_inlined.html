@@ -13,9 +13,12 @@ background-color: black;
 color: white;
 font-size: 21px;
 font-family: sans-serif;
+line-height: 1.8em;
 }
 .slider-container {
-line-height: 1em;
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
 }
 .play-button {
 margin-top: 1.5em;
@@ -48,7 +51,6 @@ cursor: default;
 .slider-label {
 margin-right: 1em;
 display: inline-block;
-padding-bottom: 10px;
 }
 .highlighted-text {
 color: #5df;
@@ -116,7 +118,6 @@ height: 8px;
 padding: 0 0px;
 background: #8b8f92;
 border-radius: 2px;
-margin-top: 25px;
 position: relative;
 bottom: 4px;
 }
@@ -178,16 +179,22 @@ margin-right: 5px;
 </style>
 <div>
 <div>
-<span><label><span class="slider-label slider-label-custom">Velocity (𝑣):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".01" type="range" value=".5"/></label></span><br/><span><label><span class="slider-label slider-label-custom">Turn-around time (Earth) (𝑇<span class="operator">)</span>:</span><input id="input-t" max=".8" min=".12" oninput="update({t:this.value})" step=".01" type="range" value="6"/></label></span>
+<span class="slider-container"><label><span class="slider-label slider-label-custom">Velocity (𝑣):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".01" type="range" value=".5"/></label>
+<br/>
+<span>𝑣 = ±
+<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span></span><br/><span class="slider-container"><label><span class="slider-label slider-label-custom">Turnaround time (Earth) (𝑇<span class="operator">)</span>:</span><input id="input-t" max=".8" min=".24" oninput="update({t:this.value})" step=".01" type="range" value="0"/></label><br/><span>𝑇 =
+<span class="sci-num highlighted-text" id="text-t"></span>yrs</span>
+</span>
 </div>
 <br/>
 <div style="line-height: 2em;">
 <span><button class="play-button demo-button" id="btn-e" onclick="clickButtonEarthPerspective()">
 Earth Perspective
-</button></span>
+</button></span><button class="play-button demo-button" id="btn-ss" onclick="clickSpaceshipPerspective()">
+Spaceship Axes
+</button>
 <br/>
-<span><button class="play-button demo-button" id="btn-ss" onclick="clickSpaceshipPerspective()">
-Spaceship Perspective</button><button class="play-button demo-button" id="btn-ob" onclick="clickOutboundPerspective()">
+<span><button class="play-button demo-button" id="btn-ob" onclick="clickOutboundPerspective()">
 Outbound Journey</button><button class="play-button demo-button" id="btn-fc" onclick="clickFrameChangePerspective()">
 Frame Change</button><button class="play-button demo-button" id="btn-ib" onclick="clickInboundPerspective()">
 Inbound Journey
@@ -196,21 +203,10 @@ Inbound Journey
 </div>
 <div>
 <div style="display: inline-block;">
-<div style="padding-left: 200px;">
-<span>𝑣 =
-<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span>
-</div>
 <svg id="viz" style="display: inline-block;"></svg>
 </div>
 <div style="display: inline-block; vertical-align: top;">
 <table>
-<tr>
-<td class="eqn-left">𝑇</td>
-<td class="eqn-middle">=</td>
-<td class="eqn-right">
-<span class="sci-num highlighted-text" id="text-t"></span>yrs
-</td>
-</tr>
 <tr id="row-t1">
 <td class="eqn-left">𝑇₁</td>
 <td class="eqn-middle">=</td>
@@ -277,7 +273,7 @@ t.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(t, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -588,6 +584,15 @@ y2: turnaround.t,
 stroke: "#bbb",
 },
 ],
+extraTexts: [
+{
+text: "𝑇",
+attrs: {
+x: origin.x - 10,
+y: turnaround.t,
+},
+},
+],
 });
 return [lines, circles, texts];
 }
@@ -777,7 +782,7 @@ const textDy = textDd * cosTheta;
 const texts = [
 slope < 1
 ? {
-text: "𝑥′′",
+text: "𝑥″",
 attrs: {
 x: xScale(lineEndX - textDx * 0.8),
 y: yScale(lineEndY - textDy * 2),
@@ -786,7 +791,7 @@ y: yScale(lineEndY - textDy * 2),
 },
 }
 : {
-text: "𝑡′′",
+text: "𝑡″",
 attrs: {
 x: xScale(lineEndX + textDx * 0.8),
 y: yScale(lineEndY + textDy * 0.5),
@@ -935,7 +940,7 @@ inbound: document.getElementById("btn-ib"),
 };
 const buttonTitles = {
 earth: "Earth Perspective",
-spaceship: "Spaceship Perspective",
+spaceship: "Spaceship Axes",
 outbound: "Outbound Perspective",
 frameChange: "Frame Change",
 inbound: "Inbound Perspective",
@@ -954,8 +959,8 @@ ssTime: document.getElementById("span-ss-time"),
 };
 const timeScale = d3
 .scaleLinear()
-.domain([0, +sliders.t.max])
-.range([0, 15]);
+.domain([+sliders.t.min, +sliders.t.max])
+.range([5, 15]);
 function update({ v, t, func }) {
 if (typeof v === "undefined") {
 v = sliders.v.value;
@@ -984,6 +989,7 @@ svgNode.appendChild(elems[i]);
 }
 textItems.v.innerHTML = fmtFloat(v, 2);
 textItems.t.innerHTML = fmtFloat(timeScale(t), 2);
+console.log(t, timeScale(t));
 const { turnaround } = getPathPoints({ v, t });
 const t1 = yScale.invert(turnaround.t) - v * xScale.invert(turnaround.x);
 textItems.t1.innerHTML = fmtFloat(timeScale(t1), 2);
