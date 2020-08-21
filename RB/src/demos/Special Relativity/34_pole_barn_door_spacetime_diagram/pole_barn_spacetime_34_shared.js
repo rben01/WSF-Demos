@@ -294,8 +294,6 @@ const poleLength = 1.3 * barnLength;
 
 const radius = d3.scaleLinear().domain([0, 8]).range([1.75, 1]).clamp(true);
 
-const dashes = "4 4";
-
 const line = d3
 	.line()
 	.x(p => xScale(p[0]))
@@ -334,6 +332,7 @@ function makeSubscript(text) {
 const BARN = 0;
 const POLE = 1;
 const BOTH = 2;
+// eslint-disable-next-line no-unused-vars
 const NONE = 3;
 
 function getSlices({ v, slicesToShow, perspective }) {
@@ -351,6 +350,13 @@ function getSlices({ v, slicesToShow, perspective }) {
 			"black",
 		)(isBarn ? 0.4 : 0.5);
 
+		const opacity =
+			slicesToShow === BOTH ||
+			(isBarn && slicesToShow === BARN) ||
+			(!isBarn && slicesToShow === POLE)
+				? 1
+				: 0;
+
 		return sliceYIntercepts.map(y0 => {
 			const x1 = AXES.x.min;
 			const x2 = AXES.x.max;
@@ -363,6 +369,7 @@ function getSlices({ v, slicesToShow, perspective }) {
 					x2: xScale(x2),
 					y2: yScale(y0 + slope * x2),
 					stroke: stroke,
+					opacity,
 					"stroke-width": 1.5,
 					"stroke-dasharray": "5 7",
 					"clip-path": `url(#axes-clip)`,
@@ -385,17 +392,7 @@ function getSlices({ v, slicesToShow, perspective }) {
 		return _getSliceAttrs(slope, gammaPole, false);
 	}
 
-	if (slicesToShow === NONE) {
-		return [];
-	} else if (slicesToShow === BARN) {
-		return getBarnSliceAttrs();
-	} else if (slicesToShow === POLE) {
-		return getPoleSliceAttrs();
-	} else if (slicesToShow === BOTH) {
-		return [...getBarnSliceAttrs(), ...getPoleSliceAttrs()];
-	} else {
-		throw new Error(`Unexpected which: ${slicesToShow}`);
-	}
+	return [...getBarnSliceAttrs(), ...getPoleSliceAttrs()];
 }
 
 let futureOpacity = null;
@@ -867,6 +864,8 @@ function update({
 		perspective === BARN
 			? getBarnPerspective({ v, t, slices })
 			: getPolePerspective({ v, t, slices });
+
+	console.log(data);
 
 	if (svg.selectAll(".c").size() === 0) {
 		applyGraphicalObjs(svg, data, { transition });

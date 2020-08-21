@@ -23,7 +23,8 @@ function isIterable(obj) {
 }
 
 function applyDatum(datum, { transition } = {}) {
-	const d3Obj = d3.select(this).datum(datum);
+	const d3Obj = d3.select(this);
+	d3Obj.datum(datum);
 
 	if (typeof datum.class !== "undefined") {
 		d3Obj.classed(datum.class, true);
@@ -46,12 +47,12 @@ function applyDatum(datum, { transition } = {}) {
 	}
 
 	if (typeof datum.text !== "undefined") {
-		t.text(datum.text);
+		d3Obj.text(datum.text);
 	}
 
 	if (typeof datum.children !== "undefined") {
 		// eslint-disable-next-line no-use-before-define
-		applyGraphicalObjs(d3Obj, () => datum.children, { transition });
+		applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
 	}
 }
 
@@ -67,6 +68,10 @@ function _addGraphicalObjs(sel, dataFunc) {
 
 // eslint-disable-next-line no-unused-vars
 function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+	if (typeof data === "function") {
+		console.log("data", sel, data());
+	}
+
 	const s = sel
 		.selectAll(selector)
 		.data(data, key)
@@ -76,6 +81,9 @@ function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } =
 			exit => exit.remove(),
 		)
 		.each(function (d) {
+			if (transition) {
+				console.log("d", sel, this, d);
+			}
 			applyDatum.call(this, d, { transition });
 		});
 

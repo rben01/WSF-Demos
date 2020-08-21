@@ -179,14 +179,17 @@ margin-right: 5px;
 </style>
 <div>
 <div>
-<span class="slider-container"><label><span class="slider-label slider-label-custom">Velocity (𝑣):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".01" type="range" value=".5"/></label>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Velocity (𝑣):</span><input id="input-v" max=".99" min="0" oninput="update({v:this.value})" step=".01" type="range" value=".5"/></label>
 <br/>
 <span>𝑣 = ±
-<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span></span><br/><span class="slider-container"><label><span class="slider-label slider-label-custom">Turnaround time (Earth) (𝑇<span class="operator">)</span>:</span><input id="input-t" max=".8" min=".24" oninput="update({t:this.value})" step=".01" type="range" value="0"/></label><br/><span>𝑇 =
-<span class="sci-num highlighted-text" id="text-t"></span>yrs</span>
-</span>
+<span class="sci-num highlighted-text" id="text-v"></span>𝑐</span>
 </div>
-<br/>
+<div class="slider-container">
+<label><span class="slider-label slider-label-custom">Turnaround time (Earth) (𝑇<span class="operator">)</span>:</span><input id="input-t" max=".8" min=".24" oninput="update({t:this.value})" step=".01" type="range" value="0"/></label><br/><span>𝑇 =
+<span class="sci-num highlighted-text" id="text-t"></span>yrs</span>
+</div>
+</div>
 <div style="line-height: 2em;">
 <span><button class="play-button demo-button" id="btn-e" onclick="clickButtonEarthPerspective()">
 Earth Perspective
