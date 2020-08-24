@@ -1,13 +1,13 @@
 /* global lorentzFactor applyGraphicalObjs defineArrowhead STANDARD_COLORS */
 
 const AXES = {
-	x: { min: -0.5, max: 1.6 },
+	x: { min: -0.5, max: 1.4 },
 	y: { min: -0.1, max: 1.8 },
 };
 
 const MARGINS = { t: 50, b: 10, l: 5, r: 10 };
 
-const HEIGHT = 400;
+const HEIGHT = 450;
 const WIDTH = (HEIGHT * (AXES.x.max - AXES.x.min)) / (AXES.y.max - AXES.y.min);
 
 const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
@@ -74,7 +74,7 @@ const colors = {
 	path: STANDARD_COLORS.secondary,
 	jump: STANDARD_COLORS.tertiary,
 	awayTime: STANDARD_COLORS.quaternary,
-	towardTime: "#aaa",
+	towardTime: "#bbb",
 };
 const dashes = "4 4";
 
@@ -175,6 +175,174 @@ function getPathObjects({ v, t, extraLines, extraTexts, circleToKeep }) {
 	return { circles, lines, texts, origin, turnaround, end };
 }
 
+function getInboundAxes({
+	v,
+	t,
+	origin,
+	turnaround,
+	end,
+	includeJumpInfo,
+	includeDirectionLabel,
+}) {
+	const EPS = 0.01;
+	const spacetimeLineLength = 1.7 * t;
+	function getLine(slope) {
+		// Technically this is the negative of the slope
+		const cosTheta = 1 / Math.sqrt(1 + slope * slope);
+		const sinTheta = 1 / Math.sqrt(1 + 1 / (slope * slope));
+		const _origLineEndX =
+			xScale.invert(turnaround.x) - spacetimeLineLength * cosTheta;
+		const _origLineEndY =
+			yScale.invert(turnaround.t) + spacetimeLineLength * sinTheta;
+		const adjustedSpacetimeLineLength =
+			_origLineEndX < AXES.x.min + 0.17
+				? (xScale.invert(turnaround.x) - (AXES.x.min + 0.17)) / cosTheta
+				: _origLineEndY > AXES.y.max + 0.17
+				? (AXES.y.max + 0.17 - yScale.invert(turnaround.t)) / sinTheta
+				: spacetimeLineLength;
+
+		const lineEndX =
+			xScale.invert(turnaround.x) - adjustedSpacetimeLineLength * cosTheta;
+		const lineEndY =
+			yScale.invert(turnaround.t) + adjustedSpacetimeLineLength * sinTheta;
+
+		const lineStartX = slope < 1 ? turnaround.x : end.x;
+		const lineStartY = slope < 1 ? turnaround.t : end.t;
+
+		const dx = -(slope < 1 ? EPS : EPS / slope);
+		const dy = slope < 1 ? EPS * slope : EPS;
+		const lines = [
+			{
+				x1: xScale(lineEndX),
+				y1: yScale(lineEndY),
+				x2: lineStartX,
+				y2: lineStartY,
+				stroke: "white",
+			},
+			{
+				x1: xScale(lineEndX),
+				y1: yScale(lineEndY),
+				x2: xScale(lineEndX + dx),
+				y2: yScale(lineEndY + dy),
+				stroke: "white",
+				"stroke-dasharray": null,
+				"marker-end": `url(#${ARROWHEAD_ID})`,
+			},
+		];
+
+		const textDd = 0.06;
+		const textDx = textDd * sinTheta;
+		const textDy = textDd * cosTheta;
+		const texts = [
+			slope < 1
+				? {
+						text: "𝑥″",
+						attrs: {
+							x: xScale(lineEndX - textDx * 0.8),
+							y: yScale(lineEndY - textDy * 2),
+							"dominant-baseline": "top",
+							"text-anchor": "end",
+						},
+				  }
+				: {
+						text: "𝑡″",
+						attrs: {
+							x: xScale(lineEndX + textDx * 0.8),
+							y: yScale(lineEndY + textDy * 0.5),
+							"dominant-baseline": "bottom",
+							"text-anchor": "begin",
+						},
+				  },
+		];
+
+		const sliceLabels =
+			includeDirectionLabel && slope >= 1
+				? [
+						{
+							text: "Inbound",
+							attrs: {
+								x: xScale(lineEndX) + 40,
+								y: yScale(lineEndY),
+								"dominant-baseline": "bottom",
+								"text-anchor": "begin",
+							},
+						},
+				  ]
+				: [];
+
+		return { extraLines: lines, extraTexts: [...texts, ...sliceLabels] };
+	}
+
+	const tObjs = getLine(1 / v);
+	const xObjs = getLine(v);
+
+	const timeSliceSlope = v;
+	const timeSliceMinYIntercept =
+		yScale.invert(turnaround.t) + timeSliceSlope * xScale.invert(turnaround.x);
+	const awayYIntercept =
+		yScale.invert(turnaround.t) - timeSliceSlope * xScale.invert(turnaround.x);
+	return {
+		extraLines: [
+			...tObjs.extraLines,
+			...xObjs.extraLines,
+			...(includeJumpInfo
+				? [
+						{
+							x1: origin.x,
+							y1: origin.t,
+							x2: origin.x,
+							y2: yScale(awayYIntercept),
+							"stroke-width": 2,
+							stroke: colors.awayTime,
+							"stroke-dasharray": null,
+						},
+						{
+							x1: origin.x,
+							y1: yScale(awayYIntercept),
+							x2: origin.x,
+							y2: yScale(timeSliceMinYIntercept),
+							"stroke-width": 2,
+							stroke: colors.jump,
+							"stroke-dasharray": null,
+						},
+				  ]
+				: []),
+		],
+		extraTexts: [
+			...tObjs.extraTexts,
+			...xObjs.extraTexts,
+			...(includeJumpInfo
+				? [
+						{
+							shape: "text",
+							class: "c",
+							text: "𝑇₁",
+							attrs: {
+								x: xScale(0) - 10,
+								y: yScale(awayYIntercept),
+								fill: colors.awayTime,
+								"dominant-baseline": "bottom",
+								"text-anchor": "end",
+							},
+						},
+						{
+							shape: "text",
+							class: "c",
+							text: "𝑇₂",
+							attrs: {
+								x: xScale(0) - 10,
+								y: yScale(timeSliceMinYIntercept),
+								fill: STANDARD_COLORS.highlighted,
+								"dominant-baseline": "bottom",
+								"text-anchor": "end",
+							},
+						},
+				  ]
+				: []),
+		],
+	};
+}
+
 function getEarthPerspective({ v, t }) {
 	const { origin, turnaround } = getPathPoints({ v, t });
 
@@ -204,8 +372,14 @@ function getEarthPerspective({ v, t }) {
 	return [lines, circles, texts];
 }
 
-function getSpaceshipPerspectiveObjs({ v, t, circleToKeep }) {
-	const { origin, turnaround } = getPathPoints({ v, t });
+function getSpaceshipPerspectiveObjs({
+	v,
+	t,
+	circleToKeep,
+	includeJumpInfo,
+	includeDirectionLabel,
+}) {
+	const { origin, turnaround, end } = getPathPoints({ v, t });
 	const { extraLines, extraTexts } = (() => {
 		const EPS = 0.01;
 		const spacetimeLineLength = 1.7 * t;
@@ -264,7 +438,22 @@ function getSpaceshipPerspectiveObjs({ v, t, circleToKeep }) {
 					  },
 			];
 
-			return { extraLines: lines, extraTexts: texts };
+			const sliceLabels =
+				includeDirectionLabel && slope < 1
+					? [
+							{
+								text: "Outbound",
+								attrs: {
+									x: xScale(lineEndX) - 5,
+									y: yScale(lineEndY) - 30,
+									"dominant-baseline": "middle",
+									"text-anchor": "begin",
+								},
+							},
+					  ]
+					: [];
+
+			return { extraLines: lines, extraTexts: [...texts, ...sliceLabels] };
 		};
 
 		const tObjs = getLine(1 / v);
@@ -275,6 +464,18 @@ function getSpaceshipPerspectiveObjs({ v, t, circleToKeep }) {
 			extraTexts: [...tObjs.extraTexts, ...xObjs.extraTexts],
 		};
 	})();
+
+	const doublePrimeAxes = getInboundAxes({
+		v,
+		t,
+		origin,
+		turnaround,
+		end,
+		includeJumpInfo,
+		includeDirectionLabel,
+	});
+	extraLines.push(...doublePrimeAxes.extraLines);
+	extraTexts.push(...doublePrimeAxes.extraTexts);
 
 	return getPathObjects({
 		v,
@@ -290,6 +491,8 @@ function getSpaceshipPerspective({ v, t }) {
 		v,
 		t,
 		circleToKeep: 0,
+		includeJumpInfo: false,
+		includeDirectionLabel: true,
 	});
 	return [lines, circles, texts];
 }
@@ -302,6 +505,8 @@ function getOutboundPerspective({ v, t }) {
 		v,
 		t,
 		circleToKeep: 1,
+		includeJumpInfo: false,
+		includeDirectionLabel: false,
 	});
 	const timeSliceSlope = v;
 	const timeSliceMaxYIntercept =
@@ -357,142 +562,15 @@ function getOutboundPerspective({ v, t }) {
 
 function getInboundJourneyObjs({ v, t, circleToKeep }) {
 	const { origin, turnaround, end } = getPathPoints({ v, t });
-	const { extraLines, extraTexts } = (() => {
-		const EPS = 0.01;
-		const spacetimeLineLength = 1.7 * t;
-		const getLine = slope => {
-			// Technically this is the negative of the slope
-			const cosTheta = 1 / Math.sqrt(1 + slope * slope);
-			const sinTheta = 1 / Math.sqrt(1 + 1 / (slope * slope));
-			const _origLineEndX =
-				xScale.invert(turnaround.x) - spacetimeLineLength * cosTheta;
-			const _origLineEndY =
-				yScale.invert(turnaround.t) + spacetimeLineLength * sinTheta;
-			const adjustedSpacetimeLineLength =
-				_origLineEndX < AXES.x.min + 0.17
-					? (xScale.invert(turnaround.x) - (AXES.x.min + 0.17)) / cosTheta
-					: _origLineEndY > AXES.y.max + 0.17
-					? (AXES.y.max + 0.17 - yScale.invert(turnaround.t)) / sinTheta
-					: spacetimeLineLength;
-
-			const lineEndX =
-				xScale.invert(turnaround.x) - adjustedSpacetimeLineLength * cosTheta;
-			const lineEndY =
-				yScale.invert(turnaround.t) + adjustedSpacetimeLineLength * sinTheta;
-
-			const lineStartX = slope < 1 ? turnaround.x : end.x;
-			const lineStartY = slope < 1 ? turnaround.t : end.t;
-
-			const dx = -(slope < 1 ? EPS : EPS / slope);
-			const dy = slope < 1 ? EPS * slope : EPS;
-			const lines = [
-				{
-					x1: xScale(lineEndX),
-					y1: yScale(lineEndY),
-					x2: lineStartX,
-					y2: lineStartY,
-					stroke: "white",
-				},
-				{
-					x1: xScale(lineEndX),
-					y1: yScale(lineEndY),
-					x2: xScale(lineEndX + dx),
-					y2: yScale(lineEndY + dy),
-					stroke: "white",
-					"stroke-dasharray": null,
-					"marker-end": `url(#${ARROWHEAD_ID})`,
-				},
-			];
-
-			const textDd = 0.06;
-			const textDx = textDd * sinTheta;
-			const textDy = textDd * cosTheta;
-			const texts = [
-				slope < 1
-					? {
-							text: "𝑥″",
-							attrs: {
-								x: xScale(lineEndX - textDx * 0.8),
-								y: yScale(lineEndY - textDy * 2),
-								"dominant-baseline": "top",
-								"text-anchor": "end",
-							},
-					  }
-					: {
-							text: "𝑡″",
-							attrs: {
-								x: xScale(lineEndX + textDx * 0.8),
-								y: yScale(lineEndY + textDy * 0.5),
-								"dominant-baseline": "bottom",
-								"text-anchor": "begin",
-							},
-					  },
-			];
-
-			return { extraLines: lines, extraTexts: texts };
-		};
-
-		const tObjs = getLine(1 / v);
-		const xObjs = getLine(v);
-
-		const timeSliceSlope = v;
-		const timeSliceMinYIntercept =
-			yScale.invert(turnaround.t) + timeSliceSlope * xScale.invert(turnaround.x);
-		const awayYIntercept =
-			yScale.invert(turnaround.t) - timeSliceSlope * xScale.invert(turnaround.x);
-		return {
-			extraLines: [
-				...tObjs.extraLines,
-				...xObjs.extraLines,
-				{
-					x1: origin.x,
-					y1: origin.t,
-					x2: origin.x,
-					y2: yScale(awayYIntercept),
-					"stroke-width": 2,
-					stroke: colors.awayTime,
-					"stroke-dasharray": null,
-				},
-				{
-					x1: origin.x,
-					y1: yScale(awayYIntercept),
-					x2: origin.x,
-					y2: yScale(timeSliceMinYIntercept),
-					"stroke-width": 2,
-					stroke: colors.jump,
-					"stroke-dasharray": null,
-				},
-			],
-			extraTexts: [
-				...tObjs.extraTexts,
-				...xObjs.extraTexts,
-				{
-					shape: "text",
-					class: "c",
-					text: "𝑇₁",
-					attrs: {
-						x: xScale(0) - 10,
-						y: yScale(awayYIntercept),
-						fill: colors.awayTime,
-						"dominant-baseline": "bottom",
-						"text-anchor": "end",
-					},
-				},
-				{
-					shape: "text",
-					class: "c",
-					text: "𝑇₂",
-					attrs: {
-						x: xScale(0) - 10,
-						y: yScale(timeSliceMinYIntercept),
-						fill: colors.jump,
-						"dominant-baseline": "bottom",
-						"text-anchor": "end",
-					},
-				},
-			],
-		};
-	})();
+	const { extraLines, extraTexts } = getInboundAxes({
+		v,
+		t,
+		origin,
+		turnaround,
+		end,
+		includeJumpInfo: true,
+		includeDirectionLabel: false,
+	});
 
 	return getPathObjects({
 		v,
@@ -595,13 +673,15 @@ const textItems = {
 	t: document.getElementById("text-t"),
 	t1: document.getElementById("text-t1"),
 	t2: document.getElementById("text-t2"),
-	ssTime: document.getElementById("text-ss-time"),
+	tJump: document.getElementById("text-jump"),
+	ssTime: document.getElementById("text-tp"),
 };
 
 const hidables = {
 	t1: document.getElementById("row-t1"),
 	t2: document.getElementById("row-t2"),
-	ssTime: document.getElementById("span-ss-time"),
+	ssTime: document.getElementById("row-tp"),
+	tJump: document.getElementById("row-jump"),
 };
 
 const timeScale = d3
@@ -643,7 +723,6 @@ function update({ v, t, func }) {
 
 	textItems.v.innerHTML = fmtFloat(v, 2);
 	textItems.t.innerHTML = fmtFloat(timeScale(t), 2);
-	console.log(t, timeScale(t));
 
 	const { turnaround } = getPathPoints({ v, t });
 	const t1 = yScale.invert(turnaround.t) - v * xScale.invert(turnaround.x);
@@ -652,10 +731,11 @@ function update({ v, t, func }) {
 	const t2 = yScale.invert(turnaround.t) + v * xScale.invert(turnaround.x);
 	textItems.t2.innerHTML = fmtFloat(timeScale(t2), 2);
 
-	const ssTime =
-		((func === persepctiveFuncs.inbound ? 2 : 1) * t) /
-		lorentzFactor({ fracOfC: v });
+	const ssTime = t / lorentzFactor({ fracOfC: v });
 	textItems.ssTime.innerHTML = fmtFloat(timeScale(ssTime), 2);
+
+	const tJump = t2 - t1;
+	textItems.tJump.innerHTML = fmtFloat(timeScale(tJump), 2);
 }
 
 function unhide(...visible) {
@@ -672,13 +752,7 @@ function unhide(...visible) {
 
 function checkButton(buttonName) {
 	Object.entries(buttons).forEach(([thisButtonName, button]) => {
-		const text = buttonTitles[thisButtonName];
-		const check = "✓";
-		const hiddenCheck = `<span style="opacity:0;">${check}</span>`;
-		button.innerHTML =
-			thisButtonName === buttonName
-				? `${hiddenCheck}${text} ${check}`
-				: `${hiddenCheck}${text} ${hiddenCheck}`;
+		button.disabled = thisButtonName === buttonName;
 	});
 }
 
@@ -714,14 +788,14 @@ function clickOutboundPerspective() {
 // eslint-disable-next-line no-unused-vars
 function clickFrameChangePerspective() {
 	update({ func: persepctiveFuncs.frameChange });
-	unhide(hidables.t1, hidables.t2, hidables.ssTime);
+	unhide(hidables.t1, hidables.t2, hidables.ssTime, hidables.tJump);
 	checkButton("frameChange");
 }
 
 // eslint-disable-next-line no-unused-vars
 function clickInboundPerspective() {
 	update({ func: persepctiveFuncs.inbound });
-	unhide(hidables.t1, hidables.t2, hidables.ssTime);
+	unhide(hidables.t1, hidables.t2, hidables.ssTime, hidables.tJump);
 	checkButton("inbound");
 }
 

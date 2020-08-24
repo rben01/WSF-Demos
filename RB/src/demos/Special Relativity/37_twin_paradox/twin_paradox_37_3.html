@@ -105,12 +105,19 @@
 				>
 			</div>
 		</div>
-		<div>
+		<div style="margin-top: 20px;">
 			<div style="display: inline-block;">
 				<svg id="viz" style="display: inline-block;"></svg>
 			</div>
 			<div style="display: inline-block; vertical-align: top;">
 				<table>
+					<tr id="row-tp">
+						<td class="eqn-left">𝑇<span class="operator">′</span></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-tp" class="sci-num secondary-text"></span>yrs
+						</td>
+					</tr>
 					<tr id="row-t1">
 						<td class="eqn-left">𝑇₁</td>
 						<td class="eqn-middle">=</td>
@@ -123,18 +130,27 @@
 						<td class="eqn-left">𝑇₂</td>
 						<td class="eqn-middle">=</td>
 						<td class="eqn-right">
-							<span id="text-t2" class="sci-num tertiary-text"></span>yrs
+							<span id="text-t2" class="sci-num highlighted-text"></span
+							>yrs
+						</td>
+					</tr>
+					<tr id="row-jump">
+						<td class="eqn-left">𝑇₂<span class="minus-sign">−</span>𝑇₁</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-jump" class="sci-num tertiary-text"></span
+							>yrs
 						</td>
 					</tr>
 				</table>
 			</div>
 		</div>
-		<div style="padding-left: 300px;">
+		<!-- <div style="padding-left: 300px;">
 			<span id="span-ss-time"
 				>Time on spaceship =
 				<span id="text-ss-time" class="sci-num secondary-text"></span>yrs</span
 			>
-		</div>
+		</div> -->
 		<script type="text/javascript" src="../../utils.js"></script>
 		<script type="text/javascript" src="./twin_paradox_37_3.js"></script>
 	</body>
