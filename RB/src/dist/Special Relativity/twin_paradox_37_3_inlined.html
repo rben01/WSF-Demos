@@ -307,21 +307,19 @@ return sel
 }
 // eslint-disable-next-line no-unused-vars
 function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
-if (typeof data === "function") {
-console.log("data", sel, data());
-}
 const s = sel
 .selectAll(selector)
 .data(data, key)
 .join(
 enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
 update => update,
-exit => exit.remove(),
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
 )
 .each(function (d) {
-if (transition) {
-console.log("d", sel, this, d);
-}
 applyDatum.call(this, d, { transition });
 });
 if (typeof cssClass !== "undefined") {

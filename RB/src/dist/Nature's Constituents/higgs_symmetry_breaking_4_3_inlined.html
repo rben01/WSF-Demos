@@ -240,7 +240,8 @@ return false;
 return typeof obj[Symbol.iterator] === "function";
 }
 function applyDatum(datum, { transition } = {}) {
-const d3Obj = d3.select(this).datum(datum);
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
 }
@@ -259,11 +260,11 @@ t.style(key, val);
 });
 }
 if (typeof datum.text !== "undefined") {
-t.text(datum.text);
+d3Obj.text(datum.text);
 }
 if (typeof datum.children !== "undefined") {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { transition });
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -283,7 +284,11 @@ const s = sel
 .join(
 enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
 update => update,
-exit => exit.remove(),
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
 )
 .each(function (d) {
 applyDatum.call(this, d, { transition });
