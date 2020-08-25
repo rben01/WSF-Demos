@@ -9,6 +9,7 @@ dependencies:
   - ipykernel
   - jupyter
   - pandas >=1.0
+  - matplotlib
   - numpy
   - scipy
   - plotly
