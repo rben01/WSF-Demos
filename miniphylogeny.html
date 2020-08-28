@@ -167,10 +167,10 @@
         }
 
         function text_input() {
-            var s = document.getElementById("input").value,
-                s2 = document.getElementById("input2").value,
-                s3 = document.getElementById("input3").value,
-                s4 = document.getElementById("input4").value;
+            var s = cap_first(document.getElementById("input").value),
+                s2 = document.getElementById("input2").value == "" ? s : cap_first(document.getElementById("input2").value),
+                s3 = document.getElementById("input3").value == "" ? s : cap_first(document.getElementById("input3").value),
+                s4 = document.getElementById("input4").value == "" ? s : cap_first(document.getElementById("input4").value);
             var o = taxonomy.filter(d => d.Species == s)[0].Order,
                 o2 = taxonomy.filter(d => d.Species == s2)[0].Order,
                 o3 = taxonomy.filter(d => d.Species == s3)[0].Order,
@@ -179,6 +179,10 @@
             click(o2);
             click(o3);
             click(o4);
+        }
+
+        function cap_first(s) {
+            return s[0].toUpperCase() + s.slice(1).toLowerCase();
         }
     </script>
 </body>
