@@ -41,13 +41,17 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <input type="text" id="input">
+    <input type="text" id="input"><br>
+    <input type="text" id="input2"><br>
+    <input type="text" id="input3"><br>
+    <input type="text" id="input4"><br>
     <button id="submit" onclick="text_input()">Submit</button>
+    <button id="clear" onclick="svg.selectAll('.highlight').remove(); selected=[]">Clear</button>
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1200></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
-            selected,
+            selected = [],
             root,
             taxonomy,
             arcgen = d3.arc();
@@ -71,7 +75,7 @@
                 .size([360, 460])
                 .separation(function (a, b) { return (a.parentId == b.parentId ? 1 : 2) / a.depth; });
 
-            d3.json("chordata_order.json").then(function (data) {
+            d3.json("minichordata_order.json").then(function (data) {
                 root = tree(d3.hierarchy(data[0]));
 
                 var link = g.selectAll(".link")
@@ -156,24 +160,25 @@
         }
 
         function click(o) {
-            if (selected) {
-                connect(selected, root.leaves().filter(n => n.data.id == o)[0]);
-                selected = null;
+            for (var s in selected) {
+                connect(selected[s], root.leaves().filter(n => n.data.id == o)[0]);
             }
-            else {
-                svg.selectAll(".highlight").remove();
-                selected = root.leaves().filter(n => n.data.id == o)[0];
-                d3.select("#" + o).append("circle")
-                    .attr("class", "highlight")
-                    .attr("r", 2.5)
-                    .style("fill", "#0F0");
-            }
+            selected.push(root.leaves().filter(n => n.data.id == o)[0])
         }
 
         function text_input() {
-            var s = document.getElementById("input").value;
-            var o = taxonomy.filter(d => d.Species == s)[0].Order;
-            click(o)
+            var s = document.getElementById("input").value,
+                s2 = document.getElementById("input2").value,
+                s3 = document.getElementById("input3").value,
+                s4 = document.getElementById("input4").value;
+            var o = taxonomy.filter(d => d.Species == s)[0].Order,
+                o2 = taxonomy.filter(d => d.Species == s2)[0].Order,
+                o3 = taxonomy.filter(d => d.Species == s3)[0].Order,
+                o4 = taxonomy.filter(d => d.Species == s4)[0].Order;
+            click(o);
+            click(o2);
+            click(o3);
+            click(o4);
         }
     </script>
 </body>
