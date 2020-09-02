@@ -631,10 +631,11 @@ function getPointKey(stage) {
 }
 
 const energyCurvePoints = [
-	{ x: 0.05, initial: 0.7, enzyme: 0.7, ligand: 0.7 },
-	{ x: 0.05, initial: 0.7, enzyme: 0.7, ligand: 0.7 },
-	{ x: 0.1, initial: 0.7, enzyme: 0.6, ligand: 0.6 },
-	{ x: 0.17, initial: 0.5, enzyme: 0.5, ligand: 0.08 },
+	{ x: 0.05, initial: 0.7, enzyme: 0.67, ligand: 0.7 },
+	{ x: 0.1, initial: 0.75, enzyme: 0.6, ligand: 0.6 },
+	{ x: 0.13, initial: 0.63, enzyme: 0.55, ligand: 0.0 },
+	{ x: 0.17, initial: 0.5, enzyme: 0.5, ligand: -0.17 },
+	{ x: 0.21, initial: 0.68, enzyme: 0.58, ligand: 0.13 },
 	{ x: 0.25, initial: 0.83, enzyme: 0.62, ligand: 0.62 },
 	{ x: 0.32, initial: 0.5, enzyme: 0.5, ligand: 0.5 },
 	{ x: 0.4, initial: 0.92, enzyme: 0.65, ligand: 0.65 },
@@ -646,6 +647,15 @@ const energyCurvePoints = [
 	{ x: 0.95, initial: 0.7, enzyme: 0.6, ligand: 0.6 },
 	{ x: 0.99, initial: 0.8, enzyme: 0.7, ligand: 0.7 },
 ];
+
+for (const point of energyCurvePoints) {
+	for (const key of Object.keys(point)) {
+		if (key === "x") {
+			continue;
+		}
+		point[key] += 0.1;
+	}
+}
 
 function getEnergyCurvePoints(stage) {
 	const k = getPointKey(stage);
@@ -895,7 +905,6 @@ function precomputeAndCachePathPoints(pathNode, nPoints) {
 const buttons = {
 	addEnzyme: document.getElementById("btn-add-enzyme"),
 	addLigand: document.getElementById("btn-add-ligand"),
-	energyWell: document.getElementById("btn-energy-well"),
 	reset: document.getElementById("btn-reset"),
 };
 function initialize() {
@@ -903,7 +912,6 @@ function initialize() {
 	buttons.addEnzyme.disabled = false;
 	buttons.addLigand.disabled = true;
 	buttons.reset.disabled = true;
-	buttons.energyWell.disabled = true;
 
 	const { background, foreground } = getBeakerOutlineData();
 
@@ -943,9 +951,9 @@ function initialize() {
 		},
 	]);
 	// Initial energy curve
-	const energyCurve = applyGraphicalObjs(graph, getEnergyCurveData(0));
+	const energyCurve = applyGraphicalObjs(graph, getEnergyCurveData(STAGES.initial));
 	precomputeAndCachePathPoints(energyCurve.node(), N_PRECOMPUTED_PATH_POINTS);
-	energyCurve.attr("d", graphLine(getEnergyCurvePoints(0)));
+	energyCurve.attr("d", graphLine(getEnergyCurvePoints(STAGES.initial)));
 
 	// Initial dipeptides on the graph
 	applyGraphicalObjs(graph, getGraphData(STAGES.initial));
@@ -1055,7 +1063,7 @@ const ligandExteriorAppearPreappearTime = 300;
 const ligandFadeDuration = 200;
 const defaultEnergyWellFadeDuration = 900;
 const graphRecedeDuration = 500;
-const energyWell3DTransitionDuration = 5000;
+const energyWell3DTransitionDuration = 7500;
 
 function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 	const {
@@ -1276,24 +1284,18 @@ function update(stage) {
 			.style("opacity", 1)
 			.end()
 			.then(() => {
-				d3.transition()
-					.duration(energyWell3DTransitionDuration)
-					.tween("3dEnergyWell", () => {
-						// eslint-disable-next-line no-use-before-define
-						return t => plotEnergyWell(t);
-					})
-					.transition()
-					.duration(energyWell3DTransitionDuration)
-					.tween("3dEnergyWell", () => {
-						// eslint-disable-next-line no-use-before-define
-						return t => plotEnergyWell(t + 1);
-					})
-					.transition()
-					.duration(energyWell3DTransitionDuration)
-					.tween("3dEnergyWell", () => {
-						// eslint-disable-next-line no-use-before-define
-						return t => plotEnergyWell(t + 2);
-					});
+				let t = d3;
+				for (let i = 0; i < 4; ++i) {
+					const ease = i === 3 ? d3.easeLinear : d3.easeCubic;
+					t = t
+						.transition()
+						.duration(energyWell3DTransitionDuration)
+						.ease(ease)
+						.tween("3dEnergyWell", () => {
+							// eslint-disable-next-line no-use-before-define
+							return t => plotEnergyWell(t + i);
+						});
+				}
 			});
 		bottomGraphContainer
 			.transition()
@@ -1303,7 +1305,7 @@ function update(stage) {
 
 		setTimeout(() => {
 			buttons.reset.disabled = false;
-		}, arcSweepDuration + defaultEnergyWellFadeDuration + 3 * energyWell3DTransitionDuration);
+		}, arcSweepDuration + defaultEnergyWellFadeDuration + 4 * energyWell3DTransitionDuration);
 
 		prevStage = stage;
 		return;
@@ -1330,6 +1332,8 @@ function update(stage) {
 			.style("opacity", 0)
 			.transition()
 			.style("display", "none");
+		// eslint-disable-next-line no-use-before-define
+		plotEnergyWell(0);
 	}
 
 	dropSubstanceIntoBeaker(stage);
@@ -1432,25 +1436,28 @@ function update(stage) {
 		thens: {
 			"graph-dipeptide-position": () => {
 				graph.selectAll(".temp-path").remove();
+
+				if (stage === STAGES.ligand) {
+					update(STAGES.energyWell);
+				}
 			},
 		},
 	});
-	console.log("td", totalTransitionDuration);
 
 	setTimeout(
 		() => {
-			const nextButton =
-				stage === STAGES.initial
-					? buttons.addEnzyme
-					: stage === STAGES.enzyme
-					? buttons.addLigand
-					: stage === STAGES.ligand
-					? buttons.energyWell
-					: stage === STAGES.energyWell
-					? buttons.reset
-					: null;
-			nextButton.disabled = false;
-			buttons.reset.disabled = stage === STAGES.initial;
+			if (stage !== STAGES.ligand) {
+				const nextButton =
+					stage === STAGES.initial
+						? buttons.addEnzyme
+						: stage === STAGES.enzyme
+						? buttons.addLigand
+						: stage === STAGES.energyWell
+						? buttons.reset
+						: null;
+				nextButton.disabled = false;
+				buttons.reset.disabled = stage === STAGES.initial;
+			}
 		},
 		stage === STAGES.initial
 			? 1000 + dipeptideResetDuration
@@ -1512,7 +1519,7 @@ function update(stage) {
 
 initialize();
 
-function get3DSphereDatum({ cx, cy, cz, color, lighting, peptide }) {
+function get3DSphereDatum({ cx, cy, cz, color, opacity, lighting, peptide }) {
 	return {
 		type: "mesh3d",
 		x: peptide.x.map(x => cx + x),
@@ -1522,6 +1529,7 @@ function get3DSphereDatum({ cx, cy, cz, color, lighting, peptide }) {
 		j: peptide.simplices.map(s => s[1]),
 		k: peptide.simplices.map(s => s[2]),
 		facecolor: peptide.simplices.map(() => color || COLORS.orange),
+		opacity,
 		lighting,
 	};
 }
@@ -1530,6 +1538,8 @@ function clamp(value, min, max) {
 	return value < min ? min : value > max ? max : value;
 }
 
+let firstPlot = true;
+const graphDiv = document.getElementById("energy-well-plot");
 // t has four stages:
 // [0, 1]: the initial beads are moving around the single energy well strip
 // [1, 2]: the well graph widens to four units wide
@@ -1570,7 +1580,7 @@ function plotEnergyWell(t) {
 			z: gridline.map(p => p[2] + 0.01),
 			line: {
 				width: 3,
-				color: "#89a",
+				color: "#789",
 			},
 			lighting: surfaceLighting,
 		})),
@@ -1585,7 +1595,7 @@ function plotEnergyWell(t) {
 		)
 		.clamp(true);
 
-	const wellToYInterpolator = d3
+	const wellIndexToYInterpolator = d3
 		.scaleLinear([-0.5, 3.5], [Math.min(...well.y), Math.max(...well.y)])
 		.clamp(true);
 
@@ -1599,152 +1609,214 @@ function plotEnergyWell(t) {
 	function xsToPoints(xs, wellIndex) {
 		const tClamped = clamp(t, 0, 1);
 		return xs.map(([x, yAdjust, zAdjust]) => {
-			const y = wellToYInterpolator(wellIndex) + yAdjust;
+			const y = wellIndexToYInterpolator(wellIndex) + yAdjust;
 
-			const xIndex = Math.floor(xIndexInterpolator.invert(x));
-			const yIndex = Math.floor(yIndexInterpolator.invert(y));
+			// Since the well is a grid of points (an xIndex-by-yIndex array of z
+			// values), we have to interpolate between the "raw" indices we get by
+			// naively inverting the values (which won't necessarily be integers) and
+			// the integer indices on the grid. So, we obtain the z-values  at the four
+			// corners of the smallest grid unit surrounding the selected point and
+			// interpolate between them
+			const xIndexRaw = xIndexInterpolator.invert(x);
+			const xLowerIndex = Math.floor(xIndexRaw);
+			const xUpperIndex = Math.ceil(xIndexRaw);
 
-			const z = well.grid[yIndex][xIndex] + tClamped * zAdjust * diameter;
+			const yIndexRaw = yIndexInterpolator.invert(y);
+			const yLowerIndex = Math.floor(yIndexRaw);
+			const yUpperIndex = Math.ceil(yIndexRaw);
+
+			function makeXInterpolator(yIndex) {
+				return d3.scaleLinear(
+					[xLowerIndex, xUpperIndex],
+					[well.grid[yIndex][xLowerIndex], well.grid[yIndex][xUpperIndex]],
+				);
+			}
+			const zAtXAndLowerY = makeXInterpolator(yLowerIndex)(xIndexRaw);
+			const zAtXAndUpperY = makeXInterpolator(yUpperIndex)(xIndexRaw);
+
+			const zAtXY = d3.scaleLinear(
+				[yLowerIndex, yUpperIndex],
+				[zAtXAndLowerY, zAtXAndUpperY],
+			)(yIndexRaw);
+
+			const z = zAtXY + tClamped * zAdjust * diameter;
 
 			return { x, y, z };
 		});
 	}
 
-	// List of lists of [xInitial, xFinal, yAdjust, zAdjust]; ys inferred from the well index, zs inferred from x and y
-	// Initial and final will be interpolated between to get the current value
-	// yAdjust is a fudge factor to get the spheres within a well strip to not all lie on the same line
-	// zAdjust is a fudge factor (to be multiplied by diameter) to get the sphere to be centered not at z, but some higher value
-	// wellBeadLocs[0] is the bottommost strip, [1] is the next up, [2] is the next up and is the one displayed first, and [3] is the topmost
-	const wellBeadLocs = [
-		[
-			[0.1, 4 * Math.PI, 0.1, 1],
-			[1.2, 3.8 * Math.PI, 0.8, 1.3],
-			[4.4, 4.3 * Math.PI, -0.3, 1.3],
-			[-2.3, 4.5 * Math.PI, -1, 1.3],
-			[-3.6, 3.7 * Math.PI, 1, 1.3],
-			[-4.4, 4 * Math.PI, 1, 1.2],
-			[7.8, 4.2 * Math.PI, 1, 1.2],
-			[8.9, 3.9 * Math.PI, -0.8, 1.3],
-		],
-		[
-			[0.9, -2 * Math.PI, 0.1, 1],
-			[1.8, -1.8 * Math.PI, 0.8, 1.3],
-			[2, -2.3 * Math.PI, -0.3, 1.3],
-			[-2.4, -2.5 * Math.PI, -0.8, 1.1],
-			[-5.3, -1.7 * Math.PI, 0.6, 1.2],
-			[-7, -2 * Math.PI, 0.8, 1.1],
-			[8.3, -2.2 * Math.PI, 0.9, 1.2],
-			[10.3, -1.9 * Math.PI, -0.8, 1.2],
-		],
-		[
-			[-5, -4 * Math.PI, 0.1, 1],
-			[-8, -3.8 * Math.PI, 0.8, 1.3],
-			[4, -4.3 * Math.PI, -0.3, 1.4],
-			[-2, -4.5 * Math.PI, -1, 1.4],
-			[-3.3, -3.7 * Math.PI, 1, 1.2],
-			[-4, -4 * Math.PI, 1, 1.5],
-			[7, -4.2 * Math.PI, 1, 1.3],
-			[8, -3.9 * Math.PI, -0.8, 1.2],
-		],
-		[
-			[-1, -3.8 * Math.PI, 0.1, 1],
-			[2, -4 * Math.PI, 0.8, 1.1],
-			[4.5, -4.1 * Math.PI, -0.3, 1.1],
-			[-2.7, -4.4 * Math.PI, -1, 1.1],
-			[-3, -3.6 * Math.PI, 1, 1.1],
-			[-4.7, -4.1 * Math.PI, 1, 1.4],
-			[-9, -4.3 * Math.PI, 1, 1.5],
-			[11.4, -3.8 * Math.PI, -0.8, 1.2],
-		],
-	]
-		.map((wellList, wellIndex) => {
-			const tClamped = wellIndex === 2 ? clamp(t, 0, 1) : clamp(t, 2, 3) - 2;
-			return wellList.map(([xi, xf, yAdjust, zAdjust]) => {
-				const x = xi * (1 - tClamped) + xf * tClamped;
-				return [x, yAdjust, zAdjust];
-			});
-		})
-		.map(xsToPoints);
+	const beadOpacityInterpolator = d3.scaleLinear([3, 3.3], [1, 0]).clamp(true);
+	const beadOpacity = t < 3 ? 1 : beadOpacityInterpolator(t);
 
-	for (const points of wellBeadLocs) {
-		for (const point of points) {
-			const { x, y, z } = point;
+	if (beadOpacity > 0) {
+		// List of lists of [xInitial, xFinal, yAdjust, zAdjust]; ys inferred from the well index, zs inferred from x and y
+		// Initial and final will be interpolated between to get the current value
+		// yAdjust is a fudge factor to get the spheres within a well strip to not all lie on the same line
+		// zAdjust is a fudge factor (to be multiplied by diameter) to get the sphere to be centered not at z, but some higher value
+		// wellBeadLocs[0] is the bottommost strip, [1] is the next up, [2] is the next up and is the one displayed first, and [3] is the topmost
+		const wellBeadLocs = [
+			[
+				[0.1, 4 * Math.PI, 0.1, 1],
+				[1.2, 3.8 * Math.PI, 0.8, 1.3],
+				[4.4, 4.3 * Math.PI, -0.3, 1.3],
+				[-2.3, 4.5 * Math.PI, -1, 1.3],
+				[-3.6, 3.7 * Math.PI, 0.5, 1.3],
+				[-7.4, 4 * Math.PI, -0.6, 1.2],
+				[7.8, 4.2 * Math.PI, 0.7, 1.2],
+				[8.9, 3.9 * Math.PI, -0.8, 1.3],
+			],
+			[
+				[0.9, -2 * Math.PI, 0.1, 1],
+				[1.8, -1.8 * Math.PI, 0.8, 1.3],
+				[2, -2.3 * Math.PI, -0.3, 1.3],
+				[-2.4, -2.5 * Math.PI, -0.8, 1.1],
+				[-5.3, -1.7 * Math.PI, 0.6, 1.2],
+				[-7, -2 * Math.PI, 0.8, 1.1],
+				[8.3, -2.2 * Math.PI, 0.9, 1.2],
+				[10.3, -1.9 * Math.PI, -0.8, 1.2],
+			],
+			[
+				[-5, -4 * Math.PI, 0.1, 1],
+				[-8, -3.8 * Math.PI, 0.8, 1.3],
+				[4, -4.3 * Math.PI, -0.3, 1.4],
+				[-2, -4.2 * Math.PI, -0.6, 1.3],
+				[-3.3, -3.7 * Math.PI, 0.4, 1.3],
+				[-4, -4 * Math.PI, -0.5, 1.3],
+				[7, -4.2 * Math.PI, 0.5, 1.3],
+				[8, -3.9 * Math.PI, -0.8, 1.2],
+			],
+			[
+				[-1, -3.8 * Math.PI, 0.1, 1.2],
+				[2, -4 * Math.PI, 0.8, 1.1],
+				[4.5, -4.1 * Math.PI, -0.3, 1.3],
+				[-2.7, -4.3 * Math.PI, -0.8, 1.4],
+				[-3, -3.6 * Math.PI, 0.7, 1.4],
+				[-4.7, -4.1 * Math.PI, 0.6, 1.2],
+				[-9, -4.2 * Math.PI, 0.7, 1.3],
+				[11.4, -3.8 * Math.PI, -0.8, 1.2],
+			],
+		]
+			.map((wellList, wellIndex) => {
+				const tClamped = wellIndex === 2 ? clamp(t, 0, 1) : clamp(t, 2, 3) - 2;
+				return wellList.map(([xi, xf, yAdjust, zAdjust]) => {
+					const x = xi * (1 - tClamped) + xf * tClamped;
+					return [x, yAdjust, zAdjust];
+				});
+			})
+			.map(xsToPoints);
+
+		for (const points of wellBeadLocs) {
+			for (const point of points) {
+				const { x, y, z } = point;
+				data.push(
+					get3DSphereDatum({
+						cx: x,
+						cy: y,
+						cz: z,
+						color: "white",
+						opacity: beadOpacity,
+						lighting: sphereLighting,
+						peptide,
+					}),
+				);
+			}
+		}
+	}
+
+	const dipeptideOpacityInterpolator = d3.scaleLinear([3.4, 3.7], [0, 1]).clamp(true);
+	const dipeptideOpacity = dipeptideOpacityInterpolator(t);
+	console.log(dipeptideOpacity);
+	if (dipeptideOpacity > 0) {
+		// rest is [dtheta, dphi, color]
+		// the order corresponds to the order of the energy wells above
+		const chainsInfo = [
+			{
+				initial: {
+					cx: 4 * Math.PI,
+					color: null,
+				},
+				rest: [
+					[0.2, 0.9, COLORS.blue],
+					[0.4, 0.4, null],
+					[0.4, 0.1, COLORS.green],
+					[0.5, -0.1, null],
+					[0.5, -0.3, COLORS.purple],
+				],
+			},
+			{
+				initial: {
+					cx: -2 * Math.PI,
+					color: null,
+				},
+				rest: [
+					[0.2, 0.8, COLORS.blue],
+					[-1, 0.1, null],
+					[-0.6, 0.6, COLORS.purple],
+				],
+			},
+			{
+				initial: { cx: -4 * Math.PI, color: null },
+				rest: [
+					[1.8, 1.1, COLORS.purple],
+					[-1, 0.1, null],
+					[-0.1, 0.1, COLORS.green],
+					[-1, 0.1, null],
+					[-0.6, 0.1, COLORS.blue],
+				],
+			},
+			{
+				initial: { cx: -4 * Math.PI, color: null },
+				rest: [
+					[0.4, 0.9, COLORS.purple],
+					[0.4, 0.1, null],
+					[0.4, 0.2, COLORS.green],
+				],
+			},
+		];
+		chainsInfo.forEach(({ initial, rest }, wellIndex) => {
+			const dy = initial.dy ?? 0;
+			const initialColor = initial.color;
+			let cx = initial.cx;
+			let cy = wellIndexToYInterpolator(wellIndex) + dy;
+
+			const xIndex = Math.floor(xIndexInterpolator.invert(cx));
+			const yIndex = Math.floor(yIndexInterpolator.invert(cy));
+
+			let cz = well.grid[yIndex][xIndex] + diameter;
 			data.push(
 				get3DSphereDatum({
-					cx: x,
-					cy: y,
-					cz: z,
-					color: "white",
+					cx,
+					cy,
+					cz,
+					color: initialColor,
+					opacity: dipeptideOpacity,
 					lighting: sphereLighting,
 					peptide,
 				}),
 			);
-		}
+
+			let theta = 0;
+			let phi = 0;
+			for (const [dTheta, dPhi, color] of rest) {
+				theta += dTheta;
+				phi += dPhi;
+				cx += diameter * Math.cos(theta) * Math.cos(phi);
+				cy += diameter * Math.sin(theta) * Math.cos(phi);
+				cz += diameter * Math.sin(phi);
+				data.push(
+					get3DSphereDatum({
+						cx,
+						cy,
+						cz,
+						color,
+						opacity: dipeptideOpacity,
+						lighting: sphereLighting,
+						peptide,
+					}),
+				);
+			}
+		});
 	}
-
-	//rest is [dtheta, dphi, color]
-	const chainsInfo = [
-		{
-			initial: { cx: 0, cy: 0, cz: -5.3, color: null },
-			rest: [
-				[0.2, 0.5, COLORS.blue],
-				[0.4, 0.4, null],
-				[0.4, 0.1, COLORS.green],
-				[0.5, -0.1, null],
-				[0.5, -0.3, COLORS.purple],
-			],
-		},
-		{
-			initial: { cx: -8, cy: 8, cz: -0.2, color: null },
-			rest: [[0.2, 0.3, COLORS.blue]],
-		},
-		{
-			initial: { cx: 0, cy: -8, cz: -2.5, color: null },
-			rest: [
-				[1.8, 0.1, COLORS.purple],
-				[-1, 0.1, null],
-				[-0.6, 0.6, COLORS.green],
-			],
-		},
-		{
-			initial: { cx: 8, cy: 0, cz: -2.8, color: null },
-			rest: [[1.8, 0.5, COLORS.purple]],
-		},
-	];
-
-	// for (const { initial, rest } of chainsInfo) {
-	// 	let { cx, cy, cz } = initial;
-	// 	data.push(
-	// 		get3DSphereDatum({
-	// 			cx,
-	// 			cy,
-	// 			cz,
-	// 			color: initial.color,
-	// 			lighting: sphereLighting,
-	// 			peptide,
-	// 		}),
-	// 	);
-
-	// 	let theta = 0,
-	// 		phi = 0;
-	// 	for (const [dTheta, dPhi, color] of rest) {
-	// 		theta += dTheta;
-	// 		phi += dPhi;
-	// 		cx += diameter * Math.cos(theta) * Math.cos(phi);
-	// 		cy += diameter * Math.sin(theta) * Math.cos(phi);
-	// 		cz += diameter * Math.sin(phi);
-	// 		data.push(
-	// 			get3DSphereDatum({
-	// 				cx,
-	// 				cy,
-	// 				cz,
-	// 				color,
-	// 				lighting: sphereLighting,
-	// 				peptide,
-	// 			}),
-	// 		);
-	// 	}
-	// }
 
 	const axesAttrs = {
 		showgrid: false,
@@ -1798,7 +1870,12 @@ function plotEnergyWell(t) {
 		scrollZoom: false,
 	};
 
-	Plotly.react("energy-well-plot", data, layout, config);
+	if (firstPlot) {
+		Plotly.react(graphDiv, data, layout, config);
+		firstPlot = false;
+	} else {
+		Plotly.react(graphDiv, data, layout);
+	}
 }
 
 plotEnergyWell(0);

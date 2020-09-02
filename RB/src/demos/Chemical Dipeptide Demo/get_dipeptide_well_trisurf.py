@@ -13,7 +13,7 @@ XMIN = -XMAX
 YMAX = 4 * np.pi
 YMIN = -YMAX
 
-N_POINTS = 51
+N_POINTS = 41
 
 
 DEPTH_GRID = np.array(
@@ -30,31 +30,6 @@ def hump(magnitude, n_x, n_y):
 
 def f(x, y):
     return 0.5 * (-np.cos(x) + np.cos(y))
-
-
-def get_gridlines2(xs, ys, *, x_major, n_gridlines):
-    if not x_major:
-        xs, ys = ys, xs
-
-    gridlines = []
-    keep_indices = np.linspace(0, len(xs) - 1, n_gridlines, dtype=int)
-    for x in xs[keep_indices]:
-        row = []
-        for y in ys:
-            if x_major:
-                z = f(x, y)
-                row.append((x, y, z))
-            else:
-                z = f(y, x)
-                row.append((y, x, z))
-        gridlines.append(row)
-    return gridlines
-
-
-def get_gridlines(z, n_x_gridlines, n_y_gridlines):
-
-    print(gridlines)
-    return gridlines
 
 
 def get_well_trisurf():
@@ -140,8 +115,9 @@ def get_well_trisurf():
 
 
 def get_peptide_sphere_surface(radius):
-    theta_vals = np.linspace(0, 2 * np.pi, 21)
-    phi_vals = np.linspace(-np.pi / 2, np.pi / 2, 21)
+    N_SPHERE_POINTS = 17
+    theta_vals = np.linspace(0, 2 * np.pi, N_SPHERE_POINTS)
+    phi_vals = np.linspace(-np.pi / 2, np.pi / 2, N_SPHERE_POINTS)
 
     theta, phi = np.meshgrid(theta_vals, phi_vals)
     theta_flat = theta.ravel()

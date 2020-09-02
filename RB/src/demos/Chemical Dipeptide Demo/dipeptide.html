@@ -43,13 +43,16 @@
 				top: 300px;
 				opacity: 0;
 			}
+			#bottom-section {
+				margin-top: 20px;
+			}
 		</style>
 	</head>
 	<body>
 		<div>
 			<div id="containers">
 				<svg id="container-1" class="container"></svg>
-				<div style="display: inline-block; vertical-align: middle;">
+				<div style="display: inline-block; vertical-align: middle">
 					<table>
 						<tr>
 							<td>
@@ -73,7 +76,7 @@
 								</button>
 							</td>
 						</tr>
-						<tr>
+						<!-- <tr>
 							<td>
 								<button
 									id="btn-energy-well"
@@ -83,7 +86,7 @@
 									3. Show Energy Well
 								</button>
 							</td>
-						</tr>
+						</tr> -->
 						<tr>
 							<td>
 								<button
@@ -91,7 +94,7 @@
 									class="play-button"
 									onclick="update(STAGES.initial)"
 								>
-									4. Reset
+									3. Reset
 								</button>
 							</td>
 						</tr>
@@ -113,7 +116,7 @@
 				<!-- <svg id="container-2" class="container"></svg>
 			<svg id="container-3" class="container"></svg> -->
 			</div>
-			<div>
+			<div id="bottom-section">
 				<div id="bottom-graph-container">
 					<div class="plot-container">
 						<svg id="energy-graph"></svg>
