@@ -41,13 +41,22 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <input type="text" id="input"><br>
-    <input type="text" id="input2"><br>
-    <input type="text" id="input3"><br>
-    <input type="text" id="input4"><br>
-    <button id="submit" onclick="text_input()">Submit</button>
-    <button id="clear" onclick="svg.selectAll('.highlight').remove(); selected=[]">Clear</button>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1200></svg>
+    <div>
+        <div style="width:50%; float:left">
+            Species 1: <input type="text" id="input"><br>
+            Species 2: <input type="text" id="input2"><br>
+            Species 3: <input type="text" id="input3"><br>
+            Species 4: <input type="text" id="input4"><br>
+            <button id="submit" onclick="text_input()">Submit</button>
+            <button id="clear" onclick="svg.selectAll('.highlight').remove(); selected=[]">Clear</button>
+        </div>
+        <div style="width:50%; float:right">
+            <text>This model automatically converts input species to their phylogenetic order. For instance, if you
+                input 'Homo sapiens', the model will select 'Primates'. You can also select orders by clicking the
+                corresponding leaf on the tree.</text>
+        </div>
+    </div>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1100></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             g,
@@ -137,7 +146,7 @@
                 d3.select(n).append("circle")
                     .attr("r", 2.5)
                     .attr("class", "highlight")
-                    .style("fill", "#0F0");
+                    .style("fill", "#147042");
                 if (n == c) { return; }
                 g.append("line")
                     .attr("class", "highlight")
@@ -145,7 +154,7 @@
                     .attr("y1", project(node.x, node.y)[1])
                     .attr("x2", project(node.x, node.parent.y)[0])
                     .attr("y2", project(node.x, node.parent.y)[1])
-                    .style("fill", "#0F0");
+                    .style("fill", "#147042");
                 g.append("path")
                     .attr("class", "highlight")
                     .attr("d", arcgen({
