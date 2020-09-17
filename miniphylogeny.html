@@ -59,7 +59,6 @@
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1100></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
-            g,
             selected = [],
             root,
             taxonomy,
@@ -125,6 +124,21 @@
                     .style("text-anchor", function (d) { return d.x < 180 === !d.children ? "end" : "start"; })
                     .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                     .text(function (d) { return d.data.id; });
+
+                g.append("line")
+                    .attr("x1", "-" + (width / 2 - 140))
+                    .attr("x2", (width / 2 - 140))
+                    .attr("y1", 20)
+                    .attr("y2", 20)
+                    .attr("stroke-width", 1)
+                    .attr("stroke", "black");
+
+                g.append("circle").attr("cx", 0).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", 0).attr("dy", "40").style("text-anchor", "middle").text("430 million years ago");
+                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "40").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", width / 2 - 140).attr("dy", "40").style("text-anchor", "middle").text("Present day");
             });
         }
 
