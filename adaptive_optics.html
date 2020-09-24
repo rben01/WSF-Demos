@@ -7,14 +7,33 @@
 </head>
 
 <body>
+    <div>
+        <label>
+            <input id="one" name="step" type="radio" checked>
+            <span>Step 1</span>
+        </label>
+        <label>
+            <input id="two" name="step" type="radio">
+            <span>Step 2</span>
+        </label>
+        <label>
+            <input id="three" name="step" type="radio">
+            <span>Step 3</span>
+        </label>
+    </div>
     <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=600></svg>
     <script>
         var svg = d3.select("#svg");
+        d3.select("#one").on("click", trans);
+        d3.select("#two").on("click", trans2);
+        d3.select("#three").on("click", trans3);
         svg.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "black")
         var g = svg.append("g"),
             height = svg.style("height").replace("px", ""),
             width = svg.style("width").replace("px", ""),
             data = [],
+            step = 1,
+            star,
             artstar,
             defmir;
         const arcgen = d3.arc().outerRadius(26).innerRadius(25).startAngle(-Math.PI / 2).endAngle(Math.PI / 2),
@@ -23,20 +42,7 @@
             data.push(Math.floor(Math.random() * 50));
         }
 
-        g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height).attr("y2", height).attr("stroke", "white");
-        g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
-        g.append("line").attr("x1", 200).attr("x2", 200).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
-        g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 100).attr("y2", height - 100).attr("stroke", "white");
-        g.append("path").attr("transform", "translate(150, " + (height - 100) + ")").attr("d", arcgen()).attr("stroke", "white");
-        var star = g.append("path")
-            .attr("transform", "translate(150, " + (height - 550) + ")")
-            .attr("stroke", "yellow")
-            .attr("d", linegen(path(data)));
 
-        var defmir = g.append("path")
-            .attr("transform", "translate(100, " + (height - 75) + ")")
-            .attr("stroke", "lightgrey")
-            .attr("d", linegen(path(50 - data)));
 
         function path(d) {
             var ar = [];
@@ -54,6 +60,37 @@
             return (ar);
         }
 
+        function starpath(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, 50 - d[i]]);
+            }
+            d[2] = Math.min(50, d[2] + 15);
+            return (ar);
+        }
+
+        function trans() {
+            g.selectAll("*").remove();
+            g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height).attr("y2", height).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 200).attr("x2", 200).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 100).attr("y2", height - 100).attr("stroke", "white");
+            g.append("path").attr("transform", "translate(150, " + (height - 100) + ")").attr("d", arcgen()).attr("stroke", "white");
+            g.append("line").attr("x1", 150).attr("x2", 150).attr("y1", height).attr("y2", height - 500).attr("stroke", "yellow");
+            g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 500).attr("y2", height - 500).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height - 500).attr("y2", height - 600).attr("stroke", "white");
+            star = g.append("path")
+                .attr("transform", "translate(100, " + (height - 550) + ")")
+                .attr("stroke", "yellow")
+                .attr("d", linegen(starpath(data)));
+
+            defmir = g.append("path")
+                .attr("transform", "translate(100, " + (height - 75) + ")")
+                .attr("stroke", "lightgrey")
+                .attr("d", linegen(path([0, 0, 0, 0, 0, 0])));
+            step = 1;
+        }
+
         function trans2() {
             g.append("line").attr("x1", 168).attr("x2", 468).attr("y1", height - 119).attr("y2", height - 419).attr("stroke", "red");
             g.append("line").attr("x1", 418).attr("x2", 518).attr("y1", height - 419).attr("y2", height - 419).attr("stroke", "white");
@@ -62,14 +99,30 @@
                 .attr("transform", "translate(418, " + (height - 469) + ")")
                 .attr("stroke", "red")
                 .attr("d", linegen(path(data)));
+            step = 2;
+        }
+
+        function trans3() {
+            step = 3;
         }
 
         function animate() {
             data.shift();
             data.push(Math.floor(Math.random() * 50));
-            artstar.transition().duration(1000).attr("d", linegen(path(data)));
-            defmir.transition().duration(1000).attr("d", linegen(invpath(data)));
+            if (step < 3) {
+                star.transition().duration(1000).attr("d", linegen(starpath(data)));
+                defmir.transition().duration(1000).attr("d", linegen(invpath([0, 0, 0, 0, 0, 0])));
+            }
+            else {
+                star.transition().duration(1000).attr("d", linegen(starpath([0, 15, 0, 0, 0, 0])));
+                defmir.transition().duration(1000).attr("d", linegen(invpath(data)));
+            }
+            if (step > 1) {
+                artstar.transition().duration(1000).attr("d", linegen(path(data)));
+            }
         }
+
+        trans();
         d3.interval(animate, 1000);
     </script>
 </body>
