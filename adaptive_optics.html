@@ -21,6 +21,10 @@
             <span>Step 3</span>
         </label>
     </div>
+    <div style="display:block;width:500px;height:60px">
+        <text id="text"></text>
+    </div>
+    <br><br>
     <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=600></svg>
     <script>
         var svg = d3.select("#svg");
@@ -31,6 +35,7 @@
         var g = svg.append("g"),
             height = svg.style("height").replace("px", ""),
             width = svg.style("width").replace("px", ""),
+            text = d3.select("#text"),
             data = [],
             step = 1,
             star,
@@ -41,8 +46,6 @@
         for (var i = 0; i < 6; i++) {
             data.push(Math.floor(Math.random() * 50));
         }
-
-
 
         function path(d) {
             var ar = [];
@@ -78,7 +81,8 @@
             g.append("path").attr("transform", "translate(150, " + (height - 100) + ")").attr("d", arcgen()).attr("stroke", "white");
             g.append("line").attr("x1", 150).attr("x2", 150).attr("y1", height).attr("y2", height - 500).attr("stroke", "yellow");
             g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 500).attr("y2", height - 500).attr("stroke", "white");
-            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height - 500).attr("y2", height - 600).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height - 500).attr("y2", height - 550).attr("stroke", "white");
+            g.append("text").attr("x", 50).attr("y", height - 525).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Observed signal");
             star = g.append("path")
                 .attr("transform", "translate(100, " + (height - 550) + ")")
                 .attr("stroke", "yellow")
@@ -87,7 +91,9 @@
             defmir = g.append("path")
                 .attr("transform", "translate(100, " + (height - 75) + ")")
                 .attr("stroke", "lightgrey")
-                .attr("d", linegen(path([0, 0, 0, 0, 0, 0])));
+                .attr("d", linegen(path([50, 50, 50, 50, 50, 50])));
+
+            text.text("When astronomers want to use a land-based telescope to observe a distant signal in space, \nthey need to contend with noise introduced when the signal passes through the atmosphere.");
             step = 1;
         }
 
@@ -95,14 +101,21 @@
             g.append("line").attr("x1", 168).attr("x2", 468).attr("y1", height - 119).attr("y2", height - 419).attr("stroke", "red");
             g.append("line").attr("x1", 418).attr("x2", 518).attr("y1", height - 419).attr("y2", height - 419).attr("stroke", "white");
             g.append("line").attr("x1", 418).attr("x2", 418).attr("y1", height - 419).attr("y2", height - 469).attr("stroke", "white");
+            g.append("text").attr("x", 368).attr("y", height - 444).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Reference star");
             artstar = g.append("path")
                 .attr("transform", "translate(418, " + (height - 469) + ")")
                 .attr("stroke", "red")
                 .attr("d", linegen(path(data)));
+
+            text.text("In order to do this, they shine a laser into the ionosphere, about 90 km above see level, to create an artificial 'reference star'.");
             step = 2;
         }
 
         function trans3() {
+            if (step == 1) {
+                trans2();
+            }
+            text.text("After observing the atmospheric noise via the 'reference star', a computer changes the shape of a deformable mirror to invert the noise, leaving just the true signal.");
             step = 3;
         }
 
