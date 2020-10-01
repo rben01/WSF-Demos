@@ -73,21 +73,21 @@ def process_pixel_locs(stage):
     y_domain = (0, IMG.shape[0])
     if stage == "initial":
         x_scaler = make_scaler(x_domain, (-13, 879))
-        y_scaler = make_scaler(y_domain, (-30, 345))
+        y_scaler = make_scaler(y_domain, (-55, 320))
 
         x_dist_scale = 1
         y_dist_scale = 1
 
     elif stage == "enzyme":
-        x_scaler = make_scaler(x_domain, (28, 821))
-        y_scaler = make_scaler(y_domain, (-18, 307))
+        x_scaler = make_scaler(x_domain, (44, 836))
+        y_scaler = make_scaler(y_domain, (-17, 300))
 
         x_dist_scale = 1.1
         y_dist_scale = 1
 
     elif stage == "ligand":
-        x_scaler = make_scaler(x_domain, (36, 832))
-        y_scaler = make_scaler(y_domain, (-17, 307))
+        x_scaler = make_scaler(x_domain, (37, 855))
+        y_scaler = make_scaler(y_domain, (-24, 298))
 
         x_dist_scale = 1.1
         y_dist_scale = 0.9
@@ -139,3 +139,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+# %%
