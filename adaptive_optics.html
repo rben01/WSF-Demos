@@ -11,10 +11,7 @@
         <button id="advance" onclick="advance()">Advance</button>
         <button id="reset" onclick="render()">Reset</button>
     </div>
-    <div style="display:block;width:500px;height:60px">
-        <text id="text"></text>
-    </div>
-    <br><br>
+    <br>
     <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=600></svg>
     <script>
         var svg = d3.select("#svg");
@@ -22,7 +19,6 @@
         var g = svg.append("g"),
             height = svg.style("height").replace("px", ""),
             width = svg.style("width").replace("px", ""),
-            text = d3.select("#text"),
             data = [],
             sig_lines,
             y,
@@ -112,7 +108,6 @@
                 .attr("stroke", "yellow")
                 .attr("d", linegen(starpath(data)));
 
-            text.text("When astronomers want to use a land-based telescope to observe a distant signal in space, they need to contend with noise introduced when the signal passes through the atmosphere.");
             step = 1;
         }
 
@@ -127,7 +122,6 @@
                 .attr("stroke", "red");
             artstar.transition().delay(1000).attr("d", linegen(path(data)));
 
-            text.text("In order to see through the distortion, they shine a laser into the ionosphere, about 90 km above see level, to create an artificial 'reference star'. They use the reference star to measure the distortion that the atmosphere introduces.");
             step = 2;
         }
 
