@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<title>Adaptive Optics</title>
+
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <label>
+            <input id="one" name="step" type="radio" checked>
+            <span>Step 1</span>
+        </label>
+        <label>
+            <input id="two" name="step" type="radio">
+            <span>Step 2</span>
+        </label>
+        <label>
+            <input id="three" name="step" type="radio">
+            <span>Step 3</span>
+        </label>
+    </div>
+    <div style="display:block;width:500px;height:60px">
+        <text id="text"></text>
+    </div>
+    <br><br>
+    <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=600></svg>
+    <script>
+        var svg = d3.select("#svg");
+        d3.select("#one").on("click", trans);
+        d3.select("#two").on("click", trans2);
+        d3.select("#three").on("click", trans3);
+        svg.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "black")
+        var g = svg.append("g"),
+            height = svg.style("height").replace("px", ""),
+            width = svg.style("width").replace("px", ""),
+            text = d3.select("#text"),
+            data = [],
+            sig_lines,
+            y,
+            step = 1,
+            star,
+            artstar,
+            defmir;
+        const arcgen = d3.arc().outerRadius(26).innerRadius(25).startAngle(-Math.PI / 2).endAngle(Math.PI / 2),
+            linegen = d3.line().curve(d3.curveCardinal);
+        for (var i = 0; i < 6; i++) {
+            data.push(Math.floor(Math.random() * 50));
+        }
+
+        function path(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, d[i]]);
+            }
+            return (ar);
+        }
+
+        function invpath(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, 50 - d[i] + 10 * i]);
+            }
+            return (ar);
+        }
+
+        function starpath(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, 50 - d[i]]);
+            }
+            d[2] = Math.min(50, d[2] + 15);
+            return (ar);
+        }
+
+        function render() {
+            g.selectAll("*").remove();
+            sig_lines = [];
+            g.append("line").attr("x1", 100).attr("x2", 300).attr("y1", height).attr("y2", height).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 300).attr("x2", 300).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 300).attr("y1", height - 100).attr("y2", height - 100).attr("stroke", "white");
+            g.append("path").attr("transform", "translate(150, " + (height - 100) + ")").attr("d", arcgen()).attr("stroke", "white");
+            g.append("polyline")
+                .attr("points", "200 " + height + ", 200 " + (height - 75) + ", 300 " + (height - 50) + ", 200 " + (height - 25))
+                .style("stroke", "white");
+            g.append("text").attr("x", 350).attr("y", height - 50).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Telescope");
+        }
+
+        function trans() {
+            sig_lines.push(g.append("line").attr("x1", 150).attr("x2", 150).attr("y1", height - 50).attr("y2", height - 500).attr("stroke", "yellow"));
+            sig_lines.push(g.append("line").attr("x1", 150).attr("x2", 200).attr("y1", height - 50).attr("y2", height - 50).attr("stroke", "yellow"));
+            g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 500).attr("y2", height - 500).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height - 500).attr("y2", height - 550).attr("stroke", "white");
+            g.append("text").attr("x", 50).attr("y", height - 525).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Observed signal");
+            g.append("text").attr("x", 50).attr("y", height - 100).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Observatory");
+            star = g.append("path")
+                .attr("transform", "translate(100, " + (height - 550) + ")")
+                .attr("stroke", "yellow")
+                .attr("d", linegen(starpath(data)));
+
+            defmir = g.append("path")
+                .attr("transform", "translate(100, " + (height - 75) + ")")
+                .attr("stroke", "lightgrey")
+                .attr("d", linegen(invpath([50, 50, 50, 50, 50, 50])));
+
+            text.text("When astronomers want to use a land-based telescope to observe a distant signal in space, \nthey need to contend with noise introduced when the signal passes through the atmosphere.");
+            step = 1;
+        }
+
+        function trans2() {
+            g.append("line").attr("x1", 168).attr("x2", 468).attr("y1", height - 119).attr("y2", height - 419).attr("stroke", "red");
+            g.append("line").attr("x1", 418).attr("x2", 518).attr("y1", height - 419).attr("y2", height - 419).attr("stroke", "white");
+            g.append("line").attr("x1", 418).attr("x2", 418).attr("y1", height - 419).attr("y2", height - 469).attr("stroke", "white");
+            g.append("text").attr("x", 368).attr("y", height - 444).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Reference star");
+            g.append("text").attr("x", 318).attr("y", height - 258).style("text-anchor", "start").style("fill", "white").attr("font-size", "15").text("Laser");
+            artstar = g.append("path")
+                .attr("transform", "translate(418, " + (height - 469) + ")")
+                .attr("stroke", "red")
+                .attr("d", linegen(path(data)));
+
+            text.text("In order to see through the distortion, they shine a laser into the ionosphere, about 90 km above see level, to create an artificial 'reference star'. They use the reference star to measure the distortion that the atmosphere introduces.");
+            step = 2;
+        }
+
+        function trans3() {
+            if (step == 1) {
+                trans2();
+            }
+            g.append("text").attr("x", 150).attr("y", height - 5).style("text-anchor", "middle").style("fill", "white").attr("font-size", "12").text("Deformable mirror");
+            text.text("After observing the atmospheric noise via the 'reference star', a computer changes the shape of a deformable mirror to invert the noise, leaving just the true signal.");
+            step = 3;
+        }
+
+        function animate() {
+            data.shift();
+            data.push(Math.floor(Math.random() * 50));
+            if (step < 3) {
+                star.transition().duration(1000).attr("d", linegen(starpath(data)));
+                defmir.transition().duration(1000).attr("d", linegen(invpath([50, 50, 50, 50, 50, 50])));
+            }
+            else {
+                star.transition().duration(1000).attr("d", linegen(starpath([0, 15, 0, 0, 0, 0])));
+                defmir.transition().duration(1000).attr("d", linegen(invpath(data)));
+                y = height - 75 + (invpath(data)[2][1] + invpath(data)[3][1]) / 2;
+                sig_lines[0].transition().duration(1000).attr("y1", y);
+                sig_lines[1].transition().duration(1000).attr("y1", y).attr("y2", y);
+            }
+            if (step > 1) {
+                artstar.transition().duration(1000).attr("d", linegen(path(data)));
+            }
+        }
+
+        render();
+        trans();
+        d3.interval(animate, 1000);
+    </script>
+</body>

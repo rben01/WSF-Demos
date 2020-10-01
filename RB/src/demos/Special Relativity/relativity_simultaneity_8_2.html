@@ -37,6 +37,7 @@
     </div>
 
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../utils.js"></script>
     <script type="text/javascript">
         var c = 299792000;
         var L = 10000;
@@ -50,12 +51,12 @@
         var trace1 = {
             x: [],
             y: [],
-            line: { dash: "dash", color: 'yellow' }
+            line: { dash: "dash", color: STANDARD_COLORS.secondary }
         };
         var trace2 = {
             x: [],
             y: [],
-            line: { dash: "dash", color: 'yellow' }
+            line: { dash: "dash", color: STANDARD_COLORS.highlighted }
         };
         var layout = {
             title: {
@@ -133,7 +134,7 @@
             trace1.y = [dt, dt];
             trace2.x = [v, v];
             trace2.y = [0, dt];
-            Plotly.newPlot('graph', [dtline, trace1, trace2], layout);
+            Plotly.newPlot('graph', [dtline, trace1, trace2], layout, { displayModeBar: false, staticPlot: true });
         }
 
         render();

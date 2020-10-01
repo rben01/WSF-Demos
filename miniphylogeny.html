@@ -30,8 +30,8 @@
         }
 
         .highlight {
-            fill: #0F0;
-            stroke: #0F0;
+            fill: #147042;
+            stroke: #147042;
             stroke-opacity: 0.4;
             stroke-width: 1.5px;
             z-index: 5;
@@ -41,13 +41,25 @@
 
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
-    <input type="text" id="input">
-    <button id="submit" onclick="text_input()">Submit</button>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1200></svg>
+    <div>
+        <div style="width:50%; float:left">
+            Species 1: <input type="text" id="input"><br>
+            Species 2: <input type="text" id="input2"><br>
+            Species 3: <input type="text" id="input3"><br>
+            Species 4: <input type="text" id="input4"><br>
+            <button id="submit" onclick="text_input()">Submit</button>
+            <button id="clear" onclick="svg.selectAll('.highlight').remove(); selected=[]">Clear</button>
+        </div>
+        <div style="width:50%; float:right">
+            <text>This model automatically converts input species to their phylogenetic order. For instance, if you
+                input 'Homo sapiens', the model will select 'Primates'. You can also select orders by clicking the
+                corresponding leaf on the tree.</text>
+        </div>
+    </div>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1100></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
-            g,
-            selected,
+            selected = [],
             root,
             taxonomy,
             arcgen = d3.arc();
@@ -71,7 +83,7 @@
                 .size([360, 460])
                 .separation(function (a, b) { return (a.parentId == b.parentId ? 1 : 2) / a.depth; });
 
-            d3.json("chordata_order.json").then(function (data) {
+            d3.json("minichordata_order.json").then(function (data) {
                 root = tree(d3.hierarchy(data[0]));
 
                 var link = g.selectAll(".link")
@@ -112,6 +124,21 @@
                     .style("text-anchor", function (d) { return d.x < 180 === !d.children ? "end" : "start"; })
                     .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                     .text(function (d) { return d.data.id; });
+
+                g.append("line")
+                    .attr("x1", "-" + (width / 2 - 140))
+                    .attr("x2", (width / 2 - 140))
+                    .attr("y1", 20)
+                    .attr("y2", 20)
+                    .attr("stroke-width", 1)
+                    .attr("stroke", "black");
+
+                g.append("circle").attr("cx", 0).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", 0).attr("dy", "40").style("text-anchor", "middle").text("430 million years ago");
+                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "40").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 20).attr("r", 2.5);
+                g.append("text").attr("x", width / 2 - 140).attr("dy", "40").style("text-anchor", "middle").text("Present day");
             });
         }
 
@@ -133,7 +160,7 @@
                 d3.select(n).append("circle")
                     .attr("r", 2.5)
                     .attr("class", "highlight")
-                    .style("fill", "#0F0");
+                    .style("fill", "#147042");
                 if (n == c) { return; }
                 g.append("line")
                     .attr("class", "highlight")
@@ -141,7 +168,7 @@
                     .attr("y1", project(node.x, node.y)[1])
                     .attr("x2", project(node.x, node.parent.y)[0])
                     .attr("y2", project(node.x, node.parent.y)[1])
-                    .style("fill", "#0F0");
+                    .style("fill", "#147042");
                 g.append("path")
                     .attr("class", "highlight")
                     .attr("d", arcgen({
@@ -151,29 +178,34 @@
                         outerRadius: node.parent.y + 2,
                     })
                     )
-                    .style("fill", "#0F0")
+                    .style("fill", "#147042")
             })
         }
 
         function click(o) {
-            if (selected) {
-                connect(selected, root.leaves().filter(n => n.data.id == o)[0]);
-                selected = null;
+            for (var s in selected) {
+                connect(selected[s], root.leaves().filter(n => n.data.id == o)[0]);
             }
-            else {
-                svg.selectAll(".highlight").remove();
-                selected = root.leaves().filter(n => n.data.id == o)[0];
-                d3.select("#" + o).append("circle")
-                    .attr("class", "highlight")
-                    .attr("r", 2.5)
-                    .style("fill", "#0F0");
-            }
+            selected.push(root.leaves().filter(n => n.data.id == o)[0])
         }
 
         function text_input() {
-            var s = document.getElementById("input").value;
-            var o = taxonomy.filter(d => d.Species == s)[0].Order;
-            click(o)
+            var s = cap_first(document.getElementById("input").value),
+                s2 = document.getElementById("input2").value == "" ? s : cap_first(document.getElementById("input2").value),
+                s3 = document.getElementById("input3").value == "" ? s : cap_first(document.getElementById("input3").value),
+                s4 = document.getElementById("input4").value == "" ? s : cap_first(document.getElementById("input4").value);
+            var o = taxonomy.filter(d => d.Species == s)[0].Order,
+                o2 = taxonomy.filter(d => d.Species == s2)[0].Order,
+                o3 = taxonomy.filter(d => d.Species == s3)[0].Order,
+                o4 = taxonomy.filter(d => d.Species == s4)[0].Order;
+            click(o);
+            click(o2);
+            click(o3);
+            click(o4);
+        }
+
+        function cap_first(s) {
+            return s[0].toUpperCase() + s.slice(1).toLowerCase();
         }
     </script>
 </body>
