@@ -356,7 +356,7 @@ def main():
         if args.outfile is not None:
             sys.exit("Cannot specify outfile without specifying an infile")
 
-        infiles = Path().glob("**/*.html")
+        infiles = list(Path().glob("**/*.html"))
         if args.exclude_html_regex is not None:
             ehr = re.compile(args.exclude_html_regex)
             infiles = [p for p in infiles if not ehr.search(p.name)]
