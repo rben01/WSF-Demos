@@ -513,10 +513,10 @@ const randomJoinAngles = [
 
 const stageJoinIndices = {
 	[STAGES.initial]: d3.range(basicDipeptides.length).map(i => [i]),
-	[STAGES.enzyme]: [[8], [0], [3, 7], [2, 1], [4, 5, 6]],
+	[STAGES.enzyme]: [[8], [2], [3, 7], [1, 0], [4, 5, 6]],
 	[STAGES.ligand]: [
-		[0, 1, 2],
-		[3, 4, 5],
+		[0, 1, 5],
+		[3, 4, 2],
 		[6, 7, 8],
 	],
 };
@@ -557,11 +557,11 @@ function getBeakerData(stage) {
 		return basicDipeptides.flat(Infinity);
 	} else if (stage === STAGES.enzyme) {
 		const newP0s = [
-			{ x: 0.7, y: 0.53 },
 			{ x: 0.24, y: 0.24 },
+			{ x: 0.7, y: 0.53 },
+			{ x: 0.55, y: 0.4 },
+			{ x: 0.3, y: 0.5 },
 			{ x: 0.55, y: 0.2 },
-			{ x: 0.7, y: 0.3 },
-			{ x: 0.25, y: 0.5 },
 		].map(({ x, y }) => ({ x: beakerXScale(x), y: beakerYScale(y) }));
 		return stageJoinIndices[stage]
 			.map((indices, j) =>
@@ -715,9 +715,9 @@ function getGraphData(stage) {
 
 const equationDipeptides = [
 	[{ color: COLORS.blue }, { color: COLORS.green }, { color: COLORS.purple }],
-	[{ color: COLORS.purple }, { color: COLORS.green }],
+	[{ color: COLORS.purple }, { color: COLORS.blue }],
 	[{ color: COLORS.blue }],
-	[{ color: COLORS.green }, { color: COLORS.blue }],
+	[{ color: COLORS.blue }, { color: COLORS.green }],
 	[{ color: COLORS.green }, { color: COLORS.purple }, { color: COLORS.blue }],
 ];
 
@@ -1166,6 +1166,7 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 			throw new Error(`Invalid stage ${stage}`);
 		}
 	} else {
+		// eslint-disable-next-line no-unused-vars
 		const [beads, text] = groupBy(data, d => d.shape, ["circle", "text"], true).map(
 			pair => pair[1],
 		);
@@ -1183,7 +1184,6 @@ function applyDataToSvg(svg, { stage, data, tweens, thens }) {
 		totalTransitionDuration = dipeptideMovementDelay + dipeptideMovementDuration;
 	}
 
-	console.log(tweens);
 	if (tweens !== undefined) {
 		for (const [name, tween] of Object.entries(tweens)) {
 			const t = svg
@@ -1227,7 +1227,7 @@ function update(stage) {
 	}
 
 	if (stage === STAGES.energyWell) {
-		const wellCenterX = graphXScale(0.168);
+		const wellCenterX = graphXScale(0.165);
 		const wellCenterY = graphYScale(0);
 		const wellEllipseRx = 60;
 		const wellEllipseRy = 10;
@@ -1406,6 +1406,28 @@ function update(stage) {
 		const finalPoint = tempFinalPathNode.getPointAtLength(finalLength);
 		const finalDistAboveCurve = finalCy - finalPoint.y;
 
+		// if (stage === STAGES.initial) {
+		// 	const initialCx = this.getAttribute("cx");
+		// 	const initialCy = this.getAttribute("cy");
+		// 	const maxHeight = 0.3 * Math.abs(initialCx - finalCx);
+		// 	const straightLineXScale = d3.scaleLinear([0, 1], [initialCx, finalCx]);
+		// 	const straightLineYScale = d3.scaleLinear([0, 1], [initialCy, finalCy]);
+
+		// 	const distAboveStraightLineEase = t => Math.sqrt(2 * t);
+		// 	const distAboveStraightLineScale = t =>
+		// 		t < 0.5
+		// 			? 2 * distAboveStraightLineEase(t)
+		// 			: 2 * distAboveStraightLineEase(1 - t);
+
+		// 	return t => {
+		// 		this.setAttribute("cx", straightLineXScale(t));
+		// 		this.setAttribute(
+		// 			"cy",
+		// 			straightLineYScale(t) - maxHeight * distAboveStraightLineScale(t),
+		// 		);
+		// 	};
+		// }
+
 		const distAboveCurveScale = d3
 			.scalePow([0, 1], [initialDistAboveCurve, finalDistAboveCurve])
 			.exponent(0.5);
@@ -1528,7 +1550,7 @@ function get3DSphereDatum({ cx, cy, cz, color, opacity, lighting, peptide }) {
 		i: peptide.simplices.map(s => s[0]),
 		j: peptide.simplices.map(s => s[1]),
 		k: peptide.simplices.map(s => s[2]),
-		facecolor: peptide.simplices.map(() => color || COLORS.orange),
+		facecolor: peptide.simplices.map(() => color ?? COLORS.orange),
 		opacity,
 		lighting,
 	};
@@ -1548,9 +1570,9 @@ const graphDiv = document.getElementById("energy-well-plot");
 function plotEnergyWell(t) {
 	const surfaceLighting = {
 		ambient: 0.7,
-		roughness: 0.8,
-		diffuse: 0.8,
-		specular: 0.7,
+		roughness: 0.6,
+		diffuse: 0.6,
+		specular: 0.9,
 	};
 	const sphereLighting = {
 		ambient: 0.5,
@@ -1725,7 +1747,7 @@ function plotEnergyWell(t) {
 
 	const dipeptideOpacityInterpolator = d3.scaleLinear([3.4, 3.7], [0, 1]).clamp(true);
 	const dipeptideOpacity = dipeptideOpacityInterpolator(t);
-	console.log(dipeptideOpacity);
+
 	if (dipeptideOpacity > 0) {
 		// rest is [dtheta, dphi, color]
 		// the order corresponds to the order of the energy wells above
@@ -1749,7 +1771,7 @@ function plotEnergyWell(t) {
 					color: null,
 				},
 				rest: [
-					[0.2, 0.8, COLORS.blue],
+					[0.2, 0.9, COLORS.blue],
 					[-1, 0.1, null],
 					[-0.6, 0.6, COLORS.purple],
 				],
@@ -1769,7 +1791,7 @@ function plotEnergyWell(t) {
 				rest: [
 					[0.4, 0.9, COLORS.purple],
 					[0.4, 0.1, null],
-					[0.4, 0.2, COLORS.green],
+					[0.4, 0.2, COLORS.blue],
 				],
 			},
 		];
