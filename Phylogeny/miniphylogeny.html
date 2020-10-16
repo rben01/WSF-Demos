@@ -48,7 +48,10 @@
             Species 3: <input type="text" id="input3"><br>
             Species 4: <input type="text" id="input4"><br>
             <button id="submit" onclick="text_input()">Submit</button>
-            <button id="clear" onclick="svg.selectAll('.highlight').remove(); selected=[]">Clear</button>
+            <button id="clear" onclick="svg.selectAll('.highlight').remove(); 
+            selected=[]; 
+            svg.selectAll('.node--leaf').select('text').attr('x', function (d) { return d.x < 180 === !d.children ? -6 : 6; });
+            svg.selectAll('image').remove()">Clear</button>
         </div>
         <div style="width:50%; float:right">
             <text>This model automatically converts input species to their phylogenetic order. For instance, if you
@@ -59,6 +62,7 @@
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1100></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
+            phylopic,
             selected = [],
             root,
             taxonomy,
@@ -66,7 +70,10 @@
 
         d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
             taxonomy = data;
-            rend2();
+            d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Chordata_Cut.csv").then(function (data) {
+                phylopic = data;
+                rend2();
+            })
         }
 
         );
@@ -183,10 +190,21 @@
         }
 
         function click(o) {
+            var selection = root.leaves().filter(n => n.data.id == o)[0];
             for (var s in selected) {
-                connect(selected[s], root.leaves().filter(n => n.data.id == o)[0]);
+                connect(selected[s], selection);
             }
-            selected.push(root.leaves().filter(n => n.data.id == o)[0])
+            selected.push(selection);
+            var url = phylopic.filter(d => d.Order == o)[0].Link;
+            var g = d3.select("g");
+            var leaf = g.select("#" + o);
+            leaf.select("text").transition().duration(500).attr("x", selection.x > 180 ? 30 : -30);
+            leaf.append("svg:image")
+                .attr("height", 20)
+                .attr("width", 24)
+                .attr("x", 1.2 * ((selection.x - 360) / 15))
+                .attr("y", 1.2 * (-10 - 10 * (1 - Math.abs((selection.x - 180) / 180))))
+                .attr("xlink:href", url);
         }
 
         function text_input() {
