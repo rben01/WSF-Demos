@@ -17,6 +17,11 @@
         .axis path {
             stroke: white;
         }
+
+        button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
     </style>
 </head>
 
@@ -32,6 +37,7 @@
                 <button id="n9" onclick="setn(9)">n=9</button>
             </label>
         </span>
+        <br>
         <br>
         <span>
             <button id="add" onclick="add()">Add to sum</button>
@@ -50,24 +56,20 @@
             w = 500,
             h = 500,
             n = 1,
-            sumpath = [],
+            sumpath,
+            l2,
             x = d3.scaleLinear().range([-w / 2, w / 2]).domain([-3, 3]),
             y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-3, 3]);
 
         var g1 = svg.append("g").attr("transform", "translate(" + w / 2 + ", " + (50 + h / 2) + ")");
         g1.append("g").attr("class", "axis").call(d3.axisBottom(x));
         g1.append("g").attr("class", "axis").call(d3.axisLeft(y));
-        var l1 = g1.append("path").attr("d", d3.line()(fourier(1))).attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 2);
+        var l1 = g1.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 2);
 
         var g2 = svg.append("g").attr("transform", "translate(" + (100 + 3 * w / 2) + ", " + (50 + h / 2) + ")");
         g2.append("g").attr("class", "axis").call(d3.axisBottom(x));
         g2.append("g").attr("class", "axis").call(d3.axisLeft(y));
-        var l2 = g2.append("path").attr("d", d3.line()(sumpath)).attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 2);
         var l3 = g2.append("path").attr("fill", "none").attr("stroke", "lightgrey").style("stroke-width", 2);
-
-        for (var i = -3; i < 3; i += 6 / 1000) {
-            sumpath.push([w * i / 6, 0]);
-        }
 
         function fourier(n) {
             var ar = [];
@@ -79,7 +81,7 @@
 
         function setn(x) {
             n = x;
-            buttons.style("background", "lightgrey");
+            buttons.style("background", "#FCFCFC");
             d3.select("#n" + n).style("background-color", "darkgrey");
             l1.attr("d", d3.line()(fourier(n)));
         }
@@ -97,6 +99,17 @@
             l2.transition().ease(d3.easeLinear).delay(4000).duration(2000).attr("d", path);
 
         }
+
+        function reset() {
+            sumpath = [];
+            for (var i = -3; i < 3; i += 6 / 1000) {
+                sumpath.push([w * i / 6, 0]);
+            }
+            l2 = g2.append("path").attr("d", d3.line()(sumpath)).attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 2);
+        }
+
+        reset();
+        setn(1);
 
     </script>
 </body>
