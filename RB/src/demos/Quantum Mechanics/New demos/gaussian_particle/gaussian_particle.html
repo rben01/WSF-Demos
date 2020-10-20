@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.plot.ly/plotly-1.57.0.min.js"
+			integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w=="
+			crossorigin="anonymous"
+		></script>
+		<script src="https://algebra.js.org/javascripts/algebra-0.2.6.min.js"></script>
+		<style>
+			.slider-container {
+				display: grid;
+				width: 500px;
+				grid-template-columns: 12em 1fr;
+				row-gap: 2px;
+			}
+			.param-slider {
+				width: 200px;
+			}
+			.plot {
+				display: inline-block;
+			}
+			.plot-container {
+				margin-top: 20px;
+			}
+			.axis {
+				stroke-width: 1;
+				stroke: black;
+			}
+			.axis-tick {
+				stroke-width: 1;
+				stroke: black;
+			}
+			.axis-label {
+				stroke-opacity: 0;
+				fill: black;
+				font-size: 14px;
+			}
+			.x-axis-label {
+				text-anchor: middle;
+				dominant-baseline: hanging;
+			}
+			.y-axis-label {
+				text-anchor: end;
+				dominant-baseline: middle;
+			}
+		</style>
+		<body>
+			<div>
+				<div class="slider-container">
+					<span class="slider-label">Correlation of particles</span>
+					<span
+						><input
+							id="slider-correlation"
+							class="param-slider correlation-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Spread of particle 1</span>
+					<span
+						><input
+							id="slider-particle-1-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Spread of particle 2</span>
+					<span
+						><input
+							id="slider-particle-2-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Mean position of particle 1</span>
+					<span
+						><input
+							id="slider-particle-1-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Mean position of particle 2</span>
+					<span
+						><input
+							id="slider-particle-2-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+				</div>
+			</div>
+			<div class="plot-container">
+				<svg id="plot-3d" class="plot"></svg>
+				<svg id="plot-2d" class="plot"></svg>
+			</div>
+			<script src="gaussian_particle.js"></script>
+		</body>
+	</head>
+</html>
