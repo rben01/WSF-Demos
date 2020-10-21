@@ -7,6 +7,7 @@ const plot3D = d3
 	.select("#plot-3d")
 	.attr("width", GRAPH_WIDTH)
 	.attr("height", GRAPH_HEIGHT);
+const plot3DNode = plot3D.node();
 
 const plot2D = d3
 	.select("#plot-2d")
@@ -389,6 +390,74 @@ function drawEllipse2D() {
 		.attr("stroke-width", d => d.strokeWidth);
 }
 
+const triangulationInfo = (() => {
+	const xMin = X_MIN;
+	const xMax = X_MAX;
+	const nXPoints = 76;
+	const dx = (xMax - xMin) / (nXPoints - 1);
+
+	const yMin = Y_MIN;
+	const yMax = Y_MAX;
+	const nYPoints = 76;
+	const dy = (yMax - yMin) / (nYPoints - 1);
+
+	const gridPoints = [];
+	for (let i = 0; i < nXPoints; ++i) {
+		const x = xMin + i * dx;
+		for (let j = 0; j < nYPoints; ++j) {
+			const y = yMin + j * dy;
+			gridPoints.push([x, y, null]);
+		}
+	}
+
+	const xs = gridPoints.map(p => p[0]);
+	const ys = gridPoints.map(p => p[1]);
+
+	const delaunay = d3.Delaunay.from(gridPoints);
+	const { triangles } = delaunay;
+	const i = d3.range(triangles.length / 3).map(i => triangles[3 * i]);
+	const j = d3.range(triangles.length / 3).map(i => triangles[3 * i + 1]);
+	const k = d3.range(triangles.length / 3).map(i => triangles[3 * i + 2]);
+
+	return { gridPoints, xs, ys, i, j, k };
+})();
+
+// https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Bivariate_case
+function gaussianPdf(x, y, { r, u1, u2, s1, s2 }) {
+	const dx = x - u1;
+	const dy = y - u2;
+	const p = r / (s1 * s2);
+	return (
+		(1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
+		Math.exp(
+			(-1 / (2 * (1 - p ** 2))) *
+				(dx ** 2 / s1 ** 2 + dy ** 2 / s2 ** 2 - (2 * p * dx * dy) / (s1 * s2)),
+		)
+	);
+}
+
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+function getGridlines({ nGridlines, xMin, xMax, yMin, yMax, nPointsPerGridline }) {
+	nPointsPerGridline = nPointsPerGridline ?? 51;
+	const dx = (xMax - xMin) / (nGridlines - 1);
+	const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+	const gridlines = [];
+	for (let i = 0; i < nGridlines; ++i) {
+		const x = xMin + i * dx;
+		const gridline = [];
+		for (let j = 0; j < nPointsPerGridline; ++j) {
+			const y = yMin + j * dy;
+			gridline.push([x, y]);
+		}
+		gridlines.push(gridline);
+	}
+	return gridlines;
+}
+
+let firstPlot = true;
 function drawSurface3D() {
 	const r = +sliders.correlation.value; // correlation
 	const s1 = +sliders.particle1Spread.value; // sigma_x
@@ -396,60 +465,92 @@ function drawSurface3D() {
 	const u1 = +sliders.particle1MeanPos.value; // mu_x
 	const u2 = +sliders.particle2MeanPos.value; // mu_y
 
-	// https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Bivariate_case
+	const [xMin, xMax, yMin, yMax] = [X_MIN, X_MAX, Y_MIN, Y_MAX];
+
 	function pdf(x, y) {
-		const dx = x - u1;
-		const dy = y - u2;
-		const p = r / (s1 * s2);
-		return (
-			(1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
-			Math.exp(
-				(-1 / (2 * (1 - p ** 2))) *
-					(dx ** 2 / s1 ** 2 +
-						dy ** 2 / s2 ** 2 -
-						(2 * p * dx * dy) / (s1 * s2)),
-			)
-		);
+		return 0.001 + gaussianPdf(x, y, { r, u1, u2, s1, s2 });
 	}
 
-	const xMin = X_MIN;
-	const xMax = X_MAX;
-	const nXPoints = 51;
-	const dx = (xMax - xMin) / (nXPoints - 1);
+	const zs = triangulationInfo.gridPoints.map(([x, y]) => pdf(x, y));
 
-	const yMin = Y_MIN;
-	const yMax = Y_MAX;
-	const nYPoints = 51;
-	const dy = (yMax - yMin) / (nYPoints - 1);
-	const gridPoints = [];
-	for (let i = 0; i < nXPoints; ++i) {
-		const x = xMin + i * dx;
-		for (let j = 0; j < nYPoints; ++j) {
-			const y = yMin + j * dy;
-			const z = pdf(x, y);
-			gridPoints.push([x, y, z]);
-		}
-	}
-
-	const delaunay = d3.Delaunay.from(
-		gridPoints,
-		p => p[0],
-		p => p[1],
-	);
-	console.log(delaunay);
-
-	const { triangles } = delaunay;
-	const meshData = {
+	const meshDatum = {
 		type: "mesh3d",
-		x: gridPoints.map(p => p[0]),
-		y: gridPoints.map(p => p[1]),
-		z: gridPoints.map(p => p[2]),
-		i: d3.range(triangles.length / 3).map(i => triangles[3 * i]),
-		j: d3.range(triangles.length / 3).map(i => triangles[3 * i + 1]),
-		k: d3.range(triangles.length / 3).map(i => triangles[3 * i + 2]),
+		x: triangulationInfo.xs,
+		y: triangulationInfo.ys,
+		z: zs,
+		i: triangulationInfo.i,
+		j: triangulationInfo.j,
+		k: triangulationInfo.k,
 	};
 
-	const data = [meshData];
+	const gridlineZShift = 0.0001;
+	const xGridlines = getGridlines({
+		nGridlines: 9,
+		f: pdf,
+		xMin: X_MIN,
+		xMax: X_MAX,
+		yMin: Y_MIN,
+		yMax: Y_MAX,
+	}).map(gridline => gridline.map(([x, y]) => [x, y, gridlineZShift + pdf(x, y)]));
+	const yGridlines = getGridlines({
+		nGridlines: 9,
+		f: pdf,
+		xMin: Y_MIN,
+		xMax: Y_MAX,
+		yMin: X_MIN,
+		yMax: X_MAX,
+	}).map(gridline => gridline.map(([x, y]) => [y, x, gridlineZShift + pdf(y, x)]));
+
+	const gridlinesData = [...xGridlines, ...yGridlines].map(gridline => ({
+		type: "scatter3d",
+		x: gridline.map(p => p[0]),
+		y: gridline.map(p => p[1]),
+		z: gridline.map(p => p[2]),
+		mode: "lines",
+		line: {
+			color: "black",
+			width: 2,
+		},
+	}));
+
+	const nSideViewPoints = 51;
+	function getGaussianSideViewPoints(min, max, { mean, stdDev }) {
+		const d = (max - min) / nSideViewPoints;
+		const points = [];
+		for (let i = 0; i < nSideViewPoints; ++i) {
+			const x = min + i * d;
+			points.push([
+				x,
+				gaussianPdf(x, 0, { r: 0, u1: mean, u2: 0, s1: stdDev, s2: 1 }),
+			]);
+		}
+		return points;
+	}
+
+	const xSideViewPoints = getGaussianSideViewPoints(xMin, xMax, {
+		mean: u1,
+		stdDev: s1,
+	}).map(([x, z]) => [x, yMax, z]);
+
+	const ySideViewPoints = getGaussianSideViewPoints(yMin, yMax, {
+		mean: u2,
+		stdDev: s2,
+	}).map(([y, z]) => [xMax, y, z]);
+
+	const sideViewData = [xSideViewPoints, ySideViewPoints].map(points => ({
+		type: "scatter3d",
+		x: points.map(p => p[0]),
+		y: points.map(p => p[1]),
+		z: points.map(p => p[2]),
+		mode: "lines",
+		line: {
+			color: "black",
+			width: 4,
+		},
+	}));
+	console.log(sideViewData);
+
+	const data = [meshDatum, ...gridlinesData, ...sideViewData];
 
 	const axesAttrs = {
 		visible: true,
@@ -465,7 +566,6 @@ function drawSurface3D() {
 	const ySpan = yMax - yMin;
 	const yAspect = ySpan / xSpan;
 
-	const zs = gridPoints.map(p => p[2]);
 	const zMin = Math.min(zs);
 	const zMax = Math.max(zs);
 	const zSpan = zMax - zMin;
@@ -480,11 +580,45 @@ function drawSurface3D() {
 			aspectratio: { x: 1, y: yAspect, z: zAspect },
 			xaxis: axesAttrs,
 			yaxis: { ...axesAttrs, range: [yMin, yMax] },
-			zaxis: { ...axesAttrs, showgrid: true, range: [0, 0.1] },
+			zaxis: {
+				...axesAttrs,
+				showgrid: true,
+				range: [
+					0,
+					gaussianPdf(0, 0, {
+						r: 1,
+						u1: 0,
+						u2: 0,
+						s1: +sliders.particle1Spread.min,
+						s2: +sliders.particle2Spread.min,
+					}),
+				],
+			},
 		},
 	};
 
-	Plotly.react(plot3D.node(), data, layout);
+	if (firstPlot) {
+		layout.scene.camera = {
+			up: { x: 0, y: 0, z: 1 },
+			center: { x: 0, y: 0, z: 0 },
+			eye: {
+				x: -1.3,
+				y: -1.3,
+				z: 1,
+			},
+			projection: { type: "perspective" },
+		};
+		firstPlot = false;
+	} else {
+		layout.scene.camera = plot3DNode._fullLayout.scene._scene.getCamera();
+	}
+
+	const config = {
+		displayModeBar: false,
+		scrollZoom: false,
+	};
+
+	Plotly.react(plot3DNode, data, layout, config);
 }
 
 drawEllipse2D();
