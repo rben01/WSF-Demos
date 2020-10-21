@@ -353,9 +353,9 @@ function drawEllipse2D() {
 	}
 
 	const ellipseColorInterpolator = d3.interpolateRgb("black", "white");
-	const colorConstancy = 5;
-	const initialBlackness = 0.8;
-	const ellipsesData = [1, 1.6, 2.2]
+	const colorConstancy = 8;
+	const initialBlackness = 0.7;
+	const ellipsesData = [0.4, 1, 1.6, 2.2]
 		.map((radius, index) => {
 			return [
 				{
@@ -473,6 +473,12 @@ function drawSurface3D() {
 
 	const zs = triangulationInfo.gridPoints.map(([x, y]) => pdf(x, y));
 
+	const surfaceLighting = {
+		ambient: 0.7,
+		roughness: 0.8,
+		diffuse: 0.4,
+		specular: 0.96,
+	};
 	const meshDatum = {
 		type: "mesh3d",
 		x: triangulationInfo.xs,
@@ -481,6 +487,7 @@ function drawSurface3D() {
 		i: triangulationInfo.i,
 		j: triangulationInfo.j,
 		k: triangulationInfo.k,
+		lighting: surfaceLighting,
 	};
 
 	const gridlineZShift = 0.0001;
@@ -598,13 +605,17 @@ function drawSurface3D() {
 	};
 
 	if (firstPlot) {
+		const cameraXYDist = 2;
+		const cameraInitialAngle = (3 * Math.PI) / 2 - 0.4;
+		const x = cameraXYDist * Math.cos(cameraInitialAngle);
+		const y = cameraXYDist * Math.sin(cameraInitialAngle);
 		layout.scene.camera = {
 			up: { x: 0, y: 0, z: 1 },
 			center: { x: 0, y: 0, z: 0 },
 			eye: {
-				x: -1.3,
-				y: -1.3,
-				z: 1,
+				x,
+				y,
+				z: 0.5,
 			},
 			projection: { type: "perspective" },
 		};
