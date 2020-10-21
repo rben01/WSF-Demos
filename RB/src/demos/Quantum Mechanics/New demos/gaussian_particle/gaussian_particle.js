@@ -1,3 +1,5 @@
+/* global SVDJS */
+
 const GRAPH_WIDTH = 400;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
 
@@ -30,7 +32,7 @@ const sliders = {
 };
 
 // eslint-disable-next-line no-use-before-define
-d3.selectAll(".param-slider").property("step", 0.001).on("input", drawEllipse2D2);
+d3.selectAll(".param-slider").property("step", 0.0017).on("input", drawEllipse2D2);
 
 d3.selectAll(".correlation-slider")
 	.property("min", -1)
@@ -38,9 +40,9 @@ d3.selectAll(".correlation-slider")
 	.property("value", 0);
 
 d3.selectAll(".spread-slider")
-	.property("min", 1)
+	.property("min", 1.1)
 	.property("max", 2)
-	.property("value", 1.5);
+	.property("value", 1.55);
 
 d3.selectAll(".position-slider")
 	.property("min", -1)
@@ -225,12 +227,12 @@ function drawEllipse2D() {
 	const c = (1 / k) * (lambda1 * eVec1[1] ** 2 + lambda2 * eVec2[1] ** 2);
 	const d =
 		(1 / k) *
-		2 *
+		-2 *
 		(u1 * (lambda1 * eVec1[0] ** 2 + lambda2 * eVec2[0] ** 2) +
 			u2 * (lambda1 * eVec1[0] * eVec1[1] + lambda2 * eVec2[0] * eVec2[1]));
 	const e =
 		(1 / k) *
-		2 *
+		-2 *
 		(u2 * (lambda1 * eVec1[1] ** 2 + lambda2 * eVec2[1] ** 2) +
 			u1 * (lambda1 * eVec1[0] * eVec1[1] + lambda2 * eVec2[0] * eVec2[1]));
 	const f =
@@ -244,15 +246,16 @@ function drawEllipse2D() {
 	const y0 = (2 * a * e - b * d) / discriminantCanonical;
 	function getScaleFactor(sign) {
 		return (
-			(-1 *
-				Math.sqrt(
-					Math.abs(
-						discriminantCanonical *
-							(d * x0 + e * y0 + 2 * f) *
-							(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
-					),
-				)) /
-			discriminantCanonical
+			-Math.sqrt(
+				Math.abs(
+					2 *
+						(a * e ** 2 +
+							c * d ** 2 -
+							b * d * e +
+							discriminantCanonical * f) *
+						(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
+				),
+			) / discriminantCanonical
 		);
 	}
 	const m = getScaleFactor(1);
@@ -266,6 +269,7 @@ function drawEllipse2D() {
 
 	console.log({
 		pp: d * x0 + e * y0 + 2 * f,
+		rr: a * e ** 2 + c * d ** 2 - b * d * e + discriminantCanonical * f,
 		qq: a + c + 1 * Math.sqrt((a - c) ** 2 + b ** 2),
 		r,
 		s1,
@@ -367,6 +371,11 @@ function transpose(mat) {
 	return ans;
 }
 
+// Synopsis: we perform an eigendecomposition on the correlation matrix and use this to
+// compute its sqrt. Then we use this to generate five points on the ellipse of the
+// level set, solve the linear equation giving the coefficients of the ellipse in
+// standard form, and then use those coefficients to get cx, cy, rx, ry, and the
+// rotation
 function drawEllipse2D2() {
 	const r = +sliders.correlation.value; // correlation
 	const s1 = +sliders.particle1Spread.value; // sigma_1
@@ -400,33 +409,205 @@ function drawEllipse2D2() {
 		],
 	);
 
-	const pointsOnUnitCircle = d3.range(100).map(i => {
-		const theta = (i / 99) * 2 * Math.PI;
-		return [Math.cos(theta), Math.sin(theta)];
+	function getEllipseParams(radius) {
+		const nPoints = 5;
+		const pointsOnUnitCircle = d3.range(nPoints).map(i => {
+			const theta = (i / nPoints) * 2 * Math.PI;
+			return [Math.cos(theta), Math.sin(theta)];
+		});
+
+		// https://stats.stackexchange.com/a/76428
+		const pointsOnEllipse = matMul(
+			pointsOnUnitCircle,
+			[
+				[radius, 0],
+				[0, radius],
+			],
+			sqrtSigma,
+		);
+
+		for (let i = 0; i < pointsOnEllipse.length; ++i) {
+			pointsOnEllipse[i][0] += u1;
+			pointsOnEllipse[i][1] += u2;
+		}
+
+		const mat = transpose(
+			pointsOnEllipse.map(([x, y]) => [x ** 2, x * y, y ** 2, x, y, 1]),
+		);
+
+		// https://math.stackexchange.com/a/2286578
+		// https://math.stackexchange.com/a/767126
+		const { u } = SVDJS.SVD(mat, "f", true, 1e-10);
+		const [a, b, c, d, e, f] = u.map(row => row[row.length - 1]);
+
+		// https://en.wikipedia.org/wiki/Ellipse#General_ellipse
+		const discriminantCanonical = b ** 2 - 4 * a * c;
+		const x0 = (2 * c * d - b * e) / discriminantCanonical;
+		const y0 = (2 * a * e - b * d) / discriminantCanonical;
+		function getScaleFactor(sign) {
+			return (
+				-Math.sqrt(
+					Math.abs(
+						2 *
+							(a * e ** 2 +
+								c * d ** 2 -
+								b * d * e +
+								discriminantCanonical * f) *
+							(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
+					),
+				) / discriminantCanonical
+			);
+		}
+		const m = getScaleFactor(1);
+		const n = getScaleFactor(-1);
+		const theta =
+			b === 0
+				? a < c
+					? 0
+					: Math.PI / 4
+				: Math.atan((1 / b) * (c - a - Math.sqrt((a - c) ** 2 + b ** 2)));
+
+		console.log({ a, b, c, d, e, f, x0, y0, m, n, theta });
+
+		// console.log(u, v, q);
+		// const [a, b, c, d, e] = q;
+
+		// let indexClosestToCenter = null;
+		// let minDistFromCenterX = Infinity;
+		// pointsOnEllipseUnordered.forEach(([x, y], i) => {
+		// 	const distFromCenterX = Math.abs(x - u1);
+		// 	if (distFromCenterX < minDistFromCenterX && y > u2) {
+		// 		indexClosestToCenter = i;
+		// 		minDistFromCenterX = distFromCenterX;
+		// 	}
+		// });
+
+		// const pointsOnEllipse = [
+		// 	...pointsOnEllipseUnordered.slice(indexClosestToCenter),
+		// 	...pointsOnEllipseUnordered.slice(0, indexClosestToCenter),
+		// ];
+		const cx = xScale2D(x0);
+		const cy = yScale2D(y0);
+		const rx = xScale2D(m) - xScale2D(X_0);
+		const ry = yScale2D(Y_0) - yScale2D(n);
+		const rotate = (-Math.sign(r) * (theta * 180)) / Math.PI;
+		const transform = `rotate(${rotate} ${cx} ${cy})`;
+
+		return { cx, cy, rx, ry, transform };
+	}
+
+	// const nPoints = 5;
+	// const pointsOnUnitCircle = d3.range(nPoints).map(i => {
+	// 	const theta = (i / nPoints) * 2 * Math.PI;
+	// 	return [Math.cos(theta), Math.sin(theta)];
+	// });
+
+	// const pointsOnEllipse = matMul(
+	// 	pointsOnUnitCircle,
+	// 	[
+	// 		[s1, 0],
+	// 		[0, s2],
+	// 	],
+	// 	sqrtSigma,
+	// );
+
+	// for (let i = 0; i < pointsOnEllipse.length; ++i) {
+	// 	pointsOnEllipse[i][0] += u1;
+	// 	pointsOnEllipse[i][1] += u2;
+	// }
+
+	// // console.log(pointsOnEllipse);
+	// const mat = transpose(
+	// 	pointsOnEllipse.map(([x, y]) => [x ** 2, x * y, y ** 2, x, y, 1]),
+	// );
+	// // console.log(JSON.stringify(mat));
+	// const { u } = SVDJS.SVD(mat, "f", true, 1e-10);
+	// const [a, b, c, d, e, f] = u.map(row => row[row.length - 1]);
+
+	// const discriminantCanonical = b ** 2 - 4 * a * c;
+	// const x0 = (2 * c * d - b * e) / discriminantCanonical;
+	// const y0 = (2 * a * e - b * d) / discriminantCanonical;
+	// function getScaleFactor(sign) {
+	// 	return (
+	// 		-Math.sqrt(
+	// 			Math.abs(
+	// 				2 *
+	// 					(a * e ** 2 +
+	// 						c * d ** 2 -
+	// 						b * d * e +
+	// 						discriminantCanonical * f) *
+	// 					(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
+	// 			),
+	// 		) / discriminantCanonical
+	// 	);
+	// }
+	// const m = getScaleFactor(1);
+	// const n = getScaleFactor(-1);
+	// const theta =
+	// 	b === 0
+	// 		? a < c
+	// 			? 0
+	// 			: Math.PI / 4
+	// 		: Math.atan((1 / b) * (c - a - Math.sqrt((a - c) ** 2 + b ** 2)));
+
+	// console.log({ a, b, c, d, e, f, x0, y0, m, n, theta });
+
+	const ellipsesData = [1, 1.6, 2.2].map((radius, index) => {
+		const colorDegradationWithRadius = 2;
+		return {
+			...getEllipseParams(radius),
+			stroke: d3.interpolateRgb(
+				"black",
+				"white",
+			)(1 - colorDegradationWithRadius / (index + colorDegradationWithRadius)),
+		};
 	});
 
-	const pointsOnEllipse = matMul(
-		pointsOnUnitCircle,
-		[
-			[s1, 0],
-			[0, s2],
-		],
-		sqrtSigma,
-	);
+	// console.log(u, v, q);
+	// const [a, b, c, d, e] = q;
 
-	const line = d3
-		.line()
-		.curve(d3.curveCardinalClosed)
-		.x(d => xScale2D(d[0] + u1))
-		.y(d => yScale2D(d[1] + u2));
+	// let indexClosestToCenter = null;
+	// let minDistFromCenterX = Infinity;
+	// pointsOnEllipseUnordered.forEach(([x, y], i) => {
+	// 	const distFromCenterX = Math.abs(x - u1);
+	// 	if (distFromCenterX < minDistFromCenterX && y > u2) {
+	// 		indexClosestToCenter = i;
+	// 		minDistFromCenterX = distFromCenterX;
+	// 	}
+	// });
+
+	// const pointsOnEllipse = [
+	// 	...pointsOnEllipseUnordered.slice(indexClosestToCenter),
+	// 	...pointsOnEllipseUnordered.slice(0, indexClosestToCenter),
+	// ];
+	// const cx = xScale2D(x0);
+	// const cy = yScale2D(y0);
+	// const rx = xScale2D(m) - xScale2D(X_0);
+	// const ry = yScale2D(Y_0) - yScale2D(n);
+	// const rotate = (-Math.sign(r) * (theta * 180)) / Math.PI;
 	plot2D
-		.selectAll(".ellipse")
-		.data([pointsOnEllipse])
-		.join("path")
-		.classed("ellipse", true)
-		.attr("d", line)
-		.attr("fill-opacity", 0)
-		.attr("stroke", "black");
+		.selectAll(".level-set")
+		.data(ellipsesData)
+		.join("ellipse")
+		.classed("level-set", true)
+		.attr("cx", d => d.cx)
+		.attr("cy", d => d.cy)
+		.attr("rx", d => d.rx)
+		.attr("ry", d => d.ry)
+		.attr("transform", d => d.transform)
+		.attr("stroke", d => d.stroke);
+
+	// const line = d3
+	// 	.line()
+	// 	.curve(d3.curveCardinalClosed)
+	// 	.x(d => xScale2D(d[0] + u1))
+	// 	.y(d => yScale2D((r < 0 ? -1 : 1) * d[1] + u2));
+	// plot2D
+	// 	.selectAll(".ellipse")
+	// 	.data([pointsOnEllipse])
+	// 	.join("path")
+	// 	.classed("ellipse", true)
+	// 	.attr("d", line);
 }
 
 drawEllipse2D2();

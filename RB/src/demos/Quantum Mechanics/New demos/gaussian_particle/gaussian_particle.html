@@ -11,7 +11,7 @@
 			integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w=="
 			crossorigin="anonymous"
 		></script>
-		<script src="https://algebra.js.org/javascripts/algebra-0.2.6.min.js"></script>
+		<script src="https://unpkg.com/svd-js" type="application/javascript"></script>
 		<style>
 			.slider-container {
 				display: grid;
@@ -30,15 +30,15 @@
 			}
 			.axis {
 				stroke-width: 1;
-				stroke: black;
+				stroke: #555;
 			}
 			.axis-tick {
 				stroke-width: 1;
-				stroke: black;
+				stroke: #666;
 			}
 			.axis-label {
 				stroke-opacity: 0;
-				fill: black;
+				fill: #111;
 				font-size: 14px;
 			}
 			.x-axis-label {
@@ -48,6 +48,18 @@
 			.y-axis-label {
 				text-anchor: end;
 				dominant-baseline: middle;
+			}
+			#plot-2d .ellipse {
+				fill-opacity: 0;
+				stroke: black;
+				stroke-width: 3;
+				stroke-dasharray: 6;
+				visibility: hidden;
+			}
+			#plot-2d .level-set {
+				fill-opacity: 0;
+				fill: white;
+				stroke-width: 3;
 			}
 		</style>
 		<body>
