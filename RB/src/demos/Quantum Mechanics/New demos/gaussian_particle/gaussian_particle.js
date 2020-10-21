@@ -1,4 +1,4 @@
-/* global SVDJS */
+/* global SVDJS Plotly */
 
 const GRAPH_WIDTH = 400;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
@@ -31,8 +31,7 @@ const sliders = {
 	particle2MeanPos: document.getElementById("slider-particle-2-mean-pos"),
 };
 
-// eslint-disable-next-line no-use-before-define
-d3.selectAll(".param-slider").property("step", 0.0017).on("input", drawEllipse2D2);
+d3.selectAll(".param-slider").property("step", 0.0017);
 
 d3.selectAll(".correlation-slider")
 	.property("min", -1)
@@ -189,132 +188,7 @@ function unitVector(vec) {
 		sum += v ** 2;
 	}
 	const magnitude = sum ** 0.5;
-	console.log(vec, magnitude);
 	return vec.map(v => v / magnitude);
-}
-
-function drawEllipse2D() {
-	const r = +sliders.correlation.value; // correlation
-	const s1 = +sliders.particle1Spread.value; // sigma_1
-	const s2 = +sliders.particle2Spread.value; // sigma_2
-	const u1 = +sliders.particle1MeanPos.value; // mu_1
-	const u2 = +sliders.particle2MeanPos.value; // mu_2
-
-	// Determinant of the correlation matrix [[s1, t], [t, s2]]
-	const det = s1 * s2 - r ** 2;
-
-	// eigendecomposition of the ICM
-	let lambda1, lambda2, eVec1, eVec2;
-	if (r === 0) {
-		lambda1 = 1 / s2;
-		lambda2 = 1 / s1;
-		eVec1 = [0, 1];
-		eVec2 = [1, 0];
-	} else {
-		const discriminantICM = Math.sqrt((s1 - s2) ** 2 + 4 * r ** 2);
-		lambda1 = (s1 + s2 - discriminantICM) / (2 * det);
-		lambda2 = (s1 + s2 + discriminantICM) / (2 * det);
-		eVec1 = unitVector([(s1 - s2 + discriminantICM) / (2 * r), 1]);
-		eVec2 = unitVector([(s1 - s2 - discriminantICM) / (2 * r), 1]);
-	}
-
-	// find equation of resulting ellipse ax^2 + bxy + cy^2 + dx + ey + f = 0
-	// https://en.wikipedia.org/wiki/Ellipse#General_ellipse
-	const k = 1; // an arbitrary level set
-	const a = (1 / k) * (lambda1 * eVec1[0] ** 2 + lambda2 * eVec2[0] ** 2);
-	const b =
-		(1 / k) * 2 * (lambda1 * eVec1[0] * eVec1[1] + lambda2 * eVec2[0] * eVec2[1]);
-	const c = (1 / k) * (lambda1 * eVec1[1] ** 2 + lambda2 * eVec2[1] ** 2);
-	const d =
-		(1 / k) *
-		-2 *
-		(u1 * (lambda1 * eVec1[0] ** 2 + lambda2 * eVec2[0] ** 2) +
-			u2 * (lambda1 * eVec1[0] * eVec1[1] + lambda2 * eVec2[0] * eVec2[1]));
-	const e =
-		(1 / k) *
-		-2 *
-		(u2 * (lambda1 * eVec1[1] ** 2 + lambda2 * eVec2[1] ** 2) +
-			u1 * (lambda1 * eVec1[0] * eVec1[1] + lambda2 * eVec2[0] * eVec2[1]));
-	const f =
-		(1 / k) *
-		(lambda1 * (u1 * eVec1[0] + u2 * eVec1[1]) ** 2 +
-			lambda2 * (u1 * eVec2[0] + u2 * eVec2[1]) ** 2);
-
-	// Finally, the canonical parameters for (x-x0)^2/m^2 + (y-y0)^2/n^2 = 1
-	const discriminantCanonical = b ** 2 - 4 * a * c;
-	const x0 = (2 * c * d - b * e) / discriminantCanonical;
-	const y0 = (2 * a * e - b * d) / discriminantCanonical;
-	function getScaleFactor(sign) {
-		return (
-			-Math.sqrt(
-				Math.abs(
-					2 *
-						(a * e ** 2 +
-							c * d ** 2 -
-							b * d * e +
-							discriminantCanonical * f) *
-						(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
-				),
-			) / discriminantCanonical
-		);
-	}
-	const m = getScaleFactor(1);
-	const n = getScaleFactor(-1);
-	const theta =
-		b === 0
-			? a < c
-				? 0
-				: Math.PI / 4
-			: Math.atan((1 / b) * (c - a - Math.sqrt((a - c) ** 2 + b ** 2)));
-
-	console.log({
-		pp: d * x0 + e * y0 + 2 * f,
-		rr: a * e ** 2 + c * d ** 2 - b * d * e + discriminantCanonical * f,
-		qq: a + c + 1 * Math.sqrt((a - c) ** 2 + b ** 2),
-		r,
-		s1,
-		s2,
-		u1,
-		u2,
-		det,
-		lambda1,
-		lambda2,
-		eVec1,
-		eVec2,
-		k,
-		a,
-		b,
-		c,
-		d,
-		e,
-		f,
-		discriminantCanonical,
-		x0,
-		y0,
-		m,
-		n,
-		theta,
-	});
-	plot2D
-		.selectAll(".level-set")
-		.data([
-			{
-				cx: x0,
-				cy: y0,
-				rx: 1 / m,
-				ry: 1 / n,
-				transform: `rotate(${theta}rad)`,
-			},
-		])
-		.join("ellipse")
-		.classed("level-set", true)
-		.attr("cx", d => d.cx)
-		.attr("cy", d => d.cy)
-		.attr("rx", d => d.rx)
-		.attr("ry", d => d.ry)
-		.attr("transform", d => d.transform)
-		.attr("fill-opacity", 0)
-		.attr("stroke", "black");
 }
 
 function __matMulHelper(mat1, mat2) {
@@ -376,7 +250,7 @@ function transpose(mat) {
 // level set, solve the linear equation giving the coefficients of the ellipse in
 // standard form, and then use those coefficients to get cx, cy, rx, ry, and the
 // rotation
-function drawEllipse2D2() {
+function drawEllipse2D() {
 	const r = +sliders.correlation.value; // correlation
 	const s1 = +sliders.particle1Spread.value; // sigma_1
 	const s2 = +sliders.particle2Spread.value; // sigma_2
@@ -467,25 +341,6 @@ function drawEllipse2D2() {
 					: Math.PI / 4
 				: Math.atan((1 / b) * (c - a - Math.sqrt((a - c) ** 2 + b ** 2)));
 
-		console.log({ a, b, c, d, e, f, x0, y0, m, n, theta });
-
-		// console.log(u, v, q);
-		// const [a, b, c, d, e] = q;
-
-		// let indexClosestToCenter = null;
-		// let minDistFromCenterX = Infinity;
-		// pointsOnEllipseUnordered.forEach(([x, y], i) => {
-		// 	const distFromCenterX = Math.abs(x - u1);
-		// 	if (distFromCenterX < minDistFromCenterX && y > u2) {
-		// 		indexClosestToCenter = i;
-		// 		minDistFromCenterX = distFromCenterX;
-		// 	}
-		// });
-
-		// const pointsOnEllipse = [
-		// 	...pointsOnEllipseUnordered.slice(indexClosestToCenter),
-		// 	...pointsOnEllipseUnordered.slice(0, indexClosestToCenter),
-		// ];
 		const cx = xScale2D(x0);
 		const cy = yScale2D(y0);
 		const rx = xScale2D(m) - xScale2D(X_0);
@@ -496,95 +351,30 @@ function drawEllipse2D2() {
 		return { cx, cy, rx, ry, transform };
 	}
 
-	// const nPoints = 5;
-	// const pointsOnUnitCircle = d3.range(nPoints).map(i => {
-	// 	const theta = (i / nPoints) * 2 * Math.PI;
-	// 	return [Math.cos(theta), Math.sin(theta)];
-	// });
+	const ellipseColorInterpolator = d3.interpolateRgb("black", "white");
+	const colorConstancy = 5;
+	const initialBlackness = 0.8;
+	const ellipsesData = [1, 1.6, 2.2]
+		.map((radius, index) => {
+			return [
+				{
+					...getEllipseParams(radius),
+					stroke: "white",
+					strokeWidth: 5,
+				},
+				{
+					...getEllipseParams(radius),
+					stroke: ellipseColorInterpolator(
+						1 -
+							initialBlackness +
+							(1 - colorConstancy / (index + colorConstancy)),
+					),
+					strokeWidth: 3,
+				},
+			];
+		})
+		.flat(Infinity);
 
-	// const pointsOnEllipse = matMul(
-	// 	pointsOnUnitCircle,
-	// 	[
-	// 		[s1, 0],
-	// 		[0, s2],
-	// 	],
-	// 	sqrtSigma,
-	// );
-
-	// for (let i = 0; i < pointsOnEllipse.length; ++i) {
-	// 	pointsOnEllipse[i][0] += u1;
-	// 	pointsOnEllipse[i][1] += u2;
-	// }
-
-	// // console.log(pointsOnEllipse);
-	// const mat = transpose(
-	// 	pointsOnEllipse.map(([x, y]) => [x ** 2, x * y, y ** 2, x, y, 1]),
-	// );
-	// // console.log(JSON.stringify(mat));
-	// const { u } = SVDJS.SVD(mat, "f", true, 1e-10);
-	// const [a, b, c, d, e, f] = u.map(row => row[row.length - 1]);
-
-	// const discriminantCanonical = b ** 2 - 4 * a * c;
-	// const x0 = (2 * c * d - b * e) / discriminantCanonical;
-	// const y0 = (2 * a * e - b * d) / discriminantCanonical;
-	// function getScaleFactor(sign) {
-	// 	return (
-	// 		-Math.sqrt(
-	// 			Math.abs(
-	// 				2 *
-	// 					(a * e ** 2 +
-	// 						c * d ** 2 -
-	// 						b * d * e +
-	// 						discriminantCanonical * f) *
-	// 					(a + c + sign * Math.sqrt((a - c) ** 2 + b ** 2)),
-	// 			),
-	// 		) / discriminantCanonical
-	// 	);
-	// }
-	// const m = getScaleFactor(1);
-	// const n = getScaleFactor(-1);
-	// const theta =
-	// 	b === 0
-	// 		? a < c
-	// 			? 0
-	// 			: Math.PI / 4
-	// 		: Math.atan((1 / b) * (c - a - Math.sqrt((a - c) ** 2 + b ** 2)));
-
-	// console.log({ a, b, c, d, e, f, x0, y0, m, n, theta });
-
-	const ellipsesData = [1, 1.6, 2.2].map((radius, index) => {
-		const colorDegradationWithRadius = 2;
-		return {
-			...getEllipseParams(radius),
-			stroke: d3.interpolateRgb(
-				"black",
-				"white",
-			)(1 - colorDegradationWithRadius / (index + colorDegradationWithRadius)),
-		};
-	});
-
-	// console.log(u, v, q);
-	// const [a, b, c, d, e] = q;
-
-	// let indexClosestToCenter = null;
-	// let minDistFromCenterX = Infinity;
-	// pointsOnEllipseUnordered.forEach(([x, y], i) => {
-	// 	const distFromCenterX = Math.abs(x - u1);
-	// 	if (distFromCenterX < minDistFromCenterX && y > u2) {
-	// 		indexClosestToCenter = i;
-	// 		minDistFromCenterX = distFromCenterX;
-	// 	}
-	// });
-
-	// const pointsOnEllipse = [
-	// 	...pointsOnEllipseUnordered.slice(indexClosestToCenter),
-	// 	...pointsOnEllipseUnordered.slice(0, indexClosestToCenter),
-	// ];
-	// const cx = xScale2D(x0);
-	// const cy = yScale2D(y0);
-	// const rx = xScale2D(m) - xScale2D(X_0);
-	// const ry = yScale2D(Y_0) - yScale2D(n);
-	// const rotate = (-Math.sign(r) * (theta * 180)) / Math.PI;
 	plot2D
 		.selectAll(".level-set")
 		.data(ellipsesData)
@@ -595,19 +385,111 @@ function drawEllipse2D2() {
 		.attr("rx", d => d.rx)
 		.attr("ry", d => d.ry)
 		.attr("transform", d => d.transform)
-		.attr("stroke", d => d.stroke);
-
-	// const line = d3
-	// 	.line()
-	// 	.curve(d3.curveCardinalClosed)
-	// 	.x(d => xScale2D(d[0] + u1))
-	// 	.y(d => yScale2D((r < 0 ? -1 : 1) * d[1] + u2));
-	// plot2D
-	// 	.selectAll(".ellipse")
-	// 	.data([pointsOnEllipse])
-	// 	.join("path")
-	// 	.classed("ellipse", true)
-	// 	.attr("d", line);
+		.attr("stroke", d => d.stroke)
+		.attr("stroke-width", d => d.strokeWidth);
 }
 
-drawEllipse2D2();
+function drawSurface3D() {
+	const r = +sliders.correlation.value; // correlation
+	const s1 = +sliders.particle1Spread.value; // sigma_x
+	const s2 = +sliders.particle2Spread.value; // sigma_y
+	const u1 = +sliders.particle1MeanPos.value; // mu_x
+	const u2 = +sliders.particle2MeanPos.value; // mu_y
+
+	// https://en.wikipedia.org/wiki/Multivariate_normal_distribution#Bivariate_case
+	function pdf(x, y) {
+		const dx = x - u1;
+		const dy = y - u2;
+		const p = r / (s1 * s2);
+		return (
+			(1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
+			Math.exp(
+				(-1 / (2 * (1 - p ** 2))) *
+					(dx ** 2 / s1 ** 2 +
+						dy ** 2 / s2 ** 2 -
+						(2 * p * dx * dy) / (s1 * s2)),
+			)
+		);
+	}
+
+	const xMin = X_MIN;
+	const xMax = X_MAX;
+	const nXPoints = 51;
+	const dx = (xMax - xMin) / (nXPoints - 1);
+
+	const yMin = Y_MIN;
+	const yMax = Y_MAX;
+	const nYPoints = 51;
+	const dy = (yMax - yMin) / (nYPoints - 1);
+	const gridPoints = [];
+	for (let i = 0; i < nXPoints; ++i) {
+		const x = xMin + i * dx;
+		for (let j = 0; j < nYPoints; ++j) {
+			const y = yMin + j * dy;
+			const z = pdf(x, y);
+			gridPoints.push([x, y, z]);
+		}
+	}
+
+	const delaunay = d3.Delaunay.from(
+		gridPoints,
+		p => p[0],
+		p => p[1],
+	);
+	console.log(delaunay);
+
+	const { triangles } = delaunay;
+	const meshData = {
+		type: "mesh3d",
+		x: gridPoints.map(p => p[0]),
+		y: gridPoints.map(p => p[1]),
+		z: gridPoints.map(p => p[2]),
+		i: d3.range(triangles.length / 3).map(i => triangles[3 * i]),
+		j: d3.range(triangles.length / 3).map(i => triangles[3 * i + 1]),
+		k: d3.range(triangles.length / 3).map(i => triangles[3 * i + 2]),
+	};
+
+	const data = [meshData];
+
+	const axesAttrs = {
+		visible: true,
+		showgrid: true,
+		showspikes: false,
+		showline: false,
+		zeroline: false,
+		showticklabels: true,
+	};
+
+	const xSpan = xMax - xMin;
+
+	const ySpan = yMax - yMin;
+	const yAspect = ySpan / xSpan;
+
+	const zs = gridPoints.map(p => p[2]);
+	const zMin = Math.min(zs);
+	const zMax = Math.max(zs);
+	const zSpan = zMax - zMin;
+	const zAspect = zSpan / xSpan;
+
+	const layout = {
+		margin: { t: 0, b: 0, l: 0, r: 0 },
+		hovermode: false,
+		showlegend: false,
+		scene: {
+			aspectmode: "manual",
+			aspectratio: { x: 1, y: yAspect, z: zAspect },
+			xaxis: axesAttrs,
+			yaxis: { ...axesAttrs, range: [yMin, yMax] },
+			zaxis: { ...axesAttrs, showgrid: true, range: [0, 0.1] },
+		},
+	};
+
+	Plotly.react(plot3D.node(), data, layout);
+}
+
+drawEllipse2D();
+drawSurface3D();
+d3.selectAll(".param-slider").on("input", () => {
+	drawEllipse2D();
+	drawSurface3D();
+});
