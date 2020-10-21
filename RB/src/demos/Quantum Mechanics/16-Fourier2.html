@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+    <style>
+        .axis {
+            stroke: white;
+        }
+
+        .axis line {
+            stroke: white;
+        }
+
+        .axis path {
+            stroke: white;
+        }
+
+        button {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+    </style>
+</head>
+
+<body style="background-color: black;">
+    <div>
+        <span>
+            <label>
+                <span class="radio-label" style="color: white;">Fourier Mode </span>
+                <button id="n1" onclick="setn(1)">n=1</button>
+                <button id="n3" onclick="setn(3)">n=3</button>
+                <button id="n5" onclick="setn(5)">n=5</button>
+                <button id="n7" onclick="setn(7)">n=7</button>
+                <button id="n9" onclick="setn(9)">n=9</button>
+            </label>
+        </span>
+        <br>
+        <br>
+        <span>
+            <button id="add" onclick="add()">Add to sum</button>
+            <button id="reset" onclick="reset()">Reset</button>
+        </span>
+    </div>
+
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" id="svg" class="viz-canvas" style="margin: auto; display: block;"
+            width=1200 height=600></svg>
+    </div>
+
+    <script type="text/javascript">
+        var svg = d3.select("#svg"),
+            buttons = d3.selectAll("button"),
+            w = 500,
+            h = 500,
+            n = 1,
+            sumpath,
+            x = d3.scaleLinear().range([-w / 2, w / 2]).domain([-3, 3]),
+            y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-3, 3]);
+
+        var g1 = svg.append("g").attr("transform", "translate(" + w / 2 + ", " + (50 + h / 2) + ")");
+        g1.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
+        g1.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
+        var l1 = g1.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
+
+        var g2 = svg.append("g").attr("transform", "translate(" + (100 + 3 * w / 2) + ", " + (50 + h / 2) + ")");
+        g2.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
+        g2.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
+        var l2 = g2.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
+        var l3 = g2.append("path").attr("fill", "none").attr("stroke", "lightgrey").style("stroke-width", 3);
+
+        function fourier(n) {
+            var ar = [];
+            for (var i = -3; i < 3; i += 6 / 1000) {
+                ar.push([w * i / 6, h * (-1) ** (1 + (n - 1) / 2) * Math.cos(n * Math.PI * i) / n / 3]);
+            }
+            return (ar)
+        }
+
+        function setn(x) {
+            n = x;
+            buttons.style("background", "#FCFCFC");
+            d3.select("#n" + n).style("background-color", "darkgrey");
+            l1.attr("d", d3.line()(fourier(n)));
+        }
+
+        function add() {
+            var delta = fourier(n);
+            for (var i = 0; i < sumpath.length; i++) {
+                sumpath[i][1] += delta[i][1];
+            }
+            var path = d3.line()(sumpath);
+            l3.attr("d", path)
+            var length = l3.node().getTotalLength()
+            l3.attr("stroke-dasharray", length + " " + length).attr("stroke-dashoffset", l3.node().getTotalLength());
+            l3.transition().ease(d3.easeLinear).duration(4000).attr("stroke-dashoffset", 0);
+            l2.transition().ease(d3.easeLinear).delay(4000).duration(2000).attr("d", path);
+
+        }
+
+        function reset() {
+            sumpath = [];
+            for (var i = -3; i < 3; i += 6 / 1000) {
+                sumpath.push([w * i / 6, 0]);
+            }
+            l2.attr("d", d3.line()(sumpath));
+            l3.attr("d", "");
+        }
+
+        reset();
+        setn(1);
+
+    </script>
+</body>
+
+</html>
