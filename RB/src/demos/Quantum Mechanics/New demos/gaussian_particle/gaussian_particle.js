@@ -246,7 +246,7 @@ function transpose(mat) {
 	return ans;
 }
 
-// Synopsis: we perform an eigendecomposition on the correlation matrix and use this to
+// Synopsis: we perform an eigendecomposition on the covariance matrix and use this to
 // compute its sqrt. Then we use this to generate five points on the ellipse of the
 // level set, solve the linear equation giving the coefficients of the ellipse in
 // standard form, and then use those coefficients to get cx, cy, rx, ry, and the
@@ -258,7 +258,7 @@ function drawEllipse2D() {
 	const u1 = +sliders.particle1MeanPos.value; // mu_1
 	const u2 = +sliders.particle2MeanPos.value; // mu_2
 
-	// eigendecomposition of the correlation matrix
+	// eigendecomposition of the covariance matrix
 	let lambda1, lambda2, eVec1, eVec2;
 	if (r === 0) {
 		lambda1 = s1;
@@ -266,6 +266,7 @@ function drawEllipse2D() {
 		eVec1 = [0, 1];
 		eVec2 = [1, 0];
 	} else {
+		// ICM stands for inverse (of the) covariance matrix
 		const discriminantICM = Math.sqrt((s1 - s2) ** 2 + 4 * r ** 2);
 		lambda1 = (s1 + s2 - discriminantICM) / 2;
 		lambda2 = (s1 + s2 + discriminantICM) / 2;
