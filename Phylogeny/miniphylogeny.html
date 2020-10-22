@@ -197,25 +197,6 @@
             selected.push(selection);
             var g = d3.select("g");
             var leaf = g.select("#" + o);
-            /* var twidth = leaf.select("text").node().getBoundingClientRect().width;
-            var theight = leaf.select("text").node().getBoundingClientRect().height;
-            if (selection.x < 90) {
-                twidth *= 1.3;
-            }
-            else if (selection.x < 180) {
-                twidth *= 1.1;
-                theight += 15;
-            }
-            else if (selection.x < 270) {
-                twidth = twidth * 0.8 - 12;
-                theight += 15;
-            }
-            leaf.append("svg:image")
-                .attr("height", 20)
-                .attr("width", 24)
-                .attr("x", selection.x > 180 ? twidth : -twidth)
-                .attr("y", -theight)
-                .attr("xlink:href", "./Phylopics/" + o + ".png"); */
             var twidth = 1.1 * leaf.select("text").node().getBBox().width;
             var theight = 1.1 * leaf.select("text").node().getBBox().height;
             leaf.append("svg:image")
