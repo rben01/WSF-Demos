@@ -195,16 +195,36 @@
                 connect(selected[s], selection);
             }
             selected.push(selection);
-            var url = phylopic.filter(d => d.Order == o)[0].Link;
             var g = d3.select("g");
             var leaf = g.select("#" + o);
-            leaf.select("text").transition().duration(500).attr("x", selection.x > 180 ? 30 : -30);
+            /* var twidth = leaf.select("text").node().getBoundingClientRect().width;
+            var theight = leaf.select("text").node().getBoundingClientRect().height;
+            if (selection.x < 90) {
+                twidth *= 1.3;
+            }
+            else if (selection.x < 180) {
+                twidth *= 1.1;
+                theight += 15;
+            }
+            else if (selection.x < 270) {
+                twidth = twidth * 0.8 - 12;
+                theight += 15;
+            }
             leaf.append("svg:image")
                 .attr("height", 20)
                 .attr("width", 24)
-                .attr("x", 1.2 * ((selection.x - 360) / 15))
-                .attr("y", 1.2 * (-10 - 10 * (1 - Math.abs((selection.x - 180) / 180))))
-                .attr("xlink:href", url);
+                .attr("x", selection.x > 180 ? twidth : -twidth)
+                .attr("y", -theight)
+                .attr("xlink:href", "./Phylopics/" + o + ".png"); */
+            var twidth = 1.1 * leaf.select("text").node().getBBox().width;
+            var theight = 1.1 * leaf.select("text").node().getBBox().height;
+            leaf.append("svg:image")
+                .attr("height", 20)
+                .attr("width", 24)
+                .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
+                .attr("x", selection.x > 180 ? twidth : -24 - twidth)
+                .attr("y", -theight)
+                .attr("xlink:href", "./Phylopics/" + o + ".png");
         }
 
         function text_input() {
