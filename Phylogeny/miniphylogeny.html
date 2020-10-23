@@ -136,17 +136,18 @@
                 g.append("line")
                     .attr("x1", "-" + (width / 2 - 140))
                     .attr("x2", (width / 2 - 140))
-                    .attr("y1", 20)
-                    .attr("y2", 20)
+                    .attr("y1", 30)
+                    .attr("y2", 30)
                     .attr("stroke-width", 1)
                     .attr("stroke", "black");
 
-                g.append("circle").attr("cx", 0).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", 0).attr("dy", "40").style("text-anchor", "middle").text("430 million years ago");
-                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "40").style("text-anchor", "middle").text("Present day");
-                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", width / 2 - 140).attr("dy", "40").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", 0).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", 0).attr("dy", "50").style("text-anchor", "middle").text("430 million years ago");
+                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", width / 2 - 140).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("svg:image").attr("x", -15).attr("y", 5).attr("width", 30).attr("height", 25).attr("xlink:href", "./Phylopics/common_ancestor.png");
             });
         }
 
