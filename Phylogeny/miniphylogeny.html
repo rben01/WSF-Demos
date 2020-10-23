@@ -71,13 +71,11 @@
 
         d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
             taxonomy = data;
-            d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Chordata_Cut.csv").then(function (data) {
-                phylopic = data;
-                rend2();
-            })
-        }
-
-        );
+        })
+        d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Chordata_Cut.csv").then(function (data) {
+            phylopic = data;
+            rend2();
+        })
 
         function rend2() {
             var width = +svg.attr("width"),
