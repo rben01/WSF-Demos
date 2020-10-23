@@ -64,6 +64,7 @@
         var svg = d3.select('svg'),
             phylopic,
             selected = [],
+            image_coords = [],
             root,
             taxonomy,
             arcgen = d3.arc();
@@ -199,13 +200,22 @@
             var leaf = g.select("#" + o);
             var twidth = 1.1 * leaf.select("text").node().getBBox().width;
             var theight = 1.1 * leaf.select("text").node().getBBox().height;
-            leaf.append("svg:image")
+            var image = leaf.append("svg:image")
                 .attr("height", 20)
                 .attr("width", 24)
                 .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                 .attr("x", selection.x > 180 ? twidth : -24 - twidth)
                 .attr("y", -theight)
                 .attr("xlink:href", "./Phylopics/" + o + ".png");
+
+            var coord = image.node().getBoundingClientRect();
+            for (var c of image_coords) {
+                if ((coord.x > c[0] - 24) & (coord.x < c[0] + 24) & (coord.y > c[1] - 20) & (coord.y < c[1] + 20)) {
+                    image.attr("x", selection.x > 180 ? 24 + twidth : -48 - twidth);
+                }
+            }
+
+            image_coords.push([image.node().getBoundingClientRect().x, image.node().getBoundingClientRect().y]);
         }
 
         function text_input() {
