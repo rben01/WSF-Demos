@@ -69,6 +69,8 @@
             taxonomy,
             arcgen = d3.arc();
 
+        const shrink = ["Batrachoidiformes", "Synbranchiformes", "Pleuronectiformes", "Tinamiformes", "Galliformes", "Anseriformes", "Ciconiiformes", "Pelecaniformes", "Charadriiformes", "Procellariiformes"];
+
         d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
             taxonomy = data;
         })
@@ -207,14 +209,10 @@
                 .attr("y", -theight)
                 .attr("xlink:href", "./Phylopics/" + o + ".png");
 
-            var coord = image.node().getBoundingClientRect();
-            for (var c of image_coords) {
-                if ((coord.x > c[0] - 24) & (coord.x < c[0] + 24) & (coord.y > c[1] - 20) & (coord.y < c[1] + 20)) {
-                    image.attr("x", selection.x > 180 ? 24 + twidth : -48 - twidth);
-                }
+            if (shrink.includes(o)) {
+                image.attr("height", 15).attr("width", 18);
             }
 
-            image_coords.push([image.node().getBoundingClientRect().x, image.node().getBoundingClientRect().y]);
         }
 
         function text_input() {
