@@ -45,6 +45,7 @@
             g1 = svg.append("g").attr("transform", "translate(600, 525)"),
             g2 = svg.append("g").attr("transform", "translate(600, 1550)"),
             aas = [],
+            aalabels = [],
             synels = [];
 
 
@@ -98,13 +99,13 @@
             }
 
             //Adding amino acids
-            var arc, centroid;
+            var arc, centroid, label;
             for (var i = 0; i < 25; i++) {
                 arc = g.append("path").attr("d", arcgen({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 })).attr("stroke", "black").attr("fill", "none");
                 aas.push(arc);
                 centroid = arcgen.centroid({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 });
                 theta = Math.atan(centroid[1] / centroid[0]) * 180 / Math.PI;
-                g.append("text").attr("x", ((i < 8) | (i > 19)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").text(codon_labels[i]);
+                aalabels.push(g.append("text").attr("x", ((i < 8) | (i > 19)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").text(codon_labels[i]));
             }
         }
 
@@ -119,8 +120,8 @@
             var l, t, theta;
             for (var i = 0; i < 256; i++) {
                 theta = i * Math.PI / 128;
-                t = g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
-                l = g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("stroke", "black");
+                t = g.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
+                l = g.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("stroke", "black");
                 synels.push(t);
                 synels.push(l);
                 l.transition().duration(1000).attr("x2", 400 * Math.cos(theta)).attr("y2", 400 * Math.sin(theta));
