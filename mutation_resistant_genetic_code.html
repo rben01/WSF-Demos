@@ -43,7 +43,6 @@
             arcgen = d3.arc().innerRadius(300).outerRadius(500),
             synarcgen = d3.arc().innerRadius(400).outerRadius(500),
             g1 = svg.append("g").attr("transform", "translate(600, 525)"),
-            g2 = svg.append("g").attr("transform", "translate(600, 1550)"),
             aas = [],
             aalabels = [],
             synels = [];
@@ -106,7 +105,6 @@
         }
 
         gcode_base(g1);
-        gcode_base(g2);
 
         function antiev(g) {
             var c = g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 300).attr("fill", "none").attr("stroke", "black");
@@ -133,27 +131,6 @@
                 else {
                     t.transition().delay(1000).text("G");
                 }
-            }
-        }
-
-        g2.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 400).attr("fill", "none").attr("stroke", "black");
-        var theta;
-        for (var i = 0; i < 256; i++) {
-            theta = i * Math.PI / 128;
-            if (i % 4 == 0) {
-                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("U");
-            }
-            else if (i % 4 == 1) {
-                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("C");
-                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
-            }
-            else if (i % 4 == 2) {
-                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("A");
-                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
-            }
-            else {
-                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("G");
-                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
             }
         }
 
