@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<title>Synthetic Genome</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<head>
+    <style>
+        .b-one {
+            font-size: 22px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .b-two {
+            font-size: 15px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .b-three {
+            font-size: 12px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+
+        .b-four {
+            font-size: 8px;
+            text-anchor: middle;
+            dominant-baseline: middle;
+        }
+    </style>
+</head>
+
+<body>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=2500></svg>
+
+    <script type="text/javascript">
+        var svg = d3.select('svg');
+        var height = +svg.attr("height"),
+            width = +svg.attr("width"),
+            arcgen = d3.arc().innerRadius(300).outerRadius(500),
+            synarcgen = d3.arc().innerRadius(400).outerRadius(500),
+            g1 = svg.append("g").attr("transform", "translate(600, 525)"),
+            g2 = svg.append("g").attr("transform", "translate(600, 1550)"),
+            aas = [],
+            synels = [];
+
+
+        const codon_labels = ["tryptophan", "stop", "cysteine", "stop", "tyrosine", "serine", "leucine", "phenylalanine", "glycine", "glutamic acid", "aspartic acid", "alanine", "valine", "arginine", "serine", "lysine", "asparagine", "threonine", "methionine", "isoleucine", "arginine", "glutamine", "histidine", "proline", "leucine"];
+        const codon_bounds = [0, 1, 2, 4, 6, 8, 12, 14, 16, 20, 22, 24, 28, 32, 34, 36, 38, 40, 44, 45, 48, 52, 54, 56, 60, 64];
+
+        function gcode_base(g) {
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 100).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 200).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 300).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 500).attr("fill", "none").attr("stroke", "black");
+
+            var sr, theta;
+            for (var i = 0; i < 64; i++) {
+                theta = i * Math.PI / 32;
+                if (i % 16 == 0) {
+                    sr = 0;
+                }
+                else if (i % 4 == 0) {
+                    sr = 100;
+                }
+                else {
+                    sr = 200;
+                }
+                g.append("line")
+                    .attr("x1", sr * Math.cos(theta))
+                    .attr("y1", sr * Math.sin(theta))
+                    .attr("x2", 300 * Math.cos(theta))
+                    .attr("y2", 300 * Math.sin(theta))
+                    .attr("stroke", "black");
+            }
+
+            //Adding codons
+            g.append("text").attr("x", 40).attr("y", -40).attr("class", "b-one").text("U");
+            g.append("text").attr("x", 40).attr("y", 40).attr("class", "b-one").text("C");
+            g.append("text").attr("x", -40).attr("y", 40).attr("class", "b-one").text("A");
+            g.append("text").attr("x", -40).attr("y", -40).attr("class", "b-one").text("G");
+            for (var i = 0; i < 4; i++) {
+                theta = i * Math.PI / 2;
+                g.append("text").attr("x", 140 * Math.cos(theta + Math.PI / 16)).attr("y", 140 * Math.sin(theta + Math.PI / 16)).attr("class", "b-two").text("U");
+                g.append("text").attr("x", 140 * Math.cos(theta + 3 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 3 * Math.PI / 16)).attr("class", "b-two").text("C");
+                g.append("text").attr("x", 140 * Math.cos(theta + 5 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 5 * Math.PI / 16)).attr("class", "b-two").text("A");
+                g.append("text").attr("x", 140 * Math.cos(theta + 7 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 7 * Math.PI / 16)).attr("class", "b-two").text("G");
+
+                for (var j = 0; j < 4; j++) {
+                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + Math.PI / 64)).attr("class", "b-three").text("U");
+                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("class", "b-three").text("C");
+                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("class", "b-three").text("A");
+                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("class", "b-three").text("G");
+                }
+            }
+
+            //Adding amino acids
+            var arc, centroid;
+            for (var i = 0; i < 25; i++) {
+                arc = g.append("path").attr("d", arcgen({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 })).attr("stroke", "black").attr("fill", "none");
+                aas.push(arc);
+                centroid = arcgen.centroid({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 });
+                theta = Math.atan(centroid[1] / centroid[0]) * 180 / Math.PI;
+                g.append("text").attr("x", ((i < 8) | (i > 19)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").text(codon_labels[i]);
+            }
+        }
+
+        gcode_base(g1);
+        gcode_base(g2);
+
+        function antiev(g) {
+            var c = g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 300).attr("fill", "none").attr("stroke", "black");
+            synels.push(c);
+            c.transition().duration(1000).attr("r", 400);
+
+            var l, t, theta;
+            for (var i = 0; i < 256; i++) {
+                theta = i * Math.PI / 128;
+                t = g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
+                l = g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("stroke", "black");
+                synels.push(t);
+                synels.push(l);
+                l.transition().duration(1000).attr("x2", 400 * Math.cos(theta)).attr("y2", 400 * Math.sin(theta));
+                if (i % 4 == 0) {
+                    t.transition().delay(1000).text("U");
+                }
+                else if (i % 4 == 1) {
+                    t.transition().delay(1000).text("C");
+                }
+                else if (i % 4 == 2) {
+                    t.transition().delay(1000).text("A");
+                }
+                else {
+                    t.transition().delay(1000).text("G");
+                }
+            }
+        }
+
+        g2.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 400).attr("fill", "none").attr("stroke", "black");
+        var theta;
+        for (var i = 0; i < 256; i++) {
+            theta = i * Math.PI / 128;
+            if (i % 4 == 0) {
+                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("U");
+            }
+            else if (i % 4 == 1) {
+                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("C");
+                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
+            }
+            else if (i % 4 == 2) {
+                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("A");
+                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
+            }
+            else {
+                g2.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four").text("G");
+                g2.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 500 * Math.cos(theta)).attr("y2", 500 * Math.sin(theta)).attr("stroke", "black");
+            }
+        }
+
+        /* var theta, aa;
+        for (var i = 0; i < 64; i++) {
+            theta = i * Math.PI / 32 + Math.PI / 64;
+            if (i == 0) { aa = "tryptophan"; }
+            else if (i == 1) { aa = "stop"; }
+            else if (i < 4) { aa = "cysteine"; }
+            else if (i < 6) { aa = "stop"; }
+            else if (i < 8) { aa = "tyrosine"; }
+            else if (i < 12) { aa = "serine"; }
+            else if (i < 14) { aa = "leucine"; }
+            else if (i < 16) { aa = "phenylalanine"; }
+            else if (i < 20) { aa = "glycine"; }
+            else if (i < 22) { aa = "glutamic acid"; }
+            else if (i < 24) { aa = "aspartic acid"; }
+            else if (i < 28) { aa = "alanine"; }
+            else if (i < 32) { aa = "valine"; }
+            else if (i < 34) { aa = "arginine"; }
+            else if (i < 36) { aa = "serine"; }
+            else if (i < 38) { aa = "lysine"; }
+            else if (i < 40) { aa = "asparagine"; }
+            else if (i < 44) { aa = "threonine"; }
+            else if (i < 45) { aa = "methionine"; }
+            else if (i < 48) { aa = "isoleucine"; }
+            else if (i < 52) { aa = "arginine"; }
+            else if (i < 54) { aa = "glutamine"; }
+            else if (i < 56) { aa = "histidine"; }
+            else if (i < 60) { aa = "proline"; }
+            else { aa = "leucine"; }
+            g1.append("text").attr("x", ((i < 16) | (i > 47)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + (((i < 16) | (i > 47)) ? -180 * theta / Math.PI : (-180 * theta / Math.PI) + 180) + ")").text(aa);
+        } */
+
+    </script>
+</body>
