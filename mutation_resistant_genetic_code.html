@@ -123,7 +123,7 @@
             for (var i = 0; i < 256; i++) {
                 theta = i * Math.PI / 128;
                 t = g.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
-                l = g.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("stroke", "black");
+                l = g.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 300 * Math.cos(theta)).attr("y2", 300 * Math.sin(theta)).attr("stroke", "black");
                 synels.push(t);
                 synels.push(l);
                 l.transition().duration(2000).attr("x2", 400 * Math.cos(theta)).attr("y2", 400 * Math.sin(theta));
@@ -140,16 +140,15 @@
                     t.transition().delay(2000).text("G");
                 }
             }
-            for (var i = 0; i < 26; i++) {
+            for (var i = 0; i < 25; i++) {
                 if (syn_ind[i] == -1) {
                     aalabels[i].text("");
-                    aas[i].transition().duration(2000).attr("d", disarcgen({ startAngle: Math.PI / 2 - syn_ind[i] * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128 }));
+                    aas[i].transition().duration(2000).attr("d", disarcgen({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - (codon_bounds[i] + 1) * Math.PI / 32 }));
                 }
                 else {
                     aas[i].transition().duration(2000).attr("d", synarcgen({ startAngle: Math.PI / 2 - syn_ind[i] * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128 }));
                     aalabels[i].transition().duration(2000).attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (2 * syn_ind[i] + 1) * 45 / 64) + ")").attr("x", ((i < 8) | (i > 19)) ? 450 : -450).style("font-size", "12px");
-                    console.log({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 });
-                    g.append("path").attr("d", synarcgen({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 })).attr("fill", "none").transition().delay(1000).duration(1000).attr("fill", "black");
+                    g.append("path").attr("d", synarcgen({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 })).style("opacity", 0).style("fill", "black").transition().delay(1000).duration(1000).style("opacity", 1);
                 }
             }
         }
