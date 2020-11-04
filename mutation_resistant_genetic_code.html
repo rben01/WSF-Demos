@@ -52,7 +52,7 @@
 
         const codon_labels = ["tryptophan", "stop", "cysteine", "stop", "tyrosine", "serine", "leucine", "phenylalanine", "glycine", "glutamic acid", "aspartic acid", "alanine", "valine", "arginine", "serine", "lysine", "asparagine", "threonine", "methionine", "isoleucine", "arginine", "glutamine", "histidine", "proline", "leucine"];
         const codon_bounds = [0, 1, 2, 4, 6, 8, 12, 14, 16, 20, 22, 24, 28, 32, 34, 36, 38, 40, 44, 45, 48, 52, 54, 56, 60, 64];
-        const syn_ind = [0, 5, 10, -1, 28, 33, 51, 62, 79, 84, 90, 96, 117, -1, 132, 149, 158, 162, 176, 182, -1, 214, 218, 234, -1];
+        const syn_ind = [0, 5, 10, -1, 28, 33, 51, 62, 79, 84, 90, 96, 117, -1, 132, 149, 158, 162, 176, 182, -1, 214, 218, 234, -1, 256];
 
         function gcode_base(g) {
             g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 100).attr("fill", "none").attr("stroke", "black");
@@ -101,8 +101,12 @@
             }
 
             //Adding amino acids
+            var aa;
             for (var i = 0; i < 25; i++) {
-                aas.push(g.append("path").attr("d", arcgen({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 })).attr("stroke", "black").attr("fill", "none"));
+                aa = g.append("path").attr("d", arcgen({ startAngle: Math.PI / 2 - codon_bounds[i] * Math.PI / 32, endAngle: Math.PI / 2 - codon_bounds[i + 1] * Math.PI / 32 })).attr("stroke", "black").attr("fill", "none");
+                aas.push(aa);
+                if (codon_labels[i] == "stop") { aa.attr("fill", "red") }
+                else { aa.attr("fill", "green") }
                 aalabels.push(g.append("text").attr("x", ((i < 8) | (i > 19)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").attr("dominant-baseline", "middle").text(codon_labels[i]));
             }
         }
@@ -136,7 +140,7 @@
                     t.transition().delay(2000).text("G");
                 }
             }
-            for (i in aas) {
+            for (var i = 0; i < 26; i++) {
                 if (syn_ind[i] == -1) {
                     aalabels[i].text("");
                     aas[i].transition().duration(2000).attr("d", disarcgen({ startAngle: Math.PI / 2 - syn_ind[i] * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128 }));
@@ -144,15 +148,19 @@
                 else {
                     aas[i].transition().duration(2000).attr("d", synarcgen({ startAngle: Math.PI / 2 - syn_ind[i] * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128 }));
                     aalabels[i].transition().duration(2000).attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (2 * syn_ind[i] + 1) * 45 / 64) + ")").attr("x", ((i < 8) | (i > 19)) ? 450 : -450).style("font-size", "12px");
+                    console.log({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 });
+                    g.append("path").attr("d", synarcgen({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 })).attr("fill", "none").transition().delay(1000).duration(1000).attr("fill", "black");
                 }
             }
         }
 
         function restore() {
-            g1 = svg.append("g").attr("transform", "translate(600, 525)"),
-                aas = [],
-                aalabels = [],
-                synels = [];
+            d3.selectAll("svg > *").remove();
+            g1 = svg.append("g").attr("transform", "translate(600, 525)");
+            aas = [];
+            aalabels = [];
+            synels = [];
+            gcode_base(g1);
         }
 
     </script>
