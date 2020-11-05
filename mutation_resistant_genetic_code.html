@@ -44,7 +44,7 @@
             width = +svg.attr("width"),
             arcgen = d3.arc().innerRadius(rad * 0.6).outerRadius(rad),
             synarcgen = d3.arc().innerRadius(rad * 0.8).outerRadius(rad),
-            disarcgen = d3.arc().innerRadius(rad * 0.8).outerRadius(rad * 0.8),
+            disarcgen = d3.arc().innerRadius(rad * 0.8).outerRadius(rad * 0.8 + 1),
             g1 = svg.append("g").attr("transform", "translate(500, 525)"),
             aas = [],
             aalabels = [],
