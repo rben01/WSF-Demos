@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<title>Synthetic Genome</title>
+<title>Mutation Resistant Genetic Code</title>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -35,16 +35,17 @@
 <body>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <button onclick="antiev()">Change</button> <button onclick="restore()">Restore</button><br>
-    <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=2500></svg>
+    <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1000 height=2500></svg>
 
     <script type="text/javascript">
-        var svg = d3.select('svg');
+        var svg = d3.select('svg'),
+            rad = 400;
         var height = +svg.attr("height"),
             width = +svg.attr("width"),
-            arcgen = d3.arc().innerRadius(300).outerRadius(500),
-            synarcgen = d3.arc().innerRadius(400).outerRadius(500),
-            disarcgen = d3.arc().innerRadius(400).outerRadius(400),
-            g1 = svg.append("g").attr("transform", "translate(600, 525)"),
+            arcgen = d3.arc().innerRadius(rad * 0.6).outerRadius(rad),
+            synarcgen = d3.arc().innerRadius(rad * 0.8).outerRadius(rad),
+            disarcgen = d3.arc().innerRadius(rad * 0.8).outerRadius(rad * 0.8),
+            g1 = svg.append("g").attr("transform", "translate(500, 525)"),
             aas = [],
             aalabels = [],
             synels = [];
@@ -55,10 +56,10 @@
         const syn_ind = [0, 5, 10, -1, 28, 33, 51, 62, 79, 84, 90, 96, 117, -1, 132, 149, 158, 162, 176, 182, -1, 214, 218, 234, -1, 256];
 
         function gcode_base(g) {
-            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 100).attr("fill", "none").attr("stroke", "black");
-            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 200).attr("fill", "none").attr("stroke", "black");
-            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 300).attr("fill", "none").attr("stroke", "black");
-            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 500).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", rad * 0.2).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", rad * 0.4).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", rad * 0.6).attr("fill", "none").attr("stroke", "black");
+            g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", rad).attr("fill", "none").attr("stroke", "black");
 
             var sr, theta;
             for (var i = 0; i < 64; i++) {
@@ -67,16 +68,16 @@
                     sr = 0;
                 }
                 else if (i % 4 == 0) {
-                    sr = 100;
+                    sr = rad * 0.2;
                 }
                 else {
-                    sr = 200;
+                    sr = rad * 0.4;
                 }
                 g.append("line")
                     .attr("x1", sr * Math.cos(theta))
                     .attr("y1", sr * Math.sin(theta))
-                    .attr("x2", 300 * Math.cos(theta))
-                    .attr("y2", 300 * Math.sin(theta))
+                    .attr("x2", rad * 0.6 * Math.cos(theta))
+                    .attr("y2", rad * 0.6 * Math.sin(theta))
                     .attr("stroke", "black");
             }
 
@@ -87,16 +88,16 @@
             g.append("text").attr("x", -40).attr("y", -40).attr("class", "b-one").text("G");
             for (var i = 0; i < 4; i++) {
                 theta = i * Math.PI / 2;
-                g.append("text").attr("x", 140 * Math.cos(theta + Math.PI / 16)).attr("y", 140 * Math.sin(theta + Math.PI / 16)).attr("class", "b-two").text("U");
-                g.append("text").attr("x", 140 * Math.cos(theta + 3 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 3 * Math.PI / 16)).attr("class", "b-two").text("C");
-                g.append("text").attr("x", 140 * Math.cos(theta + 5 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 5 * Math.PI / 16)).attr("class", "b-two").text("A");
-                g.append("text").attr("x", 140 * Math.cos(theta + 7 * Math.PI / 16)).attr("y", 140 * Math.sin(theta + 7 * Math.PI / 16)).attr("class", "b-two").text("G");
+                g.append("text").attr("x", rad * 0.28 * Math.cos(theta + Math.PI / 16)).attr("y", rad * 0.28 * Math.sin(theta + Math.PI / 16)).attr("class", "b-two").text("U");
+                g.append("text").attr("x", rad * 0.28 * Math.cos(theta + 3 * Math.PI / 16)).attr("y", rad * 0.28 * Math.sin(theta + 3 * Math.PI / 16)).attr("class", "b-two").text("C");
+                g.append("text").attr("x", rad * 0.28 * Math.cos(theta + 5 * Math.PI / 16)).attr("y", rad * 0.28 * Math.sin(theta + 5 * Math.PI / 16)).attr("class", "b-two").text("A");
+                g.append("text").attr("x", rad * 0.28 * Math.cos(theta + 7 * Math.PI / 16)).attr("y", rad * 0.28 * Math.sin(theta + 7 * Math.PI / 16)).attr("class", "b-two").text("G");
 
                 for (var j = 0; j < 4; j++) {
-                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + Math.PI / 64)).attr("class", "b-three").text("U");
-                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("class", "b-three").text("C");
-                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("class", "b-three").text("A");
-                    g.append("text").attr("x", 260 * Math.cos(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("y", 260 * Math.sin(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("class", "b-three").text("G");
+                    g.append("text").attr("x", rad * 0.52 * Math.cos(theta + j * Math.PI / 8 + Math.PI / 64)).attr("y", rad * 0.52 * Math.sin(theta + j * Math.PI / 8 + Math.PI / 64)).attr("class", "b-three").text("U");
+                    g.append("text").attr("x", rad * 0.52 * Math.cos(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("y", rad * 0.52 * Math.sin(theta + j * Math.PI / 8 + 3 * Math.PI / 64)).attr("class", "b-three").text("C");
+                    g.append("text").attr("x", rad * 0.52 * Math.cos(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("y", rad * 0.52 * Math.sin(theta + j * Math.PI / 8 + 5 * Math.PI / 64)).attr("class", "b-three").text("A");
+                    g.append("text").attr("x", rad * 0.52 * Math.cos(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("y", rad * 0.52 * Math.sin(theta + j * Math.PI / 8 + 7 * Math.PI / 64)).attr("class", "b-three").text("G");
                 }
             }
 
@@ -107,7 +108,7 @@
                 aas.push(aa);
                 if (codon_labels[i] == "stop") { aa.attr("fill", "red") }
                 else { aa.attr("fill", "green") }
-                aalabels.push(g.append("text").attr("x", ((i < 8) | (i > 19)) ? 400 : -400).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").attr("dominant-baseline", "middle").text(codon_labels[i]));
+                aalabels.push(g.append("text").attr("x", ((i < 8) | (i > 19)) ? rad * 0.8 : -rad * 0.8).attr("y", 0).attr("text-anchor", "middle").style("font-size", "15px").attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (codon_bounds[i] + codon_bounds[i + 1]) * 45 / 16) + ")").attr("dominant-baseline", "middle").text(codon_labels[i]));
             }
         }
 
@@ -115,18 +116,18 @@
 
         function antiev(g) {
             if (g == null) { g = g1 }
-            var c = g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", 300).attr("fill", "none").attr("stroke", "black");
+            var c = g.append("circle").attr("cx", 0).attr("cy", 0).attr("r", rad * 0.6).attr("fill", "none").attr("stroke", "black");
             synels.push(c);
-            c.transition().duration(2000).attr("r", 400);
+            c.transition().duration(2000).attr("r", rad * 0.8);
 
             var l, t, theta;
             for (var i = 0; i < 256; i++) {
                 theta = i * Math.PI / 128;
-                t = g.append("text").attr("x", 380 * Math.cos(theta + Math.PI / 256)).attr("y", 380 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
-                l = g.append("line").attr("x1", 300 * Math.cos(theta)).attr("y1", 300 * Math.sin(theta)).attr("x2", 300 * Math.cos(theta)).attr("y2", 300 * Math.sin(theta)).attr("stroke", "black");
+                t = g.append("text").attr("x", rad * 0.77 * Math.cos(theta + Math.PI / 256)).attr("y", rad * 0.77 * Math.sin(theta + Math.PI / 256)).attr("class", "b-four");
+                l = g.append("line").attr("x1", rad * 0.6 * Math.cos(theta)).attr("y1", rad * 0.6 * Math.sin(theta)).attr("x2", rad * 0.6 * Math.cos(theta)).attr("y2", rad * 0.6 * Math.sin(theta)).attr("stroke", "black");
                 synels.push(t);
                 synels.push(l);
-                l.transition().duration(2000).attr("x2", 400 * Math.cos(theta)).attr("y2", 400 * Math.sin(theta));
+                l.transition().duration(2000).attr("x2", rad * 0.8 * Math.cos(theta)).attr("y2", rad * 0.8 * Math.sin(theta));
                 if (i % 4 == 0) {
                     t.transition().delay(2000).text("U");
                 }
@@ -147,7 +148,7 @@
                 }
                 else {
                     aas[i].transition().duration(2000).attr("d", synarcgen({ startAngle: Math.PI / 2 - syn_ind[i] * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128 }));
-                    aalabels[i].transition().duration(2000).attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (2 * syn_ind[i] + 1) * 45 / 64) + ")").attr("x", ((i < 8) | (i > 19)) ? 450 : -450).style("font-size", "12px");
+                    aalabels[i].transition().duration(2000).attr("transform", "rotate(" + ((((i < 8) | (i > 19)) ? 0 : 180) - (2 * syn_ind[i] + 1) * 45 / 64) + ")").attr("x", ((i < 8) | (i > 19)) ? rad * 0.9 : -rad * 0.9).style("font-size", "11px");
                     g.append("path").attr("d", synarcgen({ startAngle: Math.PI / 2 - (syn_ind[i] + 1) * Math.PI / 128, endAngle: Math.PI / 2 - (syn_ind[i + 1] == -1 ? syn_ind[i + 2] : syn_ind[i + 1]) * Math.PI / 128 })).style("opacity", 0).style("fill", "black").transition().delay(1000).duration(1000).style("opacity", 1);
                 }
             }
@@ -155,7 +156,7 @@
 
         function restore() {
             d3.selectAll("svg > *").remove();
-            g1 = svg.append("g").attr("transform", "translate(600, 525)");
+            g1 = svg.append("g").attr("transform", "translate(500, 525)");
             aas = [];
             aalabels = [];
             synels = [];
