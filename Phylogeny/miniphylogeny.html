@@ -133,6 +133,10 @@
                     .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                     .text(function (d) { return d.data.id; });
 
+                g.selectAll(".node--leaf")
+                    .select("text")
+                    .on("click", function (d) { click(d.data.id) });
+
                 g.append("line")
                     .attr("x1", "-" + (width / 2 - 140))
                     .attr("x2", (width / 2 - 140))
@@ -200,6 +204,7 @@
             var g = d3.select("g");
             var leaf = g.select("#" + o);
             var twidth = 1.1 * leaf.select("text").node().getBBox().width;
+            if (navigator.userAgent.indexOf("Firefox") == -1) { twidth *= 1.1 }
             var theight = 1.1 * leaf.select("text").node().getBBox().height;
             var image = leaf.append("svg:image")
                 .attr("height", 20)
