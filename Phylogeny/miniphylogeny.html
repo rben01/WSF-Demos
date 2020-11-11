@@ -59,7 +59,7 @@
                 corresponding leaf on the tree.</text>
         </div>
     </div>
-    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1200 height=1100></svg>
+    <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1130 height=650></svg>
     <script type="text/javascript">
         var svg = d3.select('svg'),
             phylopic,
@@ -80,9 +80,7 @@
         })
 
         function rend2() {
-            var width = +svg.attr("width"),
-                height = +svg.attr("height"),
-                g = svg.append("g").attr("transform", "translate(" + (width / 2 - 15) + "," + (height / 2 + 25) + ")");
+            var g = svg.append("g").attr("transform", "translate(585, 575)");
 
             var stratify = d3.stratify()
                 .parentId(function (d) { return d.id.substring(0, d.id.lastIndexOf(".")); });
@@ -138,8 +136,8 @@
                     .on("click", function (d) { click(d.data.id) });
 
                 g.append("line")
-                    .attr("x1", "-" + (width / 2 - 140))
-                    .attr("x2", (width / 2 - 140))
+                    .attr("x1", -460)
+                    .attr("x2", 460)
                     .attr("y1", 30)
                     .attr("y2", 30)
                     .attr("stroke-width", 1)
@@ -147,10 +145,10 @@
 
                 g.append("circle").attr("cx", 0).attr("cy", 30).attr("r", 2.5);
                 g.append("text").attr("x", 0).attr("dy", "50").style("text-anchor", "middle").text("430 million years ago");
-                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 30).attr("r", 2.5);
-                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "50").style("text-anchor", "middle").text("Present day");
-                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 30).attr("r", 2.5);
-                g.append("text").attr("x", width / 2 - 140).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", -460).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", -460).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", 460).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", 460).attr("dy", "50").style("text-anchor", "middle").text("Present day");
                 g.append("svg:image").attr("x", -15).attr("y", 5).attr("width", 30).attr("height", 25).attr("xlink:href", "./Phylopics/common_ancestor.png");
             });
         }
