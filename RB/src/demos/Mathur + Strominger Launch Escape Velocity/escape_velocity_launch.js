@@ -42,15 +42,21 @@ const G = 6.6743e-11; // Units of m^3 / (kg s^2)
 const OBJECT_RADIUS_PX = 7;
 
 function unNullifyRadius(r) {
-	return r ?? +sliders.radius.value ?? DEFAULT_RADIUS_km;
+	const defaultVal =
+		sliders.radius !== null ? +sliders.radius.value : DEFAULT_RADIUS_km;
+	return r ?? defaultVal;
 }
 
 function unNullifyMass(m) {
-	return m ?? +sliders.mass.value ?? DEFAULT_MASS_1e24kg;
+	const defaultVal =
+		sliders.mass !== null ? +sliders.mass.value : DEFAULT_MASS_1e24kg;
+	return m ?? defaultVal;
 }
 
 function unNullifyVelocity(v) {
-	return v ?? +sliders.velocity.value ?? DEFAULT_VELOCITY_kmps;
+	const defaultVal =
+		sliders.velocity !== null ? +sliders.velocity.value : DEFAULT_VELOCITY_kmps;
+	return v ?? defaultVal;
 }
 
 function getEscapeVelocity_kmps({ mPlanet_1e24kg, rPlanet_km }) {
@@ -188,6 +194,7 @@ let isAnimating = false;
 function reset() {
 	isAnimating = false;
 	buttons.reset.disabled = true;
+	buttons.launch.disabled = false;
 
 	const mPlanet_1e24kg = unNullifyMass();
 	const rPlanet_km = unNullifyRadius();
@@ -208,6 +215,7 @@ function reset() {
 function launch({ v0_kmps, mPlanet_1e24kg, rPlanet_km } = {}) {
 	isAnimating = true;
 	buttons.reset.disabled = false;
+	buttons.launch.disabled = true;
 
 	const mPlanet_kg = unNullifyMass(mPlanet_1e24kg) * 1e24;
 	rPlanet_km = unNullifyRadius(rPlanet_km);
@@ -217,9 +225,6 @@ function launch({ v0_kmps, mPlanet_1e24kg, rPlanet_km } = {}) {
 	const cx0_px = planetCx + xScale_km_to_px(rPlanet_km) + OBJECT_RADIUS_PX;
 	const cx0_m = xScale_km_to_px.invert(cx0_px) * 1e3;
 	const cxMax_m = xScale_km_to_px.invert(WIDTH + OBJECT_RADIUS_PX) * 1e3;
-
-	const escapeVelocity_mps =
-		getEscapeVelocity_kmps({ mPlanet_1e24kg, rPlanet_km }) * 1e3;
 
 	const tScale = 0.073333; // The larger, the faster
 

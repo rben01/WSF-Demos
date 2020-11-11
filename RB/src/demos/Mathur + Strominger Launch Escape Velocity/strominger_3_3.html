@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" type="text/css" href="./escape_velocity_launch.css" />
+	</head>
+	<body>
+		<div id="params-container">
+			<span>Projectile velocity</span>
+			<span><input type="range" id="slider-velocity" /></span>
+			<span><span id="text-velocity" class="sci-num">0</span>km/s</span>
+			<span>Planet radius</span>
+			<span><span id="text-radius" class="sci-num">0</span>km</span>
+			<span></span>
+			<span>Planet mass</span>
+			<span
+				><span id="text-mass" class="sci-num">0</span
+				><span class="sci-num">×10<sup>24</sup></span
+				>kg</span
+			>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span></span>
+			<span>Escape velocity</span
+			><span><span id="text-escape-velocity" class="sci-num"></span>km/s</span>
+		</div>
+		<div class="text-container"><span id="text-will-escape"></span></div>
+		<div class="button-container">
+			<button id="btn-launch" onclick="launch();">Launch</button
+			><button id="btn-reset" onclick="reset();">Reset</button>
+		</div>
+		<svg id="viz"></svg>
+		<script type="text/javascript" src="./format_decimal.js"></script>
+		<script type="text/javascript" src="./strominger_params.js"></script>
+		<script type="text/javascript" src="./escape_velocity_launch.js"></script>
+	</body>
+</html>
