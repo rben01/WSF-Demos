@@ -64,19 +64,20 @@
         var svg = d3.select('svg'),
             phylopic,
             selected = [],
+            image_coords = [],
             root,
             taxonomy,
             arcgen = d3.arc();
 
+        const shrink = ["Batrachoidiformes", "Synbranchiformes", "Pleuronectiformes", "Tinamiformes", "Galliformes", "Anseriformes", "Ciconiiformes", "Pelecaniformes", "Charadriiformes", "Procellariiformes"];
+
         d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/taxonomy.csv").then(function (data) {
             taxonomy = data;
-            d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Chordata_Cut.csv").then(function (data) {
-                phylopic = data;
-                rend2();
-            })
-        }
-
-        );
+        })
+        d3.csv("https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Chordata_Cut.csv").then(function (data) {
+            phylopic = data;
+            rend2();
+        })
 
         function rend2() {
             var width = +svg.attr("width"),
@@ -132,20 +133,25 @@
                     .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
                     .text(function (d) { return d.data.id; });
 
+                g.selectAll(".node--leaf")
+                    .select("text")
+                    .on("click", function (d) { click(d.data.id) });
+
                 g.append("line")
                     .attr("x1", "-" + (width / 2 - 140))
                     .attr("x2", (width / 2 - 140))
-                    .attr("y1", 20)
-                    .attr("y2", 20)
+                    .attr("y1", 30)
+                    .attr("y2", 30)
                     .attr("stroke-width", 1)
                     .attr("stroke", "black");
 
-                g.append("circle").attr("cx", 0).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", 0).attr("dy", "40").style("text-anchor", "middle").text("430 million years ago");
-                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "40").style("text-anchor", "middle").text("Present day");
-                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 20).attr("r", 2.5);
-                g.append("text").attr("x", width / 2 - 140).attr("dy", "40").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", 0).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", 0).attr("dy", "50").style("text-anchor", "middle").text("430 million years ago");
+                g.append("circle").attr("cx", "-" + (width / 2 - 140)).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", -(width / 2 - 140)).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("circle").attr("cx", width / 2 - 140).attr("cy", 30).attr("r", 2.5);
+                g.append("text").attr("x", width / 2 - 140).attr("dy", "50").style("text-anchor", "middle").text("Present day");
+                g.append("svg:image").attr("x", -15).attr("y", 5).attr("width", 30).attr("height", 25).attr("xlink:href", "./Phylopics/common_ancestor.png");
             });
         }
 
@@ -195,16 +201,23 @@
                 connect(selected[s], selection);
             }
             selected.push(selection);
-            var url = phylopic.filter(d => d.Order == o)[0].Link;
             var g = d3.select("g");
             var leaf = g.select("#" + o);
-            leaf.select("text").transition().duration(500).attr("x", selection.x > 180 ? 30 : -30);
-            leaf.append("svg:image")
+            var twidth = 1.1 * leaf.select("text").node().getBBox().width;
+            if (navigator.userAgent.indexOf("Firefox") == -1) { twidth *= 1.1 }
+            var theight = 1.1 * leaf.select("text").node().getBBox().height;
+            var image = leaf.append("svg:image")
                 .attr("height", 20)
                 .attr("width", 24)
-                .attr("x", 1.2 * ((selection.x - 360) / 15))
-                .attr("y", 1.2 * (-10 - 10 * (1 - Math.abs((selection.x - 180) / 180))))
-                .attr("xlink:href", url);
+                .attr("transform", function (d) { return "rotate(" + (d.x < 180 ? d.x / 2 : d.x / 2 + 180) + ")"; })
+                .attr("x", selection.x > 180 ? twidth : -24 - twidth)
+                .attr("y", -theight)
+                .attr("xlink:href", "./Phylopics/" + o + ".png");
+
+            if (shrink.includes(o)) {
+                image.attr("height", 15).attr("width", 18);
+            }
+
         }
 
         function text_input() {
