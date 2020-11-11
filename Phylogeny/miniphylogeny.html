@@ -197,13 +197,14 @@
 
         function click(o) {
             var selection = root.leaves().filter(n => n.data.id == o)[0];
+            d3.selectAll(".highlight").remove();
             for (var s in selected) {
                 connect(selected[s], selection);
             }
             selected.push(selection);
             var g = d3.select("g");
             var leaf = g.select("#" + o);
-            var twidth = 1.1 * leaf.select("text").node().getBBox().width;
+            var twidth = leaf.select("text").node().getComputedTextLength() + 10;
             if (navigator.userAgent.indexOf("Firefox") == -1) { twidth *= 1.1 }
             var theight = 1.1 * leaf.select("text").node().getBBox().height;
             var image = leaf.append("svg:image")
