@@ -311,7 +311,13 @@ def inline(
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("infiles", nargs="*", help="The HTML file to inline")
-    parser.add_argument("-o", required=False, dest="outfile", help="Output filename")
+    parser.add_argument(
+        "-o",
+        required=False,
+        dest="outfile",
+        help="The filename to save the inlined file to",
+    )
+    parser.add_argument("--outdir", required=False, help="The directory to save to")
     parser.add_argument(
         "--exclude-html-regex",
         required=False,
@@ -362,6 +368,19 @@ def main():
             infiles = [p for p in infiles if not ehr.search(p.name)]
 
     for infile in infiles:
+        infile = infile.resolve()
+        outdir: Path
+        if args.outdir is None:
+            outdir = Path(".").resolve()
+            while outdir.name != "src" and outdir.name != "/":
+                outdir = outdir.parent
+
+            outdir = outdir / "dist" / infile.relative_to(outdir / "demos").parent
+        else:
+            outdir = Path(args.outdir)
+
+        outdir.mkdir(exist_ok=True, parents=True)
+
         if args.outfile is None:
             suffix = infile.suffix
             if args.minify_globals:
@@ -370,14 +389,11 @@ def main():
             outfile_name = (
                 infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
             )
-            outdir: Path = (
-                infile.parent.parent.parent.parent / "dist" / infile.parent.parent.name
-            )
-            outdir.mkdir(exist_ok=True, parents=True)
-            outfile = outdir / outfile_name
 
         else:
-            outfile = Path(args.outfile)
+            outfile_name = args.outfile
+
+        outfile = outdir / outfile_name
 
         ignored_link_dests = set(args.ignore)
         ignored_link_dest_regexes = [re.compile(regex) for regex in args.ignore_regex]
