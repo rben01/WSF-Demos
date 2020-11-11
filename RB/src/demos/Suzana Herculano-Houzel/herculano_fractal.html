@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<style>
+			body {
+				font-family: sans-serif;
+			}
+			#params-container {
+				display: grid;
+				grid-template-columns: 4em 250px;
+				align-items: center;
+				margin-top: 10px;
+				row-gap: 6px;
+				column-gap: 10px;
+			}
+			.param-slider {
+				width: 100%;
+			}
+			.text-container {
+				position: relative;
+				left: 0;
+			}
+			.ray {
+				stroke: black;
+			}
+			#fractal {
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div id="params-container">
+				<span>Angle:</span>
+				<div>
+					<input
+						id="angle-slider"
+						class="param-slider"
+						type="range"
+						step="1"
+					/>
+				</div>
+				<div></div>
+				<div>
+					<div id="angle-text-container" class="text-container">
+						<span><span id="angle-text"></span>°</span>
+					</div>
+				</div>
+				<div></div>
+				<div></div>
+				<span>Iteration:</span>
+				<div>
+					<input
+						id="iter-slider"
+						class="param-slider"
+						type="range"
+						step=".01"
+					/>
+				</div>
+				<div></div>
+				<div>
+					<div id="iter-text-container" class="text-container">
+						<span><span id="iter-text"></span></span>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div>
+			<svg id="fractal"></svg>
+		</div>
+		<script src="./herculano_fractal.js"></script>
+	</body>
+</html>

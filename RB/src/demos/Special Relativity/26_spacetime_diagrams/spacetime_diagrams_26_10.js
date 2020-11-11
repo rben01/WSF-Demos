@@ -184,9 +184,9 @@ function update({ speed }) {
 		lines.x.x1 = AXES.x.min * Math.cos(thetaX);
 		lines.x.x2 = AXES.x.max * Math.cos(thetaX);
 
-		if (!d.left) {
-			[lines.x.x1, lines.x.x2] = [lines.x.x2, lines.x.x1];
-		}
+		// if (!d.left) {
+		// 	[lines.x.x1, lines.x.x2] = [lines.x.x2, lines.x.x1];
+		// }
 
 		[lines.x.y1, lines.x.y2] = [lines.x.x1, lines.x.x2].map(x => slope * x);
 		const lineX = {
