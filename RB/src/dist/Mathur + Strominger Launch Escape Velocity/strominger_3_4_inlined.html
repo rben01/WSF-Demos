@@ -45,15 +45,15 @@ font-size: 16px;
 }
 </style>
 <div id="params-container">
-<span>Planet radius</span>
-<span><input id="slider-radius" type="range"/></span>
-<span><span class="sci-num" id="text-radius">0</span>km</span>
 <span>Planet mass</span>
 <span><input id="slider-mass" type="range"/></span>
 <span><span class="sci-num" id="text-mass">0</span><span class="sci-num">×10<sup>24</sup></span>kg</span>
+<span>Planet radius</span>
+<span><span class="sci-num" id="text-radius">0</span>km</span>
+<span></span>
 <span>Projectile velocity</span>
-<span><input id="slider-velocity" type="range"/></span>
 <span><span class="sci-num" id="text-velocity">0</span>km/s</span>
+<span></span>
 <span></span>
 <span></span>
 <span></span>
@@ -152,14 +152,14 @@ return s.join(dec);
 }
 /* eslint-disable */
 const MASS_MIN = 5; // 1e24 kg
-const MASS_MAX = 5e6;
+const MASS_MAX = 25e6;
 const R_MIN = 1e3; // km
 const R_MAX = 1e5;
 const V_MIN = 1; // km/s
 const V_MAX = 1e4;
-const DEFAULT_MASS_1e24kg = MASS_MAX / 2;
-const DEFAULT_RADIUS_km = R_MAX / 2;
-const DEFAULT_VELOCITY_kmps = V_MAX / 2;
+const DEFAULT_MASS_1e24kg = 12.5e6;
+const DEFAULT_RADIUS_km = 50e3;
+const DEFAULT_VELOCITY_kmps = 5e3;
 /* global MASS_MIN MASS_MAX R_MIN R_MAX V_MIN V_MAX DEFAULT_MASS_1e24kg DEFAULT_RADIUS_km DEFAULT_VELOCITY_kmps */
 const WIDTH = 800;
 const HEIGHT = 250;
