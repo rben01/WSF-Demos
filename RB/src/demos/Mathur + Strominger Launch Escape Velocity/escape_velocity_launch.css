@@ -1,5 +1,8 @@
 body {
 	font-family: sans-serif;
+	width: 950px;
+	margin: auto;
+	margin-top: 10px;
 }
 
 #params-container {

@@ -6,6 +6,9 @@
 </head>
 <body><style>body {
 font-family: sans-serif;
+width: 950px;
+margin: auto;
+margin-top: 10px;
 }
 #params-container {
 width: 700px;
@@ -161,7 +164,7 @@ const DEFAULT_MASS_1e24kg = 12.5e6;
 const DEFAULT_RADIUS_km = 50e3;
 const DEFAULT_VELOCITY_kmps = 5e3;
 /* global MASS_MIN MASS_MAX R_MIN R_MAX V_MIN V_MAX DEFAULT_MASS_1e24kg DEFAULT_RADIUS_km DEFAULT_VELOCITY_kmps */
-const WIDTH = 800;
+const WIDTH = 925;
 const HEIGHT = 250;
 // masses have units of 1e24 kg
 // radii have units of km
@@ -286,7 +289,7 @@ const v0_mps = v0_kmps * 1e3;
 const rMax_m = 1 / (v0_mps ** 2 / (-2 * G * mPlanet_kg) + 1 / rPlanet_m);
 const distTraveled_km = (rMax_m - rPlanet_m) * 1e-3;
 const distTraveledText = fmtFloat(distTraveled_km);
-textSpans.willEscape.innerHTML = `The projectile will fall back to the planet after traveling a maximum distance of <span class="sci-num">${distTraveledText}</span>km.`;
+textSpans.willEscape.innerHTML = `The projectile will fall back down to the planet after traveling a maximum distance of <span class="sci-num">${distTraveledText}</span>km.`;
 } else {
 textSpans.willEscape.innerText = `The projectile will never return to the planet; it will keep traveling away from the planet forever.`;
 }
@@ -327,7 +330,7 @@ const rPlanet_km = unNullifyRadius();
 // TODO
 const planetCx_px = getPlanetCx_px(rPlanet_km);
 const cx0_px = planetCx_px + xScale_km_to_px(rPlanet_km) + OBJECT_RADIUS_PX;
-svg.selectAll(".object").node().setAttribute("cx", cx0_px);
+svg.selectAll(".object").attr("cx", cx0_px).style("visibility", "visible");
 svg.selectAll(".offscreen-indicator").style("visibility", "hidden");
 drawInitialSetup();
 updateText({ mPlanet_1e24kg, rPlanet_km });

@@ -158,7 +158,7 @@ class SymbolReplacer:
     def __init__(self, base_symbols, lang=None):
         self.symbols_used = set(sorted(s.lower() for s in base_symbols))
         self.symbols_used.update(self.KEYWORDS.get(lang, []))
-        self.alphabet = self.ALPHABETS.get(lang)
+        self.alphabet = self.ALPHABETS[lang]
 
         assert len(self.alphabet) == len(set(self.alphabet))
 
@@ -230,7 +230,7 @@ def inline(
                 continue
 
             if link_dest is None:
-                contents = tag.string
+                contents = str(tag.string)
             else:
                 absolute_src: Path = infile.parent / link_dest
 
