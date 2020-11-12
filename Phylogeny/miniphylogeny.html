@@ -53,11 +53,11 @@
             svg.selectAll('.node--leaf').select('text').attr('x', function (d) { return d.x < 180 === !d.children ? -6 : 6; });
             svg.selectAll('image').remove()">Clear</button>
         </div>
-        <div style="width:50%; float:right">
+        <!-- <div style="width:50%; float:right">
             <text>This model automatically converts input species to their phylogenetic order. For instance, if you
                 input 'Homo sapiens', the model will select 'Primates'. You can also select orders by clicking the
                 corresponding leaf on the tree.</text>
-        </div>
+        </div> -->
     </div>
     <svg xmlns="https://www.w3.org/2000/svg" id="phylo" width=1130 height=650></svg>
     <script type="text/javascript">
@@ -202,7 +202,7 @@
             selected.push(selection);
             var g = d3.select("g");
             var leaf = g.select("#" + o);
-            var twidth = leaf.select("text").node().getComputedTextLength() + 10;
+            var twidth = leaf.select("text").node().getComputedTextLength() + 20;
             if (navigator.userAgent.indexOf("Firefox") == -1) { twidth *= 1.1 }
             var theight = 1.1 * leaf.select("text").node().getBBox().height;
             var image = leaf.append("svg:image")
@@ -215,6 +215,7 @@
 
             if (shrink.includes(o)) {
                 image.attr("height", 15).attr("width", 18);
+                image.attr("y", -0.75 * theight);
             }
 
         }
