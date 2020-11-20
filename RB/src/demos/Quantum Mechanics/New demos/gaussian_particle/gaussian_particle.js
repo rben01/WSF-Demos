@@ -611,7 +611,7 @@ function drawSurface3D() {
 	};
 
 	if (firstPlot) {
-		const cameraXYDist = 2;
+		const cameraXYDist = 1.7;
 		const cameraInitialAngle = (3 * Math.PI) / 2 - 0.4;
 		const x = cameraXYDist * Math.cos(cameraInitialAngle);
 		const y = cameraXYDist * Math.sin(cameraInitialAngle);
@@ -621,7 +621,7 @@ function drawSurface3D() {
 			eye: {
 				x,
 				y,
-				z: 0.5,
+				z: 1.1,
 			},
 			projection: { type: "perspective" },
 		};

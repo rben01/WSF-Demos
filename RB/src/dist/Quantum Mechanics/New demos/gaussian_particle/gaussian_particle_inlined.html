@@ -4,33 +4,205 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w==" src="https://cdn.plot.ly/plotly-1.57.0.min.js"></script>
 <script src="https://unpkg.com/svd-js" type="application/javascript"></script>
-</head><body><style>
-.slider-container {
-display: grid;
-width: 500px;
-grid-template-columns: 12em 1fr;
-row-gap: 2px;
+</head><body><style>body {
+margin-left: 10px;
+margin-top: 10px;
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
 }
-.param-slider {
-width: 200px;
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+body {
+width: 60em;
+height: 33.75em;
+}
+.grid {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: center;
+column-gap: 65px;
+}
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 4px;
+}
+.slider-container :nth-child(2n + 3) {
+margin-top: 40px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
 }
 .plot {
 display: inline-block;
 }
 .plot-container {
-margin-top: 20px;
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
 }
 .axis {
 stroke-width: 1;
-stroke: #555;
+stroke: #aaa;
 }
 .axis-tick {
 stroke-width: 1;
-stroke: #666;
+stroke: #aaa;
 }
 .axis-label {
 stroke-opacity: 0;
-fill: #111;
+fill: #ccc;
 font-size: 14px;
 }
 .x-axis-label {
@@ -51,11 +223,17 @@ visibility: hidden;
 #plot-2d .level-set {
 fill-opacity: 0;
 }
+#plot-2d .level-set-foreground {
+stroke-width: 3;
+}
+#plot-2d .level-set-background {
+stroke-width: 5;
+}
 </style>
-<div>
+<div class="grid">
 <div class="slider-container">
 <span class="slider-label">Correlation of particles</span>
-<span><input class="param-slider correlation-slider" id="slider-correlation" type="range"/></span>
+<span class="param-slider-container"><input class="param-slider correlation-slider" id="slider-correlation" type="range"/></span>
 <span class="slider-label">Spread of particle 1</span>
 <span><input class="param-slider spread-slider" id="slider-particle-1-spread" type="range"/></span>
 <span class="slider-label">Spread of particle 2</span>
@@ -65,13 +243,13 @@ fill-opacity: 0;
 <span class="slider-label">Mean position of particle 2</span>
 <span><input class="param-slider position-slider" id="slider-particle-2-mean-pos" type="range"/></span>
 </div>
-</div>
 <div class="plot-container">
 <div class="plot" id="plot-3d"></div>
 <svg class="plot" id="plot-2d"></svg>
 </div>
+</div>
 <script type="text/javascript">/* global SVDJS Plotly */
-const GRAPH_WIDTH = 400;
+const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
 const plot3D = d3
 .select("#plot-3d")
@@ -287,7 +465,7 @@ ans.push(row);
 }
 return ans;
 }
-// Synopsis: we perform an eigendecomposition on the correlation matrix and use this to
+// Synopsis: we perform an eigendecomposition on the covariance matrix and use this to
 // compute its sqrt. Then we use this to generate five points on the ellipse of the
 // level set, solve the linear equation giving the coefficients of the ellipse in
 // standard form, and then use those coefficients to get cx, cy, rx, ry, and the
@@ -298,7 +476,7 @@ const s1 = +sliders.particle1Spread.value; // sigma_1
 const s2 = +sliders.particle2Spread.value; // sigma_2
 const u1 = +sliders.particle1MeanPos.value; // mu_1
 const u2 = +sliders.particle2MeanPos.value; // mu_2
-// eigendecomposition of the correlation matrix
+// eigendecomposition of the covariance matrix
 let lambda1, lambda2, eVec1, eVec2;
 if (r === 0) {
 lambda1 = s1;
@@ -306,6 +484,7 @@ lambda2 = s2;
 eVec1 = [0, 1];
 eVec2 = [1, 0];
 } else {
+// ICM stands for inverse (of the) covariance matrix
 const discriminantICM = Math.sqrt((s1 - s2) ** 2 + 4 * r ** 2);
 lambda1 = (s1 + s2 - discriminantICM) / 2;
 lambda2 = (s1 + s2 + discriminantICM) / 2;
@@ -382,25 +561,26 @@ const rotate = (-Math.sign(r) * (theta * 180)) / Math.PI;
 const transform = `rotate(${rotate} ${cx} ${cy})`;
 return { cx, cy, rx, ry, transform };
 }
-const ellipseColorInterpolator = d3.interpolateRgb("black", "white");
-const colorConstancy = 8;
-const initialBlackness = 0.7;
+const ellipseColorInterpolator = d3.interpolateRgb("white", "black");
+const colorConstancy = 6;
+const initialWhiteness = 0.9;
 const ellipsesData = [0.4, 1, 1.6, 2.2]
 .map((radius, index) => {
+const ellipseParams = getEllipseParams(radius);
 return [
 {
-...getEllipseParams(radius),
-stroke: "white",
-strokeWidth: 5,
+...ellipseParams,
+class: "level-set-background",
+stroke: "black",
 },
 {
-...getEllipseParams(radius),
+...ellipseParams,
+class: "level-set-foreground",
 stroke: ellipseColorInterpolator(
 1 -
-initialBlackness +
+initialWhiteness +
 (1 - colorConstancy / (index + colorConstancy)),
 ),
-strokeWidth: 3,
 },
 ];
 })
@@ -409,14 +589,13 @@ plot2D
 .selectAll(".level-set")
 .data(ellipsesData)
 .join("ellipse")
-.classed("level-set", true)
+.attr("class", d => `level-set ${d.class}`)
 .attr("cx", d => d.cx)
 .attr("cy", d => d.cy)
 .attr("rx", d => d.rx)
 .attr("ry", d => d.ry)
 .attr("transform", d => d.transform)
-.attr("stroke", d => d.stroke)
-.attr("stroke-width", d => d.strokeWidth);
+.attr("stroke", d => d?.stroke);
 }
 const triangulationInfo = (() => {
 const xMin = X_MIN;
@@ -504,6 +683,7 @@ i: triangulationInfo.i,
 j: triangulationInfo.j,
 k: triangulationInfo.k,
 lighting: surfaceLighting,
+facecolor: triangulationInfo.i.map(() => "#27f"),
 };
 const gridlineZShift = 0.0001;
 const xGridlines = getGridlines({
@@ -529,8 +709,8 @@ y: gridline.map(p => p[1]),
 z: gridline.map(p => p[2]),
 mode: "lines",
 line: {
-color: "black",
-width: 2,
+color: "#000",
+width: 2.5,
 },
 }));
 const nSideViewPoints = 51;
@@ -561,11 +741,10 @@ y: points.map(p => p[1]),
 z: points.map(p => p[2]),
 mode: "lines",
 line: {
-color: "black",
+color: "#ddd",
 width: 4,
 },
 }));
-console.log(sideViewData);
 const data = [meshDatum, ...gridlinesData, ...sideViewData];
 const axesAttrs = {
 visible: true,
@@ -574,6 +753,8 @@ showspikes: false,
 showline: false,
 zeroline: false,
 showticklabels: true,
+color: "#aaa",
+gridcolor: "#999",
 };
 const xSpan = xMax - xMin;
 const ySpan = yMax - yMin;
@@ -583,6 +764,9 @@ const zMax = Math.max(zs);
 const zSpan = zMax - zMin;
 const zAspect = zSpan / xSpan;
 const layout = {
+width: GRAPH_WIDTH,
+height: GRAPH_HEIGHT,
+paper_bgcolor: "black",
 margin: { t: 0, b: 0, l: 0, r: 0 },
 hovermode: false,
 showlegend: false,
@@ -608,7 +792,7 @@ s2: +sliders.particle2Spread.min,
 },
 };
 if (firstPlot) {
-const cameraXYDist = 2;
+const cameraXYDist = 1.7;
 const cameraInitialAngle = (3 * Math.PI) / 2 - 0.4;
 const x = cameraXYDist * Math.cos(cameraInitialAngle);
 const y = cameraXYDist * Math.sin(cameraInitialAngle);
@@ -618,7 +802,7 @@ center: { x: 0, y: 0, z: 0 },
 eye: {
 x,
 y,
-z: 0.5,
+z: 1.1,
 },
 projection: { type: "perspective" },
 };
