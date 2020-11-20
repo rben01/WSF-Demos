@@ -1,6 +1,6 @@
 /* global SVDJS Plotly */
 
-const GRAPH_WIDTH = 400;
+const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
 
 const plot3D = d3
@@ -353,25 +353,26 @@ function drawEllipse2D() {
 		return { cx, cy, rx, ry, transform };
 	}
 
-	const ellipseColorInterpolator = d3.interpolateRgb("black", "white");
-	const colorConstancy = 8;
-	const initialBlackness = 0.7;
+	const ellipseColorInterpolator = d3.interpolateRgb("white", "black");
+	const colorConstancy = 6;
+	const initialWhiteness = 0.9;
 	const ellipsesData = [0.4, 1, 1.6, 2.2]
 		.map((radius, index) => {
+			const ellipseParams = getEllipseParams(radius);
 			return [
 				{
-					...getEllipseParams(radius),
-					stroke: "white",
-					strokeWidth: 5,
+					...ellipseParams,
+					class: "level-set-background",
+					stroke: "black",
 				},
 				{
-					...getEllipseParams(radius),
+					...ellipseParams,
+					class: "level-set-foreground",
 					stroke: ellipseColorInterpolator(
 						1 -
-							initialBlackness +
+							initialWhiteness +
 							(1 - colorConstancy / (index + colorConstancy)),
 					),
-					strokeWidth: 3,
 				},
 			];
 		})
@@ -381,14 +382,13 @@ function drawEllipse2D() {
 		.selectAll(".level-set")
 		.data(ellipsesData)
 		.join("ellipse")
-		.classed("level-set", true)
+		.attr("class", d => `level-set ${d.class}`)
 		.attr("cx", d => d.cx)
 		.attr("cy", d => d.cy)
 		.attr("rx", d => d.rx)
 		.attr("ry", d => d.ry)
 		.attr("transform", d => d.transform)
-		.attr("stroke", d => d.stroke)
-		.attr("stroke-width", d => d.strokeWidth);
+		.attr("stroke", d => d?.stroke);
 }
 
 const triangulationInfo = (() => {
@@ -489,6 +489,7 @@ function drawSurface3D() {
 		j: triangulationInfo.j,
 		k: triangulationInfo.k,
 		lighting: surfaceLighting,
+		facecolor: triangulationInfo.i.map(() => "#27f"),
 	};
 
 	const gridlineZShift = 0.0001;
@@ -516,8 +517,8 @@ function drawSurface3D() {
 		z: gridline.map(p => p[2]),
 		mode: "lines",
 		line: {
-			color: "black",
-			width: 2,
+			color: "#000",
+			width: 2.5,
 		},
 	}));
 
@@ -552,11 +553,10 @@ function drawSurface3D() {
 		z: points.map(p => p[2]),
 		mode: "lines",
 		line: {
-			color: "black",
+			color: "#ddd",
 			width: 4,
 		},
 	}));
-	console.log(sideViewData);
 
 	const data = [meshDatum, ...gridlinesData, ...sideViewData];
 
@@ -567,6 +567,8 @@ function drawSurface3D() {
 		showline: false,
 		zeroline: false,
 		showticklabels: true,
+		color: "#aaa",
+		gridcolor: "#999",
 	};
 
 	const xSpan = xMax - xMin;
@@ -580,6 +582,9 @@ function drawSurface3D() {
 	const zAspect = zSpan / xSpan;
 
 	const layout = {
+		width: GRAPH_WIDTH,
+		height: GRAPH_HEIGHT,
+		paper_bgcolor: "black",
 		margin: { t: 0, b: 0, l: 0, r: 0 },
 		hovermode: false,
 		showlegend: false,

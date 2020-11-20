@@ -12,33 +12,53 @@
 			crossorigin="anonymous"
 		></script>
 		<script src="https://unpkg.com/svd-js" type="application/javascript"></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
-			.slider-container {
-				display: grid;
-				width: 500px;
-				grid-template-columns: 12em 1fr;
-				row-gap: 2px;
+			body {
+				width: 60em;
+				height: 33.75em;
 			}
-			.param-slider {
-				width: 200px;
+			.grid {
+				display: grid;
+				grid-template-columns: 13em 1fr;
+				align-items: center;
+				column-gap: 65px;
+			}
+			.slider-container {
+				grid-row: span 2;
+				display: grid;
+				grid-template-columns: 1fr;
+				row-gap: 4px;
+			}
+			.slider-container :nth-child(2n + 3) {
+				margin-top: 40px;
+			}
+			.param-slider-container {
+				display: inline-block;
+				width: 100%;
+			}
+			input[type="range"] {
+				width: 100%;
 			}
 			.plot {
 				display: inline-block;
 			}
 			.plot-container {
-				margin-top: 20px;
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: 20px;
 			}
 			.axis {
 				stroke-width: 1;
-				stroke: #555;
+				stroke: #aaa;
 			}
 			.axis-tick {
 				stroke-width: 1;
-				stroke: #666;
+				stroke: #aaa;
 			}
 			.axis-label {
 				stroke-opacity: 0;
-				fill: #111;
+				fill: #ccc;
 				font-size: 14px;
 			}
 			.x-axis-label {
@@ -59,12 +79,18 @@
 			#plot-2d .level-set {
 				fill-opacity: 0;
 			}
+			#plot-2d .level-set-foreground {
+				stroke-width: 3;
+			}
+			#plot-2d .level-set-background {
+				stroke-width: 5;
+			}
 		</style>
 		<body>
-			<div>
+			<div class="grid">
 				<div class="slider-container">
 					<span class="slider-label">Correlation of particles</span>
-					<span
+					<span class="param-slider-container"
 						><input
 							id="slider-correlation"
 							class="param-slider correlation-slider"
@@ -99,10 +125,10 @@
 							type="range"
 					/></span>
 				</div>
-			</div>
-			<div class="plot-container">
-				<div id="plot-3d" class="plot"></div>
-				<svg id="plot-2d" class="plot"></svg>
+				<div class="plot-container">
+					<div id="plot-3d" class="plot"></div>
+					<svg id="plot-2d" class="plot"></svg>
+				</div>
 			</div>
 			<script src="gaussian_particle.js"></script>
 		</body>
