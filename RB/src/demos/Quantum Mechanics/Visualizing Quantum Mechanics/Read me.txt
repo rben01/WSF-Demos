@@ -1,0 +1,179 @@
+Welcome to Visual Quantum Mechanics.
+
+This CD contains a lot of digital movies that can be accessed through the application
+VQM.exe.
+Just double-click the application's icon to launch the software from the CD.
+Do not drag the application to your hard disk.
+
+The application "Visual Quantum Mechanics - 1" is a presentation environment for the
+computer-generated animations illustrating the book "Visual Quantum Mechanics".
+Basically, it is an interactive movie player that combines movies with text, graphics,
+and further information.
+This application was written with Macromedia Director 8.5 on an Apple Macintosh computer.
+The movies were created with Mathematica 3.0 and 4.0 in QuickTime format.
+
+
+SYSTEM REQUIREMENTS:
+
+This is a hybrid CD, it runs on Windows 95/98/NT/2000 and Macintosh computers.
+The following requirements must be fulfilled.
+
+Windows:
+Win 95/ Win NT4 or later, QuickTime 4 or later (QuickTime installer on the CD-ROM)
+CPU: Pentium 166 MHz
+RAM: 32 MB installed
+256 colors  at 640x480 pixels (thousands of colors recommended)
+4-speed CD-ROM (12xCD-ROM recommended)
+
+Macintosh:
+MacOS 8.1 or later, QuickTime 4 or later.
+Mac OS X: Classic mode only
+CPU: Power Mac, 120 MHz
+RAM: 32 MB installed, 12 MB of available RAM
+256 colors  at 640x480 pixels (thousands of colors recommended)
+4-speed CD-ROM (12xCD-ROM recommended)
+
+Linux/Unix:
+Presently, there is no version of the Macromedia Director application for these
+platforms. Hence it is not possible to support these platforms.
+
+
+You won't have much fun with the minimal requirements. The software has been designed
+to run smoothly on multimedia computers of the year 2000. The startup time of the
+application "Visual Quantum Mechanics - 1" and the performance of the movies depend
+critically on the speed of your CD-ROM drive and on the overall performance of your
+computer. The movies are played directly from the CD. A 12x CD-ROM drive or better gives
+you a big advantage. If you need the best possible performance (e.g., for video
+projection in a lecture hall), and if you have 600 MB of free disk space, you may copy
+everything to your hard disk.
+
+Tip: You can skip the animation at startup by pressing the shift-key.
+
+The software on the CD will launch the QuickTime installer if it cannot find QuickTime
+on your system. The installer will install QuickTime 5.0.
+The newest version of QuickTime is also available on the Internet:
+http://www.apple.com/quicktime
+
+
+The CD also contains the Mathematica source code of the movies.  It is accessible from
+within the application "Visual Quantum Mechanics - 1". If you want to create your own
+movies you must have Mathematica.
+
+Mathematica 4.0 is available from
+Wolfram Research, Inc.
+100 Trade Center Drive
+Champaign, IL 61820-7237
+USA 
+http://www.wolfram.com/
+
+The Mathematica code on the CD assumes that the software found in the folder "Mathematica"
+on the CD is installed at the appropriate places within the folder Mathematica 4.0 on your
+hard disk.
+
+Technical notes for Mathematica users:
+
+Some of the code needs Version 3.0 or later. You may copy the text and paste it in a
+Mathematica notebook. The text will apear in a single notebook cell. You may then evaluate
+this cell to generate the movie as it appears in Visual Quantum Mechanics.
+Of course this makes only sense if you plan to vary the initial conditions and/or the
+method of visualization.
+
+(Mathematica 3 on a Mac sometimes has problems with line breaks when pasting text from
+the clipboard into a notebook. In this case, simply select the whole text and paste it
+again.
+There should be no problem with Mathematica 4. See, however, item B) below)
+
+The code should run without problems under the following conditions:
+
+A) The Mathematica packages provided on the CD have been installed on their correct
+position.
+The correct position is in the Mathematica program folder. Place the folder "Graphics"
+and the Folder "Quantum Mechanics" into /AddOns/Applications.
+The folder "Graphics" contains packages for the visualization of complex-valued
+functions. The package "ComplexPlot.m" comes with documentation. Rebuild the Help-index
+to access the documentation via the Help browser.
+The folder Quantum Mechanics contains an application for the numerical solution of
+the Schršdinger equation. QuantumKernel has no documentation yet. Check the homepage
+of Visual Quantum Mechanics: http://www.kfunigraz.ac.at/imawww/vqm/. The usage is
+explained a bit by the Mathematica notebooks containing the code for the movies. The
+application QuantumKernel also contains routines for solving the Pauli and Dirac equations,
+but these features are not yet fully tested. Newer versions will be made available on the
+home page of this book, see the contact information below.
+
+B) Be sure to paste the text in a Mathematica cell which is in input form.
+(Menu: Cell->Convert to->InputForm).
+This is done automatically if you set the default input format type to "InputForm".
+(Menu: Cell->Default Input Format Type->InputForm).
+If a package is loaded from a cell in Standard Form which also contains commands from that
+package then you are most likely to run into problems with what is called "shadowing".
+Another possibility to avoid this problem is to split the cell after the package loading
+commands.
+
+C) Start a new kernel session before you evaluate the notebook with the code pasted from
+Visual Quantum Mechanics. No particular care has been taken to protect the definitions in
+one notebook from the definitions made somewhere else. So interactions are likely to occur
+and they will produce unpredictable results.
+
+D) Be aware that many notebooks take an exceedingly long time to execute.  In order to
+test your modifications you should, for example, reduce the number of time-steps or
+PlotPoints etc.
+
+CONTACT INFORMATION
+
+Visit the homepage of this book:
+http://www.kfunigraz.ac.at/imawww/vqm/
+
+or write me an e-mail:
+mailto://bernd.thaller@kfunigraz.ac.at
+
+or write snail-mail to
+Bernd Thaller
+Institut of Mathematics
+University of Graz
+Heinrichstrasse 36
+A-8010 GRAZ
+Austria/Europe
+
+Publisher:
+TELOS, The Electronic Library of Science
+Springer-Verlag New York
+175 Fifth Avenue
+New York, NY 10010
+(212) 460-150
+http://www.telospub.com/
+
+
+COPYRIGHT NOTICE
+
+© 2002 by Bernd Thaller
+Springer-Verlag New York, Inc. is granted the exclusive right
+to distribute this CD-ROM.
+The author retains the copyright for the movies and the software.
+Published by TELOS, The Electronic Library of Science.
+TELOS is an imprint of Springer-Verlag New York, Inc.
+
+This work consist of a printed book and a CD-ROM disc packaged with the book,
+and is protected by federal copyright law and international treaty.
+You are not allowed to make any copy of the CD-ROM for any reason, without
+the written permission of the publisher except that you may download
+and copy the files from the CD-ROM for you own research, teaching, and
+personal communications use. Commercial use without the written consent
+of Springer-Verlag is strictly prohibited.
+
+The use of general descriptive names, trademarks, etc., in this publication,
+even if the former are not especially identified, is not to be taken as a
+sign that such names, as understood by the Trade Marks and Merchandise Mark Act,
+may accordingly be used by anyone. Where those designations appear in this book
+or on the CD and Springer-Verlag was aware of a trademark claim, the
+designations follow the capitalization style used by the manufacturer.
+
+
+DISCLAIMER
+
+Springer-Verlag or the author makes no warranty of representation, either
+express or implied, with respect to this CD-ROM or book, including their quality,
+merchantability, or fitness for a particular purpose. In no event will
+Springer-Verlag or the author be liable for direct, indirect, special,
+incidental, or consequential damages arising out of the use or inability
+to use the disc or book, even if Springer-Verlag or the author has been
+advised of the possibility of such damages.
