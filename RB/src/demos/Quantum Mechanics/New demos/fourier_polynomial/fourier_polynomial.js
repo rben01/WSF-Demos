@@ -45,9 +45,27 @@ function get_poly_path() {
     return points;
 }
 
+function get_peri_path() {
+    var c0 = +sliders.constant.value,
+        c1 = +sliders.linear.value,
+        c2 = +sliders.quadratic.value,
+        c3 = +sliders.cubic.value,
+        points = [],
+        x;
+
+    for (var i = -6; i < 6; i += 12 / 1000) {
+        x = ((i + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+        points.push([w * i / 12, -h * (c3 * x ** 3 + c2 * x ** 2 + c1 * x + c0) / 20])
+    }
+
+    return points;
+}
+
 function update() {
     var points = get_poly_path();
     poly.attr("d", d3.line()(points));
+    peri.attr("d", d3.line()(get_peri_path()));
 }
 
-d3.selectAll("input").on("input", update)
+d3.selectAll("input").on("input", update);
+update();
