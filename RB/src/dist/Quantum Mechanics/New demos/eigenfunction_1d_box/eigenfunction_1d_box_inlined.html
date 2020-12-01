@@ -6,9 +6,8 @@
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
 <script crossorigin="anonymous" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 <!-- To automatically render math in text elements, include the auto-render extension: -->
-<script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
-</head>
-<body><style>body {
+<script crossorigin="anonymous" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+<style>body {
 margin-left: 10px;
 margin-top: 10px;
 background-color: black;
@@ -238,7 +237,8 @@ stroke-width: 2px;
 stroke: none;
 fill-opacity: 1;
 }
-</style>
+</style></head>
+<body>
 <div class="grid">
 <div class="slider-container">
 <span class="slider-label">Width of well, <span id="latex-width"></span></span>

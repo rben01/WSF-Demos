@@ -298,7 +298,7 @@ def inline(
 
         style_tag = soup.new_tag("style")
         style_tag.string = css_source
-        soup.find("body").insert(0, style_tag)
+        soup.find("head").append(style_tag)
 
     with outfile.open("w") as f:
         f.write(
