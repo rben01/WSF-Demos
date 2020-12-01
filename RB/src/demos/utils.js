@@ -10,6 +10,7 @@ const STANDARD_COLORS = {
 	secondary: "#f3c002", // yellow
 	tertiary: "#14c778", // green
 	quaternary: "#e5d", // pinkish
+	graphicPrimary: "#27f", // brilliant blue
 };
 
 // https://stackoverflow.com/a/32538867
@@ -202,9 +203,11 @@ function groupBy(array, keyFunc, expectedKeys, asArray = true) {
 		}
 	}
 
-	for (const k of expectedKeys) {
-		if (!(k in grouped)) {
-			grouped[k] = [];
+	if (expectedKeys) {
+		for (const k of expectedKeys) {
+			if (!(k in grouped)) {
+				grouped[k] = [];
+			}
 		}
 	}
 

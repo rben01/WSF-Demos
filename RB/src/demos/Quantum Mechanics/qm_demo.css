@@ -8,10 +8,55 @@ body {
 	line-height: 1.8em;
 }
 
+.grid {
+	display: grid;
+	grid-template-columns: 13em 1fr;
+	align-items: start;
+}
 .slider-container {
-	line-height: 1.4em;
-	display: block;
-	margin-bottom: 10px;
+	grid-row: span 2;
+	display: grid;
+	grid-template-columns: 1fr;
+	row-gap: 4px;
+}
+.slider-container > :nth-child(2n + 3) {
+	margin-top: 40px;
+}
+.param-slider-container {
+	display: inline-block;
+	width: 100%;
+}
+input[type="range"] {
+	width: 100%;
+}
+.plot {
+	display: inline-block;
+}
+.plot-container {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	column-gap: 10px;
+}
+.axis {
+	stroke-width: 1;
+	stroke: #aaa;
+}
+.axis-tick {
+	stroke-width: 1;
+	stroke: #aaa;
+}
+.axis-label {
+	stroke-opacity: 0;
+	fill: #ccc;
+	font-size: 14px;
+}
+.x-axis-label {
+	text-anchor: middle;
+	dominant-baseline: hanging;
+}
+.y-axis-label {
+	text-anchor: end;
+	dominant-baseline: middle;
 }
 
 .play-button {
@@ -44,11 +89,6 @@ body {
 	color: #444;
 	text-shadow: 1px 1px #ccc;
 	cursor: default;
-}
-
-.slider-label {
-	margin-right: 1em;
-	display: inline-block;
 }
 
 .highlighted-text {
@@ -134,6 +174,7 @@ input[type="range"] {
 	border-radius: 2px;
 	position: relative;
 	bottom: 4px;
+	outline: none;
 }
 
 input[type="range"]::-webkit-slider-thumb {
