@@ -1,6 +1,6 @@
 const svg = d3.select("#svg"),
     w = 400,
-    h = 400,
+    h = 350,
     x = d3.scaleLinear().range([-w / 2, w / 2]).domain([-6, 6]),
     y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-10, 10]),
     cx = d3.scaleLinear().range([0, w]).domain([0, 10]),
