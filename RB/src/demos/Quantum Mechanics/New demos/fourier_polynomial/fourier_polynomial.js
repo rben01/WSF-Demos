@@ -16,23 +16,23 @@ const sliders = {
     cubic: document.getElementById("cubic")
 }
 
-const poly_graph = svg.append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const poly_graph = d3.select("#svg").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
 poly_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 poly_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const poly = poly_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const peri_graph = svg.append("g").attr("transform", "translate(" + (50 + 3 * w / 2) + ", " + (h / 2 + 50) + ")");
+const peri_graph = d3.select("#svg2").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
 peri_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 peri_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const peri = peri_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const cos_graph = svg.append("g").attr("transform", "translate(" + (100 + 5 * w / 2) + ", " + (h / 2 + 50) + ")");
+const cos_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
 const cos = cos_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const sin_graph = svg.append("g").attr("transform", "translate(" + (150 + 7 * w / 2) + ", " + (h / 2 + 50) + ")");
+const sin_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
 const sin = sin_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const fourier_graph = svg.append("g").attr("transform", "translate(" + (200 + 9 * w / 2) + ", " + (h / 2 + 50) + ")");
+const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
 fourier_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 fourier_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const fourier = fourier_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
