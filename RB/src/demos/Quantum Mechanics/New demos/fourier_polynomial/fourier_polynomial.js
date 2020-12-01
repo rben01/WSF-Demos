@@ -72,14 +72,14 @@ Odd function - f(x) = Sigma b_n sin (n pi x / L), b_n = 2/L int [0,L] f(x) cos(n
 function get_sin_coefs() {
     var coefs = [];
     for (var n = 1; n < 11; n++) {
-        coefs.push(c1 * 2 * (-1) ** (n + 1) / n + c3 * 2 * (-1) ** (n + 1) * (Math.PI ** 2 - 6 / n ** 2) / n);
+        coefs.push(c1 * 2 * (-1) ** (n) / n + c3 * 2 * (-1) ** (n) * (Math.PI ** 2 - 6 / n ** 2) / n);
     }
 
     return coefs;
 }
 
 function get_cos_coefs() {
-    var coefs = [c0 + c2 * 4 * Math.PI ** 2 / 3];
+    var coefs = [c0 + c2 * Math.PI ** 2 / 3];
     for (var n = 1; n < 10; n++) {
         coefs.push(c2 * 4 * (-1) ** n / n ** 2);
     }
@@ -87,10 +87,30 @@ function get_cos_coefs() {
     return coefs;
 }
 
+function get_fourier_path(coscs, sincs) {
+    var points = [],
+        y;
+
+    for (var i = -6; i < 6; i += 12 / 1000) {
+        y = 0;
+        for (var n = 0; n < 10; n++) {
+            y += coscs[n] * Math.cos(n * i) + sincs[n] * Math.sin(n * i);
+        }
+        points.push([w * i / 12, -h * y / 20]);
+    }
+
+    return points;
+}
+
 function update() {
     var points = get_poly_path();
     poly.attr("d", d3.line()(points));
     peri.attr("d", d3.line()(get_peri_path()));
+
+    var coscs = get_cos_coefs(),
+        sincs = get_sin_coefs();
+
+    fourier.attr("d", d3.line()(get_fourier_path(coscs, sincs)));
 }
 
 d3.selectAll("input").on("input", update);
