@@ -30,12 +30,12 @@ const peri = peri_graph.append("path").attr("fill", "none").style("stroke", "lig
 
 const cos_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + 25 + ", " + (h / 2 + 25) + ")");
 cos_graph.append("g").attr("class", "axis").call(d3.axisBottom(cx).ticks(0));
-cos_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(0));
+cos_graph.append("g").attr("class", "axis").call(d3.axisLeft(cy).ticks(0));
 const cos = cos_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
 const sin_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + 25 + ", " + (h / 2 + 25) + ")");
 sin_graph.append("g").attr("class", "axis").call(d3.axisBottom(cx).ticks(0));
-sin_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(0));
+sin_graph.append("g").attr("class", "axis").call(d3.axisLeft(cy).ticks(0));
 const sin = sin_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
 const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 25) + ")");
@@ -109,13 +109,22 @@ function get_fourier_path(coscs, sincs) {
 }
 
 function update() {
-    var points = get_poly_path();
+    var points = get_poly_path(),
+        cosd = "",
+        sind = "";
     poly.attr("d", d3.line()(points));
     peri.attr("d", d3.line()(get_peri_path()));
 
     var coscs = get_cos_coefs(),
         sincs = get_sin_coefs();
 
+    for (var i = 0; i < 10; i++) {
+        cosd += "M " + (i + 1) * w / 10 + ", " + 0 + " v " + coscs[i] * h / 6 + " ";
+        sind += "M " + (i + 1) * w / 10 + ", " + 0 + " v " + sincs[i] * h / 6 + " ";
+    }
+
+    cos.attr("d", cosd);
+    sin.attr("d", sind);
     fourier.attr("d", d3.line()(get_fourier_path(coscs, sincs)));
 }
 
