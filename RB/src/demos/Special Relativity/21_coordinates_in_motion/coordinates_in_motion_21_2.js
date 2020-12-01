@@ -1,4 +1,4 @@
-/* global C lorentzFactor applyDatum applyGraphicalObjs */
+/* global groupBy lorentzFactor applyDatum applyGraphicalObjs */
 "use strict";
 
 const RANGES = {
@@ -121,7 +121,7 @@ const heightScale = d3
 	.range([0, AX_BOUNDS.yMin - AX_BOUNDS.yMax]);
 
 // x has units of light-minutes
-function getTimeDeltaMinutes({ x, fracOfC }) {
+function getTimeDeltaSeconds({ x, fracOfC }) {
 	return x * fracOfC;
 }
 
@@ -133,7 +133,12 @@ function getArrowClassName(frameName) {
 	return `arrow-frame-${frameName}`;
 }
 
-function getGraphData(d) {
+function getGraphData(d, { referenceFrame, fracOfC } = {}) {
+	referenceFrame = referenceFrame ?? frameButtons.a.checked ? "a" : "b";
+	fracOfC = fracOfC ?? +speedSlider.value;
+	const lf =
+		d.isTopFrame === (referenceFrame === "a") ? 1 : lorentzFactor({ fracOfC });
+
 	const y0s = yScale(0);
 	const frameName = d.isTopFrame ? "a" : "b";
 
@@ -141,6 +146,8 @@ function getGraphData(d) {
 		const lineColor = "white";
 		const fillColor = "#5c4e29";
 		const boxHeightAboveGround = 0.3;
+
+		const path = d3.line().curve(d3.curveNatural);
 
 		const boxData = [];
 		const lineData = [];
@@ -165,17 +172,28 @@ function getGraphData(d) {
 			});
 
 			const xs = xScale(x);
-
+			const lorentzScaledXs = xScale(x / lf);
+			const boxHeightAboveGroundS = yScale(boxHeightAboveGround);
+			const pathPoints = [
+				[xs, boxHeightAboveGroundS],
+				[
+					xs * 0.8 + lorentzScaledXs * 0.2,
+					(boxHeightAboveGroundS * 2) / 3 + (y0s * 1) / 3,
+				],
+				[
+					xs * 0.2 + lorentzScaledXs * 0.8,
+					(boxHeightAboveGroundS * 1) / 3 + (y0s * 2) / 3,
+				],
+				[lorentzScaledXs, y0s],
+			];
 			lineData.push({
-				shape: "line",
+				shape: "path",
 				class: "box-line",
 				attrs: {
-					x1: xs,
-					y1: y0s,
-					x2: xs,
-					y2: yScale(boxHeightAboveGround),
+					d: path(pathPoints),
 					stroke: lineColor,
 					"stroke-width": 2,
+					"fill-opacity": 0,
 				},
 			});
 
@@ -217,6 +235,11 @@ function getGraphData(d) {
 
 	function getAxesData() {
 		const axisColor = "#999";
+		const tickLabelSizeConstancy = 4;
+		const axisLabelTextScale =
+			d.isTopFrame === (referenceFrame === "a")
+				? 1
+				: (tickLabelSizeConstancy - fracOfC) / tickLabelSizeConstancy;
 
 		const [minX, maxX] = xScale.domain().map(xScale);
 		const axisDatum = {
@@ -233,7 +256,7 @@ function getGraphData(d) {
 		};
 
 		const ticksData = xScale.ticks(RANGES.x.span).map(x => {
-			const xs = xScale(x);
+			const xs = xScale(x / lf);
 			return {
 				class: "x-axis-tick",
 				shape: "line",
@@ -249,16 +272,16 @@ function getGraphData(d) {
 		});
 
 		const labelsData = xScale.ticks(5).map(x => {
-			const xs = xScale(x);
+			const xs = xScale(x / lf);
 			return {
 				class: "x-axis-label",
 				shape: "text",
-				text: `${x}`,
+				text: `${x}`.replace("-", "−"),
 				attrs: {
 					x: xs,
 					y: yScale(-AXIS_MARGINS.bottom / 2) + 4,
 					fill: d3.interpolateRgb(axisColor, "white")(0.3),
-					"font-size": 17,
+					"font-size": 17 * axisLabelTextScale,
 					"text-anchor": "middle",
 					"alignment-baseline": "middle",
 				},
@@ -313,20 +336,18 @@ function updateClocks({ fracOfC, referenceFrame } = {}) {
 
 	stationaryArrow.attr("opacity", 0);
 
+	const speedSign = frameAIsStationary ? 1 : -1;
 	const movingArrowAbsX2 = 6.5 + fracOfC * 4;
-	movingArrow
-		.attr("x2", xScale((frameAIsStationary ? -1 : 1) * movingArrowAbsX2))
-		.attr("opacity", 1);
+	movingArrow.attr("x2", xScale(-speedSign * movingArrowAbsX2)).attr("opacity", 1);
 
 	stationaryText.each(function () {
 		const text = d3.select(this);
 		text.text(timeToStr(10, 0));
 	});
 
-	const speedSign = frameAIsStationary ? 1 : -1;
 	movingText.each(function (d) {
 		const x = d.x;
-		const dtSeconds = getTimeDeltaMinutes({ x: x, fracOfC: speedSign * fracOfC });
+		const dtSeconds = getTimeDeltaSeconds({ x: x, fracOfC: speedSign * fracOfC });
 
 		const text = d3.select(this);
 		text.text(timeToStr(10, dtSeconds));
@@ -355,6 +376,22 @@ function updateClocks({ fracOfC, referenceFrame } = {}) {
 		movingTextSpans.a.textContent = "Moving";
 		movingTextSpans.b.textContent = "At Rest";
 	}
+
+	subcanvases.each(function (d) {
+		const subcanvas = d3.select(this);
+		const graphData = getGraphData(d, { fracOfC });
+		const groups = groupBy(graphData, datum => `${datum.shape}.${datum.class}`);
+		for (const [selector, data] of groups) {
+			if (
+				["text.text-frame", "line.arrow-frame"].some(selectorSubstr =>
+					selector.includes(selectorSubstr),
+				)
+			) {
+				continue;
+			}
+			applyGraphicalObjs(subcanvas, data, { selector });
+		}
+	});
 }
 
 subcanvases.each(function (d) {

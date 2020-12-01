@@ -1,4 +1,4 @@
-/* global SVDJS Plotly */
+/* global SVDJS Plotly STANDARD_COLORS */
 
 const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
@@ -489,7 +489,7 @@ function drawSurface3D() {
 		j: triangulationInfo.j,
 		k: triangulationInfo.k,
 		lighting: surfaceLighting,
-		facecolor: triangulationInfo.i.map(() => "#27f"),
+		facecolor: triangulationInfo.i.map(() => STANDARD_COLORS.graphicPrimary),
 	};
 
 	const gridlineZShift = 0.0001;
