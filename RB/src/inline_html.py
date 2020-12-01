@@ -5,10 +5,13 @@ import enum
 import json
 import re
 import sys
+from dataclasses import dataclass
 from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 import requests
 from bs4 import BeautifulSoup, Tag
+from typing_extensions import Literal
 
 SYMBOLS_TO_REPLACE = [
     "AESTHETIC",
@@ -191,6 +194,12 @@ class SymbolReplacer:
             yield self._get_next_symbol()
 
 
+@dataclass
+class TagContainer:
+    content: str
+    attrs: Dict[str, str]
+
+
 def inline(
     infile: Path,
     outfile: Path,
@@ -207,17 +216,19 @@ def inline(
     with infile.open() as f:
         soup = BeautifulSoup(f.read(), "lxml")
 
-    js_source_strs = []
-    css_source_strs = []
+    js_tags: List[TagContainer] = []
+    css_tags: List[TagContainer] = []
 
-    tag_names_and_link_attrs = [
-        ("script", "src", js_source_strs, "r"),
-        ("link", "href", css_source_strs, "r"),
-        ("style", None, css_source_strs, "r"),
+    tag_names_and_link_attrs: List[
+        Tuple[str, Optional[str], Optional[List[TagContainer]], Literal["r", "rb"]]
+    ] = [
+        ("script", "src", js_tags, "r"),
+        ("link", "href", css_tags, "r"),
+        ("style", None, css_tags, "r"),
         ("img", "src", None, "rb"),
     ]
 
-    for tag_name, link_attr, source_strs, file_mode in tag_names_and_link_attrs:
+    for tag_name, link_attr, source_tags, file_mode in tag_names_and_link_attrs:
         tags = soup.find_all(tag_name)
         for tag in tags:
             tag: Tag
@@ -237,27 +248,34 @@ def inline(
                 with absolute_src.open(file_mode) as f:
                     contents = f.read()
 
+            tag_container = TagContainer(
+                contents, {k: v for k, v in tag.attrs.items() if k != link_attr}
+            )
+
             if tag_name == "img":
                 data = base64.b64encode(contents).decode("utf-8")
                 tag[
                     "src"
                 ] = f"data:image/{absolute_src.suffix.strip('.')};base64,{data}"
             else:
-                source_strs.append(contents)
+                source_tags.append(tag_container)
                 tag.decompose()
 
-    if js_source_strs:
-        js_source_str = "\n".join(js_source_strs)
+    for js_tag in js_tags:
         if minify_js:
             response = requests.post(
-                "https://javascript-minifier.com/raw", data={"input": js_source_str},
+                "https://javascript-minifier.com/raw", data={"input": js_tag.content},
             )
             js_code = response.text
         else:
-            js_code = js_source_str
+            js_code = js_tag.content
 
         script_tag = soup.new_tag("script")
         script_tag["type"] = "text/javascript"
+
+        for k, v in js_tag.attrs.items():
+            script_tag[k] = v
+
         if minify_globals:
             symbols = [match[1] for match in SYMBOL_RE.findall(js_code) if match[1]]
             replacer = SymbolReplacer(symbols, lang=Lang.js)
@@ -286,18 +304,21 @@ def inline(
         script_tag.string = js_code
         soup.find("body").append(script_tag)
 
-    if css_source_strs:
-        css_source_str = "\n".join(css_source_strs)
+    for css_tag in css_tags:
         if minify_css:
             response = requests.post(
-                "https://cssminifier.com/raw", data={"input": css_source_str}
+                "https://cssminifier.com/raw", data={"input": css_tag.content}
             )
             css_source = response.text
         else:
-            css_source = css_source_str
+            css_source = css_tag.content
 
         style_tag = soup.new_tag("style")
         style_tag.string = css_source
+
+        for k, v in css_tag.attrs.items():
+            style_tag[k] = v
+
         soup.find("head").append(style_tag)
 
     with outfile.open("w") as f:
