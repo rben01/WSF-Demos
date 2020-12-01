@@ -3,11 +3,18 @@
 <head>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
-<script crossorigin="anonymous" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update();" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 <!-- To automatically render math in text elements, include the auto-render extension: -->
-<script crossorigin="anonymous" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
-<style>body {
+<!-- <script
+defer
+src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+crossorigin="anonymous"
+onload="renderMathInElement(document.body);"
+></script> -->
+<style rel="stylesheet">body {
 margin-left: 10px;
 margin-top: 10px;
 background-color: black;
@@ -203,9 +210,14 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
-.katex-html {
-display: none;
+</style><style>
+.grid {
+column-gap: 30px;
+white-space: nowrap;
 }
+/* .katex-html {
+display: none;
+} */
 .wave {
 fill-opacity: 0;
 stroke-linecap: round;
@@ -449,7 +461,7 @@ return Object.entries(grouped);
 }
 return grouped;
 }
-/* global applyGraphicalObjs katex STANDARD_COLORS */
+</script><script type="text/javascript">/* global applyGraphicalObjs katex STANDARD_COLORS */
 const WIDTH = 1000;
 const HEIGHT = 600;
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
@@ -511,7 +523,8 @@ const y0_scaled = yScale(0);
 const barrierXScaled = xScale(X_0 + width);
 const yTickLoc = getAmplitude(width);
 const yAxisLabelHeight = 40;
-const yAxisBaseDx = -50;
+const yAxisBaseDx = -55;
+const yAxisNegDx = yAxisBaseDx - 19;
 return [
 {
 shape: "rect",
@@ -585,7 +598,7 @@ shape: "foreignObject",
 sign: -1,
 classes: ["axis", "y-axis-label-fo"],
 attrs: {
-x: x0_Scaled + yAxisBaseDx - 12,
+x: x0_Scaled + yAxisNegDx,
 y: yScale(-yTickLoc) - yAxisLabelHeight / 2,
 width: 1,
 height: 1,
@@ -715,7 +728,6 @@ equationDiv.innerHTML = katex.renderToString(
 );
 equationDiv.style.opacity = opacity;
 }
-update();
 for (const slider of Object.values(sliders)) {
 d3.select(slider).on("input", function () {
 update();

@@ -73,7 +73,8 @@ function getAxesData(width) {
 	const yTickLoc = getAmplitude(width);
 
 	const yAxisLabelHeight = 40;
-	const yAxisBaseDx = -50;
+	const yAxisBaseDx = -55;
+	const yAxisNegDx = yAxisBaseDx - 19;
 
 	return [
 		{
@@ -148,7 +149,7 @@ function getAxesData(width) {
 			sign: -1,
 			classes: ["axis", "y-axis-label-fo"],
 			attrs: {
-				x: x0_Scaled + yAxisBaseDx - 12,
+				x: x0_Scaled + yAxisNegDx,
 				y: yScale(-yTickLoc) - yAxisLabelHeight / 2,
 				width: 1,
 				height: 1,
@@ -297,7 +298,6 @@ function update() {
 	equationDiv.style.opacity = opacity;
 }
 
-update();
 for (const slider of Object.values(sliders)) {
 	d3.select(slider).on("input", function () {
 		update();
