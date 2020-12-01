@@ -1,8 +1,10 @@
 const svg = d3.select("#svg"),
-    w = 500,
-    h = 500,
+    w = 400,
+    h = 400,
     x = d3.scaleLinear().range([-w / 2, w / 2]).domain([-6, 6]),
-    y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-10, 10]);
+    y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-10, 10]),
+    cx = d3.scaleLinear().range([-w / 2, w / 2]).domain([0, 10]),
+    cy = d3.scaleLinear().range([-h / 2, h / 2]).domain([-3, 3]);
 
 var c0 = 0,
     c1 = 0,
@@ -16,23 +18,23 @@ const sliders = {
     cubic: document.getElementById("cubic")
 }
 
-const poly_graph = d3.select("#svg").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const poly_graph = d3.select("#svg").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 25) + ")");
 poly_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 poly_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const poly = poly_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const peri_graph = d3.select("#svg2").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const peri_graph = d3.select("#svg2").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 25) + ")");
 peri_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 peri_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const peri = peri_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const cos_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const cos_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 25) + ")");
 const cos = cos_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const sin_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const sin_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 25) + ")");
 const sin = sin_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 50) + ")");
+const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + w / 2 + ", " + (h / 2 + 25) + ")");
 fourier_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
 fourier_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
 const fourier = fourier_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
