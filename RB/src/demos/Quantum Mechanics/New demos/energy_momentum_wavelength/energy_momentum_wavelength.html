@@ -1,0 +1,38 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+        integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+        crossorigin="anonymous">
+        </script>
+    <link rel="stylesheet" type="text/css" href="../../../wsf_demo.css" />
+</head>
+
+<body style="margin-left: 50px;">
+    <div class="grid">
+        <div class="slider-container">
+            <span class="slider-label">Wavenumber</span>
+            <span class="param-slider-container">
+                <input id="wavenumber" class="param-slider correlation-slider" type="range" min=-1 max=1 step=0.01>
+            </span><br>
+            <button>Start</button>
+        </div>
+        <div class="plot-container">
+            <svg id="svg" class="plot" height=400 width=450></svg>
+        </div>
+        <div class="plot-container">
+            <svg id="svg2" class="plot" height=400 width=450></svg>
+        </div>
+        <div class="plot-container">
+            <svg id="svg3" class="plot" height=400 width=450></svg>
+        </div>
+        <div class="plot-container">
+            <svg id="svg4" class="plot" height=400 width=450></svg>
+        </div>
+        <div class="plot-container">
+            <svg id="svg5" class="plot" height=400 width=450></svg>
+        </div>
+    </div>
+
+</html>
