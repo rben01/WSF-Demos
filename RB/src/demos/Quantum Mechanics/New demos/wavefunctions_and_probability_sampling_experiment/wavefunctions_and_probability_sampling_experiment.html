@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			.grid-left-right {
+				grid-template-columns: auto 1fr;
+				column-gap: 50px;
+			}
+			.vertical-container {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;
+			}
+			#wavefunction-plot {
+				margin-top: 20px;
+			}
+			.axis-axis {
+				stroke: #ccc;
+				stroke-width: 2px;
+				fill-opacity: 0;
+			}
+			.axis-curve {
+				stroke: white;
+				stroke-width: 4px;
+				fill-opacity: 0;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+			.axis-label {
+				fill: white;
+				stroke-opacity: 0;
+				font-size: 24px;
+				font-weight: lighter;
+			}
+			.plot {
+				align-self: end;
+				vertical-align: bottom;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div class="vertical-container">
+				<div class="slider-container">
+					<span>Shape of probability distribution</span>
+					<span
+						id="wavefunction-shape-buttons"
+						class="radio-button-container horizontal"
+					>
+						<label
+							><input
+								type="radio"
+								name="wavefunction-shape"
+								onclick="update('gaussian')"
+								checked
+							/><span>Gaussian</span></label
+						><label
+							><input
+								type="radio"
+								name="wavefunction-shape"
+								onclick="update('triangle')"
+							/><span>Triangle</span></label
+						><label
+							><input type="radio" name="wavefunction-shape" /><span
+								>Uniform</span
+							></label
+						><label
+							><input
+								type="radio"
+								name="wavefunction-shape"
+								onclick="update('square')"
+							/><span>Square</span></label
+						><label
+							><input
+								type="radio"
+								name="wavefunction-shape"
+								onclick="update('smallSquare')"
+							/><span>Smaller square</span></label
+						>
+					</span>
+					<span
+						>Number of measurements: <span id="num-measurements-text"></span
+					></span>
+					<span >
+						<label><input type="range" name="num-measurements" id="number-of-measurements-slider"/></label>
+					</span>
+					<span></span>
+					<span id="measurement-buttons" class="radio-button-container">
+						<label
+							><input
+								type="radio"
+								name="measurement"
+								onclick="runMeasurement();"
+							/><span>Run experiment</span></label
+						><label
+							><input
+								type="radio"
+								name="measurement"
+								onclick="stopMeasurement()"
+								checked
+							/><span>Stop experiment</span></label
+						>
+					</span>
+				</div>
+				<svg id="wavefunction-plot" class="plot"></svg>
+			</div>
+			<svg id="experiment-plot" class="plot"></svg>
+		</div>
+		<div></div>
+		<script src="../../../utils.js"></script>
+		<script src="./wavefunctions_and_probability_sampling_experiment.js"></script>
+	</body>
+</html>

@@ -216,3 +216,35 @@ function groupBy(array, keyFunc, expectedKeys, asArray = true) {
 	}
 	return grouped;
 }
+
+function _initializeRadioButtons() {
+	const radioButtonContainers = document.getElementsByClassName(
+		"radio-button-container",
+	);
+
+	function selectButton() {
+		this.classList.add("checked-label");
+		const siblingLabels = this.parentNode.getElementsByTagName("label");
+		for (let j = 0; j < siblingLabels.length; ++j) {
+			const label = siblingLabels[j];
+			if (label === this) {
+				continue;
+			}
+			label.classList.remove("checked-label");
+		}
+	}
+
+	for (let i = 0; i < radioButtonContainers.length; ++i) {
+		const rbc = radioButtonContainers[i];
+
+		d3.select(rbc)
+			.selectAll("label")
+			.each(function () {
+				if (this.querySelector("input").checked) {
+					selectButton.call(this);
+				}
+			})
+			.on("click", selectButton);
+	}
+}
+_initializeRadioButtons();
