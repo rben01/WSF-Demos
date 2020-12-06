@@ -6,7 +6,7 @@ const X_0 = 0;
 const X_WIDTH = X_MAX - X_MIN;
 
 const WAVEF_Y_MIN = -0.1;
-const Y_MAX = 1.5;
+const Y_MAX = 1.7;
 const Y_0 = 0;
 const Y_WIDTH = Y_MAX - WAVEF_Y_MIN;
 
@@ -85,14 +85,100 @@ const numMeasurementsSlider = (() => {
 	slider.min = MIN_NUM_MEASUREMENTS;
 	slider.max = MAX_NUM_MEASUREMENTS;
 	slider.step = 1;
-	slider.value = MIN_NUM_MEASUREMENTS;
+	slider.value = MAX_NUM_MEASUREMENTS; //MIN_NUM_MEASUREMENTS;
 	slider.oninput = updateNumMeasurementsText;
 	return slider;
 })();
 
 updateNumMeasurementsText.call(numMeasurementsSlider);
+const GAUSSIAN_MU = 0;
+const GAUSSIAN_SIGMA = 0.35;
 
-function getAxesData({ name, f, width, nPixelsPerCurvePoint }) {
+function gaussian(x) {
+	return (
+		Math.exp(-0.5 * ((x - GAUSSIAN_MU) / GAUSSIAN_SIGMA) ** 2) /
+		(GAUSSIAN_SIGMA * (2 * Math.PI) ** 0.5)
+	);
+}
+
+// https://en.wikipedia.org/wiki/Box–Muller_transform
+function gaussianSample() {
+	const rand = Math.random;
+	let u, v;
+
+	do {
+		u = rand();
+	} while (u === 0);
+
+	do {
+		v = rand();
+	} while (v === 0);
+
+	const standardGaussianRV = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+
+	return GAUSSIAN_MU + GAUSSIAN_SIGMA * standardGaussianRV;
+}
+
+function triangle(x) {
+	return Math.max(0, 1 - Math.abs(x));
+}
+
+// CDF of triangle function y=1-abs(x) is Piecewise[{{1/2+x+x^2/2, x<0}, {1/2+x-x^2/2, x>0}}] for -1<x<1
+function triangleSample() {
+	const y = Math.random();
+	if (y < 0.5) {
+		// solve .5+x+x^2/2 = y; you get two solutions; take the larger one
+		return (2 * y) ** 0.5 - 1;
+	} else {
+		// solve .5+x-x^2/2 = y; you get two solutions; take the smaller one
+		return 1 - (2 - 2 * y) ** 0.5;
+	}
+}
+
+// The absolute value of where the square function goes from zero to nonzero (it must
+// integrate to 1)
+function _squareThreshold(magnitude) {
+	return 1 / (2 * magnitude);
+}
+
+function _genericSquare(x, magnitude) {
+	const threshold = _squareThreshold(magnitude);
+	return Math.abs(x) > threshold ? 0 : magnitude;
+}
+
+// CDF of square is line with slope `magnitude` passing through (0, .5)
+function _genericSquareSample(magnitude) {
+	// if y = .5 + m*x, then x = (y - .5)/m
+	const y = Math.random();
+	return (y - 0.5) / magnitude;
+}
+
+const SQUARE_MAGNITUDE = 0.8;
+function square(x) {
+	return _genericSquare(x, SQUARE_MAGNITUDE);
+}
+
+function squareSample() {
+	return _genericSquareSample(SQUARE_MAGNITUDE);
+}
+
+const SMALL_SQUARE_MAGNITUDE = 1.3;
+function smallSquare(x) {
+	return _genericSquare(x, SMALL_SQUARE_MAGNITUDE);
+}
+
+function smallSquareSample() {
+	return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
+}
+
+const supports = {
+	gaussian: [X_MIN, X_MAX],
+	triangle: [-1, 1],
+	square: [-1, 1].map(sign => sign * _squareThreshold(SQUARE_MAGNITUDE)),
+	smallSquare: [-1, 1].map(sign => sign * _squareThreshold(SMALL_SQUARE_MAGNITUDE)),
+};
+
+function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 	width = +width;
 	const nPoints = width / (nPixelsPerCurvePoint ?? N_PIXELS_PER_CURVE_POINT);
 
@@ -111,12 +197,47 @@ function getAxesData({ name, f, width, nPixelsPerCurvePoint }) {
 		throw new Error(`Invalid plot ${name}`);
 	}
 
-	const line = d3.line().curve(d3.curveLinear);
-	const pathPoints = d3.range(nPoints).map(i => {
-		const x = X_MIN + (i / (nPoints - 1)) * X_WIDTH;
-		const y = f(x);
-		return [xScale(x), yScale(y)];
-	});
+	let pathPoints;
+	if (name === WAVEFUNCTION || probDistName === "gaussian") {
+		pathPoints = d3.range(nPoints).map(i => {
+			const x = X_MIN + (i / (nPoints - 1)) * X_WIDTH;
+			const y = f(x);
+			return [x, y];
+		});
+	} else if (probDistName === "triangle") {
+		pathPoints = [
+			[supports.triangle[0], Y_0],
+			[X_0, 1],
+			[supports.triangle[1], Y_0],
+		];
+	} else if (probDistName === "square") {
+		pathPoints = [
+			[X_MIN, Y_0],
+			[supports.square[0], Y_0],
+			[supports.square[0], SQUARE_MAGNITUDE],
+			[supports.square[1], SQUARE_MAGNITUDE],
+			[supports.square[1], Y_0],
+			[X_MAX, Y_0],
+		];
+	} else if (probDistName === "smallSquare") {
+		pathPoints = [
+			[X_MIN, Y_0],
+			[supports.smallSquare[0], Y_0],
+			[supports.smallSquare[0], SMALL_SQUARE_MAGNITUDE],
+			[supports.smallSquare[1], SMALL_SQUARE_MAGNITUDE],
+			[supports.smallSquare[1], Y_0],
+			[X_MAX, Y_0],
+		];
+	} else {
+		throw new Error(`Invalid probDistName ${probDistName}`);
+	}
+
+	const line = d3
+		.line()
+		.curve(d3.curveLinear)
+		.x(p => xScale(p[0]))
+		.y(p => yScale(p[1]));
+
 	const path = line(pathPoints);
 
 	const data = [
@@ -170,76 +291,6 @@ function getAxesData({ name, f, width, nPixelsPerCurvePoint }) {
 	return data;
 }
 
-function gaussian(x) {
-	const mu = 0;
-	const sigma = 0.3;
-	return Math.exp(-0.5 * ((x - mu) / sigma) ** 2) / (2 * Math.PI * sigma ** 2) ** 0.5;
-}
-
-// https://en.wikipedia.org/wiki/Box–Muller_transform
-function gaussianSample() {
-	const rand = Math.random;
-	let u = rand(),
-		v = rand();
-	while (u === 0) {
-		u = rand();
-	}
-	while (v === 0) {
-		v = rand();
-	}
-	return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
-}
-
-function triangle(x) {
-	return Math.max(0, 1 - Math.abs(x));
-}
-
-// CDF of triangle function y=1-abs(x) is Piecewise[{{1/2+x+x^2/2, x<0}, {1/2+x-x^2/2, x>0}}] for -1<x<1
-function triangleSample() {
-	const y = Math.random();
-	if (y < 0.5) {
-		// solve .5+x+x^2/2 = y; you get two solutions; take the larger one
-		return (2 * y) ** 0.5 - 1;
-	} else {
-		// solve .5+x-x^2/2 = y; you get two solutions; take the smaller one
-		return 1 - (2 - 2 * y) ** 0.5;
-	}
-}
-
-function _squareThreshold(magnitude) {
-	return 1 / (2 * magnitude);
-}
-
-function _genericSquare(x, magnitude) {
-	const threshold = _squareThreshold(magnitude);
-	return Math.abs(x) > threshold ? 0 : magnitude;
-}
-
-// CDF of square is line with slope `magnitude` passing through (0, .5)
-function _genericSquareSample(magnitude) {
-	// if y = .5 + m*x, then x = (y - .5)/m
-	const y = Math.random();
-	return (y - 0.5) / magnitude;
-}
-
-const SQUARE_MAGNITUDE = 0.8;
-function square(x) {
-	return _genericSquare(x, SQUARE_MAGNITUDE);
-}
-
-function squareSample() {
-	return _genericSquareSample(SQUARE_MAGNITUDE);
-}
-
-const SMALL_SQUARE_MAGNITUDE = 1.3;
-function smallSquare(x) {
-	return _genericSquare(x, SMALL_SQUARE_MAGNITUDE);
-}
-
-function smallSquareSample() {
-	return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
-}
-
 const probabilityDistributions = {
 	gaussian,
 	triangle,
@@ -254,13 +305,6 @@ const samplingFunctions = {
 	smallSquare: smallSquareSample,
 };
 
-const supports = {
-	gaussian: [X_MIN, X_MAX],
-	triangle: [-1, 1],
-	square: [-1, 1].map(sign => sign * _squareThreshold(SQUARE_MAGNITUDE)),
-	smallSquare: [-1, 1].map(sign => sign * _squareThreshold(SMALL_SQUARE_MAGNITUDE)),
-};
-
 let selectedProbDist;
 function update(probDistName) {
 	selectedProbDist = probDistName;
@@ -268,52 +312,98 @@ function update(probDistName) {
 
 	d3.selectAll(".plot").each(function (d) {
 		const { name } = d;
-		const f = name === "probability" ? x => baseFunc(x) ** 0.5 : baseFunc;
+		const f = name === "probability" ? baseFunc : x => baseFunc(x) ** 0.5;
 		const sel = d3.select(this);
-		const data = getAxesData({ name, width: sel.attr("width"), f });
+		const data = getAxesData({
+			name,
+			width: sel.attr("width"),
+			probDistName,
+			f,
+		});
 		applyGraphicalObjs(sel, data, { selector: ".axis" });
-	});
-}
-
-function takeMeasurementAndReturnNewData({
-	samplingFunc,
-	bucketScale,
-	buckets,
-	scale,
-}) {
-	const sample = samplingFunc();
-	const bucketIndex = bucketScale(sample);
-	buckets[bucketIndex].n += 1;
-
-	const scaledX0 = probaXScale(X_0);
-	return buckets.map(bucket => {
-		const height = bucket.n * scale;
-		const scaledHeight = probaYScale(height);
-		return {
-			shape: "rect",
-			classes: ["experiment-bucket"],
-			attrs: {
-				x: probaXScale(bucket.x),
-				y: scaledHeight,
-				width: probaXScale(bucket.width) - scaledX0,
-				height: scaledHeight,
-			},
-		};
 	});
 }
 
 // Will be adjusted to evenly divide the given probability function's support
 const APPROX_BUCKET_WIDTH = 0.05;
 
+let experimentInterval;
+function stopExperiment() {
+	clearInterval(experimentInterval);
+}
+
+// eslint-disable-next-line no-unused-vars
 function runExperiment() {
 	const nMeasurements = sliderScale();
+	const samplingFunc = samplingFunctions[selectedProbDist];
 
 	const [supportMin, supportMax] = supports[selectedProbDist];
 	const supportWidth = supportMax - supportMin;
 
 	// Round bucket width down to next number that divides the width of the support
-	const bucketWidth = supportWidth / Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
+	const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
+	const bucketWidth = supportWidth / (nBuckets - 1);
+	console.log(
+		supportMin,
+		supportMax,
+		supportWidth,
+		supportWidth / APPROX_BUCKET_WIDTH,
+		nBuckets,
+		bucketWidth,
+	);
 
+	// `buckets` contains nBuckets+1 buckets, the first nBuckets of which are rendered
+	// on screen and the last of which aggregates all buckets that don't fit on screen
+	const buckets = d3
+		.range(nBuckets + 1)
+		.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
+
+	const scaledX0 = probaXScale(X_0);
+	const scaledY0 = probaYScale(Y_0);
+	let nMeasurementsSoFar = 1;
+
+	experimentInterval = setInterval(() => {
+		const currentAreaOfSamples =
+			APPROX_BUCKET_WIDTH *
+			(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
+		const scale = 1 / currentAreaOfSamples;
+
+		// Take sample, update corresponding bucket. If sample is out of axis bounds, apply
+		// it to the last bucket, which is a catch-all for non-rendered samples
+		const sample = samplingFunc();
+		const nBuckets = buckets.length - 1;
+		let bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
+		if (bucketIndex < 0 || bucketIndex > nBuckets) {
+			bucketIndex = nBuckets;
+		}
+		buckets[bucketIndex].n += 1;
+
+		// Exclude the final, catch-all bucket
+
+		const data = buckets.slice(0, nBuckets - 1).map(bucket => {
+			const height = bucket.n * scale;
+			const scaledY = probaYScale(Y_0 + height);
+			const scaledHeight = scaledY0 - probaYScale(height);
+
+			return {
+				shape: "rect",
+				classes: ["experiment-bucket"],
+				attrs: {
+					x: probaXScale(bucket.x),
+					y: scaledY,
+					width: probaXScale(bucketWidth) - scaledX0,
+					height: scaledHeight,
+				},
+			};
+		});
+
+		applyGraphicalObjs(probaPlot, data, { selector: ".experiment-bucket" });
+
+		nMeasurementsSoFar += 1;
+		if (nMeasurementsSoFar > nMeasurements) {
+			stopExperiment();
+		}
+	}, 25);
 }
 
-update("gaussian");
+update("square");

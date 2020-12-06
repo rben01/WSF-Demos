@@ -44,6 +44,10 @@
 				align-self: end;
 				vertical-align: bottom;
 			}
+			.experiment-bucket {
+				fill: yellow;
+				stroke: blue;
+			}
 		</style>
 	</head>
 	<body>
@@ -59,14 +63,14 @@
 							><input
 								type="radio"
 								name="wavefunction-shape"
-								onclick="update('gaussian')"
+								onchange="if (this.checked) {update('gaussian')}"
 								checked
 							/><span>Gaussian</span></label
 						><label
 							><input
 								type="radio"
 								name="wavefunction-shape"
-								onclick="update('triangle')"
+								onchange="if (this.checked) {update('triangle')}"
 							/><span>Triangle</span></label
 						><label
 							><input type="radio" name="wavefunction-shape" /><span
@@ -76,21 +80,26 @@
 							><input
 								type="radio"
 								name="wavefunction-shape"
-								onclick="update('square')"
+								onchange="if (this.checked) {update('square')}"
 							/><span>Square</span></label
 						><label
 							><input
 								type="radio"
 								name="wavefunction-shape"
-								onclick="update('smallSquare')"
+								onchange="if (this.checked) {update('smallSquare')}"
 							/><span>Smaller square</span></label
 						>
 					</span>
 					<span
 						>Number of measurements: <span id="num-measurements-text"></span
 					></span>
-					<span >
-						<label><input type="range" name="num-measurements" id="number-of-measurements-slider"/></label>
+					<span>
+						<label
+							><input
+								type="range"
+								name="num-measurements"
+								id="number-of-measurements-slider"
+						/></label>
 					</span>
 					<span></span>
 					<span id="measurement-buttons" class="radio-button-container">
@@ -98,13 +107,13 @@
 							><input
 								type="radio"
 								name="measurement"
-								onclick="runMeasurement();"
+								onclick="runExperiment();"
 							/><span>Run experiment</span></label
 						><label
 							><input
 								type="radio"
 								name="measurement"
-								onclick="stopMeasurement()"
+								onclick="stopExperiment()"
 								checked
 							/><span>Stop experiment</span></label
 						>
