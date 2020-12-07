@@ -305,8 +305,20 @@ const samplingFunctions = {
 	smallSquare: smallSquareSample,
 };
 
+let experimentInterval;
+function stopExperiment() {
+	clearInterval(experimentInterval);
+}
+
+function resetExperiment() {
+	stopExperiment();
+	probaPlot.selectAll(".experiment-indicator").remove();
+}
+
 let selectedProbDist;
 function update(probDistName) {
+	resetExperiment();
+
 	selectedProbDist = probDistName;
 	const baseFunc = probabilityDistributions[probDistName];
 
@@ -327,13 +339,12 @@ function update(probDistName) {
 // Will be adjusted to evenly divide the given probability function's support
 const APPROX_BUCKET_WIDTH = 0.05;
 
-let experimentInterval;
-function stopExperiment() {
-	clearInterval(experimentInterval);
-}
-
+// eslint-disable-next-line no-unused-vars
+let _buckets, nMeas;
 // eslint-disable-next-line no-unused-vars
 function runExperiment() {
+	resetExperiment();
+
 	const nMeasurements = sliderScale();
 	const samplingFunc = samplingFunctions[selectedProbDist];
 
@@ -342,7 +353,7 @@ function runExperiment() {
 
 	// Round bucket width down to next number that divides the width of the support
 	const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
-	const bucketWidth = supportWidth / (nBuckets - 1);
+	const bucketWidth = supportWidth / nBuckets;
 	console.log(
 		supportMin,
 		supportMax,
@@ -357,6 +368,8 @@ function runExperiment() {
 	const buckets = d3
 		.range(nBuckets + 1)
 		.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
+	_buckets = buckets;
+	console.log(buckets);
 
 	const scaledX0 = probaXScale(X_0);
 	const scaledY0 = probaYScale(Y_0);
@@ -364,7 +377,7 @@ function runExperiment() {
 
 	experimentInterval = setInterval(() => {
 		const currentAreaOfSamples =
-			APPROX_BUCKET_WIDTH *
+			bucketWidth *
 			(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
 		const scale = 1 / currentAreaOfSamples;
 
@@ -380,14 +393,14 @@ function runExperiment() {
 
 		// Exclude the final, catch-all bucket
 
-		const data = buckets.slice(0, nBuckets - 1).map(bucket => {
+		const data = buckets.slice(0, nBuckets).map(bucket => {
 			const height = bucket.n * scale;
 			const scaledY = probaYScale(Y_0 + height);
 			const scaledHeight = scaledY0 - probaYScale(height);
 
 			return {
 				shape: "rect",
-				classes: ["experiment-bucket"],
+				classes: ["experiment-indicator", "experiment-bucket"],
 				attrs: {
 					x: probaXScale(bucket.x),
 					y: scaledY,
@@ -397,13 +410,24 @@ function runExperiment() {
 			};
 		});
 
-		applyGraphicalObjs(probaPlot, data, { selector: ".experiment-bucket" });
+		data.push({
+			shape: "circle",
+			classes: ["experiment-indicator", "measurement-marker"],
+			attrs: {
+				cx: probaXScale(sample),
+				cy: probaYScale(Y_0) + 10,
+				r: 4,
+			},
+		});
+
+		applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
 
 		nMeasurementsSoFar += 1;
+		nMeas = nMeasurementsSoFar;
 		if (nMeasurementsSoFar > nMeasurements) {
 			stopExperiment();
 		}
 	}, 25);
 }
 
-update("square");
+update("gaussian");

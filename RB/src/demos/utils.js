@@ -224,6 +224,12 @@ function _initializeRadioButtons() {
 
 	function selectButton() {
 		this.classList.add("checked-label");
+		const input = this.querySelector("input");
+		console.log(this);
+		if (input !== null) {
+			input.checked = true;
+			input.disabled = true;
+		}
 		const siblingLabels = this.parentNode.getElementsByTagName("label");
 		for (let j = 0; j < siblingLabels.length; ++j) {
 			const label = siblingLabels[j];
@@ -231,6 +237,12 @@ function _initializeRadioButtons() {
 				continue;
 			}
 			label.classList.remove("checked-label");
+
+			const input = this.querySelector("input");
+			if (input !== null) {
+				input.checked = false;
+				input.disabled = false;
+			}
 		}
 	}
 
@@ -244,7 +256,11 @@ function _initializeRadioButtons() {
 					selectButton.call(this);
 				}
 			})
-			.on("click", selectButton);
+			.on("click", function () {
+				if (!this.querySelector("input").checked) {
+					selectButton.call(this);
+				}
+			});
 	}
 }
 _initializeRadioButtons();
