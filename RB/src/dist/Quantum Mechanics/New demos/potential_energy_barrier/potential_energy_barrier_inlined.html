@@ -1,0 +1,29 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js">
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
+<style rel="stylesheet" type="text/css">body{max-width:800px;margin:50px auto;padding-left:auto;padding-right:auto;background-color:#000;color:#fff;font-size:21px;font-family:sans-serif;line-height:1.8em}.slider-container{line-height:1.4em;display:block;margin-bottom:10px}.play-button{margin-top:1.5em;margin-bottom:1em;margin-right:3px;width:5em;height:30px;font-size:15px;border-radius:4px;background:#ccc;background-image:-webkit-linear-gradient(top,#fff,#aaa);color:#000;text-shadow:1px 1px #ddd}.play-button:hover{cursor:pointer}.play-button:active{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#fff);color:#333}.play-button:disabled{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#aaa);color:#444;text-shadow:1px 1px #ccc;cursor:default}.slider-label{margin-right:1em;display:inline-block}.highlighted-text{color:#5df}.secondary-text{color:#f3c002}.tertiary-text{color:#14c778}.quaternary-text{color:#e5d}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}.subscript{position:relative;top:.3em;left:0;font-size:65%}.superscript{position:relative;bottom:.8em;left:0;font-size:65%}.minus-sign{margin-right:1px}.operator{margin-left:3px;margin-right:3px}button.depressed-button{background-color:#555;color:#fff}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;width:320px;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;position:relative;bottom:4px}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style></head>
+<body>
+<div class="slider-container">
+<span class="slider-label">Barrier Height</span>
+<span class="param-slider-container">
+<input class="param-slider" id="height" max="10" min="5" step="0.01" type="range"/>
+</span>
+<br/>
+<span class="slider-label">Particle Mass</span>
+<span class="param-slider-container">
+<input class="param-slider" id="mass" max="0.5" min="0.1" step="0.01" type="range"/>
+</span>
+<br/>
+<span class="slider-label">Particle Energy</span>
+<span class="param-slider-container">
+<input class="param-slider" id="energy" max="8" min="1" step="0.01" type="range"/>
+</span>
+</div>
+<div class="plot-container">
+<svg class="plot" height="1000" id="svg" width="1500"></svg>
+</div>
+<script type="text/javascript">const w=1450,h=950,x=d3.scaleLinear().domain([-10,10]).range([0,w]),y=d3.scaleLinear().domain([0,10]).range([h,0]),graph=d3.select("#svg").append("g").attr("transform","translate(25, 25)"),x_axis=graph.append("g").attr("class","axis").attr("transform","translate(0, "+h+")").call(d3.axisBottom(x).ticks(5)),y_axis=graph.append("g").attr("class","axis").attr("transform","translate(725, 0)").call(d3.axisLeft(y).ticks(6)),barrier=graph.append("rect").style("fill","grey").attr("x",x(0)).attr("width",725),wave=graph.append("path").style("fill","none").style("stroke","red"),dashed=graph.append("line").style("stroke","white").attr("x1",0).attr("x2",w).attr("stroke-dasharray","25 25"),height=document.getElementById("height"),mass=document.getElementById("mass"),energy=document.getElementById("energy");function k(t,a){return math.sqrt(2*t*a)}function chi(t,a,e){return math.sqrt(2*t*(a-e))}function a2(t,a){return math.sum(-1,math.divide(2*a,math.sum(a,t)))}function a3(t,a){return math.divide(2*a,math.sum(a,t))}function psi(t,a,e,r){return r<=0?math.abs(math.sum(math.exp(math.multiply(math.i,k(a,e)*r)),math.multiply(a2(chi(a,e,t),k(a,e)),math.exp(math.multiply(math.i,-k(a,e)*r))))):math.abs(math.multiply(a3(chi(a,e,t),k(a,e)),math.exp(math.multiply(math.i,math.multiply(chi(a,e,t),r)))))}var b,m,e;function update(){b=+height.value,m=+mass.value,e=+energy.value,barrier.attr("y",y(b)).attr("height",h-y(b)),dashed.attr("y1",y(e)).attr("y2",y(e));for(var t=[],a=-10;a<10;a+=.01)t.push([x(a),y(psi(b,m,e,a)**2+e)]);wave.attr("d",d3.line()(t))}d3.select("#height").on("input",update),d3.select("#mass").on("input",update),d3.select("#energy").on("input",update),update();</script></body>
+</html>
