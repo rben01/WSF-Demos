@@ -6,6 +6,7 @@
         integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
         crossorigin="anonymous">
         </script>
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
     <link rel="stylesheet" type="text/css" href="../../../wsf_demo.css" />
 </head>
 
@@ -23,13 +24,15 @@
         <br>
         <span class="slider-label">Particle Energy</span>
         <span class="param-slider-container">
-            <input id="energy" class="param-slider" type="range" min="1" max="12" step="0.01">
+            <input id="energy" class="param-slider" type="range" min="1" max="8" step="0.01">
         </span>
     </div>
 
     <div class="plot-container">
-        <svg id="svg" class="plot" height=1000 width=1500></svg>
+        <svg id="svg" class="plot" height=800 width=1500></svg>
     </div>
 </body>
+
+<script src="potential_energy_barrier.js"></script>
 
 </html>
