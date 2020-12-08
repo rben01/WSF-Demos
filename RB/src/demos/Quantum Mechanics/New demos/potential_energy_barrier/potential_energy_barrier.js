@@ -1,5 +1,5 @@
 const w = 1450,
-    h = 950,
+    h = 750,
     x = d3.scaleLinear().domain([-10, 10]).range([0, w]),
     y = d3.scaleLinear().domain([0, 10]).range([h, 0]),
     graph = d3.select("#svg").append("g").attr("transform", "translate(25, 25)"),
