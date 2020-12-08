@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
+		<meta charset="utf-8" />
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
 			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
@@ -28,11 +29,17 @@
 				fill-opacity: 0;
 			}
 			.axis-curve {
-				stroke: white;
-				stroke-width: 4px;
 				fill-opacity: 0;
 				stroke-linecap: round;
 				stroke-linejoin: round;
+			}
+			.axis-curve.curve-background {
+				stroke-width: 8px;
+				stroke: black;
+			}
+			.axis-curve.curve-foreground {
+				stroke-width: 4px;
+				stroke: white;
 			}
 			.axis-label {
 				fill: white;
@@ -45,11 +52,18 @@
 				vertical-align: bottom;
 			}
 			.experiment-bucket {
-				fill: yellow;
-				stroke: blue;
+				fill: #5df;
+				stroke: black;
+			}
+			.experiment-selected-bucket {
+				fill: #aef;
 			}
 			.measurement-marker {
 				fill: greenyellow;
+			}
+			.experiment-measurement-counter {
+				fill: white;
+				font-size: 20px;
 			}
 		</style>
 	</head>
@@ -62,36 +76,28 @@
 						id="wavefunction-shape-buttons"
 						class="radio-button-container horizontal"
 					>
+						<button
+							class="button shape-button"
+							shape="gaussian"
+							button-checked
+						>
+							Gaussian</button
+						><button class="button shape-button" shape="triangle">
+							Triangle</button
+						><button class="button shape-button" shape="square">
+							Square</button
+						><button class="button shape-button" shape="smallSquare">
+							Smaller square
+						</button>
+					</span>
+					<span>Measurement speed: <span id="experiment-speed"></span></span>
+					<span>
 						<label
 							><input
-								type="radio"
-								name="wavefunction-shape"
-								onchange="if (this.checked) {update('gaussian')}"
-								checked
-							/><span>Gaussian</span></label
-						><label
-							><input
-								type="radio"
-								name="wavefunction-shape"
-								onchange="if (this.checked) {update('triangle')}"
-							/><span>Triangle</span></label
-						><label
-							><input type="radio" name="wavefunction-shape" /><span
-								>Uniform</span
-							></label
-						><label
-							><input
-								type="radio"
-								name="wavefunction-shape"
-								onchange="if (this.checked) {update('square')}"
-							/><span>Square</span></label
-						><label
-							><input
-								type="radio"
-								name="wavefunction-shape"
-								onchange="if (this.checked) {update('smallSquare')}"
-							/><span>Smaller square</span></label
-						>
+								type="range"
+								name="experiment-speed"
+								id="experiment-speed-slider"
+						/></label>
 					</span>
 					<span
 						>Number of measurements: <span id="num-measurements-text"></span
@@ -106,20 +112,16 @@
 					</span>
 					<span></span>
 					<span id="measurement-buttons" class="radio-button-container">
-						<label
-							><input
-								type="radio"
-								name="measurement"
-								onclick="runExperiment();"
-							/><span>Run experiment</span></label
-						><label
-							><input
-								type="radio"
-								name="measurement"
-								onclick="stopExperiment()"
-								checked
-							/><span>Stop experiment</span></label
+						<button class="button" id="btn-run" onclick="runExperiment()">
+							Run experiment</button
+						><button
+							class="button"
+							id="btn-stop"
+							onclick="stopExperiment()"
+							button-checked
 						>
+							Stop experiment
+						</button>
 					</span>
 				</div>
 				<svg id="wavefunction-plot" class="plot"></svg>

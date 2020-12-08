@@ -27,6 +27,13 @@ function applyDatum(datum, { transition } = {}) {
 	const d3Obj = d3.select(this);
 	d3Obj.datum(datum);
 
+	if (
+		(datum.class !== undefined || datum.classes !== undefined) &&
+		this.hasAttribute("class")
+	) {
+		this.removeAttribute("class");
+	}
+
 	if (typeof datum.class !== "undefined") {
 		d3Obj.classed(datum.class, true);
 	}
@@ -222,43 +229,26 @@ function _initializeRadioButtons() {
 		"radio-button-container",
 	);
 
-	function selectButton() {
-		this.classList.add("checked-label");
-		const input = this.querySelector("input");
-		console.log(this);
-		if (input !== null) {
-			input.checked = true;
-			input.disabled = true;
-		}
-		const siblingLabels = this.parentNode.getElementsByTagName("label");
-		for (let j = 0; j < siblingLabels.length; ++j) {
-			const label = siblingLabels[j];
-			if (label === this) {
-				continue;
-			}
-			label.classList.remove("checked-label");
-
-			const input = this.querySelector("input");
-			if (input !== null) {
-				input.checked = false;
-				input.disabled = false;
-			}
-		}
-	}
-
 	for (let i = 0; i < radioButtonContainers.length; ++i) {
 		const rbc = radioButtonContainers[i];
 
 		d3.select(rbc)
-			.selectAll("label")
+			.selectAll("button")
 			.each(function () {
-				if (this.querySelector("input").checked) {
-					selectButton.call(this);
+				if (this.hasAttribute("button-checked")) {
+					this.disabled = true;
 				}
 			})
-			.on("click", function () {
-				if (!this.querySelector("input").checked) {
-					selectButton.call(this);
+			.on("click._default", function () {
+				this.setAttribute("button-checked", "");
+				this.disabled = true;
+				const siblings = this.parentNode.querySelectorAll("button");
+				for (const sibling of siblings) {
+					if (this === sibling) {
+						continue;
+					}
+					sibling.disabled = false;
+					sibling.removeAttribute("button-checked");
 				}
 			});
 	}

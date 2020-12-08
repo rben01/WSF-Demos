@@ -1,6 +1,6 @@
 body {
-	margin-left: 10px;
-	margin-top: 10px;
+	/* margin-left: 10px;
+	margin-top: 10px; */
 	background-color: black;
 	color: white;
 	font-size: 22px;
@@ -17,8 +17,12 @@ body {
 	grid-row: span 2;
 	display: grid;
 	grid-template-columns: 1fr;
-	row-gap: 4px;
+	row-gap: 2px;
+	border: 2px solid white;
+	border-radius: 5px;
+	padding: 10px 10px 10px 10px;
 }
+
 .slider-container > :nth-child(2n + 3) {
 	margin-top: 40px;
 }
@@ -70,8 +74,7 @@ input[type="range"] {
 	line-height: initial;
 }
 
-.button,
-.radio-button-container label {
+.button {
 	padding: 7px 8px;
 	margin-right: 3px;
 	font-size: 15px;
@@ -82,20 +85,17 @@ input[type="range"] {
 	text-shadow: 1px 1px #ddd;
 }
 
-.button:hover,
-.radio-button-container label:hover {
+.button:hover {
 	cursor: pointer;
 }
 
-.button:active,
-.radio-button-container label:active {
+.button:active {
 	background: #ccc;
 	background-image: -webkit-linear-gradient(top, #999, #fff);
 	color: #333;
 }
 
-.button:disabled,
-.radio-button-container label.checked-label {
+.button:disabled {
 	background: #ccc;
 	background-image: -webkit-linear-gradient(top, #999, #aaa);
 	color: #444;
@@ -187,6 +187,10 @@ input[type="range"] {
 	position: relative;
 	bottom: 4px;
 	outline: none;
+}
+
+input[type="range"]:disabled {
+	opacity: 0.5;
 }
 
 input[type="range"]::-webkit-slider-thumb {

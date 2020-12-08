@@ -56,9 +56,35 @@ const probaPlot = d3
 	.attr("width", PROBA_WIDTH)
 	.attr("height", PROBA_HEIGHT);
 
-const MIN_NUM_MEASUREMENTS = 30;
-const MAX_NUM_MEASUREMENTS = 80;
-function sliderScale(value) {
+const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
+
+const MIN_EXPERIMENT_SPEED = 1;
+const MAX_EXPERIMENT_SPEED = 100;
+let experimentSpeed = MIN_EXPERIMENT_SPEED;
+const experimentSpeedToTimeIntervalScale = d3.scaleLog(
+	[MIN_EXPERIMENT_SPEED, MAX_EXPERIMENT_SPEED],
+	[0.5, 0.00001],
+);
+const experimentSpeedTextSpan = document.getElementById("experiment-speed");
+function updateExperimentSpeed() {
+	const speed = +(this.value ?? MIN_EXPERIMENT_SPEED);
+	experimentSpeed = speed;
+	experimentSpeedTextSpan.innerText = `${speed}x`;
+}
+updateExperimentSpeed();
+
+const experimentSpeedSlider = (() => {
+	const slider = document.getElementById("experiment-speed-slider");
+	slider.min = MIN_EXPERIMENT_SPEED;
+	slider.max = MAX_EXPERIMENT_SPEED;
+	slider.step = 1;
+	slider.value = MIN_EXPERIMENT_SPEED;
+	slider.oninput = updateExperimentSpeed;
+})();
+
+const MIN_NUM_MEASUREMENTS = 50;
+const MAX_NUM_MEASUREMENTS = 100;
+function numMeasurementsSliderScale(value) {
 	// eslint-disable-next-line no-use-before-define
 	value = value ?? +numMeasurementsSlider.value;
 
@@ -75,7 +101,7 @@ function sliderScale(value) {
 const numMeasurementsTextSpan = document.getElementById("num-measurements-text");
 function updateNumMeasurementsText() {
 	const value = +(this.value ?? MIN_NUM_MEASUREMENTS);
-	const scaledValue = sliderScale(value);
+	const scaledValue = numMeasurementsSliderScale(value);
 	const scaledText = isFinite(scaledValue) ? `${scaledValue}` : "Infinite";
 	numMeasurementsTextSpan.innerText = scaledText;
 }
@@ -262,13 +288,6 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 			},
 		},
 		{
-			shape: "path",
-			classes: ["axis", "axis-curve"],
-			attrs: {
-				d: path,
-			},
-		},
-		{
 			shape: "text",
 			text: "𝑥",
 			classes: ["axis", "axis-label", "axis-x-label"],
@@ -284,6 +303,23 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 			attrs: {
 				x: xScale(X_0) + 10,
 				y: yScale(Y_MAX) + 20,
+			},
+		},
+		// these paths *must* go last to maintain order when moving them to the end
+		// after adding histogram bars (this is simpler, if more brittle, than adding a
+		// key for the join)
+		{
+			shape: "path",
+			classes: ["axis", "axis-curve", "curve-background"],
+			attrs: {
+				d: path,
+			},
+		},
+		{
+			shape: "path",
+			classes: ["axis", "axis-curve", "curve-foreground"],
+			attrs: {
+				d: path,
 			},
 		},
 	];
@@ -306,18 +342,10 @@ const samplingFunctions = {
 };
 
 let experimentInterval;
-function stopExperiment() {
-	clearInterval(experimentInterval);
-}
-
-function resetExperiment() {
-	stopExperiment();
-	probaPlot.selectAll(".experiment-indicator").remove();
-}
 
 let selectedProbDist;
 function update(probDistName) {
-	resetExperiment();
+	probaPlot.selectAll(".experiment-indicator").remove();
 
 	selectedProbDist = probDistName;
 	const baseFunc = probabilityDistributions[probDistName];
@@ -336,16 +364,40 @@ function update(probDistName) {
 	});
 }
 
+function enableShapeButtons() {
+	document.getElementById("number-of-measurements-slider").disabled = false;
+	shapeButtonContainer.selectAll(".shape-button").property("disabled", function () {
+		return this.hasAttribute("button-checked");
+	});
+}
+
+function disableShapeButtons() {
+	document.getElementById("number-of-measurements-slider").disabled = true;
+	shapeButtonContainer.selectAll(".shape-button").property("disabled", true);
+	// shapeButtonContainer.selectAll("input").on("change", function () {});
+}
+
+function stopExperiment() {
+	enableShapeButtons();
+	document.getElementById("btn-run").disabled = false;
+	document.getElementById("btn-stop").disabled = true;
+	clearInterval(experimentInterval);
+}
+
+function resetExperiment() {
+	stopExperiment();
+	probaPlot.selectAll(".experiment-indicator").remove();
+}
+
 // Will be adjusted to evenly divide the given probability function's support
 const APPROX_BUCKET_WIDTH = 0.05;
 
 // eslint-disable-next-line no-unused-vars
-let _buckets, nMeas;
-// eslint-disable-next-line no-unused-vars
 function runExperiment() {
 	resetExperiment();
+	disableShapeButtons();
 
-	const nMeasurements = sliderScale();
+	const nMeasurements = numMeasurementsSliderScale();
 	const samplingFunc = samplingFunctions[selectedProbDist];
 
 	const [supportMin, supportMax] = supports[selectedProbDist];
@@ -354,28 +406,23 @@ function runExperiment() {
 	// Round bucket width down to next number that divides the width of the support
 	const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
 	const bucketWidth = supportWidth / nBuckets;
-	console.log(
-		supportMin,
-		supportMax,
-		supportWidth,
-		supportWidth / APPROX_BUCKET_WIDTH,
-		nBuckets,
-		bucketWidth,
-	);
 
 	// `buckets` contains nBuckets+1 buckets, the first nBuckets of which are rendered
 	// on screen and the last of which aggregates all buckets that don't fit on screen
 	const buckets = d3
 		.range(nBuckets + 1)
 		.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
-	_buckets = buckets;
-	console.log(buckets);
 
 	const scaledX0 = probaXScale(X_0);
 	const scaledY0 = probaYScale(Y_0);
 	let nMeasurementsSoFar = 1;
 
-	experimentInterval = setInterval(() => {
+	function nextUpdateTimeIntervalMS() {
+		return 1000 * experimentSpeedToTimeIntervalScale(experimentSpeed);
+		// return 0.1 * Math.exp(-nMeasurementsSoFar / 300) * 1000;
+	}
+
+	function takeMeasurement() {
 		const currentAreaOfSamples =
 			bucketWidth *
 			(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
@@ -391,16 +438,22 @@ function runExperiment() {
 		}
 		buckets[bucketIndex].n += 1;
 
-		// Exclude the final, catch-all bucket
+		const waitTimeMS = nextUpdateTimeIntervalMS();
 
-		const data = buckets.slice(0, nBuckets).map(bucket => {
+		// Exclude the final, catch-all bucket
+		const data = buckets.slice(0, nBuckets).map((bucket, i) => {
 			const height = bucket.n * scale;
 			const scaledY = probaYScale(Y_0 + height);
 			const scaledHeight = scaledY0 - probaYScale(height);
 
+			const classes = ["experiment-indicator", "experiment-bucket"];
+			if (waitTimeMS >= 20 && i === bucketIndex) {
+				classes.push("experiment-selected-bucket");
+			}
+
 			return {
 				shape: "rect",
-				classes: ["experiment-indicator", "experiment-bucket"],
+				classes,
 				attrs: {
 					x: probaXScale(bucket.x),
 					y: scaledY,
@@ -411,23 +464,50 @@ function runExperiment() {
 		});
 
 		data.push({
-			shape: "circle",
-			classes: ["experiment-indicator", "measurement-marker"],
+			shape: "text",
+			text: `Measurements: ${nMeasurementsSoFar}`,
+			classes: ["experiment-indicator", "experiment-measurement-counter"],
 			attrs: {
-				cx: probaXScale(sample),
-				cy: probaYScale(Y_0) + 10,
-				r: 4,
+				x: probaXScale(X_MIN) + 60,
+				y: probaYScale(Y_0) + 20,
 			},
 		});
 
+		// data.push({
+		// 	shape: "circle",
+		// 	classes: ["experiment-indicator", "measurement-marker"],
+		// 	attrs: {
+		// 		cx: probaXScale(sample),
+		// 		cy: probaYScale(Y_0) + 10,
+		// 		r: 4,
+		// 	},
+		// });
+
 		applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
 
+		if (nMeasurementsSoFar <= 1) {
+			const probaPlotNode = probaPlot.node();
+			probaPlotNode.appendChild(
+				probaPlotNode.querySelector(".axis-curve.curve-background"),
+			);
+			probaPlotNode.appendChild(
+				probaPlotNode.querySelector(".axis-curve.curve-foreground"),
+			);
+		}
+
 		nMeasurementsSoFar += 1;
-		nMeas = nMeasurementsSoFar;
 		if (nMeasurementsSoFar > nMeasurements) {
 			stopExperiment();
+		} else {
+			experimentInterval = setTimeout(takeMeasurement, waitTimeMS);
 		}
-	}, 25);
+	}
+
+	experimentInterval = setTimeout(takeMeasurement, nextUpdateTimeIntervalMS());
 }
+
+shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
+	update(this.getAttribute("shape"));
+});
 
 update("gaussian");
