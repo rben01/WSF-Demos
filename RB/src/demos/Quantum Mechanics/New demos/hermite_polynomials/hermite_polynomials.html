@@ -8,9 +8,56 @@
 			crossorigin="anonymous"
 		></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
-		<style></style>
+		<style>
+			.slider-container {
+				position: absolute;
+				top: 5px;
+				left: 5px;
+				width: 300px;
+				background-color: black;
+			}
+			.curve {
+				fill-opacity: 0;
+			}
+			.curve-background {
+				stroke-width: 8px;
+				stroke: black;
+			}
+			.curve-foreground {
+				stroke-width: 4px;
+				stroke: white;
+			}
+			.axis {
+				stroke: #ccc;
+				stroke-width: 2px;
+			}
+			.axis-tick {
+				stroke: #ccc;
+				stroke-width: 2px;
+			}
+			.axis-label {
+				font-size: 12px;
+				fill: "white";
+			}
+			.axis-x-label {
+				text-anchor: middle;
+				dominant-baseline: hanging;
+			}
+			.axis-y-label {
+				text-anchor: end;
+				dominant-baseline: middle;
+			}
+		</style>
 	</head>
 	<body>
-		<div class="grid-left-right"><div class="slider-container"></div></div>
+		<div class="slider-container">
+			<span>𝑛<sup>th</sup> Hermite polynomial: <span id="hermite-n"></span></span>
+			<span><input type="range" id="hermite-n-slider" /></span>
+			<span>Zoom level: |𝑥| ≤ <span id="x-scale"></span></span>
+			<span><input type="range" id="x-scale-slider" /></span>
+		</div>
+		<svg id="plot"></svg>
+		<script src="../../../utils.js"></script>
+		<script src="./hermite_polynomials.js"></script>
 	</body>
 </html>
