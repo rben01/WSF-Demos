@@ -26,13 +26,13 @@ const hermiteSlider = (() => {
 const scaleFormatter = d3.format(".3~r");
 const MIN_SCALE = 1;
 const MAX_SCALE = 5;
-const DEFAULT_GRAPH_SCAE = MAX_SCALE;
+const DEFAULT_GRAPH_SCALE = MAX_SCALE;
 const scaleSlider = (() => {
 	const slider = document.getElementById("x-scale-slider");
 	slider.min = MIN_SCALE;
 	slider.max = MAX_SCALE;
 	slider.step = 0.01;
-	slider.value = DEFAULT_GRAPH_SCAE;
+	slider.value = DEFAULT_GRAPH_SCALE;
 	// eslint-disable-next-line no-use-before-define
 	slider.oninput = () => update({ graphScale: this.value });
 

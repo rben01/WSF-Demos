@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style rel="stylesheet">body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+}
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px 10px 10px 10px;
+}
+.slider-container > :nth-child(2n + 3) {
+margin-top: 40px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 1;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 1;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ccc;
+font-size: 14px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.button {
+padding: 7px 8px;
+margin-right: 3px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style><style>
+.slider-container {
+position: absolute;
+top: 5px;
+left: 5px;
+width: 300px;
+background-color: black;
+}
+.curve {
+fill-opacity: 0;
+}
+.curve-background {
+stroke-width: 8px;
+stroke: black;
+}
+.curve-foreground {
+stroke-width: 4px;
+stroke: white;
+}
+.axis {
+stroke: #ccc;
+stroke-width: 2px;
+}
+.axis-tick {
+stroke: #ccc;
+stroke-width: 2px;
+}
+.axis-label {
+font-size: 12px;
+fill: "white";
+}
+.axis-x-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.axis-y-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+</style></head>
+<body>
+<div class="slider-container">
+<span>𝑛<sup>th</sup> Hermite polynomial: <span id="hermite-n"></span></span>
+<span><input id="hermite-n-slider" type="range"/></span>
+<span>Zoom level: |𝑥| ≤ <span id="x-scale"></span></span>
+<span><input id="x-scale-slider" type="range"/></span>
+</div>
+<svg id="plot"></svg>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+d3.select(rbc)
+.selectAll("button")
+.each(function () {
+if (this.hasAttribute("button-checked")) {
+this.disabled = true;
+}
+})
+.on("click._default", function () {
+this.setAttribute("button-checked", "");
+this.disabled = true;
+const siblings = this.parentNode.querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("button-checked");
+}
+});
+}
+}
+_initializeRadioButtons();
+</script><script type="text/javascript">/* global applyGraphicalObjs */
+const WIDTH = 1350;
+const HEIGHT = 750;
+const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const hermiteNTextSpan = document.getElementById("hermite-n");
+const scaleTextSpan = document.getElementById("x-scale");
+const MIN_HERMITE_N = 0;
+const MAX_HERMITE_N = 10;
+const DEFAULT_HERMITE_N = MIN_HERMITE_N;
+const hermiteSlider = (() => {
+const slider = document.getElementById("hermite-n-slider");
+slider.min = DEFAULT_HERMITE_N;
+slider.max = MAX_HERMITE_N;
+slider.step = 1;
+slider.value = MIN_HERMITE_N;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = () => update({ hermiteN: this.value });
+return slider;
+})();
+const scaleFormatter = d3.format(".3~r");
+const MIN_SCALE = 1;
+const MAX_SCALE = 5;
+const DEFAULT_GRAPH_SCALE = MAX_SCALE;
+const scaleSlider = (() => {
+const slider = document.getElementById("x-scale-slider");
+slider.min = MIN_SCALE;
+slider.max = MAX_SCALE;
+slider.step = 0.01;
+slider.value = DEFAULT_GRAPH_SCALE;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = () => update({ graphScale: this.value });
+return slider;
+})();
+function getHermitePolynomial(n) {
+switch (n) {
+case 0:
+return () => 1;
+case 1:
+return x => 2 * x;
+case 2:
+return x => 2 * (x ** 2 - 1);
+case 3:
+return x => 4 * x * (2 * x ** 2 - 3);
+case 4:
+return x => 4 * (4 * x ** 4 - 12 * x ** 2 + 3);
+case 5:
+return x => 8 * x * (4 * x ** 4 - 20 * x ** 2 + 1 * 5);
+case 6:
+return x => 8 * (8 * x ** 6 - 60 * x ** 4 + 90 * x ** 2 - 15);
+case 7:
+return x => 16 * x * (8 * x ** 6 - 84 * x ** 4 + 210 * x ** 2 - 105);
+case 8:
+return x =>
+16 * (16 * x ** 8 - 224 * x ** 6 + 840 * x ** 4 - 840 * x ** 2 + 105);
+case 9:
+return x =>
+32 *
+x *
+(16 * x ** 8 - 288 * x ** 6 + 1512 * x ** 4 - 2520 * x ** 2 + 945);
+case 10:
+return x =>
+32 *
+(32 * x ** 10 -
+720 * x ** 8 +
+5040 * x ** 6 -
+12600 * x ** 4 +
+9450 * x ** 2 -
+945);
+}
+}
+const nPoints = 300;
+const line = d3.line();
+function getGraphData({ hermiteN, graphScale }) {
+const hermitePolynomial = getHermitePolynomial(hermiteN);
+const minX = -graphScale;
+const maxX = -minX;
+const dx = (maxX - minX) / (nPoints - 1);
+let minY = Infinity;
+let maxY = -Infinity;
+const curvePointsUnscaled = d3.range(nPoints).map(i => {
+const x = minX + i * dx;
+const y = hermitePolynomial(x);
+if (y < minY) {
+minY = y;
+}
+if (y > maxY) {
+maxY = y;
+}
+return [x, y];
+});
+minY = Math.min(minY, -2);
+maxY = Math.max(maxY, 2);
+const tickLength = 10;
+const marginScale = 1.05;
+const graphXMin = minX * marginScale;
+const graphXMax = maxX * marginScale;
+const graphYMin = minY * marginScale;
+const graphYMax = maxY * marginScale;
+const xScale = d3.scaleLinear([graphXMin, graphXMax], [0, WIDTH]);
+const yScale = (() => {
+let yScale = d3.scaleLinear([graphYMin, graphYMax], [HEIGHT, 0]);
+if (yScale.invert(tickLength + 20) > graphYMin) {
+yScale = d3.scaleLinear(
+[graphYMin, graphYMax],
+[HEIGHT - (tickLength + 20), 0],
+);
+}
+return yScale;
+})();
+const curvePointsScaled = curvePointsUnscaled.map(([x, y]) => [
+xScale(x),
+yScale(y),
+]);
+const scaledX0 = xScale(0);
+const scaledY0 = yScale(0);
+const nXTicks = 20;
+const nXLabels = 5;
+const xTicks = xScale.ticks(nXTicks);
+const xTickSet = new Set(xTicks);
+const xLabelLocs = xScale.ticks(nXLabels).filter(x => xTickSet.has(x) && x !== 0); // This works because the numbers we're working with are exactly representable as floats; otherwise .has might fail with rounding errors
+const xTickFormat = xScale.tickFormat(nXLabels, "~g");
+const nYTicks = 20;
+const nYLabels = 5;
+const yTicks = yScale.ticks(nYTicks).filter(y => y !== 0);
+const yTickSet = new Set(yTicks);
+const yLabelLocs = yScale.ticks(nYLabels).filter(y => yTickSet.has(y) && y !== 0);
+const yTickFormat = yScale.tickFormat(nYLabels, "~g");
+const tickData = [
+...xTicks.map(x => {
+const scaledX = xScale(x);
+return {
+shape: "line",
+classes: ["axis-tick", "axis-x-tick"],
+attrs: {
+x1: scaledX,
+x2: scaledX,
+y1: scaledY0,
+y2: scaledY0 + tickLength,
+},
+};
+}),
+...yTicks.map(y => {
+const scaledY = yScale(y);
+return {
+shape: "line",
+classes: ["axis-tick", "axis-y-tick"],
+attrs: {
+x1: scaledX0 - tickLength,
+x2: scaledX0,
+y1: scaledY,
+y2: scaledY,
+},
+};
+}),
+];
+const tickLabelData = [
+...xLabelLocs.map(x => {
+const scaledX = xScale(x);
+return {
+shape: "text",
+classes: ["axis-label", "axis-x-label"],
+text: xTickFormat(x),
+attrs: {
+x: scaledX,
+y: scaledY0 + tickLength + 4,
+},
+};
+}),
+...yLabelLocs.map(y => {
+const scaledY = yScale(y);
+return {
+shape: "text",
+classes: ["axis-label", "axis-y-label"],
+text: yTickFormat(y),
+attrs: {
+x: scaledX0 - tickLength - 4,
+y: scaledY,
+},
+};
+}),
+];
+const axisData = [
+{
+shape: "line",
+classes: ["graph-obj", "axis", "x-axis"],
+attrs: {
+x1: xScale(graphXMin),
+x2: xScale(graphXMax),
+y1: scaledY0,
+y2: scaledY0,
+},
+},
+{
+shape: "line",
+classes: ["graph-obj", "axis", "y-axis"],
+attrs: {
+x1: scaledX0,
+x2: scaledX0,
+y1: yScale(graphYMin),
+y2: yScale(graphYMax),
+},
+},
+{
+shape: "path",
+classes: ["graph-obj", "curve", "curve-background"],
+attrs: {
+d: line(curvePointsScaled),
+},
+},
+{
+shape: "path",
+classes: ["graph-obj", "curve", "curve-foreground"],
+attrs: {
+d: line(curvePointsScaled),
+},
+},
+];
+return { axisData, tickData, tickLabelData };
+}
+function update({ hermiteN, graphScale } = {}) {
+hermiteN = +(hermiteN ?? hermiteSlider.value);
+graphScale = +(graphScale ?? scaleSlider.value);
+hermiteNTextSpan.innerText = hermiteN;
+scaleTextSpan.innerText = scaleFormatter(graphScale);
+const { axisData, tickData, tickLabelData } = getGraphData({
+hermiteN,
+graphScale,
+});
+applyGraphicalObjs(plot, tickData, { selector: ".axis-tick" });
+applyGraphicalObjs(plot, tickLabelData, { selector: ".axis-label" });
+applyGraphicalObjs(plot, axisData, { selector: ".graph-obj" });
+}
+update();
+</script></body>
+</html>

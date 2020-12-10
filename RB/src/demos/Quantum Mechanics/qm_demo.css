@@ -13,18 +13,36 @@ body {
 	grid-template-columns: 13em 1fr;
 	align-items: start;
 }
+
+.controls-container {
+	display: inline-block;
+	border: 2px solid white;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.controls {
+	grid-row: span 2;
+	display: grid;
+	grid-template-columns: 1fr;
+	row-gap: 2px;
+}
+
+.controls > :nth-child(2n + 3) {
+	margin-top: 30px;
+}
+
+/* Legacy; don't use */
 .slider-container {
 	grid-row: span 2;
 	display: grid;
 	grid-template-columns: 1fr;
 	row-gap: 2px;
-	border: 2px solid white;
-	border-radius: 5px;
-	padding: 10px 10px 10px 10px;
 }
 
+/* Legacy; don't use */
 .slider-container > :nth-child(2n + 3) {
-	margin-top: 40px;
+	margin-top: 30px;
 }
 .param-slider-container {
 	display: inline-block;
