@@ -39,12 +39,15 @@ function a2(chi, k, w2) {
 function a3(chi, k, w2) {
     return math.divide(
         -2 * k * (k + chi),
-        math.multiply(
+        math.subtract(
             math.multiply(
                 math.exp(math.multiply(math.i, w2 * (k - chi))),
-                math.exp(math.multiply(math.i, 4 * w2 * chi))
+                math.multiply(
+                    math.exp(math.multiply(math.i, 4 * w2 * chi)),
+                    (k - chi) ** 2
+                )
             ),
-            (k - chi) ** 2 - (k + chi) ** 2
+            (k + chi) ** 2
         )
     )
 }
@@ -52,12 +55,15 @@ function a3(chi, k, w2) {
 function a4(chi, k, w2) {
     return math.divide(
         2 * k * (k - chi),
-        math.multiply(
+        math.subtract(
             math.multiply(
-                math.exp(math.multiply(math.i, w2 * (k - 3 * chi))),
-                math.exp(math.multiply(math.i, 4 * w2 * chi))
+                math.multiply(
+                    math.exp(math.multiply(math.i, w2 * (k - 3 * chi))),
+                    math.exp(math.multiply(math.i, 4 * w2 * chi))
+                ),
+                (k - chi) ** 2
             ),
-            (k - chi) ** 2 - (k + chi) ** 2
+            (k + chi) ** 2
         )
     )
 }
@@ -67,12 +73,15 @@ function a5(chi, k, w2) {
         -1,
         math.divide(
             4 * k * chi,
-            math.multiply(
+            math.subtract(
                 math.multiply(
-                    math.exp(math.multiply(math.i, 2 * w2 * (k - chi))),
-                    math.exp(math.multiply(math.i, 4 * w2 * chi))
+                    math.multiply(
+                        math.exp(math.multiply(math.i, 2 * w2 * (k - chi))),
+                        math.exp(math.multiply(math.i, 4 * w2 * chi))
+                    ),
+                    (k - chi) ** 2
                 ),
-                (k - chi) ** 2 - (k + chi) ** 2
+                (k + chi) ** 2
             )
         )
     )
