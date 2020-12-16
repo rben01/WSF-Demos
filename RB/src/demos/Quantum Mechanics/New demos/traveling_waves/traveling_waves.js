@@ -12,7 +12,7 @@ const Y_0 = 0;
 
 const WAVENUMBER = 1;
 const PERIOD = 2 * Math.PI * WAVENUMBER;
-const ANIMATION_DURATION_MS = 5000;
+const ANIMATION_TIME_SCALE = Math.PI / 10000; // units of 1/ms
 let netDx = 0;
 let isPlaying = false;
 let animationFrame;
@@ -26,25 +26,10 @@ const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT - _margin, _margin]);
 let showVerticalDot = true;
 
 const MIN_TIME = 0;
-const MAX_TIME = 2 * Math.PI;
-const DEFAULT_TIME = MIN_TIME;
-let currTime = DEFAULT_TIME;
-const timeSlider = (() => {
-	const slider = document.getElementById("slider-time");
-	slider.min = MIN_TIME;
-	slider.max = MAX_TIME;
-	slider.step = 0.000001;
-	slider.value = DEFAULT_TIME;
-	slider.oninput = function () {
-		// eslint-disable-next-line no-use-before-define
-		update({ time: +this.value, fromUserInteraction: true });
-	};
+let currTime = MIN_TIME;
 
-	return slider;
-})();
-
-const MIN_SPEED = 1;
-const MAX_SPEED = 8;
+const MIN_SPEED = 2;
+const MAX_SPEED = 30;
 const DEFAULT_SPEED = MIN_SPEED;
 const speedSlider = (() => {
 	const slider = document.getElementById("slider-speed");
@@ -60,7 +45,7 @@ const speedSlider = (() => {
 
 const INITIAL_SHAPE = "sine";
 let selectedShape = INITIAL_SHAPE;
-const shapeButtons = d3
+const _shapeButtons = d3
 	.select("#shape-button-container")
 	.selectAll(".button")
 	.each(function () {
@@ -75,7 +60,7 @@ const shapeButtons = d3
 		update({ shape });
 	});
 
-const toggleBlueDotButton = d3.select("#btn-toggle-dot").on("click", function () {
+const _toggleBlueDotButton = d3.select("#btn-toggle-dot").on("click", function () {
 	showVerticalDot = !showVerticalDot;
 	if (!isPlaying) {
 		// eslint-disable-next-line no-use-before-define
@@ -102,7 +87,7 @@ function getAxesData() {
 		return x !== 0;
 	}
 	const xTickLocs = xScale.ticks(20).filter(nonzero);
-	const xLabelLocs = xScale.ticks(10).filter(x => x > 0);
+	const xLabelLocs = xScale.ticks(10).filter(nonzero);
 
 	const yTickLocs = yScale.ticks(20).filter(nonzero);
 	const yLabelLocs = yScale.ticks(5).filter(nonzero);
@@ -291,10 +276,6 @@ function play() {
 	playbackButtonElems.pause.disabled = false;
 	playbackButtonElems.reset.disabled = false;
 
-	if (currTime >= MAX_TIME - +timeSlider.step) {
-		timeSlider.value = currTime = MIN_TIME;
-	}
-
 	isPlaying = true;
 	let prevTimestampMS;
 	function step(timestampMS) {
@@ -304,13 +285,12 @@ function play() {
 		const elapsedSinceLastUpdateMS = timestampMS - prevTimestampMS;
 		prevTimestampMS = timestampMS;
 
-		const dt =
-			(MAX_TIME - MIN_TIME) * (elapsedSinceLastUpdateMS / ANIMATION_DURATION_MS);
+		const dt = ANIMATION_TIME_SCALE * elapsedSinceLastUpdateMS;
 
 		// eslint-disable-next-line no-use-before-define
 		update({ time: currTime + dt, fromUserInteraction: false });
 
-		if (isPlaying && currTime < MAX_TIME - +timeSlider.step) {
+		if (isPlaying) {
 			animationFrame = window.requestAnimationFrame(step);
 		} else {
 			pause();
@@ -332,21 +312,16 @@ function update({ time, shape, fromUserInteraction }) {
 		shape = selectedShape;
 	}
 
+	time = time ?? currTime;
+
 	fromUserInteraction = fromUserInteraction ?? false;
 	if (fromUserInteraction) {
 		pause();
 	}
 
-	if (time !== undefined && time !== null) {
-		timeSlider.value = time;
-	} else {
-		time = +timeSlider.value;
-	}
-
 	const speed = +speedSlider.value;
 
-	playbackButtonElems.reset.disabled =
-		fromUserInteraction && timeSlider.value === timeSlider.min;
+	playbackButtonElems.reset.disabled = fromUserInteraction;
 
 	const dt = time - currTime;
 	const dx = speed * dt;
