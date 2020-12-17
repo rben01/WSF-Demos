@@ -1,5 +1,6 @@
 /* global THREE */
 
+const plotElem = document.getElementById("plot");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
 	75,
@@ -7,14 +8,11 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	2000,
 );
-const plotElem = document.getElementById("plot");
 const renderer = new THREE.WebGLRenderer({
 	canvas: plotElem,
 	antialias: true,
 });
 renderer.setSize(plotElem.clientWidth, plotElem.clientHeight);
-
-const screenUnitsToMetersScale = d3.scaleLinear([0, 1000], [0, 0.001]);
 
 const _PANE_HEIGHT = 100;
 const SOURCE_OUTER_PANE_WIDTH = 500;
@@ -22,9 +20,44 @@ const SOURCE_PANE_HEIGHT = _PANE_HEIGHT;
 const DETECTOR_WIDTH = 900;
 const DETECTOR_HEIGHT = _PANE_HEIGHT;
 const SOURCE_PANE_GAP_WIDTH = 20;
-const SOURCE_Z = -800;
+const SOURCE_Z = -1000;
 const DETECTOR_Z = -300;
 const DISTANCE = Math.abs(SOURCE_Z - DETECTOR_Z);
+const CAMERA_Z = (SOURCE_Z + DETECTOR_Z) / 2;
+
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(600, 600, CAMERA_Z);
+const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -300, CAMERA_Z);
+const CAMERA_DIST_FROM_POINT_OF_FOCUS = CAMERA_DEFAULT_POSITION.distanceTo(
+	CAMERA_POINT_OF_FOCUS,
+);
+const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
+
+d3.select(plotElem).call(
+	d3.drag().on("drag", function (event) {
+		const cameraDisplacementFromPointOfFocus = camera.position
+			.clone()
+			.sub(CAMERA_POINT_OF_FOCUS);
+
+		const { dx, dy } = event;
+		// Not a typo; x-drags rotate around y, y-drags rotate around x
+		const angleAroundY = -dx * DRAG_SPEED;
+		const angleAroundZ = dy * DRAG_SPEED;
+
+		cameraDisplacementFromPointOfFocus.applyEuler(
+			new THREE.Euler(0, angleAroundY, angleAroundZ, "XYZ"),
+		);
+
+		const newCameraPos = CAMERA_POINT_OF_FOCUS.clone().add(
+			cameraDisplacementFromPointOfFocus,
+		);
+		camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
+		camera.lookAt(CAMERA_POINT_OF_FOCUS);
+		camera.updateProjectionMatrix();
+		renderer.render(scene, camera);
+	}),
+);
+
+const screenUnitsToMetersScale = d3.scaleLinear([0, 1000], [0, 0.00001]);
 
 const WAVELENGTH = 500e-9; // meters
 
@@ -84,9 +117,14 @@ function pointsToGeometry(points, { closePath } = { closePath: true }) {
 }
 
 function getIntensityOnDetector(angle, wavelength, slitSeparation, baseIntensity) {
+	// An arbitrary factor to smooth things out; the larger, the less bumpy the wave
+	const smoothFactor = 1;
 	return (
 		baseIntensity *
-		Math.cos((Math.PI * slitSeparation * Math.sin(angle)) / wavelength) ** 2
+		Math.cos(
+			(Math.PI * slitSeparation * Math.sin(angle)) / (wavelength * smoothFactor),
+		) **
+			2
 	);
 }
 
@@ -101,18 +139,17 @@ function getIntensityPath({
 	dashLength,
 	gapLength,
 }) {
+	nPoints = nPoints ?? 1000;
+
 	const maxAmplitude = (DETECTOR_HEIGHT * 0.7) / 2;
 
-	const maxDistFromCx = cx - DISTANCE * Math.sin(maxAngle);
-	const xMin = cx - maxDistFromCx;
-	const xMax = cx + maxDistFromCx;
-	const xScale = d3.scaleLinear([0, 1], [xMin, xMax]);
+	const angleScale = d3.scaleLinear([0, 1], [-maxAngle, maxAngle]);
 
 	const topHalfPoints = [];
 	const bottomHalfPoints = [];
 	for (let i = 0; i < nPoints; ++i) {
-		const x = xScale(i / (nPoints - 1));
-		const angle = Math.atan2(DISTANCE, cx - x);
+		const angle = angleScale(i / (nPoints - 1));
+		const x = cx + DISTANCE * Math.tan(angle);
 		if (i === 0) {
 			console.log(
 				angle,
@@ -269,7 +306,7 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 
 	// Ampltitude (intensity) visible on detector
 	(() => {
-		const maxAngle = Math.atan2(DISTANCE, DETECTOR_WIDTH / 2);
+		const maxAngle = Math.atan2(DETECTOR_WIDTH / 2, DISTANCE);
 		const [topPath, bottomPath] = getIntensityPath({
 			cx: 0,
 			cy: 0,
@@ -277,7 +314,6 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			wavelength,
 			slitSeparation,
 			maxAngle,
-			nPoints: 100,
 		});
 		const { topCurve, bottomCurve } = objects.amplitudeObjs;
 		for (const [curve, path] of [
@@ -285,7 +321,7 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			[bottomCurve, bottomPath],
 		]) {
 			curve.geometry.dispose();
-			curve.geometry = new THREE.TubeBufferGeometry(path, 64, 3, 3, false);
+			curve.geometry = new THREE.TubeBufferGeometry(path, 64, 2, 3, false);
 		}
 	})();
 
@@ -295,9 +331,9 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 }
 
 camera.position.x = 600;
-camera.position.y = 400;
-camera.position.z = -500;
-camera.lookAt(new THREE.Vector3(0, -400, -500));
+camera.position.y = 600;
+camera.position.z = (SOURCE_Z + DETECTOR_Z) / 2;
+camera.lookAt(new THREE.Vector3(0, -300, camera.position.z));
 
 const objs = updateEnvironment({
 	angle: 0,
