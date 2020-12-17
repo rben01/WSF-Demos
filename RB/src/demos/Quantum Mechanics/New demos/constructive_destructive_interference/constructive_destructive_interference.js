@@ -130,6 +130,27 @@ const PHOTON_MATERIAL = new THREE.MeshBasicMaterial({
 	side: THREE.DoubleSide,
 });
 
+const DEFAULT_ANGLE = 0;
+
+const MIN_WAVELENGTH = 400e-9;
+const MAX_WAVELENGTH = 800e-9;
+const DEFAULT_WAVELENGTH = (MIN_WAVELENGTH + MAX_WAVELENGTH) / 2;
+
+const MIN_SLIT_SEPARATION = 2;
+const MAX_SLIT_SEPARATION = 30;
+const DEFAULT_SLIT_SEPARATION = (MIN_SLIT_SEPARATION + MAX_SLIT_SEPARATION) / 2;
+
+const colorScale = t => d3.interpolateSinebow(t * 0.8);
+const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
+
+const ARROWHEAD_LENGTH = 1.2;
+const ARROWHEAD_WIDTH = 0.8;
+
+let currAngle = DEFAULT_ANGLE;
+let currWavelength = DEFAULT_WAVELENGTH;
+let currSlitSeparation = DEFAULT_SLIT_SEPARATION;
+let currOffset = 0;
+
 function get3DVerticesForRectAtOrigin(width, height, z) {
 	const halfWidth = width / 2;
 	const halfHeight = height / 2;
@@ -156,15 +177,13 @@ function pointsToGeometry(
 	return new geometryConstructor().setFromPoints(vector3s);
 }
 
+const DETECTOR_AMPLITUDE = (DETECTOR_HEIGHT * 0.7) / 2;
+
 function getIntensityOnDetector(angle, wavelength, slitSeparation, baseIntensity) {
 	// An arbitrary factor to smooth things out; the larger, the less bumpy the wave
-	const smoothFactor = 1;
 	return (
 		baseIntensity *
-		Math.cos(
-			(Math.PI * slitSeparation * Math.sin(angle)) / (wavelength * smoothFactor),
-		) **
-			2
+		Math.cos((Math.PI * slitSeparation * Math.sin(angle)) / wavelength) ** 2
 	);
 }
 
@@ -176,12 +195,10 @@ function getIntensityPath({
 	slitSeparation,
 	maxAngle,
 	nPoints,
-	dashLength,
-	gapLength,
+	// dashLength,
+	// gapLength,
 }) {
 	nPoints = nPoints ?? 1000;
-
-	const maxAmplitude = (DETECTOR_HEIGHT * 0.7) / 2;
 
 	const angleScale = d3.scaleLinear([0, 1], [-maxAngle, maxAngle]);
 
@@ -194,7 +211,7 @@ function getIntensityPath({
 			angle,
 			wavelength,
 			screenUnitsToMetersScale(slitSeparation),
-			maxAmplitude,
+			DETECTOR_AMPLITUDE,
 		);
 		const yTop = cy + intensity;
 		const yBot = cy - intensity;
@@ -210,6 +227,19 @@ function getIntensityPath({
 	return [pathFrom(topHalfPoints), pathFrom(bottomHalfPoints)];
 }
 
+function getNPeriodsTotal(originCx, originDisplacement, angle, wavelength) {
+	const originX = originCx + originDisplacement;
+	const endPointX = originCx + DISTANCE * Math.tan(angle);
+	const waveTotalLengthPx = (DISTANCE ** 2 + (originX - endPointX) ** 2) ** 0.5;
+	const waveTotalLengthMeters = screenUnitsToMetersScale(waveTotalLengthPx);
+	const nPeriodsTotal = waveTotalLengthMeters / wavelength;
+	return nPeriodsTotal;
+}
+
+function getLocalAmplitude(phase, offset, wavelength) {
+	return Math.sin(2 * Math.PI * phase - offset / wavelength);
+}
+
 function getPhotonPath({
 	originCx,
 	originDisplacement,
@@ -217,17 +247,22 @@ function getPhotonPath({
 	angle,
 	wavelength,
 	amplitude,
+	offset,
 	nPoints,
 }) {
 	originCy = originCy ?? 0;
 	amplitude = amplitude ?? SOURCE_PANE_HEIGHT * 0.3;
+	offset = offset ?? 0;
 	nPoints = nPoints ?? 1000;
 
-	const endPointX = originCx + DISTANCE * Math.tan(angle);
 	const originX = originCx + originDisplacement;
-	const waveTotalLengthPx = (DISTANCE ** 2 + (originX - endPointX) ** 2) ** 0.5;
-	const waveTotalLengthMeters = screenUnitsToMetersScale(waveTotalLengthPx);
-	const nPeriodsTotal = waveTotalLengthMeters / wavelength;
+	const endPointX = originCx + DISTANCE * Math.tan(angle);
+	const nPeriodsTotal = getNPeriodsTotal(
+		originCx,
+		originDisplacement,
+		angle,
+		wavelength,
+	);
 
 	const points = [];
 	for (let i = 0; i < nPoints; ++i) {
@@ -235,7 +270,7 @@ function getPhotonPath({
 		const x = (1 - t) * originX + t * endPointX;
 
 		const phase = t * nPeriodsTotal;
-		const y = originCy + amplitude * Math.sin(2 * Math.PI * phase);
+		const y = originCy + amplitude * getLocalAmplitude(phase, offset, wavelength);
 
 		const z = (1 - t) * SOURCE_Z + t * DETECTOR_Z;
 		points.push(new THREE.Vector3(x, y, z));
@@ -244,26 +279,7 @@ function getPhotonPath({
 	return new THREE.CatmullRomCurve3(points);
 }
 
-const DEFAULT_ANGLE = 0;
-const DEFAULT_WAVELENGTH = 500e-9;
-const DEFAULT_SLIT_SEPARATION = 2;
-
-const MIN_WAVELENGTH = 200e-9;
-const MAX_WAVELENGTH = 800e-9;
-
-const MIN_SLIT_SEPARATION = 2;
-const MAX_SLIT_SEPARATION = 30;
-
-const colorScale = t => d3.interpolateSinebow(t * 0.8);
-const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
-
-const ARROWHEAD_LENGTH = 1;
-const ARROWHEAD_WIDTH = 0.6;
-
-let currAngle = DEFAULT_ANGLE;
-let currWavelength = DEFAULT_WAVELENGTH;
-let currSlitSeparation = DEFAULT_SLIT_SEPARATION;
-function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
+function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects }) {
 	if (angle !== undefined) {
 		currAngle = angle;
 	} else {
@@ -280,6 +296,12 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 		currSlitSeparation = slitSeparation;
 	} else {
 		slitSeparation = currSlitSeparation;
+	}
+
+	if (offset !== undefined) {
+		currOffset = offset;
+	} else {
+		offset = currOffset;
 	}
 
 	const paneInnerEdgeDistFromCenterX = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH;
@@ -365,11 +387,9 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			);
 			const backPane = new THREE.Mesh(paneGeometry, DETECTOR_MATERIAL_BACK);
 			backPane.position.z = DETECTOR_Z;
-			scene.add(backPane);
 
 			const frontPane = new THREE.Mesh(paneGeometry, DETECTOR_MATERIAL_FRONT);
 			frontPane.position.z = DETECTOR_Z;
-			scene.add(frontPane);
 
 			const borderGeometry = pointsToGeometry(
 				get3DVerticesForRectAtOrigin(
@@ -379,7 +399,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 				),
 			);
 			const border = new THREE.Line(borderGeometry, OUTLINE_MATERIAL);
-			scene.add(border);
+
+			scene.add(backPane, frontPane, border);
 			objects.detectorObjs = { backPane, frontPane, border };
 		})();
 
@@ -393,10 +414,24 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			}
 			const topCurve = makeCurve();
 			const bottomCurve = makeCurve();
-			scene.add(topCurve);
-			scene.add(bottomCurve);
 
-			objects.amplitudeObjs = { topCurve, bottomCurve };
+			const verticalLine = new THREE.Mesh(
+				new THREE.BufferGeometry(),
+				DETECTOR_INTENSITY_MATERIAL,
+			);
+
+			const superpositionDot = new THREE.Mesh(
+				new THREE.SphereBufferGeometry(0.5, 10, 10),
+				DETECTOR_INTENSITY_MATERIAL,
+			);
+
+			scene.add(topCurve, bottomCurve, verticalLine, superpositionDot);
+			objects.amplitudeObjs = {
+				topCurve,
+				bottomCurve,
+				verticalLine,
+				superpositionDot,
+			};
 		})();
 
 		// Fringe lights shining on front of detector. It's actually more efficient to
@@ -415,8 +450,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			for (let i = -maxLightIndex; i <= maxLightIndex; ++i) {
 				const light = new THREE.SpotLight(0xffffff, 1.5, 500, Math.PI, 1, 100);
 				fringeLights.push(light);
-				scene.add(light);
 			}
+			scene.add(...fringeLights);
 
 			objects.fringeObjs = fringeObjs;
 		})();
@@ -484,6 +519,13 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 
 	// Ampltitude (intensity) visible on back of detector
 	(() => {
+		const {
+			topCurve,
+			bottomCurve,
+			verticalLine,
+			superpositionDot,
+		} = objects.amplitudeObjs;
+
 		const tubeRadius = 0.1;
 		const [topPath, bottomPath] = getIntensityPath({
 			cx: 0,
@@ -493,7 +535,6 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			slitSeparation,
 			maxAngle: MAX_ANGLE_RAD,
 		});
-		const { topCurve, bottomCurve } = objects.amplitudeObjs;
 		for (const [curve, path] of [
 			[topCurve, topPath],
 			[bottomCurve, bottomPath],
@@ -507,6 +548,27 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 				false,
 			);
 		}
+
+		verticalLine.geometry.dispose();
+		const intensity = getIntensityOnDetector(
+			angle,
+			wavelength,
+			screenUnitsToMetersScale(slitSeparation),
+			DETECTOR_AMPLITUDE,
+		);
+		const detectionX = DISTANCE * Math.tan(angle);
+		const verticalLineCurve = new THREE.LineCurve3(
+			new THREE.Vector3(detectionX, intensity, DETECTOR_Z),
+			new THREE.Vector3(detectionX, -intensity, DETECTOR_Z),
+		);
+		verticalLine.geometry = new THREE.TubeBufferGeometry(
+			verticalLineCurve,
+			1,
+			0.1,
+			10,
+		);
+
+		superpositionDot.position.set(detectionX, 0, DETECTOR_Z);
 	})();
 
 	const color = new THREE.Color(colorScale(wavelengthScale(wavelength)));
@@ -564,6 +626,84 @@ camera.position.z = CAMERA_DEFAULT_POSITION.z;
 camera.lookAt(CAMERA_POINT_OF_FOCUS);
 
 const objs = updateEnvironment({});
+
+let animationFrame;
+let isPlaying = false;
+const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster they travel
+
+// eslint-disable-next-line no-unused-vars
+function play() {
+	function getPhotonValueOnDetector(displacement) {
+		return getLocalAmplitude(
+			getNPeriodsTotal(0, displacement, currAngle, currWavelength),
+			currOffset,
+			currWavelength,
+		);
+	}
+
+	isPlaying = true;
+	let startMS;
+	function step(timestampMS) {
+		if (!isPlaying) {
+			window.cancelAnimationFrame(animationFrame);
+			return;
+		}
+
+		if (startMS === undefined) {
+			startMS = timestampMS;
+		}
+		const elapsedMS = timestampMS - startMS;
+		const photons = objs.photonObjs.photons;
+
+		const displacement = currSlitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
+		const color = new THREE.Color(colorScale(wavelengthScale(currWavelength)));
+
+		const offset = elapsedMS * PHOTON_SPEED;
+		currOffset = offset;
+
+		for (let i = 0; i < photons.length; ++i) {
+			const photon = photons[i];
+			photon.geometry.dispose();
+			const photonPath = getPhotonPath({
+				originCx: 0,
+				originDisplacement: (i === 0 ? -1 : 1) * displacement,
+				angle: currAngle,
+				wavelength: currWavelength,
+				offset,
+			});
+			photon.geometry = new THREE.TubeBufferGeometry(photonPath, 1000, 0.15, 10);
+			photon.material.color = color;
+		}
+
+		const superpositionDot = objs.amplitudeObjs.superpositionDot;
+		const intensity = getIntensityOnDetector(
+			currAngle,
+			currWavelength,
+			screenUnitsToMetersScale(currSlitSeparation),
+			DETECTOR_AMPLITUDE,
+		);
+
+		const leftPhotonValueOnDetector = getPhotonValueOnDetector(
+			currSlitSeparation / 2,
+		);
+		const rightPhotonValueOnDetector = getPhotonValueOnDetector(
+			-currSlitSeparation / 2,
+		);
+
+		superpositionDot.position.y =
+			(intensity / 2) * (leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+
+		renderer.render(scene, camera);
+
+		animationFrame = window.requestAnimationFrame(step);
+	}
+	window.requestAnimationFrame(step);
+}
+
+// eslint-disable-next-line no-unused-vars
+function pause() {
+	isPlaying = false;
+}
 
 // Angle slider
 (() => {
