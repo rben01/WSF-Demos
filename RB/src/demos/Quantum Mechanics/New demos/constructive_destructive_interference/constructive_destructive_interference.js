@@ -35,26 +35,6 @@ const CAMERA_DEFAULT_POSITION = new THREE.Vector3(60, 40, CAMERA_Z);
 const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
 const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
 
-// const slitSeparationTextElem = document.getElementById("slit-separation-text");
-// const slitSeparationTextPos = new THREE.Vector3(
-// 	0,
-// 	SOURCE_PANE_HEIGHT / 2 + 4,
-// 	SOURCE_Z + 0.01,
-// );
-// function updateSlitSeparationTextElemPos() {
-// 	const textPos = slitSeparationTextPos.clone().project(camera);
-// 	console.log(textPos);
-// 	const plotElemRect = plotElem.getBoundingClientRect();
-// 	const halfWidth = plotElemRect.width / 2;
-// 	const halfHeight = plotElemRect.height / 2;
-// 	const textPosX = plotElemRect.x + halfWidth + textPos.x * halfWidth;
-// 	const textPosY = plotElemRect.y + halfHeight - textPos.y * halfHeight;
-
-// 	slitSeparationTextElem.style.left = `${textPosX}px`;
-// 	slitSeparationTextElem.style.top = `${textPosY}px`;
-// }
-// updateSlitSeparationTextElemPos();
-
 d3.select(plotElem).call(
 	d3.drag().on("drag", function (event) {
 		const cameraDisplacementFromPointOfFocus = camera.position
@@ -287,6 +267,7 @@ function getPhotonValueOnDetector(displacement) {
 	);
 }
 
+let isPlaying = false;
 function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects }) {
 	if (angle !== undefined) {
 		currAngle = angle;
@@ -432,6 +413,7 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 				new THREE.SphereBufferGeometry(0.5, 10, 10),
 				DETECTOR_INTENSITY_MATERIAL,
 			);
+			superpositionDot.position.z = DETECTOR_Z;
 
 			scene.add(topCurve, bottomCurve, verticalLine, superpositionDot);
 			objects.amplitudeObjs = {
@@ -576,15 +558,19 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 			10,
 		);
 
-		const leftPhotonValueOnDetector = getPhotonValueOnDetector(
-			currSlitSeparation / 2,
-		);
-		const rightPhotonValueOnDetector = getPhotonValueOnDetector(
-			-currSlitSeparation / 2,
-		);
-		const superpositionDotY =
-			(intensity / 2) * (leftPhotonValueOnDetector + rightPhotonValueOnDetector);
-		superpositionDot.position.set(detectionX, superpositionDotY, DETECTOR_Z);
+		superpositionDot.position.x = detectionX;
+		if (!isPlaying) {
+			const leftPhotonValueOnDetector = getPhotonValueOnDetector(
+				currSlitSeparation / 2,
+			);
+			const rightPhotonValueOnDetector = getPhotonValueOnDetector(
+				-currSlitSeparation / 2,
+			);
+			const superpositionDotY =
+				(intensity / 2) *
+				(leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+			superpositionDot.position.y = superpositionDotY;
+		}
 	})();
 
 	const color = new THREE.Color(colorScale(wavelengthScale(wavelength)));
@@ -611,25 +597,32 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 		}
 	})();
 
-	// Photons traveling from source to detector
-	(() => {
-		const { photonObjs } = objects;
-		const photons = photonObjs.photons;
-		const displacement = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
+	if (!isPlaying) {
+		// Photons traveling from source to detector
+		(() => {
+			const { photonObjs } = objects;
+			const photons = photonObjs.photons;
+			const displacement = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
 
-		for (let i = 0; i < photons.length; ++i) {
-			const photon = photons[i];
-			photon.geometry.dispose();
-			const photonPath = getPhotonPath({
-				originCx: 0,
-				originDisplacement: (i === 0 ? -1 : 1) * displacement,
-				angle,
-				wavelength,
-			});
-			photon.geometry = new THREE.TubeBufferGeometry(photonPath, 1000, 0.15, 10);
-			photon.material.color = color;
-		}
-	})();
+			for (let i = 0; i < photons.length; ++i) {
+				const photon = photons[i];
+				photon.geometry.dispose();
+				const photonPath = getPhotonPath({
+					originCx: 0,
+					originDisplacement: (i === 0 ? -1 : 1) * displacement,
+					angle,
+					wavelength,
+				});
+				photon.geometry = new THREE.TubeBufferGeometry(
+					photonPath,
+					1000,
+					0.15,
+					10,
+				);
+				photon.material.color = color;
+			}
+		})();
+	}
 
 	renderer.render(scene, camera);
 
@@ -644,7 +637,6 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 const objs = updateEnvironment({});
 
 let animationFrame;
-let isPlaying = false;
 const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster they travel
 
 // eslint-disable-next-line no-unused-vars
