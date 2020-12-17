@@ -251,7 +251,7 @@ function getPhotonPath({
 	nPoints,
 }) {
 	originCy = originCy ?? 0;
-	amplitude = amplitude ?? SOURCE_PANE_HEIGHT * 0.3;
+	amplitude = amplitude ?? SOURCE_PANE_HEIGHT * 0.15;
 	offset = offset ?? 0;
 	nPoints = nPoints ?? 1000;
 
@@ -277,6 +277,14 @@ function getPhotonPath({
 	}
 
 	return new THREE.CatmullRomCurve3(points);
+}
+
+function getPhotonValueOnDetector(displacement) {
+	return getLocalAmplitude(
+		getNPeriodsTotal(0, displacement, currAngle, currWavelength),
+		currOffset,
+		currWavelength,
+	);
 }
 
 function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects }) {
@@ -568,7 +576,15 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 			10,
 		);
 
-		superpositionDot.position.set(detectionX, 0, DETECTOR_Z);
+		const leftPhotonValueOnDetector = getPhotonValueOnDetector(
+			currSlitSeparation / 2,
+		);
+		const rightPhotonValueOnDetector = getPhotonValueOnDetector(
+			-currSlitSeparation / 2,
+		);
+		const superpositionDotY =
+			(intensity / 2) * (leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+		superpositionDot.position.set(detectionX, superpositionDotY, DETECTOR_Z);
 	})();
 
 	const color = new THREE.Color(colorScale(wavelengthScale(wavelength)));
@@ -633,14 +649,6 @@ const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster the
 
 // eslint-disable-next-line no-unused-vars
 function play() {
-	function getPhotonValueOnDetector(displacement) {
-		return getLocalAmplitude(
-			getNPeriodsTotal(0, displacement, currAngle, currWavelength),
-			currOffset,
-			currWavelength,
-		);
-	}
-
 	isPlaying = true;
 	let startMS;
 	function step(timestampMS) {
