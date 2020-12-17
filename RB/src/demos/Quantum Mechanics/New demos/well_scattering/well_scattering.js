@@ -3,10 +3,10 @@ const w = 1450,
     x = d3.scaleLinear().domain([-10, 10]).range([0, w]),
     y = d3.scaleLinear().domain([-10, 20]).range([h, 0]),
     graph = d3.select("#svg").append("g").attr("transform", "translate(25, 25)"),
-    x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + 2 * h / 3 + ")").call(d3.axisBottom(x).ticks(5)),
-    y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + w / 2 + ", 0)").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10, 15, 20])),
     well = graph.append("path").style("fill", "grey"),
-    wave = graph.append("path").style("fill", "none").style("stroke", "red"),
+    x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + 2 * h / 3 + ")").call(d3.axisBottom(x).tickValues([-10, -5, 5, 10])),
+    y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + w / 2 + ", 0)").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10, 15, 20])),
+    wave = graph.append("path").style("fill", "none").style("stroke", "#5df"),
     dashed = graph.append("line").style("stroke", "white").attr("x1", 0).attr("x2", w).attr("stroke-dasharray", "25 25"),
     depth = document.getElementById("depth"),
     width = document.getElementById("width"),
@@ -27,11 +27,14 @@ function a2(chi, k, w2) {
             (k - chi) * (k + chi)
         ),
         math.multiply(
-            math.multiply(
-                math.exp(math.multiply(math.i, 2 * w2 * k)),
-                math.exp(math.multiply(math.i, 4 * w2 * chi))
-            ),
-            (k - chi) ** 2 - (k + chi) ** 2
+            math.exp(math.multiply(math.i, 2 * w2 * k)),
+            math.subtract(
+                math.multiply(
+                    math.exp(math.multiply(math.i, 4 * w2 * chi)),
+                    (k - chi) ** 2
+                ),
+                (k + chi) ** 2
+            )
         )
     )
 }
@@ -39,15 +42,15 @@ function a2(chi, k, w2) {
 function a3(chi, k, w2) {
     return math.divide(
         -2 * k * (k + chi),
-        math.subtract(
-            math.multiply(
-                math.exp(math.multiply(math.i, w2 * (k - chi))),
+        math.multiply(
+            math.exp(math.multiply(math.i, w2 * (k - chi))),
+            math.subtract(
                 math.multiply(
                     math.exp(math.multiply(math.i, 4 * w2 * chi)),
                     (k - chi) ** 2
-                )
-            ),
-            (k + chi) ** 2
+                ),
+                (k + chi) ** 2
+            )
         )
     )
 }
@@ -55,15 +58,15 @@ function a3(chi, k, w2) {
 function a4(chi, k, w2) {
     return math.divide(
         2 * k * (k - chi),
-        math.subtract(
-            math.multiply(
+        math.multiply(
+            math.exp(math.multiply(math.i, w2 * (k - 3 * chi))),
+            math.subtract(
                 math.multiply(
-                    math.exp(math.multiply(math.i, w2 * (k - 3 * chi))),
-                    math.exp(math.multiply(math.i, 4 * w2 * chi))
+                    math.exp(math.multiply(math.i, 4 * w2 * chi)),
+                    (k - chi) ** 2
                 ),
-                (k - chi) ** 2
-            ),
-            (k + chi) ** 2
+                (k + chi) ** 2
+            )
         )
     )
 }
@@ -73,15 +76,15 @@ function a5(chi, k, w2) {
         -1,
         math.divide(
             4 * k * chi,
-            math.subtract(
-                math.multiply(
+            math.multiply(
+                math.exp(math.multiply(math.i, 2 * w2 * (k - chi))),
+                math.subtract(
                     math.multiply(
-                        math.exp(math.multiply(math.i, 2 * w2 * (k - chi))),
-                        math.exp(math.multiply(math.i, 4 * w2 * chi))
+                        math.exp(math.multiply(math.i, 4 * w2 * chi)),
+                        (k - chi) ** 2
                     ),
-                    (k - chi) ** 2
-                ),
-                (k + chi) ** 2
+                    (k + chi) ** 2
+                )
             )
         )
     )
