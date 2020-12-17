@@ -224,6 +224,13 @@ function groupBy(array, keyFunc, expectedKeys, asArray = true) {
 	return grouped;
 }
 
+function syncButtonState(button) {
+	if (button.hasAttribute("button-checked")) {
+		button.disabled = true;
+	} else if (button.disabled) {
+		button.setAttribute("button-checked", "");
+	}
+}
 function _initializeRadioButtons() {
 	const radioButtonContainers = document.getElementsByClassName(
 		"radio-button-container",
@@ -235,9 +242,7 @@ function _initializeRadioButtons() {
 		d3.select(rbc)
 			.selectAll("button")
 			.each(function () {
-				if (this.hasAttribute("button-checked")) {
-					this.disabled = true;
-				}
+				syncButtonState(this);
 			})
 			.on("click._default", function () {
 				this.setAttribute("button-checked", "");
