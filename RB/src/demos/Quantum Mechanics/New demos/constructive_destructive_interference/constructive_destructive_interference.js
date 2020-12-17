@@ -11,22 +11,23 @@ const camera = new THREE.PerspectiveCamera(
 const renderer = new THREE.WebGLRenderer({
 	canvas: plotElem,
 	antialias: true,
+	powerPreference: "high-performance",
 });
 renderer.setSize(plotElem.clientWidth, plotElem.clientHeight);
 
-const _PANE_HEIGHT = 100;
-const SOURCE_OUTER_PANE_WIDTH = 500;
+const _PANE_HEIGHT = 10;
+const SOURCE_OUTER_PANE_WIDTH = 20;
 const SOURCE_PANE_HEIGHT = _PANE_HEIGHT;
-const DETECTOR_WIDTH = 900;
+const DETECTOR_WIDTH = 90;
 const DETECTOR_HEIGHT = _PANE_HEIGHT;
-const SOURCE_PANE_GAP_WIDTH = 20;
-const SOURCE_Z = -1000;
-const DETECTOR_Z = -300;
+const SOURCE_PANE_GAP_WIDTH = 2;
+const SOURCE_Z = -100;
+const DETECTOR_Z = -30;
 const DISTANCE = Math.abs(SOURCE_Z - DETECTOR_Z);
-const CAMERA_Z = (SOURCE_Z + DETECTOR_Z) / 2;
+const CAMERA_Z = (SOURCE_Z + DETECTOR_Z) * 0.45;
 
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(600, 600, CAMERA_Z);
-const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -300, CAMERA_Z);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(60, 40, CAMERA_Z);
+const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
 const CAMERA_DIST_FROM_POINT_OF_FOCUS = CAMERA_DEFAULT_POSITION.distanceTo(
 	CAMERA_POINT_OF_FOCUS,
 );
@@ -39,12 +40,20 @@ d3.select(plotElem).call(
 			.sub(CAMERA_POINT_OF_FOCUS);
 
 		const { dx, dy } = event;
-		// Not a typo; x-drags rotate around y, y-drags rotate around x
+		// y is up so x-drags rotate around the y-axis; y-drags rotate around a
+		// combination of x-axis and z-axis depending on the current camera angle -- if
+		// on the x-y plane, y-drags rotate entirely around the z-axis; if on the y-z
+		// plane, y-drags rotate entirely around the x-axis
 		const angleAroundY = -dx * DRAG_SPEED;
-		const angleAroundZ = dy * DRAG_SPEED;
+		const angleInXZPlane = Math.atan2(
+			cameraDisplacementFromPointOfFocus.z,
+			cameraDisplacementFromPointOfFocus.x,
+		);
+		const angleAroundX = -Math.sin(angleInXZPlane) * dy * DRAG_SPEED;
+		const angleAroundZ = Math.cos(angleInXZPlane) * dy * DRAG_SPEED;
 
 		cameraDisplacementFromPointOfFocus.applyEuler(
-			new THREE.Euler(0, angleAroundY, angleAroundZ, "XYZ"),
+			new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
 		);
 
 		const newCameraPos = CAMERA_POINT_OF_FOCUS.clone().add(
@@ -57,7 +66,7 @@ d3.select(plotElem).call(
 	}),
 );
 
-const screenUnitsToMetersScale = d3.scaleLinear([0, 1000], [0, 0.00001]);
+const screenUnitsToMetersScale = d3.scaleLinear([0, 1000], [0, 0.0001]);
 
 const WAVELENGTH = 500e-9; // meters
 
@@ -67,7 +76,7 @@ const SOURCE_PANE_MATERIAL = new THREE.MeshBasicMaterial({
 	transparent: false,
 });
 
-const DETECTOR_MATERIAL = new THREE.MeshBasicMaterial({
+const DETECTOR_MATERIAL = new THREE.MeshPhongMaterial({
 	color: 0x99aabb,
 	side: THREE.DoubleSide,
 	transparent: true,
@@ -75,7 +84,7 @@ const DETECTOR_MATERIAL = new THREE.MeshBasicMaterial({
 });
 
 const OUTLINE_MATERIAL = new THREE.LineBasicMaterial({
-	color: 0xffffff,
+	color: 0xcccccc,
 	linewidth: 1,
 });
 
@@ -107,13 +116,19 @@ function get3DVerticesForRectAtOrigin(width, height, z) {
 	];
 }
 
-function pointsToGeometry(points, { closePath } = { closePath: true }) {
+function pointsToGeometry(
+	points,
+	{ closePath, geometryConstructor } = {
+		closePath: true,
+		geometryConstructor: THREE.BufferGeometry,
+	},
+) {
 	if (closePath) {
 		points = [...points, points[0]];
 	}
 
 	const vector3s = points.map(point => new THREE.Vector3(...point));
-	return new THREE.BufferGeometry().setFromPoints(vector3s);
+	return new geometryConstructor().setFromPoints(vector3s);
 }
 
 function getIntensityOnDetector(angle, wavelength, slitSeparation, baseIntensity) {
@@ -234,6 +249,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			const paneGeometry = new THREE.PlaneBufferGeometry(
 				DETECTOR_WIDTH,
 				DETECTOR_HEIGHT,
+				20,
+				20,
 			);
 			const pane = new THREE.Mesh(paneGeometry, DETECTOR_MATERIAL);
 			pane.position.z = DETECTOR_Z;
@@ -321,7 +338,7 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 			[bottomCurve, bottomPath],
 		]) {
 			curve.geometry.dispose();
-			curve.geometry = new THREE.TubeBufferGeometry(path, 64, 2, 3, false);
+			curve.geometry = new THREE.TubeBufferGeometry(path, 64, 0.2, 3, false);
 		}
 	})();
 
@@ -330,12 +347,16 @@ function updateEnvironment({ angle, wavelength, slitSeparation, objects }) {
 	return objects;
 }
 
-camera.position.x = 600;
-camera.position.y = 600;
-camera.position.z = (SOURCE_Z + DETECTOR_Z) / 2;
-camera.lookAt(new THREE.Vector3(0, -300, camera.position.z));
+const light = new THREE.PointLight(0xff0000, 10, 0);
+light.position.set(0, 0, DETECTOR_Z - 10);
+scene.add(light);
+
+camera.position.x = CAMERA_DEFAULT_POSITION.x;
+camera.position.y = CAMERA_DEFAULT_POSITION.y;
+camera.position.z = CAMERA_DEFAULT_POSITION.z;
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
 
 const objs = updateEnvironment({
 	angle: 0,
-	slitSeparation: 50,
+	slitSeparation: 5,
 });
