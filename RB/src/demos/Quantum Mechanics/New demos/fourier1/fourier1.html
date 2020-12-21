@@ -1,0 +1,87 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+        integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+        crossorigin="anonymous"></script>
+    <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
+    <style>
+        .param-slider {
+            width: 200px;
+        }
+
+        .plot {
+            display: inline-block;
+        }
+
+        .plot-container {
+            margin-top: 20px;
+        }
+
+        .axis {
+            stroke-width: 1;
+            stroke: #555;
+        }
+
+        .axis-tick {
+            stroke-width: 1;
+            stroke: #666;
+        }
+
+        .axis-label {
+            stroke-opacity: 0;
+            fill: #111;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="grid-left-right">
+        <div class="controls-container">
+            <span class="slider-label">Mode 1</span>
+            <span class="param-slider-container">
+                <input id="mode1" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 2</span>
+            <span class="param-slider-container">
+                <input id="mode2" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 3</span>
+            <span class="param-slider-container">
+                <input id="mode3" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 4</span>
+            <span class="param-slider-container">
+                <input id="mode4" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 5</span>
+            <span class="param-slider-container">
+                <input id="mode5" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 6</span>
+            <span class="param-slider-container">
+                <input id="mode6" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 7</span>
+            <span class="param-slider-container">
+                <input id="mode7" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 8</span>
+            <span class="param-slider-container">
+                <input id="mode8" class="param-slider correlation-slider" type="range" />
+            </span>
+            <span class="slider-label">Mode 9</span>
+            <span class="param-slider-container">
+                <input id="mode9" class="param-slider correlation-slider" type="range" />
+            </span>
+        </div>
+        <div class="plot-container">
+            <svg id="svg" class="plot"></svg>
+        </div>
+    </div>
+    <script href="fourier1.js"></script>
+</body>
+
+</html>
