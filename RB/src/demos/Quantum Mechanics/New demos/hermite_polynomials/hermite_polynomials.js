@@ -4,6 +4,7 @@ const WIDTH = 1050;
 const HEIGHT = 750;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const plotNode = plot.node();
 
 const hermiteNTextSpan = document.getElementById("hermite-n");
 const scaleTextSpan = document.getElementById("x-scale");
@@ -252,6 +253,8 @@ function update({ hermiteN, graphScale } = {}) {
 	applyGraphicalObjs(plot, tickData, { selector: ".axis-tick" });
 	applyGraphicalObjs(plot, tickLabelData, { selector: ".axis-label" });
 	applyGraphicalObjs(plot, axisData, { selector: ".graph-obj" });
+	plotNode.append(plot.selectAll(".curve-background").node());
+	plotNode.append(plot.selectAll(".curve-foreground").node());
 }
 
 update();
