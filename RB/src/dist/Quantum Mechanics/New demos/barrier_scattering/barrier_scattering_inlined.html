@@ -5,7 +5,242 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
-<style rel="stylesheet" type="text/css">body{background-color:#000;color:#fff;font-size:22px;font-family:sans-serif;line-height:1.8em}.grid-left-right{display:grid;grid-template-columns:13em 1fr;align-items:start}.controls-container{display:inline-block;border:2px solid #fff;border-radius:5px;padding:10px}.controls{grid-row:span 2;display:grid;grid-template-columns:1fr;row-gap:2px}.controls>:nth-child(2n+3){margin-top:30px}.slider-container{grid-row:span 2;display:grid;grid-template-columns:1fr;row-gap:2px}.slider-container>:nth-child(2n+3){margin-top:30px}.param-slider-container{display:inline-block;width:100%}input[type=range]{width:100%}.plot{display:inline-block}.plot-container{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}.axis{stroke-width:1;stroke:#aaa}.axis-tick{stroke-width:1;stroke:#aaa}.axis-label{stroke-opacity:0;fill:#ccc;font-size:14px}.x-axis-label{text-anchor:middle;dominant-baseline:hanging}.y-axis-label{text-anchor:end;dominant-baseline:middle}.radio-button-container label input{display:none}.radio-button-container.horizontal{display:flex;flex-direction:row;align-content:stretch;line-height:initial}.button{padding:7px 8px;margin-right:3px;font-size:15px;border-radius:4px;background:#ccc;background-image:-webkit-linear-gradient(top,#fff,#aaa);color:#000;text-shadow:1px 1px #ddd}.button:hover{cursor:pointer}.button:active{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#fff);color:#333}.button:disabled{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#aaa);color:#444;text-shadow:1px 1px #ccc;cursor:default}.highlighted-text{color:#5df}.secondary-text{color:#f3c002}.tertiary-text{color:#14c778}.quaternary-text{color:#e5d}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}.subscript{position:relative;top:.3em;left:0;font-size:65%}.superscript{position:relative;bottom:.8em;left:0;font-size:65%}.minus-sign{margin-right:1px}.operator{margin-left:3px;margin-right:3px}button.depressed-button{background-color:#555;color:#fff}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;position:relative;bottom:4px;outline:0}input[type=range]:disabled{opacity:.5}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style></head>
+<style rel="stylesheet" type="text/css">body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.button {
+padding: 7px 8px;
+margin-right: 3px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style></head>
 <body>
 <div class="grid-left-right">
 <div class="slider-container">
@@ -32,5 +267,177 @@
 <svg class="plot" height="800" id="svg" width="1500"></svg>
 </div>
 </div>
-<script type="text/javascript">const W=1450,H=750,x=d3.scaleLinear().domain([-10,10]).range([0,W]),y=d3.scaleLinear().domain([0,80]).range([H,0]),graph=d3.select("#svg").append("g").attr("transform","translate(25, 25)"),x_axis=graph.append("g").attr("class","axis").attr("transform","translate(0, "+H+")").call(d3.axisBottom(x).ticks(5)),y_axis=graph.append("g").attr("class","axis").attr("transform","translate("+W/2+", 0)").call(d3.axisLeft(y).tickValues([-10,-5,5,10,15,20])),barrier=graph.append("rect").style("fill","grey"),wave=graph.append("path").style("fill","none").style("stroke","#5df").style("stroke-width",2),dashed=graph.append("line").style("stroke","white").attr("x1",0).attr("x2",W).attr("stroke-dasharray","25 25"),height=document.getElementById("height"),width=document.getElementById("width"),mass=document.getElementById("mass"),energy=document.getElementById("energy");function k(t,a){return math.sqrt(2*t*a)}function chi(t,a,m){return math.sqrt(2*t*(a-m))}function a2(t,a,m){return math.divide(math.multiply(math.sum(-1,math.exp(math.multiply(math.i,math.multiply(t,4*m)))),math.multiply(math.subtract(a,t),math.sum(a,t))),math.multiply(math.exp(math.multiply(math.i,2*m*a)),math.subtract(math.multiply(math.exp(math.multiply(math.i,math.multiply(t,4*m))),math.square(math.subtract(a,t))),math.square(math.sum(a,t)))))}function a3(t,a,m){return math.divide(math.multiply(-2*a,math.sum(a,t)),math.multiply(math.exp(math.multiply(math.i,math.multiply(m,math.subtract(a,t)))),math.subtract(math.multiply(math.exp(math.multiply(math.i,math.multiply(4*m,t))),math.square(math.subtract(a,t))),math.square(math.sum(a,t)))))}function a4(t,a,m){return math.divide(math.multiply(2*a,math.subtract(a,t)),math.multiply(math.exp(math.multiply(math.i,math.multiply(m,math.subtract(a,math.multiply(3,t))))),math.subtract(math.multiply(math.exp(math.multiply(math.i,math.multiply(4*m,t))),math.square(math.subtract(a,t))),math.square(math.sum(a,t)))))}function a5(t,a,m){return math.multiply(-1,math.divide(math.multiply(4*a,t),math.multiply(math.exp(math.multiply(math.i,math.multiply(2*m,math.subtract(a,t)))),math.subtract(math.multiply(math.exp(math.multiply(math.i,math.multiply(4*m,t))),math.square(math.subtract(a,t))),math.square(math.sum(a,t))))))}function psi(t,a,m,h,e){return e<=-t/2?math.abs(math.sum(math.exp(math.multiply(math.i,k(m,h)*e)),math.multiply(a2(chi(m,h,a),k(m,h),t/2),math.exp(math.multiply(math.i,-1*k(m,h)*e))))):e<=t/2?math.abs(math.sum(math.multiply(a3(chi(m,h,a),k(m,h),t/2),math.exp(math.multiply(math.i,math.multiply(chi(m,h,a),e)))),math.multiply(a4(chi(m,h,a),k(m,h),t/2),math.exp(math.multiply(math.i,math.multiply(chi(m,h,a),-e)))))):math.abs(math.multiply(a5(chi(m,h,a),k(m,h),t/2),math.exp(math.multiply(math.i,k(m,h)*e))))}var d,w,m,e;function update(){h=+height.value,w=+width.value,m=+mass.value,e=+energy.value,barrier.attr("x",x(-w/2)).attr("width",w*W/20).attr("y",y(h)).attr("height",h*H/80),dashed.attr("y1",y(e)).attr("y2",y(e));for(var t=[],a=-10;a<10;a+=.01)t.push([x(a),y(psi(w,h,m,e,a)**2+e)]);wave.attr("d",d3.line()(t))}d3.select("#height").on("input",update),d3.select("#width").on("input",update),d3.select("#mass").on("input",update),d3.select("#energy").on("input",update),update();</script></body>
+<script type="text/javascript">const W = 1450,
+H = 750,
+x = d3.scaleLinear().domain([-10, 10]).range([0, W]),
+y = d3.scaleLinear().domain([0, 80]).range([H, 0]),
+graph = d3.select("#svg").append("g").attr("transform", "translate(25, 25)"),
+x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + H + ")").call(d3.axisBottom(x).ticks(5)),
+y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + W / 2 + ", 0)").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10, 15, 20])),
+barrier = graph.append("rect").style("fill", "grey"),
+wave = graph.append("path").style("fill", "none").style("stroke", "#5df").style("stroke-width", 2),
+dashed = graph.append("line").style("stroke", "white").attr("x1", 0).attr("x2", W).attr("stroke-dasharray", "25 25"),
+height = document.getElementById("height"),
+width = document.getElementById("width"),
+mass = document.getElementById("mass"),
+energy = document.getElementById("energy");
+function k(m, e) { return math.sqrt(2 * m * e) }
+function chi(m, e, h) { return math.sqrt(2 * m * (e - h)) }
+function a2(chi, k, w) {
+return math.divide(
+math.multiply(
+math.sum(
+-1,
+math.exp(
+math.multiply(
+math.i,
+math.multiply(chi, 4 * w)
+)
+)
+),
+math.multiply(
+math.subtract(k, chi),
+math.sum(k, chi)
+)
+),
+math.multiply(
+math.exp(math.multiply(math.i, 2 * w * k)),
+math.subtract(
+math.multiply(
+math.exp(
+math.multiply(
+math.i,
+math.multiply(chi, 4 * w)
+)
+),
+math.square(math.subtract(k, chi))
+),
+math.square(math.sum(k, chi))
+)
+)
+)
+}
+function a3(chi, k, w) {
+return math.divide(
+math.multiply(
+-2 * k,
+math.sum(k, chi)
+),
+math.multiply(
+math.exp(
+math.multiply(
+math.i,
+math.multiply(w, math.subtract(k, chi))
+)
+),
+math.subtract(
+math.multiply(
+math.exp(
+math.multiply(
+math.i,
+math.multiply(4 * w, chi)
+)
+),
+math.square(math.subtract(k, chi))
+),
+math.square(math.sum(k, chi))
+)
+)
+)
+}
+function a4(chi, k, w) {
+return math.divide(
+math.multiply(2 * k, math.subtract(k, chi)),
+math.multiply(
+math.exp(
+math.multiply(
+math.i,
+math.multiply(w, math.subtract(k, math.multiply(3, chi))))
+),
+math.subtract(
+math.multiply(
+math.exp(
+math.multiply(math.i, math.multiply(4 * w, chi))
+),
+math.square(math.subtract(k, chi))
+),
+math.square(math.sum(k, chi))
+)
+)
+)
+}
+function a5(chi, k, w) {
+return math.multiply(
+-1,
+math.divide(
+math.multiply(4 * k, chi),
+math.multiply(
+math.exp(
+math.multiply(math.i, math.multiply(2 * w, math.subtract(k, chi)))
+),
+math.subtract(
+math.multiply(
+math.exp(math.multiply(math.i, math.multiply(4 * w, chi))),
+math.square(math.subtract(k, chi))
+),
+math.square(math.sum(k, chi))
+)
+)
+)
+)
+}
+function psi(w, h, m, e, i) {
+if (i <= -w / 2) {
+return math.abs(
+math.sum(
+math.exp(math.multiply(math.i, k(m, e) * i)),
+math.multiply(
+a2(chi(m, e, h), k(m, e), w / 2),
+math.exp(math.multiply(math.i, -1 * k(m, e) * i))
+)
+)
+)
+}
+else if (i <= w / 2) {
+return math.abs(
+math.sum(
+math.multiply(
+a3(chi(m, e, h), k(m, e), w / 2),
+math.exp(math.multiply(math.i, math.multiply(chi(m, e, h), i)))
+),
+math.multiply(
+a4(chi(m, e, h), k(m, e), w / 2),
+math.exp(math.multiply(math.i, math.multiply(chi(m, e, h), -i)))
+)
+)
+)
+}
+else {
+return math.abs(
+math.multiply(
+a5(chi(m, e, h), k(m, e), w / 2),
+math.exp(math.multiply(math.i, k(m, e) * i))
+)
+)
+}
+}
+var d, w, m, e;
+function update() {
+h = +height.value;
+w = +width.value;
+m = +mass.value;
+e = +energy.value;
+barrier.attr("x", x(-w / 2)).attr("width", w * W / 20).attr("y", y(h)).attr("height", h * H / 80);
+dashed.attr("y1", y(e)).attr("y2", y(e));
+var points = []
+for (var i = -10; i < 10; i += 0.01) {
+points.push([x(i), y(psi(w, h, m, e, i) ** 2 + e)]);
+}
+wave.attr("d", d3.line()(points));
+}
+d3.select("#height").on("input", update);
+d3.select("#width").on("input", update);
+d3.select("#mass").on("input", update);
+d3.select("#energy").on("input", update);
+update();</script></body>
 </html>

@@ -1,19 +1,8 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
-<!-- The loading of KaTeX is deferred to speed up page rendering -->
-<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update();" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
-<!-- To automatically render math in text elements, include the auto-render extension: -->
-<!-- <script
-defer
-src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
-integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
-crossorigin="anonymous"
-onload="renderMathInElement(document.body);"
-></script> -->
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
 <style rel="stylesheet">body {
 /* margin-left: 10px;
 margin-top: 10px; */
@@ -250,72 +239,14 @@ background: #ffffff;
 cursor: pointer;
 }
 </style><style>
-.grid {
-display: grid;
-grid-template-columns: 16em 1fr;
-align-items: start;
-column-gap: 30px;
-white-space: nowrap;
-}
-/* .katex-html {
-display: none;
-} */
-.wave {
-fill-opacity: 0;
-stroke-linecap: round;
-}
-.plot-eqn-container {
-display: grid;
-grid-template-columns: 1fr;
-}
-#eqn-container {
-text-align: start;
-margin-left: 100px;
-}
-.axis-axis {
-stroke-width: 3px;
-stroke: #ccc;
-}
-.x-axis-label {
-font-size: 30px;
-font-weight: 1000;
-fill: white;
-stroke-opacity: 0;
-}
-.axis-tick {
-stroke-opacity: 1;
-stroke: #ccc;
-stroke-width: 3px;
-}
-.empty-space {
-stroke: none;
-fill-opacity: 1;
-}
-#plot {
-margin-left: -50px;
+#experiment-plot {
+margin-left: 30px;
+width: 80vw;
+height: 80vw;
 }
 </style></head>
 <body>
-<div class="grid">
-<div class="controls-container">
-<div class="slider-container">
-<span class="slider-label">Width of well, <span id="latex-width"></span></span>
-<span class="param-slider-container"><input class="param-slider" id="slider-width" type="range"/></span>
-<span class="slider-label">Wavenumber, <span id="latex-wavenumber"></span></span>
-<span class="param-slider-container"><input class="param-slider" id="slider-wavenumber" type="range"/></span>
-</div>
-</div>
-<div class="plot-eqn-container">
-<div><span class="math" id="eqn-container"></span></div>
-<svg id="plot">
-<defs>
-<pattern height="10" id="diagonalHatch" patterntransform="rotate(30 0 0) translate(26,0)" patternunits="userSpaceOnUse" width="10">
-<line style="stroke: #666; stroke-width: 7" x1="0" x2="0" y1="0" y2="10"></line>
-</pattern>
-</defs>
-</svg>
-</div>
-</div>
+<canvas id="experiment-plot"></canvas>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
@@ -581,277 +512,125 @@ sibling.removeAttribute("button-checked");
 }
 }
 _initializeRadioButtons();
-</script><script type="text/javascript">/* global applyGraphicalObjs katex STANDARD_COLORS */
-const WIDTH = 1000;
-const HEIGHT = 600;
-const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
-const equationDiv = document.getElementById("eqn-container");
-const X_MIN = -0.1;
-const X_0 = 0;
-const X_MAX = 1.07;
-// y min and max of the full plotting area; the sine functions use a smaller amplitude
-const Y_MAX = 2.3;
-const Y_MIN = -Y_MAX;
-const X_MARGIN = 5;
-const Y_MARGIN = 30;
-const xScale = d3.scaleLinear([X_MIN, X_MAX], [X_MARGIN, WIDTH - X_MARGIN]);
-const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT - Y_MARGIN, Y_MARGIN]);
-const HATCH_ROTATION_DEG = 30;
-const COS_HATCH_ROTATION = Math.cos((Math.PI / 180) * HATCH_ROTATION_DEG);
-const equationOpacityScale = d3.scaleLinear([0.2, 0.95], [0, 1]).clamp(true);
-const waveStrokeScale = d3.interpolateRgb("#2225", "#ffff");
-const sliders = {
-width: document.getElementById("slider-width"),
-wavenumber: document.getElementById("slider-wavenumber"),
-};
-(() => {
-const slider = sliders.width;
-slider.min = 0.5;
-slider.max = 1;
-slider.step = 0.002;
-slider.value = 0.75;
+</script><script type="text/javascript">/* global THREE STANDARD_COLORS */
+const canvas = document.getElementById("experiment-plot");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+75,
+canvas.clientWidth / canvas.clientHeight,
+0.1,
+2000,
+);
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: true,
+powerPreference: "high-performance",
+});
+renderer.localClippingEnabled = false;
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+const SURFACE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x2277ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
+transparent: true,
+opacity: 0.5,
+emissive: 0x1111ee,
+emissiveIntensity: 0.5,
+wireframe: true,
+side: THREE.DoubleSide,
+});
+const X_MIN = -2;
+const X_MAX = 2;
+const Y_MIN = -2;
+const Y_MAX = 2;
+function gaussianPdf(x, y) {
+// return x + y;
+const u1 = 0;
+const u2 = 0;
+const s1 = 0.35;
+const s2 = 0.35;
+const r = 0;
+const dx = x - u1;
+const dy = y - u2;
+const p = r / (s1 * s2);
+return (
+(1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
+Math.exp(
+(-1 / (2 * (1 - p ** 2))) *
+(dx ** 2 / s1 ** 2 + dy ** 2 / s2 ** 2 - (2 * p * dx * dy) / (s1 * s2)),
+)
+);
+}
+const triangulationInfo = (() => {
+const xMin = X_MIN;
+const xMax = X_MAX;
+const nXPoints = 101;
+const dx = (xMax - xMin) / (nXPoints - 1);
+const yMin = Y_MIN;
+const yMax = Y_MAX;
+const nYPoints = 103;
+const dy = (yMax - yMin) / (nYPoints - 1);
+const gridPoints = [];
+for (let i = 0; i < nXPoints; ++i) {
+const x = xMin + i * dx;
+for (let j = 0; j < nYPoints; ++j) {
+const y = yMin + j * dy;
+gridPoints.push([x, y, null]);
+}
+}
+const xs = gridPoints.map(p => p[0]);
+const ys = gridPoints.map(p => p[1]);
+const delaunay = d3.Delaunay.from(gridPoints);
+const { triangles } = delaunay;
+const i = d3.range(triangles.length / 3).map(i => triangles[3 * i]);
+const j = d3.range(triangles.length / 3).map(i => triangles[3 * i + 1]);
+const k = d3.range(triangles.length / 3).map(i => triangles[3 * i + 2]);
+const trianglesBufferAttribute = new THREE.BufferAttribute(triangles, 3);
+return { gridPoints, xs, ys, i, j, k, trianglesBufferAttribute };
 })();
-(() => {
-const slider = sliders.wavenumber;
-slider.min = 0;
-slider.max = 6;
-slider.step = 0.002;
-slider.value = 1;
-})();
-const latexSpans = {
-width: document.getElementById("latex-width"),
-wavenumber: document.getElementById("latex-wavenumber"),
-};
-function updateLatex({ width, wavenumber }) {
-if (width !== undefined) {
-const widthStr = width.toFixed(2);
-latexSpans.width.innerHTML = katex.renderToString(`L=${widthStr} `);
-}
-if (wavenumber !== undefined) {
-const wavenumberStr = wavenumber.toFixed(2);
-latexSpans.wavenumber.innerHTML = katex.renderToString(
-`\\displaystyle k=\\frac{2\\pi}{\\lambda}=${wavenumberStr}`,
+function updatePdf(objs = {}) {
+// let { surfaceGeometry } = objs;
+// if (surfaceGeometry === undefined) {
+// 	surfaceGeometry = new THREE.BufferGeometry();
+// }
+// const positions = new Float32Array(
+// 	d3
+// 		.zip(triangulationInfo.xs, triangulationInfo.ys)
+// 		.flatMap(([x, y]) => [x, y, gaussianPdf(x, y)]),
+// );
+// console.log(positions);
+// surfaceGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
+// surfaceGeometry.setIndex(triangulationInfo.trianglesBufferAttribute);
+const surfaceGeometry = new THREE.ParametricBufferGeometry(
+(u, v, vec) => {
+const x = X_MIN + u * (X_MAX - X_MIN);
+const y = Y_MIN + v * (Y_MAX - Y_MIN);
+const z = gaussianPdf(x, y);
+vec.x = x;
+vec.y = y;
+vec.z = z;
+},
+51,
+51,
 );
-}
-}
-function getAmplitude(width) {
-return (2 / width) ** 0.5;
-}
-function getAxesData(width) {
-const x0_Scaled = xScale(X_0);
-const y0_scaled = yScale(0);
-const barrierXScaled = xScale(X_0 + width);
-const yTickLoc = getAmplitude(width);
-const yAxisLabelHeight = 40;
-const yAxisBaseDx = -55;
-const yAxisNegDx = yAxisBaseDx - 19;
-return [
-{
-shape: "rect",
-classes: ["axis", "empty-space"],
-attrs: {
-x: barrierXScaled,
-y: yScale(Y_MAX),
-width: xScale(X_MAX) - barrierXScaled,
-height: yScale(Y_MIN) - yScale(Y_MAX),
-fill: "url(#diagonalHatch)",
-},
-},
-{
-shape: "line",
-classes: ["axis", "axis-axis", "x-axis"],
-attrs: {
-x1: xScale(X_MIN),
-x2: barrierXScaled,
-y1: y0_scaled,
-y2: y0_scaled,
-},
-},
-{
-shape: "line",
-classes: ["axis", "axis-axis", "y-axis"],
-attrs: {
-x1: x0_Scaled,
-x2: x0_Scaled,
-y1: yScale(Y_MIN),
-y2: yScale(Y_MAX),
-},
-},
-{
-shape: "line",
-classes: ["axis", "axis-axis", "barrier"],
-attrs: {
-x1: barrierXScaled,
-x2: barrierXScaled,
-y1: yScale(Y_MIN),
-y2: yScale(Y_MAX),
-},
-},
-...[-yTickLoc, yTickLoc].map(y => {
-const yScaled = yScale(y);
-return {
-shape: "line",
-classes: ["axis", "axis-tick", "y-axis-tick"],
-attrs: {
-x1: x0_Scaled,
-x2: x0_Scaled - 8,
-y1: yScaled,
-y2: yScaled,
-},
-};
-}),
-{
-shape: "text",
-classes: ["axis", "x-axis-label"],
-text: "𝐿",
-attrs: {
-x: barrierXScaled,
-y: y0_scaled,
-dx: 15,
-dy: 10,
-"text-anchor": "middle",
-"dominant-baseline": "hanging",
-},
-},
-{
-shape: "foreignObject",
-sign: -1,
-classes: ["axis", "y-axis-label-fo"],
-attrs: {
-x: x0_Scaled + yAxisNegDx,
-y: yScale(-yTickLoc) - yAxisLabelHeight / 2,
-width: 1,
-height: 1,
-overflow: "visible",
-},
-},
-{
-shape: "foreignObject",
-sign: 1,
-classes: ["axis", "y-axis-label-fo"],
-attrs: {
-x: x0_Scaled + yAxisBaseDx,
-y: yScale(yTickLoc) - yAxisLabelHeight / 2,
-width: 1,
-height: 1,
-overflow: "visible",
-},
-},
-];
-}
-function getWavesData({ width, wavenumber }) {
-updateLatex({ width, wavenumber });
-const line = d3.line().curve(d3.curveNatural);
-const amplitude = getAmplitude(width);
-function wavenumberToPath(wavenumber, xArray) {
-function f(x) {
-return amplitude * Math.sin((Math.PI * wavenumber * x) / width);
-}
-return line(xArray.map(x => [xScale(x), yScale(f(x))]));
-}
-const nPointsPerMaxWidth = 199;
-function getXArray(maxX) {
-const nPoints = Math.floor(nPointsPerMaxWidth * (maxX - X_0));
-return d3.range(nPoints).map(i => X_0 + ((maxX - X_0) * i) / (nPoints - 1));
-}
-const staticWaveXFracArray = getXArray(width);
-const dynamicWaveXFracArray = getXArray(X_MAX);
-const wavenumbers = [...d3.range(1, 7), wavenumber];
-let maxWaveHighlightAmount = -Infinity;
-let maxWaveHighlightWavenumber = null;
-const waveData = wavenumbers.map((k, i) => {
-const isDynamicWave = i === wavenumbers.length - 1;
-let xArray,
-waveType,
-waveHighlightAmount,
-strokeVisibility,
-strokeWidth,
-stroke;
-if (isDynamicWave) {
-xArray = dynamicWaveXFracArray;
-waveHighlightAmount = 1;
-waveType = "dynamic";
-strokeVisibility = 1;
-strokeWidth = "4px";
-stroke = STANDARD_COLORS.highlighted;
-} else {
-xArray = staticWaveXFracArray;
-waveType = "static";
-const wavenumberDiff = Math.abs(k - wavenumber);
-waveHighlightAmount = 1 - 1.2 * wavenumberDiff;
-if (waveHighlightAmount > maxWaveHighlightAmount) {
-maxWaveHighlightAmount = waveHighlightAmount;
-maxWaveHighlightWavenumber = k;
-}
-strokeVisibility = Math.max(0.3, waveHighlightAmount);
-strokeWidth = `${Math.max(5, 8 * waveHighlightAmount)}px`;
-stroke = waveStrokeScale(strokeVisibility);
-}
-return {
-shape: "path",
-classes: ["wave", waveType],
-attrs: {
-id: `wave-wavenumber-${k}`,
-d: wavenumberToPath(k, xArray),
-stroke,
-"stroke-width": strokeWidth,
-},
-waveType,
-wavenumber: k,
-fore: false,
-};
-});
-for (const datum of waveData) {
-if (
-datum.waveType === "dynamic" ||
-(datum.waveType === "static" &&
-datum.wavenumber === maxWaveHighlightWavenumber)
-) {
-datum.fore = true;
-}
-}
-const wavenumberData = {
-wavenumber: maxWaveHighlightWavenumber,
-amount: maxWaveHighlightAmount,
-};
-return { waveData, wavenumberData };
-}
-function update() {
-const width = +sliders.width.value;
-const wavenumber = +sliders.wavenumber.value;
-applyGraphicalObjs(plot, getAxesData(width), { selector: ".axis" });
-plot.selectAll(".y-axis-label-fo").each(function (d) {
-const baseLatex = "\\sqrt{\\frac{2}{L}}";
-const fullLatex = `${d.sign < 0 ? "-" : ""}${baseLatex}`;
-this.innerHTML = `<div xmlns="http://www.w3.org/1999/xhtml" style="font-size:20px;"></div>`;
-this.querySelector("div").innerHTML = katex.renderToString(fullLatex);
-});
-const barrierXScaled = xScale(X_0 + width);
-const barrierTranslateX = barrierXScaled * COS_HATCH_ROTATION;
-document
-.getElementById("diagonalHatch")
-.setAttribute(
-"patternTransform",
-`rotate(${HATCH_ROTATION_DEG},0,0) translate(${barrierTranslateX}, 0)`,
+const surface = new THREE.Mesh(surfaceGeometry, SURFACE_MATERIAL);
+surface.position.set(0, 0, 0);
+const surface2 = new THREE.Mesh(
+new THREE.PlaneBufferGeometry(2, 2),
+SURFACE_MATERIAL,
 );
-const { waveData, wavenumberData } = getWavesData({ width, wavenumber });
-applyGraphicalObjs(plot, waveData, { selector: ".wave" });
-plot.selectAll(".wave").each(function (d) {
-if (d.fore) {
-plot.node().append(this);
+surface2.position.z += 1;
+scene.add(surface);
+// scene.add(surface2);
+renderer.render(scene, camera);
+return { surfaceGeometry };
 }
-});
-const opacity = equationOpacityScale(wavenumberData.amount);
-const highlightedWavenumber = wavenumberData.wavenumber;
-equationDiv.innerHTML = katex.renderToString(
-`\\textrm{Energy} = E_{${highlightedWavenumber}} = \\frac{\\hbar^2\\pi^2}{2mL^2}`,
-);
-equationDiv.style.opacity = opacity;
-}
-for (const slider of Object.values(sliders)) {
-d3.select(slider).on("input", function () {
-update();
-});
-}
+camera.position.set(0, -4, 4);
+camera.up.set(0, 1, 0);
+camera.lookAt(0, 0, 0);
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(2, -2, 3);
+scene.add(light, new THREE.AmbientLight(0x2277ff, 0.5));
+const objs = updatePdf();
 </script></body>
 </html>

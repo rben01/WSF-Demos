@@ -378,56 +378,69 @@ def main():
     args = parser.parse_args()
 
     if len(args.infiles) > 0:
-        infiles = [Path(p) for p in args.infiles]
+        inpaths = [Path(p) for p in args.infiles]
     else:
         if args.outfile is not None:
             sys.exit("Cannot specify outfile without specifying an infile")
 
-        infiles = list(Path().glob("**/*.html"))
-        if args.exclude_html_regex is not None:
-            ehr = re.compile(args.exclude_html_regex)
-            infiles = [p for p in infiles if not ehr.search(p.name)]
+        inpaths = [Path(".")]
+        # infiles = list(Path().glob("**/*.html"))
+        # if args.exclude_html_regex is not None:
+        #
+        #     infiles = [p for p in infiles if not ehr.search(p.name)]
 
-    for infile in infiles:
-        infile = infile.resolve()
-        outdir: Path
-        if args.outdir is None:
-            outdir = Path(".").resolve()
-            while outdir.name != "src" and outdir.name != "/":
-                outdir = outdir.parent
-
-            outdir = outdir / "dist" / infile.relative_to(outdir / "demos").parent
+    ehr = re.compile(args.exclude_html_regex)
+    for inpath in inpaths:
+        inpath = inpath.resolve()
+        if inpath.is_dir():
+            infiles = inpath.glob("**/*.html")
         else:
-            outdir = Path(args.outdir)
+            infiles = [inpath]
 
-        outdir.mkdir(exist_ok=True, parents=True)
+        for infile in infiles:
+            if ehr.search(infile.name) is not None:
+                continue
 
-        if args.outfile is None:
-            suffix = infile.suffix
-            if args.minify_globals:
-                suffix = f".min{suffix}"
+            outdir: Path
+            if args.outdir is None:
+                outdir = Path(".").resolve()
+                while outdir.name != "src" and outdir.name != "/":
+                    outdir = outdir.parent
 
-            outfile_name = (
-                infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
+                outdir = outdir / "dist" / infile.relative_to(outdir / "demos").parent
+            else:
+                outdir = Path(args.outdir)
+
+            outdir.mkdir(exist_ok=True, parents=True)
+
+            if args.outfile is None:
+                suffix = infile.suffix
+                if args.minify_globals:
+                    suffix = f".min{suffix}"
+
+                outfile_name = (
+                    infile.with_name(infile.stem + "_inlined").with_suffix(suffix).name
+                )
+
+            else:
+                outfile_name = args.outfile
+
+            outfile = outdir / outfile_name
+
+            ignored_link_dests = set(args.ignore)
+            ignored_link_dest_regexes = [
+                re.compile(regex) for regex in args.ignore_regex
+            ]
+
+            inline(
+                infile,
+                outfile,
+                ignored_link_dests=ignored_link_dests,
+                ignored_link_dest_regexes=ignored_link_dest_regexes,
+                minify_js=args.minify_js,
+                minify_css=args.minify_css,
+                minify_globals=args.minify_globals,
             )
-
-        else:
-            outfile_name = args.outfile
-
-        outfile = outdir / outfile_name
-
-        ignored_link_dests = set(args.ignore)
-        ignored_link_dest_regexes = [re.compile(regex) for regex in args.ignore_regex]
-
-        inline(
-            infile,
-            outfile,
-            ignored_link_dests=ignored_link_dests,
-            ignored_link_dest_regexes=ignored_link_dest_regexes,
-            minify_js=args.minify_js,
-            minify_css=args.minify_css,
-            minify_globals=args.minify_globals,
-        )
 
 
 # %%

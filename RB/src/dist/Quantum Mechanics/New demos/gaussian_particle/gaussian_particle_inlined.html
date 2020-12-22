@@ -4,26 +4,107 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w==" src="https://cdn.plot.ly/plotly-1.57.0.min.js"></script>
 <script src="https://unpkg.com/svd-js" type="application/javascript"></script>
-</head><body><style>body {
-margin-left: 10px;
-margin-top: 10px;
+<style rel="stylesheet">body {
+/* margin-left: 10px;
+margin-top: 10px; */
 background-color: black;
 color: white;
 font-size: 22px;
 font-family: sans-serif;
 line-height: 1.8em;
 }
-.slider-container {
-line-height: 1.4em;
-display: block;
-margin-bottom: 10px;
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
 }
-.play-button {
-margin-top: 1.5em;
-margin-bottom: 1em;
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.button {
+padding: 7px 8px;
 margin-right: 3px;
-width: 5em;
-height: 30px;
 font-size: 15px;
 border-radius: 4px;
 background: #ccc;
@@ -31,24 +112,20 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.play-button:hover {
+.button:hover {
 cursor: pointer;
 }
-.play-button:active {
+.button:active {
 background: #ccc;
 background-image: -webkit-linear-gradient(top, #999, #fff);
 color: #333;
 }
-.play-button:disabled {
+.button:disabled {
 background: #ccc;
 background-image: -webkit-linear-gradient(top, #999, #aaa);
 color: #444;
 text-shadow: 1px 1px #ccc;
 cursor: default;
-}
-.slider-label {
-margin-right: 1em;
-display: inline-block;
 }
 .highlighted-text {
 color: #5df;
@@ -84,13 +161,13 @@ padding-left: 3px;
 .subscript {
 position: relative;
 top: 0.3em;
-left: 0em;
+left: 0;
 font-size: 65%;
 }
 .superscript {
 position: relative;
 bottom: 0.8em;
-left: 0em;
+left: 0;
 font-size: 65%;
 }
 .minus-sign {
@@ -117,6 +194,10 @@ background: #8b8f92;
 border-radius: 2px;
 position: relative;
 bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
 }
 input[type="range"]::-webkit-slider-thumb {
 -webkit-appearance: none;
@@ -140,7 +221,7 @@ color-stop(1, #c8c8c8)
 border: 1px solid #787878;
 }
 input[type="range"]::-moz-range-thumb {
-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
 border: 1px solid #000000;
 height: 20px;
 width: 20px;
@@ -150,7 +231,7 @@ cursor: pointer;
 }
 /* All the same stuff for IE */
 input[type="range"]::-ms-thumb {
-box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
 border: 1px solid #000000;
 height: 20px;
 width: 20px;
@@ -158,6 +239,7 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+</style><style>
 body {
 width: 60em;
 height: 33.75em;
@@ -192,27 +274,6 @@ display: grid;
 grid-template-columns: 1fr 1fr;
 column-gap: 10px;
 }
-.axis {
-stroke-width: 1;
-stroke: #aaa;
-}
-.axis-tick {
-stroke-width: 1;
-stroke: #aaa;
-}
-.axis-label {
-stroke-opacity: 0;
-fill: #ccc;
-font-size: 14px;
-}
-.x-axis-label {
-text-anchor: middle;
-dominant-baseline: hanging;
-}
-.y-axis-label {
-text-anchor: end;
-dominant-baseline: middle;
-}
 #plot-2d .ellipse {
 fill-opacity: 0;
 stroke: black;
@@ -224,13 +285,15 @@ visibility: hidden;
 fill-opacity: 0;
 }
 #plot-2d .level-set-foreground {
-stroke-width: 3;
-}
-#plot-2d .level-set-background {
 stroke-width: 5;
 }
-</style>
+#plot-2d .level-set-background {
+stroke-width: 7;
+}
+</style></head>
+<body>
 <div class="grid">
+<div class="controls-container">
 <div class="slider-container">
 <span class="slider-label">Correlation of particles</span>
 <span class="param-slider-container"><input class="param-slider correlation-slider" id="slider-correlation" type="range"/></span>
@@ -243,12 +306,278 @@ stroke-width: 5;
 <span class="slider-label">Mean position of particle 2</span>
 <span><input class="param-slider position-slider" id="slider-particle-2-mean-pos" type="range"/></span>
 </div>
+</div>
 <div class="plot-container">
-<div class="plot" id="plot-3d"></div>
+<div class="plot draggable" id="plot-3d"></div>
 <svg class="plot" id="plot-2d"></svg>
 </div>
 </div>
-<script type="text/javascript">/* global SVDJS Plotly */
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+}) {
+drawEdges = drawEdges ?? false;
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+d3.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+})
+.on("click._default", function () {
+this.setAttribute("button-checked", "");
+this.disabled = true;
+const siblings = this.parentNode.querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("button-checked");
+}
+});
+}
+}
+_initializeRadioButtons();
+</script><script type="text/javascript">/* global SVDJS Plotly STANDARD_COLORS */
 const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
 const plot3D = d3
@@ -292,9 +621,9 @@ d3.selectAll(".position-slider")
 // Set up 2D plot
 (() => {
 const majorTickSpacing = 1;
-const minorTickSpacing = 0.5;
-const majorTickLength = 5;
-const minorTickLength = 3;
+const minorTickSpacing = 1; // All ticks are major
+const majorTickLength = 6;
+const minorTickLength = 6;
 const axisLabelSpacing = 2;
 const nMinorTickGapsBwtnMajorTicks = Math.round(
 majorTickSpacing / minorTickSpacing,
@@ -683,11 +1012,11 @@ i: triangulationInfo.i,
 j: triangulationInfo.j,
 k: triangulationInfo.k,
 lighting: surfaceLighting,
-facecolor: triangulationInfo.i.map(() => "#27f"),
+facecolor: triangulationInfo.i.map(() => STANDARD_COLORS.graphicPrimary),
 };
 const gridlineZShift = 0.0001;
 const xGridlines = getGridlines({
-nGridlines: 9,
+nGridlines: 12,
 f: pdf,
 xMin: X_MIN,
 xMax: X_MAX,
@@ -695,7 +1024,7 @@ yMin: Y_MIN,
 yMax: Y_MAX,
 }).map(gridline => gridline.map(([x, y]) => [x, y, gridlineZShift + pdf(x, y)]));
 const yGridlines = getGridlines({
-nGridlines: 9,
+nGridlines: 12,
 f: pdf,
 xMin: Y_MIN,
 xMax: Y_MAX,
@@ -742,7 +1071,7 @@ z: points.map(p => p[2]),
 mode: "lines",
 line: {
 color: "#ddd",
-width: 4,
+width: 9,
 },
 }));
 const data = [meshDatum, ...gridlinesData, ...sideViewData];
@@ -753,6 +1082,7 @@ showspikes: false,
 showline: false,
 zeroline: false,
 showticklabels: true,
+gridwidth: 3,
 color: "#aaa",
 gridcolor: "#999",
 };
@@ -770,6 +1100,7 @@ paper_bgcolor: "black",
 margin: { t: 0, b: 0, l: 0, r: 0 },
 hovermode: false,
 showlegend: false,
+font: { family: "sans-serif", size: 15 },
 scene: {
 aspectmode: "manual",
 aspectratio: { x: 1, y: yAspect, z: zAspect },
