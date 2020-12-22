@@ -224,6 +224,43 @@ function groupBy(array, keyFunc, expectedKeys, asArray = true) {
 	return grouped;
 }
 
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+	nGridlines,
+	xMin,
+	xMax,
+	yMin,
+	yMax,
+	zFunc,
+	drawEdges,
+	nPointsPerGridline,
+}) {
+	drawEdges = drawEdges ?? false;
+
+	const iMin = drawEdges ? 0 : 1;
+	const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+
+	nPointsPerGridline = nPointsPerGridline ?? 51;
+	const dx = (xMax - xMin) / (nGridlines - 1);
+	const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+	const gridlines = [];
+	for (let i = iMin; i < iMaxPlus1; ++i) {
+		const x = xMin + i * dx;
+		const gridline = [];
+		for (let j = 0; j < nPointsPerGridline; ++j) {
+			const y = yMin + j * dy;
+			const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+			gridline.push(point);
+		}
+		gridlines.push(gridline);
+	}
+	return gridlines;
+}
+
 function syncButtonState(button) {
 	if (button.hasAttribute("button-checked")) {
 		button.disabled = true;

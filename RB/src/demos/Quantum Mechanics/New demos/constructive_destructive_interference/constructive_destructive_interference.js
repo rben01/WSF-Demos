@@ -1,23 +1,23 @@
 /* global THREE */
 
-const plotElem = document.getElementById("plot");
+const canvas = document.getElementById("plot");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
 	75,
-	plotElem.clientWidth / plotElem.clientHeight,
+	canvas.clientWidth / canvas.clientHeight,
 	0.1,
 	2000,
 );
 const renderer = new THREE.WebGLRenderer({
-	canvas: plotElem,
+	canvas: canvas,
 	antialias: true,
 	powerPreference: "high-performance",
 });
 renderer.localClippingEnabled = true;
 
-plotElem.width = plotElem.clientWidth * window.devicePixelRatio;
-plotElem.height = plotElem.clientHeight * window.devicePixelRatio;
-renderer.setSize(plotElem.clientWidth, plotElem.clientHeight);
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
 const _PANE_HEIGHT = 10;
 const SOURCE_OUTER_PANE_WIDTH = 20;
@@ -35,7 +35,7 @@ const CAMERA_DEFAULT_POSITION = new THREE.Vector3(60, 40, CAMERA_Z);
 const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
 const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
 
-d3.select(plotElem).call(
+d3.select(canvas).call(
 	d3.drag().on("drag", function (event) {
 		const cameraDisplacementFromPointOfFocus = camera.position
 			.clone()
