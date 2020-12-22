@@ -27,14 +27,14 @@ def get_html_listing_soup(
         html_relative_path = html_full_path.relative_to(BASE_DIR)
         li = soup.new_tag("li")
         ul.append(li)
-        a = soup.new_tag("a", href=str(html_relative_path))
+        a = soup.new_tag("a", href=f"./{html_relative_path}")
         a.string = demo_name
         li.append(a)
 
     if out_file is None:
         out_file = BASE_DIR / "index.html"
 
-    Path(out_file).write_text(str(soup))
+    Path(out_file).write_text(soup.prettify())
 
 
 get_html_listing_soup("New Demos")
