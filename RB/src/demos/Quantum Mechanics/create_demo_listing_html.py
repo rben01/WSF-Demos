@@ -37,4 +37,4 @@ def get_html_listing_soup(
     Path(out_file).write_text(soup.prettify())
 
 
-get_html_listing_soup("New Demos")
+get_html_listing_soup("New demos")
