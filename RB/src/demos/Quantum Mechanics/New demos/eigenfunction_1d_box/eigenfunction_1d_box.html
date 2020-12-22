@@ -36,7 +36,7 @@
 		<style>
 			.grid {
 				display: grid;
-				grid-template-columns: 13em 1fr;
+				grid-template-columns: 16em 1fr;
 				align-items: start;
 				column-gap: 30px;
 				white-space: nowrap;
@@ -54,7 +54,7 @@
 			}
 			#eqn-container {
 				text-align: start;
-				padding-left: 100px;
+				margin-left: 100px;
 			}
 			.axis-axis {
 				stroke-width: 3px;
@@ -69,33 +69,41 @@
 			.axis-tick {
 				stroke-opacity: 1;
 				stroke: #ccc;
-				stroke-width: 2px;
+				stroke-width: 3px;
 			}
 			.empty-space {
 				stroke: none;
 				fill-opacity: 1;
 			}
+			#plot {
+				margin-left: -50px;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="grid">
-			<div class="slider-container">
-				<span class="slider-label"
-					>Width of well, <span id="latex-width"></span
-				></span>
-				<span class="param-slider-container"
-					><input id="slider-width" class="param-slider" type="range"
-				/></span>
+			<div class="controls-container">
+				<div class="slider-container">
+					<span class="slider-label"
+						>Width of well, <span id="latex-width"></span
+					></span>
+					<span class="param-slider-container"
+						><input id="slider-width" class="param-slider" type="range"
+					/></span>
 
-				<span class="slider-label"
-					>Wavenumber, <span id="latex-wavenumber"></span
-				></span>
-				<span class="param-slider-container"
-					><input id="slider-wavenumber" class="param-slider" type="range"
-				/></span>
+					<span class="slider-label"
+						>Wavenumber, <span id="latex-wavenumber"></span
+					></span>
+					<span class="param-slider-container"
+						><input
+							id="slider-wavenumber"
+							class="param-slider"
+							type="range"
+					/></span>
+				</div>
 			</div>
 			<div class="plot-eqn-container">
-				<div id="eqn-container"></div>
+				<div><span id="eqn-container" class="math"></span></div>
 				<svg id="plot">
 					<defs>
 						<pattern

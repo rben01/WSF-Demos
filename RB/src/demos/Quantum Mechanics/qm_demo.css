@@ -32,6 +32,13 @@ body {
 	margin-top: 30px;
 }
 
+.draggable:hover {
+	cursor: grab;
+}
+.draggable:active {
+	cursor: grabbing;
+}
+
 /* Legacy; don't use */
 .slider-container {
 	grid-row: span 2;
@@ -60,17 +67,17 @@ input[type="range"] {
 	column-gap: 10px;
 }
 .axis {
-	stroke-width: 1;
+	stroke-width: 3;
 	stroke: #aaa;
 }
 .axis-tick {
-	stroke-width: 1;
+	stroke-width: 3;
 	stroke: #aaa;
 }
 .axis-label {
 	stroke-opacity: 0;
-	fill: #ccc;
-	font-size: 14px;
+	fill: #ddd;
+	font-size: 17px;
 }
 .x-axis-label {
 	text-anchor: middle;
@@ -79,6 +86,13 @@ input[type="range"] {
 .y-axis-label {
 	text-anchor: end;
 	dominant-baseline: middle;
+}
+.math {
+	color: black;
+	background-color: white;
+	padding: 9px 5px;
+	border-radius: 2px;
+	/* border: 1px solid white; */
 }
 
 .radio-button-container label input {

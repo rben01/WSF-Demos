@@ -1,6 +1,6 @@
 /* global applyGraphicalObjs */
 
-const WIDTH = 1350;
+const WIDTH = 1050;
 const HEIGHT = 750;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
@@ -176,7 +176,7 @@ function getGraphData({ hermiteN, graphScale }) {
 			const scaledX = xScale(x);
 			return {
 				shape: "text",
-				classes: ["axis-label", "axis-x-label"],
+				classes: ["axis-label", "x-axis-label"],
 				text: xTickFormat(x),
 				attrs: {
 					x: scaledX,
@@ -188,7 +188,7 @@ function getGraphData({ hermiteN, graphScale }) {
 			const scaledY = yScale(y);
 			return {
 				shape: "text",
-				classes: ["axis-label", "axis-y-label"],
+				classes: ["axis-label", "y-axis-label"],
 				text: yTickFormat(y),
 				attrs: {
 					x: scaledX0 - tickLength - 4,
