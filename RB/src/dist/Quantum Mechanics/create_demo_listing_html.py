@@ -2,6 +2,7 @@ from pathlib import Path
 from typing import Optional, Union
 
 from bs4 import BeautifulSoup
+import time
 
 BASE_DIR = Path(__file__).parent.resolve()
 
@@ -15,6 +16,8 @@ def get_html_listing_soup(
     ul: BeautifulSoup = soup.new_tag("ul")
     body.append(ul)
 
+    now_sec = int(time.time())
+
     for demo in sorted(in_folder.iterdir()):
         demo_name = demo.name
         if demo_name.startswith(".") or not demo.is_dir():
@@ -27,7 +30,7 @@ def get_html_listing_soup(
         html_relative_path = html_full_path.relative_to(BASE_DIR)
         li = soup.new_tag("li")
         ul.append(li)
-        a = soup.new_tag("a", href=f"./{html_relative_path}")
+        a = soup.new_tag("a", href=f"./{html_relative_path}?t={now_sec}")
         a.string = demo_name
         li.append(a)
 
