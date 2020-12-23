@@ -48,27 +48,7 @@
 				grid-template-columns: 1fr 1fr;
 				column-gap: 10px;
 			}
-			.axis {
-				stroke-width: 1;
-				stroke: #aaa;
-			}
-			.axis-tick {
-				stroke-width: 1;
-				stroke: #aaa;
-			}
-			.axis-label {
-				stroke-opacity: 0;
-				fill: #ccc;
-				font-size: 14px;
-			}
-			.x-axis-label {
-				text-anchor: middle;
-				dominant-baseline: hanging;
-			}
-			.y-axis-label {
-				text-anchor: end;
-				dominant-baseline: middle;
-			}
+
 			#plot-2d .ellipse {
 				fill-opacity: 0;
 				stroke: black;
@@ -80,54 +60,56 @@
 				fill-opacity: 0;
 			}
 			#plot-2d .level-set-foreground {
-				stroke-width: 3;
+				stroke-width: 5;
 			}
 			#plot-2d .level-set-background {
-				stroke-width: 5;
+				stroke-width: 7;
 			}
 		</style>
 	</head>
 	<body>
 		<div class="grid">
-			<div class="slider-container">
-				<span class="slider-label">Correlation of particles</span>
-				<span class="param-slider-container"
-					><input
-						id="slider-correlation"
-						class="param-slider correlation-slider"
-						type="range"
-				/></span>
-				<span class="slider-label">Spread of particle 1</span>
-				<span
-					><input
-						id="slider-particle-1-spread"
-						class="param-slider spread-slider"
-						type="range"
-				/></span>
-				<span class="slider-label">Spread of particle 2</span>
-				<span
-					><input
-						id="slider-particle-2-spread"
-						class="param-slider spread-slider"
-						type="range"
-				/></span>
-				<span class="slider-label">Mean position of particle 1</span>
-				<span
-					><input
-						id="slider-particle-1-mean-pos"
-						class="param-slider position-slider"
-						type="range"
-				/></span>
-				<span class="slider-label">Mean position of particle 2</span>
-				<span
-					><input
-						id="slider-particle-2-mean-pos"
-						class="param-slider position-slider"
-						type="range"
-				/></span>
+			<div class="controls-container">
+				<div class="slider-container">
+					<span class="slider-label">Correlation of particles</span>
+					<span class="param-slider-container"
+						><input
+							id="slider-correlation"
+							class="param-slider correlation-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Spread of particle 1</span>
+					<span
+						><input
+							id="slider-particle-1-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Spread of particle 2</span>
+					<span
+						><input
+							id="slider-particle-2-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Mean position of particle 1</span>
+					<span
+						><input
+							id="slider-particle-1-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+					<span class="slider-label">Mean position of particle 2</span>
+					<span
+						><input
+							id="slider-particle-2-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+				</div>
 			</div>
 			<div class="plot-container">
-				<div id="plot-3d" class="plot"></div>
+				<div id="plot-3d" class="plot draggable"></div>
 				<svg id="plot-2d" class="plot"></svg>
 			</div>
 		</div>

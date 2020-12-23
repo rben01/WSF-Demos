@@ -3,20 +3,22 @@
 // eslint-disable-next-line no-unused-vars
 function renderLatex() {
 	document.getElementById("text-eqn-wavefunction").innerHTML = katex.renderToString(
-		`\\displaystyle\\psi(x,y)=\\sqrt{\\frac{2}{L_x}}\\sqrt{\\frac{2}{L_y}}\\sin\\left(\\frac{\\pi n_x x}{L_x}\\right)\\sin\\left(\\frac{\\pi n_y y}{L_y}\\right)`,
+		`\\displaystyle\\psi(x,y)=\\sqrt{\\frac{2}{a}}\\sqrt{\\frac{2}{b}}\\sin\\left(\\frac{\\pi n_x x}{a}\\right)\\sin\\left(\\frac{\\pi n_y y}{b}\\right)`,
 	);
 	document.getElementById("text-eqn-energy").innerHTML = katex.renderToString(
-		`\\displaystyle\\textrm{Energy}=\\frac{\\hbar^2 n_x^2}{2mL_x^2}+\\frac{\\hbar^2 n_y^2}{2mL_y^2}`,
+		`\\displaystyle\\textrm{Energy}=\\frac{\\hbar^2 n_x^2}{2ma^2}+\\frac{\\hbar^2 n_y^2}{2mb^2}`,
 	);
-	document.getElementById("text-eqn-amplitude").innerHTML = katex.renderToString(
-		`\\displaystyle A=\\textrm{Amplitude}=\\sqrt{\\frac{2}{L_x}}\\sqrt{\\frac{2}{L_y}}`,
-	);
+	// document.getElementById("text-eqn-amplitude").innerHTML = katex.renderToString(
+	// 	`\\displaystyle A=\\textrm{Amplitude}=\\sqrt{\\frac{2}{L_x}}\\sqrt{\\frac{2}{L_y}}`,
+	// );
 }
 
 const X_MIN = 0;
 const X_MAX = 1;
+const X_WIDTH = X_MAX - X_MIN;
 const Y_MIN = 0;
 const Y_MAX = 1;
+const Y_WIDTH = Y_MAX - Y_MIN;
 const MIN_VAL = 0.25;
 
 const plot = document.getElementById("plot");
@@ -53,13 +55,25 @@ const triangulationInfo = (() => {
 	return { gridPoints, xs, ys, i, j, k };
 })();
 
+function getXScale(lx) {
+	const dx = (X_WIDTH - lx) / 2;
+	return d3.scaleLinear([X_MIN, X_MAX], [X_MIN + dx, X_MAX - dx]);
+}
+
+function getYScale(ly) {
+	const dy = (Y_WIDTH - ly) / 2;
+	return d3.scaleLinear([Y_MIN, Y_MAX], [Y_MIN + dy, Y_MAX - dy]);
+}
+
 function getScaledTriangulationInfo(lx, ly) {
+	const xScale = getXScale(lx);
+	const yScale = getYScale(ly);
+
 	const { i, j, k } = triangulationInfo;
 	let { gridPoints, xs, ys } = triangulationInfo;
-	gridPoints = gridPoints.map(([x, y, z]) => [x * lx, y * ly, z]);
-	xs = xs.map(x => x * lx);
-	ys = ys.map(y => y * ly);
-
+	gridPoints = gridPoints.map(([x, y, z]) => [xScale(x), yScale(y), z]);
+	xs = xs.map(x => xScale(x));
+	ys = ys.map(y => yScale(y));
 	return { gridPoints, xs, ys, i, j, k };
 }
 
@@ -103,10 +117,12 @@ function update({ nx, ny, lx, ly } = {}) {
 		currLy = ly;
 	}
 
-	const xMin = X_MIN;
-	const xMax = X_MAX * lx;
-	const yMin = Y_MIN;
-	const yMax = Y_MAX * ly;
+	const dx = X_WIDTH * ((X_MAX - lx) / 2);
+	const xMin = X_MIN + dx;
+	const xMax = X_MAX - dx;
+	const dy = (Y_WIDTH * (Y_MAX - ly)) / 2;
+	const yMin = Y_MIN + dy;
+	const yMax = Y_MAX - dy;
 
 	const surfaceLighting = {
 		ambient: 0.7,
@@ -117,7 +133,7 @@ function update({ nx, ny, lx, ly } = {}) {
 
 	const triangulationInfo = getScaledTriangulationInfo(lx, ly);
 	const zs = triangulationInfo.gridPoints.map(([x, y]) =>
-		waveFunction(x, y, { nx, ny, lx, ly }),
+		waveFunction(x - dx, y - dy, { nx, ny, lx, ly }),
 	);
 	const maxZPossible = 2 / MIN_VAL;
 	const maxZObtained = d3.max(zs);
@@ -142,7 +158,8 @@ function update({ nx, ny, lx, ly } = {}) {
 		yMin,
 		yMax,
 		nPointsPerGridline: 103,
-		zFunc: (x, y) => waveFunction(x, y, { nx, ny, lx, ly }) + gridlineZShift,
+		zFunc: (x, y) =>
+			waveFunction(x - dx, y - dy, { nx, ny, lx, ly }) + gridlineZShift,
 	});
 	const yGridlines = getGridlines({
 		nGridlines: 17,
@@ -155,7 +172,7 @@ function update({ nx, ny, lx, ly } = {}) {
 		gridline.map(([x, y]) => [
 			y,
 			x,
-			waveFunction(x, y, { nx: ny, ny: nx, lx: ly, ly: lx }),
+			waveFunction(x - dy, y - dx, { nx: ny, ny: nx, lx: ly, ly: lx }),
 		]),
 	);
 
@@ -173,126 +190,126 @@ function update({ nx, ny, lx, ly } = {}) {
 
 	const zRange = maxZPossible * 1.3;
 
-	const BOUND_SHIFT = 0.004;
-	const boundingVertices = [
-		// Bottom
-		[X_MIN, Y_MIN, -zRange],
-		[X_MIN, Y_MAX - BOUND_SHIFT, -zRange],
-		[X_MAX - BOUND_SHIFT, Y_MAX - BOUND_SHIFT, -zRange],
-		[X_MAX - BOUND_SHIFT, Y_MIN, -zRange],
-		// Left
-		[X_MIN, Y_MAX, -zRange + BOUND_SHIFT],
-		[X_MIN, Y_MAX, zRange],
-		[X_MAX - BOUND_SHIFT, Y_MAX, zRange],
-		[X_MAX - BOUND_SHIFT, Y_MAX, -zRange + BOUND_SHIFT],
-		// Right
-		[X_MAX, Y_MIN, -zRange + BOUND_SHIFT],
-		[X_MAX, Y_MIN, zRange],
-		[X_MAX, Y_MAX - BOUND_SHIFT, zRange],
-		[X_MAX, Y_MAX - BOUND_SHIFT, -zRange + BOUND_SHIFT],
-		// [X_MIN, Y_MAX, zRange],
-		// [X_MAX, Y_MIN, -zRange],
-		// [X_MAX, Y_MIN, zRange],
-		// [X_MAX, Y_MAX, -zRange],
-		// [X_MAX, Y_MAX, zRange],
-	];
-	const boundingTriangles = [
-		// Bottom
-		[0, 1, 2],
-		[0, 2, 3],
-		// Left
-		[4, 5, 6],
-		[4, 6, 7],
-		// Top
-		[8, 9, 10],
-		[8, 10, 11],
-	];
+	// const BOUND_SHIFT = 0.004;
+	// const boundingVertices = [
+	// 	// Bottom
+	// 	[X_MIN, Y_MIN, -zRange],
+	// 	[X_MIN, Y_MAX - BOUND_SHIFT, -zRange],
+	// 	[X_MAX - BOUND_SHIFT, Y_MAX - BOUND_SHIFT, -zRange],
+	// 	[X_MAX - BOUND_SHIFT, Y_MIN, -zRange],
+	// 	// Left
+	// 	[X_MIN, Y_MAX, -zRange + BOUND_SHIFT],
+	// 	[X_MIN, Y_MAX, zRange],
+	// 	[X_MAX - BOUND_SHIFT, Y_MAX, zRange],
+	// 	[X_MAX - BOUND_SHIFT, Y_MAX, -zRange + BOUND_SHIFT],
+	// 	// Right
+	// 	[X_MAX, Y_MIN, -zRange + BOUND_SHIFT],
+	// 	[X_MAX, Y_MIN, zRange],
+	// 	[X_MAX, Y_MAX - BOUND_SHIFT, zRange],
+	// 	[X_MAX, Y_MAX - BOUND_SHIFT, -zRange + BOUND_SHIFT],
+	// 	// [X_MIN, Y_MAX, zRange],
+	// 	// [X_MAX, Y_MIN, -zRange],
+	// 	// [X_MAX, Y_MIN, zRange],
+	// 	// [X_MAX, Y_MAX, -zRange],
+	// 	// [X_MAX, Y_MAX, zRange],
+	// ];
+	// const boundingTriangles = [
+	// 	// Bottom
+	// 	[0, 1, 2],
+	// 	[0, 2, 3],
+	// 	// Left
+	// 	[4, 5, 6],
+	// 	[4, 6, 7],
+	// 	// Top
+	// 	[8, 9, 10],
+	// 	[8, 10, 11],
+	// ];
 
-	const barrierVertices = [
-		// Left near face
-		[X_MIN, yMax, -zRange],
-		[X_MIN, yMax, zRange],
-		[X_MIN, Y_MAX, -zRange],
-		[X_MIN, Y_MAX, zRange],
-		// Left far face
-		[xMax, yMax, -zRange],
-		[xMax, yMax, zRange],
-		[xMax, Y_MAX, -zRange],
-		[xMax, Y_MAX, zRange],
-		// Right near face
-		[xMax, Y_MIN, -zRange],
-		[xMax, Y_MIN, zRange],
-		[X_MAX, Y_MIN, -zRange],
-		[X_MAX, Y_MIN, zRange],
-		// Right far face
-		[X_MAX, yMax, -zRange],
-		[X_MAX, yMax, zRange],
-	];
+	// const barrierVertices = [
+	// 	// Left near face
+	// 	[X_MIN, yMax, -zRange],
+	// 	[X_MIN, yMax, zRange],
+	// 	[X_MIN, Y_MAX, -zRange],
+	// 	[X_MIN, Y_MAX, zRange],
+	// 	// Left far face
+	// 	[xMax, yMax, -zRange],
+	// 	[xMax, yMax, zRange],
+	// 	[xMax, Y_MAX, -zRange],
+	// 	[xMax, Y_MAX, zRange],
+	// 	// Right near face
+	// 	[xMax, Y_MIN, -zRange],
+	// 	[xMax, Y_MIN, zRange],
+	// 	[X_MAX, Y_MIN, -zRange],
+	// 	[X_MAX, Y_MIN, zRange],
+	// 	// Right far face
+	// 	[X_MAX, yMax, -zRange],
+	// 	[X_MAX, yMax, zRange],
+	// ];
 
-	const barrierIndices = [
-		//// Left
-		// -z
-		[0, 2, 4],
-		[2, 4, 6],
-		// -y
-		[0, 4, 5],
-		[0, 1, 5],
-		// -x
-		[0, 2, 3],
-		[0, 1, 3],
-		// +x
-		[4, 5, 6],
-		[5, 6, 7],
-		// +y
-		// Don't add duplicate faces to avoid z-fighting (y-fighting?)
-		...(yMax === Y_MAX
-			? []
-			: [
-					[2, 3, 6],
-					[3, 6, 7],
-			  ]),
-		// +z
-		[1, 3, 5],
-		[3, 5, 7],
+	// const barrierIndices = [
+	// 	//// Left
+	// 	// -z
+	// 	[0, 2, 4],
+	// 	[2, 4, 6],
+	// 	// -y
+	// 	[0, 4, 5],
+	// 	[0, 1, 5],
+	// 	// -x
+	// 	[0, 2, 3],
+	// 	[0, 1, 3],
+	// 	// +x
+	// 	[4, 5, 6],
+	// 	[5, 6, 7],
+	// 	// +y
+	// 	// Don't add duplicate faces to avoid z-fighting (y-fighting?)
+	// 	...(yMax === Y_MAX
+	// 		? []
+	// 		: [
+	// 				[2, 3, 6],
+	// 				[3, 6, 7],
+	// 		  ]),
+	// 	// +z
+	// 	[1, 3, 5],
+	// 	[3, 5, 7],
 
-		//// Right
-		// -z
-		[4, 8, 10],
-		[4, 10, 12],
-		// -y
-		[4, 8, 9],
-		[4, 5, 9],
-		// -x
-		[8, 9, 10],
-		[9, 10, 11],
-		// +x
-		// Don't add duplicate faces to avoid z-fighting (x-fighting?)
-		...(xMax === X_MAX
-			? []
-			: [
-					[10, 11, 12],
-					[12, 11, 13],
-			  ]),
-		// +y
-		[4, 5, 12],
-		[5, 12, 13],
-		// +z
-		[5, 9, 11],
-		[5, 11, 13],
-	];
+	// 	//// Right
+	// 	// -z
+	// 	[4, 8, 10],
+	// 	[4, 10, 12],
+	// 	// -y
+	// 	[4, 8, 9],
+	// 	[4, 5, 9],
+	// 	// -x
+	// 	[8, 9, 10],
+	// 	[9, 10, 11],
+	// 	// +x
+	// 	// Don't add duplicate faces to avoid z-fighting (x-fighting?)
+	// 	...(xMax === X_MAX
+	// 		? []
+	// 		: [
+	// 				[10, 11, 12],
+	// 				[12, 11, 13],
+	// 		  ]),
+	// 	// +y
+	// 	[4, 5, 12],
+	// 	[5, 12, 13],
+	// 	// +z
+	// 	[5, 9, 11],
+	// 	[5, 11, 13],
+	// ];
 
-	const barrierDatum = {
-		type: "mesh3d",
-		x: barrierVertices.map(p => p[0]),
-		y: barrierVertices.map(p => p[1]),
-		z: barrierVertices.map(p => p[2]),
-		i: barrierIndices.map(i => i[0]),
-		j: barrierIndices.map(i => i[1]),
-		k: barrierIndices.map(i => i[2]),
-		flatshading: true,
-		lighting: { facenormalepsilon: 0, ambient: 0.4, specular: 0.5, diffuse: 0.3 },
-		facecolor: boundingTriangles.map(() => "#555"),
-	};
+	// const barrierDatum = {
+	// 	type: "mesh3d",
+	// 	x: barrierVertices.map(p => p[0]),
+	// 	y: barrierVertices.map(p => p[1]),
+	// 	z: barrierVertices.map(p => p[2]),
+	// 	i: barrierIndices.map(i => i[0]),
+	// 	j: barrierIndices.map(i => i[1]),
+	// 	k: barrierIndices.map(i => i[2]),
+	// 	flatshading: true,
+	// 	lighting: { facenormalepsilon: 0, ambient: 0.4, specular: 0.5, diffuse: 0.3 },
+	// 	facecolor: boundingTriangles.map(() => "#555"),
+	// };
 
 	// const boundingVertices = [];
 	// const boundingTriangles = [];
@@ -307,37 +324,37 @@ function update({ nx, ny, lx, ly } = {}) {
 	// 	}
 	// }
 
-	const boundingSurface = {
-		type: "mesh3d",
-		x: boundingVertices.map(p => p[0]),
-		y: boundingVertices.map(p => p[1]),
-		z: boundingVertices.map(p => p[2]),
-		i: boundingTriangles.map(t => t[0]),
-		j: boundingTriangles.map(t => t[1]),
-		k: boundingTriangles.map(t => t[2]),
-		flatshading: true,
-		lighting: { facenormalepsilon: 0 },
-		facecolor: boundingTriangles.map(() => "#000"),
-	};
+	// const boundingSurface = {
+	// 	type: "mesh3d",
+	// 	x: boundingVertices.map(p => p[0]),
+	// 	y: boundingVertices.map(p => p[1]),
+	// 	z: boundingVertices.map(p => p[2]),
+	// 	i: boundingTriangles.map(t => t[0]),
+	// 	j: boundingTriangles.map(t => t[1]),
+	// 	k: boundingTriangles.map(t => t[2]),
+	// 	flatshading: true,
+	// 	lighting: { facenormalepsilon: 0 },
+	// 	facecolor: boundingTriangles.map(() => "#000"),
+	// };
 
 	const dd = 0.002;
 	const boundingLines = [
 		// Bottom square
 		[
-			[X_MIN, Y_MIN, -zRange],
-			[X_MIN, yMax, -zRange],
+			[xMin, yMin, -zRange],
+			[xMin, yMax, -zRange],
 		],
 		[
-			[X_MIN, yMax, -zRange],
+			[xMin, yMax, -zRange],
 			[xMax, yMax, -zRange],
 		],
 		[
 			[xMax, yMax, -zRange],
-			[xMax, Y_MIN, -zRange],
+			[xMax, yMin, -zRange],
 		],
 		[
-			[xMax, Y_MIN, -zRange],
-			[X_MIN, Y_MIN, -zRange],
+			[xMax, yMin, -zRange],
+			[xMin, yMin, -zRange],
 		],
 		// Left square (minus the edge it shares with the bottom one)
 		[
@@ -346,20 +363,20 @@ function update({ nx, ny, lx, ly } = {}) {
 		],
 		[
 			[xMax, yMax, zRange],
-			[X_MIN, yMax, zRange],
+			[xMin, yMax, zRange],
 		],
 		[
-			[X_MIN, yMax, zRange],
-			[X_MIN, yMax, -zRange],
+			[xMin, yMax, zRange],
+			[xMin, yMax, -zRange],
 		],
 		// Right square (minus the two edges it shares with the other two)
 		[
 			[xMax, yMax, zRange],
-			[xMax, Y_MIN, zRange],
+			[xMax, yMin, zRange],
 		],
 		[
-			[xMax, Y_MIN, zRange],
-			[xMax, Y_MIN, -zRange],
+			[xMax, yMin, zRange],
+			[xMax, yMin, -zRange],
 		],
 	].map(points => ({
 		type: "scatter3d",
@@ -384,70 +401,70 @@ function update({ nx, ny, lx, ly } = {}) {
 
 	const AXIS_LINE_THICKNESS = 5;
 	const AXIS_COLOR = "#bbb";
-	const axisLines = [
-		// Far lines
-		// [
-		// 	[X_MAX, Y_MAX, -zRange],
-		// 	[X_MIN, Y_MAX, -zRange],
-		// ],
-		// [
-		// 	[X_MAX, Y_MAX, -zRange],
-		// 	[X_MAX, Y_MIN, -zRange],
-		// ],
-		// [
-		// 	[X_MAX, Y_MAX, -zRange],
-		// 	[X_MAX, Y_MAX, zRange],
-		// ],
-		// Others
-		[
-			[X_MAX, Y_MAX, zRange],
-			[X_MIN, Y_MAX, zRange],
-		],
-		[
-			[X_MIN, Y_MAX, zRange],
-			[X_MIN, Y_MAX, -zRange],
-		],
-		[
-			[X_MAX, Y_MAX, zRange],
-			[X_MAX, Y_MIN, zRange],
-		],
-		[
-			[X_MAX, Y_MIN, zRange],
-			[X_MAX, Y_MIN, -zRange],
-		],
-		[
-			[X_MAX, Y_MIN, -zRange],
-			[xMax, Y_MIN, -zRange],
-		],
-		[
-			[X_MIN, Y_MAX, -zRange],
-			[X_MIN, yMin, -zRange],
-		],
-	].map(points => ({
-		type: "scatter3d",
-		mode: "lines",
-		x: points.map(p => p[0]),
-		y: points.map(p => p[1]),
-		z: points.map(p => p[2]),
-		line: {
-			width: AXIS_LINE_THICKNESS - 1,
-			color: AXIS_COLOR,
-		},
-	}));
+	// const axisLines = [
+	// 	// Far lines
+	// 	// [
+	// 	// 	[X_MAX, Y_MAX, -zRange],
+	// 	// 	[X_MIN, Y_MAX, -zRange],
+	// 	// ],
+	// 	// [
+	// 	// 	[X_MAX, Y_MAX, -zRange],
+	// 	// 	[X_MAX, Y_MIN, -zRange],
+	// 	// ],
+	// 	// [
+	// 	// 	[X_MAX, Y_MAX, -zRange],
+	// 	// 	[X_MAX, Y_MAX, zRange],
+	// 	// ],
+	// 	// Others
+	// 	[
+	// 		[X_MAX, Y_MAX, zRange],
+	// 		[X_MIN, Y_MAX, zRange],
+	// 	],
+	// 	[
+	// 		[X_MIN, Y_MAX, zRange],
+	// 		[X_MIN, Y_MAX, -zRange],
+	// 	],
+	// 	[
+	// 		[X_MAX, Y_MAX, zRange],
+	// 		[X_MAX, Y_MIN, zRange],
+	// 	],
+	// 	[
+	// 		[X_MAX, Y_MIN, zRange],
+	// 		[X_MAX, Y_MIN, -zRange],
+	// 	],
+	// 	[
+	// 		[X_MAX, Y_MIN, -zRange],
+	// 		[xMax, Y_MIN, -zRange],
+	// 	],
+	// 	[
+	// 		[X_MIN, Y_MAX, -zRange],
+	// 		[X_MIN, yMin, -zRange],
+	// 	],
+	// ].map(points => ({
+	// 	type: "scatter3d",
+	// 	mode: "lines",
+	// 	x: points.map(p => p[0]),
+	// 	y: points.map(p => p[1]),
+	// 	z: points.map(p => p[2]),
+	// 	line: {
+	// 		width: AXIS_LINE_THICKNESS - 1,
+	// 		color: AXIS_COLOR,
+	// 	},
+	// }));
 
 	const TICK_LENGTH = 0.03;
 	const LABEL_DIST_FROM_TICK = 0.05;
 	const axisTicksAndLabelsInfo = [
 		// x axis ticks
-		{ point: [X_MIN, Y_MIN, -zRange], dir: "y", label: "0" },
-		{ point: [xMax, Y_MIN, -zRange], dir: "y", label: "𝐿<sub>𝑥</sub>" },
+		{ point: [xMin, yMin, -zRange], dir: "y", label: "0" },
+		{ point: [xMax, yMin, -zRange], dir: "y", label: "𝑎" },
 		// y axis ticks
-		{ point: [X_MIN, Y_MIN, -zRange], dir: "x", label: "0" },
-		{ point: [X_MIN, yMax, -zRange], dir: "x", label: "𝐿<sub>𝑦</sub>" },
+		{ point: [xMin, yMin, -zRange], dir: "x", label: "0" },
+		{ point: [xMin, yMax, -zRange], dir: "x", label: "𝑏" },
 		// z axis ticks
-		{ point: [X_MIN, yMax, -maxZObtained], dir: "x", label: "-𝐴" },
-		{ point: [X_MIN, yMax, 0], dir: "x", label: "0" },
-		{ point: [X_MIN, yMax, maxZObtained], dir: "x", label: "𝐴" },
+		{ point: [xMin, yMax, -maxZObtained], dir: "x", label: "-𝐴" },
+		{ point: [xMin, yMax, 0], dir: "x", label: "0" },
+		{ point: [xMin, yMax, maxZObtained], dir: "x", label: "𝐴" },
 	];
 	const axisTicks = [];
 	const axisLabels = [];
@@ -495,7 +512,7 @@ function update({ nx, ny, lx, ly } = {}) {
 		// ...axisLines,
 		...axisTicks,
 		...axisLabels,
-		barrierDatum,
+		// barrierDatum,
 	];
 
 	const axesAttrs = {

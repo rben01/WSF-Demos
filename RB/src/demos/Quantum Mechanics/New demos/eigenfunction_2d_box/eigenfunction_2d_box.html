@@ -48,9 +48,11 @@
 				overflow-x: visible;
 			}
 			.eqn-container {
-				position: relative;
+				/* position: relative; */
 				white-space: nowrap;
 				line-height: 80px;
+				min-height: 100%;
+				height: 150px;
 				z-index: 999;
 			}
 			.eqn-spacer {
@@ -66,6 +68,7 @@
 			#plot {
 				position: relative;
 				top: -50px;
+				left: -50px;
 			}
 		</style>
 	</head>
@@ -154,26 +157,27 @@
 								5
 							</button>
 						</div>
-						<span>𝐿<sub>𝑥</sub></span>
+						<span>𝑎</span>
 						<span
 							><input type="range" class="length-slider" id="slider-lx"
 						/></span>
-						<span>𝐿<sub>𝑦</sub></span>
+						<span>𝑏</span>
 						<span
 							><input type="range" class="length-slider" id="slider-ly"
 						/></span>
 					</div>
 				</div>
-				<div class="eqn-container">
-					<span class="latex" id="text-eqn-wavefunction"></span><br />
-					<span class="latex" id="text-eqn-amplitude"></span><br />
-					<span class="latex" id="text-eqn-energy"></span>
+				<div class="eqn-container math">
+					<span class="latex" id="text-eqn-wavefunction"></span><br /><span
+						class="latex"
+						id="text-eqn-energy"
+					></span>
 				</div>
 			</div>
 
 			<div>
 				<div class="plot-container">
-					<div id="plot"></div>
+					<div id="plot" class="draggable"></div>
 				</div>
 			</div>
 		</div>

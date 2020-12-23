@@ -13,7 +13,7 @@ const renderer = new THREE.WebGLRenderer({
 	antialias: true,
 	powerPreference: "high-performance",
 });
-renderer.localClippingEnabled = true;
+renderer.localClippingEnabled = false;
 
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
@@ -120,7 +120,8 @@ const MIN_SLIT_SEPARATION = 2;
 const MAX_SLIT_SEPARATION = 30;
 const DEFAULT_SLIT_SEPARATION = (MIN_SLIT_SEPARATION + MAX_SLIT_SEPARATION) / 2;
 
-const colorScale = t => d3.interpolateSinebow(t * 0.8);
+const colorScale = t =>
+	d3.interpolateRgb(d3.interpolateSinebow(t * 0.7), "white")(0.05);
 const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
 
 const ARROWHEAD_LENGTH = 1.2;
@@ -643,9 +644,9 @@ const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster the
 function play() {
 	isPlaying = true;
 	let startMS;
+	const initialOffset = currOffset;
 	function step(timestampMS) {
 		if (!isPlaying) {
-			window.cancelAnimationFrame(animationFrame);
 			return;
 		}
 
@@ -658,7 +659,7 @@ function play() {
 		const displacement = currSlitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
 		const color = new THREE.Color(colorScale(wavelengthScale(currWavelength)));
 
-		const offset = elapsedMS * PHOTON_SPEED;
+		const offset = initialOffset + elapsedMS * PHOTON_SPEED;
 		currOffset = offset;
 
 		for (let i = 0; i < photons.length; ++i) {
@@ -703,6 +704,7 @@ function play() {
 // eslint-disable-next-line no-unused-vars
 function pause() {
 	isPlaying = false;
+	window.cancelAnimationFrame(animationFrame);
 }
 
 // Angle slider

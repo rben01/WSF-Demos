@@ -17,17 +17,37 @@ display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
 }
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+/* Legacy; don't use */
 .slider-container {
 grid-row: span 2;
 display: grid;
 grid-template-columns: 1fr;
 row-gap: 2px;
-border: 2px solid white;
-border-radius: 5px;
-padding: 10px 10px 10px 10px;
 }
+/* Legacy; don't use */
 .slider-container > :nth-child(2n + 3) {
-margin-top: 40px;
+margin-top: 30px;
 }
 .param-slider-container {
 display: inline-block;
@@ -45,17 +65,17 @@ grid-template-columns: 1fr 1fr;
 column-gap: 10px;
 }
 .axis {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-tick {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-label {
 stroke-opacity: 0;
-fill: #ccc;
-font-size: 14px;
+fill: #ddd;
+font-size: 17px;
 }
 .x-axis-label {
 text-anchor: middle;
@@ -64,6 +84,13 @@ dominant-baseline: hanging;
 .y-axis-label {
 text-anchor: end;
 dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
 }
 .radio-button-container label input {
 display: none;
@@ -212,12 +239,15 @@ background: #ffffff;
 cursor: pointer;
 }
 </style><style>
+.container {
+display: inline-block;
+vertical-align: top;
+}
 .slider-container {
-position: absolute;
+/* position: absolute; */
 top: 5px;
 left: 5px;
-width: 300px;
-background-color: black;
+width: 270px;
 }
 .curve {
 fill-opacity: 0;
@@ -230,33 +260,18 @@ stroke: black;
 stroke-width: 4px;
 stroke: white;
 }
-.axis {
-stroke: #ccc;
-stroke-width: 2px;
-}
-.axis-tick {
-stroke: #ccc;
-stroke-width: 2px;
-}
-.axis-label {
-font-size: 12px;
-fill: "white";
-}
-.axis-x-label {
-text-anchor: middle;
-dominant-baseline: hanging;
-}
-.axis-y-label {
-text-anchor: end;
-dominant-baseline: middle;
+#plot {
+display: inline-block;
 }
 </style></head>
 <body>
-<div class="slider-container">
+<div class="container">
+<div class="slider-container controls-container">
 <span>𝑛<sup>th</sup> Hermite polynomial: <span id="hermite-n"></span></span>
 <span><input id="hermite-n-slider" type="range"/></span>
 <span>Zoom level: |𝑥| ≤ <span id="x-scale"></span></span>
 <span><input id="x-scale-slider" type="range"/></span>
+</div>
 </div>
 <svg id="plot"></svg>
 <script type="text/javascript">"use strict";
@@ -457,6 +472,47 @@ return Object.entries(grouped);
 }
 return grouped;
 }
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+}) {
+drawEdges = drawEdges ?? false;
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("button-checked", "");
+}
+}
 function _initializeRadioButtons() {
 const radioButtonContainers = document.getElementsByClassName(
 "radio-button-container",
@@ -466,9 +522,7 @@ const rbc = radioButtonContainers[i];
 d3.select(rbc)
 .selectAll("button")
 .each(function () {
-if (this.hasAttribute("button-checked")) {
-this.disabled = true;
-}
+syncButtonState(this);
 })
 .on("click._default", function () {
 this.setAttribute("button-checked", "");
@@ -486,9 +540,10 @@ sibling.removeAttribute("button-checked");
 }
 _initializeRadioButtons();
 </script><script type="text/javascript">/* global applyGraphicalObjs */
-const WIDTH = 1350;
+const WIDTH = 1050;
 const HEIGHT = 750;
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const plotNode = plot.node();
 const hermiteNTextSpan = document.getElementById("hermite-n");
 const scaleTextSpan = document.getElementById("x-scale");
 const MIN_HERMITE_N = 0;
@@ -645,7 +700,7 @@ const tickLabelData = [
 const scaledX = xScale(x);
 return {
 shape: "text",
-classes: ["axis-label", "axis-x-label"],
+classes: ["axis-label", "x-axis-label"],
 text: xTickFormat(x),
 attrs: {
 x: scaledX,
@@ -657,7 +712,7 @@ y: scaledY0 + tickLength + 4,
 const scaledY = yScale(y);
 return {
 shape: "text",
-classes: ["axis-label", "axis-y-label"],
+classes: ["axis-label", "y-axis-label"],
 text: yTickFormat(y),
 attrs: {
 x: scaledX0 - tickLength - 4,
@@ -716,6 +771,8 @@ graphScale,
 applyGraphicalObjs(plot, tickData, { selector: ".axis-tick" });
 applyGraphicalObjs(plot, tickLabelData, { selector: ".axis-label" });
 applyGraphicalObjs(plot, axisData, { selector: ".graph-obj" });
+plotNode.append(plot.selectAll(".curve-background").node());
+plotNode.append(plot.selectAll(".curve-foreground").node());
 }
 update();
 </script></body>

@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8"/>
-<script src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <style rel="stylesheet">body {
 /* margin-left: 10px;
@@ -33,6 +33,12 @@ row-gap: 2px;
 .controls > :nth-child(2n + 3) {
 margin-top: 30px;
 }
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
 /* Legacy; don't use */
 .slider-container {
 grid-row: span 2;
@@ -60,17 +66,17 @@ grid-template-columns: 1fr 1fr;
 column-gap: 10px;
 }
 .axis {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-tick {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-label {
 stroke-opacity: 0;
-fill: #ccc;
-font-size: 14px;
+fill: #ddd;
+font-size: 17px;
 }
 .x-axis-label {
 text-anchor: middle;
@@ -79,6 +85,13 @@ dominant-baseline: hanging;
 .y-axis-label {
 text-anchor: end;
 dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
 }
 .radio-button-container label input {
 display: none;
@@ -269,7 +282,7 @@ Pause
 </div>
 </div>
 </div>
-<canvas id="plot"></canvas>
+<canvas class="draggable" id="plot"></canvas>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
@@ -468,6 +481,40 @@ return Object.entries(grouped);
 }
 return grouped;
 }
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+}) {
+drawEdges = drawEdges ?? false;
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
 function syncButtonState(button) {
 if (button.hasAttribute("button-checked")) {
 button.disabled = true;
@@ -502,23 +549,23 @@ sibling.removeAttribute("button-checked");
 }
 _initializeRadioButtons();
 </script><script type="text/javascript">/* global THREE */
-const plotElem = document.getElementById("plot");
+const canvas = document.getElementById("plot");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
 75,
-plotElem.clientWidth / plotElem.clientHeight,
+canvas.clientWidth / canvas.clientHeight,
 0.1,
 2000,
 );
 const renderer = new THREE.WebGLRenderer({
-canvas: plotElem,
+canvas: canvas,
 antialias: true,
 powerPreference: "high-performance",
 });
-renderer.localClippingEnabled = true;
-plotElem.width = plotElem.clientWidth * window.devicePixelRatio;
-plotElem.height = plotElem.clientHeight * window.devicePixelRatio;
-renderer.setSize(plotElem.clientWidth, plotElem.clientHeight);
+renderer.localClippingEnabled = false;
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 const _PANE_HEIGHT = 10;
 const SOURCE_OUTER_PANE_WIDTH = 20;
 const SOURCE_PANE_HEIGHT = _PANE_HEIGHT;
@@ -533,25 +580,7 @@ const MAX_ANGLE_RAD = Math.atan2(DETECTOR_WIDTH * 0.495, DISTANCE);
 const CAMERA_DEFAULT_POSITION = new THREE.Vector3(60, 40, CAMERA_Z);
 const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
 const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
-// const slitSeparationTextElem = document.getElementById("slit-separation-text");
-// const slitSeparationTextPos = new THREE.Vector3(
-// 	0,
-// 	SOURCE_PANE_HEIGHT / 2 + 4,
-// 	SOURCE_Z + 0.01,
-// );
-// function updateSlitSeparationTextElemPos() {
-// 	const textPos = slitSeparationTextPos.clone().project(camera);
-// 	console.log(textPos);
-// 	const plotElemRect = plotElem.getBoundingClientRect();
-// 	const halfWidth = plotElemRect.width / 2;
-// 	const halfHeight = plotElemRect.height / 2;
-// 	const textPosX = plotElemRect.x + halfWidth + textPos.x * halfWidth;
-// 	const textPosY = plotElemRect.y + halfHeight - textPos.y * halfHeight;
-// 	slitSeparationTextElem.style.left = `${textPosX}px`;
-// 	slitSeparationTextElem.style.top = `${textPosY}px`;
-// }
-// updateSlitSeparationTextElemPos();
-d3.select(plotElem).call(
+d3.select(canvas).call(
 d3.drag().on("drag", function (event) {
 const cameraDisplacementFromPointOfFocus = camera.position
 .clone()
@@ -621,7 +650,8 @@ const DEFAULT_WAVELENGTH = (MIN_WAVELENGTH + MAX_WAVELENGTH) / 2;
 const MIN_SLIT_SEPARATION = 2;
 const MAX_SLIT_SEPARATION = 30;
 const DEFAULT_SLIT_SEPARATION = (MIN_SLIT_SEPARATION + MAX_SLIT_SEPARATION) / 2;
-const colorScale = t => d3.interpolateSinebow(t * 0.8);
+const colorScale = t =>
+d3.interpolateRgb(d3.interpolateSinebow(t * 0.7), "white")(0.05);
 const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
 const ARROWHEAD_LENGTH = 1.2;
 const ARROWHEAD_WIDTH = 0.8;
@@ -1065,9 +1095,9 @@ const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster the
 function play() {
 isPlaying = true;
 let startMS;
+const initialOffset = currOffset;
 function step(timestampMS) {
 if (!isPlaying) {
-window.cancelAnimationFrame(animationFrame);
 return;
 }
 if (startMS === undefined) {
@@ -1077,7 +1107,7 @@ const elapsedMS = timestampMS - startMS;
 const photons = objs.photonObjs.photons;
 const displacement = currSlitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
 const color = new THREE.Color(colorScale(wavelengthScale(currWavelength)));
-const offset = elapsedMS * PHOTON_SPEED;
+const offset = initialOffset + elapsedMS * PHOTON_SPEED;
 currOffset = offset;
 for (let i = 0; i < photons.length; ++i) {
 const photon = photons[i];
@@ -1115,6 +1145,7 @@ window.requestAnimationFrame(step);
 // eslint-disable-next-line no-unused-vars
 function pause() {
 isPlaying = false;
+window.cancelAnimationFrame(animationFrame);
 }
 // Angle slider
 (() => {

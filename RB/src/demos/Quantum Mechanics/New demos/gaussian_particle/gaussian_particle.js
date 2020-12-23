@@ -52,9 +52,9 @@ d3.selectAll(".position-slider")
 // Set up 2D plot
 (() => {
 	const majorTickSpacing = 1;
-	const minorTickSpacing = 0.5;
-	const majorTickLength = 5;
-	const minorTickLength = 3;
+	const minorTickSpacing = 1; // All ticks are major
+	const majorTickLength = 6;
+	const minorTickLength = 6;
 	const axisLabelSpacing = 2;
 
 	const nMinorTickGapsBwtnMajorTicks = Math.round(
@@ -494,7 +494,7 @@ function drawSurface3D() {
 
 	const gridlineZShift = 0.0001;
 	const xGridlines = getGridlines({
-		nGridlines: 9,
+		nGridlines: 12,
 		f: pdf,
 		xMin: X_MIN,
 		xMax: X_MAX,
@@ -502,7 +502,7 @@ function drawSurface3D() {
 		yMax: Y_MAX,
 	}).map(gridline => gridline.map(([x, y]) => [x, y, gridlineZShift + pdf(x, y)]));
 	const yGridlines = getGridlines({
-		nGridlines: 9,
+		nGridlines: 12,
 		f: pdf,
 		xMin: Y_MIN,
 		xMax: Y_MAX,
@@ -554,7 +554,7 @@ function drawSurface3D() {
 		mode: "lines",
 		line: {
 			color: "#ddd",
-			width: 4,
+			width: 9,
 		},
 	}));
 
@@ -567,6 +567,7 @@ function drawSurface3D() {
 		showline: false,
 		zeroline: false,
 		showticklabels: true,
+		gridwidth: 3,
 		color: "#aaa",
 		gridcolor: "#999",
 	};
@@ -588,6 +589,7 @@ function drawSurface3D() {
 		margin: { t: 0, b: 0, l: 0, r: 0 },
 		hovermode: false,
 		showlegend: false,
+		font: { family: "sans-serif", size: 15 },
 		scene: {
 			aspectmode: "manual",
 			aspectratio: { x: 1, y: yAspect, z: zAspect },

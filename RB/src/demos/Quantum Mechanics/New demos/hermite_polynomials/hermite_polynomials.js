@@ -1,9 +1,10 @@
 /* global applyGraphicalObjs */
 
-const WIDTH = 1350;
+const WIDTH = 1050;
 const HEIGHT = 750;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const plotNode = plot.node();
 
 const hermiteNTextSpan = document.getElementById("hermite-n");
 const scaleTextSpan = document.getElementById("x-scale");
@@ -176,7 +177,7 @@ function getGraphData({ hermiteN, graphScale }) {
 			const scaledX = xScale(x);
 			return {
 				shape: "text",
-				classes: ["axis-label", "axis-x-label"],
+				classes: ["axis-label", "x-axis-label"],
 				text: xTickFormat(x),
 				attrs: {
 					x: scaledX,
@@ -188,7 +189,7 @@ function getGraphData({ hermiteN, graphScale }) {
 			const scaledY = yScale(y);
 			return {
 				shape: "text",
-				classes: ["axis-label", "axis-y-label"],
+				classes: ["axis-label", "y-axis-label"],
 				text: yTickFormat(y),
 				attrs: {
 					x: scaledX0 - tickLength - 4,
@@ -252,6 +253,8 @@ function update({ hermiteN, graphScale } = {}) {
 	applyGraphicalObjs(plot, tickData, { selector: ".axis-tick" });
 	applyGraphicalObjs(plot, tickLabelData, { selector: ".axis-label" });
 	applyGraphicalObjs(plot, axisData, { selector: ".graph-obj" });
+	plotNode.append(plot.selectAll(".curve-background").node());
+	plotNode.append(plot.selectAll(".curve-foreground").node());
 }
 
 update();

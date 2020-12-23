@@ -15,27 +15,50 @@ crossorigin="anonymous"
 onload="renderMathInElement(document.body);"
 ></script> -->
 <style rel="stylesheet">body {
-margin-left: 10px;
-margin-top: 10px;
+/* margin-left: 10px;
+margin-top: 10px; */
 background-color: black;
 color: white;
 font-size: 22px;
 font-family: sans-serif;
 line-height: 1.8em;
 }
-.grid {
+.grid-left-right {
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
 }
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+/* Legacy; don't use */
 .slider-container {
 grid-row: span 2;
 display: grid;
 grid-template-columns: 1fr;
-row-gap: 4px;
+row-gap: 2px;
 }
+/* Legacy; don't use */
 .slider-container > :nth-child(2n + 3) {
-margin-top: 40px;
+margin-top: 30px;
 }
 .param-slider-container {
 display: inline-block;
@@ -53,17 +76,17 @@ grid-template-columns: 1fr 1fr;
 column-gap: 10px;
 }
 .axis {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-tick {
-stroke-width: 1;
+stroke-width: 3;
 stroke: #aaa;
 }
 .axis-label {
 stroke-opacity: 0;
-fill: #ccc;
-font-size: 14px;
+fill: #ddd;
+font-size: 17px;
 }
 .x-axis-label {
 text-anchor: middle;
@@ -73,12 +96,25 @@ dominant-baseline: hanging;
 text-anchor: end;
 dominant-baseline: middle;
 }
-.play-button {
-margin-top: 1.5em;
-margin-bottom: 1em;
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.button {
+padding: 7px 8px;
 margin-right: 3px;
-width: 5em;
-height: 30px;
 font-size: 15px;
 border-radius: 4px;
 background: #ccc;
@@ -86,15 +122,15 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.play-button:hover {
+.button:hover {
 cursor: pointer;
 }
-.play-button:active {
+.button:active {
 background: #ccc;
 background-image: -webkit-linear-gradient(top, #999, #fff);
 color: #333;
 }
-.play-button:disabled {
+.button:disabled {
 background: #ccc;
 background-image: -webkit-linear-gradient(top, #999, #aaa);
 color: #444;
@@ -170,6 +206,9 @@ position: relative;
 bottom: 4px;
 outline: none;
 }
+input[type="range"]:disabled {
+opacity: 0.5;
+}
 input[type="range"]::-webkit-slider-thumb {
 -webkit-appearance: none;
 -moz-apperance: none;
@@ -212,6 +251,9 @@ cursor: pointer;
 }
 </style><style>
 .grid {
+display: grid;
+grid-template-columns: 16em 1fr;
+align-items: start;
 column-gap: 30px;
 white-space: nowrap;
 }
@@ -228,7 +270,7 @@ grid-template-columns: 1fr;
 }
 #eqn-container {
 text-align: start;
-padding-left: 100px;
+margin-left: 100px;
 }
 .axis-axis {
 stroke-width: 3px;
@@ -243,23 +285,28 @@ stroke-opacity: 0;
 .axis-tick {
 stroke-opacity: 1;
 stroke: #ccc;
-stroke-width: 2px;
+stroke-width: 3px;
 }
 .empty-space {
 stroke: none;
 fill-opacity: 1;
 }
+#plot {
+margin-left: -50px;
+}
 </style></head>
 <body>
 <div class="grid">
+<div class="controls-container">
 <div class="slider-container">
 <span class="slider-label">Width of well, <span id="latex-width"></span></span>
 <span class="param-slider-container"><input class="param-slider" id="slider-width" type="range"/></span>
 <span class="slider-label">Wavenumber, <span id="latex-wavenumber"></span></span>
 <span class="param-slider-container"><input class="param-slider" id="slider-wavenumber" type="range"/></span>
 </div>
+</div>
 <div class="plot-eqn-container">
-<div id="eqn-container"></div>
+<div><span class="math" id="eqn-container"></span></div>
 <svg id="plot">
 <defs>
 <pattern height="10" id="diagonalHatch" patterntransform="rotate(30 0 0) translate(26,0)" patternunits="userSpaceOnUse" width="10">
@@ -294,6 +341,12 @@ return typeof obj[Symbol.iterator] === "function";
 function applyDatum(datum, { transition } = {}) {
 const d3Obj = d3.select(this);
 d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
 if (typeof datum.class !== "undefined") {
 d3Obj.classed(datum.class, true);
 }
@@ -461,6 +514,73 @@ return Object.entries(grouped);
 }
 return grouped;
 }
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+}) {
+drawEdges = drawEdges ?? false;
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+d3.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+})
+.on("click._default", function () {
+this.setAttribute("button-checked", "");
+this.disabled = true;
+const siblings = this.parentNode.querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("button-checked");
+}
+});
+}
+}
+_initializeRadioButtons();
 </script><script type="text/javascript">/* global applyGraphicalObjs katex STANDARD_COLORS */
 const WIDTH = 1000;
 const HEIGHT = 600;
