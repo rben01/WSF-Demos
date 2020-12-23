@@ -2,308 +2,50 @@
 <html>
 <head>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet" type="text/css">body {
-/* margin-left: 10px;
-margin-top: 10px; */
-background-color: black;
-color: white;
-font-size: 22px;
-font-family: sans-serif;
-line-height: 1.8em;
-}
-.grid-left-right {
-display: grid;
-grid-template-columns: 13em 1fr;
-align-items: start;
-}
-.controls-container {
-display: inline-block;
-border: 2px solid white;
-border-radius: 5px;
-padding: 10px;
-}
-.controls {
-grid-row: span 2;
-display: grid;
-grid-template-columns: 1fr;
-row-gap: 2px;
-}
-.controls > :nth-child(2n + 3) {
-margin-top: 30px;
-}
-.draggable:hover {
-cursor: grab;
-}
-.draggable:active {
-cursor: grabbing;
-}
-/* Legacy; don't use */
-.slider-container {
-grid-row: span 2;
-display: grid;
-grid-template-columns: 1fr;
-row-gap: 2px;
-}
-/* Legacy; don't use */
-.slider-container > :nth-child(2n + 3) {
-margin-top: 30px;
-}
-.param-slider-container {
-display: inline-block;
-width: 100%;
-}
-input[type="range"] {
-width: 100%;
-}
-.plot {
-display: inline-block;
-}
-.plot-container {
-display: grid;
-grid-template-columns: 1fr 1fr;
-column-gap: 10px;
-}
-.axis {
-stroke-width: 3;
-stroke: #aaa;
-}
-.axis-tick {
-stroke-width: 3;
-stroke: #aaa;
-}
-.axis-label {
-stroke-opacity: 0;
-fill: #ddd;
-font-size: 17px;
-}
-.x-axis-label {
-text-anchor: middle;
-dominant-baseline: hanging;
-}
-.y-axis-label {
-text-anchor: end;
-dominant-baseline: middle;
-}
-.math {
-color: black;
-background-color: white;
-padding: 9px 5px;
-border-radius: 2px;
-/* border: 1px solid white; */
-}
-.radio-button-container label input {
-display: none;
-}
-.radio-button-container.horizontal {
-display: flex;
-flex-direction: row;
-align-content: stretch;
-line-height: initial;
-}
-.button {
-padding: 7px 8px;
-margin-right: 3px;
-font-size: 15px;
-border-radius: 4px;
-background: #ccc;
-background-image: -webkit-linear-gradient(top, #fff, #aaa);
-color: black;
-text-shadow: 1px 1px #ddd;
-}
-.button:hover {
-cursor: pointer;
-}
-.button:active {
-background: #ccc;
-background-image: -webkit-linear-gradient(top, #999, #fff);
-color: #333;
-}
-.button:disabled {
-background: #ccc;
-background-image: -webkit-linear-gradient(top, #999, #aaa);
-color: #444;
-text-shadow: 1px 1px #ccc;
-cursor: default;
-}
-.highlighted-text {
-color: #5df;
-}
-.secondary-text {
-color: #f3c002;
-}
-.tertiary-text {
-color: #14c778;
-}
-.quaternary-text {
-color: #e5d;
-}
-.viz-canvas {
-padding-top: 1em;
-}
-.sci-num {
-padding-right: 0.15em;
-}
-.eqn-left {
-text-align: right;
-}
-.eqn-middle {
-padding-left: 0.25em;
-padding-right: 0.25em;
-}
-.eqn-right {
-text-align: left;
-}
-.radio-label {
-padding-left: 3px;
-}
-.subscript {
-position: relative;
-top: 0.3em;
-left: 0;
-font-size: 65%;
-}
-.superscript {
-position: relative;
-bottom: 0.8em;
-left: 0;
-font-size: 65%;
-}
-.minus-sign {
-margin-right: 1px;
-}
-.operator {
-margin-left: 3px;
-margin-right: 3px;
-}
-button.depressed-button {
-background-color: #555;
-color: white;
-}
-input[type="radio"] {
-position: relative;
-bottom: 4px;
-}
-input[type="range"] {
--webkit-appearance: none;
--moz-apperance: none;
-height: 8px;
-padding: 0 0;
-background: #8b8f92;
-border-radius: 2px;
-position: relative;
-bottom: 4px;
-outline: none;
-}
-input[type="range"]:disabled {
-opacity: 0.5;
-}
-input[type="range"]::-webkit-slider-thumb {
--webkit-appearance: none;
--moz-apperance: none;
-width: 25px;
-height: 25px;
--webkit-border-radius: 20px;
--moz-border-radius: 20px;
--ms-border-radius: 20px;
--o-border-radius: 20px;
-border-radius: 20px;
-background-image: -webkit-gradient(
-linear,
-left top,
-left bottom,
-color-stop(0, #fefefe),
-color-stop(0.49, #d7d7d7),
-color-stop(0.51, #d1d1d1),
-color-stop(1, #c8c8c8)
-);
-border: 1px solid #787878;
-}
-input[type="range"]::-moz-range-thumb {
-box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
-border: 1px solid #000000;
-height: 20px;
-width: 20px;
-border-radius: 20px;
-background: #ffffff;
-cursor: pointer;
-}
-/* All the same stuff for IE */
-input[type="range"]::-ms-thumb {
-box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
-border: 1px solid #000000;
-height: 20px;
-width: 20px;
-border-radius: 20px;
-background: #ffffff;
-cursor: pointer;
-}
-</style><style>
-.param-slider {
-width: 200px;
-}
-.plot {
-display: inline-block;
-}
-.plot-container {
-margin-top: 20px;
-}
-.axis {
-stroke-width: 1;
-stroke: #555;
-}
-.axis-tick {
-stroke-width: 1;
-stroke: #666;
-}
-.axis-label {
-stroke-opacity: 0;
-fill: #111;
-font-size: 14px;
-}
-</style></head>
+<style rel="stylesheet" type="text/css">body{background-color:#000;color:#fff;font-size:22px;font-family:sans-serif;line-height:1.8em}.grid-left-right{display:grid;grid-template-columns:13em 1fr;align-items:start}.controls-container{display:inline-block;border:2px solid #fff;border-radius:5px;padding:10px}.controls{grid-row:span 2;display:grid;grid-template-columns:1fr;row-gap:2px}.controls>:nth-child(2n+3){margin-top:30px}.draggable:hover{cursor:grab}.draggable:active{cursor:grabbing}.slider-container{grid-row:span 2;display:grid;grid-template-columns:1fr;row-gap:2px}.slider-container>:nth-child(2n+3){margin-top:30px}.param-slider-container{display:inline-block;width:100%}input[type=range]{width:100%}.plot{display:inline-block}.plot-container{display:grid;grid-template-columns:1fr 1fr;column-gap:10px}.axis{stroke-width:3;stroke:#aaa}.axis-tick{stroke-width:3;stroke:#aaa}.axis-label{stroke-opacity:0;fill:#ddd;font-size:17px}.x-axis-label{text-anchor:middle;dominant-baseline:hanging}.y-axis-label{text-anchor:end;dominant-baseline:middle}.math{color:#000;background-color:#fff;padding:9px 5px;border-radius:2px}.radio-button-container label input{display:none}.radio-button-container.horizontal{display:flex;flex-direction:row;align-content:stretch;line-height:initial}.button{padding:7px 8px;margin-right:3px;font-size:15px;border-radius:4px;background:#ccc;background-image:-webkit-linear-gradient(top,#fff,#aaa);color:#000;text-shadow:1px 1px #ddd}.button:hover{cursor:pointer}.button:active{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#fff);color:#333}.button:disabled{background:#ccc;background-image:-webkit-linear-gradient(top,#999,#aaa);color:#444;text-shadow:1px 1px #ccc;cursor:default}.highlighted-text{color:#5df}.secondary-text{color:#f3c002}.tertiary-text{color:#14c778}.quaternary-text{color:#e5d}.viz-canvas{padding-top:1em}.sci-num{padding-right:.15em}.eqn-left{text-align:right}.eqn-middle{padding-left:.25em;padding-right:.25em}.eqn-right{text-align:left}.radio-label{padding-left:3px}.subscript{position:relative;top:.3em;left:0;font-size:65%}.superscript{position:relative;bottom:.8em;left:0;font-size:65%}.minus-sign{margin-right:1px}.operator{margin-left:3px;margin-right:3px}button.depressed-button{background-color:#555;color:#fff}input[type=radio]{position:relative;bottom:4px}input[type=range]{-webkit-appearance:none;-moz-apperance:none;height:8px;padding:0 0;background:#8b8f92;border-radius:2px;position:relative;bottom:4px;outline:0}input[type=range]:disabled{opacity:.5}input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;-moz-apperance:none;width:25px;height:25px;-webkit-border-radius:20px;-moz-border-radius:20px;-ms-border-radius:20px;-o-border-radius:20px;border-radius:20px;background-image:-webkit-gradient(linear,left top,left bottom,color-stop(0,#fefefe),color-stop(.49,#d7d7d7),color-stop(.51,#d1d1d1),color-stop(1,#c8c8c8));border:1px solid #787878}input[type=range]::-moz-range-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}input[type=range]::-ms-thumb{box-shadow:1px 1px 1px #000,0 0 1px #0d0d0d;border:1px solid #000;height:20px;width:20px;border-radius:20px;background:#fff;cursor:pointer}</style><style>.param-slider{width:200px}.plot{display:inline-block}.plot-container{margin-top:20px}.axis{stroke-width:1;stroke:#555}.axis-tick{stroke-width:1;stroke:#666}.axis-label{stroke-opacity:0;fill:#111;font-size:14px}</style></head>
 <body>
 <div class="grid-left-right">
 <div class="controls-container">
 <span class="slider-label">Mode 1</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode1" type="range"/>
+<input class="param-slider" id="mode1" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 2</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode2" type="range"/>
+<input class="param-slider" id="mode2" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 3</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode3" type="range"/>
+<input class="param-slider" id="mode3" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 4</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode4" type="range"/>
+<input class="param-slider" id="mode4" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 5</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode5" type="range"/>
+<input class="param-slider" id="mode5" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 6</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode6" type="range"/>
+<input class="param-slider" id="mode6" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 7</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode7" type="range"/>
+<input class="param-slider" id="mode7" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 8</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode8" type="range"/>
+<input class="param-slider" id="mode8" max="2" min="-2" step="0.01" type="range"/>
 </span>
 <span class="slider-label">Mode 9</span>
 <span class="param-slider-container">
-<input class="param-slider correlation-slider" id="mode9" type="range"/>
+<input class="param-slider" id="mode9" max="2" min="-2" step="0.01" type="range"/>
 </span>
 </div>
 <div class="plot-container">
-<svg class="plot" id="svg"></svg>
+<svg class="plot" height="750" id="svg" width="1350"></svg>
 </div>
 </div>
-<script href="fourier1.js" type="text/javascript">None</script></body>
+<script type="text/javascript">const W=1350,H=750,svg=d3.select("#svg"),g1=svg.append("g").attr("transform","translate(25, 25)"),g2=svg.append("g").attr("transform","translate(725, 25)"),x1=d3.scaleLinear().domain([-3,3]).range([0,575]),y1=d3.scaleLinear().domain([-4,4]).range([700,0]),x2=d3.scaleLinear().domain([0,9]).range([0,575]),y2=d3.scaleLinear().domain([-2,2]).range([700,0]),step=g1.append("path").style("stroke","white").style("stroke-width",3).attr("d",`M 0,${y1(-1.5)} L ${x1(-1)},${y1(-1.5)} L ${x1(-1)},${y1(1.5)} L ${x1(1)},${y1(1.5)} L ${x1(1)},${y1(-1.5)} L ${x1(3)},${y1(-1.5)}`),sumline=g1.append("path").style("stroke","#5df").style("stroke-width",3).style("fill","none"),ampline=g2.append("path").style("stroke","#5df").style("stroke-width",2).style("fill","none").style("stroke-dasharray","15 15"),xax1=g1.append("g").attr("class","axis").attr("transform","translate(0, 350)").call(d3.axisBottom(x1).tickValues([-3,-2,-1,1,2,3])),yax1=g1.append("g").attr("class","axis").attr("transform","translate(287.5)").call(d3.axisLeft(y1).tickValues([-4,-2,2,4])),xax2=g2.append("g").attr("class","axis").attr("transform","translate(0, 350)").call(d3.axisBottom(x2).tickValues([1,2,3,4,5,6,7,8,9])),yax2=g2.append("g").attr("class","axis").call(d3.axisLeft(y2).tickValues([-2,-1,1,2])),modes=[document.getElementById("mode1"),document.getElementById("mode2"),document.getElementById("mode3"),document.getElementById("mode4"),document.getElementById("mode5"),document.getElementById("mode6"),document.getElementById("mode7"),document.getElementById("mode8"),document.getElementById("mode9")],mlines=[g2.append("line").style("stroke","white").attr("x1",x2(1)).attr("x2",x2(1)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(2)).attr("x2",x2(2)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(3)).attr("x2",x2(3)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(4)).attr("x2",x2(4)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(5)).attr("x2",x2(5)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(6)).attr("x2",x2(6)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(7)).attr("x2",x2(7)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(8)).attr("x2",x2(8)).attr("y1",350),g2.append("line").style("stroke","white").attr("x1",x2(9)).attr("x2",x2(9)).attr("y1",350)];var mode_vals;function update(){mode_vals=[];for(var t=0;t<9;t++)mode_vals.push(modes[t].value),mlines[t].attr("y2",y2(modes[t].value));var e,a=[];for(t=-3;t<3;t+=.01){e=0;for(var s=0;s<9;s++)e+=mode_vals[s]*Math.cos(Math.PI*(s+1)*t/2);a.push([x1(t),y1(e)])}sumline.attr("d",d3.line()(a)),a=[];for(t=1;t<9;t+=.01)a.push([x2(t),y2(6/(Math.PI*t)*Math.sin(Math.PI*t/2))]);ampline.attr("d",d3.line()(a))}for(var i=1;i<10;i++)d3.select(`#mode${i}`).on("input",update);update();</script></body>
 </html>
