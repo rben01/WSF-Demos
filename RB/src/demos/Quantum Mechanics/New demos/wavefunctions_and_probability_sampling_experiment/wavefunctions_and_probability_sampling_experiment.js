@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs */
+/* global applyGraphicalObjs areaInsidePath */
 
 const X_MAX = 1.1;
 const X_MIN = -X_MAX;
@@ -224,9 +224,14 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 		throw new Error(`Invalid plot ${name}`);
 	}
 
-	const curveStyle = probDistName === "gaussian" ? d3.curveNatural : d3.curveLinear;
+	const curveStyle =
+		probDistName === "gaussian" ? d3.curveCatmullRom : d3.curveLinear;
+	const squareDx = 0.01;
 	let pathPoints;
-	if (probDistName === "gaussian") {
+	if (
+		(name === PROBABILITY && probDistName === "triangle") ||
+		probDistName === "gaussian"
+	) {
 		pathPoints = d3.range(nPoints).map(i => {
 			const x = X_MIN + (i / (nPoints - 1)) * X_WIDTH;
 			const y = f(x);
@@ -243,19 +248,19 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 	} else if (probDistName === "square") {
 		pathPoints = [
 			[X_MIN, Y_0],
-			[supports.square[0], Y_0],
+			[supports.square[0] - squareDx, Y_0],
 			[supports.square[0], SQUARE_MAGNITUDE],
 			[supports.square[1], SQUARE_MAGNITUDE],
-			[supports.square[1], Y_0],
+			[supports.square[1] + squareDx, Y_0],
 			[X_MAX, Y_0],
 		];
 	} else if (probDistName === "smallSquare") {
 		pathPoints = [
 			[X_MIN, Y_0],
-			[supports.smallSquare[0], Y_0],
+			[supports.smallSquare[0] - squareDx, Y_0],
 			[supports.smallSquare[0], SMALL_SQUARE_MAGNITUDE],
 			[supports.smallSquare[1], SMALL_SQUARE_MAGNITUDE],
-			[supports.smallSquare[1], Y_0],
+			[supports.smallSquare[1] + squareDx, Y_0],
 			[X_MAX, Y_0],
 		];
 	} else {
@@ -362,7 +367,7 @@ const samplingFunctions = {
 let experimentInterval;
 
 let wavefunctionCurveTotalLength;
-function searchCurveForPointNearGivenX(curveNode, x, precision) {
+function searchCurveForPointNearGivenX(curveNode, x, precision, shape) {
 	if (precision === undefined) {
 		precision = 0.2; // Whatever units SVG uses (pretty sure it's pixels)
 	}
@@ -382,16 +387,66 @@ function searchCurveForPointNearGivenX(curveNode, x, precision) {
 			rightLength = currentLength;
 		}
 	}
+
+	// if (shape === "square" || shape === "smallerSquare") {
+	// 	const unscaledPrecision = wavefXScale.invert(precision) - wavefXScale.invert(0);
+	// 	const foundXScaled = point.x;
+	// 	const foundXUnscaled = wavefXScale.invert(foundXScaled);
+	// 	const xSign = foundXUnscaled < X_0 ? -1 : 1;
+
+	// 	const magnitude =
+	// 		shape === "square" ? SQUARE_MAGNITUDE : SMALL_SQUARE_MAGNITUDE;
+	// 	const thresholdUnscaled = xSign * _squareThreshold(magnitude);
+	// 	const thresholdScaled = wavefXScale(thresholdUnscaled);
+
+	// 	if (Math.abs(thresholdScaled - foundXScaled) < precision) {
+	// 		let foundVertical = false;
+	// 		if (xSign < 0) {
+	// 			for (let i = 0; i < wavefCurvePathPoints.length - 1; ++i) {
+	// 				const [thisX, thisY] = wavefCurvePathPoints[i];
+	// 				const nextX = wavefCurvePathPoints[i + 1][0];
+	// 				if (Math.abs(thresholdUnscaled - thisX) < unscaledPrecision) {
+	// 					foundVertical = true;
+	// 				}
+	// 				if (
+	// 					foundVertical &&
+	// 					Math.abs(thresholdUnscaled - nextX) > unscaledPrecision
+	// 				) {
+	// 					return { x: wavefXScale(thisX), y: wavefYScale(thisY) };
+	// 				}
+	// 			}
+	// 		} else {
+	// 			for (let i = wavefCurvePathPoints.length - 1; i > 0; --i) {
+	// 				const [thisX, thisY] = wavefCurvePathPoints[i];
+	// 				const nextX = wavefCurvePathPoints[i - 1][0];
+	// 				if (Math.abs(thresholdUnscaled - thisX) < unscaledPrecision) {
+	// 					foundVertical = true;
+	// 				}
+	// 				if (
+	// 					foundVertical &&
+	// 					Math.abs(thresholdUnscaled - nextX) > unscaledPrecision
+	// 				) {
+	// 					return { x: wavefXScale(thisX), y: wavefYScale(thisY) };
+	// 				}
+	// 			}
+	// 		}
+	// 		// const y = wavefYScale(magnitude);
+	// 		// return { x: threshold, y };
+	// 	}
+	// }
+
 	return point;
 }
 
+const SNAP_THRESHOLD = 0.05;
 function searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
 	curvePathPoints,
 	xUnscaled,
 	yUnscaled,
-	insertionDistThreshold,
+	{ insertionDistThreshold, allowInsertion } = {},
 ) {
-	insertionDistThreshold = insertionDistThreshold ?? 0.1;
+	insertionDistThreshold = insertionDistThreshold ?? SNAP_THRESHOLD; // In unscaled units (where axes go from approx. -1 to 1)
+	allowInsertion = allowInsertion ?? true;
 
 	let left = 0;
 	let right = curvePathPoints.length - 1;
@@ -420,7 +475,12 @@ function searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
 
 	const leftDist = Math.abs(leftPoint[0] - xUnscaled);
 	const rightDist = Math.abs(rightPoint[0] - xUnscaled);
-	if (leftDist > insertionDistThreshold && rightDist > insertionDistThreshold) {
+
+	if (
+		allowInsertion &&
+		leftDist > insertionDistThreshold &&
+		rightDist > insertionDistThreshold
+	) {
 		const insertionIndex = left + 1;
 		curvePathPoints.splice(insertionIndex, 0, [xUnscaled, yUnscaled]);
 		return insertionIndex;
@@ -447,7 +507,7 @@ function update(probDistName) {
 
 	d3.selectAll(".plot").each(function (d) {
 		const { name } = d;
-		const f = name === "probability" ? baseFunc : x => baseFunc(x) ** 0.5;
+		const f = name === PROBABILITY ? x => baseFunc(x) ** 2 : baseFunc;
 		const sel = d3.select(this);
 		const data = getAxesData({
 			name,
@@ -468,13 +528,32 @@ function update(probDistName) {
 
 	wavefPlot
 		.on("mousemove", function (event) {
-			if (mouseIsOnGrabPath) {
+			if (isDraggingGrabHandle) {
+				document.body.style.cursor = "grabbing";
+			} else if (mouseIsOnGrabPath) {
 				document.body.style.cursor = "grab";
-			} else if (!isDraggingGrabHandle) {
+			} else {
 				document.body.style.cursor = null;
 			}
 
-			const [x, y] = d3.pointer(event);
+			const [xUnsnappedScaled, y] = d3.pointer(event);
+
+			const indexOfClosestPointToX = searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
+				wavefCurvePathPoints,
+				wavefXScale.invert(xUnsnappedScaled),
+				wavefYScale(y),
+				{ allowInsertion: false },
+			);
+			let xSnappedScaled = wavefXScale(
+				wavefCurvePathPoints[indexOfClosestPointToX][0],
+			);
+			if (
+				Math.abs(xSnappedScaled - xUnsnappedScaled) >
+				wavefXScale(SNAP_THRESHOLD) - wavefXScale(0)
+			) {
+				xSnappedScaled = xUnsnappedScaled;
+			}
+
 			const yMin = wavefYScale(Y_MAX * 0.8);
 			const yMax = wavefYScale(0);
 
@@ -504,7 +583,9 @@ function update(probDistName) {
 			} else if (mouseIsOnGrabPath) {
 				const point = searchCurveForPointNearGivenX(
 					wavefunctionGrabHandleNode,
-					x,
+					xSnappedScaled,
+					undefined,
+					probDistName,
 				);
 				if (grabIndicator !== undefined) {
 					grabIndicator.attr("cx", point.x).attr("cy", point.y);
@@ -563,10 +644,11 @@ function update(probDistName) {
 			isDraggingGrabHandle = true;
 			shapeButtonContainer.selectAll(".shape-button").property("disabled", false);
 			if (probDistName === "gaussian") {
-				curvePathGenerator.curve(d3.curveNatural);
+				curvePathGenerator.curve(d3.curveCatmullRom);
 			} else {
 				curvePathGenerator.curve(d3.curveLinear);
 			}
+			document.body.style.cursor = "grabbing";
 		});
 }
 

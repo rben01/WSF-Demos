@@ -9,6 +9,9 @@
 		></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
+			body {
+				user-select: none !important;
+			}
 			.grid-left-right {
 				grid-template-columns: auto 1fr;
 				column-gap: 50px;
@@ -57,7 +60,7 @@
 				cursor: grab;
 			} */
 			/* .axis-curve.axis-curve.curve-grab-handle:active {
-				cursor: grabbing;
+				cursor: grabbing !important;
 			} */
 			.wavef-grab-indicator {
 				fill: #5df;
@@ -155,6 +158,7 @@
 		</div>
 		<div></div>
 		<script src="../../../utils.js"></script>
+		<script src="./polygons.js"></script>
 		<script src="./wavefunctions_and_probability_sampling_experiment.js"></script>
 	</body>
 </html>
