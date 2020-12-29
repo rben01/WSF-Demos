@@ -22,7 +22,7 @@ const _BIG_HEIGHT = _BIG_WIDTH / _ASPECT_RATIO;
 const PROBA_WIDTH = _BIG_WIDTH;
 const PROBA_HEIGHT = _BIG_HEIGHT;
 
-const N_PIXELS_PER_CURVE_POINT = 50;
+const N_PIXELS_PER_CURVE_POINT = 20;
 
 const _margin = 5;
 
@@ -204,7 +204,7 @@ const supports = {
 	smallSquare: [-1, 1].map(sign => sign * _squareThreshold(SMALL_SQUARE_MAGNITUDE)),
 };
 
-let curvePathPoints;
+let wavefCurvePathPoints;
 function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 	width = +width;
 	const nPoints = width / (nPixelsPerCurvePoint ?? N_PIXELS_PER_CURVE_POINT);
@@ -224,16 +224,16 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 		throw new Error(`Invalid plot ${name}`);
 	}
 
-	const curveStyle = d3.curveLinear; // probDistName === "gaussian" ? d3.curveNatural : d3.curveLinear;
-
+	const curveStyle = probDistName === "gaussian" ? d3.curveNatural : d3.curveLinear;
+	let pathPoints;
 	if (probDistName === "gaussian") {
-		curvePathPoints = d3.range(nPoints).map(i => {
+		pathPoints = d3.range(nPoints).map(i => {
 			const x = X_MIN + (i / (nPoints - 1)) * X_WIDTH;
 			const y = f(x);
 			return [x, y];
 		});
 	} else if (probDistName === "triangle") {
-		curvePathPoints = [
+		pathPoints = [
 			[X_MIN, Y_0],
 			[supports.triangle[0], Y_0],
 			[X_0, 1],
@@ -241,7 +241,7 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 			[X_MAX, Y_0],
 		];
 	} else if (probDistName === "square") {
-		curvePathPoints = [
+		pathPoints = [
 			[X_MIN, Y_0],
 			[supports.square[0], Y_0],
 			[supports.square[0], SQUARE_MAGNITUDE],
@@ -250,7 +250,7 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 			[X_MAX, Y_0],
 		];
 	} else if (probDistName === "smallSquare") {
-		curvePathPoints = [
+		pathPoints = [
 			[X_MIN, Y_0],
 			[supports.smallSquare[0], Y_0],
 			[supports.smallSquare[0], SMALL_SQUARE_MAGNITUDE],
@@ -268,7 +268,10 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 		.x(p => xScale(p[0]))
 		.y(p => yScale(p[1]));
 
-	const path = line(curvePathPoints);
+	const path = line(pathPoints);
+	if (name === WAVEFUNCTION) {
+		wavefCurvePathPoints = [...pathPoints];
+	}
 
 	const data = [
 		{
@@ -432,7 +435,6 @@ let mouseIsOnGrabPath = false;
 let isDraggingGrabHandle = false;
 const curvePathGenerator = d3
 	.line()
-	.curve(d3.curveLinear)
 	.x(p => wavefXScale(p[0]))
 	.y(p => wavefYScale(p[1]));
 
@@ -485,10 +487,10 @@ function update(probDistName) {
 					grabIndicator.attr("cx", initialX).attr("cy", cy);
 				}
 				if (curvePointsSelectedPointIndex !== undefined) {
-					curvePathPoints[
+					wavefCurvePathPoints[
 						curvePointsSelectedPointIndex
 					][1] = wavefYScale.invert(cy);
-					const path = curvePathGenerator(curvePathPoints);
+					const path = curvePathGenerator(wavefCurvePathPoints);
 					wavefPlot.selectAll(".axis-curve").attr("d", path);
 					wavefunctionCurveTotalLength = wavefunctionGrabHandleNode.getTotalLength();
 				}
@@ -554,12 +556,17 @@ function update(probDistName) {
 			const [mouseX, mouseY] = d3.pointer(event);
 			initialX = mouseX;
 			curvePointsSelectedPointIndex = searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
-				curvePathPoints,
+				wavefCurvePathPoints,
 				wavefXScale.invert(initialX),
 				wavefYScale.invert(mouseY),
 			);
 			isDraggingGrabHandle = true;
 			shapeButtonContainer.selectAll(".shape-button").property("disabled", false);
+			if (probDistName === "gaussian") {
+				curvePathGenerator.curve(d3.curveNatural);
+			} else {
+				curvePathGenerator.curve(d3.curveLinear);
+			}
 		});
 }
 
