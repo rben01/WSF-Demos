@@ -389,7 +389,11 @@ def main():
         #
         #     infiles = [p for p in infiles if not ehr.search(p.name)]
 
-    ehr = re.compile(args.exclude_html_regex)
+    if args.exclude_html_regex:
+        ehr = re.compile(args.exclude_html_regex)
+    else:
+        ehr = None
+
     for inpath in inpaths:
         inpath = inpath.resolve()
         if inpath.is_dir():
@@ -398,7 +402,7 @@ def main():
             infiles = [inpath]
 
         for infile in infiles:
-            if ehr.search(infile.name) is not None:
+            if ehr and ehr.search(infile.name) is not None:
                 continue
 
             outdir: Path
