@@ -22,7 +22,7 @@ const _BIG_HEIGHT = _BIG_WIDTH / _ASPECT_RATIO;
 const PROBA_WIDTH = _BIG_WIDTH;
 const PROBA_HEIGHT = _BIG_HEIGHT;
 
-const N_PIXELS_PER_CURVE_POINT = 3;
+const N_PIXELS_PER_CURVE_POINT = 50;
 
 const _margin = 5;
 
@@ -59,7 +59,7 @@ const probaPlot = d3
 const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
 
 const MIN_EXPERIMENT_SPEED = 1;
-const MAX_EXPERIMENT_SPEED = 100;
+const MAX_EXPERIMENT_SPEED = 250;
 let experimentSpeed = MIN_EXPERIMENT_SPEED;
 const experimentSpeedToTimeIntervalScale = d3.scaleLog(
 	[MIN_EXPERIMENT_SPEED, MAX_EXPERIMENT_SPEED],
@@ -204,6 +204,7 @@ const supports = {
 	smallSquare: [-1, 1].map(sign => sign * _squareThreshold(SMALL_SQUARE_MAGNITUDE)),
 };
 
+let curvePathPoints;
 function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 	width = +width;
 	const nPoints = width / (nPixelsPerCurvePoint ?? N_PIXELS_PER_CURVE_POINT);
@@ -213,7 +214,7 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 		yMin = WAVEF_Y_MIN;
 		xScale = wavefXScale;
 		yScale = wavefYScale;
-		yAxisText = "𝜓(𝑥)";
+		yAxisText = "|𝜓(𝑥)|";
 	} else if (name === PROBABILITY) {
 		yMin = PROBA_Y_MIN;
 		xScale = probaXScale;
@@ -223,21 +224,24 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 		throw new Error(`Invalid plot ${name}`);
 	}
 
-	let pathPoints;
-	if (name === WAVEFUNCTION || probDistName === "gaussian") {
-		pathPoints = d3.range(nPoints).map(i => {
+	const curveStyle = d3.curveLinear; // probDistName === "gaussian" ? d3.curveNatural : d3.curveLinear;
+
+	if (probDistName === "gaussian") {
+		curvePathPoints = d3.range(nPoints).map(i => {
 			const x = X_MIN + (i / (nPoints - 1)) * X_WIDTH;
 			const y = f(x);
 			return [x, y];
 		});
 	} else if (probDistName === "triangle") {
-		pathPoints = [
+		curvePathPoints = [
+			[X_MIN, Y_0],
 			[supports.triangle[0], Y_0],
 			[X_0, 1],
 			[supports.triangle[1], Y_0],
+			[X_MAX, Y_0],
 		];
 	} else if (probDistName === "square") {
-		pathPoints = [
+		curvePathPoints = [
 			[X_MIN, Y_0],
 			[supports.square[0], Y_0],
 			[supports.square[0], SQUARE_MAGNITUDE],
@@ -246,7 +250,7 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 			[X_MAX, Y_0],
 		];
 	} else if (probDistName === "smallSquare") {
-		pathPoints = [
+		curvePathPoints = [
 			[X_MIN, Y_0],
 			[supports.smallSquare[0], Y_0],
 			[supports.smallSquare[0], SMALL_SQUARE_MAGNITUDE],
@@ -260,11 +264,11 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 
 	const line = d3
 		.line()
-		.curve(d3.curveLinear)
+		.curve(curveStyle)
 		.x(p => xScale(p[0]))
 		.y(p => yScale(p[1]));
 
-	const path = line(pathPoints);
+	const path = line(curvePathPoints);
 
 	const data = [
 		{
@@ -315,6 +319,17 @@ function getAxesData({ name, f, width, probDistName, nPixelsPerCurvePoint }) {
 				d: path,
 			},
 		},
+		...(name === WAVEFUNCTION
+			? [
+					{
+						shape: "path",
+						classes: ["axis", "axis-curve", "curve-grab-handle"],
+						attrs: {
+							d: path,
+						},
+					},
+			  ]
+			: []),
 		{
 			shape: "path",
 			classes: ["axis", "axis-curve", "curve-foreground"],
@@ -343,6 +358,84 @@ const samplingFunctions = {
 
 let experimentInterval;
 
+let wavefunctionCurveTotalLength;
+function searchCurveForPointNearGivenX(curveNode, x, precision) {
+	if (precision === undefined) {
+		precision = 0.2; // Whatever units SVG uses (pretty sure it's pixels)
+	}
+	let leftLength = 0;
+	let rightLength = wavefunctionCurveTotalLength ?? curveNode.getTotalLength();
+	let point;
+	while (leftLength < rightLength - precision) {
+		const currentLength = (leftLength + rightLength) / 2;
+		point = curveNode.getPointAtLength(currentLength);
+		const pointX = point.x;
+
+		if (pointX < x - precision) {
+			leftLength = currentLength;
+		} else if (pointX < x + precision) {
+			break;
+		} else {
+			rightLength = currentLength;
+		}
+	}
+	return point;
+}
+
+function searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
+	curvePathPoints,
+	xUnscaled,
+	yUnscaled,
+	insertionDistThreshold,
+) {
+	insertionDistThreshold = insertionDistThreshold ?? 0.1;
+
+	let left = 0;
+	let right = curvePathPoints.length - 1;
+	let currentIndex;
+	let point;
+	while (left < right - 1) {
+		currentIndex = Math.floor((left + right) / 2);
+		point = curvePathPoints[currentIndex];
+		const pointX = point[0];
+
+		if (pointX < xUnscaled) {
+			left = currentIndex;
+		} else if (pointX === xUnscaled) {
+			break;
+		} else {
+			right = currentIndex;
+		}
+	}
+
+	if (point.x === xUnscaled) {
+		return currentIndex;
+	}
+
+	const leftPoint = curvePathPoints[left];
+	const rightPoint = curvePathPoints[right];
+
+	const leftDist = Math.abs(leftPoint[0] - xUnscaled);
+	const rightDist = Math.abs(rightPoint[0] - xUnscaled);
+	if (leftDist > insertionDistThreshold && rightDist > insertionDistThreshold) {
+		const insertionIndex = left + 1;
+		curvePathPoints.splice(insertionIndex, 0, [xUnscaled, yUnscaled]);
+		return insertionIndex;
+	} else if (leftDist < rightDist) {
+		return left;
+	} else {
+		return right;
+	}
+}
+
+let mouseIsOnGrabPath = false;
+let isDraggingGrabHandle = false;
+const curvePathGenerator = d3
+	.line()
+	.curve(d3.curveLinear)
+	.x(p => wavefXScale(p[0]))
+	.y(p => wavefYScale(p[1]));
+
 let selectedProbDist;
 function update(probDistName) {
 	probaPlot.selectAll(".experiment-indicator").remove();
@@ -362,6 +455,112 @@ function update(probDistName) {
 		});
 		applyGraphicalObjs(sel, data, { selector: ".axis" });
 	});
+
+	const wavefunctionGrabHandle = wavefPlot.selectAll(".curve-grab-handle");
+	const wavefunctionGrabHandleNode = wavefunctionGrabHandle.node();
+	wavefunctionCurveTotalLength = wavefunctionGrabHandleNode.getTotalLength();
+	let grabIndicator;
+	let grabIndicatorVerticalLine;
+	let initialX;
+	let curvePointsSelectedPointIndex;
+
+	wavefPlot
+		.on("mousemove", function (event) {
+			if (mouseIsOnGrabPath) {
+				document.body.style.cursor = "grab";
+			} else if (!isDraggingGrabHandle) {
+				document.body.style.cursor = null;
+			}
+
+			const [x, y] = d3.pointer(event);
+			const yMin = wavefYScale(Y_MAX * 0.8);
+			const yMax = wavefYScale(0);
+
+			// Three choices: 1. dragging the handle to move the curve point; 2. simply
+			// hovering over the path without dragging; 3. neither, in which case the
+			// grab indicator shouldn't be shown
+			if (isDraggingGrabHandle) {
+				const cy = Math.max(yMin, Math.min(y, yMax));
+				if (grabIndicator !== undefined) {
+					grabIndicator.attr("cx", initialX).attr("cy", cy);
+				}
+				if (curvePointsSelectedPointIndex !== undefined) {
+					curvePathPoints[
+						curvePointsSelectedPointIndex
+					][1] = wavefYScale.invert(cy);
+					const path = curvePathGenerator(curvePathPoints);
+					wavefPlot.selectAll(".axis-curve").attr("d", path);
+					wavefunctionCurveTotalLength = wavefunctionGrabHandleNode.getTotalLength();
+				}
+				if (grabIndicatorVerticalLine !== undefined) {
+					grabIndicatorVerticalLine
+						.attr("x1", initialX)
+						.attr("x2", initialX)
+						.attr("y1", yMin)
+						.attr("y2", yMax);
+				}
+			} else if (mouseIsOnGrabPath) {
+				const point = searchCurveForPointNearGivenX(
+					wavefunctionGrabHandleNode,
+					x,
+				);
+				if (grabIndicator !== undefined) {
+					grabIndicator.attr("cx", point.x).attr("cy", point.y);
+				}
+				if (grabIndicatorVerticalLine !== undefined) {
+					grabIndicatorVerticalLine
+						.attr("x1", point.x)
+						.attr("x2", point.x)
+						.attr("y1", yMin)
+						.attr("y2", yMax);
+				}
+			} else {
+				wavefPlot.selectAll(".wavef-grab-indicator").data([]).join("circle");
+				wavefPlot.selectAll(".wavef-grab-v-line").data([]).join("line");
+				grabIndicator = undefined;
+				curvePointsSelectedPointIndex = undefined;
+				grabIndicatorVerticalLine = undefined;
+			}
+		})
+		.on("mouseup", function () {
+			isDraggingGrabHandle = false;
+			if (!mouseIsOnGrabPath) {
+				grabIndicator = wavefPlot
+					.selectAll(".wavef-grab-indicator")
+					.data([])
+					.join("circle");
+			}
+		});
+
+	wavefunctionGrabHandle
+		.on("mouseover", function () {
+			mouseIsOnGrabPath = true;
+			grabIndicatorVerticalLine = wavefPlot
+				.selectAll(".wavef-grab-v-line")
+				.data([0])
+				.join("line")
+				.classed("wavef-grab-v-line", true);
+			grabIndicator = wavefPlot
+				.selectAll(".wavef-grab-indicator")
+				.data([0])
+				.join("circle")
+				.classed("wavef-grab-indicator", true)
+				.attr("r", 15);
+		})
+		.on("mouseout", function () {
+			mouseIsOnGrabPath = false;
+		})
+		.on("mousedown", function (event) {
+			const [mouseX, mouseY] = d3.pointer(event);
+			initialX = mouseX;
+			curvePointsSelectedPointIndex = searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
+				curvePathPoints,
+				wavefXScale.invert(initialX),
+				wavefYScale.invert(mouseY),
+			);
+			isDraggingGrabHandle = true;
+			shapeButtonContainer.selectAll(".shape-button").property("disabled", false);
+		});
 }
 
 function enableShapeButtons() {

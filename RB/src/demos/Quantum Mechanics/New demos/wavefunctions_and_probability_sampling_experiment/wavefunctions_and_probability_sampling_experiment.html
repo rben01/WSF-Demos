@@ -29,7 +29,7 @@
 				fill-opacity: 0;
 			}
 			.axis-curve {
-				fill-opacity: 0;
+				fill: none;
 				stroke-linecap: round;
 				stroke-linejoin: round;
 			}
@@ -40,6 +40,30 @@
 			.axis-curve.curve-foreground {
 				stroke-width: 4px;
 				stroke: white;
+				pointer-events: none;
+			}
+			.axis-curve.axis-curve.curve-grab-handle {
+				fill: none;
+				stroke-opacity: 0;
+				stroke-width: 20px;
+			}
+			.wavef-grab-v-line {
+				stroke: #ccc;
+				stroke-width: 3;
+				stroke-dasharray: 5 5;
+				pointer-events: none;
+			}
+			/* .axis-curve.axis-curve.curve-grab-handle:hover {
+				cursor: grab;
+			} */
+			/* .axis-curve.axis-curve.curve-grab-handle:active {
+				cursor: grabbing;
+			} */
+			.wavef-grab-indicator {
+				fill: #5df;
+				stroke: #fff;
+				stroke-width: 4px;
+				pointer-events: none;
 			}
 			.axis-label {
 				fill: white;
@@ -69,7 +93,7 @@
 	</head>
 	<body>
 		<div class="grid-left-right">
-			<div class="vertical-container">
+			<div class="controls-container">
 				<div class="slider-container">
 					<span>Shape of probability distribution</span>
 					<span
@@ -90,6 +114,8 @@
 							Smaller square
 						</button>
 					</span>
+					<span>(or drag the plot below to set manually)</span>
+					<svg id="wavefunction-plot" class="plot"></svg>
 					<span>Measurement speed: <span id="experiment-speed"></span></span>
 					<span>
 						<label
@@ -124,7 +150,6 @@
 						</button>
 					</span>
 				</div>
-				<svg id="wavefunction-plot" class="plot"></svg>
 			</div>
 			<svg id="experiment-plot" class="plot"></svg>
 		</div>
