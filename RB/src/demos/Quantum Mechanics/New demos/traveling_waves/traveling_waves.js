@@ -24,6 +24,39 @@ const xScale = d3.scaleLinear([X_MIN, X_MAX], [_margin, WIDTH - _margin]);
 const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT - _margin, _margin]);
 
 let showVerticalDot = true;
+let verticalMovingDotXUnscaled;
+const _verticalDotHiddenSentinel = -1;
+const _verticalDotPrescaledXMin = 0;
+const _verticalDotPrescaledXMax = 1000;
+function verticalDotSliderXScale(verticalDotPrescaledX) {
+	if (verticalDotPrescaledX === _verticalDotHiddenSentinel) {
+		return -1;
+	}
+	const t =
+		(verticalDotPrescaledX - _verticalDotPrescaledXMin) /
+		(_verticalDotPrescaledXMax - _verticalDotPrescaledXMin);
+	const xMin = 0;
+	const xMax = 2 * Math.PI;
+	return xMin * (1 - t) + xMax * t;
+}
+const verticalDotSlider = (() => {
+	const slider = document.getElementById("slider-vertical-dot-x");
+	slider.min = _verticalDotHiddenSentinel;
+	slider.max = _verticalDotPrescaledXMax;
+	slider.step = 1;
+	slider.value = (_verticalDotPrescaledXMin + _verticalDotPrescaledXMax) / 2;
+	verticalMovingDotXUnscaled = verticalDotSliderXScale(+slider.value);
+	slider.oninput = function () {
+		verticalMovingDotXUnscaled = verticalDotSliderXScale(+this.value);
+		showVerticalDot = verticalMovingDotXUnscaled >= 0;
+		// plot.selectAll(".dot-guide")
+		// 	.attr("x1", verticalMovingDotX)
+		// 	.attr("x2", verticalMovingDotX);
+		// eslint-disable-next-line no-use-before-define
+		update({});
+	};
+	return slider;
+})();
 
 const MIN_TIME = 0;
 let currTime = MIN_TIME;
@@ -76,8 +109,6 @@ const playbackButtonElems = {
 for (const button of Object.values(playbackButtonElems)) {
 	d3.select(button).on("click._default", null);
 }
-
-const VERTICAL_MOVING_DOT_X = Math.PI;
 
 function getAxesData() {
 	const labelFormatter = d3.format(".2~g");
@@ -176,7 +207,7 @@ function getSinePoints(dx) {
 		const y = Math.sin(WAVENUMBER * (x - dx));
 		return [x, y];
 	});
-	const dotY = Math.sin(WAVENUMBER * (VERTICAL_MOVING_DOT_X - dx));
+	const dotY = Math.sin(WAVENUMBER * (verticalMovingDotXUnscaled - dx));
 	return { points, dotY };
 }
 
@@ -207,8 +238,11 @@ function getSquarePoints(dx) {
 	const points = _getFunkyWavePoints(onePeriod, dx);
 
 	const x0 = X_0 + dx;
-	const dotY =
-		x0 - PERIOD / 2 <= VERTICAL_MOVING_DOT_X && VERTICAL_MOVING_DOT_X < x0 ? -1 : 1;
+	let distFromX0 = (verticalMovingDotXUnscaled - x0) % PERIOD;
+	while (distFromX0 < X_0) {
+		distFromX0 += PERIOD;
+	}
+	const dotY = distFromX0 >= PERIOD / 2 ? -1 : 1;
 
 	return { points, dotY };
 }
@@ -229,7 +263,7 @@ function getTrianglePoints(dx) {
 	let rightPointIndex;
 	for (let i = 0; i < points.length; ++i) {
 		const x = points[i][0];
-		if (VERTICAL_MOVING_DOT_X < x) {
+		if (verticalMovingDotXUnscaled < x) {
 			rightPointIndex = i;
 			break;
 		}
@@ -237,7 +271,7 @@ function getTrianglePoints(dx) {
 	const [x1, y1] = points[rightPointIndex - 1];
 	const [x2, y2] = points[rightPointIndex];
 
-	const t = (VERTICAL_MOVING_DOT_X - x1) / (x2 - x1);
+	const t = (verticalMovingDotXUnscaled - x1) / (x2 - x1);
 	const dotY = t * y2 + (1 - t) * y1;
 
 	return { points, dotY };
@@ -249,6 +283,7 @@ const pointFuncs = {
 	triangle: getTrianglePoints,
 };
 
+// eslint-disable-next-line no-unused-vars
 function reset() {
 	isPlaying = false;
 	netDx = 0;
@@ -257,6 +292,9 @@ function reset() {
 	playbackButtonElems.play.disabled = false;
 	playbackButtonElems.pause.disabled = true;
 	playbackButtonElems.reset.disabled = true;
+	verticalDotSlider.value =
+		(_verticalDotPrescaledXMin + _verticalDotPrescaledXMax) / 2;
+	verticalMovingDotXUnscaled = verticalDotSliderXScale(+verticalDotSlider.value);
 
 	// eslint-disable-next-line no-use-before-define
 	update({ time: MIN_TIME, fromUserInteraction: true });
@@ -271,6 +309,7 @@ function pause() {
 	playbackButtonElems.reset.disabled = false;
 }
 
+// eslint-disable-next-line no-unused-vars
 function play() {
 	playbackButtonElems.play.disabled = true;
 	playbackButtonElems.pause.disabled = false;
@@ -349,14 +388,14 @@ function update({ time, shape, fromUserInteraction }) {
 
 	const dotData = [];
 	if (showVerticalDot) {
-		const scaledDotX = xScale(VERTICAL_MOVING_DOT_X);
+		const verticalMovingDotXScaled = xScale(verticalMovingDotXUnscaled);
 		dotData.push(
 			{
 				shape: "line",
 				class: "dot dot-guide",
 				attrs: {
-					x1: scaledDotX,
-					x2: scaledDotX,
+					x1: verticalMovingDotXScaled,
+					x2: verticalMovingDotXScaled,
 					y1: yScale(Y_MIN),
 					y2: yScale(Y_MAX),
 				},
@@ -365,7 +404,7 @@ function update({ time, shape, fromUserInteraction }) {
 				shape: "circle",
 				class: "dot vertical-dot vertical-dot-background",
 				attrs: {
-					cx: xScale(VERTICAL_MOVING_DOT_X),
+					cx: verticalMovingDotXScaled,
 					cy: yScale(dotY),
 					r: 19,
 				},
@@ -374,7 +413,7 @@ function update({ time, shape, fromUserInteraction }) {
 				shape: "circle",
 				class: "dot vertical-dot vertical-dot-foreground",
 				attrs: {
-					cx: xScale(VERTICAL_MOVING_DOT_X),
+					cx: verticalMovingDotXScaled,
 					cy: yScale(dotY),
 					r: 15,
 				},
