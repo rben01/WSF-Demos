@@ -21,8 +21,6 @@ const _BIG_HEIGHT = 750;
 const PROBA_WIDTH = _BIG_WIDTH;
 const PROBA_HEIGHT = _BIG_HEIGHT;
 
-const N_PIXELS_PER_CURVE_POINT = 15;
-
 const _margin = 5;
 
 const wavefXScale = d3.scaleLinear([X_MIN, X_MAX], [_margin, WAVEF_WIDTH - _margin]);
@@ -72,6 +70,7 @@ function updateExperimentSpeed() {
 }
 updateExperimentSpeed();
 
+// eslint-disable-next-line no-unused-vars
 const experimentSpeedSlider = (() => {
 	const slider = document.getElementById("experiment-speed-slider");
 	slider.min = MIN_EXPERIMENT_SPEED;
@@ -163,8 +162,7 @@ function _genericSquare(x, magnitude) {
 	return Math.abs(x) > threshold ? 0 : magnitude;
 }
 
-// CDF of square is line with slope `magnitude**2` passing through (0, magnitude**2 *
-// threshold)
+// CDF of square is line with slope `magnitude**2` passing through (0, .5)
 function _genericSquareSample(magnitude) {
 	const y = Math.random();
 	return (y - 0.5) / magnitude ** 2;
@@ -179,7 +177,7 @@ function squareSample() {
 	return _genericSquareSample(SQUARE_MAGNITUDE);
 }
 
-const SMALL_SQUARE_MAGNITUDE = 1.3;
+const SMALL_SQUARE_MAGNITUDE = 1.29;
 function smallSquare(x) {
 	return _genericSquare(x, SMALL_SQUARE_MAGNITUDE);
 }
@@ -435,7 +433,6 @@ const probabilityDistributions = {
 	smallSquare,
 };
 
-let experimentInterval;
 let experimentAnimationFrame;
 
 let wavefunctionCurveTotalLength;
@@ -666,7 +663,7 @@ function update(probDistName) {
 				const wavePath = wavefPlot
 					.selectAll(".axis-curve.curve-foreground")
 					.node();
-				const nPoints = 2000;
+				const nPoints = 1500;
 				const dl = 1 / (nPoints - 1);
 
 				const totalLengthInitial = wavePath.getTotalLength();
@@ -785,6 +782,7 @@ function stopExperiment() {
 	wavefPlot.selectAll("*").style("pointer-events", null);
 }
 
+// eslint-disable-next-line no-unused-vars
 function clearExperiment() {
 	probaPlot.selectAll(".experiment-indicator").remove();
 	d3.select("#btn-clear-experiment").property("disabled", true);
@@ -834,7 +832,7 @@ function runExperiment() {
 		? gaussianSample
 		: selectedProbDist === "square"
 		? squareSample
-		: selectedProbDist === "smallerSquare"
+		: selectedProbDist === "smallSquare"
 		? smallSquareSample
 		: sampleCdf;
 
@@ -850,6 +848,7 @@ function runExperiment() {
 	const buckets = d3
 		.range(nBuckets + 1)
 		.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
+	const catchallBucketIndex = nBuckets;
 
 	const scaledX0 = probaXScale(X_0);
 	const scaledY0 = probaYScale(Y_0);
@@ -857,21 +856,7 @@ function runExperiment() {
 
 	function nextUpdateTimeIntervalMS() {
 		return 1000 * experimentSpeedToTimeIntervalScale(experimentSpeed);
-		// return 0.1 * Math.exp(-nMeasurementsSoFar / 300) * 1000;
 	}
-
-	let bucketIndex;
-	// let waitTimeMS;
-	// function takeMeasurement() {
-	// 	// Take sample, update corresponding bucket. If sample is out of axis bounds, apply
-	// 	// it to the last bucket, which is a catch-all for non-rendered samples
-	// 	const sample = samplingFunc();
-	// 	bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
-	// 	if (bucketIndex < 0 || bucketIndex > nBuckets) {
-	// 		bucketIndex = nBuckets;
-	// 	}
-	// 	buckets[bucketIndex].n += 1;
-	// }
 
 	let prevTimestampMS;
 	let experimentRemainderFrac = 0;
@@ -889,15 +874,16 @@ function runExperiment() {
 		const nExperiments = Math.floor(nExperimentsExact);
 		experimentRemainderFrac = nExperimentsExact % 1;
 
+		let bucketIndex;
 		for (let i = 0; i < nExperiments; ++i) {
 			const sample = samplingFunc();
 			bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
 			if (bucketIndex < 0 || bucketIndex > nBuckets) {
-				bucketIndex = nBuckets;
+				bucketIndex = catchallBucketIndex;
 			}
 			buckets[bucketIndex].n += 1;
 			nMeasurementsSoFar += 1;
-			if (nMeasurementsSoFar > nMeasurements) {
+			if (nMeasurementsSoFar >= nMeasurements) {
 				break;
 			}
 		}
@@ -951,15 +937,13 @@ function runExperiment() {
 			);
 		}
 
-		if (nMeasurementsSoFar > nMeasurements) {
+		if (nMeasurementsSoFar >= nMeasurements) {
 			stopExperiment();
 		} else {
 			experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 		}
 	}
 	experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
-
-	// experimentInterval = setTimeout(takeMeasurement, nextUpdateTimeIntervalMS());
 }
 
 shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
