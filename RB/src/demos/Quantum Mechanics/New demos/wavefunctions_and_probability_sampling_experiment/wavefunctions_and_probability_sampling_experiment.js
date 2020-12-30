@@ -141,12 +141,11 @@ function _genericSquare(x, magnitude) {
 	return Math.abs(x) > threshold ? 0 : magnitude;
 }
 
-// CDF of square is line with slope `magnitude` passing through (0, magnitude *
+// CDF of square is line with slope `magnitude**2` passing through (0, magnitude**2 *
 // threshold)
 function _genericSquareSample(magnitude) {
-	// if y = m*(x+t), then x = y/m - t
 	const y = Math.random();
-	return (y - 0.5) / magnitude;
+	return (y - 0.5) / magnitude ** 2;
 }
 
 const SQUARE_MAGNITUDE = 0.8;
@@ -234,7 +233,10 @@ let probaCurvePathPoints;
 
 function interpolatePoints(wavefPoints, func) {
 	const points = [];
-	const distBtwnAddedPoints = 0.0005; // In unscaled units
+
+	// This has to be small for accurate sampling (since sampling is performed
+	// numerically via the CDF), but too small and rendering becomes a bottleneck
+	const distBtwnAddedPoints = 0.003; // In unscaled units
 	for (let i = 0; i < wavefPoints.length - 1; ++i) {
 		const thisPoint = wavefPoints[i];
 		const nextPoint = wavefPoints[i + 1];
@@ -495,6 +497,7 @@ let mouseIsOnGrabPath = false;
 let isDraggingGrabHandle = false;
 const wavefCurvePathGenerator = d3
 	.line()
+	.curve(d3.curveLinear)
 	.x(p => wavefXScale(p[0]))
 	.y(p => wavefYScale(p[1]));
 const probaCurvePathGenerator = d3
@@ -640,10 +643,8 @@ function update(probDistName) {
 				const wavePath = wavefPlot
 					.selectAll(".axis-curve.curve-foreground")
 					.node();
-				const nPoints = 300;
+				const nPoints = 1000;
 				const dl = 1 / (nPoints - 1);
-
-				console.log(areaUnderCurve(probaCurvePathPoints));
 
 				const totalLengthInitial = wavePath.getTotalLength();
 				probaCurvePathPoints = [];
@@ -657,9 +658,7 @@ function update(probDistName) {
 					const y = wavefYScale.invert(yWavefScaled) ** 2;
 					probaCurvePathPoints.push([x, y]);
 				}
-				console.log(probaCurvePathPoints);
 				const pathArea = areaUnderCurve(probaCurvePathPoints);
-				console.log(pathArea);
 				wavefCurvePathPoints = wavefCurvePathPoints.map(([x, y]) => [
 					x,
 					y / pathArea ** 0.5,
@@ -784,10 +783,8 @@ function runExperiment() {
 	let samples;
 	function sampleCdf() {
 		if (sampleIndex === maxSamplesGathered) {
-			console.log("gathering");
 			samples = [...sample(cdf, maxSamplesGathered)];
 			sampleIndex = 0;
-			console.log("gathered");
 		}
 		const s = samples[sampleIndex];
 		sampleIndex += 1;
@@ -833,7 +830,6 @@ function runExperiment() {
 		// Take sample, update corresponding bucket. If sample is out of axis bounds, apply
 		// it to the last bucket, which is a catch-all for non-rendered samples
 		const sample = samplingFunc();
-		const nBuckets = buckets.length - 1;
 		let bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
 		if (bucketIndex < 0 || bucketIndex > nBuckets) {
 			bucketIndex = nBuckets;
