@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs areaInsidePath */
+/* global applyGraphicalObjs */
 
 const X_MAX = 1.1;
 const X_MIN = -X_MAX;
@@ -196,6 +196,37 @@ function smallSquareSample() {
 	return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
 }
 
+function sample(cdfPoints) {
+	const r = Math.random();
+	let left = 0;
+	let right = cdfPoints.length - 1;
+	let currentIndex;
+
+	while (left < right - 1) {
+		currentIndex = Math.floor((left + right) / 2);
+		const currentPoint = cdfPoints[currentIndex];
+		const y = currentPoint[1];
+		if (y < r) {
+			right = currentIndex;
+		} else {
+			left = currentIndex;
+		}
+	}
+}
+
+function areaUnderCurve(points) {
+	const len = points.length - 1;
+	let area = 0;
+	for (let i = 0; i < len; ++i) {
+		const thisPoint = points[i];
+		const nextPoint = points[i + 1];
+		const dx = nextPoint[0] - thisPoint[0];
+		const yAvg = (thisPoint[1] + nextPoint[1]) / 2;
+		area += dx * yAvg;
+	}
+	return area;
+}
+
 const supports = {
 	gaussian: [X_MIN, X_MAX],
 	triangle: [-1, 1],
@@ -229,7 +260,7 @@ function getInterpolatedProbaPoints() {
 }
 
 function getAxesData({ name, f, probDistName }) {
-	const nPoints = 21;
+	const nPoints = 15;
 
 	let yMin, xScale, yScale, yAxisText;
 	if (name === WAVEFUNCTION) {
@@ -371,7 +402,7 @@ function getAxesData({ name, f, probDistName }) {
 		},
 	];
 
-	return data;
+	return { data, pathPoints };
 }
 
 const probabilityDistributions = {
@@ -443,6 +474,8 @@ function searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
 		}
 	}
 
+	console.log(left, right);
+
 	if (point.x === xUnscaled) {
 		return currentIndex;
 	}
@@ -485,43 +518,34 @@ function update(probDistName) {
 
 	selectedProbDist = probDistName;
 	const baseFunc = probabilityDistributions[probDistName];
-	const probaData = (() => {
+	const probaPathPoints = (() => {
 		const d = probaPlot.datum();
 
 		// Due to lack of foresight, this call is what updates the list of curve points
-		const data = getAxesData({
+		const pathPoints = getAxesData({
 			name: d.name,
 			width: +probaPlot.attr("width"),
 			probDistName,
 			f: x => baseFunc(x) ** 2,
-		});
-		return data;
+		}).pathPoints;
+		return pathPoints;
 	})();
 
-	// Please forgive me
-	const pathDatum = probaData[probaData.length - 1];
-	pathDatum.classes.push("temp-path");
-	applyGraphicalObjs(probaPlot, [pathDatum], { selector: ".temp-path" });
-	const probaPathNode = probaPlot.selectAll(".temp-path").node();
-	const baseProbaArea = areaInsidePath(probaPathNode, undefined, undefined, {
-		xScale: probaXScale,
-		yScale: probaYScale,
-	});
-	probaPlot.selectAll(".temp-path").remove();
+	const probaArea = areaUnderCurve(probaPathPoints);
 
 	d3.selectAll(".plot").each(function (d) {
 		const { name } = d;
 		const f =
 			name === PROBABILITY
-				? x => baseFunc(x) ** 2 / baseProbaArea
-				: x => baseFunc(x) / baseProbaArea ** 0.5;
+				? x => baseFunc(x) ** 2 / probaArea
+				: x => baseFunc(x) / probaArea ** 0.5;
 		const sel = d3.select(this);
 		const data = getAxesData({
 			name,
 			width: sel.attr("width"),
 			probDistName,
 			f,
-		});
+		}).data;
 		applyGraphicalObjs(sel, data, { selector: ".axis" });
 	});
 
@@ -618,20 +642,9 @@ function update(probDistName) {
 		})
 		.on("mouseup", function () {
 			if (isDraggingGrabHandle) {
-				const probaPathD = probaCurvePathGenerator(
+				const pathArea = areaUnderCurve(
 					wavefCurvePathPoints.map(([x, y]) => [x, y ** 2]),
 				);
-				const probaTempPath = probaPlot
-					.selectAll(".temp-path")
-					.data([0])
-					.join("path")
-					.classed("temp-path", true)
-					.attr("d", probaPathD);
-				const pathArea = areaInsidePath(probaTempPath.node(), 0.1, undefined, {
-					xScale: probaXScale,
-					yScale: probaYScale,
-				});
-				probaTempPath.remove();
 				wavefCurvePathPoints = wavefCurvePathPoints.map(([x, y]) => [
 					x,
 					y / pathArea ** 0.5,
