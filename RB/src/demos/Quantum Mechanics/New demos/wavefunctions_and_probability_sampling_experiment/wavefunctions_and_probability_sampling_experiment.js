@@ -6,7 +6,7 @@ const X_0 = 0;
 const X_WIDTH = X_MAX - X_MIN;
 
 const WAVEF_Y_MIN = -0.1;
-const Y_MAX = 2;
+const Y_MAX = 1.9;
 const Y_0 = 0;
 // eslint-disable-next-line no-unused-vars
 const Y_WIDTH = Y_MAX - WAVEF_Y_MIN;
@@ -130,10 +130,10 @@ function triangle(x) {
 	return Math.max(0, 1 - Math.abs(x));
 }
 
-// The absolute value of where the square function goes from zero to nonzero (as a
+// The absolute x-value of where the square function goes from zero to nonzero (as a
 // wavefunction, when squared it must integrate to 1)
 function _squareThreshold(magnitude) {
-	return 1 / (2 * magnitude) ** 2;
+	return 1 / (2 * magnitude ** 2);
 }
 
 function _genericSquare(x, magnitude) {
@@ -141,9 +141,10 @@ function _genericSquare(x, magnitude) {
 	return Math.abs(x) > threshold ? 0 : magnitude;
 }
 
-// CDF of square is line with slope `magnitude` passing through (0, .5)
+// CDF of square is line with slope `magnitude` passing through (0, magnitude *
+// threshold)
 function _genericSquareSample(magnitude) {
-	// if y = .5 + m*x, then x = (y - .5)/m
+	// if y = m*(x+t), then x = y/m - t
 	const y = Math.random();
 	return (y - 0.5) / magnitude;
 }
@@ -166,24 +167,30 @@ function smallSquareSample() {
 	return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
 }
 
-function sample(cdfPoints) {
-	const r = Math.random();
-	let left = 0;
-	let right = cdfPoints.length - 1;
-	let currentIndex;
+function sample(cdfPoints, n) {
+	n = n ?? 1;
+	const samples = [];
 
-	while (left < right - 1) {
-		currentIndex = Math.floor((left + right) / 2);
-		const currentPoint = cdfPoints[currentIndex];
-		const y = currentPoint[1];
-		if (y < r) {
-			left = currentIndex;
-		} else {
-			right = currentIndex;
+	for (let i = 0; i < n; ++i) {
+		const r = Math.random();
+		let left = 0;
+		let right = cdfPoints.length - 1;
+		let currentIndex;
+
+		while (left < right - 1) {
+			currentIndex = Math.floor((left + right) / 2);
+			const currentPoint = cdfPoints[currentIndex];
+			const y = currentPoint[1];
+			if (y < r) {
+				left = currentIndex;
+			} else {
+				right = currentIndex;
+			}
 		}
+		samples.push(cdfPoints[currentIndex][0]);
 	}
 
-	return cdfPoints[currentIndex][0];
+	return samples;
 }
 
 function areaUnderCurve(points) {
@@ -227,7 +234,7 @@ let probaCurvePathPoints;
 
 function interpolatePoints(wavefPoints, func) {
 	const points = [];
-	const distBtwnAddedPoints = 0.0015; // In unscaled units
+	const distBtwnAddedPoints = 0.0005; // In unscaled units
 	for (let i = 0; i < wavefPoints.length - 1; ++i) {
 		const thisPoint = wavefPoints[i];
 		const nextPoint = wavefPoints[i + 1];
@@ -248,7 +255,8 @@ function interpolatePoints(wavefPoints, func) {
 	return points;
 }
 
-function getAxesData({ name, f, probDistName }) {
+function getAxesData({ name, f, probDistName, yScaleFactor }) {
+	yScaleFactor = yScaleFactor ?? 1;
 	const nPoints = 33;
 
 	let yMin, xScale, yScale, yAxisText;
@@ -307,9 +315,13 @@ function getAxesData({ name, f, probDistName }) {
 	}
 
 	if (name === WAVEFUNCTION) {
+		pathPoints = pathPoints.map(([x, y]) => [x, y * yScaleFactor]);
 		wavefCurvePathPoints = [...pathPoints];
 	} else {
-		pathPoints = interpolatePoints(pathPoints).map(([x]) => [x, f(x) ** 2]);
+		pathPoints = interpolatePoints(pathPoints).map(([x]) => [
+			x,
+			(f(x) * yScaleFactor) ** 2,
+		]);
 		probaCurvePathPoints = [...pathPoints];
 	}
 
@@ -320,7 +332,6 @@ function getAxesData({ name, f, probDistName }) {
 		.y(p => yScale(p[1]));
 
 	const path = line(pathPoints);
-	console.log(pathPoints);
 	const data = [
 		{
 			shape: "line",
@@ -357,7 +368,7 @@ function getAxesData({ name, f, probDistName }) {
 			classes: ["axis", "axis-label", "axis-y-label"],
 			attrs: {
 				x: xScale(X_0) + 10,
-				y: yScale(Y_MAX) - 150,
+				y: name === PROBABILITY ? yScale(Y_MAX) - 150 : yScale(Y_MAX) + 20,
 			},
 		},
 		// these paths *must* go last to maintain order when moving them to the end
@@ -499,34 +510,37 @@ function update(probDistName) {
 
 	selectedProbDist = probDistName;
 	const baseFunc = probabilityDistributions[probDistName];
-	const probaPathPoints = (() => {
-		const d = probaPlot.datum();
-
+	const initialProbaPathPoints = (() => {
 		// Due to lack of foresight, this call is what updates the list of curve points
 		const pathPoints = getAxesData({
-			name: d.name,
+			name: PROBABILITY,
 			probDistName,
 			f: baseFunc,
 		}).pathPoints;
 		return pathPoints;
 	})();
 
-	const probaArea = areaUnderCurve(probaPathPoints);
-	console.log(probaArea);
+	const probaArea = areaUnderCurve(initialProbaPathPoints);
+	const yScaleFactor = 1 / probaArea ** 0.5;
 
 	d3.selectAll(".plot").each(function (d) {
 		const { name } = d;
-		const f = x => baseFunc(x) / probaArea ** 0.5;
 		const sel = d3.select(this);
 		const data = getAxesData({
 			name,
 			probDistName,
-			f,
+			f: baseFunc,
+			yScaleFactor,
 		}).data;
 
 		applyGraphicalObjs(sel, data, { selector: ".axis" });
 	});
-	console.log();
+
+	if (probDistName === "gaussian") {
+		wavefCurvePathGenerator.curve(d3.curveCatmullRom);
+	} else {
+		wavefCurvePathGenerator.curve(d3.curveLinear);
+	}
 
 	const wavefunctionGrabHandle = wavefPlot.selectAll(".curve-grab-handle");
 	const wavefunctionGrabHandleNode = wavefunctionGrabHandle.node();
@@ -535,6 +549,7 @@ function update(probDistName) {
 	let grabIndicatorVerticalLine;
 	let initialX;
 	let curvePointsSelectedPointIndex;
+	let workInProgress = false;
 
 	wavefPlot
 		.on("mousemove", function (event) {
@@ -546,12 +561,12 @@ function update(probDistName) {
 				document.body.style.cursor = null;
 			}
 
-			const [xUnsnappedScaled, y] = d3.pointer(event);
+			const [xUnsnappedScaled, yScaled] = d3.pointer(event);
 
 			const indexOfClosestPointToX = searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
 				wavefCurvePathPoints,
 				wavefXScale.invert(xUnsnappedScaled),
-				wavefYScale(y),
+				wavefYScale.invert(yScaled),
 				{ allowInsertion: false },
 			);
 			let xSnappedScaled = wavefXScale(
@@ -571,7 +586,7 @@ function update(probDistName) {
 			// hovering over the path without dragging; 3. neither, in which case the
 			// grab indicator shouldn't be shown
 			if (isDraggingGrabHandle) {
-				const cy = Math.max(yMin, Math.min(y, yMax));
+				const cy = Math.max(yMin, Math.min(yScaled, yMax));
 				if (grabIndicator !== undefined) {
 					grabIndicator.attr("cx", initialX).attr("cy", cy);
 				}
@@ -620,18 +635,50 @@ function update(probDistName) {
 			}
 		})
 		.on("mouseup", function () {
+			workInProgress = true;
 			if (isDraggingGrabHandle) {
+				const wavePath = wavefPlot
+					.selectAll(".axis-curve.curve-foreground")
+					.node();
+				const nPoints = 300;
+				const dl = 1 / (nPoints - 1);
+
+				console.log(areaUnderCurve(probaCurvePathPoints));
+
+				const totalLengthInitial = wavePath.getTotalLength();
+				probaCurvePathPoints = [];
+				for (let i = 0; i < nPoints; ++i) {
+					const length = totalLengthInitial * i * dl;
+					const {
+						x: xWavefScaled,
+						y: yWavefScaled,
+					} = wavePath.getPointAtLength(length);
+					const x = wavefXScale.invert(xWavefScaled);
+					const y = wavefYScale.invert(yWavefScaled) ** 2;
+					probaCurvePathPoints.push([x, y]);
+				}
+				console.log(probaCurvePathPoints);
 				const pathArea = areaUnderCurve(probaCurvePathPoints);
+				console.log(pathArea);
 				wavefCurvePathPoints = wavefCurvePathPoints.map(([x, y]) => [
 					x,
 					y / pathArea ** 0.5,
 				]);
-				probaCurvePathPoints = interpolatePoints(
-					wavefCurvePathPoints,
-				).map(([x, y]) => [x, y ** 2]);
-
 				const wavefPath = wavefCurvePathGenerator(wavefCurvePathPoints);
 				wavefPlot.selectAll(".axis-curve").attr("d", wavefPath);
+
+				const totalLengthFinal = wavePath.getTotalLength();
+				probaCurvePathPoints = [];
+				for (let i = 0; i < nPoints; ++i) {
+					const length = totalLengthFinal * i * dl;
+					const {
+						x: xWavefScaled,
+						y: yWavefScaled,
+					} = wavePath.getPointAtLength(length);
+					const x = wavefXScale.invert(xWavefScaled);
+					const y = wavefYScale.invert(yWavefScaled) ** 2;
+					probaCurvePathPoints.push([x, y]);
+				}
 
 				const probaPath = probaCurvePathGenerator(probaCurvePathPoints);
 				probaPlot.selectAll(".axis-curve").attr("d", probaPath);
@@ -644,6 +691,10 @@ function update(probDistName) {
 					.style("visibility", "hidden");
 				wavefPlot.selectAll(".wavef-grab-v-line").style("visibility", "hidden");
 			}
+
+			document.body.style.cursor = mouseIsOnGrabPath ? "grab" : null;
+
+			workInProgress = false;
 		});
 
 	wavefunctionGrabHandle
@@ -667,6 +718,11 @@ function update(probDistName) {
 			mouseIsOnGrabPath = false;
 		})
 		.on("mousedown", function (event) {
+			mouseIsOnGrabPath = true;
+			isDraggingGrabHandle = true;
+			if (workInProgress) {
+				return;
+			}
 			didModifyOriginalShape = true;
 			const [mouseX, mouseY] = d3.pointer(event);
 			initialX = mouseX;
@@ -675,18 +731,11 @@ function update(probDistName) {
 				wavefXScale.invert(initialX),
 				wavefYScale.invert(mouseY),
 			);
-			isDraggingGrabHandle = true;
+			wavefPlot
+				.selectAll(".axis-curve")
+				.attr("d", wavefCurvePathGenerator(wavefCurvePathPoints));
 			shapeButtonContainer.selectAll(".shape-button").property("disabled", false);
 
-			let curveType;
-			if (probDistName === "gaussian") {
-				curveType = d3.curveCatmullRom;
-			} else {
-				curveType = d3.curveLinear;
-			}
-			[wavefCurvePathGenerator, probaCurvePathGenerator].forEach(pg =>
-				pg.curve(curveType),
-			);
 			document.body.style.cursor = "grabbing";
 		});
 }
@@ -694,7 +743,7 @@ function update(probDistName) {
 function enableShapeButtons() {
 	document.getElementById("number-of-measurements-slider").disabled = false;
 	shapeButtonContainer.selectAll(".shape-button").property("disabled", function () {
-		return this.hasAttribute("button-checked");
+		return !didModifyOriginalShape && this.hasAttribute("button-checked");
 	});
 }
 
@@ -730,16 +779,28 @@ function runExperiment() {
 	const nMeasurements = numMeasurementsSliderScale();
 
 	const cdf = getCdf(probaCurvePathPoints);
+	const maxSamplesGathered = 10000;
+	let sampleIndex = maxSamplesGathered;
+	let samples;
+	function sampleCdf() {
+		if (sampleIndex === maxSamplesGathered) {
+			console.log("gathering");
+			samples = [...sample(cdf, maxSamplesGathered)];
+			sampleIndex = 0;
+			console.log("gathered");
+		}
+		const s = samples[sampleIndex];
+		sampleIndex += 1;
+		return s;
+	}
+
 	const samplingFunc = didModifyOriginalShape
-		? () => sample(cdf)
+		? sampleCdf
 		: selectedProbDist === "square"
 		? squareSample
 		: selectedProbDist === "smallerSquare"
 		? smallSquareSample
-		: () => sample(cdf);
-
-	console.log(cdf);
-	console.log(d3.range(10).map(samplingFunc));
+		: sampleCdf;
 
 	const [supportMin, supportMax] = supports[selectedProbDist];
 	const supportWidth = supportMax - supportMin;
