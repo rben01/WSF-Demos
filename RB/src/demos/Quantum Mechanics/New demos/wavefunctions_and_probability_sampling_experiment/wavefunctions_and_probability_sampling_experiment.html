@@ -23,6 +23,9 @@
 				justify-content: space-between;
 				align-items: center;
 			}
+			.radio-button-container.horizontal button {
+				flex: 1 1 auto;
+			}
 			#wavefunction-plot {
 				margin-top: 20px;
 			}
@@ -143,7 +146,10 @@
 						/></label>
 					</span>
 					<span></span>
-					<span id="measurement-buttons" class="radio-button-container">
+					<span
+						id="measurement-buttons"
+						class="radio-button-container horizontal"
+					>
 						<button class="button" id="btn-run" onclick="runExperiment()">
 							Run experiment</button
 						><button
@@ -152,7 +158,14 @@
 							onclick="stopExperiment()"
 							button-checked
 						>
-							Stop experiment
+							Stop experiment</button
+						><button
+							class="button"
+							id="btn-clear-experiment"
+							onclick="clearExperiment()"
+							button-checked
+						>
+							Clear
 						</button>
 					</span>
 				</div>

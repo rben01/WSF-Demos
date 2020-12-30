@@ -58,11 +58,11 @@ const probaPlot = d3
 const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
 
 const MIN_EXPERIMENT_SPEED = 1;
-const MAX_EXPERIMENT_SPEED = 250;
+const MAX_EXPERIMENT_SPEED = 100;
 let experimentSpeed = MIN_EXPERIMENT_SPEED;
 const experimentSpeedToTimeIntervalScale = d3.scaleLog(
 	[MIN_EXPERIMENT_SPEED, MAX_EXPERIMENT_SPEED],
-	[0.5, 0.00001],
+	[0.5, 0.0001],
 );
 const experimentSpeedTextSpan = document.getElementById("experiment-speed");
 function updateExperimentSpeed() {
@@ -124,6 +124,28 @@ function gaussian(x) {
 		Math.exp(-0.5 * ((x - GAUSSIAN_MU) / GAUSSIAN_SIGMA) ** 2) /
 		(GAUSSIAN_SIGMA * (2 * Math.PI) ** 0.5)
 	);
+}
+
+// https://en.wikipedia.org/wiki/Box–Muller_transform
+function gaussianSample() {
+	const rand = Math.random;
+	let u, v;
+
+	do {
+		u = rand();
+	} while (u === 0);
+
+	do {
+		v = rand();
+	} while (v === 0);
+
+	const standardGaussianRV = Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
+
+	// Since the wavefunction is a guassian, the probability function is a (normalized)
+	// square of a gaussian, which is also gaussian but with a different variance
+	const sigma = GAUSSIAN_SIGMA / 2 ** 0.5;
+
+	return GAUSSIAN_MU + sigma * standardGaussianRV;
 }
 
 function triangle(x) {
@@ -414,6 +436,7 @@ const probabilityDistributions = {
 };
 
 let experimentInterval;
+let experimentAnimationFrame;
 
 let wavefunctionCurveTotalLength;
 function searchCurveForPointNearGivenX(curveNode, x, precision) {
@@ -643,7 +666,7 @@ function update(probDistName) {
 				const wavePath = wavefPlot
 					.selectAll(".axis-curve.curve-foreground")
 					.node();
-				const nPoints = 1000;
+				const nPoints = 2000;
 				const dl = 1 / (nPoints - 1);
 
 				const totalLengthInitial = wavePath.getTotalLength();
@@ -754,10 +777,17 @@ function disableShapeButtons() {
 
 function stopExperiment() {
 	enableShapeButtons();
+	d3.select("#btn-clear-experiment").property("disabled", false);
 	document.getElementById("btn-run").disabled = false;
 	document.getElementById("btn-stop").disabled = true;
-	clearInterval(experimentInterval);
+	// clearInterval(experimentInterval);
+	window.cancelAnimationFrame(experimentAnimationFrame);
 	wavefPlot.selectAll("*").style("pointer-events", null);
+}
+
+function clearExperiment() {
+	probaPlot.selectAll(".experiment-indicator").remove();
+	d3.select("#btn-clear-experiment").property("disabled", true);
 }
 
 function resetExperiment() {
@@ -768,22 +798,29 @@ function resetExperiment() {
 // Will be adjusted to evenly divide the given probability function's support
 const APPROX_BUCKET_WIDTH = 0.05;
 
+d3.select("#btn-run").on("click._default", null);
+d3.select("#btn-clear-experiment").on("click._default", null);
+
 // eslint-disable-next-line no-unused-vars
 function runExperiment() {
 	resetExperiment();
 	disableShapeButtons();
+
+	d3.select("#btn-run").property("disabled", true);
+	d3.select("#btn-stop").property("disabled", false);
+	d3.select("#btn-clear-experiment").property("disabled", true);
 
 	wavefPlot.selectAll("*").style("pointer-events", "none");
 
 	const nMeasurements = numMeasurementsSliderScale();
 
 	const cdf = getCdf(probaCurvePathPoints);
-	const maxSamplesGathered = 10000;
+	const maxSamplesGathered = 1000;
 	let sampleIndex = maxSamplesGathered;
 	let samples;
 	function sampleCdf() {
 		if (sampleIndex === maxSamplesGathered) {
-			samples = [...sample(cdf, maxSamplesGathered)];
+			samples = sample(cdf, maxSamplesGathered);
 			sampleIndex = 0;
 		}
 		const s = samples[sampleIndex];
@@ -793,6 +830,8 @@ function runExperiment() {
 
 	const samplingFunc = didModifyOriginalShape
 		? sampleCdf
+		: selectedProbDist === "gaussian"
+		? gaussianSample
 		: selectedProbDist === "square"
 		? squareSample
 		: selectedProbDist === "smallerSquare"
@@ -821,23 +860,52 @@ function runExperiment() {
 		// return 0.1 * Math.exp(-nMeasurementsSoFar / 300) * 1000;
 	}
 
-	function takeMeasurement() {
+	let bucketIndex;
+	// let waitTimeMS;
+	// function takeMeasurement() {
+	// 	// Take sample, update corresponding bucket. If sample is out of axis bounds, apply
+	// 	// it to the last bucket, which is a catch-all for non-rendered samples
+	// 	const sample = samplingFunc();
+	// 	bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
+	// 	if (bucketIndex < 0 || bucketIndex > nBuckets) {
+	// 		bucketIndex = nBuckets;
+	// 	}
+	// 	buckets[bucketIndex].n += 1;
+	// }
+
+	let prevTimestampMS;
+	let experimentRemainderFrac = 0;
+
+	function updateExperimentUI(timestampMS) {
+		if (prevTimestampMS === undefined) {
+			prevTimestampMS = timestampMS;
+		}
+		const elapsedMS = timestampMS - prevTimestampMS;
+		prevTimestampMS = timestampMS;
+
+		const timeBtwnSamplesMS = nextUpdateTimeIntervalMS();
+		const nExperimentsExact =
+			elapsedMS / timeBtwnSamplesMS + experimentRemainderFrac;
+		const nExperiments = Math.floor(nExperimentsExact);
+		experimentRemainderFrac = nExperimentsExact % 1;
+
+		for (let i = 0; i < nExperiments; ++i) {
+			const sample = samplingFunc();
+			bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
+			if (bucketIndex < 0 || bucketIndex > nBuckets) {
+				bucketIndex = nBuckets;
+			}
+			buckets[bucketIndex].n += 1;
+			nMeasurementsSoFar += 1;
+			if (nMeasurementsSoFar > nMeasurements) {
+				break;
+			}
+		}
+
 		const currentAreaOfSamples =
 			bucketWidth *
 			(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
 		const scale = 1 / currentAreaOfSamples;
-
-		// Take sample, update corresponding bucket. If sample is out of axis bounds, apply
-		// it to the last bucket, which is a catch-all for non-rendered samples
-		const sample = samplingFunc();
-		let bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
-		if (bucketIndex < 0 || bucketIndex > nBuckets) {
-			bucketIndex = nBuckets;
-		}
-		buckets[bucketIndex].n += 1;
-
-		const waitTimeMS = nextUpdateTimeIntervalMS();
-
 		// Exclude the final, catch-all bucket
 		const data = buckets.slice(0, nBuckets).map((bucket, i) => {
 			const height = bucket.n * scale;
@@ -845,7 +913,7 @@ function runExperiment() {
 			const scaledHeight = scaledY0 - probaYScale(height);
 
 			const classes = ["experiment-indicator", "experiment-bucket"];
-			if (waitTimeMS >= 20 && i === bucketIndex) {
+			if (timeBtwnSamplesMS >= 20 && i === bucketIndex) {
 				classes.push("experiment-selected-bucket");
 			}
 
@@ -883,15 +951,15 @@ function runExperiment() {
 			);
 		}
 
-		nMeasurementsSoFar += 1;
 		if (nMeasurementsSoFar > nMeasurements) {
 			stopExperiment();
 		} else {
-			experimentInterval = setTimeout(takeMeasurement, waitTimeMS);
+			experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 		}
 	}
+	experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 
-	experimentInterval = setTimeout(takeMeasurement, nextUpdateTimeIntervalMS());
+	// experimentInterval = setTimeout(takeMeasurement, nextUpdateTimeIntervalMS());
 }
 
 shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
