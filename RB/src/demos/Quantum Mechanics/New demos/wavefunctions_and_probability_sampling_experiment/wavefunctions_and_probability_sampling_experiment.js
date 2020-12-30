@@ -482,14 +482,10 @@ function searchCurvePointsForIndexNearGivenX_InsertingPointIfNothingIsClose(
 		if (pointX < xUnscaled) {
 			left = currentIndex;
 		} else if (pointX === xUnscaled) {
-			break;
+			return currentIndex;
 		} else {
 			right = currentIndex;
 		}
-	}
-
-	if (point.x === xUnscaled) {
-		return currentIndex;
 	}
 
 	const leftPoint = curvePathPoints[left];

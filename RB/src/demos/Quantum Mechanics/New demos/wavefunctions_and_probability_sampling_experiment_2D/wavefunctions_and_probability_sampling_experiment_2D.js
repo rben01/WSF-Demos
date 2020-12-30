@@ -60,11 +60,11 @@ d3.select(canvas).call(
 
 const SURFACE_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0x2277ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
-	transparent: true,
-	opacity: 0.5,
-	emissive: 0x1111ee,
-	emissiveIntensity: 0.5,
-	wireframe: true,
+	// transparent: true,
+	// opacity: 0.5,
+	// emissive: 0x1111ee,
+	// emissiveIntensity: 0.5,
+	// wireframe: true,
 	side: THREE.DoubleSide,
 });
 
@@ -103,7 +103,7 @@ function trianglePdf(x, y) {
 }
 
 function square(x, y) {
-	return Math.abs(x) < 1 && Math.abs(y) < 1 ? 1 : 0;
+	return Math.abs(x) < 0.5 && Math.abs(y) < 0.5 ? 1 : 0;
 }
 
 const triangulationInfo = (() => {
