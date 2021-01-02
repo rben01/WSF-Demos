@@ -1381,7 +1381,9 @@ const samplingFunc = didModifyOriginalShape
 : selectedProbDist === "smallSquare"
 ? smallSquareSample
 : sampleCdf;
-const [supportMin, supportMax] = supports[selectedProbDist];
+const [supportMin, supportMax] = didModifyOriginalShape
+? [X_MIN, X_MAX]
+: supports[selectedProbDist];
 const supportWidth = supportMax - supportMin;
 // Round bucket width down to next number that divides the width of the support
 const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);

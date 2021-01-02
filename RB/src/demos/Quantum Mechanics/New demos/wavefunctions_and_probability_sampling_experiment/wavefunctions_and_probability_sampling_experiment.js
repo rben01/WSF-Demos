@@ -832,7 +832,9 @@ function runExperiment() {
 		? smallSquareSample
 		: sampleCdf;
 
-	const [supportMin, supportMax] = supports[selectedProbDist];
+	const [supportMin, supportMax] = didModifyOriginalShape
+		? [X_MIN, X_MAX]
+		: supports[selectedProbDist];
 	const supportWidth = supportMax - supportMin;
 
 	// Round bucket width down to next number that divides the width of the support
