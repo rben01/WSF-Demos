@@ -102,7 +102,7 @@ updateNumMeasurementsText.call(numMeasurementsSlider);
 
 const CAMERA_DEFAULT_POSITION = new THREE.Vector3(2.5, -2.5, 1);
 const PROBA_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0.7);
-const WAVEF_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
+const WAVEF_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, -0.1);
 const DRAG_SPEED = 0.004; // scale factor to convert pixels dragged to radians
 
 for (const canvas of [canvasProba, canvasWavef]) {
@@ -476,7 +476,7 @@ function resetExperiment() {
 }
 
 // Will be adjusted to evenly divide the given probability function's support
-const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / (1 * N_GRIDLINES);
+const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / (N_GRIDLINES - 1);
 
 d3.select("#btn-run").on("click._default", null);
 d3.select("#btn-clear-experiment").on("click._default", null);
@@ -526,6 +526,7 @@ function runExperiment() {
 	const nBuckets = supportSizes.map(s => Math.ceil(s / APPROX_BUCKET_WIDTH));
 	const bucketSizes = supportSizes.map((s, i) => s / nBuckets[i]);
 	const bucketArea = bucketSizes.reduce((a, b) => a * b);
+	console.log(nBuckets, N_GRIDLINES);
 
 	// `buckets` contains prod(nBuckets)+1 buckets, the first prod(nBuckets) of which
 	// are rendered on screen and the last of which aggregates all buckets that don't
