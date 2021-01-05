@@ -121,13 +121,18 @@ d3.select(canvas).call(
 	}),
 );
 
-const SURFACE_MATERIAL = new THREE.MeshLambertMaterial({
+const GRIDLINE_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0x2277ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
 	// transparent: true,
 	// opacity: 0.5,
 	// emissive: 0x1111ee,
 	// emissiveIntensity: 0.5,
 	// wireframe: true,
+	side: THREE.DoubleSide,
+});
+
+const BUCKET_MATERIAL = new THREE.MeshLambertMaterial({
+	color: 0x997722,
 	side: THREE.DoubleSide,
 });
 
@@ -180,7 +185,7 @@ const SMALL_SQUARE_MAGNITUDE = 1.3;
 
 // Magnitude is the magnitude of the wavefunction; we need \int\int magnitude**2 dx dy == 1
 function _squareThreshold(magnitude) {
-	return 1 / (2 * magnitude);
+	return 0.5 * magnitude;
 }
 
 function _squareFunc(x, y, magnitude) {
@@ -252,6 +257,21 @@ function triangleSample() {
 	return [x * x_sign, y * y_sign];
 }
 
+function _genericSquareSample(magnitude) {
+	const threshold = _squareThreshold(magnitude);
+	const r_x = (Math.random() - 0.5) * threshold;
+	const r_y = (Math.random() - 0.5) * threshold;
+	return [r_x, r_y];
+}
+
+function squareSample() {
+	return _genericSquareSample(SQUARE_MAGNITUDE);
+}
+
+function smallSquareSample() {
+	return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
+}
+
 const triangulationInfo = (() => {
 	const xMin = X_MIN;
 	const xMax = X_MAX;
@@ -305,7 +325,7 @@ const triangulationInfo = (() => {
 	return { gridPoints, xs, ys, i, j, k, gridlines: { x: xGridlines, y: yGridlines } };
 })();
 
-const objsProba = { empty: true };
+const objsProba = { empty: true, bucketMeshes: [] };
 let selectedProbDist;
 function update(probDistName) {
 	selectedProbDist = probDistName;
@@ -321,7 +341,7 @@ function update(probDistName) {
 		// Add the probability distribution meshes (to be filled with tube buffer geometries)
 		(() => {
 			const probDistGridlineMeshes = gridlines.map(
-				() => new THREE.Mesh(new THREE.BufferGeometry(), SURFACE_MATERIAL),
+				() => new THREE.Mesh(new THREE.BufferGeometry(), GRIDLINE_MATERIAL),
 			);
 
 			scene.add(...probDistGridlineMeshes);
@@ -374,21 +394,23 @@ function stopExperiment() {
 
 // eslint-disable-next-line no-unused-vars
 function clearExperiment() {
-	for (const mesh of objsProba.probDistGridlineMeshes) {
+	for (const mesh of objsProba.bucketMeshes) {
 		mesh.geometry.dispose();
+		mesh.geometry = new THREE.BufferGeometry();
 	}
+	renderer.render(scene, camera);
 	d3.select("#btn-clear-experiment").property("disabled", true);
 }
 
 function resetExperiment() {
 	stopExperiment();
-	for (const mesh of objsProba.probDistGridlineMeshes) {
+	for (const mesh of objsProba.bucketMeshes) {
 		mesh.geometry.dispose();
 	}
 }
 
 // Will be adjusted to evenly divide the given probability function's support
-const APPROX_BUCKET_WIDTH = 0.05;
+const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / N_GRIDLINES;
 
 d3.select("#btn-run").on("click._default", null);
 d3.select("#btn-clear-experiment").on("click._default", null);
@@ -404,47 +426,48 @@ function runExperiment() {
 
 	const nMeasurements = numMeasurementsSliderScale();
 
-	const maxSamplesGathered = 1000;
-	let sampleIndex = maxSamplesGathered;
-	let samples;
-	function sampleCdf() {
-		if (sampleIndex === maxSamplesGathered) {
-			samples = sample(cdf, maxSamplesGathered);
-			sampleIndex = 0;
-		}
-		const s = samples[sampleIndex];
-		sampleIndex += 1;
-		return s;
-	}
+	const samplingFunc =
+		selectedProbDist === "gaussian"
+			? gaussianSample
+			: selectedProbDist === "square"
+			? squareSample
+			: selectedProbDist === "smallSquare"
+			? smallSquareSample
+			: selectedProbDist === "triangle"
+			? triangleSample
+			: null;
 
-	const samplingFunc = didModifyOriginalShape
-		? sampleCdf
-		: selectedProbDist === "gaussian"
-		? gaussianSample
-		: selectedProbDist === "square"
-		? squareSample
-		: selectedProbDist === "smallSquare"
-		? smallSquareSample
-		: sampleCdf;
-
-	const [supportMin, supportMax] = didModifyOriginalShape
-		? [X_MIN, X_MAX]
-		: supports[selectedProbDist];
-	const supportWidth = supportMax - supportMin;
+	const supportSizes = [X_MAX - X_MIN, Y_MAX - Y_MIN];
 
 	// Round bucket width down to next number that divides the width of the support
-	const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
-	const bucketWidth = supportWidth / nBuckets;
+	const nBuckets = supportSizes.map(() => N_GRIDLINES - 1);
+	const bucketSizes = supportSizes.map((s, i) => s / nBuckets[i]);
+	const bucketArea = bucketSizes.reduce((a, b) => a * b);
 
-	// `buckets` contains nBuckets+1 buckets, the first nBuckets of which are rendered
-	// on screen and the last of which aggregates all buckets that don't fit on screen
-	const buckets = d3
-		.range(nBuckets + 1)
-		.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
+	// `buckets` contains prod(nBuckets)+1 buckets, the first prod(nBuckets) of which
+	// are rendered on screen and the last of which aggregates all buckets that don't
+	// fit on screen. Each bucket is labeled {x,y} according to the lower left corner of
+	// the bucket (towards (-inf, -inf))
+	const buckets = d3.range(nBuckets.reduce((a, b) => a * b) + 1).map(i => {
+		const ix = Math.floor(i / nBuckets[0]);
+		const iy = i % nBuckets[1];
+
+		const x = X_MIN + bucketSizes[0] * ix;
+		const y = Y_MIN + bucketSizes[1] * iy;
+
+		let mesh = objsProba.bucketMeshes[i];
+		if (mesh === undefined) {
+			mesh = new THREE.Mesh(new THREE.BufferGeometry(), BUCKET_MATERIAL);
+			objsProba.bucketMeshes.push(mesh);
+			mesh.position.x = x + bucketSizes[0] / 2;
+			mesh.position.y = y + bucketSizes[1] / 2;
+			scene.add(mesh);
+		}
+
+		return { x, y, n: 0, mesh };
+	});
 	const catchallBucketIndex = nBuckets;
 
-	const scaledX0 = probaXScale(X_0);
-	const scaledY0 = probaYScale(Y_0);
 	let nMeasurementsSoFar = 1;
 
 	function nextUpdateTimeIntervalMS() {
@@ -470,8 +493,11 @@ function runExperiment() {
 		let bucketIndex;
 		for (let i = 0; i < nExperiments; ++i) {
 			const sample = samplingFunc();
-			bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
-			if (bucketIndex < 0 || bucketIndex > nBuckets) {
+			const [x, y] = sample;
+			const ix = Math.floor((x - X_MIN) / bucketSizes[0]);
+			const iy = Math.floor((y - Y_MIN) / bucketSizes[1]);
+			bucketIndex = ix * nBuckets[0] + iy;
+			if (ix < 0 || ix > nBuckets[0] || iy < 0 || iy > nBuckets[1]) {
 				bucketIndex = catchallBucketIndex;
 			}
 			buckets[bucketIndex].n += 1;
@@ -481,54 +507,65 @@ function runExperiment() {
 			}
 		}
 
-		const currentAreaOfSamples =
-			bucketWidth *
-			(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
-		const scale = 1 / currentAreaOfSamples;
+		const currentVolumeOfSamples =
+			bucketArea * (isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
+		const scale = 1 / currentVolumeOfSamples;
 		// Exclude the final, catch-all bucket
-		const data = buckets.slice(0, nBuckets).map((bucket, i) => {
-			const height = bucket.n * scale;
-			const scaledY = probaYScale(Y_0 + height);
-			const scaledHeight = scaledY0 - probaYScale(height);
+		for (let i = 0; i < buckets.length - 1; ++i) {
+			const bucket = buckets[i];
+			const { n, mesh } = bucket;
+			const height = n * scale;
 
-			const classes = ["experiment-indicator", "experiment-bucket"];
-			if (timeBtwnSamplesMS >= 20 && i === bucketIndex) {
-				classes.push("experiment-selected-bucket");
+			mesh.geometry.dispose();
+			if (height > 0) {
+				const geometry = new THREE.BoxBufferGeometry(
+					bucketSizes[0],
+					bucketSizes[1],
+					Math.max(height, 0.0001),
+				);
+				mesh.position.z = height / 2;
+				mesh.geometry = geometry;
 			}
-
-			return {
-				shape: "rect",
-				classes,
-				attrs: {
-					x: probaXScale(bucket.x),
-					y: scaledY,
-					width: probaXScale(bucketWidth) - scaledX0,
-					height: scaledHeight,
-				},
-			};
-		});
-
-		data.push({
-			shape: "text",
-			text: `Measurements: ${nMeasurementsSoFar}`,
-			classes: ["experiment-indicator", "experiment-measurement-counter"],
-			attrs: {
-				x: probaXScale(X_MIN) + 60,
-				y: probaYScale(Y_0) + 20,
-			},
-		});
-
-		applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
-
-		if (nMeasurementsSoFar <= 1) {
-			const probaPlotNode = probaPlot.node();
-			probaPlotNode.appendChild(
-				probaPlotNode.querySelector(".axis-curve.curve-background"),
-			);
-			probaPlotNode.appendChild(
-				probaPlotNode.querySelector(".axis-curve.curve-foreground"),
-			);
 		}
+
+		renderer.render(scene, camera);
+
+		// const data = buckets.slice(0, nBuckets).map(({ x, y, n }, i) => {
+		// 	const height = n * scale;
+
+		// 	return {
+		// 		shape: "rect",
+		// 		classes,
+		// 		attrs: {
+		// 			x: probaXScale(bucket.x),
+		// 			y: scaledY,
+		// 			width: probaXScale(bucketWidth) - scaledX0,
+		// 			height: scaledHeight,
+		// 		},
+		// 	};
+		// });
+
+		// data.push({
+		// 	shape: "text",
+		// 	text: `Measurements: ${nMeasurementsSoFar}`,
+		// 	classes: ["experiment-indicator", "experiment-measurement-counter"],
+		// 	attrs: {
+		// 		x: probaXScale(X_MIN) + 60,
+		// 		y: probaYScale(Y_0) + 20,
+		// 	},
+		// });
+
+		// applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
+
+		// if (nMeasurementsSoFar <= 1) {
+		// 	const probaPlotNode = probaPlot.node();
+		// 	probaPlotNode.appendChild(
+		// 		probaPlotNode.querySelector(".axis-curve.curve-background"),
+		// 	);
+		// 	probaPlotNode.appendChild(
+		// 		probaPlotNode.querySelector(".axis-curve.curve-foreground"),
+		// 	);
+		// }
 
 		if (nMeasurementsSoFar >= nMeasurements) {
 			stopExperiment();
@@ -549,7 +586,7 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 
 const light = new THREE.PointLight(0xffffff, 1, 100);
 light.position.set(1.5, -2.5, 1);
-scene.add(light, new THREE.AmbientLight(0x2277ff, 0.5));
+scene.add(light, new THREE.AmbientLight(0x2277ff, 0.8));
 
 shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
 	update(this.getAttribute("shape"));
