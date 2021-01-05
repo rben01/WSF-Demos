@@ -1,23 +1,41 @@
-/* global THREE STANDARD_COLORS getGridlines */
+/* global THREE getGridlines */
 
-const canvas = document.getElementById("experiment-plot");
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-	75,
-	canvas.clientWidth / canvas.clientHeight,
-	0.1,
-	100,
-);
-const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
-	antialias: true,
-	powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
+function makeCanvasObjs(canvasId) {
+	const canvas = document.getElementById(canvasId);
+	const scene = new THREE.Scene();
+	const camera = new THREE.PerspectiveCamera(
+		75,
+		canvas.clientWidth / canvas.clientHeight,
+		0.1,
+		20,
+	);
+	const renderer = new THREE.WebGLRenderer({
+		canvas,
+		antialias: true,
+		powerPreference: "high-performance",
+	});
+	renderer.localClippingEnabled = false;
 
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+	canvas.width = canvas.clientWidth * window.devicePixelRatio;
+	canvas.height = canvas.clientHeight * window.devicePixelRatio;
+	renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+	return { canvas, scene, camera, renderer };
+}
+
+const {
+	canvas: canvasWavef,
+	scene: sceneWavef,
+	camera: cameraWavef,
+	renderer: rendererWavef,
+} = makeCanvasObjs("wavefunction-plot");
+
+const {
+	canvas: canvasProba,
+	scene: sceneProba,
+	camera: cameraProba,
+	renderer: rendererProba,
+} = makeCanvasObjs("experiment-plot");
 
 const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
 
@@ -82,47 +100,53 @@ const numMeasurementsSlider = (() => {
 
 updateNumMeasurementsText.call(numMeasurementsSlider);
 
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(2.7, -2.7, 1);
-const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(2.5, -2.5, 1);
+const PROBA_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0.7);
+const WAVEF_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
 const DRAG_SPEED = 0.004; // scale factor to convert pixels dragged to radians
 
-d3.select(canvas).call(
-	d3.drag().on("drag", function (event) {
-		const cameraDisplacementFromPointOfFocus = camera.position
-			.clone()
-			.sub(CAMERA_POINT_OF_FOCUS);
+for (const canvas of [canvasProba, canvasWavef]) {
+	d3.select(canvas).call(
+		d3.drag().on("drag", function (event) {
+			for (const [camera, scene, renderer, pointOfFocus] of [
+				[cameraProba, sceneProba, rendererProba, PROBA_CAMERA_POINT_OF_FOCUS],
+				[cameraWavef, sceneWavef, rendererWavef, WAVEF_CAMERA_POINT_OF_FOCUS],
+			]) {
+				const cameraDisplacementFromPointOfFocus = camera.position
+					.clone()
+					.sub(pointOfFocus);
 
-		const { dx, dy } = event;
-		// z is up so x-drags rotate around the z-axis; y-drags rotate around a
-		// combination of x-axis and y-axis depending on the current camera angle -- if
-		// on the x-z plane, y-drags rotate entirely around the y-axis; if on the y-z
-		// plane, y-drags rotate entirely around the x-axis
-		const angleAroundZ = -dx * DRAG_SPEED;
-		const angleInXYPlane = Math.atan2(
-			cameraDisplacementFromPointOfFocus.y,
-			cameraDisplacementFromPointOfFocus.x,
-		);
-		const angleAroundX = Math.sin(angleInXYPlane) * dy * DRAG_SPEED;
-		const angleAroundY = -Math.cos(angleInXYPlane) * dy * DRAG_SPEED;
+				const { dx, dy } = event;
+				// z is up so x-drags rotate around the z-axis; y-drags rotate around a
+				// combination of x-axis and y-axis depending on the current camera angle -- if
+				// on the x-z plane, y-drags rotate entirely around the y-axis; if on the y-z
+				// plane, y-drags rotate entirely around the x-axis
+				const angleAroundZ = -dx * DRAG_SPEED;
+				const angleInXYPlane = Math.atan2(
+					cameraDisplacementFromPointOfFocus.y,
+					cameraDisplacementFromPointOfFocus.x,
+				);
+				const angleAroundX = Math.sin(angleInXYPlane) * dy * DRAG_SPEED;
+				const angleAroundY = -Math.cos(angleInXYPlane) * dy * DRAG_SPEED;
 
-		cameraDisplacementFromPointOfFocus.applyEuler(
-			new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
-		);
+				cameraDisplacementFromPointOfFocus.applyEuler(
+					new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
+				);
 
-		const newCameraPos = CAMERA_POINT_OF_FOCUS.clone().add(
-			cameraDisplacementFromPointOfFocus,
-		);
-		camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
-		camera.lookAt(CAMERA_POINT_OF_FOCUS);
-		camera.updateProjectionMatrix();
-		renderer.render(scene, camera);
-
-		// updateSlitSeparationTextElemPos();
-	}),
-);
+				const newCameraPos = pointOfFocus
+					.clone()
+					.add(cameraDisplacementFromPointOfFocus);
+				camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
+				camera.lookAt(pointOfFocus);
+				camera.updateProjectionMatrix();
+				renderer.render(scene, camera);
+			}
+		}),
+	);
+}
 
 const GRIDLINE_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0x2277ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
+	color: 0x2288ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
 	// transparent: true,
 	// opacity: 0.5,
 	// emissive: 0x1111ee,
@@ -132,7 +156,7 @@ const GRIDLINE_MATERIAL = new THREE.MeshLambertMaterial({
 });
 
 const BUCKET_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0x997722,
+	color: 0xffbb22,
 	side: THREE.DoubleSide,
 });
 
@@ -147,10 +171,10 @@ const N_GRIDLINES = 33;
 const WAVEFUNCTION = "wavefunction";
 const PROBABILITY = "probability";
 
-const GAUSSIAN_SIGMA = 0.35;
+const GAUSSIAN_SIGMA = 0.4;
 const GAUSSIAN_MU = 0;
 
-function gaussianPdf(x, y) {
+function gaussianWavefunction(x, y) {
 	// return x + y;
 	const u1 = GAUSSIAN_MU;
 	const u2 = GAUSSIAN_MU;
@@ -162,18 +186,22 @@ function gaussianPdf(x, y) {
 	const dy = y - u2;
 	const p = r / (s1 * s2);
 	return (
-		(1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
-		Math.exp(
-			(-1 / (2 * (1 - p ** 2))) *
-				(dx ** 2 / s1 ** 2 + dy ** 2 / s2 ** 2 - (2 * p * dx * dy) / (s1 * s2)),
-		)
+		2 *
+		(Math.PI * s1 * s2) ** 0.5 *
+		((1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
+			Math.exp(
+				(-1 / (2 * (1 - p ** 2))) *
+					(dx ** 2 / s1 ** 2 +
+						dy ** 2 / s2 ** 2 -
+						(2 * p * dx * dy) / (s1 * s2)),
+			))
 	);
 }
 
 const TRIANGLE_PEAK = 1.2;
 const TRIANGLE_EXTENT = Math.sqrt(3) / TRIANGLE_PEAK;
 
-function trianglePdf(x, y) {
+function triangleWavefunction(x, y) {
 	return (
 		(TRIANGLE_PEAK / TRIANGLE_EXTENT) *
 		Math.max(0, TRIANGLE_EXTENT - Math.abs(x) - Math.abs(y))
@@ -185,27 +213,27 @@ const SMALL_SQUARE_MAGNITUDE = 1.3;
 
 // Magnitude is the magnitude of the wavefunction; we need \int\int magnitude**2 dx dy == 1
 function _squareThreshold(magnitude) {
-	return 0.5 * magnitude;
+	return 0.5 / magnitude;
 }
 
 function _squareFunc(x, y, magnitude) {
 	const threshold = _squareThreshold(magnitude);
-	return Math.abs(x) < threshold && Math.abs(y) < threshold ? 1 : 0;
+	return Math.abs(x) < threshold && Math.abs(y) < threshold ? magnitude : 0;
 }
 
-function squarePdf(x, y) {
-	return SQUARE_MAGNITUDE * _squareFunc(x, y, SQUARE_MAGNITUDE);
+function squareWavefunction(x, y) {
+	return _squareFunc(x, y, SQUARE_MAGNITUDE);
 }
 
-function smallSquarePdf(x, y) {
-	return SMALL_SQUARE_MAGNITUDE * _squareFunc(x, y, SMALL_SQUARE_MAGNITUDE);
+function smallSquareWavefunction(x, y) {
+	return _squareFunc(x, y, SMALL_SQUARE_MAGNITUDE);
 }
 
 const wavefunctions = {
-	gaussian: gaussianPdf,
-	triangle: trianglePdf,
-	square: squarePdf,
-	smallSquare: smallSquarePdf,
+	gaussian: gaussianWavefunction,
+	triangle: triangleWavefunction,
+	square: squareWavefunction,
+	smallSquare: smallSquareWavefunction,
 };
 
 // https://en.wikipedia.org/wiki/Box–Muller_transform
@@ -259,8 +287,8 @@ function triangleSample() {
 
 function _genericSquareSample(magnitude) {
 	const threshold = _squareThreshold(magnitude);
-	const r_x = (Math.random() - 0.5) * threshold;
-	const r_y = (Math.random() - 0.5) * threshold;
+	const r_x = 2 * (Math.random() - 0.5) * threshold;
+	const r_y = 2 * (Math.random() - 0.5) * threshold;
 	return [r_x, r_y];
 }
 
@@ -325,6 +353,7 @@ const triangulationInfo = (() => {
 	return { gridPoints, xs, ys, i, j, k, gridlines: { x: xGridlines, y: yGridlines } };
 })();
 
+const objsWavef = { empty: true };
 const objsProba = { empty: true, bucketMeshes: [] };
 let selectedProbDist;
 function update(probDistName) {
@@ -344,29 +373,67 @@ function update(probDistName) {
 				() => new THREE.Mesh(new THREE.BufferGeometry(), GRIDLINE_MATERIAL),
 			);
 
-			scene.add(...probDistGridlineMeshes);
-			objsProba.probDistGridlineMeshes = probDistGridlineMeshes;
+			sceneProba.add(...probDistGridlineMeshes);
+			objsProba.gridlineMeshes = probDistGridlineMeshes;
+		})();
+	}
+
+	if (objsWavef.empty) {
+		objsWavef.empty = false;
+		// Add the wavefunction meshes (to be filled with tube buffer geometries)
+		(() => {
+			const wavefGridlineMeshes = gridlines.map(
+				() => new THREE.Mesh(new THREE.BufferGeometry(), GRIDLINE_MATERIAL),
+			);
+
+			sceneWavef.add(...wavefGridlineMeshes);
+			objsWavef.gridlineMeshes = wavefGridlineMeshes;
 		})();
 	}
 
 	const f = wavefunctions[probDistName];
-	const probDistGridlineGeometries = gridlines
-		.map(
-			gridline =>
-				new THREE.CatmullRomCurve3(
-					gridline.map(([x, y]) => new THREE.Vector3(x, y, f(x, y) ** 2)),
-				),
-		)
-		.map(path => new THREE.TubeBufferGeometry(path, 100, 0.007, 7));
+	for (const { func, objs, renderer, scene, camera } of [
+		{
+			func: f,
+			objs: objsWavef,
+			renderer: rendererWavef,
+			scene: sceneWavef,
+			camera: cameraWavef,
+		},
+		{
+			func: (x, y) => f(x, y) ** 2,
+			objs: objsProba,
+			renderer: rendererProba,
+			scene: sceneProba,
+			camera: cameraProba,
+		},
+	]) {
+		for (let i = 0; i < gridlines.length; ++i) {
+			const gridline = gridlines[i];
+			const path = new THREE.CatmullRomCurve3(
+				gridline.map(([x, y]) => new THREE.Vector3(x, y, func(x, y))),
+			);
+			const geometry = new THREE.TubeBufferGeometry(path, 100, 0.007, 7);
+			const mesh = objs.gridlineMeshes[i];
+			mesh.geometry.dispose();
+			mesh.geometry = geometry;
+		}
+		renderer.render(scene, camera);
+	}
 
-	probDistGridlineGeometries.forEach((geometry, i) => {
-		const mesh = objsProba.probDistGridlineMeshes[i];
-		mesh.geometry.dispose();
-		mesh.geometry = geometry;
-	});
-
-	renderer.render(scene, camera);
 	return;
+}
+
+const numExperimentObjs = {
+	container: document.getElementById("container-num-experiments"),
+	textSpan: document.getElementById("text-num-experiments"),
+};
+function showNumExperiments() {
+	numExperimentObjs.container.style.visibility = "visible";
+}
+
+function hideNumExperiments() {
+	numExperimentObjs.container.style.visibility = "hidden";
 }
 
 function enableShapeButtons() {
@@ -394,23 +461,22 @@ function stopExperiment() {
 
 // eslint-disable-next-line no-unused-vars
 function clearExperiment() {
+	hideNumExperiments();
 	for (const mesh of objsProba.bucketMeshes) {
 		mesh.geometry.dispose();
 		mesh.geometry = new THREE.BufferGeometry();
 	}
-	renderer.render(scene, camera);
+	rendererProba.render(sceneProba, cameraProba);
 	d3.select("#btn-clear-experiment").property("disabled", true);
 }
 
 function resetExperiment() {
 	stopExperiment();
-	for (const mesh of objsProba.bucketMeshes) {
-		mesh.geometry.dispose();
-	}
+	clearExperiment();
 }
 
 // Will be adjusted to evenly divide the given probability function's support
-const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / N_GRIDLINES;
+const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / (1 * N_GRIDLINES);
 
 d3.select("#btn-run").on("click._default", null);
 d3.select("#btn-clear-experiment").on("click._default", null);
@@ -419,6 +485,7 @@ d3.select("#btn-clear-experiment").on("click._default", null);
 function runExperiment() {
 	resetExperiment();
 	disableShapeButtons();
+	showNumExperiments();
 
 	d3.select("#btn-run").property("disabled", true);
 	d3.select("#btn-stop").property("disabled", false);
@@ -437,10 +504,26 @@ function runExperiment() {
 			? triangleSample
 			: null;
 
-	const supportSizes = [X_MAX - X_MIN, Y_MAX - Y_MIN];
+	const squareMagnitude =
+		selectedProbDist === "square" ? SQUARE_MAGNITUDE : SMALL_SQUARE_MAGNITUDE;
+	const supports =
+		selectedProbDist === "square" || selectedProbDist === "smallSquare"
+			? d3
+					.range(2)
+					.map(() =>
+						[-1, 1].map(sign => sign * _squareThreshold(squareMagnitude)),
+					)
+			: [
+					[X_MIN, X_MAX],
+					[Y_MIN, Y_MAX],
+			  ];
+	const xMin = supports[0][0];
+	const yMin = supports[1][0];
+
+	const supportSizes = supports.map(supp => supp[1] - supp[0]);
 
 	// Round bucket width down to next number that divides the width of the support
-	const nBuckets = supportSizes.map(() => N_GRIDLINES - 1);
+	const nBuckets = supportSizes.map(s => Math.ceil(s / APPROX_BUCKET_WIDTH));
 	const bucketSizes = supportSizes.map((s, i) => s / nBuckets[i]);
 	const bucketArea = bucketSizes.reduce((a, b) => a * b);
 
@@ -452,17 +535,17 @@ function runExperiment() {
 		const ix = Math.floor(i / nBuckets[0]);
 		const iy = i % nBuckets[1];
 
-		const x = X_MIN + bucketSizes[0] * ix;
-		const y = Y_MIN + bucketSizes[1] * iy;
+		const x = xMin + bucketSizes[0] * ix;
+		const y = yMin + bucketSizes[1] * iy;
 
 		let mesh = objsProba.bucketMeshes[i];
 		if (mesh === undefined) {
 			mesh = new THREE.Mesh(new THREE.BufferGeometry(), BUCKET_MATERIAL);
 			objsProba.bucketMeshes.push(mesh);
-			mesh.position.x = x + bucketSizes[0] / 2;
-			mesh.position.y = y + bucketSizes[1] / 2;
-			scene.add(mesh);
+			sceneProba.add(mesh);
 		}
+		mesh.position.x = x + bucketSizes[0] / 2;
+		mesh.position.y = y + bucketSizes[1] / 2;
 
 		return { x, y, n: 0, mesh };
 	});
@@ -494,8 +577,8 @@ function runExperiment() {
 		for (let i = 0; i < nExperiments; ++i) {
 			const sample = samplingFunc();
 			const [x, y] = sample;
-			const ix = Math.floor((x - X_MIN) / bucketSizes[0]);
-			const iy = Math.floor((y - Y_MIN) / bucketSizes[1]);
+			const ix = Math.floor((x - xMin) / bucketSizes[0]);
+			const iy = Math.floor((y - yMin) / bucketSizes[1]);
 			bucketIndex = ix * nBuckets[0] + iy;
 			if (ix < 0 || ix > nBuckets[0] || iy < 0 || iy > nBuckets[1]) {
 				bucketIndex = catchallBucketIndex;
@@ -528,44 +611,9 @@ function runExperiment() {
 			}
 		}
 
-		renderer.render(scene, camera);
+		numExperimentObjs.textSpan.innerText = nMeasurementsSoFar;
 
-		// const data = buckets.slice(0, nBuckets).map(({ x, y, n }, i) => {
-		// 	const height = n * scale;
-
-		// 	return {
-		// 		shape: "rect",
-		// 		classes,
-		// 		attrs: {
-		// 			x: probaXScale(bucket.x),
-		// 			y: scaledY,
-		// 			width: probaXScale(bucketWidth) - scaledX0,
-		// 			height: scaledHeight,
-		// 		},
-		// 	};
-		// });
-
-		// data.push({
-		// 	shape: "text",
-		// 	text: `Measurements: ${nMeasurementsSoFar}`,
-		// 	classes: ["experiment-indicator", "experiment-measurement-counter"],
-		// 	attrs: {
-		// 		x: probaXScale(X_MIN) + 60,
-		// 		y: probaYScale(Y_0) + 20,
-		// 	},
-		// });
-
-		// applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
-
-		// if (nMeasurementsSoFar <= 1) {
-		// 	const probaPlotNode = probaPlot.node();
-		// 	probaPlotNode.appendChild(
-		// 		probaPlotNode.querySelector(".axis-curve.curve-background"),
-		// 	);
-		// 	probaPlotNode.appendChild(
-		// 		probaPlotNode.querySelector(".axis-curve.curve-foreground"),
-		// 	);
-		// }
+		rendererProba.render(sceneProba, cameraProba);
 
 		if (nMeasurementsSoFar >= nMeasurements) {
 			stopExperiment();
@@ -576,17 +624,34 @@ function runExperiment() {
 	experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 }
 
-camera.position.set(
-	CAMERA_DEFAULT_POSITION.x,
-	CAMERA_DEFAULT_POSITION.y,
-	CAMERA_DEFAULT_POSITION.z,
-);
-camera.up.set(0, 0, 1);
-camera.lookAt(CAMERA_POINT_OF_FOCUS);
+for (const [camera, scene] of [
+	[cameraProba, sceneProba],
+	[cameraWavef, sceneWavef],
+]) {
+	camera.up.set(0, 0, 1);
 
-const light = new THREE.PointLight(0xffffff, 1, 100);
-light.position.set(1.5, -2.5, 1);
-scene.add(light, new THREE.AmbientLight(0x2277ff, 0.8));
+	if (camera === cameraWavef) {
+		console.log("wavefc");
+		camera.position.set(
+			CAMERA_DEFAULT_POSITION.x * 0.8,
+			CAMERA_DEFAULT_POSITION.y * 0.8,
+			CAMERA_DEFAULT_POSITION.z * 0.5,
+		);
+		camera.lookAt(WAVEF_CAMERA_POINT_OF_FOCUS);
+	} else {
+		console.log("probac");
+		camera.position.set(
+			CAMERA_DEFAULT_POSITION.x,
+			CAMERA_DEFAULT_POSITION.y,
+			CAMERA_DEFAULT_POSITION.z,
+		);
+		camera.lookAt(PROBA_CAMERA_POINT_OF_FOCUS);
+	}
+
+	const light = new THREE.PointLight(0xffffff, 1, 100);
+	light.position.set(1.5, -2.5, 1);
+	scene.add(light, new THREE.AmbientLight(0x2277ff, 0.8));
+}
 
 shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
 	update(this.getAttribute("shape"));

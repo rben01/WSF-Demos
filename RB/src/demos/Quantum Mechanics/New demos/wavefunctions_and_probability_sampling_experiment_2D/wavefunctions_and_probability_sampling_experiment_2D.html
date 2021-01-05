@@ -14,9 +14,6 @@
 		></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
-			body {
-				user-select: none !important;
-			}
 			.grid-left-right {
 				grid-template-columns: auto 1fr;
 				column-gap: 50px;
@@ -32,155 +29,103 @@
 				flex: 1 1 auto;
 			}
 			#wavefunction-plot {
-				margin-top: 20px;
-			}
-			.axis-axis {
-				stroke: #ccc;
-				stroke-width: 2px;
-				fill-opacity: 0;
-			}
-			.axis-curve {
-				fill: none;
-				stroke-linecap: round;
-				stroke-linejoin: round;
-			}
-			.axis-curve.curve-background {
-				stroke-width: 8px;
-				stroke: black;
-			}
-			.axis-curve.curve-foreground {
-				stroke-width: 4px;
-				stroke: white;
-				pointer-events: none;
-			}
-			.axis-curve.axis-curve.curve-grab-handle {
-				fill: none;
-				stroke-opacity: 0;
-				stroke-width: 20px;
-			}
-			.wavef-grab-v-line {
-				stroke: #ccc;
-				stroke-width: 3;
-				stroke-dasharray: 5 5;
-				pointer-events: none;
-			}
-			.temp-path {
-				opacity: 0;
-			}
-			/* .axis-curve.axis-curve.curve-grab-handle:hover {
-				cursor: grab;
-			} */
-			/* .axis-curve.axis-curve.curve-grab-handle:active {
-				cursor: grabbing !important;
-			} */
-			.wavef-grab-indicator {
-				fill: #5df;
-				stroke: #fff;
-				stroke-width: 4px;
-				pointer-events: none;
-			}
-			.axis-label {
-				fill: white;
-				stroke-opacity: 0;
-				font-size: 24px;
-				font-weight: lighter;
-			}
-			.plot {
-				align-self: end;
-				vertical-align: bottom;
-			}
-			.experiment-bucket {
-				fill: #5df;
-				stroke: black;
-			}
-			.experiment-selected-bucket {
-				fill: #aef;
-			}
-			.measurement-marker {
-				fill: greenyellow;
+				margin: 0 auto;
+				height: 300px;
+				width: 17em;
 			}
 			.experiment-measurement-counter {
 				fill: white;
 				font-size: 20px;
 			}
 			#experiment-plot {
-				margin-left: 300px;
-				width: calc(98vw - 300px);
-				height: 80vw;
+				margin-top: 0;
+				margin-left: calc(17em + 100px);
+				width: calc(100vw - 200px - 17em);
+				height: 50vw;
 			}
 			.controls-container {
-				width: 375px;
+				width: 17em;
 				position: absolute;
+			}
+			.label-proba {
+				position: absolute;
+				left: calc(17em + 150px);
+				top: 22px;
+			}
+			#container-num-experiments {
+				visibility: hidden;
 			}
 		</style>
 	</head>
 	<body>
-		<div class="grid-left-right">
-			<div class="controls-container">
-				<div class="slider-container">
-					<span>Shape of wavefunction</span>
-					<span
-						id="wavefunction-shape-buttons"
-						class="radio-button-container horizontal"
+		<div class="controls-container">
+			<div class="slider-container">
+				<span>Shape of wavefunction ⎮𝜓(𝑥)⎮</span>
+				<span
+					id="wavefunction-shape-buttons"
+					class="radio-button-container horizontal"
+				>
+					<button class="button shape-button" shape="gaussian" button-checked>
+						Gaussian</button
+					><button class="button shape-button" shape="triangle">
+						Pyramid</button
+					><button class="button shape-button" shape="square">Square</button
+					><button class="button shape-button" shape="smallSquare">
+						Smaller square
+					</button>
+				</span>
+				<span></span>
+				<canvas id="wavefunction-plot" class="draggable"></canvas>
+
+				<span>Measurement speed: <span id="experiment-speed"></span></span>
+				<span>
+					<label
+						><input
+							type="range"
+							name="experiment-speed"
+							id="experiment-speed-slider"
+					/></label>
+				</span>
+				<span
+					>Number of measurements: <span id="num-measurements-text"></span
+				></span>
+				<span>
+					<label
+						><input
+							type="range"
+							name="num-measurements"
+							id="number-of-measurements-slider"
+					/></label>
+				</span>
+				<span></span>
+				<span
+					id="measurement-buttons"
+					class="radio-button-container horizontal"
+				>
+					<button class="button" id="btn-run" onclick="runExperiment()">
+						Run experiment</button
+					><button
+						class="button"
+						id="btn-stop"
+						onclick="stopExperiment()"
+						button-checked
 					>
-						<button
-							class="button shape-button"
-							shape="gaussian"
-							button-checked
-						>
-							Gaussian</button
-						><button class="button shape-button" shape="triangle">
-							Pyramid</button
-						><button class="button shape-button" shape="square">
-							Square</button
-						><button class="button shape-button" shape="smallSquare">
-							Smaller square
-						</button>
-					</span>
-					<span>Measurement speed: <span id="experiment-speed"></span></span>
-					<span>
-						<label
-							><input
-								type="range"
-								name="experiment-speed"
-								id="experiment-speed-slider"
-						/></label>
-					</span>
-					<span
-						>Number of measurements: <span id="num-measurements-text"></span
-					></span>
-					<span>
-						<label
-							><input
-								type="range"
-								name="num-measurements"
-								id="number-of-measurements-slider"
-						/></label>
-					</span>
-					<span></span>
-					<span
-						id="measurement-buttons"
-						class="radio-button-container horizontal"
+						Stop experiment</button
+					><button
+						class="button"
+						id="btn-clear-experiment"
+						onclick="clearExperiment()"
+						button-checked
 					>
-						<button class="button" id="btn-run" onclick="runExperiment()">
-							Run experiment</button
-						><button
-							class="button"
-							id="btn-stop"
-							onclick="stopExperiment()"
-							button-checked
-						>
-							Stop experiment</button
-						><button
-							class="button"
-							id="btn-clear-experiment"
-							onclick="clearExperiment()"
-							button-checked
-						>
-							Clear
-						</button>
-					</span>
-				</div>
+						Clear
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="label-proba">
+			<div>Probability distribution ⎮𝜓(𝑥)⎮²</div>
+			<div id="container-num-experiments">
+				Number of experiments: <span id="text-num-experiments"></span>
 			</div>
 		</div>
 		<canvas id="experiment-plot" class="draggable"></canvas>
