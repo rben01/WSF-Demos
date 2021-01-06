@@ -1,12 +1,13 @@
 let teff = 5780.0;
 let lum = 1.0;
-const sRecentV = 1.776;
-const caRecentV = 2.136e-4;
-const cbRecentV = 2.533e-8;
-const ccRecentV = -1.332e-11;
-const cdRecentV = -3.097e-15;
 
-const sRunawayG = 1.107;
+const sRecentV = 1.776; // v0
+const caRecentV = 2.136e-4; // v1
+const cbRecentV = 2.533e-8; // v2
+const ccRecentV = -1.332e-11; // v3
+const cdRecentV = -3.097e-15; // v4
+
+const sRunawayG = 1.107; // 
 const caRunawayG = 1.332e-4;
 const cbRunawayG = 1.58e-8;
 const ccRunawayG = -8.308e-12;
@@ -144,39 +145,51 @@ function calculate() {
 	elem = document.getElementById("lum");
 	elem.value = lum;
 
+	// Inner HZ - Recent Venus limit - stellar flux
 	elem = document.getElementById("recentV");
 	elem.value = recentV;
 
+	// Inner HZ - Runaway Greenhouse limit - stellar flux
 	elem = document.getElementById("RunawayG");
 	elem.value = RunawayG;
 
+	// 5 earth masses - Inner HZ - Runaway Greenhouse limit - stellar flux
 	elem = document.getElementById("SERunawayG");
 	elem.value = SERunawayG;
 
+	// .1 earth masses - Inner HZ - Runaway Greenhouse limit - stellar flux
 	elem = document.getElementById("SubRunawayG");
 	elem.value = SubRunawayG;
 
+	// Outer HZ - Maximum Greenhouse limit - stellar flux
 	elem = document.getElementById("MaximumG");
 	elem.value = MaximumG;
 
+	// Inner HZ - Recent Venus limit - HZ dist (AU)
 	elem = document.getElementById("recentVdis");
 	elem.value = recentVdis;
 
+	// Inner HZ - Runaway Greenhouse limit - HZ dist (AU)
 	elem = document.getElementById("RunawayGdis");
 	elem.value = RunawayGdis;
 
+	// 5 earth masses - Inner HZ - Runaway Greenhouse limit - HZ dist (AU)
 	elem = document.getElementById("SERunawayGdis");
 	elem.value = SERunawayGdis;
 
+	// .1 earth masses - Inner HZ - Runaway Greenhouse limit - HZ dist (AU)
 	elem = document.getElementById("SubRunawayGdis");
 	elem.value = SubRunawayGdis;
 
+	// Outer HZ - Maximum Greenhouse limit - HZ dist (AU)
 	elem = document.getElementById("MaximumGdis");
 	elem.value = MaximumGdis;
 
+	// Outer HZ - Early Mars limit - stellar flux
 	elem = document.getElementById("EarlyMars");
 	elem.value = EarlyMars;
 
+	// Outer HZ - Early Mars limit - HZ dist (AU)
 	elem = document.getElementById("EarlyMarsdis");
 	elem.value = EarlyMarsdis;
 }

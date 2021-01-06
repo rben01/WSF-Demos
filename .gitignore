@@ -4,3 +4,7 @@ __pycache__
 *.min.*
 RB/src/demos/CDFs
 .ebextensions
+*.aux
+*.fdb_latexmk
+*.fls
+*.xdv

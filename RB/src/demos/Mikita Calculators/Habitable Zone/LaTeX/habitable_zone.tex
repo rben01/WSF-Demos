@@ -1,0 +1,99 @@
+\documentclass{article}
+\usepackage[margin=1in]{geometry}
+
+\usepackage{mathtools}
+\usepackage{siunitx}
+
+\newcommand{\tsun}{T_\odot}
+\newcommand{\lsun}{L_\odot}
+
+\title{Habitable Zone Calculator}
+\date{}
+\begin{document}
+\maketitle
+
+\section{Setup}
+\subsection{Constants}
+\begin{align*}
+	\tsun & =\textrm{The Sun's effective temperature} \\
+	      & =\SI{5780}{\kelvin}                       \\
+	\lsun & =\textrm{The Sun's luminosity}            \\
+	      & =\SI{3.828e26}{\watt}
+\end{align*}
+\subsection{Input Variables}
+\begin{align*}
+	T & =\textrm{The star's effective temperature (in units of K)} \\
+	L & =\textrm{The star's luminosity (in units of \( \lsun \))}
+\end{align*}
+\subsection{Output Variables}
+The constants \(a_0, a_1, a_2, a_3, a_4\) will be defined below for each scenario. Assuming they have been defined, then
+\begin{align*}
+	f & =\textrm{The observed stellar flux (in units of the Sun's stellar flux on Earth)} \\
+	  & =\sum_{n=0}^4 a_n\cdot{(T-\tsun)}^{n}                                             \\
+	\\
+	d & =\textrm{The habitable zone distance (in AU) from the star}                       \\
+	  & =\sqrt{\frac{L}{f}}
+\end{align*}
+
+\section{Conservative Habitable Zone Limits (1 Earth Mass)}
+
+\subsection{Inner Habitable Zone --- Runaway Greenhouse Limit}
+\begin{align*}
+	a_{0} & =\num{1.107}      \\
+	a_{1} & =\num{1.332e-4}   \\
+	a_{2} & =\num{1.58e-8}    \\
+	a_{3} & =\num{-8.308e-12} \\
+	a_{4} & =\num{-1.931e-15}
+\end{align*}
+
+\subsection{Outer Habitable Zone --- Maximum Greenhouse Limit}
+\begin{align*}
+	a_{0} & =\num{0.356}      \\
+	a_{1} & =\num{6.171e-5}   \\
+	a_{2} & =\num{1.698e-9}   \\
+	a_{3} & =\num{-3.198e-12} \\
+	a_{4} & =\num{-5.575e-16}
+\end{align*}
+
+\section{Optimistic Habitable Zone Limits (1 Earth Mass)}
+
+\subsection{Inner Habitable Zone --- Recent Venus Limit}
+\begin{align*}
+	a_{0} & =\num{1.776}      \\
+	a_{1} & =\num{2.136e-4}   \\
+	a_{2} & =\num{2.533e-8}   \\
+	a_{3} & =\num{-1.332e-11} \\
+	a_{4} & =\num{-3.097e-15}
+\end{align*}
+\subsection{Outer Habitable Zone --- Early Mars Limit}
+\begin{align*}
+	a_{0} & =\num{0.3207}     \\
+	a_{1} & =\num{5.5471e-5}  \\
+	a_{2} & =\num{1.5265e-9}  \\
+	a_{3} & =\num{-2.874e-12} \\
+	a_{4} & =\num{-5.011e-16}
+\end{align*}
+
+\section{Conservative Habitable Zone Limits (5 Earth Masses)}
+
+\subsection{Inner Habitable Zone --- Runaway Greenhouse Limit}
+\begin{align*}
+	a_{0} & =\num{1.188}      \\
+	a_{1} & =\num{1.433e-4}   \\
+	a_{2} & =\num{1.707e-8}   \\
+	a_{3} & =\num{-8.968e-12} \\
+	a_{4} & =\num{-2.084e-15} \\
+\end{align*}
+
+\section{Conservative Habitable Zone Limits (0.1 Earth Masses)}
+
+\subsection{Inner Habitable Zone --- Runaway Greenhouse Limit}
+\begin{align*}
+	a_{0} & =\num{0.99}       \\
+	a_{1} & =\num{1.209e-4}   \\
+	a_{2} & =\num{1.404e-8}   \\
+	a_{3} & =\num{-7.418e-12} \\
+	a_{4} & =\num{-1.713e-15} \\
+\end{align*}
+
+\end{document}
