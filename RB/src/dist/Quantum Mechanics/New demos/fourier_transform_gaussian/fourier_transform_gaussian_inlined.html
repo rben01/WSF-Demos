@@ -305,7 +305,7 @@ position: absolute;
 <div class="ib controls-container">
 <div class="controls">
 <span class="header">Properties in position (\(x\)) space</span>
-<span class="">\(\displaystyle\psi(x)=\frac{e^{i\theta(x-\mu)}}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}\)</span>
+<span class="">\(\displaystyle\psi(x)=\left(\pi^\frac{1}{4}\sqrt{2\sigma}\right)e^{i\theta(x-\mu)}\frac{e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}}{\sigma\sqrt{2\pi}}\)</span>
 <span class="child">Gaussian's position space mean (\(\mu\))</span>
 <span class="child"><input id="slider-x-mean" type="range"/></span>
 <span class="text-after-slider child">Gaussian's position space width (\(\sigma\))</span>
@@ -313,7 +313,7 @@ position: absolute;
 <span class="v-divider"></span>
 <span class="text-after-slider header">Properties in momentum (𝑝) space</span>
 <span class="">\(\displaystyle(\mathcal
-F\psi)(k)=\frac{e^{-ik\mu}}{\sqrt{2\pi}}e^{-\frac{1}{2}((k-\theta)\sigma)^2}\)</span>
+F\psi)(p)=\left(\pi^\frac{1}{4}\sqrt{2\sigma^{-1}}\right)e^{-ip\mu}\frac{e^{-\frac{1}{2}(\frac{p-\theta}{\sigma^{-1}})^2}}{\sigma^{-1}\sqrt{2\pi}}\)</span>
 <span class="child">Gaussian's momentum space mean (\(\theta\))</span>
 <span class="child"><input id="slider-p-mean" type="range"/></span>
 <span class="text-after-slider child">Gaussian's momentum space width (\(\sigma^{-1}\))</span>
@@ -726,13 +726,12 @@ const HEIGHT = 350;
 const X_MIN = -6;
 const X_0 = 0;
 const X_MAX = -X_MIN;
-const ABOVE_BELOW_X_AXIS_RATIO = 2;
+const ABOVE_BELOW_X_AXIS_RATIO = 3;
 const Y_MIN = -0.5;
 const Y_0 = 0;
 const Y_MAX = ABOVE_BELOW_X_AXIS_RATIO * -Y_MIN;
 const PHASE_MIN = -3 * Math.PI;
 const PHASE_MAX = ABOVE_BELOW_X_AXIS_RATIO * -PHASE_MIN;
-const ONE_OVER_SQRT_2PI = 1 / (2 * Math.PI) ** 0.5;
 const plots = d3.selectAll(".plot").attr("width", WIDTH).attr("height", HEIGHT);
 const plotX = d3.select("#plot-x-space").datum({ space: "x" });
 const plotP = d3.select("#plot-p-space").datum({ space: "p" });
@@ -805,7 +804,7 @@ d.space === "x"
 // },
 ]
 : [
-{ x: xScale(X_MAX) - 50, y: yScaleMagnitude(Y_0) + 3, math: "k" },
+{ x: xScale(X_MAX) - 50, y: yScaleMagnitude(Y_0) + 3, math: "p" },
 // {
 // 	x: xScale(X_0) + 5,
 // 	y: yScaleMagnitude(Y_MAX) + 15,
@@ -825,15 +824,17 @@ const curveGenerator = d3
 .x(p => p[0])
 .y(p => p[1]);
 function getData(mu, sigma, phase) {
+const sqrtSigma = sigma ** 0.5;
+const fourthRootPi = Math.PI ** 0.25;
 function gaussian(x) {
 return Complex.fromPolar(
-(ONE_OVER_SQRT_2PI / sigma) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
+(1 / (sqrtSigma * fourthRootPi)) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
 (x - mu) * phase,
 );
 }
 function fourieredGaussian(w) {
 return Complex.fromPolar(
-ONE_OVER_SQRT_2PI * Math.exp(-0.5 * ((w - phase) * sigma) ** 2),
+(sqrtSigma / fourthRootPi) * Math.exp(-0.5 * ((w - phase) * sigma) ** 2),
 -w * mu,
 );
 }
@@ -860,28 +861,6 @@ y2: yScaleMagnitude(Y_MAX),
 },
 },
 ];
-// const axisLabels = {
-// 	original: [
-// 		{
-// 			shape: "text",
-// 			class: "axis-label x-axis-label",
-// 			text: "𝑥",
-// 			attrs: {
-// 				x: xScale(X_MAX) - 20,
-// 				y: yScaleMagnitude(Y_0) + 5,
-// 			},
-// 		},
-// 		{
-// 			shape: "text",
-// 			class: "axis-label y-axis-label",
-// 			text: "𝜓",
-// 			attrs: {
-// 				x: xScale(X_0) - 10,
-// 				y: yScaleMagnitude(Y_MAX) + 25,
-// 			},
-// 		},
-// 	],
-// };
 const dx = 1 / (nPoints - 1);
 const points = [];
 for (let i = 0; i < nPoints; ++i) {
@@ -956,7 +935,6 @@ const sigma = xSpaceWidth;
 const phase = pSpaceMean;
 const { axesData, curveDatas } = getData(mu, sigma, phase);
 applyGraphicalObjs(plots, axesData, { selector: ".axis" });
-// applyGraphicalObjs(plotX, axisLabels.original, { selector: ".axis-label" });
 applyGraphicalObjs(plotX, curveDatas.original_phase, {
 selector: ".curve.original.phase",
 });
@@ -969,20 +947,6 @@ selector: ".curve.fouriered.phase",
 applyGraphicalObjs(plotP, curveDatas.fouriered_magnitude, {
 selector: ".curve.fouriered.magnitude",
 });
-// (() => {
-// 	const { axesData, curveData } = dataForPlot(mu, sigma, phase, {
-// 		fourier: false,
-// 	});
-// 	applyGraphicalObjs(plotX, axesData, { selector: ".axis" });
-// 	applyGraphicalObjs(plotX, curveData, { selector: ".curve" });
-// })();
-// (() => {
-// 	const { axesData, curveData } = dataForPlot(mu, sigma, phase, {
-// 		fourier: true,
-// 	});
-// 	applyGraphicalObjs(plotP, axesData, { selector: ".axis" });
-// 	applyGraphicalObjs(plotP, curveData, { selector: ".curve" });
-// })();
 }
 update();
 </script></body>
