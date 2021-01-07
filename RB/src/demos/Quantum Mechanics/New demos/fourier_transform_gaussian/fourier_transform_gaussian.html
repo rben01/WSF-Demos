@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+		></script>
+
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+			integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+			crossorigin="anonymous"
+			onload="renderMathInElement(document.body);"
+		></script>
+
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			body {
+				vertical-align: top;
+			}
+			.controls-heading-divider {
+				height: 5px;
+			}
+			.controls > :nth-child(2n + 3) {
+				margin-top: unset;
+			}
+			.controls .text-after-slider {
+				margin-top: 22px;
+			}
+			.v-divider {
+				padding: 30px 0;
+				border-bottom: 2px dotted white;
+			}
+			.header {
+				font-size: 110%;
+			}
+			.ib {
+				vertical-align: top;
+				display: inline-block;
+			}
+			.plot {
+				display: block;
+			}
+			.plot-container {
+				margin-left: 40px;
+			}
+			.curve {
+				fill: none;
+				stroke-linejoin: round;
+			}
+			.curve-background {
+				stroke: black;
+				stroke-width: 8px;
+			}
+			.curve-foreground {
+				stroke-width: 4px;
+			}
+			.magnitude.curve-foreground {
+				stroke: #f3c002;
+			}
+			.phase.curve-foreground {
+				stroke: #5df;
+			}
+			#plot-x-space {
+				margin-bottom: 50px;
+			}
+			.key-text {
+				fill: white;
+				dominant-baseline: hanging;
+				font-size: 90%;
+			}
+			.axis-label {
+				position: absolute;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="ib controls-container">
+			<div class="controls">
+				<span class="header">Properties in position (\(x\)) space</span>
+				<span class=""
+					>\(\displaystyle\psi(x)=\frac{e^{i\theta(x-\mu)}}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}\)</span
+				>
+				<span class="child">Gaussian's position space mean (\(\mu\))</span>
+				<span class="child"><input id="slider-x-mean" type="range" /></span>
+				<span class="text-after-slider child"
+					>Gaussian's position space width (\(\sigma\))</span
+				>
+				<span class="child"><input id="slider-x-width" type="range" /></span>
+				<span class="v-divider"></span>
+				<span class="text-after-slider header"
+					>Properties in momentum (𝑝) space</span
+				>
+				<span class=""
+					>\(\displaystyle(\mathcal
+					F\psi)(k)=\frac{e^{-ik\mu}}{\sqrt{2\pi}}e^{-\frac{1}{2}((k-\theta)\sigma)^2}\)</span
+				>
+				<span class="child">Gaussian's momentum space mean (\(\theta\))</span>
+				<span class="child"><input id="slider-p-mean" type="range" /></span>
+				<span class="text-after-slider child"
+					>Gaussian's momentum space width (\(\sigma^{-1}\))</span
+				>
+				<span class="child"><input id="slider-p-width" type="range" /></span>
+			</div>
+		</div>
+		<div class="ib plot-container">
+			<svg class="plot" id="plot-x-space"></svg>
+			<svg class="plot" id="plot-p-space"></svg>
+		</div>
+		<script src="../../../utils.js"></script>
+		<script src="../../complex.js"></script>
+		<script src="./fourier_transform_gaussian.js"></script>
+	</body>
+</html>
