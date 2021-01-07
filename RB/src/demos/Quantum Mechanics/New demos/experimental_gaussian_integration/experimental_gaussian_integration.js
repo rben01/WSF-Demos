@@ -1,8 +1,8 @@
-const W = 1350,
+const W = 1300,
     H = 750,
     svg = d3.select("#svg"),
     g1 = svg.append("g").attr("transform", `translate(50, 25)`),
-    g2 = svg.append("g").attr("transform", `translate(${W / 2 + 100}, 25)`),
+    g2 = svg.append("g").attr("transform", `translate(${W / 2 + 50}, 25)`),
     x1 = d3.scaleLinear().domain([0, 10]).range([0, W / 2 - 100]),
     y1 = d3.scaleLinear().domain([0, 2]).range([H - 50, 0]),
     x2 = d3.scaleLinear().domain([-6, 6]).range([0, W / 2 - 100]),
@@ -42,4 +42,5 @@ g1.append("path").style("fill", "none").style("stroke", "white").attr("stroke-da
 
 d3.select("#alpha").on("input", update);
 d3.select("#grab").on("click", grab_data);
+d3.selectAll(".tick text").attr("class", "axis-label");
 update();
