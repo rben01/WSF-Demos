@@ -6,7 +6,7 @@ const W = 1450,
     barrier = graph.append("rect").style("fill", "grey"),
     x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + H + ")").call(d3.axisBottom(x).ticks(5)),
     y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + W / 2 + ", 0)").call(d3.axisLeft(y).tickValues([20, 40, 60, 80])),
-    wave = graph.append("path").style("fill", "none").style("stroke", "#5df").style("stroke-width", 2),
+    wave = graph.append("path").style("fill", "none").style("stroke", "#5df").style("stroke-width", 5),
     dashed = graph.append("line").style("stroke", "white").attr("x1", 0).attr("x2", W).attr("stroke-dasharray", "25 25"),
     height = document.getElementById("height"),
     width = document.getElementById("width"),
@@ -174,7 +174,7 @@ function update() {
 
     var points = []
     for (var i = -10; i < 10; i += 0.01) {
-        points.push([x(i), y(psi(w, h, m, e, i) ** 2 + e)]);
+        points.push([x(i), y(3 * psi(w, h, m, e, i) ** 2 + e)]);
     }
     wave.attr("d", d3.line()(points));
 }
@@ -183,5 +183,6 @@ d3.select("#height").on("input", update);
 d3.select("#width").on("input", update);
 d3.select("#mass").on("input", update);
 d3.select("#energy").on("input", update);
+d3.selectAll(".tick text").attr("class", "axis-label")
 
 update();
