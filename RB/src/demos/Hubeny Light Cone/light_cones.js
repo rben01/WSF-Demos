@@ -1,5 +1,5 @@
-const WIDTH = 1350,
-    HEIGHT = 750,
+const WIDTH = 950,
+    HEIGHT = 550,
     G = 6.674 * 10 ** (-20),
     g = d3.select("#svg").append("g").attr("transform", "translate(25,0)"),
     label = document.getElementById("label"),
