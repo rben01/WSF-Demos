@@ -24,15 +24,15 @@ const W = 1350,
     document.getElementById("mode8"),
     document.getElementById("mode9")],
     mlines = [
-        g2.append("line").style("stroke", "white").attr("x1", x2(1)).attr("x2", x2(1)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(2)).attr("x2", x2(2)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(3)).attr("x2", x2(3)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(4)).attr("x2", x2(4)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(5)).attr("x2", x2(5)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(6)).attr("x2", x2(6)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(7)).attr("x2", x2(7)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(8)).attr("x2", x2(8)).attr("y1", H / 2 - 25),
-        g2.append("line").style("stroke", "white").attr("x1", x2(9)).attr("x2", x2(9)).attr("y1", H / 2 - 25)
+        g2.append("line").style("stroke", "white").attr("x1", x2(1)).attr("x2", x2(1)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(2)).attr("x2", x2(2)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(3)).attr("x2", x2(3)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(4)).attr("x2", x2(4)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(5)).attr("x2", x2(5)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(6)).attr("x2", x2(6)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(7)).attr("x2", x2(7)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(8)).attr("x2", x2(8)).attr("y1", H / 2 - 25).style("stroke-width", 3),
+        g2.append("line").style("stroke", "white").attr("x1", x2(9)).attr("x2", x2(9)).attr("y1", H / 2 - 25).style("stroke-width", 3)
     ];
 
 var mode_vals;
