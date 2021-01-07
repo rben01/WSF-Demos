@@ -2,14 +2,14 @@ const W = 1350,
     H = 750,
     svg = d3.select("#svg"),
     g1 = svg.append("g").attr("transform", `translate(25, 25)`),
-    g2 = svg.append("g").attr("transform", `translate(${W / 2 + 50}, 25)`),
+    g2 = svg.append("g").attr("transform", `translate(${W / 2 + 25}, 25)`),
     x1 = d3.scaleLinear().domain([-3, 3]).range([0, W / 2 - 100]),
     y1 = d3.scaleLinear().domain([-4, 4]).range([H - 50, 0]),
     x2 = d3.scaleLinear().domain([0, 9]).range([0, W / 2 - 100]),
     y2 = d3.scaleLinear().domain([-2, 2]).range([H - 50, 0]),
-    step = g1.append("path").style("stroke", "white").style("stroke-width", 3).attr("d", `M 0,${y1(-1.5)} L ${x1(-1)},${y1(-1.5)} L ${x1(-1)},${y1(1.5)} L ${x1(1)},${y1(1.5)} L ${x1(1)},${y1(-1.5)} L ${x1(3)},${y1(-1.5)}`),
-    sumline = g1.append("path").style("stroke", "#5df").style("stroke-width", 3).style("fill", "none"),
-    ampline = g2.append("path").style("stroke", "#5df").style("stroke-width", 2).style("fill", "none").style("stroke-dasharray", "15 15"),
+    step = g1.append("path").style("stroke", "white").style("stroke-width", 4).attr("d", `M 0,${y1(-1.5)} L ${x1(-1)},${y1(-1.5)} L ${x1(-1)},${y1(1.5)} L ${x1(1)},${y1(1.5)} L ${x1(1)},${y1(-1.5)} L ${x1(3)},${y1(-1.5)}`),
+    sumline = g1.append("path").style("stroke", "#5df").style("stroke-width", 4).style("fill", "none"),
+    ampline = g2.append("path").style("stroke", "#5df").style("stroke-width", 3).style("fill", "none").style("stroke-dasharray", "15 15"),
     xax1 = g1.append("g").attr("class", "axis").attr("transform", `translate(0, ${H / 2 - 25})`).call(d3.axisBottom(x1).tickValues([-3, -2, -1, 1, 2, 3])),
     yax1 = g1.append("g").attr("class", "axis").attr("transform", `translate(${W / 4 - 50})`).call(d3.axisLeft(y1).tickValues([-4, -2, 2, 4])),
     xax2 = g2.append("g").attr("class", "axis").attr("transform", `translate(0, ${H / 2 - 25})`).call(d3.axisBottom(x2).tickValues([1, 2, 3, 4, 5, 6, 7, 8, 9])),
@@ -64,5 +64,6 @@ function update() {
 for (var i = 1; i < 10; i++) {
     d3.select(`#mode${i}`).on("input", update);
 }
+d3.selectAll(".tick text").attr("class", "axis-label");
 
 update();
