@@ -42,10 +42,7 @@ const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
 const MIN_EXPERIMENT_SPEED = 1;
 const MAX_EXPERIMENT_SPEED = 100;
 let experimentSpeed = MIN_EXPERIMENT_SPEED;
-const experimentSpeedToTimeIntervalScale = d3.scaleLog(
-	[MIN_EXPERIMENT_SPEED, MAX_EXPERIMENT_SPEED],
-	[0.5, 0.0001],
-);
+const experimentSpeedToTimeIntervalScale = speed => 1 / (15 * speed ** 1.4);
 const experimentSpeedTextSpan = document.getElementById("experiment-speed");
 function updateExperimentSpeed() {
 	const speed = +(this.value ?? MIN_EXPERIMENT_SPEED);
@@ -75,8 +72,8 @@ function numMeasurementsSliderScale(value) {
 	}
 	return (
 		MIN_NUM_MEASUREMENTS -
-		Math.floor(1.1 ** MIN_NUM_MEASUREMENTS) +
-		Math.floor(1.1 ** value)
+		Math.floor(1.121 ** MIN_NUM_MEASUREMENTS) +
+		Math.floor(1.121 ** value)
 	);
 }
 
@@ -93,7 +90,7 @@ const numMeasurementsSlider = (() => {
 	slider.min = MIN_NUM_MEASUREMENTS;
 	slider.max = MAX_NUM_MEASUREMENTS;
 	slider.step = 1;
-	slider.value = MAX_NUM_MEASUREMENTS; //MIN_NUM_MEASUREMENTS;
+	slider.value = MAX_NUM_MEASUREMENTS - 1;
 	slider.oninput = updateNumMeasurementsText;
 	return slider;
 })();
