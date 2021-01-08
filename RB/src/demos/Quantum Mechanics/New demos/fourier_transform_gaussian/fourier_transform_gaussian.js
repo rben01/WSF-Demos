@@ -7,7 +7,7 @@ const X_MIN = -6;
 const X_0 = 0;
 const X_MAX = -X_MIN;
 
-const ABOVE_BELOW_X_AXIS_RATIO = 2;
+const ABOVE_BELOW_X_AXIS_RATIO = 3;
 
 const Y_MIN = -0.5;
 const Y_0 = 0;
@@ -15,8 +15,6 @@ const Y_MAX = ABOVE_BELOW_X_AXIS_RATIO * -Y_MIN;
 
 const PHASE_MIN = -3 * Math.PI;
 const PHASE_MAX = ABOVE_BELOW_X_AXIS_RATIO * -PHASE_MIN;
-
-const ONE_OVER_SQRT_2PI = 1 / (2 * Math.PI) ** 0.5;
 
 const plots = d3.selectAll(".plot").attr("width", WIDTH).attr("height", HEIGHT);
 const plotX = d3.select("#plot-x-space").datum({ space: "x" });
@@ -98,7 +96,7 @@ plots
 					// },
 			  ]
 			: [
-					{ x: xScale(X_MAX) - 50, y: yScaleMagnitude(Y_0) + 3, math: "k" },
+					{ x: xScale(X_MAX) - 50, y: yScaleMagnitude(Y_0) + 3, math: "p" },
 					// {
 					// 	x: xScale(X_0) + 5,
 					// 	y: yScaleMagnitude(Y_MAX) + 15,
@@ -120,16 +118,18 @@ const curveGenerator = d3
 	.y(p => p[1]);
 
 function getData(mu, sigma, phase) {
+	const sqrtSigma = sigma ** 0.5;
+	const fourthRootPi = Math.PI ** 0.25;
 	function gaussian(x) {
 		return Complex.fromPolar(
-			(ONE_OVER_SQRT_2PI / sigma) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
+			(1 / (sqrtSigma * fourthRootPi)) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
 			(x - mu) * phase,
 		);
 	}
 
 	function fourieredGaussian(w) {
 		return Complex.fromPolar(
-			ONE_OVER_SQRT_2PI * Math.exp(-0.5 * ((w - phase) * sigma) ** 2),
+			(sqrtSigma / fourthRootPi) * Math.exp(-0.5 * ((w - phase) * sigma) ** 2),
 			-w * mu,
 		);
 	}
@@ -158,29 +158,6 @@ function getData(mu, sigma, phase) {
 			},
 		},
 	];
-
-	// const axisLabels = {
-	// 	original: [
-	// 		{
-	// 			shape: "text",
-	// 			class: "axis-label x-axis-label",
-	// 			text: "𝑥",
-	// 			attrs: {
-	// 				x: xScale(X_MAX) - 20,
-	// 				y: yScaleMagnitude(Y_0) + 5,
-	// 			},
-	// 		},
-	// 		{
-	// 			shape: "text",
-	// 			class: "axis-label y-axis-label",
-	// 			text: "𝜓",
-	// 			attrs: {
-	// 				x: xScale(X_0) - 10,
-	// 				y: yScaleMagnitude(Y_MAX) + 25,
-	// 			},
-	// 		},
-	// 	],
-	// };
 
 	const dx = 1 / (nPoints - 1);
 
@@ -274,7 +251,6 @@ function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
 
 	applyGraphicalObjs(plots, axesData, { selector: ".axis" });
 
-	// applyGraphicalObjs(plotX, axisLabels.original, { selector: ".axis-label" });
 	applyGraphicalObjs(plotX, curveDatas.original_phase, {
 		selector: ".curve.original.phase",
 	});
@@ -288,22 +264,6 @@ function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
 	applyGraphicalObjs(plotP, curveDatas.fouriered_magnitude, {
 		selector: ".curve.fouriered.magnitude",
 	});
-
-	// (() => {
-	// 	const { axesData, curveData } = dataForPlot(mu, sigma, phase, {
-	// 		fourier: false,
-	// 	});
-	// 	applyGraphicalObjs(plotX, axesData, { selector: ".axis" });
-	// 	applyGraphicalObjs(plotX, curveData, { selector: ".curve" });
-	// })();
-
-	// (() => {
-	// 	const { axesData, curveData } = dataForPlot(mu, sigma, phase, {
-	// 		fourier: true,
-	// 	});
-	// 	applyGraphicalObjs(plotP, axesData, { selector: ".axis" });
-	// 	applyGraphicalObjs(plotP, curveData, { selector: ".curve" });
-	// })();
 }
 
 update();
