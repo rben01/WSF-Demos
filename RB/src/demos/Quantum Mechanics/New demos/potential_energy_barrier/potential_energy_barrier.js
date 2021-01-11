@@ -6,8 +6,8 @@ const w = 1450,
     x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + h + ")").call(d3.axisBottom(x).ticks(5)),
     y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + w / 2 + ", 0)").call(d3.axisLeft(y).tickValues([2, 4, 6, 8, 10])),
     barrier = graph.append("rect").style("fill", "grey").attr("x", x(0)).attr("width", w / 2),
-    wave = graph.append("path").style("fill", "none").style("stroke", "red"),
-    dashed = graph.append("line").style("stroke", "white").attr("x1", 0).attr("x2", w).attr("stroke-dasharray", "25 25"),
+    wave = graph.append("path").style("fill", "none").style("stroke", "#5df").style("stroke-width", 5),
+    dashed = graph.append("line").style("stroke", "white").style("stroke-width", 3).attr("x1", 0).attr("x2", w).attr("stroke-dasharray", "25 25"),
     height = document.getElementById("height"),
     mass = document.getElementById("mass"),
     energy = document.getElementById("energy");
@@ -49,5 +49,6 @@ function update() {
 d3.select("#height").on("input", update);
 d3.select("#mass").on("input", update);
 d3.select("#energy").on("input", update);
+d3.selectAll(".tick text").attr("class", "axis-label");
 
 update();
