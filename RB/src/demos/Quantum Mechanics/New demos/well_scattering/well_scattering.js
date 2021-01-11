@@ -4,10 +4,11 @@ const w = 1450,
     y = d3.scaleLinear().domain([-10, 20]).range([h, 0]),
     graph = d3.select("#svg").append("g").attr("transform", "translate(25, 25)"),
     well = graph.append("path").style("fill", "grey"),
+    well_outline = graph.append("path").style("stroke", "white").style("stroke-width", 2),
     x_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(0, " + 2 * h / 3 + ")").call(d3.axisBottom(x).tickValues([-10, -5, 5, 10])),
     y_axis = graph.append("g").attr("class", "axis").attr("transform", "translate(" + w / 2 + ", 0)").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10, 15, 20])),
-    wave = graph.append("path").style("fill", "none").style("stroke", "#5df"),
-    dashed = graph.append("line").style("stroke", "white").attr("x1", 0).attr("x2", w).attr("stroke-dasharray", "25 25"),
+    wave = graph.append("path").style("fill", "none").style("stroke", "#5df").style("stroke-width", 5),
+    dashed = graph.append("line").style("stroke", "white").style("stroke-width", 3).attr("x1", 0).attr("x2", w).attr("stroke-dasharray", "25 25"),
     depth = document.getElementById("depth"),
     width = document.getElementById("width"),
     mass = document.getElementById("mass"),
@@ -151,14 +152,16 @@ function update() {
 
     var points = []
     for (var i = -10; i < 10; i += 0.01) {
-        points.push([x(i), y(psi(w2, d, m, e, i) ** 2 + e)]);
+        points.push([x(i), y(3 * psi(w2, d, m, e, i) ** 2 + e)]);
     }
     wave.attr("d", d3.line()(points));
+    well_outline.attr("d", `M ${x(-w2)} ${y(0)} L ${x(-w2)} ${y(-d)} L ${x(w2)} ${y(-d)} L ${x(w2)} ${y(0)}`);
 }
 
 d3.select("#depth").on("input", update);
 d3.select("#width").on("input", update);
 d3.select("#mass").on("input", update);
 d3.select("#energy").on("input", update);
+d3.selectAll(".tick text").attr("class", "axis-label");
 
 update();
