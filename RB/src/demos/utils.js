@@ -303,7 +303,9 @@ function _initializeRadioButtons() {
 			.on("click._default", function () {
 				this.setAttribute("button-checked", "");
 				this.disabled = true;
-				const siblings = this.parentNode.querySelectorAll("button");
+				const siblings = this.closest(
+					".radio-button-container",
+				).querySelectorAll("button");
 				for (const sibling of siblings) {
 					if (this === sibling) {
 						continue;

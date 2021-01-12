@@ -75,16 +75,25 @@
 							><button
 								id="dispersion-nonrel"
 								class="button"
+								onclick="setDispersionNonrelativistic()"
 								button-checked
 							>
 								Nonrelativistic<br />\(|\omega|=\hbar k^2/2m\)
 							</button></span
 						><span
-							><button id="dispersion-rela" class="button">
+							><button
+								id="dispersion-rela"
+								class="button"
+								onclick="setDispersionRelativistic()"
+							>
 								Relativistic<br />\(|\omega|=ck\)
 							</button></span
 						><span
-							><button id="dispersion-choose" class="button">
+							><button
+								id="dispersion-choose"
+								class="button"
+								onclick="setDispersionFree()"
+							>
 								Choose your<br />own \(\omega\)
 							</button></span
 						>
@@ -92,7 +101,7 @@
 					<span>Wavenumber (\(k\))</span>
 					<span><input type="range" id="slider-wavenumber" /></span>
 					<span>Angular frequency (\(\omega\))</span>
-					<span><input type="range" id="slider-omega" /></span>
+					<span><input type="range" id="slider-omega" disabled /></span>
 					<span></span>
 					<span class="radio-button-container horizontal">
 						<button class="button" onclick="play()">Play</button

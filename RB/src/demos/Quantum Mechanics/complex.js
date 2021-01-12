@@ -121,7 +121,7 @@ class Complex {
 
 	static cis(z) {
 		if (typeof z === "number") {
-			return Complex.fromReal(z).cis();
+			return Complex.fromPolar(1, z);
 		}
 
 		return z.cis();

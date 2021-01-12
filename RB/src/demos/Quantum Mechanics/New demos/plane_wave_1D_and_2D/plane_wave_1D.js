@@ -1,7 +1,7 @@
 /* global applyGraphicalObjs Complex */
 
 const WIDTH = 800;
-const HEIGHT = 600;
+const HEIGHT = 400;
 
 const X_MIN = -12.2;
 const X_0 = 0;
@@ -29,10 +29,109 @@ const phaseLineGenerator = d3
 	.x(p => xScale(p[0]))
 	.y(p => yScale(p[1]));
 
-let timeMS = 0;
+let currentTimeMS = 0;
 let isAnimating = false;
 
-function getData({ tMS, wavenumber, omega } = {}) {
+const DISPERSION = {
+	nonrelativistic: 0,
+	relativistic: 1,
+	free: 2,
+};
+
+let currentDispersion = DISPERSION.nonrelativistic;
+let prevOmega;
+
+const omegaSlider = (() => {
+	const slider = document.getElementById("slider-omega");
+	slider.min = 0;
+	slider.max = 5;
+	slider.step = 0.0001;
+	slider.oninput = function () {
+		const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
+		const currOmega = +this.value;
+		currentTimeMS = (phaseAtX0 / currOmega) * 1000;
+		prevOmega = currOmega;
+	};
+	return slider;
+})();
+
+const wavenumberSlider = (() => {
+	const slider = document.getElementById("slider-wavenumber");
+	slider.min = 0.01;
+	slider.max = 2;
+	slider.step = 0.0001;
+	slider.value = 1;
+	slider.oninput = function () {
+		// eslint-disable-next-line no-use-before-define
+		updateOmega();
+		// eslint-disable-next-line no-use-before-define
+		update();
+	};
+	return slider;
+})();
+
+const nonRelativisticDispersionScale = d3
+	.scalePow(
+		[+wavenumberSlider.min, +wavenumberSlider.max],
+		[+omegaSlider.min, +omegaSlider.max],
+	)
+	.exponent(2);
+
+const relativisticDispersionScale = d3.scaleLinear(
+	[+wavenumberSlider.min, +wavenumberSlider.max],
+	[+omegaSlider.min, +omegaSlider.max],
+);
+
+function updateOmega() {
+	if (currentDispersion === DISPERSION.free) {
+		return;
+	}
+
+	const wavenumber = +wavenumberSlider.value;
+	let currOmega;
+
+	if (currentDispersion === DISPERSION.nonrelativistic) {
+		currOmega = nonRelativisticDispersionScale(wavenumber);
+	} else if (currentDispersion === DISPERSION.relativistic) {
+		currOmega = relativisticDispersionScale(wavenumber);
+	} else {
+		throw new Error(`Unexpected dispersion ${currentDispersion}`);
+	}
+
+	if (prevOmega !== undefined && currOmega !== 0) {
+		const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
+		currentTimeMS = (phaseAtX0 / currOmega) * 1000;
+	}
+
+	omegaSlider.value = currOmega;
+	prevOmega = currOmega;
+}
+
+function setDispersion(value) {
+	currentDispersion = value;
+	omegaSlider.disabled = true;
+	updateOmega();
+}
+
+// eslint-disable-next-line no-unused-vars
+function setDispersionNonrelativistic() {
+	setDispersion(DISPERSION.nonrelativistic);
+}
+
+// eslint-disable-next-line no-unused-vars
+function setDispersionRelativistic() {
+	setDispersion(DISPERSION.relativistic);
+}
+
+// eslint-disable-next-line no-unused-vars
+function setDispersionFree() {
+	currentDispersion = DISPERSION.free;
+	omegaSlider.disabled = false;
+}
+
+setDispersionNonrelativistic();
+
+function getAxisData() {
 	const tickLength = 7;
 
 	const xAxisTicks = xScale.ticks(20).filter(x => x !== X_0);
@@ -130,34 +229,32 @@ function getData({ tMS, wavenumber, omega } = {}) {
 		},
 	];
 
-	tMS = tMS ?? timeMS;
-	wavenumber = wavenumber ?? 0.9;
-	omega = omega ?? 1;
+	return axisData;
+}
+applyGraphicalObjs(plot, getAxisData(), { selector: ".axis" });
 
-	const tSec = tMS / 1000;
+function getData() {
+	const wavenumber = +wavenumberSlider.value;
+	const omega = +omegaSlider.value;
 
-	const nPointsPerPeriod = 100;
+	const tSec = currentTimeMS / 1000; // currentPhase / omega; // timeMS / 1000;
+
+	const nPointsPerPeriod = 35;
 
 	const periodWidth = (2 * Math.PI) / wavenumber;
 	const nPeriods = Math.ceil((X_MAX - X_MIN) / periodWidth);
 	const dx = periodWidth / (nPointsPerPeriod - 1);
+
 	const curvePoints = []; // list of points [x, real, imag]
 	for (let p = 0; p < nPeriods; ++p) {
 		const periodX0 = X_MIN + p * periodWidth;
 		for (let i = 0; i < nPointsPerPeriod; ++i) {
 			const x = periodX0 + i * dx;
 			const phase = wavenumber * x - omega * tSec;
+
 			const z = Complex.cis(phase);
 			const re = z.x;
 			const im = z.y;
-
-			let adjPhase = phase % (2 * Math.PI);
-			if (adjPhase > Math.PI) {
-				adjPhase -= 2 * Math.PI;
-			}
-			if (adjPhase < -Math.PI) {
-				adjPhase += 2 * Math.PI;
-			}
 
 			curvePoints.push({ x, re, im });
 		}
@@ -168,7 +265,7 @@ function getData({ tMS, wavenumber, omega } = {}) {
 	}
 	const nMin = Math.floor(nForX(X_MIN));
 	const nMax = Math.ceil(nForX(X_MAX));
-	// console.log(nMin, nMax);
+
 	const phaseCurvePoints = d3.range(nMin, nMax + 1).flatMap(n => {
 		const xMid = (omega * tSec + 2 * Math.PI * n) / wavenumber;
 		const xMin = xMid - periodWidth / 2;
@@ -200,43 +297,50 @@ function getData({ tMS, wavenumber, omega } = {}) {
 		})),
 	];
 
-	return { axisData, curveData };
+	return curveData;
 }
 
 function update() {
-	const { axisData, curveData } = getData();
-	applyGraphicalObjs(plot, axisData, { selector: ".axis" });
-	applyGraphicalObjs(plot, curveData, { selector: ".curve" });
+	applyGraphicalObjs(plot, getData(), { selector: ".curve" });
 }
 
 update();
 
+let animationFrame;
+// eslint-disable-next-line no-unused-vars
 function play() {
 	isAnimating = true;
+	wavenumberSlider.disabled = true;
+
 	let prevTimestampMS;
 	function step(timestampMS) {
 		if (prevTimestampMS === undefined) {
 			prevTimestampMS = timestampMS;
 		}
 		const elapsedMS = timestampMS - prevTimestampMS;
-		timeMS += elapsedMS;
+		currentTimeMS += elapsedMS;
+		// currentPhase += (elapsedMS / 1000) * +omegaSlider.value;
 		prevTimestampMS = timestampMS;
 
 		update();
 
 		if (isAnimating) {
-			window.requestAnimationFrame(step);
+			animationFrame = window.requestAnimationFrame(step);
 		}
 	}
 
-	window.requestAnimationFrame(step);
+	animationFrame = window.requestAnimationFrame(step);
 }
 
 function stop() {
+	window.cancelAnimationFrame(animationFrame);
 	isAnimating = false;
+	wavenumberSlider.disabled = false;
 }
 
+// eslint-disable-next-line no-unused-vars
 function reset() {
-	timeMS = 0;
+	stop();
+	currentTimeMS = 0;
 	update();
 }
