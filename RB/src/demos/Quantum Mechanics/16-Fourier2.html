@@ -42,6 +42,7 @@
         <span>
             <button id="add" onclick="add()">Add to sum</button>
             <button id="reset" onclick="reset()">Reset</button>
+            <button id="add-remainder" onclick="addRemainder()">Add n=11 through n=21 to sum</button>
         </span>
     </div>
 
@@ -94,7 +95,7 @@
             var path = d3.line()(sumpath);
             l3.attr("d", path)
             var length = l3.node().getTotalLength()
-            l3.attr("stroke-dasharray", length + " " + length).attr("stroke-dashoffset", l3.node().getTotalLength());
+            l3.attr("stroke-dasharray", length + " " + length).attr("stroke-dashoffset", length);
             l3.transition().ease(d3.easeLinear).duration(4000).attr("stroke-dashoffset", 0);
             l2.transition().ease(d3.easeLinear).delay(4000).duration(2000).attr("d", path);
 
@@ -107,6 +108,24 @@
             }
             l2.attr("d", d3.line()(sumpath));
             l3.attr("d", "");
+        }
+
+        function addRemainder() {
+            l3.attr("d", "");
+            n = 13;
+            var delta = fourier(n);
+            for (var i = 0; i < sumpath.length; i++) {
+                sumpath[i][1] += delta[i][1];
+            }
+            l2.transition().ease(d3.easeLinear).duration(2000).attr("d", d3.line()(sumpath)).on("end", function repeat() {
+                n += 2;
+                if (n > 21) { return; }
+                delta = fourier(n);
+                for (var i = 0; i < sumpath.length; i++) {
+                    sumpath[i][1] += delta[i][1];
+                }
+                l2.transition().ease(d3.easeLinear).duration(2000).attr("d", d3.line()(sumpath)).on("end", repeat);
+            });
         }
 
         reset();
