@@ -125,7 +125,7 @@ const phaseLineGenerator = d3
 	.x(p => xScale(p[0]))
 	.y(p => yScale(p[1]));
 
-let currentTimeMS = 0;
+let currentPhase = 0;
 let isAnimating = false;
 
 const DISPERSION = {
@@ -135,33 +135,36 @@ const DISPERSION = {
 };
 
 let currentDispersion = DISPERSION.nonrelativistic;
-let prevOmega;
 
 const omegaSlider = (() => {
 	const slider = document.getElementById("slider-omega");
 	slider.min = 0;
 	slider.max = 5;
 	slider.step = 0.0001;
-	slider.oninput = function () {
-		const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
-		const currOmega = +this.value;
-		currentTimeMS = (phaseAtX0 / currOmega) * 1000;
-		prevOmega = currOmega;
-	};
+	// slider.oninput = function () {
+	// 	// const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
+	// 	// const currOmega = +this.value;
+	// 	// console.log(currOmega, currentTimeMS);
+	// 	// if (currOmega > 1e-10) {
+	// 	// 	currentTimeMS = (phaseAtX0 / currOmega) * 1000;
+	// 	// }
+	// 	// console.log(currentTimeMS);
+	// 	// prevOmega = currOmega;
+	// };
 	return slider;
 })();
 
 const wavenumberSlider = (() => {
 	const slider = document.getElementById("slider-wavenumber");
 	slider.min = 0.1;
-	slider.max = 1.7;
+	slider.max = 2.1;
 	slider.step = 0.0001;
 	slider.value = 1;
 	slider.oninput = function () {
 		// eslint-disable-next-line no-use-before-define
 		updateOmega();
 		// eslint-disable-next-line no-use-before-define
-		update();
+		update(0);
 	};
 	return slider;
 })();
@@ -194,13 +197,7 @@ function updateOmega() {
 		throw new Error(`Unexpected dispersion ${currentDispersion}`);
 	}
 
-	if (prevOmega !== undefined && currOmega !== 0) {
-		const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
-		currentTimeMS = (phaseAtX0 / currOmega) * 1000;
-	}
-
 	omegaSlider.value = currOmega;
-	prevOmega = currOmega;
 }
 
 function setDispersion(value) {
@@ -333,15 +330,13 @@ function getWave3DPathAndIntersector(xMin, xMax, amplitude, xScale) {
 	amplitude = amplitude ?? 1;
 
 	const wavenumber = +wavenumberSlider.value / xScale;
-	const omega = +omegaSlider.value;
-	const tSec = currentTimeMS / 1000;
 
 	const nPoints = 500;
 	const dx = (xMax - xMin) / (nPoints - 1);
 	const points = [];
 	for (let i = 0; i < nPoints; ++i) {
 		const x = xMin + i * dx;
-		const phase = wavenumber * x - omega * tSec;
+		const phase = wavenumber * x - currentPhase;
 		const y = amplitude * Math.cos(phase);
 		const z = amplitude * Math.sin(phase);
 		points.push(new THREE.Vector3(x, y, z));
@@ -349,7 +344,7 @@ function getWave3DPathAndIntersector(xMin, xMax, amplitude, xScale) {
 
 	const path = new THREE.CatmullRomCurve3(points);
 
-	const yzIntersectionPhase = -omega * tSec;
+	const yzIntersectionPhase = -currentPhase;
 	const re = amplitude * Math.cos(yzIntersectionPhase);
 	const im = amplitude * Math.sin(yzIntersectionPhase);
 	const intersector = new THREE.LineCurve3(
@@ -576,9 +571,6 @@ update3D();
 
 function getData() {
 	const wavenumber = +wavenumberSlider.value;
-	const omega = +omegaSlider.value;
-
-	const tSec = currentTimeMS / 1000;
 
 	const nPointsPerPeriod = 35;
 
@@ -591,7 +583,7 @@ function getData() {
 		const periodX0 = X_MIN + p * periodWidth;
 		for (let i = 0; i < nPointsPerPeriod; ++i) {
 			const x = periodX0 + i * dx;
-			const phase = wavenumber * x - omega * tSec;
+			const phase = wavenumber * x - currentPhase;
 
 			const z = Complex.cis(phase);
 			const re = z.x;
@@ -602,13 +594,13 @@ function getData() {
 	}
 
 	function nForX(x) {
-		return (wavenumber * x - omega * tSec) / (2 * Math.PI);
+		return (wavenumber * x - currentPhase) / (2 * Math.PI);
 	}
 	const nMin = Math.floor(nForX(X_MIN));
 	const nMax = Math.ceil(nForX(X_MAX));
 
 	const phaseCurvePoints = d3.range(nMin, nMax + 1).flatMap(n => {
-		const xMid = (omega * tSec + 2 * Math.PI * n) / wavenumber;
+		const xMid = (currentPhase + 2 * Math.PI * n) / wavenumber;
 		const xMin = xMid;
 		const xMax = xMid + periodWidth;
 		return [[xMin, 0], [xMax, 1], null];
@@ -641,12 +633,15 @@ function getData() {
 	return curveData;
 }
 
-function update() {
+function update(dtMS) {
+	const omega = +omegaSlider.value;
+	currentPhase += (omega * dtMS) / 1000;
+
 	applyGraphicalObjs(plot2D, getData(), { selector: ".curve" });
 	update3D();
 }
 
-update();
+update(0);
 
 let animationFrame;
 // eslint-disable-next-line no-unused-vars
@@ -660,11 +655,8 @@ function play() {
 			prevTimestampMS = timestampMS;
 		}
 		const elapsedMS = timestampMS - prevTimestampMS;
-		currentTimeMS += elapsedMS;
-		// currentPhase += (elapsedMS / 1000) * +omegaSlider.value;
+		update(elapsedMS);
 		prevTimestampMS = timestampMS;
-
-		update();
 
 		if (isAnimating) {
 			animationFrame = window.requestAnimationFrame(step);
@@ -683,6 +675,5 @@ function stop() {
 // eslint-disable-next-line no-unused-vars
 function reset() {
 	stop();
-	currentTimeMS = 0;
 	update();
 }
