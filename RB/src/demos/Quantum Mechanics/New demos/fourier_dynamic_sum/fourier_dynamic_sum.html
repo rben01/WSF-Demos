@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
+</head>
+
+<body style="background-color: black;">
+    <div class="controls-container">
+        <span>
+            <label>
+                <span class="radio-label" style="color: white;">Fourier Mode </span>
+                <button class="button" id="n1" onclick="setn(1)">n=1</button>
+                <button class="button" id="n3" onclick="setn(3)">n=3</button>
+                <button class="button" id="n5" onclick="setn(5)">n=5</button>
+                <button class="button" id="n7" onclick="setn(7)">n=7</button>
+                <button class="button" id="n9" onclick="setn(9)">n=9</button>
+            </label>
+        </span>
+        <br>
+        <br>
+        <span>
+            <button class="button" id="add" onclick="add()">Add to sum</button>
+            <button class="button" id="reset" onclick="reset()">Reset</button>
+            <button class="button" id="add-remainder" onclick="addRemainder()">Add n=11 through n=21 to sum</button>
+        </span>
+    </div>
+
+    <div>
+        <svg xmlns="http://www.w3.org/2000/svg" id="svg" style="margin: auto; display: block;" width=1200
+            height=600></svg>
+    </div>
+
+    <script src="fourier_dynamic_sum.js"></script>
+</body>
+
+</html>
