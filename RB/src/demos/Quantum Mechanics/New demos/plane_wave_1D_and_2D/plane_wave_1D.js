@@ -95,8 +95,18 @@ const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
 	side: THREE.DoubleSide,
 	transparent: false,
 });
-const POINTER_MATERIAL = new THREE.MeshLambertMaterial({
+const INTERSECTOR_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0xee55dd,
+	side: THREE.DoubleSide,
+	transparent: false,
+});
+const REAL_PART_MATERIAL = new THREE.MeshBasicMaterial({
+	color: 0x55ddff,
+	side: THREE.DoubleSide,
+	transparent: false,
+});
+const IMAG_PART_MATERIAL = new THREE.MeshBasicMaterial({
+	color: 0xf3c002,
 	side: THREE.DoubleSide,
 	transparent: false,
 });
@@ -141,16 +151,6 @@ const omegaSlider = (() => {
 	slider.min = 0;
 	slider.max = 5;
 	slider.step = 0.0001;
-	// slider.oninput = function () {
-	// 	// const phaseAtX0 = prevOmega * (currentTimeMS / 1000);
-	// 	// const currOmega = +this.value;
-	// 	// console.log(currOmega, currentTimeMS);
-	// 	// if (currOmega > 1e-10) {
-	// 	// 	currentTimeMS = (phaseAtX0 / currOmega) * 1000;
-	// 	// }
-	// 	// console.log(currentTimeMS);
-	// 	// prevOmega = currOmega;
-	// };
 	return slider;
 })();
 
@@ -525,7 +525,7 @@ function update3D() {
 		(() => {
 			const yzPlaneIntersector = new THREE.Mesh(
 				new THREE.BufferGeometry(),
-				POINTER_MATERIAL,
+				INTERSECTOR_MATERIAL,
 			);
 
 			const yzPlaneIntersectorArrowhead = new THREE.Mesh(
@@ -533,16 +533,40 @@ function update3D() {
 					arrowheadRadius * 1.1,
 					arrowheadHeight * 1.1,
 				),
-				POINTER_MATERIAL,
+				INTERSECTOR_MATERIAL,
 			);
 
-			scene.add(yzPlaneIntersector, yzPlaneIntersectorArrowhead);
-			objs3d.yzPlaneIntersector = yzPlaneIntersector;
-			objs3d.yzPlaneIntersectorArrowhead = yzPlaneIntersectorArrowhead;
+			const realPartMarker = new THREE.Mesh(
+				new THREE.BufferGeometry(),
+				REAL_PART_MATERIAL,
+			);
+			const imagPartMarker = new THREE.Mesh(
+				new THREE.BufferGeometry(),
+				IMAG_PART_MATERIAL,
+			);
+
+			scene.add(
+				yzPlaneIntersector,
+				yzPlaneIntersectorArrowhead,
+				realPartMarker,
+				imagPartMarker,
+			);
+			Object.assign(objs3d, {
+				yzPlaneIntersector,
+				yzPlaneIntersectorArrowhead,
+				realPartMarker,
+				imagPartMarker,
+			});
 		})();
 	}
 
-	const { wave, yzPlaneIntersector, yzPlaneIntersectorArrowhead } = objs3d;
+	const {
+		wave,
+		yzPlaneIntersector,
+		yzPlaneIntersectorArrowhead,
+		realPartMarker,
+		imagPartMarker,
+	} = objs3d;
 
 	const { path, intersector, re, im } = getWave3DPathAndIntersector(
 		xMin,
@@ -554,8 +578,28 @@ function update3D() {
 	wave.geometry.dispose();
 	wave.geometry = new THREE.TubeBufferGeometry(path, 300, 0.1);
 
+	const markerRadius = 0.1;
+
 	yzPlaneIntersector.geometry.dispose();
-	yzPlaneIntersector.geometry = new THREE.TubeBufferGeometry(intersector, 10, 0.1);
+	yzPlaneIntersector.geometry = new THREE.TubeBufferGeometry(
+		intersector,
+		2,
+		markerRadius,
+	);
+
+	realPartMarker.geometry.dispose();
+	realPartMarker.geometry = new THREE.TubeBufferGeometry(
+		new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, re, 0)),
+		2,
+		markerRadius * 1.1,
+	);
+
+	imagPartMarker.geometry.dispose();
+	imagPartMarker.geometry = new THREE.TubeBufferGeometry(
+		new THREE.LineCurve3(new THREE.Vector3(0, re, 0), new THREE.Vector3(0, re, im)),
+		2,
+		markerRadius * 1.1,
+	);
 
 	rotateThenPositionObject(
 		yzPlaneIntersectorArrowhead,
