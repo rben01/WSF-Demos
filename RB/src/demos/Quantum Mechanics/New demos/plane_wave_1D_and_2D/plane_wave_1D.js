@@ -514,7 +514,7 @@ function update3D() {
 		// (static) yz plane (C plane)
 		(() => {
 			const yzPlane = new THREE.Mesh(
-				new THREE.RingBufferGeometry(amplitude * 0.98, amplitude * 1.02, 30, 1),
+				new THREE.RingBufferGeometry(amplitude * 0.98, amplitude * 1.02, 75, 1),
 				AXIS_MATERIAL,
 			);
 			rotateThenPositionObject(
