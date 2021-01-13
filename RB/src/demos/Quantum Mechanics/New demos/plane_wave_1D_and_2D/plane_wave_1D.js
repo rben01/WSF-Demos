@@ -576,9 +576,9 @@ function update3D() {
 	);
 
 	wave.geometry.dispose();
-	wave.geometry = new THREE.TubeBufferGeometry(path, 300, 0.1);
+	wave.geometry = new THREE.TubeBufferGeometry(path, 300, 0.2);
 
-	const markerRadius = 0.1;
+	const markerRadius = 0.15;
 
 	yzPlaneIntersector.geometry.dispose();
 	yzPlaneIntersector.geometry = new THREE.TubeBufferGeometry(
