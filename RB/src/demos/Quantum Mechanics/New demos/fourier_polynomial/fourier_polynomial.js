@@ -1,8 +1,7 @@
-const svg = d3.select("#svg"),
-    w = 400,
+const w = 400,
     h = 350,
     x = d3.scaleLinear().range([-w / 2, w / 2]).domain([-6, 6]),
-    y = d3.scaleLinear().range([-h / 2, h / 2]).domain([-10, 10]),
+    y = d3.scaleLinear().range([-h / 2, h / 2]).domain([10, -10]),
     cx = d3.scaleLinear().range([0, w]).domain([0, 10]),
     cy = d3.scaleLinear().range([-h / 2, h / 2]).domain([-3, 3]);
 
@@ -21,28 +20,31 @@ const sliders = {
 const cos_graph = d3.select("#svg").append("g").attr("transform", "translate(" + 25 + ", " + (h / 2 + 25) + ")");
 cos_graph.append("g").attr("class", "axis").call(d3.axisBottom(cx).ticks(0));
 cos_graph.append("g").attr("class", "axis").call(d3.axisLeft(cy).ticks(0));
+cos_graph.append("text").attr("x", w / 2 - 80).attr("y", -h / 2 + 10).style("stroke", "white").style("fill", "white").style("text-align", "center").text("Cosine Coefficients");
 const cos = cos_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
 const sin_graph = d3.select("#svg2").append("g").attr("transform", "translate(" + 25 + ", " + (h / 2 + 25) + ")");
 sin_graph.append("g").attr("class", "axis").call(d3.axisBottom(cx).ticks(0));
 sin_graph.append("g").attr("class", "axis").call(d3.axisLeft(cy).ticks(0));
+sin_graph.append("text").attr("x", w / 2 - 80).attr("y", -h / 2 + 10).style("stroke", "white").style("fill", "white").style("text-align", "center").text("Sine Coefficients");
 const sin = sin_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const poly_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 25) + ")");
-poly_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
-poly_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
+const poly_graph = d3.select("#svg3").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 35) + ")");
+poly_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).tickValues([-6, -3, 3, 6]));
+poly_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10]));
+poly_graph.append("text").attr("x", - 60).attr("y", -h / 2 - 10).style("stroke", "white").style("fill", "white").style("text-align", "center").text("Polynomial");
 const poly = poly_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-const peri_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 25) + ")");
-peri_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
-peri_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
+const peri_graph = d3.select("#svg4").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 35) + ")");
+peri_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).tickValues([-6, -3, 3, 6]));
+peri_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10]));
+peri_graph.append("text").attr("x", - 120).attr("y", -h / 2 - 10).style("stroke", "white").style("fill", "white").style("text-align", "center").text("Periodicized Polynomial");
 const peri = peri_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
-
-
-const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 25) + ")");
-fourier_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).ticks(7));
-fourier_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).ticks(7));
+const fourier_graph = d3.select("#svg5").append("g").attr("transform", "translate(" + (25 + w / 2) + ", " + (h / 2 + 35) + ")");
+fourier_graph.append("g").attr("class", "axis").call(d3.axisBottom(x).tickValues([-6, -3, 3, 6]));
+fourier_graph.append("g").attr("class", "axis").call(d3.axisLeft(y).tickValues([-10, -5, 5, 10]));
+fourier_graph.append("text").attr("x", - 130).attr("y", -h / 2 - 10).style("stroke", "white").style("fill", "white").style("text-align", "center").text("10 Term Fourier Approximation");
 const fourier = fourier_graph.append("path").attr("fill", "none").style("stroke", "lightgrey").style("stroke-width", 3);
 
 function get_poly_path() {
@@ -111,10 +113,9 @@ function get_fourier_path(coscs, sincs) {
 }
 
 function update() {
-    var points = get_poly_path(),
-        cosd = "",
+    var cosd = "",
         sind = "";
-    poly.attr("d", d3.line()(points));
+    poly.attr("d", d3.line()(get_poly_path()));
     peri.attr("d", d3.line()(get_peri_path()));
 
     var coscs = get_cos_coefs(),
@@ -131,4 +132,6 @@ function update() {
 }
 
 d3.selectAll("input").on("input", update);
+d3.selectAll(".tick text").attr("class", "axis-label");
+
 update();

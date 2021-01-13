@@ -38,7 +38,7 @@ var fpoints = [];
 for (var i = 0.8; i < 10; i += 0.01) {
     fpoints.push([x1(i), y1(math.sqrt(math.PI / i))])
 }
-g1.append("path").style("fill", "none").style("stroke", "white").attr("stroke-dasharray", "25 25").attr("d", d3.line()(fpoints));
+g1.append("path").style("fill", "none").style("stroke", "white").style("stroke-width", 3).attr("stroke-dasharray", "25 25").attr("d", d3.line()(fpoints));
 
 d3.select("#alpha").on("input", update);
 d3.select("#grab").on("click", grab_data);

@@ -6,7 +6,7 @@
         integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
         crossorigin="anonymous">
         </script>
-    <link rel="stylesheet" type="text/css" href="../../../wsf_demo.css" />
+    <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
     <style>
         .grid {
             display: grid;
@@ -17,7 +17,10 @@
 
         .slider-container {
             display: grid;
+            grid-row: span 1;
             grid-template-columns: 1fr;
+            line-height: 1.4em;
+            margin-bottom: 10px;
             row-gap: 4px;
         }
 
@@ -36,22 +39,6 @@
         .plot-container {
             display: inline-block;
             margin-top: 10px;
-        }
-
-        .axis {
-            stroke-width: 1;
-            stroke: #555;
-        }
-
-        .axis-tick {
-            stroke-width: 1;
-            stroke: #666;
-        }
-
-        .axis-label {
-            stroke-opacity: 0;
-            fill: #111;
-            font-size: 14px;
         }
 
         .x-axis-label {
@@ -93,13 +80,13 @@
             <svg id="svg2" class="plot" height=400 width=450></svg>
         </div>
         <div class="plot-container">
-            <svg id="svg3" class="plot" height=400 width=450></svg>
+            <svg id="svg3" class="plot" height=410 width=450></svg>
         </div>
         <div class="plot-container">
-            <svg id="svg4" class="plot" height=400 width=450></svg>
+            <svg id="svg4" class="plot" height=410 width=450></svg>
         </div>
         <div class="plot-container">
-            <svg id="svg5" class="plot" height=400 width=450></svg>
+            <svg id="svg5" class="plot" height=410 width=450></svg>
         </div>
     </div>
 
