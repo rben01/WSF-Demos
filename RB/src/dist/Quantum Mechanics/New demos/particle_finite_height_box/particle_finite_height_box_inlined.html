@@ -262,16 +262,18 @@ pointer-events: visibleStroke;
 transform: translate(0, 1px);
 }
 .energy-line {
-stroke-width: 3px;
 clip-path: url(#clip-path);
 }
 .energy-line.visible {
 stroke: var(--color-highlight);
+stroke-width: 3px;
 stroke-dasharray: 3px 5px;
 pointer-events: none;
 }
 .energy-line.hoverable {
 stroke-width: 10px;
+pointer-events: all;
+stroke: black; /* has to be set for Safari to catch mouse events? */
 }
 .energy-curve {
 fill: none;
