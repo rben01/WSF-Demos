@@ -44,9 +44,11 @@ function applyDatum(datum, { transition } = {}) {
 	}
 
 	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
-	Object.entries(datum.attrs).forEach(([key, val]) => {
-		t.attr(key, val);
-	});
+	if (datum.attrs !== undefined) {
+		Object.entries(datum.attrs).forEach(([key, val]) => {
+			t.attr(key, val);
+		});
+	}
 
 	if (datum.styles !== undefined) {
 		Object.entries(datum.styles).forEach(([key, val]) => {
@@ -165,7 +167,10 @@ function matMul(...mats) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function defineArrowhead(defs, { id, length, width, color, attrs }) {
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+	attrs = attrs ?? {};
+	flip = flip ?? false;
+
 	const markerAttrs = {
 		attrs: {
 			refX: length / 2,
@@ -176,11 +181,18 @@ function defineArrowhead(defs, { id, length, width, color, attrs }) {
 			orient: "auto",
 		},
 	};
+
+	const path = flip
+		? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+				(2 * length) / 3
+		  } ${width / 2} z`
+		: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+				width / 2
+		  } z`;
+
 	const arrowheadAttrs = {
 		attrs: {
-			d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
-				width / 2
-			} z`,
+			d: path,
 			"stroke-linejoin": "miter",
 			stroke: color,
 			fill: color,
