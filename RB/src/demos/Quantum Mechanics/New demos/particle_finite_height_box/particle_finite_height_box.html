@@ -12,14 +12,34 @@
 			.grid-left-right {
 				column-gap: 50px;
 			}
+
+			.invisible {
+				opacity: 0;
+			}
+			.hoverable {
+				pointer-events: visibleStroke;
+				transform: translate(0, 1px);
+			}
+			.energy-line {
+				stroke-width: 3px;
+				clip-path: url(#clip-path);
+			}
+			.energy-line.visible {
+				stroke: var(--color-highlight);
+				stroke-dasharray: 3px 5px;
+				pointer-events: none;
+			}
+			.energy-line.hoverable {
+				stroke-width: 5px;
+			}
 			.energy-curve {
 				fill: none;
 				clip-path: url(#clip-path);
 			}
 			.energy-curve.mouse-event-catcher {
-				stroke-width: 15px;
-				opacity: 0;
-				pointer-events: all;
+				stroke-width: 11px;
+				/* stroke: red;
+				opacity: 0.5; */
 			}
 			.energy-curve.curve-background {
 				stroke-width: 6px;
@@ -36,12 +56,7 @@
 			.curve-foreground.odd {
 				stroke: var(--color-secondary);
 			}
-			.energy-line {
-				stroke-width: 3px;
-				stroke: var(--color-highlight);
-				stroke-dasharray: 3px 5px;
-				clip-path: url(#clip-path);
-			}
+
 			.well {
 				stroke: #56a;
 				stroke-width: 2px;
@@ -56,25 +71,54 @@
 				font-size: 25px;
 			}
 			.vertical-axis-label {
-				dominant-baseline: center;
 				text-anchor: end;
 			}
+			.vertical-axis-label.axis-label-right {
+				text-anchor: start;
+			}
 			.horizontal-axis-label {
-				dominant-baseline: hanging;
 				text-anchor: middle;
+			}
+			.graph-key {
+				display: grid;
+				grid-template-columns: 30px 1fr;
+				align-items: center;
+				column-gap: 20px;
+				background-color: black;
+				padding: 40px 15px 6px;
+				border-radius: 4px;
+				border: black solid 2px;
+			}
+			.key-line {
+				height: 7px;
+				width: 40px;
+			}
+			.key-symmetric {
+				background-color: white;
+			}
+			.key-antisymmetric {
+				background-color: var(--color-secondary);
 			}
 		</style>
 	</head>
 	<body>
 		<div class="grid-left-right">
-			<div class="controls-container">
-				<div class="controls">
-					<span>Width of the well (𝐿)</span>
-					<span><input type="range" id="slider-width" /></span>
-					<span>Height of the well (𝑉)</span>
-					<span><input type="range" id="slider-height" /></span>
-					<span>Mass of the particle (𝑚)</span>
-					<span><input type="range" id="slider-mass" /></span>
+			<div>
+				<div class="controls-container">
+					<div class="controls">
+						<span>Width of the well (𝐿)</span>
+						<span><input type="range" id="slider-width" /></span>
+						<span>Height of the well (𝑉)</span>
+						<span><input type="range" id="slider-height" /></span>
+						<span>Mass of the particle (𝑚)</span>
+						<span><input type="range" id="slider-mass" /></span>
+					</div>
+				</div>
+				<div id="key" class="graph-key">
+					<div class="key-line key-symmetric"></div>
+					<span class="key-label">Symmetric</span>
+					<div class="key-line key-antisymmetric"></div>
+					<span class="key-label">Antisymmetric</span>
 				</div>
 			</div>
 			<div><svg id="plot"></svg></div>

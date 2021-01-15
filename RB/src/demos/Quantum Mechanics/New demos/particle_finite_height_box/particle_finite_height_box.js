@@ -1,5 +1,5 @@
 /* global applyGraphicalObjs defineArrowhead */
-const WIDTH = 900;
+const WIDTH = 1000;
 const HEIGHT = 750;
 
 const X_MIN = -2;
@@ -11,7 +11,8 @@ const Y_MAX = 10;
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
 const defs = plot.append("defs");
 const wellContainer = plot.append("g");
-const energyObjContainer = plot.append("g");
+const energyLinesContainer = plot.append("g");
+const energyCurvesContainer = plot.append("g");
 
 const XS_MIN = 100;
 const XS_MAX = WIDTH - 100;
@@ -38,6 +39,20 @@ defineArrowhead(defs, {
 	id: "arrowhead-end",
 	length: arrowheadLength,
 	width: arrowheadWidth,
+	color: "white",
+});
+defineArrowhead(defs, {
+	id: "arrowhead-start-small",
+	length: arrowheadLength / 2,
+	width: arrowheadWidth / 2,
+	color: "white",
+	flip: true,
+});
+
+defineArrowhead(defs, {
+	id: "arrowhead-end-small",
+	length: arrowheadLength / 2,
+	width: arrowheadWidth / 2,
 	color: "white",
 });
 
@@ -213,7 +228,9 @@ function update() {
 
 	const nPoints = 500;
 	const dx = (X_MAX - X_MIN) / (nPoints - 1);
-	const energyObjs = [];
+
+	const energyLines = [];
+	const energyCurves = [];
 
 	for (const even of [true, false]) {
 		const energies = findEnergies({ m, L, V, even });
@@ -231,48 +248,68 @@ function update() {
 				points.push([xScale(x), yScale(y)]);
 			}
 
-			const energyId = `index:${index}-even:${even}`;
+			const energyId = `index:${index};even:${even}`;
+
 			const energyY = yScale(energy);
+			energyLines.push(
+				{
+					shape: "line",
+					class: "energy energy-line visible",
+					energyId,
+					energy,
+					attrs: {
+						x1: XS_MIN,
+						x2: xScale(X_MAX),
+						y1: energyY,
+						y2: energyY,
+					},
+				},
+				{
+					shape: "line",
+					class: "energy energy-line invisible hoverable",
+					energyId,
+					energy,
+					attrs: {
+						x1: XS_MIN,
+						x2: xScale(X_MAX),
+						y1: energyY,
+						y2: energyY,
+					},
+				},
+			);
+
 			const path = line(points);
-			energyObjs.push({
+			energyCurves.push({
 				shape: "g",
 				class: "energy-container",
 				energyId,
+				energy,
 				children: [
 					{
-						shape: "line",
-						class: "energy energy-line",
-						energyId,
-						attrs: {
-							x1: XS_MIN,
-							x2: xScale(X_MAX),
-							y1: energyY,
-							y2: energyY,
-						},
-					},
-
-					{
 						shape: "path",
-						class: "energy energy-curve curve-background",
+						class: "energy energy-curve visible curve-background",
 						energyId,
+						energy,
 						attrs: {
 							d: path,
 						},
 					},
 					{
 						shape: "path",
-						class: `energy energy-curve curve-foreground ${
+						class: `energy energy-curve visible curve-foreground ${
 							even ? "even" : "odd"
 						}`,
 						energyId,
+						energy,
 						attrs: {
 							d: path,
 						},
 					},
 					{
 						shape: "path",
-						class: "energy energy-curve mouse-event-catcher",
+						class: "energy energy-curve mouse-event-catcher hoverable",
 						energyId,
+						energy,
 						attrs: {
 							d: path,
 						},
@@ -282,12 +319,25 @@ function update() {
 		}
 	}
 
+	for (const objs of [energyCurves, energyLines]) {
+		objs.sort((a, b) => a.energy - b.energy).forEach((d, i) => {
+			const energyLevelIndex = i + 1;
+			d.energyLevelIndex = energyLevelIndex;
+			if (d.children !== undefined) {
+				for (const child of d.children) {
+					child.energyLevelIndex = energyLevelIndex;
+				}
+			}
+		});
+	}
+
 	const wellInnerLeft = xScale(-L / 2);
 	const wellInnerRight = xScale(L / 2);
 	const wellTop = yScale(V);
 	const wellBot = yScale(Y_MIN);
-	const axisOffset = 30;
-	const axisLabelOffset = 40;
+	const verticalAxisOffset = 70;
+	const horizontalAxisOffset = 25;
+	const axisLabelOffsetFromAxis = 10;
 
 	const wellData = [
 		...[xScale(X_MIN), xScale(L / 2) - 1].map(x => ({
@@ -304,8 +354,8 @@ function update() {
 			shape: "line",
 			class: "well axis vertical-axis",
 			attrs: {
-				x1: XS_MIN - axisOffset,
-				x2: XS_MIN - axisOffset,
+				x1: XS_MIN - verticalAxisOffset,
+				x2: XS_MIN - verticalAxisOffset,
 				y1: wellBot - arrowheadLength / 2,
 				y2: wellTop + arrowheadLength / 2,
 				"marker-start": `url(#arrowhead-start)`,
@@ -317,9 +367,10 @@ function update() {
 			class: "well axis-label vertical-axis-label",
 			text: "𝑉",
 			attrs: {
-				x: XS_MIN - axisLabelOffset,
+				x: XS_MIN - (verticalAxisOffset + axisLabelOffsetFromAxis),
 				y: (wellBot + wellTop) / 2,
 				dx: -5,
+				"dominant-baseline": "middle",
 			},
 		},
 		{
@@ -328,8 +379,8 @@ function update() {
 			attrs: {
 				x1: wellInnerLeft + arrowheadLength / 2,
 				x2: wellInnerRight - arrowheadLength / 2,
-				y1: YS_MAX + axisOffset,
-				y2: YS_MAX + axisOffset,
+				y1: YS_MAX + horizontalAxisOffset,
+				y2: YS_MAX + horizontalAxisOffset,
 				"marker-start": `url(#arrowhead-start)`,
 				"marker-end": `url(#arrowhead-end)`,
 			},
@@ -340,29 +391,88 @@ function update() {
 			text: "𝐿",
 			attrs: {
 				x: xScale(0),
-				y: YS_MAX + axisLabelOffset,
+				y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
+				"dominant-baseline": "hanging",
 			},
 		},
 	];
 
 	applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
-	applyGraphicalObjs(energyObjContainer, energyObjs, {
+	applyGraphicalObjs(energyLinesContainer, energyLines, { selector: ".energy-line" });
+	applyGraphicalObjs(energyCurvesContainer, energyCurves, {
 		selector: ".energy-container",
 	});
 
-	plot.selectAll(".mouse-event-catcher")
+	const psiAxisOffset = 15;
+	plot.selectAll(".hoverable")
 		.on("mouseover", function (_, thisDatum) {
 			const thisEnergyId = thisDatum.energyId;
-			plot.selectAll(".energy-container").each(function (d) {
+			const thisEnergy = thisDatum.energy;
+			const thisEnergyIndex = thisDatum.energyLevelIndex;
+			plot.selectAll(".energy-line.visible").each(function (d) {
+				if (d.energyId !== thisEnergyId) {
+					d3.select(this).style("opacity", 0.2);
+				}
+			});
+			plot.selectAll(".energy-curve.visible").each(function (d) {
 				if (d.energyId !== thisEnergyId) {
 					d3.select(this).style("opacity", 0.1);
 				}
 			});
+
+			const wavefunctionContainer = wellContainer
+				.selectAll(".wavefunction-container")
+				.data([0])
+				.join("g")
+				.classed("wavefunction-container", true)
+				.style("visibility", "visible");
+
+			applyGraphicalObjs(
+				wavefunctionContainer,
+				[
+					{
+						shape: "line",
+						class: "axis vertical-axis",
+						attrs: {
+							x1: XS_MIN - psiAxisOffset,
+							x2: XS_MIN - psiAxisOffset,
+							y1: yScale(thisEnergy - AMPLITUDE),
+							y2: yScale(thisEnergy + AMPLITUDE),
+							"marker-start": "url(#arrowhead-start-small)",
+							"marker-end": "url(#arrowhead-end-small)",
+						},
+					},
+					{
+						shape: "text",
+						class: "axis-label vertical-axis-label",
+						text: "𝜓",
+						attrs: {
+							x: XS_MIN - psiAxisOffset - axisLabelOffsetFromAxis,
+							y: yScale(thisEnergy),
+							"dominant-baseline": "middle",
+						},
+					},
+					{
+						shape: "text",
+						class: "axis-label vertical-axis-label axis-label-right",
+						text: `𝑛 = ${thisEnergyIndex}`,
+						attrs: {
+							x: XS_MAX + axisLabelOffsetFromAxis,
+							y: yScale(thisEnergy),
+							"dominant-baseline": "middle",
+						},
+					},
+				],
+				{ selector: "*" },
+			);
 		})
 		.on("mouseout", function () {
-			plot.selectAll(".energy-container").each(function () {
+			plot.selectAll(".visible").each(function () {
 				d3.select(this).style("opacity", 1);
 			});
+			wellContainer
+				.selectAll(".wavefunction-container")
+				.style("visibility", "hidden");
 		});
 }
 
