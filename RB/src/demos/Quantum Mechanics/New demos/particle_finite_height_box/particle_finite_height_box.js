@@ -362,9 +362,8 @@ function update() {
 			attrs: {
 				x1: XS_MIN - verticalAxisOffset,
 				x2: XS_MIN - verticalAxisOffset,
-				y1: wellBot - arrowheadLength / 2,
-				y2: wellTop + arrowheadLength / 2,
-				"marker-start": `url(#arrowhead-start)`,
+				y1: wellBot,
+				y2: wellTop,
 				"marker-end": `url(#arrowhead-end)`,
 			},
 		},

@@ -278,6 +278,7 @@ stroke: black; /* has to be set for Safari to catch mouse events? */
 .energy-curve {
 fill: none;
 clip-path: url(#clip-path);
+stroke-linejoin: round;
 }
 .energy-curve.mouse-event-catcher {
 stroke-width: 11px;
@@ -1008,9 +1009,8 @@ class: "well axis vertical-axis",
 attrs: {
 x1: XS_MIN - verticalAxisOffset,
 x2: XS_MIN - verticalAxisOffset,
-y1: wellBot - arrowheadLength / 2,
-y2: wellTop + arrowheadLength / 2,
-"marker-start": `url(#arrowhead-start)`,
+y1: wellBot,
+y2: wellTop,
 "marker-end": `url(#arrowhead-end)`,
 },
 },
