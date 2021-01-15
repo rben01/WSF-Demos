@@ -1,31 +1,62 @@
-/* global applyGraphicalObjs */
-const WIDTH = 500;
-const HEIGHT = 500;
+/* global applyGraphicalObjs defineArrowhead */
+const WIDTH = 900;
+const HEIGHT = 750;
 
-const X_MIN = -3;
+const X_MIN = -2;
 const X_MAX = -X_MIN;
 
-const Y_MIN = -1;
-const Y_MAX = 20;
+const Y_MIN = 0;
+const Y_MAX = 10;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const defs = plot.append("defs");
+const wellContainer = plot.append("g");
+const energyObjContainer = plot.append("g");
 
-const xScale = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
-const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT, 0]);
+const XS_MIN = 100;
+const XS_MAX = WIDTH - 100;
+const YS_MAX = HEIGHT - 100;
+defs.append("clipPath")
+	.attr("id", "clip-path")
+	.append("rect")
+	.attr("x", XS_MIN)
+	.attr("width", XS_MAX - XS_MIN - 2)
+	.attr("y", 0)
+	.attr("height", HEIGHT);
+
+const arrowheadLength = 15;
+const arrowheadWidth = 15;
+defineArrowhead(defs, {
+	id: "arrowhead-start",
+	length: arrowheadLength,
+	width: arrowheadWidth,
+	color: "white",
+	flip: true,
+});
+
+defineArrowhead(defs, {
+	id: "arrowhead-end",
+	length: arrowheadLength,
+	width: arrowheadWidth,
+	color: "white",
+});
+
+const xScale = d3.scaleLinear([X_MIN, X_MAX], [XS_MIN, XS_MAX]); // leaving room for axis
+const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [YS_MAX, 0]);
 
 const HBAR = 0.3;
-const AMPLITUDE = 0.7;
+const AMPLITUDE = 0.3;
 
 const line = d3.line();
 
 const widthSlider = (() => {
 	const slider = document.getElementById("slider-width");
-	const min = 0.1;
-	const max = (X_MAX - X_MIN) / 2;
+	const min = 0.3;
+	const max = (X_MAX - X_MIN) * 0.7;
 
 	slider.min = min;
 	slider.max = max;
-	slider.step = 0.001;
+	slider.step = 0.01;
 	slider.value = (min + max) / 2;
 	// eslint-disable-next-line no-use-before-define
 	slider.oninput = update;
@@ -35,11 +66,11 @@ const widthSlider = (() => {
 const heightSlider = (() => {
 	const slider = document.getElementById("slider-height");
 	const min = 1;
-	const max = Y_MAX * 0.8;
+	const max = Y_MAX * 0.95;
 
 	slider.min = min;
 	slider.max = max;
-	slider.step = 0.001;
+	slider.step = 0.01;
 	slider.value = (min + max) / 2;
 	// eslint-disable-next-line no-use-before-define
 	slider.oninput = update;
@@ -53,7 +84,7 @@ const massSlider = (() => {
 
 	slider.min = min;
 	slider.max = max;
-	slider.step = 0.001;
+	slider.step = 0.01;
 	slider.value = (min + max) / 2;
 	// eslint-disable-next-line no-use-before-define
 	slider.oninput = update;
@@ -182,12 +213,13 @@ function update() {
 
 	const nPoints = 500;
 	const dx = (X_MAX - X_MIN) / (nPoints - 1);
-	const energyCurves = [];
-	const energyLines = [];
+	const energyObjs = [];
 
 	for (const even of [true, false]) {
 		const energies = findEnergies({ m, L, V, even });
-		for (const energy of energies) {
+
+		for (let index = 0; index < energies.length; ++index) {
+			const energy = energies[index];
 			const psi = makePsiFunction({ even, V, L, m, energy });
 			// console.log(energy, alpha, k * Math.tan((k * L) / 2));
 			// console.log(alpha, k, $CEven(alpha, k), $BEven(alpha, k), (k * L) / 2);
@@ -198,52 +230,140 @@ function update() {
 				const y = psi(x);
 				points.push([xScale(x), yScale(y)]);
 			}
-			energyCurves.push({
-				shape: "path",
-				class: "energy-curve",
-				attrs: {
-					d: line(points),
-					stroke: even ? "white" : "#0f0",
-					fill: "none",
-					"stroke-width": 2,
-				},
-			});
 
+			const energyId = `index:${index}-even:${even}`;
 			const energyY = yScale(energy);
-			energyLines.push({
-				shape: "line",
-				class: "energy-line",
-				attrs: {
-					x1: xScale(X_MIN),
-					x2: xScale(X_MAX),
-					y1: energyY,
-					y2: energyY,
-					stroke: "red",
-				},
+			const path = line(points);
+			energyObjs.push({
+				shape: "g",
+				class: "energy-container",
+				energyId,
+				children: [
+					{
+						shape: "line",
+						class: "energy energy-line",
+						energyId,
+						attrs: {
+							x1: XS_MIN,
+							x2: xScale(X_MAX),
+							y1: energyY,
+							y2: energyY,
+						},
+					},
+
+					{
+						shape: "path",
+						class: "energy energy-curve curve-background",
+						energyId,
+						attrs: {
+							d: path,
+						},
+					},
+					{
+						shape: "path",
+						class: `energy energy-curve curve-foreground ${
+							even ? "even" : "odd"
+						}`,
+						energyId,
+						attrs: {
+							d: path,
+						},
+					},
+					{
+						shape: "path",
+						class: "energy energy-curve mouse-event-catcher",
+						energyId,
+						attrs: {
+							d: path,
+						},
+					},
+				],
 			});
 		}
 	}
 
-	plot.selectAll(".well")
-		.data([
-			{
-				x: xScale(-L / 2),
-			},
-			{
-				x: xScale(L / 2),
-			},
-		])
-		.join("line")
-		.classed("well", true)
-		.attr("x1", d => d.x)
-		.attr("x2", d => d.x)
-		.attr("y1", yScale(0))
-		.attr("y2", yScale(V))
-		.attr("stroke", "#22ccff")
-		.attr("stroke-width", 2);
+	const wellInnerLeft = xScale(-L / 2);
+	const wellInnerRight = xScale(L / 2);
+	const wellTop = yScale(V);
+	const wellBot = yScale(Y_MIN);
+	const axisOffset = 30;
+	const axisLabelOffset = 40;
 
-	applyGraphicalObjs(plot, energyLines, { selector: ".energy-line" });
-	applyGraphicalObjs(plot, energyCurves, { selector: ".energy-curve" });
+	const wellData = [
+		...[xScale(X_MIN), xScale(L / 2) - 1].map(x => ({
+			shape: "rect",
+			class: "well",
+			attrs: {
+				x,
+				width: xScale(X_MAX) - xScale(L / 2) - 1,
+				y: wellTop,
+				height: wellBot - wellTop - 1,
+			},
+		})),
+		{
+			shape: "line",
+			class: "well axis vertical-axis",
+			attrs: {
+				x1: XS_MIN - axisOffset,
+				x2: XS_MIN - axisOffset,
+				y1: wellBot - arrowheadLength / 2,
+				y2: wellTop + arrowheadLength / 2,
+				"marker-start": `url(#arrowhead-start)`,
+				"marker-end": `url(#arrowhead-end)`,
+			},
+		},
+		{
+			shape: "text",
+			class: "well axis-label vertical-axis-label",
+			text: "𝑉",
+			attrs: {
+				x: XS_MIN - axisLabelOffset,
+				y: (wellBot + wellTop) / 2,
+				dx: -5,
+			},
+		},
+		{
+			shape: "line",
+			class: "well axis horizontal-axis",
+			attrs: {
+				x1: wellInnerLeft + arrowheadLength / 2,
+				x2: wellInnerRight - arrowheadLength / 2,
+				y1: YS_MAX + axisOffset,
+				y2: YS_MAX + axisOffset,
+				"marker-start": `url(#arrowhead-start)`,
+				"marker-end": `url(#arrowhead-end)`,
+			},
+		},
+		{
+			shape: "text",
+			class: "well axis-label horizontal-axis-label",
+			text: "𝐿",
+			attrs: {
+				x: xScale(0),
+				y: YS_MAX + axisLabelOffset,
+			},
+		},
+	];
+
+	applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
+	applyGraphicalObjs(energyObjContainer, energyObjs, {
+		selector: ".energy-container",
+	});
+
+	plot.selectAll(".mouse-event-catcher")
+		.on("mouseover", function (_, thisDatum) {
+			const thisEnergyId = thisDatum.energyId;
+			plot.selectAll(".energy-container").each(function (d) {
+				if (d.energyId !== thisEnergyId) {
+					d3.select(this).style("opacity", 0.1);
+				}
+			});
+		})
+		.on("mouseout", function () {
+			plot.selectAll(".energy-container").each(function () {
+				d3.select(this).style("opacity", 1);
+			});
+		});
 }
 
 update();

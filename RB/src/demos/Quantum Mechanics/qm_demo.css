@@ -1,3 +1,10 @@
+:root {
+	--color-highlight: #5df;
+	--color-secondary: #f3c002;
+	--color-tertiary: #14c778;
+	--color-quaternary: #e5d;
+}
+
 body {
 	/* margin-left: 10px;
 	margin-top: 10px; */
@@ -143,19 +150,19 @@ input[type="range"] {
 }
 
 .highlighted-text {
-	color: #5df;
+	color: var(--color-highlight);
 }
 
 .secondary-text {
-	color: #f3c002;
+	color: var(--color-secondary);
 }
 
 .tertiary-text {
-	color: #14c778;
+	color: var(--color-tertiary);
 }
 
 .quaternary-text {
-	color: #e5d;
+	color: var(--color-quaternary);
 }
 
 .viz-canvas {

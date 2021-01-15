@@ -12,17 +12,68 @@
 			.grid-left-right {
 				column-gap: 50px;
 			}
+			.energy-curve {
+				fill: none;
+				clip-path: url(#clip-path);
+			}
+			.energy-curve.mouse-event-catcher {
+				stroke-width: 15px;
+				opacity: 0;
+				pointer-events: all;
+			}
+			.energy-curve.curve-background {
+				stroke-width: 6px;
+				stroke: black;
+				pointer-events: none;
+			}
+			.energy-curve.curve-foreground {
+				stroke-width: 3px;
+				pointer-events: none;
+			}
+			.curve-foreground.even {
+				stroke: white;
+			}
+			.curve-foreground.odd {
+				stroke: var(--color-secondary);
+			}
+			.energy-line {
+				stroke-width: 3px;
+				stroke: var(--color-highlight);
+				stroke-dasharray: 3px 5px;
+				clip-path: url(#clip-path);
+			}
+			.well {
+				stroke: #56a;
+				stroke-width: 2px;
+				fill: #2c3c4c;
+			}
+			.axis {
+				stroke-width: 2px;
+				stroke: white;
+			}
+			.axis-label {
+				fill: white;
+				font-size: 25px;
+			}
+			.vertical-axis-label {
+				dominant-baseline: center;
+				text-anchor: end;
+			}
+			.horizontal-axis-label {
+				dominant-baseline: hanging;
+				text-anchor: middle;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="grid-left-right">
 			<div class="controls-container">
 				<div class="controls">
-					<span>Width of the well</span>
+					<span>Width of the well (𝐿)</span>
 					<span><input type="range" id="slider-width" /></span>
-					<span>Height of the well</span>
+					<span>Height of the well (𝑉)</span>
 					<span><input type="range" id="slider-height" /></span>
-					<span>Mass of the particle</span>
+					<span>Mass of the particle (𝑚)</span>
 					<span><input type="range" id="slider-mass" /></span>
 				</div>
 			</div>
