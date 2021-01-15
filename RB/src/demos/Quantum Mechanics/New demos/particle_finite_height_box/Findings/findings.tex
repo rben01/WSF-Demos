@@ -1,0 +1,62 @@
+\documentclass{article}
+\usepackage[margin=.9in]{geometry}
+\usepackage{mathtools}
+
+\newcommand{\dx}{\,\mathrm{d}x}
+
+\begin{document}
+\section{Variables}
+\begin{align*}
+	\alpha & =\frac{\sqrt{2m(U_0-E)}}{\hbar} \\
+	k      & =\frac{\sqrt{2mE}}{\hbar}
+\end{align*}
+\section{Even case}
+\subsection{Wavefunction}
+\begin{align}
+	\psi(x) & =\begin{cases}
+		Ce^{\alpha x}  & x<-\frac{L}{2}                    \\
+		B\cos(k x)     & -\frac{L}{2}\le x \le \frac{L}{2} \\
+		Ce^{-\alpha x} & x>\frac{L}{2}
+	\end{cases}
+\end{align}
+\subsection{Continuity condition}
+\begin{align}
+	\alpha & =k\tan\frac{kL}{2}                         \\
+	B      & =\frac{Ce^{-\alpha L/2}}{\cos\frac{kL}{2}}
+\end{align}
+\subsection{\(\textrm{Norm} = 1\)}
+\begin{align}
+	1          & =
+	\int_{-\infty}^{-\frac{L}{2}}{(Ce^{\alpha x} )}^2\dx+\int_{-\frac{L}{2}}^{\frac{L}{2}}{(B\cos(k x) )}^2\dx+\int_{\frac{L}{2}}^{\infty}{(Ce^{-\alpha x})}^2\dx         \\
+	\implies C & =  \sqrt{\alpha k e^{L\alpha}\left(\frac{1+\cos{\left(L k \right)}}{L \alpha k + \alpha \sin{\left(L k \right)} + k \cos{\left(L k \right)} + k}\right)}
+\end{align}
+\subsection{Solving for \(E\)}
+\begin{align}
+	E\sec^2\left(\frac{L\sqrt{2mE}}{2\hbar}\right) & = U
+\end{align}
+\section{Odd case}
+\subsection{Wavefunction}
+\begin{align}
+	\psi(x) & =\begin{cases}
+		Ce^{\alpha x}   & x<-\frac{L}{2}                    \\
+		B\sin(k x)      & -\frac{L}{2}\le x \le \frac{L}{2} \\
+		-Ce^{-\alpha x} & x>\frac{L}{2}
+	\end{cases}
+\end{align}
+\subsection{Continuity condition}
+\begin{align}
+	\alpha & =-k\cot\frac{kL}{2}                         \\
+	B      & =\frac{-Ce^{-\alpha L/2}}{\sin\frac{kL}{2}}
+\end{align}
+\subsection{\(\textrm{Norm} = 1\)}
+\begin{align}
+	1          & =
+	\int_{-\infty}^{-\frac{L}{2}}{(Ce^{\alpha x})}^2\dx+\int_{-\frac{L}{2}}^{\frac{L}{2}}{(B\sin(k x) )}^2\dx+\int_{\frac{L}{2}}^{\infty}{(-Ce^{-\alpha x})}^2\dx                       \\
+	\implies C & =  \sqrt{\alpha k e^{L\alpha}\left(\frac{1-\cos{\left(L k \right)}}{L \alpha k - \alpha \sin{\left(L k \right)} - k \cos{\left(L k \right)} + k}\right)}
+\end{align}
+\subsection{Solving for \(E\)}
+\begin{align}
+	E\csc^2\left(\frac{L\sqrt{2mE}}{2\hbar}\right) & = U
+\end{align}
+
+\end{document}
