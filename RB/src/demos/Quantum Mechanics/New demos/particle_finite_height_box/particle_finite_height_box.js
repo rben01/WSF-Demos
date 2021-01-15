@@ -1,5 +1,5 @@
 /* global applyGraphicalObjs defineArrowhead */
-const WIDTH = 1000;
+const WIDTH = 1100;
 const HEIGHT = 750;
 
 const X_MIN = -2;
@@ -14,7 +14,7 @@ const wellContainer = plot.append("g");
 const energyLinesContainer = plot.append("g");
 const energyCurvesContainer = plot.append("g");
 
-const XS_MIN = 100;
+const XS_MIN = 150;
 const XS_MAX = WIDTH - 100;
 const YS_MAX = HEIGHT - 100;
 defs.append("clipPath")
@@ -251,37 +251,43 @@ function update() {
 			const energyId = `index:${index};even:${even}`;
 
 			const energyY = yScale(energy);
-			energyLines.push(
-				{
-					shape: "line",
-					class: "energy energy-line visible",
-					energyId,
-					energy,
-					attrs: {
-						x1: XS_MIN,
-						x2: xScale(X_MAX),
-						y1: energyY,
-						y2: energyY,
+			energyLines.push({
+				shape: "g",
+				class: "energy-line-container",
+				energyId,
+				energy,
+				children: [
+					{
+						shape: "line",
+						class: "energy energy-line visible",
+						energyId,
+						energy,
+						attrs: {
+							x1: XS_MIN,
+							x2: xScale(X_MAX),
+							y1: energyY,
+							y2: energyY,
+						},
 					},
-				},
-				{
-					shape: "line",
-					class: "energy energy-line invisible hoverable",
-					energyId,
-					energy,
-					attrs: {
-						x1: XS_MIN,
-						x2: xScale(X_MAX),
-						y1: energyY,
-						y2: energyY,
+					{
+						shape: "line",
+						class: "energy energy-line invisible hoverable",
+						energyId,
+						energy,
+						attrs: {
+							x1: XS_MIN,
+							x2: xScale(X_MAX),
+							y1: energyY,
+							y2: energyY,
+						},
 					},
-				},
-			);
+				],
+			});
 
 			const path = line(points);
 			energyCurves.push({
 				shape: "g",
-				class: "energy-container",
+				class: "energy-curve-container",
 				energyId,
 				energy,
 				children: [
@@ -365,10 +371,21 @@ function update() {
 		{
 			shape: "text",
 			class: "well axis-label vertical-axis-label",
-			text: "𝑉",
+			text: "𝐸 = 𝑉",
 			attrs: {
 				x: XS_MIN - (verticalAxisOffset + axisLabelOffsetFromAxis),
-				y: (wellBot + wellTop) / 2,
+				y: wellTop,
+				dx: -5,
+				"dominant-baseline": "middle",
+			},
+		},
+		{
+			shape: "text",
+			class: "well axis-label vertical-axis-label",
+			text: "𝐸 = 𝟢",
+			attrs: {
+				x: XS_MIN - (verticalAxisOffset + axisLabelOffsetFromAxis),
+				y: wellBot,
 				dx: -5,
 				"dominant-baseline": "middle",
 			},
@@ -388,9 +405,19 @@ function update() {
 		{
 			shape: "text",
 			class: "well axis-label horizontal-axis-label",
-			text: "𝐿",
+			text: "𝑥 = −½𝐿",
 			attrs: {
-				x: xScale(0),
+				x: xScale(-L / 2),
+				y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
+				"dominant-baseline": "hanging",
+			},
+		},
+		{
+			shape: "text",
+			class: "well axis-label horizontal-axis-label",
+			text: "𝑥 = ½𝐿",
+			attrs: {
+				x: xScale(L / 2),
 				y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
 				"dominant-baseline": "hanging",
 			},
@@ -398,9 +425,11 @@ function update() {
 	];
 
 	applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
-	applyGraphicalObjs(energyLinesContainer, energyLines, { selector: ".energy-line" });
+	applyGraphicalObjs(energyLinesContainer, energyLines, {
+		selector: ".energy-line-container",
+	});
 	applyGraphicalObjs(energyCurvesContainer, energyCurves, {
-		selector: ".energy-container",
+		selector: ".energy-curve-container",
 	});
 
 	const psiAxisOffset = 15;
