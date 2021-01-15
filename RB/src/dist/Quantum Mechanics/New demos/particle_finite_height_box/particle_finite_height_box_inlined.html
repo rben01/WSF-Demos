@@ -1,0 +1,1151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style rel="stylesheet">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-right: 3px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style><style>
+.grid-left-right {
+column-gap: 10px;
+}
+.invisible {
+opacity: 0;
+}
+.hoverable {
+pointer-events: visibleStroke;
+transform: translate(0, 1px);
+}
+.energy-line {
+clip-path: url(#clip-path);
+}
+.energy-line.visible {
+stroke: var(--color-highlight);
+stroke-width: 3px;
+stroke-dasharray: 3px 5px;
+pointer-events: none;
+}
+.energy-line.hoverable {
+stroke-width: 10px;
+pointer-events: all;
+stroke: black; /* has to be set for Safari to catch mouse events? */
+}
+.energy-curve {
+fill: none;
+clip-path: url(#clip-path);
+}
+.energy-curve.mouse-event-catcher {
+stroke-width: 11px;
+/* stroke: red;
+opacity: 0.5; */
+}
+.energy-curve.curve-background {
+stroke-width: 6px;
+stroke: black;
+pointer-events: none;
+}
+.energy-curve.curve-foreground {
+stroke-width: 3px;
+pointer-events: none;
+}
+.curve-foreground.even {
+stroke: white;
+}
+.curve-foreground.odd {
+stroke: var(--color-secondary);
+}
+.well {
+stroke: #56a;
+stroke-width: 2px;
+fill: #2c3c4c;
+}
+.axis {
+stroke-width: 2px;
+stroke: white;
+}
+.axis-label {
+fill: white;
+font-size: 25px;
+}
+.vertical-axis-label {
+text-anchor: end;
+}
+.vertical-axis-label.axis-label-right {
+text-anchor: start;
+}
+.horizontal-axis-label {
+text-anchor: middle;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 40px 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+.key-symmetric {
+background-color: white;
+}
+.key-antisymmetric {
+background-color: var(--color-secondary);
+}
+</style></head>
+<body>
+<div class="grid-left-right">
+<div>
+<div class="controls-container">
+<div class="controls">
+<span>Width of the well (𝐿)</span>
+<span><input id="slider-width" type="range"/></span>
+<span>Height of the well (𝑉)</span>
+<span><input id="slider-height" type="range"/></span>
+<span>Mass of the particle (𝑚)</span>
+<span><input id="slider-mass" type="range"/></span>
+</div>
+</div>
+<div class="graph-key" id="key">
+<div class="key-line key-symmetric"></div>
+<span class="key-label">Symmetric</span>
+<div class="key-line key-antisymmetric"></div>
+<span class="key-label">Antisymmetric</span>
+</div>
+</div>
+<div><svg id="plot"></svg></div>
+</div>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point =
+zFunc !== undefined
+? [trueX, trueY, zFunc(trueX, trueY)]
+: [trueX, trueY];
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+d3.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+})
+.on("click._default", function () {
+this.setAttribute("button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("button-checked");
+}
+});
+}
+}
+_initializeRadioButtons();
+</script><script type="text/javascript">/* global applyGraphicalObjs defineArrowhead */
+const WIDTH = 1100;
+const HEIGHT = 750;
+const X_MIN = -2;
+const X_MAX = -X_MIN;
+const Y_MIN = 0;
+const Y_MAX = 10;
+const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const defs = plot.append("defs");
+const wellContainer = plot.append("g");
+const energyLinesContainer = plot.append("g");
+const energyCurvesContainer = plot.append("g");
+const XS_MIN = 150;
+const XS_MAX = WIDTH - 100;
+const YS_MAX = HEIGHT - 100;
+defs.append("clipPath")
+.attr("id", "clip-path")
+.append("rect")
+.attr("x", XS_MIN)
+.attr("width", XS_MAX - XS_MIN - 2)
+.attr("y", 0)
+.attr("height", HEIGHT);
+const arrowheadLength = 15;
+const arrowheadWidth = 15;
+defineArrowhead(defs, {
+id: "arrowhead-start",
+length: arrowheadLength,
+width: arrowheadWidth,
+color: "white",
+flip: true,
+});
+defineArrowhead(defs, {
+id: "arrowhead-end",
+length: arrowheadLength,
+width: arrowheadWidth,
+color: "white",
+});
+defineArrowhead(defs, {
+id: "arrowhead-start-small",
+length: arrowheadLength / 2,
+width: arrowheadWidth / 2,
+color: "white",
+flip: true,
+});
+defineArrowhead(defs, {
+id: "arrowhead-end-small",
+length: arrowheadLength / 2,
+width: arrowheadWidth / 2,
+color: "white",
+});
+const xScale = d3.scaleLinear([X_MIN, X_MAX], [XS_MIN, XS_MAX]); // leaving room for axis
+const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [YS_MAX, 0]);
+const HBAR = 0.3;
+const AMPLITUDE = 0.3;
+const line = d3.line();
+const widthSlider = (() => {
+const slider = document.getElementById("slider-width");
+const min = 0.6;
+const max = (X_MAX - X_MIN) * 0.7;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})();
+const heightSlider = (() => {
+const slider = document.getElementById("slider-height");
+const min = 1;
+const max = Y_MAX * 0.95;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})();
+const massSlider = (() => {
+const slider = document.getElementById("slider-mass");
+const min = 0.2;
+const max = 3;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})();
+function $alpha({ V, m, energy }) {
+return (2 * m * (V - energy)) ** 0.5 / HBAR;
+}
+function $k({ m, energy }) {
+return (2 * m * energy) ** 0.5 / HBAR;
+}
+function $CEven(alpha, k, L) {
+const Lk = L * k;
+return Math.sqrt(
+alpha *
+k *
+Math.exp(L * alpha) *
+((1 + Math.cos(Lk)) /
+(L * alpha * k + alpha * Math.sin(Lk) + k * Math.cos(Lk) + k)),
+);
+}
+function $COdd(alpha, k, L) {
+const Lk = L * k;
+return Math.sqrt(
+alpha *
+k *
+Math.exp(L * alpha) *
+((1 - Math.cos(Lk)) /
+(L * alpha * k - alpha * Math.sin(Lk) - k * Math.cos(Lk) + k)),
+);
+}
+function makePsiFunction({ even, V, L, m, energy }) {
+const alpha = $alpha({ V, m, energy });
+const k = $k({ m, energy });
+if (even) {
+const c = $CEven(alpha, k, L);
+const b = (c * Math.exp((-alpha * L) / 2)) / Math.cos((k * L) / 2);
+return x =>
+energy +
+AMPLITUDE *
+(x < -L / 2
+? c * Math.exp(alpha * x)
+: x < L / 2
+? b * Math.cos(k * x)
+: c * Math.exp(-alpha * x));
+} else {
+const c = $COdd(alpha, k, L);
+const b = (-c * Math.exp((-alpha * L) / 2)) / Math.sin((k * L) / 2);
+return x =>
+energy +
+AMPLITUDE *
+(x < -L / 2
+? c * Math.exp(alpha * x)
+: x < L / 2
+? b * Math.sin(k * x)
+: -c * Math.exp(-alpha * x));
+}
+}
+// Just... read this:
+// https://en.wikipedia.org/wiki/Finite_potential_well#Finding_wavefunctions_for_the_bound_state
+function findEnergies({ m, L, V, even }) {
+const nPointsSearched = 20000;
+const u0_Sqrd = (m * L ** 2 * V) / (2 * HBAR ** 2);
+const u0 = u0_Sqrd ** 0.5;
+const errorFunc = even
+? v => Math.abs(v * Math.tan(v) - (u0_Sqrd - v ** 2) ** 0.5)
+: v => Math.abs(-v / Math.tan(v) - (u0_Sqrd - v ** 2) ** 0.5);
+let solutions = [u0 / 2];
+// Summary of the solving algorithm:
+// Pick a starting point and a neighborhood (nhbd) around that point to search in
+// Traverse the neighborhood from left to right. Track whether the error associated with each point in the neighborhood is smaller or larger than that of the previous point
+// If the previous error was smaller than the one before it, but the current error is larger than the previous error, then the previous point was a local minimum. Add it to the list of candidate solutions.
+// Once we've traversed every neighborhood of every point, start over using a smaller neighborhood around each of aformentioned candidate solution. Do this until satisfied with precision of solutions (below, while n < 2).
+// Algorithm assumptions:
+// The function is smooth enough that there won't be any spurious local minima
+for (let n = 0; n < 2; ++n) {
+const solnCandidates = [...solutions];
+solutions = [];
+const nhbdHalfWidth = (u0 / 2) * nPointsSearched ** -n;
+for (const candidate of solnCandidates) {
+const nhbdMin = candidate - nhbdHalfWidth;
+const nhbdRight = candidate + nhbdHalfWidth;
+const du = (nhbdRight - nhbdMin) / (nPointsSearched - 1);
+let isDescending = false;
+let prevU;
+let prevError = Infinity;
+for (let i = 0; i < nPointsSearched; ++i) {
+const u = nhbdMin + (i + 1) * du;
+const error = errorFunc(u);
+if (isDescending && error > prevError) {
+solutions.push(prevU);
+}
+isDescending = error < prevError;
+prevU = u;
+prevError = error;
+}
+}
+}
+solutions = solutions
+.map(v => (2 * HBAR ** 2 * v ** 2) / (m * L ** 2))
+.filter(energy => energy < V); // filter shouldn't be necessary, but just in case
+return solutions;
+}
+function update() {
+const m = +massSlider.value;
+const V = +heightSlider.value;
+const L = +widthSlider.value;
+const nPoints = 500;
+const dx = (X_MAX - X_MIN) / (nPoints - 1);
+const energyLines = [];
+const energyCurves = [];
+for (const even of [true, false]) {
+const energies = findEnergies({ m, L, V, even });
+for (let index = 0; index < energies.length; ++index) {
+const energy = energies[index];
+const psi = makePsiFunction({ even, V, L, m, energy });
+// console.log(energy, alpha, k * Math.tan((k * L) / 2));
+// console.log(alpha, k, $CEven(alpha, k), $BEven(alpha, k), (k * L) / 2);
+const points = [];
+for (let i = 0; i < nPoints; ++i) {
+const x = X_MIN + i * dx;
+const y = psi(x);
+points.push([xScale(x), yScale(y)]);
+}
+const energyId = `index:${index};even:${even}`;
+const energyY = yScale(energy);
+energyLines.push({
+shape: "g",
+class: "energy-line-container",
+energyId,
+energy,
+children: [
+{
+shape: "line",
+class: "energy energy-line visible",
+energyId,
+energy,
+attrs: {
+x1: XS_MIN,
+x2: xScale(X_MAX),
+y1: energyY,
+y2: energyY,
+},
+},
+{
+shape: "line",
+class: "energy energy-line invisible hoverable",
+energyId,
+energy,
+attrs: {
+x1: XS_MIN,
+x2: xScale(X_MAX),
+y1: energyY,
+y2: energyY,
+},
+},
+],
+});
+const path = line(points);
+energyCurves.push({
+shape: "g",
+class: "energy-curve-container",
+energyId,
+energy,
+children: [
+{
+shape: "path",
+class: "energy energy-curve visible curve-background",
+energyId,
+energy,
+attrs: {
+d: path,
+},
+},
+{
+shape: "path",
+class: `energy energy-curve visible curve-foreground ${
+even ? "even" : "odd"
+}`,
+energyId,
+energy,
+attrs: {
+d: path,
+},
+},
+{
+shape: "path",
+class: "energy energy-curve mouse-event-catcher hoverable",
+energyId,
+energy,
+attrs: {
+d: path,
+},
+},
+],
+});
+}
+}
+for (const objs of [energyCurves, energyLines]) {
+objs.sort((a, b) => a.energy - b.energy).forEach((d, i) => {
+const energyLevelIndex = i + 1;
+d.energyLevelIndex = energyLevelIndex;
+if (d.children !== undefined) {
+for (const child of d.children) {
+child.energyLevelIndex = energyLevelIndex;
+}
+}
+});
+}
+const wellInnerLeft = xScale(-L / 2);
+const wellInnerRight = xScale(L / 2);
+const wellTop = yScale(V);
+const wellBot = yScale(Y_MIN);
+const verticalAxisOffset = 70;
+const horizontalAxisOffset = 25;
+const axisLabelOffsetFromAxis = 10;
+const wellData = [
+...[xScale(X_MIN), xScale(L / 2) - 1].map(x => ({
+shape: "rect",
+class: "well",
+attrs: {
+x,
+width: xScale(X_MAX) - xScale(L / 2) - 1,
+y: wellTop,
+height: wellBot - wellTop - 1,
+},
+})),
+{
+shape: "line",
+class: "well axis vertical-axis",
+attrs: {
+x1: XS_MIN - verticalAxisOffset,
+x2: XS_MIN - verticalAxisOffset,
+y1: wellBot - arrowheadLength / 2,
+y2: wellTop + arrowheadLength / 2,
+"marker-start": `url(#arrowhead-start)`,
+"marker-end": `url(#arrowhead-end)`,
+},
+},
+{
+shape: "text",
+class: "well axis-label vertical-axis-label",
+text: "𝐸 = 𝑉",
+attrs: {
+x: XS_MIN - (verticalAxisOffset + axisLabelOffsetFromAxis),
+y: wellTop,
+dx: -5,
+"dominant-baseline": "middle",
+},
+},
+{
+shape: "text",
+class: "well axis-label vertical-axis-label",
+text: "𝐸 = 𝟢",
+attrs: {
+x: XS_MIN - (verticalAxisOffset + axisLabelOffsetFromAxis),
+y: wellBot,
+dx: -5,
+"dominant-baseline": "middle",
+},
+},
+{
+shape: "line",
+class: "well axis horizontal-axis",
+attrs: {
+x1: wellInnerLeft + arrowheadLength / 2,
+x2: wellInnerRight - arrowheadLength / 2,
+y1: YS_MAX + horizontalAxisOffset,
+y2: YS_MAX + horizontalAxisOffset,
+"marker-start": `url(#arrowhead-start)`,
+"marker-end": `url(#arrowhead-end)`,
+},
+},
+{
+shape: "text",
+class: "well axis-label horizontal-axis-label",
+text: "𝑥 = −½𝐿",
+attrs: {
+x: xScale(-L / 2),
+y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
+"dominant-baseline": "hanging",
+},
+},
+{
+shape: "text",
+class: "well axis-label horizontal-axis-label",
+text: "𝑥 = ½𝐿",
+attrs: {
+x: xScale(L / 2),
+y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
+"dominant-baseline": "hanging",
+},
+},
+];
+applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
+applyGraphicalObjs(energyLinesContainer, energyLines, {
+selector: ".energy-line-container",
+});
+applyGraphicalObjs(energyCurvesContainer, energyCurves, {
+selector: ".energy-curve-container",
+});
+const psiAxisOffset = 15;
+plot.selectAll(".hoverable")
+.on("mouseover", function (_, thisDatum) {
+const thisEnergyId = thisDatum.energyId;
+const thisEnergy = thisDatum.energy;
+const thisEnergyIndex = thisDatum.energyLevelIndex;
+plot.selectAll(".energy-line.visible").each(function (d) {
+if (d.energyId !== thisEnergyId) {
+d3.select(this).style("opacity", 0.2);
+}
+});
+plot.selectAll(".energy-curve.visible").each(function (d) {
+if (d.energyId !== thisEnergyId) {
+d3.select(this).style("opacity", 0.1);
+}
+});
+const wavefunctionContainer = wellContainer
+.selectAll(".wavefunction-container")
+.data([0])
+.join("g")
+.classed("wavefunction-container", true)
+.style("visibility", "visible");
+applyGraphicalObjs(
+wavefunctionContainer,
+[
+{
+shape: "line",
+class: "axis vertical-axis",
+attrs: {
+x1: XS_MIN - psiAxisOffset,
+x2: XS_MIN - psiAxisOffset,
+y1: yScale(thisEnergy - AMPLITUDE),
+y2: yScale(thisEnergy + AMPLITUDE),
+"marker-start": "url(#arrowhead-start-small)",
+"marker-end": "url(#arrowhead-end-small)",
+},
+},
+{
+shape: "text",
+class: "axis-label vertical-axis-label",
+text: "𝜓",
+attrs: {
+x: XS_MIN - psiAxisOffset - axisLabelOffsetFromAxis,
+y: yScale(thisEnergy),
+"dominant-baseline": "middle",
+},
+},
+{
+shape: "text",
+class: "axis-label vertical-axis-label axis-label-right",
+text: `𝑛 = ${thisEnergyIndex}`,
+attrs: {
+x: XS_MAX + axisLabelOffsetFromAxis,
+y: yScale(thisEnergy),
+"dominant-baseline": "middle",
+},
+},
+],
+{ selector: "*" },
+);
+})
+.on("mouseout", function () {
+plot.selectAll(".visible").each(function () {
+d3.select(this).style("opacity", 1);
+});
+wellContainer
+.selectAll(".wavefunction-container")
+.style("visibility", "hidden");
+});
+}
+update();
+</script></body>
+</html>
