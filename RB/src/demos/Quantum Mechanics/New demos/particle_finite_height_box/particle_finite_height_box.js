@@ -66,7 +66,7 @@ const line = d3.line();
 
 const widthSlider = (() => {
 	const slider = document.getElementById("slider-width");
-	const min = 0.3;
+	const min = 0.6;
 	const max = (X_MAX - X_MIN) * 0.7;
 
 	slider.min = min;
