@@ -21,6 +21,7 @@ for (var i = 0; i < 20; i++) {
     bars.push(g2.append("rect").attr("x", x2(i * 0.05)).attr("y", y2(0)).attr("width", w / 20).attr("fill-opacity", 0.5));
 }
 
+// |sqrt(2)(exp(2itπ^2)sin(2πx)+exp(9itπ^2/2)sin(3πx)+exp(8itπ^2)sin(4πx))|^2/3
 function f1(x, t) {
     return (
         math.divide(
@@ -70,6 +71,7 @@ function f1(x, t) {
     )
 }
 
+// |sqrt(2)(exp(2itπ^2)sin(2πx)+exp(9itπ^2/2)sin(3πx)+exp(25itπ^2/2)sin(5πx))|^2/2
 function f2(x, t) {
     return (
         math.divide(
