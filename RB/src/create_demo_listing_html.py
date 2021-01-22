@@ -54,7 +54,7 @@ def get_html_listing_soup(
         out_file = in_folder / "index.html"
 
     html = "<!DOCTYPE html>" + str(soup)
-    html = html.replace("><", "\n><")
+    html = html.replace(">", "\n>")
     Path(out_file).write_text(html)
 
 
