@@ -207,4 +207,7 @@ var f = f1,
     t = 0;
 
 d3.selectAll(".tick text").attr("class", "axis-label");
+d3.select("#w1").on("click", () => setf(1)).attr("button-checked", true);
+d3.select("#w2").on("click", () => setf(2));
+d3.select("#w3").on("click", () => setf(3));
 update();
