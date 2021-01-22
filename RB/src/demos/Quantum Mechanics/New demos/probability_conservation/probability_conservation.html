@@ -8,6 +8,7 @@
         crossorigin="anonymous">
         </script>
     <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+    <script src="../../../utils.js"></script>
     <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
 </head>
 
@@ -15,16 +16,16 @@
     <div class="controls-container">
         <div class="radio-button-container">
             <span class="radio-label">f: </span>
-            <button id="w1" onclick="setf(1)">Wavefunction 1</button>
-            <button id="w2" onclick="setf(2)">Wavefunction 2</button>
-            <button id="w3" onclick="setf(3)">Wavefunction 3</button>
-            <br>
-            <span class="slider-label">Time: </span>
-            <span class="param-slider-container">
-                <input id="time" oninput="sett(this.value)" class="param-slider" type="range" min="0" max="0.1"
-                    step="0.01">
-            </span>
+            <button class="button" id="w1" onclick="setf(1)">Wavefunction 1</button>
+            <button class="button" id="w2" onclick="setf(2)">Wavefunction 2</button>
+            <button class="button" id="w3" onclick="setf(3)">Wavefunction 3</button>
         </div>
+        <br>
+        <span class="param-slider-container">
+            <span class="slider-label" style="white-space: nowrap;">Time: </span>
+            <input id="time" oninput="sett(this.value)" class="param-slider" type="range" min="0" max="0.1" step="0.01"
+                style="white-space: nowrap; width: 82%;">
+        </span>
     </div>
 
     <div class="plot-container">
