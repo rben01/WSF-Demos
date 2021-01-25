@@ -800,11 +800,11 @@ const xAxisTickLocs = [
 [0.25, "0.25"],
 [0.5, "0.5"],
 [0.75, "0.75"],
-[1, null],
+[1, "1.0"],
 ];
 const xAxisLabels = xAxisTickLocs.flatMap(([x, scalar]) => {
-const prefix = scalar === null ? "" : `${scalar}`;
-const text = `${prefix}\u{2009}𝜋`;
+// const prefix = scalar === null ? "" : `${scalar}`;
+const text = `${scalar}`;
 return ["axis-label-bg", "axis-label-fg"].map(labelClass => ({
 shape: "text",
 text,
@@ -886,8 +886,8 @@ katex.render(`n_1=${n1}`, textSpans.labelN1);
 katex.render(`n_2=${n2}`, textSpans.labelN2);
 const n1Str = n1 === 1 ? "" : n1;
 const n2Str = n2 === 1 ? "" : n2;
-katex.render(`\\psi_1(x)=\\sin(${n1Str} x)`, textSpans.graphKeyN1);
-katex.render(`\\psi_2(x)=\\sin(${n2Str} x)`, textSpans.graphKeyN2);
+katex.render(`\\psi_1(x)=\\sin(${n1Str}\\pi x)`, textSpans.graphKeyN1);
+katex.render(`\\psi_2(x)=\\sin(${n2Str}\\pi x)`, textSpans.graphKeyN2);
 const integralValue = n1 === n2 ? 1 : 0;
 katex.render(
 `\\langle\\psi_1,\\psi_2\\rangle=\\textrm{Integral}=${integralValue}`,
