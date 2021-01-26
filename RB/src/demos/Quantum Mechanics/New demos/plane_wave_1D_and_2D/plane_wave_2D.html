@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<meta charset="utf-8" />
-
 		<script
 			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
 			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
@@ -13,7 +11,6 @@
 			integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/"
 			crossorigin="anonymous"
 		></script>
-
 		<link
 			rel="stylesheet"
 			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
@@ -39,69 +36,12 @@
 		></script>
 
 		<link rel="stylesheet" href="../../qm_demo.css" />
-
 		<style>
-			:root {
-				--color-real-part: #5df;
-				--color-imag-part: #f3c002;
-				--color-phase: #e5d;
+			.grid-left-right {
+				grid-template-columns: max-content 1fr;
 			}
 			.radio-button-container.horizontal button {
 				flex: 1;
-			}
-			.grid-left-right {
-				grid-template-columns: max-content 1fr;
-				column-gap: 50px;
-			}
-			.curve {
-				fill: none;
-			}
-			.curve-background {
-				stroke: black;
-				stroke-width: 8px;
-			}
-			.curve-foreground {
-				stroke-width: 4px;
-			}
-			.curve-foreground.real-part {
-				stroke: var(--color-real-part);
-			}
-			.curve-foreground.imag-part {
-				stroke: var(--color-imag-part);
-			}
-			.curve-foreground.phase {
-				stroke: var(--color-phase);
-			}
-			.x-axis-name {
-				font-size: 30px;
-			}
-			.graph-key {
-				position: absolute;
-				display: grid;
-				grid-template-columns: 30px 1fr;
-				align-items: center;
-				column-gap: 20px;
-				background-color: black;
-				padding: 6px 10px;
-				border-radius: 4px;
-				border: black solid 2px;
-			}
-			#key-2d {
-				left: 410px;
-				top: 320px;
-			}
-			.key-line {
-				height: 7px;
-				width: 40px;
-			}
-			.key-real-part {
-				background-color: var(--color-real-part);
-			}
-			.key-imag-part {
-				background-color: var(--color-imag-part);
-			}
-			.key-phase {
-				background-color: var(--color-phase);
 			}
 		</style>
 	</head>
@@ -110,7 +50,7 @@
 			<div class="controls-container">
 				<div class="controls">
 					<span>Plane wave equation</span>
-					<span>\(\psi(x,t)=e^{i(kx-\omega t)}=e^{i\phi}\)</span>
+					<span>\(\psi(x,y,t)=e^{i(k_xx +k_yy-\omega t)}=e^{i\phi}\)</span>
 					<span>Dispersion</span>
 					<div class="radio-button-container horizontal">
 						<span
@@ -140,8 +80,10 @@
 							</button></span
 						>
 					</div>
-					<span>Wavenumber (\(k\))</span>
-					<span><input type="range" id="slider-wavenumber" /></span>
+					<span>Wavenumber in \(x\)-direction (\(k_x\))</span>
+					<span><input type="range" id="slider-wavenumber-x" /></span>
+					<span>Wavenumber in \(y\)-direction (\(k_y\))</span>
+					<span><input type="range" id="slider-wavenumber-y" /></span>
 					<span>Angular frequency (\(\omega\))</span>
 					<span><input type="range" id="slider-omega" disabled /></span>
 					<span></span>
@@ -156,21 +98,12 @@
 				</div>
 			</div>
 			<div>
-				<canvas id="plot-3D" class="draggable"></canvas>
-				<svg id="plot-2D"></svg>
+				<div><canvas id="plot-comp"></canvas></div>
+				<div><svg id="plot-phase"></svg></div>
 			</div>
-		</div>
-		<div id="key-2d" class="graph-key">
-			<div class="key-line key-phase"></div>
-			<span class="key-label">\(\frac{\phi}{2\pi}\)</span>
-			<div class="key-line key-real-part"></div>
-			<span class="key-label">\(\textrm{Re}[\psi]=\cos\phi\)</span>
-			<div class="key-line key-imag-part"></div>
-			<span class="key-label">\(\textrm{Im}[\psi]=\sin\phi\)</span>
 		</div>
 		<script src="../../../utils.js"></script>
 		<script src="../../three_utils.js"></script>
-		<script src="../../complex.js"></script>
-		<script src="./plane_wave_1D.js"></script>
+		<script src="./plane_wave_2D.js"></script>
 	</body>
 </html>
