@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs Complex */
+/* global applyGraphicalObjs Complex katex */
 
 const WIDTH = 750;
 const HEIGHT = 350;
@@ -32,7 +32,6 @@ plots
 	.attr("transform", (_, i) => `translate(30,  ${20 + 30 * i})`)
 	.each(function (d) {
 		const row = d3.select(this);
-		console.log(row);
 		row.append("rect")
 			.attr("x", 0)
 			.attr("y", 5)
@@ -212,36 +211,88 @@ function getData(mu, sigma, phase) {
 	return { axesData, curveDatas };
 }
 
-function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
+const textSpans = {
+	positionWidth: document.getElementById("text-position-width"),
+	positionMean: document.getElementById("text-position-mean"),
+	momentumWidth: document.getElementById("text-momentum-width"),
+	momentumMean: document.getElementById("text-momentum-mean"),
+};
+
+const floatFormatter = x => d3.format(".1f")(x).replace("−", "-");
+
+function updateText({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
+	if (typeof katex === "undefined") {
+		return;
+	}
+
+	if (xSpaceMean !== undefined) {
+		katex.render(`\\sigma=${floatFormatter(xSpaceMean)}`, textSpans.positionMean);
+	}
+	if (xSpaceWidth !== undefined) {
+		katex.render(`\\mu=${floatFormatter(xSpaceWidth)}`, textSpans.positionWidth);
+	}
+	if (pSpaceMean !== undefined) {
+		katex.render(`\\theta=${floatFormatter(pSpaceMean)}`, textSpans.momentumMean);
+	}
+	if (pSpaceWidth !== undefined) {
+		katex.render(
+			`\\sigma^{-1}=${floatFormatter(pSpaceWidth)}`,
+			textSpans.momentumWidth,
+		);
+	}
+}
+
+function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth, initial } = {}) {
+	initial = initial ?? false;
+
 	if (xSpaceWidth !== undefined) {
 		pSpaceWidth = 1 / xSpaceWidth;
 	} else if (pSpaceWidth !== undefined) {
 		xSpaceWidth = 1 / pSpaceWidth;
 	}
 
+	const textUpdates = {};
 	if (xSpaceMean === undefined) {
 		xSpaceMean = +sliderXMean.value;
+		if (initial) {
+			textUpdates.xSpaceMean = xSpaceMean;
+		}
 	} else {
 		sliderXMean.value = xSpaceMean;
+		textUpdates.xSpaceMean = xSpaceMean;
 	}
 
 	if (xSpaceWidth === undefined) {
 		xSpaceWidth = +sliderXWidth.value;
+		if (initial) {
+			textUpdates.xSpaceWidth = xSpaceWidth;
+		}
 	} else {
 		sliderXWidth.value = xSpaceWidth;
+		textUpdates.xSpaceWidth = xSpaceWidth;
 	}
 
 	if (pSpaceMean === undefined) {
 		pSpaceMean = +sliderPMean.value;
+		if (initial) {
+			textUpdates.pSpaceMean = pSpaceMean;
+		}
 	} else {
 		sliderPMean.value = pSpaceMean;
+		textUpdates.pSpaceMean = pSpaceMean;
 	}
 
 	if (pSpaceWidth === undefined) {
 		pSpaceWidth = +sliderPWidth.value;
+		if (initial) {
+			textUpdates.pSpaceWidth = pSpaceWidth;
+		}
 	} else {
 		sliderPWidth.value = pSpaceWidth;
+		textUpdates.pSpaceWidth = pSpaceWidth;
 	}
+
+	updateText(textUpdates);
 
 	const mu = xSpaceMean;
 	const sigma = xSpaceWidth;

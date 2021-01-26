@@ -26,6 +26,7 @@ const textSpans = {
 // x's have units of pi
 const X_MIN = -0.2;
 const X_0 = 0;
+const X_1 = 1;
 const X_MAX = 1.2;
 
 const Y_MIN = -1.1;
@@ -72,8 +73,8 @@ function getAxesData(whichGraph) {
 			shape: "line",
 			class: "axis x-axis",
 			attrs: {
-				x1: xScale(X_MIN),
-				x2: xScale(X_MAX),
+				x1: xScale(X_0),
+				x2: xScale(X_1)
 				y1: ys0,
 				y2: ys0,
 			},
@@ -165,8 +166,8 @@ for (const graphType of GRAPH_TYPES) {
 
 function sinePoints(n) {
 	const nPoints = 300;
-	const xMin = 0;
-	const xMax = 1;
+	const xMin = X_0
+	const xMax = X_1
 	const dx = (xMax - xMin) / (nPoints - 1);
 	const points = [];
 	for (let i = 0; i < nPoints; ++i) {
@@ -282,8 +283,8 @@ function update() {
 						d: straightLine(
 							[
 								[X_MAX, Y_MAX],
-								[1, Y_MAX],
-								[1, Y_MIN],
+								[X_1, Y_MAX],
+								[X_1, Y_MIN],
 								[X_MAX, Y_MIN],
 							].map(([x, y]) => [xScale(x), yScale(y)]),
 						),

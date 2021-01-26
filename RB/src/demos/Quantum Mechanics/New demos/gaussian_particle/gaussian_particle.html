@@ -17,11 +17,12 @@
 			body {
 				width: 60em;
 				height: 33.75em;
+				vertical-align: top;
 			}
 			.grid {
 				display: grid;
 				grid-template-columns: 13em 1fr;
-				align-items: center;
+				align-items: start;
 				column-gap: 65px;
 			}
 			.slider-container {
@@ -47,6 +48,8 @@
 				display: grid;
 				grid-template-columns: 1fr 1fr;
 				column-gap: 10px;
+				align-items: start;
+				align-content: start;
 			}
 
 			#plot-2d .ellipse {
@@ -109,8 +112,15 @@
 				</div>
 			</div>
 			<div class="plot-container">
-				<div id="plot-3d" class="plot draggable"></div>
-				<svg id="plot-2d" class="plot"></svg>
+				<div>
+					<div>3D Plot</div>
+
+					<div id="plot-3d" class="plot draggable"></div>
+				</div>
+				<div>
+					<div>Contour Plot</div>
+					<svg id="plot-2d" class="plot"></svg>
+				</div>
 			</div>
 		</div>
 		<script src="../../../utils.js"></script>

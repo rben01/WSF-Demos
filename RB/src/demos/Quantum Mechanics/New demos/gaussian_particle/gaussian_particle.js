@@ -15,11 +15,11 @@ const plot2D = d3
 	.attr("height", GRAPH_HEIGHT);
 
 const margin2D = 15;
-const X_MIN = -5;
-const X_MAX = 5;
+const X_MIN = -4.8;
+const X_MAX = 4.8;
 const X_0 = (X_MIN + X_MAX) / 2;
-const Y_MIN = -5;
-const Y_MAX = 5;
+const Y_MIN = -4.8;
+const Y_MAX = 4.8;
 const Y_0 = (Y_MIN + Y_MAX) / 2;
 const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [margin2D, GRAPH_WIDTH - margin2D]);
 const yScale2D = d3.scaleLinear([Y_MIN, Y_MAX], [GRAPH_HEIGHT - margin2D, margin2D]);
@@ -92,31 +92,25 @@ d3.selectAll(".position-slider")
 		.attr("y2", d => d.y2);
 
 	// ticks
-	const nXTicks = Math.round((X_MAX - X_MIN) / minorTickSpacing + 1);
-	const xTickScale = d3.scaleLinear([0, nXTicks - 1], [X_MIN, X_MAX]);
-	const xTicks = d3.range(nXTicks).map(i => {
-		const isMajorTick = i % nMinorTickGapsBwtnMajorTicks === 0;
-		const x = xScale2D(xTickScale(i));
+	const xTicks = d3.range(Math.ceil(X_MIN), Math.floor(X_MAX) + 1).map(x => {
+		const xs = xScale2D(x);
 		return {
 			class: "axis-tick x-axis-tick",
-			x1: x,
-			x2: x,
-			y1: y0 + axisStrokeWidth / 2,
-			y2: y0 - (isMajorTick ? majorTickLength : minorTickLength),
+			x1: xs,
+			x2: xs,
+			y1: y0 - axisStrokeWidth / 2,
+			y2: y0 + majorTickLength,
 		};
 	});
 
-	const nYTicks = Math.round((Y_MAX - Y_MIN) / minorTickSpacing + 1);
-	const yTickScale = d3.scaleLinear([0, nXTicks - 1], [Y_MIN, Y_MAX]);
-	const yTicks = d3.range(nYTicks).map(i => {
-		const isMajorTick = i % nMinorTickGapsBwtnMajorTicks === 0;
-		const y = yScale2D(yTickScale(i));
+	const yTicks = d3.range(Math.ceil(Y_MIN), Math.floor(Y_MAX) + 1).map(y => {
+		const ys = yScale2D(y);
 		return {
 			class: "axis-tick y-axis-tick",
-			x1: x0 - axisStrokeWidth / 2,
-			x2: x0 + (isMajorTick ? majorTickLength : minorTickLength),
-			y1: y,
-			y2: y,
+			x1: x0 + axisStrokeWidth / 2,
+			x2: x0 - majorTickLength,
+			y1: ys,
+			y2: ys,
 		};
 	});
 
@@ -133,41 +127,31 @@ d3.selectAll(".position-slider")
 	// tick labels
 	const labelFormatter = d3.format("d");
 
-	const xLabelMin = Math.ceil(X_MIN / axisLabelSpacing) * axisLabelSpacing;
-	const xLabelMax = Math.floor(X_MAX / axisLabelSpacing) * axisLabelSpacing;
-	const nXLabels = Math.round((xLabelMax - xLabelMin) / axisLabelSpacing + 1);
-	const xLabelScale = d3.scaleLinear([0, nXLabels - 1], [xLabelMin, xLabelMax]);
-	const xLabels = d3
-		.range(nXLabels)
-		.map(i => {
-			const x = xLabelScale(i);
+	const xLabels = [-4, -2, 2, 4]
+		.map(x => {
 			if (x === 0) {
 				return null;
 			}
+			const xs = xScale2D(x);
 			return {
 				class: "axis-label x-axis-label",
-				x: xScale2D(x),
-				y: y0 + 5,
+				x: xs,
+				y: y0 + majorTickLength + 5,
 				text: labelFormatter(x),
 			};
 		})
 		.filter(d => d !== null);
 
-	const yLabelMin = Math.ceil(Y_MIN / axisLabelSpacing) * axisLabelSpacing;
-	const yLabelMax = Math.floor(Y_MAX / axisLabelSpacing) * axisLabelSpacing;
-	const nYLabels = Math.round((yLabelMax - yLabelMin) / axisLabelSpacing + 1);
-	const yLabelScale = d3.scaleLinear([0, nYLabels - 1], [yLabelMin, yLabelMax]);
-	const yLabels = d3
-		.range(nYLabels)
-		.map(i => {
-			const y = yLabelScale(i);
+	const yLabels = [-4, -2, 2, 4]
+		.map(y => {
 			if (y === 0) {
 				return null;
 			}
+			const ys = yScale2D(y);
 			return {
 				class: "axis-label y-axis-label",
-				x: x0 - 5,
-				y: yScale2D(y),
+				x: x0 - majorTickLength - 5,
+				y: ys,
 				text: labelFormatter(y),
 			};
 		})
@@ -181,6 +165,22 @@ d3.selectAll(".position-slider")
 		.attr("x", d => d.x)
 		.attr("y", d => d.y)
 		.text(d => d.text);
+
+	const axisNameFontsize = "25px";
+	plot2D
+		.append("text")
+		.text("𝑥")
+		.classed("axis-label x-axis-label", true)
+		.attr("x", xScale2D(X_MAX) - 15)
+		.attr("y", yScale2D(Y_0) + 13)
+		.style("font-size", axisNameFontsize);
+	plot2D
+		.append("text")
+		.text("𝑦")
+		.classed("axis-label y-axis-label", true)
+		.attr("x", xScale2D(X_0) - 20)
+		.attr("y", yScale2D(Y_MAX) + 10)
+		.style("font-size", axisNameFontsize);
 })();
 
 function unitVector(vec) {
@@ -245,6 +245,11 @@ function transpose(mat) {
 	}
 	return ans;
 }
+
+const BASIC_BLUE = d3.interpolateRgb(
+	d3.interpolateRgb(STANDARD_COLORS.graphicPrimary, STANDARD_COLORS.highlighted)(0.4),
+	"white",
+)(0.1);
 
 // Synopsis: we perform an eigendecomposition on the covariance matrix and use this to
 // compute its sqrt. Then we use this to generate five points on the ellipse of the
@@ -353,7 +358,7 @@ function drawEllipse2D() {
 		return { cx, cy, rx, ry, transform };
 	}
 
-	const ellipseColorInterpolator = d3.interpolateRgb("white", "black");
+	const ellipseColorInterpolator = d3.interpolateRgb(BASIC_BLUE, "black");
 	const colorConstancy = 6;
 	const initialWhiteness = 0.9;
 	const ellipsesData = [0.4, 1, 1.6, 2.2]
@@ -363,7 +368,7 @@ function drawEllipse2D() {
 				{
 					...ellipseParams,
 					class: "level-set-background",
-					stroke: "black",
+					stroke: "#ccc",
 				},
 				{
 					...ellipseParams,
