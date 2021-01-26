@@ -4,7 +4,13 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w==" src="https://cdn.plot.ly/plotly-1.57.0.min.js"></script>
 <script src="https://unpkg.com/svd-js" type="application/javascript"></script>
-<style rel="stylesheet">body {
+<style rel="stylesheet">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+}
+body {
 /* margin-left: 10px;
 margin-top: 10px; */
 background-color: black;
@@ -17,6 +23,12 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
 }
 .controls-container {
 display: inline-block;
@@ -33,11 +45,31 @@ row-gap: 2px;
 .controls > :nth-child(2n + 3) {
 margin-top: 30px;
 }
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
 .draggable:hover {
 cursor: grab;
 }
 .draggable:active {
 cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
 }
 /* Legacy; don't use */
 .slider-container {
@@ -102,6 +134,12 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
 .button {
 padding: 7px 8px;
 margin-right: 3px;
@@ -128,16 +166,16 @@ text-shadow: 1px 1px #ccc;
 cursor: default;
 }
 .highlighted-text {
-color: #5df;
+color: var(--color-highlight);
 }
 .secondary-text {
-color: #f3c002;
+color: var(--color-secondary);
 }
 .tertiary-text {
-color: #14c778;
+color: var(--color-tertiary);
 }
 .quaternary-text {
-color: #e5d;
+color: var(--color-quaternary);
 }
 .viz-canvas {
 padding-top: 1em;
@@ -243,11 +281,12 @@ cursor: pointer;
 body {
 width: 60em;
 height: 33.75em;
+vertical-align: top;
 }
 .grid {
 display: grid;
 grid-template-columns: 13em 1fr;
-align-items: center;
+align-items: start;
 column-gap: 65px;
 }
 .slider-container {
@@ -273,6 +312,8 @@ display: inline-block;
 display: grid;
 grid-template-columns: 1fr 1fr;
 column-gap: 10px;
+align-items: start;
+align-content: start;
 }
 #plot-2d .ellipse {
 fill-opacity: 0;
@@ -308,8 +349,14 @@ stroke-width: 7;
 </div>
 </div>
 <div class="plot-container">
+<div>
+<div>3D Plot</div>
 <div class="plot draggable" id="plot-3d"></div>
+</div>
+<div>
+<div>Contour Plot</div>
 <svg class="plot" id="plot-2d"></svg>
+</div>
 </div>
 </div>
 <script type="text/javascript">"use strict";
@@ -352,9 +399,11 @@ d3Obj.classed(c, true);
 }
 }
 const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+}
 if (datum.styles !== undefined) {
 Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
@@ -455,7 +504,9 @@ ans = __matMulHelper(ans, mats[i]);
 return ans;
 }
 // eslint-disable-next-line no-unused-vars
-function defineArrowhead(defs, { id, length, width, color, attrs }) {
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
 const markerAttrs = {
 attrs: {
 refX: length / 2,
@@ -466,11 +517,16 @@ markerHeight: width,
 orient: "auto",
 },
 };
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
 const arrowheadAttrs = {
 attrs: {
-d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
-width / 2
-} z`,
+d: path,
 "stroke-linejoin": "miter",
 stroke: color,
 fill: color,
@@ -524,8 +580,14 @@ yMax,
 zFunc,
 drawEdges,
 nPointsPerGridline,
+swapOrientation,
 }) {
 drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
 const iMin = drawEdges ? 0 : 1;
 const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
 nPointsPerGridline = nPointsPerGridline ?? 51;
@@ -537,12 +599,55 @@ const x = xMin + i * dx;
 const gridline = [];
 for (let j = 0; j < nPointsPerGridline; ++j) {
 const y = yMin + j * dy;
-const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point =
+zFunc !== undefined
+? [trueX, trueY, zFunc(trueX, trueY)]
+: [trueX, trueY];
 gridline.push(point);
 }
 gridlines.push(gridline);
 }
 return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
 }
 function syncButtonState(button) {
 if (button.hasAttribute("button-checked")) {
@@ -565,7 +670,9 @@ syncButtonState(this);
 .on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
-const siblings = this.parentNode.querySelectorAll("button");
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
 for (const sibling of siblings) {
 if (this === sibling) {
 continue;
@@ -590,11 +697,11 @@ const plot2D = d3
 .attr("width", GRAPH_WIDTH)
 .attr("height", GRAPH_HEIGHT);
 const margin2D = 15;
-const X_MIN = -5;
-const X_MAX = 5;
+const X_MIN = -4.8;
+const X_MAX = 4.8;
 const X_0 = (X_MIN + X_MAX) / 2;
-const Y_MIN = -5;
-const Y_MAX = 5;
+const Y_MIN = -4.8;
+const Y_MAX = 4.8;
 const Y_0 = (Y_MIN + Y_MAX) / 2;
 const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [margin2D, GRAPH_WIDTH - margin2D]);
 const yScale2D = d3.scaleLinear([Y_MIN, Y_MAX], [GRAPH_HEIGHT - margin2D, margin2D]);
@@ -656,30 +763,24 @@ y2: yScale2D(Y_MAX),
 .attr("y1", d => d.y1)
 .attr("y2", d => d.y2);
 // ticks
-const nXTicks = Math.round((X_MAX - X_MIN) / minorTickSpacing + 1);
-const xTickScale = d3.scaleLinear([0, nXTicks - 1], [X_MIN, X_MAX]);
-const xTicks = d3.range(nXTicks).map(i => {
-const isMajorTick = i % nMinorTickGapsBwtnMajorTicks === 0;
-const x = xScale2D(xTickScale(i));
+const xTicks = d3.range(Math.ceil(X_MIN), Math.floor(X_MAX) + 1).map(x => {
+const xs = xScale2D(x);
 return {
 class: "axis-tick x-axis-tick",
-x1: x,
-x2: x,
-y1: y0 + axisStrokeWidth / 2,
-y2: y0 - (isMajorTick ? majorTickLength : minorTickLength),
+x1: xs,
+x2: xs,
+y1: y0 - axisStrokeWidth / 2,
+y2: y0 + majorTickLength,
 };
 });
-const nYTicks = Math.round((Y_MAX - Y_MIN) / minorTickSpacing + 1);
-const yTickScale = d3.scaleLinear([0, nXTicks - 1], [Y_MIN, Y_MAX]);
-const yTicks = d3.range(nYTicks).map(i => {
-const isMajorTick = i % nMinorTickGapsBwtnMajorTicks === 0;
-const y = yScale2D(yTickScale(i));
+const yTicks = d3.range(Math.ceil(Y_MIN), Math.floor(Y_MAX) + 1).map(y => {
+const ys = yScale2D(y);
 return {
 class: "axis-tick y-axis-tick",
-x1: x0 - axisStrokeWidth / 2,
-x2: x0 + (isMajorTick ? majorTickLength : minorTickLength),
-y1: y,
-y2: y,
+x1: x0 + axisStrokeWidth / 2,
+x2: x0 - majorTickLength,
+y1: ys,
+y2: ys,
 };
 });
 plot2D
@@ -693,40 +794,30 @@ plot2D
 .attr("y2", d => d.y2);
 // tick labels
 const labelFormatter = d3.format("d");
-const xLabelMin = Math.ceil(X_MIN / axisLabelSpacing) * axisLabelSpacing;
-const xLabelMax = Math.floor(X_MAX / axisLabelSpacing) * axisLabelSpacing;
-const nXLabels = Math.round((xLabelMax - xLabelMin) / axisLabelSpacing + 1);
-const xLabelScale = d3.scaleLinear([0, nXLabels - 1], [xLabelMin, xLabelMax]);
-const xLabels = d3
-.range(nXLabels)
-.map(i => {
-const x = xLabelScale(i);
+const xLabels = [-4, -2, 2, 4]
+.map(x => {
 if (x === 0) {
 return null;
 }
+const xs = xScale2D(x);
 return {
 class: "axis-label x-axis-label",
-x: xScale2D(x),
-y: y0 + 5,
+x: xs,
+y: y0 + majorTickLength + 5,
 text: labelFormatter(x),
 };
 })
 .filter(d => d !== null);
-const yLabelMin = Math.ceil(Y_MIN / axisLabelSpacing) * axisLabelSpacing;
-const yLabelMax = Math.floor(Y_MAX / axisLabelSpacing) * axisLabelSpacing;
-const nYLabels = Math.round((yLabelMax - yLabelMin) / axisLabelSpacing + 1);
-const yLabelScale = d3.scaleLinear([0, nYLabels - 1], [yLabelMin, yLabelMax]);
-const yLabels = d3
-.range(nYLabels)
-.map(i => {
-const y = yLabelScale(i);
+const yLabels = [-4, -2, 2, 4]
+.map(y => {
 if (y === 0) {
 return null;
 }
+const ys = yScale2D(y);
 return {
 class: "axis-label y-axis-label",
-x: x0 - 5,
-y: yScale2D(y),
+x: x0 - majorTickLength - 5,
+y: ys,
 text: labelFormatter(y),
 };
 })
@@ -739,6 +830,21 @@ plot2D
 .attr("x", d => d.x)
 .attr("y", d => d.y)
 .text(d => d.text);
+const axisNameFontsize = "25px";
+plot2D
+.append("text")
+.text("𝑥")
+.classed("axis-label x-axis-label", true)
+.attr("x", xScale2D(X_MAX) - 15)
+.attr("y", yScale2D(Y_0) + 13)
+.style("font-size", axisNameFontsize);
+plot2D
+.append("text")
+.text("𝑦")
+.classed("axis-label y-axis-label", true)
+.attr("x", xScale2D(X_0) - 20)
+.attr("y", yScale2D(Y_MAX) + 10)
+.style("font-size", axisNameFontsize);
 })();
 function unitVector(vec) {
 let sum = 0;
@@ -794,6 +900,10 @@ ans.push(row);
 }
 return ans;
 }
+const BASIC_BLUE = d3.interpolateRgb(
+d3.interpolateRgb(STANDARD_COLORS.graphicPrimary, STANDARD_COLORS.highlighted)(0.4),
+"white",
+)(0.1);
 // Synopsis: we perform an eigendecomposition on the covariance matrix and use this to
 // compute its sqrt. Then we use this to generate five points on the ellipse of the
 // level set, solve the linear equation giving the coefficients of the ellipse in
@@ -890,7 +1000,7 @@ const rotate = (-Math.sign(r) * (theta * 180)) / Math.PI;
 const transform = `rotate(${rotate} ${cx} ${cy})`;
 return { cx, cy, rx, ry, transform };
 }
-const ellipseColorInterpolator = d3.interpolateRgb("white", "black");
+const ellipseColorInterpolator = d3.interpolateRgb(BASIC_BLUE, "black");
 const colorConstancy = 6;
 const initialWhiteness = 0.9;
 const ellipsesData = [0.4, 1, 1.6, 2.2]
@@ -900,7 +1010,7 @@ return [
 {
 ...ellipseParams,
 class: "level-set-background",
-stroke: "black",
+stroke: "#ccc",
 },
 {
 ...ellipseParams,

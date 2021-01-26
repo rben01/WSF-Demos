@@ -4,10 +4,16 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
-<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update({initial:true})" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 <!-- To automatically render math in text elements, include the auto-render extension: -->
 <script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
-<style rel="stylesheet">body {
+<style rel="stylesheet">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+}
+body {
 /* margin-left: 10px;
 margin-top: 10px; */
 background-color: black;
@@ -20,6 +26,12 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
 }
 .controls-container {
 display: inline-block;
@@ -36,11 +48,31 @@ row-gap: 2px;
 .controls > :nth-child(2n + 3) {
 margin-top: 30px;
 }
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
 .draggable:hover {
 cursor: grab;
 }
 .draggable:active {
 cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
 }
 /* Legacy; don't use */
 .slider-container {
@@ -105,6 +137,12 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
 .button {
 padding: 7px 8px;
 margin-right: 3px;
@@ -131,16 +169,16 @@ text-shadow: 1px 1px #ccc;
 cursor: default;
 }
 .highlighted-text {
-color: #5df;
+color: var(--color-highlight);
 }
 .secondary-text {
-color: #f3c002;
+color: var(--color-secondary);
 }
 .tertiary-text {
-color: #14c778;
+color: var(--color-tertiary);
 }
 .quaternary-text {
-color: #e5d;
+color: var(--color-quaternary);
 }
 .viz-canvas {
 padding-top: 1em;
@@ -246,6 +284,9 @@ cursor: pointer;
 body {
 vertical-align: top;
 }
+.controls-container {
+width: 480px;
+}
 /* .controls-heading-divider {
 height: 5px;
 } */
@@ -300,30 +341,35 @@ font-size: 90%;
 .axis-label {
 position: absolute;
 }
+.nowrap {
+white-space: nowrap;
+}
 </style></head>
 <body>
+<div class="nowrap">
 <div class="ib controls-container">
 <div class="controls">
 <span class="header">Properties in position (\(x\)) space</span>
 <span class="">\(\displaystyle\psi(x)=\left(\pi^\frac{1}{4}\sqrt{2\sigma}\right)e^{i\theta(x-\mu)}\frac{e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}}{\sigma\sqrt{2\pi}}\)</span>
-<span class="child">Gaussian's position space mean (\(\mu\))</span>
-<span class="child"><input id="slider-x-mean" type="range"/></span>
-<span class="text-after-slider child">Gaussian's position space width (\(\sigma\))</span>
+<span class="text-after-slider child">Gaussian's position space width (<span id="text-position-width"></span>)</span>
 <span class="child"><input id="slider-x-width" type="range"/></span>
+<span class="child">Gaussian's position space mean (<span id="text-position-mean"></span>)</span>
+<span class="child"><input id="slider-x-mean" type="range"/></span>
 <span class="v-divider"></span>
 <span></span>
 <span class="text-after-slider header">Properties in momentum (𝑝) space</span>
 <span class="">\(\displaystyle(\mathcal
 F\psi)(p)=\left(\pi^\frac{1}{4}\sqrt{2\sigma^{-1}}\right)e^{-ip\mu}\frac{e^{-\frac{1}{2}(\frac{p-\theta}{\sigma^{-1}})^2}}{\sigma^{-1}\sqrt{2\pi}}\)</span>
-<span class="child">Gaussian's momentum space mean (\(\theta\))</span>
-<span class="child"><input id="slider-p-mean" type="range"/></span>
-<span class="text-after-slider child">Gaussian's momentum space width (\(\sigma^{-1}\))</span>
+<span class="text-after-slider child">Gaussian's momentum space width (<span id="text-momentum-width"></span>)</span>
 <span class="child"><input id="slider-p-width" type="range"/></span>
+<span class="child">Gaussian's momentum space mean (<span id="text-momentum-mean"></span>)</span>
+<span class="child"><input id="slider-p-mean" type="range"/></span>
 </div>
 </div>
 <div class="ib plot-container">
 <svg class="plot" id="plot-x-space"></svg>
 <svg class="plot" id="plot-p-space"></svg>
+</div>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -365,9 +411,11 @@ d3Obj.classed(c, true);
 }
 }
 const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+}
 if (datum.styles !== undefined) {
 Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
@@ -468,7 +516,9 @@ ans = __matMulHelper(ans, mats[i]);
 return ans;
 }
 // eslint-disable-next-line no-unused-vars
-function defineArrowhead(defs, { id, length, width, color, attrs }) {
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
 const markerAttrs = {
 attrs: {
 refX: length / 2,
@@ -479,11 +529,16 @@ markerHeight: width,
 orient: "auto",
 },
 };
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
 const arrowheadAttrs = {
 attrs: {
-d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
-width / 2
-} z`,
+d: path,
 "stroke-linejoin": "miter",
 stroke: color,
 fill: color,
@@ -574,6 +629,38 @@ gridlines.push(gridline);
 }
 return gridlines;
 }
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
+}
 function syncButtonState(button) {
 if (button.hasAttribute("button-checked")) {
 button.disabled = true;
@@ -595,7 +682,9 @@ syncButtonState(this);
 .on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
-const siblings = this.parentNode.querySelectorAll("button");
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
 for (const sibling of siblings) {
 if (this === sibling) {
 continue;
@@ -707,7 +796,7 @@ return Complex.fromPolar(magnitude, phase);
 }
 static cis(z) {
 if (typeof z === "number") {
-return Complex.fromReal(z).cis();
+return Complex.fromPolar(1, z);
 }
 return z.cis();
 }
@@ -721,7 +810,7 @@ return this.constructor.fromPolar(magnitude, phase);
 }
 }
 Complex.i = Complex.fromImag(1);
-</script><script type="text/javascript">/* global applyGraphicalObjs Complex */
+</script><script type="text/javascript">/* global applyGraphicalObjs Complex katex */
 const WIDTH = 750;
 const HEIGHT = 350;
 const X_MIN = -6;
@@ -748,7 +837,6 @@ plots
 .attr("transform", (_, i) => `translate(30,  ${20 + 30 * i})`)
 .each(function (d) {
 const row = d3.select(this);
-console.log(row);
 row.append("rect")
 .attr("x", 0)
 .attr("y", 5)
@@ -905,32 +993,78 @@ d: curveGenerator(xy),
 }
 return { axesData, curveDatas };
 }
-function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
+const textSpans = {
+positionWidth: document.getElementById("text-position-width"),
+positionMean: document.getElementById("text-position-mean"),
+momentumWidth: document.getElementById("text-momentum-width"),
+momentumMean: document.getElementById("text-momentum-mean"),
+};
+const floatFormatter = x => d3.format(".1f")(x).replace("−", "-");
+function updateText({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
+if (typeof katex === "undefined") {
+return;
+}
+if (xSpaceMean !== undefined) {
+katex.render(`\\sigma=${floatFormatter(xSpaceMean)}`, textSpans.positionMean);
+}
+if (xSpaceWidth !== undefined) {
+katex.render(`\\mu=${floatFormatter(xSpaceWidth)}`, textSpans.positionWidth);
+}
+if (pSpaceMean !== undefined) {
+katex.render(`\\theta=${floatFormatter(pSpaceMean)}`, textSpans.momentumMean);
+}
+if (pSpaceWidth !== undefined) {
+katex.render(
+`\\sigma^{-1}=${floatFormatter(pSpaceWidth)}`,
+textSpans.momentumWidth,
+);
+}
+}
+function update({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth, initial } = {}) {
+initial = initial ?? false;
 if (xSpaceWidth !== undefined) {
 pSpaceWidth = 1 / xSpaceWidth;
 } else if (pSpaceWidth !== undefined) {
 xSpaceWidth = 1 / pSpaceWidth;
 }
+const textUpdates = {};
 if (xSpaceMean === undefined) {
 xSpaceMean = +sliderXMean.value;
+if (initial) {
+textUpdates.xSpaceMean = xSpaceMean;
+}
 } else {
 sliderXMean.value = xSpaceMean;
+textUpdates.xSpaceMean = xSpaceMean;
 }
 if (xSpaceWidth === undefined) {
 xSpaceWidth = +sliderXWidth.value;
+if (initial) {
+textUpdates.xSpaceWidth = xSpaceWidth;
+}
 } else {
 sliderXWidth.value = xSpaceWidth;
+textUpdates.xSpaceWidth = xSpaceWidth;
 }
 if (pSpaceMean === undefined) {
 pSpaceMean = +sliderPMean.value;
+if (initial) {
+textUpdates.pSpaceMean = pSpaceMean;
+}
 } else {
 sliderPMean.value = pSpaceMean;
+textUpdates.pSpaceMean = pSpaceMean;
 }
 if (pSpaceWidth === undefined) {
 pSpaceWidth = +sliderPWidth.value;
+if (initial) {
+textUpdates.pSpaceWidth = pSpaceWidth;
+}
 } else {
 sliderPWidth.value = pSpaceWidth;
+textUpdates.pSpaceWidth = pSpaceWidth;
 }
+updateText(textUpdates);
 const mu = xSpaceMean;
 const sigma = xSpaceWidth;
 const phase = pSpaceMean;

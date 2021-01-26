@@ -3,7 +3,13 @@
 <head>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet">body {
+<style rel="stylesheet">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+}
+body {
 /* margin-left: 10px;
 margin-top: 10px; */
 background-color: black;
@@ -16,6 +22,12 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
 }
 .controls-container {
 display: inline-block;
@@ -32,11 +44,31 @@ row-gap: 2px;
 .controls > :nth-child(2n + 3) {
 margin-top: 30px;
 }
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
 .draggable:hover {
 cursor: grab;
 }
 .draggable:active {
 cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
 }
 /* Legacy; don't use */
 .slider-container {
@@ -101,6 +133,12 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
 .button {
 padding: 7px 8px;
 margin-right: 3px;
@@ -127,16 +165,16 @@ text-shadow: 1px 1px #ccc;
 cursor: default;
 }
 .highlighted-text {
-color: #5df;
+color: var(--color-highlight);
 }
 .secondary-text {
-color: #f3c002;
+color: var(--color-secondary);
 }
 .tertiary-text {
-color: #14c778;
+color: var(--color-tertiary);
 }
 .quaternary-text {
-color: #e5d;
+color: var(--color-quaternary);
 }
 .viz-canvas {
 padding-top: 1em;

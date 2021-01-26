@@ -14,7 +14,13 @@ integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlY
 crossorigin="anonymous"
 onload="renderMathInElement(document.body);"
 ></script> -->
-<style rel="stylesheet">body {
+<style rel="stylesheet">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+}
+body {
 /* margin-left: 10px;
 margin-top: 10px; */
 background-color: black;
@@ -27,6 +33,12 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
 }
 .controls-container {
 display: inline-block;
@@ -43,11 +55,31 @@ row-gap: 2px;
 .controls > :nth-child(2n + 3) {
 margin-top: 30px;
 }
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
 .draggable:hover {
 cursor: grab;
 }
 .draggable:active {
 cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
 }
 /* Legacy; don't use */
 .slider-container {
@@ -112,6 +144,12 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
 .button {
 padding: 7px 8px;
 margin-right: 3px;
@@ -138,16 +176,16 @@ text-shadow: 1px 1px #ccc;
 cursor: default;
 }
 .highlighted-text {
-color: #5df;
+color: var(--color-highlight);
 }
 .secondary-text {
-color: #f3c002;
+color: var(--color-secondary);
 }
 .tertiary-text {
-color: #14c778;
+color: var(--color-tertiary);
 }
 .quaternary-text {
-color: #e5d;
+color: var(--color-quaternary);
 }
 .viz-canvas {
 padding-top: 1em;
@@ -356,9 +394,11 @@ d3Obj.classed(c, true);
 }
 }
 const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
 Object.entries(datum.attrs).forEach(([key, val]) => {
 t.attr(key, val);
 });
+}
 if (datum.styles !== undefined) {
 Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
@@ -459,7 +499,9 @@ ans = __matMulHelper(ans, mats[i]);
 return ans;
 }
 // eslint-disable-next-line no-unused-vars
-function defineArrowhead(defs, { id, length, width, color, attrs }) {
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
 const markerAttrs = {
 attrs: {
 refX: length / 2,
@@ -470,11 +512,16 @@ markerHeight: width,
 orient: "auto",
 },
 };
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
 const arrowheadAttrs = {
 attrs: {
-d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
-width / 2
-} z`,
+d: path,
 "stroke-linejoin": "miter",
 stroke: color,
 fill: color,
@@ -528,8 +575,14 @@ yMax,
 zFunc,
 drawEdges,
 nPointsPerGridline,
+swapOrientation,
 }) {
 drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
 const iMin = drawEdges ? 0 : 1;
 const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
 nPointsPerGridline = nPointsPerGridline ?? 51;
@@ -541,12 +594,55 @@ const x = xMin + i * dx;
 const gridline = [];
 for (let j = 0; j < nPointsPerGridline; ++j) {
 const y = yMin + j * dy;
-const point = zFunc !== undefined ? [x, y, zFunc(x, y)] : [x, y];
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point =
+zFunc !== undefined
+? [trueX, trueY, zFunc(trueX, trueY)]
+: [trueX, trueY];
 gridline.push(point);
 }
 gridlines.push(gridline);
 }
 return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
 }
 function syncButtonState(button) {
 if (button.hasAttribute("button-checked")) {
@@ -569,7 +665,9 @@ syncButtonState(this);
 .on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
-const siblings = this.parentNode.querySelectorAll("button");
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
 for (const sibling of siblings) {
 if (this === sibling) {
 continue;
