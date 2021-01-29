@@ -92,14 +92,16 @@ d3.select(canvas).call(
 	}),
 );
 
+const PSI_COMPONENTS = {
+	real: 0,
+	imag: 1,
+	phase: 2,
+};
+let selectedPsiComponent = PSI_COMPONENTS.real;
+
 const AXIS_COLOR = 0xaaaaaa;
 const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
 	color: AXIS_COLOR,
-	side: THREE.DoubleSide,
-	transparent: false,
-});
-const PHASE_MATERIAL = new THREE.MeshBasicMaterial({
-	color: 0xf3c002,
 	side: THREE.DoubleSide,
 	transparent: false,
 });
@@ -112,18 +114,29 @@ const REAL_PART_UNSELECTED_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0x2277ff,
 	side: THREE.DoubleSide,
 	transparent: true,
-	opacity: 0.1,
+	opacity: 0.2,
 });
 const IMAG_PART_SELECTED_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0xf3c002,
+	color: 0xf3b822,
 	side: THREE.DoubleSide,
 	transparent: false,
 });
 const IMAG_PART_UNSELECTED_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0xf3c002,
+	color: 0xf3b822,
 	side: THREE.DoubleSide,
 	transparent: true,
-	opacity: 0.1,
+	opacity: 0.2,
+});
+const PHASE_SELECTED_MATERIAL = new THREE.MeshBasicMaterial({
+	color: 0xee55dd,
+	side: THREE.DoubleSide,
+	transparent: false,
+});
+const PHASE_UNSELECTED_MATERIAL = new THREE.MeshBasicMaterial({
+	color: 0xee55dd,
+	side: THREE.DoubleSide,
+	transparent: true,
+	opacity: 0.2,
 });
 
 const sliders = {
@@ -235,6 +248,24 @@ let currentOmega = 0;
 
 function getWavefunctionFunction(kx, ky, mode) {
 	function wavefunctionValue(u, v, vec) {
+		// We want to design this so that u moves perpendicular to the waveform (against
+		// the grain, so to speak) and v moves parallel (with the grain) while keeping
+		// all points within the region[X_MIN, X_MAX] * [Y_MIN, Y_MAX] The line which u
+		// varies along will be y = Y_0 + m * (x - X_0) where m is the slope of the line
+		// that goes against the grain
+
+		const uSlope = Math.atan2(ky, kx);
+
+		const yWhereULineIntersectsXMIN = Y_0 + uSlope * (X_MIN - X_0);
+		const xWhereULineIntersectsYMIN = X_0 + (1 / uSlope) * (Y_MIN - Y_0);
+		const uLineXMin =
+			yWhereULineIntersectsXMIN >= Y_MIN ? X_MIN : xWhereULineIntersectsYMIN;
+
+		const yWhereULineIntersectsXMAX = Y_0 + uSlope * (X_MAX - X_0);
+		const xWhereULineIntersectsYMAX = X_0 + (1 / uSlope) * (Y_MIN - Y_0);
+		const uLineXMin =
+			yWhereULineIntersectsXMIN >= Y_MIN ? X_MIN : xWhereULineIntersectsYMIN;
+
 		const x = xScale3D(uScaleToX(u));
 		const y = yScale3D(vScaleToY(v));
 		const valComplex = psi(x, y, kx, ky, currentOmega);
@@ -249,6 +280,27 @@ function getWavefunctionFunction(kx, ky, mode) {
 	}
 
 	return wavefunctionValue;
+}
+
+function setSelectedPsiComponent(comp) {
+	selectedPsiComponent = comp;
+	// eslint-disable-next-line no-use-before-define
+	update();
+}
+
+// eslint-disable-next-line no-unused-vars
+function showReal() {
+	setSelectedPsiComponent(PSI_COMPONENTS.real);
+}
+
+// eslint-disable-next-line no-unused-vars
+function showImaginary() {
+	setSelectedPsiComponent(PSI_COMPONENTS.imag);
+}
+
+// eslint-disable-next-line no-unused-vars
+function showPhase() {
+	setSelectedPsiComponent(PSI_COMPONENTS.phase);
 }
 
 const pointerHeight = yScale3D(0.2) - yScale3D(0);
@@ -418,20 +470,18 @@ function update(dtMS) {
 			objs3d.axes = { meshes: nonArrowAxisMeshes };
 		})();
 
-		// The wavefunction
+		// The real and imaginary parts of the wavefunction
 		(() => {
-			const wavefunction = new THREE.Mesh(
-				new THREE.BufferGeometry(),
-				WAVE_MATERIAL,
-			);
+			const wavefunctionRe = new THREE.Mesh(new THREE.BufferGeometry());
+			const wavefunctionIm = new THREE.Mesh(new THREE.BufferGeometry());
 
-			scene.add(wavefunction);
-			objs3d.wavefunction = { wavefunction };
+			scene.add(wavefunctionRe, wavefunctionIm);
+			objs3d.wavefunction = { real: wavefunctionRe, imag: wavefunctionIm };
 		})();
 
 		// The phase indicators
 		(() => {
-			const pointerWidth = xScale3D(0.06) - xScale3D(0);
+			const pointerWidth = xScale3D(0.07) - xScale3D(0);
 
 			const gridSpacing = 0.5;
 
@@ -451,7 +501,6 @@ function update(dtMS) {
 
 					const mesh = new THREE.Mesh(
 						new THREE.ConeBufferGeometry(pointerWidth, pointerHeight, 8, 1),
-						PHASE_MATERIAL,
 					);
 					scene.add(mesh);
 					meshes.push({ x, xScaled, yScaled, y, mesh });
@@ -463,15 +512,54 @@ function update(dtMS) {
 	const kx = +sliders.kx.value;
 	const ky = +sliders.ky.value;
 
-	const { wavefunction } = objs3d.wavefunction;
-	wavefunction.geometry.dispose();
-	wavefunction.geometry = new THREE.ParametricBufferGeometry(
-		getWavefunctionFunction(kx, ky, MODES.real),
-		wavenumberToNSlicesForSelected(kx),
-		wavenumberToNSlicesForSelected(ky),
-	);
+	const { real: realPartMesh, imag: imagPartMesh } = objs3d.wavefunction;
+	realPartMesh.geometry.dispose();
+	imagPartMesh.geometry.dispose();
+
+	for (const {
+		mesh,
+		selectedMaterial,
+		unselectedMaterial,
+		mode,
+		thisPsiComponent,
+	} of [
+		{
+			mesh: realPartMesh,
+			selectedMaterial: REAL_PART_SELECTED_MATERIAL,
+			unselectedMaterial: REAL_PART_UNSELECTED_MATERIAL,
+			mode: MODES.real,
+			thisPsiComponent: PSI_COMPONENTS.real,
+		},
+		{
+			mesh: imagPartMesh,
+			selectedMaterial: IMAG_PART_SELECTED_MATERIAL,
+			unselectedMaterial: IMAG_PART_UNSELECTED_MATERIAL,
+			mode: MODES.imag,
+			thisPsiComponent: PSI_COMPONENTS.imag,
+		},
+	]) {
+		let wavenumberSliceScale, material;
+		if (selectedPsiComponent === thisPsiComponent) {
+			wavenumberSliceScale = wavenumberToNSlicesForSelected;
+			material = selectedMaterial;
+		} else {
+			wavenumberSliceScale = wavenumberToNSlicesForUnselected;
+			material = unselectedMaterial;
+		}
+
+		mesh.geometry = new THREE.ParametricBufferGeometry(
+			getWavefunctionFunction(kx, ky, mode),
+			wavenumberSliceScale(kx),
+			wavenumberSliceScale(ky),
+		);
+		mesh.material = material;
+	}
 
 	const { pointers } = objs3d.pointers;
+	const phaseMaterial =
+		selectedPsiComponent === PSI_COMPONENTS.phase
+			? PHASE_SELECTED_MATERIAL
+			: PHASE_UNSELECTED_MATERIAL;
 	for (const { x, xScaled, y, yScaled, mesh } of pointers) {
 		const phase = psi(x, y, kx, ky, currentOmega).phase;
 		mesh.position.set(
@@ -480,6 +568,7 @@ function update(dtMS) {
 			pointerZScaled,
 		);
 		mesh.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), phase);
+		mesh.material = phaseMaterial;
 	}
 
 	renderer.render(scene, camera);
