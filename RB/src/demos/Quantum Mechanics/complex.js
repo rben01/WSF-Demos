@@ -48,6 +48,14 @@ class Complex {
 		return this._$r * Math.sin(this._$theta);
 	}
 
+	get re() {
+		return this._$r * Math.cos(this._$theta);
+	}
+
+	get im() {
+		return this._$r * Math.sin(this._$theta);
+	}
+
 	conj() {
 		return this.constructor.fromPolar(this._$r, -this._$theta);
 	}
