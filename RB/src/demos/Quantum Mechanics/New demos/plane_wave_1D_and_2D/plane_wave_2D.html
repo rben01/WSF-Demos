@@ -39,6 +39,7 @@
 		<style>
 			.grid-left-right {
 				grid-template-columns: max-content 1fr;
+				column-gap: 60px;
 			}
 			.radio-button-container.horizontal button {
 				flex: 1;
@@ -60,7 +61,7 @@
 								onclick="setDispersionNonrelativistic()"
 								button-checked
 							>
-								Nonrelativistic<br />\(|\omega|=\hbar k^2/2m\)
+								Nonrelativistic<br />\(|\omega|=\hbar |k|^2/2m\)
 							</button></span
 						><span
 							><button
@@ -68,7 +69,7 @@
 								class="button"
 								onclick="setDispersionRelativistic()"
 							>
-								Relativistic<br />\(|\omega|=ck\)
+								Relativistic<br />\(|\omega|=c|k|\)
 							</button></span
 						><span
 							><button
@@ -81,11 +82,33 @@
 						>
 					</div>
 					<span>Wavenumber in \(x\)-direction (\(k_x\))</span>
-					<span><input type="range" id="slider-wavenumber-x" /></span>
+					<span
+						><input
+							type="range"
+							class="slider wavenumber-slider"
+							id="slider-wavenumber-x"
+					/></span>
 					<span>Wavenumber in \(y\)-direction (\(k_y\))</span>
-					<span><input type="range" id="slider-wavenumber-y" /></span>
+					<span
+						><input
+							type="range"
+							class="slider wavenumber-slider"
+							id="slider-wavenumber-y"
+					/></span>
 					<span>Angular frequency (\(\omega\))</span>
-					<span><input type="range" id="slider-omega" disabled /></span>
+					<span
+						><input type="range" class="slider" id="slider-omega" disabled
+					/></span>
+					<span>Wavefunction component to show</span>
+					<span class="radio-button-container horizontal">
+						<button class="button" onclick="showReal()" button-checked>
+							Real part<br />\(\Re[\psi]\)</button
+						><button class="button" onclick="showImaginary()">
+							Imaginary<br />\(\Im[\psi]\)</button
+						><button class="button" onclick="showPhase()">
+							Phase<br />\(\phi\)
+						</button>
+					</span>
 					<span></span>
 					<span class="radio-button-container horizontal">
 						<button class="button" onclick="play()">Play</button
@@ -98,12 +121,13 @@
 				</div>
 			</div>
 			<div>
-				<div><canvas id="plot-comp"></canvas></div>
+				<div><canvas id="plot-comp" class="draggable"></canvas></div>
 				<div><svg id="plot-phase"></svg></div>
 			</div>
 		</div>
 		<script src="../../../utils.js"></script>
 		<script src="../../three_utils.js"></script>
+		<script src="../../complex.js"></script>
 		<script src="./plane_wave_2D.js"></script>
 	</body>
 </html>

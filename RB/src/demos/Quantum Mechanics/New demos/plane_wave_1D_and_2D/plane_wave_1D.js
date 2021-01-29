@@ -138,14 +138,6 @@ const phaseLineGenerator = d3
 let currentPhase = 0;
 let isAnimating = false;
 
-const DISPERSION = {
-	nonrelativistic: 0,
-	relativistic: 1,
-	free: 2,
-};
-
-let currentDispersion = DISPERSION.nonrelativistic;
-
 const omegaSlider = (() => {
 	const slider = document.getElementById("slider-omega");
 	slider.min = 0;
@@ -168,6 +160,14 @@ const wavenumberSlider = (() => {
 	};
 	return slider;
 })();
+
+const DISPERSION = {
+	nonrelativistic: 0,
+	relativistic: 1,
+	free: 2,
+};
+
+let currentDispersion = DISPERSION.nonrelativistic;
 
 const nonRelativisticDispersionScale = d3
 	.scalePow(
@@ -691,7 +691,6 @@ let animationFrame;
 // eslint-disable-next-line no-unused-vars
 function play() {
 	isAnimating = true;
-	wavenumberSlider.disabled = true;
 
 	let prevTimestampMS;
 	function step(timestampMS) {
@@ -713,7 +712,6 @@ function play() {
 function stop() {
 	window.cancelAnimationFrame(animationFrame);
 	isAnimating = false;
-	wavenumberSlider.disabled = false;
 }
 
 // eslint-disable-next-line no-unused-vars

@@ -19,6 +19,7 @@ body {
 	display: grid;
 	grid-template-columns: 13em 1fr;
 	align-items: start;
+	column-gap: 40px;
 }
 
 .grid-left-right-2 {

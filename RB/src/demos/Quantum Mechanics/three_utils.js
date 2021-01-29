@@ -17,6 +17,8 @@ function roundRect(ctx, x, y, w, h, r) {
 	ctx.stroke();
 }
 
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
 // eslint-disable-next-line no-unused-vars
 function makeTextSprite(
 	message,
@@ -31,16 +33,14 @@ function makeTextSprite(
 	} = {},
 ) {
 	// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
-	const _white = { r: 255, g: 255, b: 255, a: 1.0 };
-	const _clear = { r: 0, g: 0, b: 0, a: 0.0 };
 
 	fontface = fontface ?? "sans-serif";
 	fontsize = fontsize ?? 27;
 	fontweight = fontweight ?? "";
 	borderThickness = borderThickness ?? 0;
-	borderColor = borderColor ?? _clear;
-	backgroundColor = backgroundColor ?? _clear;
-	textColor = textColor ?? _white;
+	borderColor = borderColor ?? _three_utils_clear;
+	backgroundColor = backgroundColor ?? _three_utils_clear;
+	textColor = textColor ?? _three_utils_white;
 
 	const canvas = document.createElement("canvas");
 	const context = canvas.getContext("2d");
@@ -78,6 +78,52 @@ function makeTextSprite(
 }
 
 const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+	const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+	if (rotAxisHypotenuse < 1e-12) {
+		return null;
+	}
+
+	const rotAxisXDir = -dy;
+	const rotAxisYDir = -dx;
+	const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+	const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+
+	const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+
+	const originalDisplacementComponentParallelToUp = up
+		.clone()
+		.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+	const originalDisplacementComponentPerpendicularToUp = originalDisplacementFromPointOfFocus
+		.clone()
+		.sub(originalDisplacementComponentParallelToUp);
+	const right = up
+		.clone()
+		.cross(originalDisplacementComponentPerpendicularToUp)
+		.normalize();
+
+	// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+	// matrix and hence its inverse is it's transpose, and so x = A^t b, where b =
+	// [0, sin, cos]
+	const rotationAxis = new THREE.Vector3(
+		up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+		up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+		up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+	);
+
+	const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+	const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+		rotationAxis,
+		rotationMagnitude,
+	);
+
+	originalDisplacementFromPointOfFocus.applyQuaternion(rotationQuaternion);
+
+	const newPosition = pointOfFocus.clone().add(originalDisplacementFromPointOfFocus);
+
+	return newPosition;
+}
+
 // eslint-disable-next-line no-unused-vars
 function makeThreeCameraDrag({
 	camera,
@@ -88,95 +134,27 @@ function makeThreeCameraDrag({
 	dragSpeed,
 	callback,
 }) {
-	dragSpeed = dragSpeed ?? 0.004;
+	dragSpeed = dragSpeed ?? 0.006;
 	up = up ?? _three_utils_upZ;
 
 	return d3.drag().on("drag", function (event) {
 		const { dx, dy } = event;
 
-		const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
-		if (rotAxisHypotenuse < 1e-12) {
-			return;
+		const newCameraPos = getNewPositionForDrag({
+			dx,
+			dy,
+			up,
+			oldPosition: camera.position,
+			pointOfFocus,
+			dragSpeed,
+		});
+
+		if (newCameraPos !== null) {
+			camera.position.copy(newCameraPos);
+			camera.lookAt(pointOfFocus);
+			camera.updateProjectionMatrix();
+			renderer.render(scene, camera);
 		}
-
-		const rotAxisX = -dy;
-		const rotAxisY = -dx;
-		const rotAxisCosTheta = rotAxisX / rotAxisHypotenuse;
-		const rotAxisSinTheta = rotAxisY / rotAxisHypotenuse;
-
-		const cameraDisplacementFromPointOfFocus = camera.position
-			.clone()
-			.sub(pointOfFocus);
-
-		const cameraDisplacementComponentParallelToUp = up
-			.clone()
-			.multiplyScalar(cameraDisplacementFromPointOfFocus.dot(up));
-		const cameraDisplacementComponentPerpendicularToUp = cameraDisplacementFromPointOfFocus
-			.clone()
-			.sub(cameraDisplacementComponentParallelToUp)
-			.normalize();
-		const right = up
-			.clone()
-			.cross(cameraDisplacementComponentPerpendicularToUp)
-			.normalize();
-
-		// console.log(cameraDisplacementComponentPerpendicularToUp, up, right);
-		const rotationAxis = new THREE.Vector3(
-			up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
-			up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
-			up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
-		);
-
-		const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
-		const cameraRotQuaternion = new THREE.Quaternion().setFromAxisAngle(
-			rotationAxis,
-			rotationMagnitude,
-		);
-
-		cameraDisplacementFromPointOfFocus.applyQuaternion(cameraRotQuaternion);
-		// console.log(cameraDisplacementFromPointOfFocus);
-
-		// const screenRotationAxis = new THREE.Vector3(dy, 0, -dx);
-		// screenRotationAxis.normalize();
-
-		// const angleAroundUp = -dx * dragSpeed;
-		// const angleInHorizontalPlane = Math.atan2(
-		// 	cameraDisplacementFromPointOfFocus.y,
-		// 	cameraDisplacementFromPointOfFocus.x,
-		// );
-
-		// const angleAroundHorizontalAxis1 =
-		// 	Math.sin(angleInHorizontalPlane) * dy * dragSpeed;
-		// const angleAroundHorizontalAxis2 =
-		// 	-Math.cos(angleInHorizontalPlane) * dy * dragSpeed;
-
-		// // Euler angle assuming that "up" is (0,0,1)
-		// const eulerAngle = new THREE.Euler(
-		// 	angleAroundHorizontalAxis1,
-		// 	angleAroundHorizontalAxis2,
-		// 	angleAroundUp,
-		// );
-
-		// const circumAxialQuaternion = new THREE.Quaternion();
-		// circumAxialQuaternion.setFromEuler(eulerAngle);
-
-		// // But it's not necessarily up, so we correct by tilting it
-		// const rotateUpAxisInPlaceQuaternion = new THREE.Quaternion();
-		// rotateUpAxisInPlaceQuaternion.setFromUnitVectors(up, _three_utils_upZ);
-
-		// cameraDisplacementFromPointOfFocus.
-		// 	.applyQuaternion(rotateUpAxisInPlaceQuaternion)
-		// 	.applyQuaternion(circumAxialQuaternion)
-		// 	.applyQuaternion(rotateUpAxisInPlaceQuaternion.invert());
-
-		const newCameraPos = pointOfFocus
-			.clone()
-			.add(cameraDisplacementFromPointOfFocus);
-
-		camera.position.copy(newCameraPos);
-		camera.lookAt(pointOfFocus);
-		camera.updateProjectionMatrix();
-		renderer.render(scene, camera);
 
 		if (callback) {
 			callback();
