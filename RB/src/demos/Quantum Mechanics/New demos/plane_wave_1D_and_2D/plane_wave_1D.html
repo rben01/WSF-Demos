@@ -27,6 +27,7 @@
 			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
 			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
 			crossorigin="anonymous"
+			onload="update()"
 		></script>
 
 		<!-- To automatically render math in text elements, include the auto-render extension: -->
@@ -55,6 +56,7 @@
 			}
 			.curve {
 				fill: none;
+				stroke-linejoin: round;
 			}
 			.curve-background {
 				stroke: black;
@@ -140,14 +142,14 @@
 							</button></span
 						>
 					</div>
-					<span>Wavenumber (\(k\))</span>
+					<span>Wavenumber (<span id="text-kx"></span>)</span>
 					<span
 						><input
 							type="range"
 							class="wavenumber-slider"
 							id="slider-wavenumber"
 					/></span>
-					<span>Angular frequency (\(\omega\))</span>
+					<span>Angular frequency (<span id="text-omega"></span>)</span>
 					<span><input type="range" id="slider-omega" disabled /></span>
 					<span></span>
 					<span class="radio-button-container horizontal">

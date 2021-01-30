@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs Complex THREE makeTextSprite */
+/* global applyGraphicalObjs Complex THREE makeTextSprite katex */
 const WIDTH = 800;
 const HEIGHT = 400;
 const HEIGHT_3D = 300;
@@ -10,6 +10,14 @@ const X_MAX = -X_MIN;
 const Y_MIN = -1.1;
 const Y_0 = 0;
 const Y_MAX = 1.1;
+
+const floatFormatter = d3
+	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
+	.format(".1f");
+const textSpans = {
+	kx: document.getElementById("text-kx"),
+	omega: document.getElementById("text-omega"),
+};
 
 const canvas = document.getElementById("plot-3D");
 d3.select(canvas).attr("width", WIDTH); //.attr("height", HEIGHT_3D);
@@ -143,6 +151,13 @@ const omegaSlider = (() => {
 	slider.min = 0;
 	slider.max = 5;
 	slider.step = 0.0001;
+
+	slider.oninput = function () {
+		if (typeof katex !== "undefined") {
+			katex.render(`\\omega=${floatFormatter(+this.value)}`, textSpans.omega);
+		}
+	};
+
 	return slider;
 })();
 
@@ -198,6 +213,9 @@ function updateOmega() {
 	}
 
 	omegaSlider.value = currOmega;
+	if (typeof katex !== "undefined") {
+		katex.render(`\\omega=${floatFormatter(currOmega)}`, textSpans.omega);
+	}
 }
 
 function setDispersion(value) {
@@ -630,8 +648,8 @@ function getData() {
 			const phase = wavenumber * x - currentPhase;
 
 			const z = Complex.cis(phase);
-			const re = z.x;
-			const im = z.y;
+			const re = z.re;
+			const im = z.im;
 
 			curvePoints.push({ x, re, im });
 		}
@@ -678,11 +696,19 @@ function getData() {
 }
 
 function update(dtMS) {
+	dtMS = dtMS ?? 0;
 	const omega = +omegaSlider.value;
 	currentPhase += (omega * dtMS) / 1000;
 
+	const kx = +wavenumberSlider.value;
+
 	applyGraphicalObjs(plot2D, getData(), { selector: ".curve" });
 	update3D();
+
+	if (typeof katex !== "undefined") {
+		katex.render(`k_x=${floatFormatter(kx)}`, textSpans.kx);
+		katex.render(`\\omega=${floatFormatter(omega)}`, textSpans.omega);
+	}
 }
 
 update(0);

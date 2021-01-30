@@ -1,6 +1,5 @@
-/* global applyGraphicalObjs Complex THREE makeTextSprite makeThreeCameraDrag */
+/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex */
 const WIDTH = 900;
-const HEIGHT = 400;
 const HEIGHT_3D = 700;
 
 const X_MAX = 2 * Math.PI;
@@ -8,17 +7,14 @@ const X_MIN = -X_MAX;
 const X_0 = 0;
 
 const xScale3D = d3.scaleLinear([-1, 1], [-2, 2]);
-const uScaleToX = d3.scaleLinear([0, 1], [X_MIN, X_MAX]);
 
 const Y_MAX = X_MAX;
 const Y_MIN = -Y_MAX;
 const Y_0 = X_0;
 
 const yScale3D = d3.scaleLinear([-1, 1], [-2, 2]);
-const vScaleToY = d3.scaleLinear([0, 1], [Y_MIN, Y_MAX]);
 
 const Z_MIN = -1.2;
-const Z_0 = 0;
 const Z_MAX = -Z_MIN;
 
 const zScale3D = d3.scaleLinear([-1, 1], [-4, 4]);
@@ -30,7 +26,7 @@ const wavenumberToNSlicesForUnselected = (() => {
 	const scale = d3
 		.scalePow()
 		.domain([MIN_ABS_WAVENUMBER, MAX_ABS_WAVENUMBER])
-		.rangeRound([10, 70])
+		.rangeRound([13, 80])
 		.exponent(0.5);
 	return k => scale(Math.abs(k));
 })();
@@ -50,7 +46,7 @@ const camera = new THREE.PerspectiveCamera(
 	50,
 	canvas.clientWidth / canvas.clientHeight,
 	0.1,
-	2000,
+	100,
 );
 const renderer = new THREE.WebGLRenderer({
 	canvas: canvas,
@@ -67,9 +63,10 @@ renderer.setSize(WIDTH, HEIGHT_3D);
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 scene.add(
 	(() => {
-		const pointLight = new THREE.PointLight(0xffffff, 0.6);
-		pointLight.position.set(X_0 + 4, Y_0 - 1, 40);
-		return pointLight;
+		// By default aimed at the origin, which is fine for us
+		const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+		dirLight.position.set(X_MIN - 1, Y_MIN - 1, 20);
+		return dirLight;
 	})(),
 );
 
@@ -93,11 +90,23 @@ d3.select(canvas).call(
 );
 
 const PSI_COMPONENTS = {
-	real: 0,
-	imag: 1,
-	phase: 2,
+	real: "real",
+	imag: "imag",
+	phase: "phase",
 };
-let selectedPsiComponent = PSI_COMPONENTS.real;
+
+const VISIBILITY_STATE = {
+	visible: 0,
+	dim: 1,
+	hidden: 2,
+};
+const N_VISIBILITY_STATES = Object.keys(VISIBILITY_STATE).length;
+
+const componentVisibilities = {
+	[PSI_COMPONENTS.real]: VISIBILITY_STATE.visible,
+	[PSI_COMPONENTS.imag]: VISIBILITY_STATE.hidden,
+	[PSI_COMPONENTS.phase]: VISIBILITY_STATE.hidden,
+};
 
 const AXIS_COLOR = 0xaaaaaa;
 const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
@@ -109,34 +118,19 @@ const REAL_PART_SELECTED_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0x2277ff,
 	side: THREE.DoubleSide,
 	transparent: false,
-});
-const REAL_PART_UNSELECTED_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0x2277ff,
-	side: THREE.DoubleSide,
-	transparent: true,
-	opacity: 0.2,
+	opacity: 1,
 });
 const IMAG_PART_SELECTED_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0xf3b822,
 	side: THREE.DoubleSide,
 	transparent: false,
-});
-const IMAG_PART_UNSELECTED_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0xf3b822,
-	side: THREE.DoubleSide,
-	transparent: true,
-	opacity: 0.2,
+	opacity: 1,
 });
 const PHASE_SELECTED_MATERIAL = new THREE.MeshBasicMaterial({
 	color: 0xee55dd,
 	side: THREE.DoubleSide,
 	transparent: false,
-});
-const PHASE_UNSELECTED_MATERIAL = new THREE.MeshBasicMaterial({
-	color: 0xee55dd,
-	side: THREE.DoubleSide,
-	transparent: true,
-	opacity: 0.2,
+	opacity: 1,
 });
 
 const sliders = {
@@ -146,7 +140,7 @@ const sliders = {
 		const slider = document.getElementById("slider-omega");
 		slider.min = 0;
 		slider.max = 5;
-		slider.step = 0.0001;
+		slider.step = 0.01;
 		return slider;
 	})(),
 };
@@ -157,7 +151,7 @@ d3.selectAll(".wavenumber-slider").each(function () {
 	const slider = this;
 	slider.min = -MAX_ABS_WAVENUMBER;
 	slider.max = MAX_ABS_WAVENUMBER;
-	slider.step = 0.001;
+	slider.step = 0.01;
 	slider.value = 0;
 
 	d3.select(slider).on("input", () => {
@@ -246,65 +240,169 @@ const MODES = {
 
 let currentOmega = 0;
 
+const X_MIN_LINE = Line2D.fromConstantX(X_MIN);
+const X_MAX_LINE = Line2D.fromConstantX(X_MAX);
+const Y_MIN_LINE = Line2D.fromConstantY(Y_MIN);
+const Y_MAX_LINE = Line2D.fromConstantY(Y_MAX);
+
 function getWavefunctionFunction(kx, ky, mode) {
+	const uSlope = ky / kx;
+	const uLine = Line2D.fromPointSlopeForm(X_0, Y_0, uSlope);
+	const vSlope = -1 / uSlope;
+
+	const [cornerLines1, cornerLines2] =
+		uSlope > 0
+			? [
+					[X_MIN_LINE, Y_MAX_LINE], // Intersection toward top left
+					[X_MAX_LINE, Y_MIN_LINE], // Intersection toward bottom right
+			  ]
+			: [
+					[X_MIN_LINE, Y_MIN_LINE], // Intersection toward bottom left
+					[X_MAX_LINE, Y_MAX_LINE], // Intersection toward top right
+			  ];
+
+	const boundingVLine1 = Line2D.fromPointSlopeForm(
+		X_MIN,
+		uSlope > 0 ? Y_MIN : Y_MAX,
+		vSlope,
+	);
+	const boundingVLine2 = Line2D.fromPointSlopeForm(
+		X_MAX,
+		uSlope > 0 ? Y_MAX : Y_MIN,
+		vSlope,
+	);
+
+	const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
+	const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
+
 	function wavefunctionValue(u, v, vec) {
 		// We want to design this so that u moves perpendicular to the waveform (against
 		// the grain, so to speak) and v moves parallel (with the grain) while keeping
-		// all points within the region[X_MIN, X_MAX] * [Y_MIN, Y_MAX] The line which u
-		// varies along will be y = Y_0 + m * (x - X_0) where m is the slope of the line
-		// that goes against the grain
+		// all points within the region [X_MIN, X_MAX] * [Y_MIN, Y_MAX]. The line which
+		// u varies along will be y = Y_0 + m * (x - X_0) (i.e., the line of slope m
+		// passing through (X_0, Y_0)) where m is the slope of the line that goes
+		// against the grain, except if kx === 0 or ky === 0. Note that this u-line must
+		// extend beyond the bounds of the box so that the v-line can cover the whole
+		// box
 
-		const uSlope = Math.atan2(ky, kx);
+		// The components of the vector we'll return
+		let x, y;
 
-		const yWhereULineIntersectsXMIN = Y_0 + uSlope * (X_MIN - X_0);
-		const xWhereULineIntersectsYMIN = X_0 + (1 / uSlope) * (Y_MIN - Y_0);
-		const uLineXMin =
-			yWhereULineIntersectsXMIN >= Y_MIN ? X_MIN : xWhereULineIntersectsYMIN;
+		// The simple cases, where the line is degenerate (surface is a flat plane),
+		// vertical (kx === 0), or horizontal (ky === 0), require some care because the
+		// intersections we would otherwise use won't exist. Thankfully these cases are
+		// trivial.
+		if (kx === 0 || ky === 0) {
+			let xVar, yVar;
+			if (ky === 0) {
+				// Either the degenerate case (if kx === 0) or the horizontal case (if kx
+				// !== 0)
+				xVar = u;
+				yVar = v;
+			} else {
+				// the vertical case
+				xVar = v;
+				yVar = u;
+			}
+			x = X_MIN + xVar * (X_MAX - X_MIN);
+			y = Y_MIN + yVar * (Y_MAX - Y_MIN);
+		} else {
+			// If kx !== 0 and ky !== 0 then we can actually do this the "right" (i.e.,
+			// hard) way
 
-		const yWhereULineIntersectsXMAX = Y_0 + uSlope * (X_MAX - X_0);
-		const xWhereULineIntersectsYMAX = X_0 + (1 / uSlope) * (Y_MIN - Y_0);
-		const uLineXMin =
-			yWhereULineIntersectsXMIN >= Y_MIN ? X_MIN : xWhereULineIntersectsYMIN;
+			const [uvIntersectionPointX, uvIntersectionPointY] = d3.interpolate(
+				uLineEndpoint1,
+				uLineEndpoint2,
+			)(u);
 
-		const x = xScale3D(uScaleToX(u));
-		const y = yScale3D(vScaleToY(v));
-		const valComplex = psi(x, y, kx, ky, currentOmega);
+			const vLine = Line2D.fromPointSlopeForm(
+				uvIntersectionPointX,
+				uvIntersectionPointY,
+				vSlope,
+			);
 
+			const [p1, p2] = [cornerLines1, cornerLines2].map(linePair => {
+				const [d1, d2] = linePair.map(line => {
+					const point = line.intersectionWith(vLine);
+					const sqDist =
+						(point[0] - uvIntersectionPointX) ** 2 +
+						(point[1] - uvIntersectionPointY) ** 2;
+					return { sqDist, point };
+				});
+
+				return d1.sqDist < d2.sqDist ? d1.point : d2.point;
+			});
+
+			[x, y] = d3.interpolateArray(p1, p2)(v);
+		}
+
+		const zC = psi(x, y, kx, ky, currentOmega);
 		let z;
 		if (mode === MODES.real) {
-			z = valComplex.re;
+			z = zC.re;
 		} else if (mode === MODES.imag) {
-			z = valComplex.im;
+			z = zC.im;
 		}
-		return vec.set(x, y, z);
+
+		return vec.set(xScale3D(x), yScale3D(y), z * 1.1);
 	}
 
 	return wavefunctionValue;
 }
 
 function setSelectedPsiComponent(comp) {
-	selectedPsiComponent = comp;
+	// Silly JS, why is (-1) % 3 === -1 and not 2??
+	componentVisibilities[comp] =
+		(componentVisibilities[comp] + (N_VISIBILITY_STATES - 1)) % N_VISIBILITY_STATES;
 	// eslint-disable-next-line no-use-before-define
 	update();
 }
 
 // eslint-disable-next-line no-unused-vars
 function showReal() {
-	setSelectedPsiComponent(PSI_COMPONENTS.real);
+	setSelectedPsiComponent("real");
 }
 
 // eslint-disable-next-line no-unused-vars
 function showImaginary() {
-	setSelectedPsiComponent(PSI_COMPONENTS.imag);
+	setSelectedPsiComponent("imag");
 }
 
 // eslint-disable-next-line no-unused-vars
 function showPhase() {
-	setSelectedPsiComponent(PSI_COMPONENTS.phase);
+	setSelectedPsiComponent("phase");
 }
 
 const pointerHeight = yScale3D(0.2) - yScale3D(0);
-const pointerZScaled = 1.3;
+const pointerZScaled = 1.5;
+
+function setMaterialOpacity(material, visibilityState) {
+	const opacity =
+		visibilityState === VISIBILITY_STATE.visible
+			? 1
+			: visibilityState === VISIBILITY_STATE.dim
+			? 0.2
+			: visibilityState === VISIBILITY_STATE.hidden
+			? 0
+			: null;
+
+	if (opacity === null) {
+		throw new Error(`Invalid visibilityState ${visibilityState}`);
+	}
+
+	material.transparent = opacity !== 1;
+	material.visible = opacity !== 0;
+	material.opacity = opacity;
+}
+
+const floatFormatter = d3
+	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
+	.format(".1f");
+const textSpans = {
+	kx: document.getElementById("text-kx"),
+	ky: document.getElementById("text-ky"),
+	omega: document.getElementById("text-omega"),
+};
 
 const objs3d = { empty: true };
 function update(dtMS) {
@@ -456,13 +554,12 @@ function update(dtMS) {
 				});
 				const [x, y, z] = xyz;
 				const [dx, dy, dz] = dxyz;
-				sprite.position.copy(
-					new THREE.Vector3(
-						xScale3D(x) + dx,
-						yScale3D(y) + dy,
-						zScale3D(z) + dz,
-					),
+				sprite.position.set(
+					xScale3D(x) + dx,
+					yScale3D(y) + dy,
+					zScale3D(z) + dz,
 				);
+				sprite.material.depthWrite = false;
 				return sprite;
 			});
 
@@ -481,9 +578,9 @@ function update(dtMS) {
 
 		// The phase indicators
 		(() => {
-			const pointerWidth = xScale3D(0.07) - xScale3D(0);
+			const pointerWidth = xScale3D(0.065) - xScale3D(0);
 
-			const gridSpacing = 0.5;
+			const gridSpacing = 0.39;
 
 			const nXGridPoints = Math.ceil((X_MAX - X_MIN) / gridSpacing);
 			const xGridSpacing = (X_MAX - X_MIN) / (nXGridPoints - 1);
@@ -516,50 +613,44 @@ function update(dtMS) {
 	realPartMesh.geometry.dispose();
 	imagPartMesh.geometry.dispose();
 
-	for (const {
-		mesh,
-		selectedMaterial,
-		unselectedMaterial,
-		mode,
-		thisPsiComponent,
-	} of [
+	for (const { mesh, material, mode, thisPsiComponent } of [
 		{
 			mesh: realPartMesh,
-			selectedMaterial: REAL_PART_SELECTED_MATERIAL,
-			unselectedMaterial: REAL_PART_UNSELECTED_MATERIAL,
+			material: REAL_PART_SELECTED_MATERIAL,
 			mode: MODES.real,
 			thisPsiComponent: PSI_COMPONENTS.real,
 		},
 		{
 			mesh: imagPartMesh,
-			selectedMaterial: IMAG_PART_SELECTED_MATERIAL,
-			unselectedMaterial: IMAG_PART_UNSELECTED_MATERIAL,
+			material: IMAG_PART_SELECTED_MATERIAL,
 			mode: MODES.imag,
 			thisPsiComponent: PSI_COMPONENTS.imag,
 		},
 	]) {
-		let wavenumberSliceScale, material;
-		if (selectedPsiComponent === thisPsiComponent) {
+		const thisComponentVisibility = componentVisibilities[thisPsiComponent];
+		let wavenumberSliceScale;
+		if (thisComponentVisibility === VISIBILITY_STATE.visible) {
 			wavenumberSliceScale = wavenumberToNSlicesForSelected;
-			material = selectedMaterial;
 		} else {
 			wavenumberSliceScale = wavenumberToNSlicesForUnselected;
-			material = unselectedMaterial;
 		}
+
+		setMaterialOpacity(material, thisComponentVisibility);
 
 		mesh.geometry = new THREE.ParametricBufferGeometry(
 			getWavefunctionFunction(kx, ky, mode),
-			wavenumberSliceScale(kx),
-			wavenumberSliceScale(ky),
+			wavenumberSliceScale((kx ** 2 + ky ** 2) ** 0.5), // u components
+			1, // v componenets
 		);
 		mesh.material = material;
 	}
 
 	const { pointers } = objs3d.pointers;
-	const phaseMaterial =
-		selectedPsiComponent === PSI_COMPONENTS.phase
-			? PHASE_SELECTED_MATERIAL
-			: PHASE_UNSELECTED_MATERIAL;
+	setMaterialOpacity(
+		PHASE_SELECTED_MATERIAL,
+		componentVisibilities[PSI_COMPONENTS.phase],
+	);
+
 	for (const { x, xScaled, y, yScaled, mesh } of pointers) {
 		const phase = psi(x, y, kx, ky, currentOmega).phase;
 		mesh.position.set(
@@ -568,10 +659,17 @@ function update(dtMS) {
 			pointerZScaled,
 		);
 		mesh.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), phase);
-		mesh.material = phaseMaterial;
+		mesh.material = PHASE_SELECTED_MATERIAL;
 	}
 
 	renderer.render(scene, camera);
+
+	if (typeof katex !== "undefined") {
+		const omega = +sliders.omega.value;
+		katex.render(`k_x=${floatFormatter(kx)}`, textSpans.kx);
+		katex.render(`k_y=${floatFormatter(ky)}`, textSpans.ky);
+		katex.render(`\\omega=${floatFormatter(omega)}`, textSpans.omega);
+	}
 }
 
 d3.select(sliders.omega).on("input", () => update());
@@ -608,5 +706,6 @@ function stop() {
 // eslint-disable-next-line no-unused-vars
 function reset() {
 	stop();
+	currentOmega = 0;
 	update();
 }
