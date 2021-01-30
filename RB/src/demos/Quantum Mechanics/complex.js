@@ -18,9 +18,9 @@ class Complex {
 		return new this(magnitude, phase);
 	}
 
-	static fromCartesian(x, y) {
-		const magnitude = (x ** 2 + y ** 2) ** 0.5;
-		const phase = Math.atan2(y, x);
+	static fromCartesian(re, im) {
+		const magnitude = (re ** 2 + im ** 2) ** 0.5;
+		const phase = Math.atan2(im, re);
 		return new this(magnitude, phase);
 	}
 
@@ -38,14 +38,6 @@ class Complex {
 
 	get phase() {
 		return this._$theta;
-	}
-
-	get x() {
-		return this._$r * Math.cos(this._$theta);
-	}
-
-	get y() {
-		return this._$r * Math.sin(this._$theta);
 	}
 
 	get re() {
@@ -92,13 +84,13 @@ class Complex {
 	}
 
 	static add(...args) {
-		let x = 0;
-		let y = 0;
+		let re = 0;
+		let im = 0;
 		for (const arg of args) {
-			x += arg.x;
-			y += arg.y;
+			re += arg.re;
+			im += arg.im;
 		}
-		return this.fromCartesian(x, y);
+		return this.fromCartesian(re, im);
 	}
 
 	add(...others) {
@@ -106,11 +98,11 @@ class Complex {
 	}
 
 	static sub(z1, z2) {
-		return this.fromCartesian(z1.x - z2.x, z1.y - z2.y);
+		return this.fromCartesian(z1.re - z2.re, z1.im - z2.im);
 	}
 
 	sub(other) {
-		return this.constructor.fromCartesian(this.x - other.x, this.y - other.y);
+		return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
 	}
 
 	static exp(z) {
@@ -122,8 +114,8 @@ class Complex {
 	}
 
 	exp() {
-		const magnitude = Math.exp(this.x);
-		const phase = this.y;
+		const magnitude = Math.exp(this.re);
+		const phase = this.im;
 		return Complex.fromPolar(magnitude, phase);
 	}
 
@@ -136,7 +128,8 @@ class Complex {
 	}
 
 	cis() {
-		return Complex.fromCartesian(0, 1).mul(this).exp();
+		// exp(i*(x+iy)) = e^(-y)e^(ix)
+		return Complex.fromPolar(-this.im, this.re);
 	}
 
 	pow(realNumber) {
