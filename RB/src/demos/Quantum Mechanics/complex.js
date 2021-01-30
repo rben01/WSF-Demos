@@ -129,7 +129,7 @@ class Complex {
 
 	cis() {
 		// exp(i*(x+iy)) = e^(-y)e^(ix)
-		return Complex.fromPolar(-this.im, this.re);
+		return Complex.fromPolar(Math.exp(-this.im), this.re);
 	}
 
 	pow(realNumber) {
