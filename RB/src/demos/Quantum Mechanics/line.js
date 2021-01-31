@@ -53,8 +53,9 @@ class Line2D {
 		const { a: a1, b: b1, c: c1 } = this;
 		const { a: a2, b: b2, c: c2 } = other;
 
-		const x = (b1 * c2 - b2 * c1) / (a1 * b2 - a2 * b1);
-		const y = (a2 * c1 - a1 * c2) / (a1 * b2 - a2 * b1);
+		const denominator = a1 * b2 - a2 * b1;
+		const x = (b1 * c2 - b2 * c1) / denominator;
+		const y = (a2 * c1 - a1 * c2) / denominator;
 		return [x, y];
 	}
 }

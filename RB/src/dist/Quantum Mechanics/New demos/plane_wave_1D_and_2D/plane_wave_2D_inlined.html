@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
 <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
@@ -285,68 +284,35 @@ background: #ffffff;
 cursor: pointer;
 }
 </style><style>
-:root {
---color-real-part: #5df;
---color-imag-part: #f3c002;
---color-phase: #e5d;
+.grid-left-right {
+grid-template-columns: minmax(20em, max-content) 1fr;
+column-gap: 60px;
 }
 .radio-button-container.horizontal button {
 flex: 1;
 }
-.grid-left-right {
-grid-template-columns: max-content 1fr;
-column-gap: 50px;
+.grow-buttons {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
 }
-.curve {
-fill: none;
-stroke-linejoin: round;
-}
-.curve-background {
-stroke: black;
-stroke-width: 8px;
-}
-.curve-foreground {
-stroke-width: 4px;
-}
-.curve-foreground.real-part {
-stroke: var(--color-real-part);
-}
-.curve-foreground.imag-part {
-stroke: var(--color-imag-part);
-}
-.curve-foreground.phase {
-stroke: var(--color-phase);
-}
-.x-axis-name {
-font-size: 30px;
+.grow-buttons button {
+flex: 1;
 }
 .graph-key {
 position: absolute;
-display: grid;
-grid-template-columns: 30px 1fr;
-align-items: center;
-column-gap: 20px;
-background-color: black;
-padding: 6px 10px;
-border-radius: 4px;
-border: black solid 2px;
-}
-#key-2d {
-left: 410px;
-top: 320px;
-}
-.key-line {
-height: 7px;
-width: 40px;
+top: 10px;
+left: 22em;
 }
 .key-real-part {
-background-color: var(--color-real-part);
+background-color: #4af;
 }
 .key-imag-part {
-background-color: var(--color-imag-part);
+background-color: var(--color-secondary);
 }
 .key-phase {
-background-color: var(--color-phase);
+background-color: var(--color-quaternary);
 }
 </style></head>
 <body>
@@ -354,21 +320,32 @@ background-color: var(--color-phase);
 <div class="controls-container">
 <div class="controls">
 <span>Plane wave equation</span>
-<span>\(\psi(x,t)=e^{i(kx-\omega t)}=e^{i\phi}\)</span>
+<span>\(\psi(x,y,t)=e^{i(k_xx +k_yy-\omega t)}=e^{i\phi}\)</span>
 <span>Dispersion</span>
 <div class="radio-button-container horizontal">
 <span><button button-checked="" class="button" id="dispersion-nonrel" onclick="setDispersionNonrelativistic()">
-Nonrelativistic<br/>\(|\omega|=\hbar k^2/2m\)
+Nonrelativistic<br/>\(|\omega|=\hbar |k|^2/2m\)
 </button></span><span><button class="button" id="dispersion-rela" onclick="setDispersionRelativistic()">
-Relativistic<br/>\(|\omega|=ck\)
+Relativistic<br/>\(|\omega|=c|k|\)
 </button></span><span><button class="button" id="dispersion-choose" onclick="setDispersionFree()">
 Choose your<br/>own \(\omega\)
 </button></span>
 </div>
-<span>Wavenumber (<span id="text-kx"></span>)</span>
-<span><input class="wavenumber-slider" id="slider-wavenumber" type="range"/></span>
+<span>Wavenumber in \(x\)-direction (<span id="text-kx"></span>)</span>
+<span><input class="slider wavenumber-slider" id="slider-wavenumber-x" type="range"/></span>
+<span>Wavenumber in \(y\)-direction (<span id="text-ky"></span>)</span>
+<span><input class="slider wavenumber-slider" id="slider-wavenumber-y" type="range"/></span>
 <span>Angular frequency (<span id="text-omega"></span>)</span>
-<span><input disabled="" id="slider-omega" type="range"/></span>
+<span><input class="slider" disabled="" id="slider-omega" type="range"/></span>
+<span style="line-height: 1.1em">Toggle component visibility<br/>(Hidden → dim →
+prominent)</span>
+<span class="horizontal grow-buttons">
+<button class="button" onclick="showReal()">
+Real part<br/>\(\Re[\psi]\)</button><button class="button" onclick="showImaginary()">
+Imaginary<br/>\(\Im[\psi]\)</button><button class="button" onclick="showPhase()">
+Phase<br/>\(\phi\)
+</button>
+</span>
 <span></span>
 <span class="radio-button-container horizontal">
 <button class="button" onclick="play()">Play</button><button button-checked="" class="button" onclick="stop()">
@@ -379,17 +356,16 @@ Reset
 </div>
 </div>
 <div>
-<canvas class="draggable" id="plot-3D"></canvas>
-<svg id="plot-2D"></svg>
+<div><canvas class="draggable" id="plot-comp"></canvas></div>
 </div>
 </div>
-<div class="graph-key" id="key-2d">
-<div class="key-line key-phase"></div>
-<span class="key-label">\(\frac{\phi}{2\pi}\)</span>
+<div class="graph-key" id="graph-key">
 <div class="key-line key-real-part"></div>
 <span class="key-label">\(\textrm{Re}[\psi]=\cos\phi\)</span>
 <div class="key-line key-imag-part"></div>
 <span class="key-label">\(\textrm{Im}[\psi]=\sin\phi\)</span>
+<div class="key-line key-phase"></div>
+<span class="key-label">\(\textrm{Phase}=\phi\)</span>
 </div>
 <script type="text/javascript">"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -970,39 +946,95 @@ return this.constructor.fromPolar(magnitude, phase);
 }
 }
 Complex.i = Complex.fromImag(1);
-</script><script type="text/javascript">/* global applyGraphicalObjs Complex THREE makeTextSprite katex */
-const WIDTH = 800;
-const HEIGHT = 400;
-const HEIGHT_3D = 300;
-const X_MIN = -12.2;
+</script><script type="text/javascript">// eslint-disable-next-line no-unused-vars
+class Line2D {
+constructor(a, b, c) {
+this._a = a;
+this._b = b;
+this._c = c;
+}
+static fromStandardForm(a, b, c) {
+return new this(a, b, c);
+}
+static fromPointSlopeForm(x0, y0, m) {
+// y - y0 = m * (x - x0)
+return new this(-m, 1, m * x0 - y0);
+}
+static fromConstantY(y0) {
+// y = y0
+return new this(0, 1, -y0);
+}
+static fromConstantX(x0) {
+// x = x0
+return new this(1, 0, -x0);
+}
+get a() {
+return this._a;
+}
+get b() {
+return this._b;
+}
+get c() {
+return this._c;
+}
+get slope() {
+return -this._a / this._b;
+}
+get yIntercept() {
+return -this._c / this._b;
+}
+get xIntercept() {
+return -this._c / this._a;
+}
+intersectionWith(other) {
+const { a: a1, b: b1, c: c1 } = this;
+const { a: a2, b: b2, c: c2 } = other;
+const denominator = a1 * b2 - a2 * b1;
+const x = (b1 * c2 - b2 * c1) / denominator;
+const y = (a2 * c1 - a1 * c2) / denominator;
+return [x, y];
+}
+}
+</script><script type="text/javascript">/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex */
+const WIDTH = 900;
+const HEIGHT_3D = 700;
+const X_MAX = 2 * Math.PI;
+const X_MIN = -X_MAX;
 const X_0 = 0;
-const X_MAX = -X_MIN;
-const Y_MIN = -1.1;
-const Y_0 = 0;
-const Y_MAX = 1.1;
-const floatFormatter = d3
-.formatLocale({ minus: "-", decimal: ".", thousands: "," })
-.format(".1f");
-const textSpans = {
-kx: document.getElementById("text-kx"),
-omega: document.getElementById("text-omega"),
-};
-const canvas = document.getElementById("plot-3D");
-d3.select(canvas).attr("width", WIDTH); //.attr("height", HEIGHT_3D);
+const xScale3D = d3.scaleLinear([-1, 1], [-2, 2]);
+const Y_MAX = X_MAX;
+const Y_MIN = -Y_MAX;
+const Y_0 = X_0;
+const yScale3D = d3.scaleLinear([-1, 1], [-2, 2]);
+const Z_MIN = -1.2;
+const Z_MAX = -Z_MIN;
+const zScale3D = d3.scaleLinear([-1, 1], [-4, 4]);
+const MIN_ABS_WAVENUMBER = 0;
+const MAX_ABS_WAVENUMBER = 2;
+const wavenumberToNSlicesForUnselected = (() => {
+const scale = d3
+.scalePow()
+.domain([MIN_ABS_WAVENUMBER, MAX_ABS_WAVENUMBER])
+.rangeRound([13, 80])
+.exponent(0.5);
+return k => scale(Math.abs(k));
+})();
+const wavenumberToNSlicesForSelected = (() => {
+const scale = d3
+.scalePow()
+.domain([MIN_ABS_WAVENUMBER, MAX_ABS_WAVENUMBER])
+.rangeRound([20, 130])
+.exponent(0.5);
+return k => scale(Math.abs(k));
+})();
+const canvas = document.getElementById("plot-comp");
+d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
 const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera(
-// 	150,
-// 	canvas.clientWidth / canvas.clientHeight,
-// 	0.1,
-// 	2000,
-// );
-const camera = new THREE.OrthographicCamera(
-X_MIN * 1.7,
-X_MAX * 1.7,
-8.5,
--8.5,
--40,
-40,
+const camera = new THREE.PerspectiveCamera(
+50,
+canvas.clientWidth / canvas.clientHeight,
+0.1,
+100,
 );
 const renderer = new THREE.WebGLRenderer({
 canvas: canvas,
@@ -1017,113 +1049,93 @@ renderer.setSize(WIDTH, HEIGHT_3D);
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 scene.add(
 (() => {
-const pointLight = new THREE.PointLight(0xffffff, 1);
-pointLight.position.set(0, -3, 20);
-return pointLight;
+// By default aimed at the origin, which is fine for us
+const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+dirLight.position.set(X_MIN - 1, Y_MIN - 1, 20);
+return dirLight;
 })(),
 );
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(2.7, -5.5, 1.6);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(19, 40, 15);
 const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
-const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
-d3.select(canvas).call(
-d3.drag().on("drag", function (event) {
-const cameraDisplacementFromPointOfFocus = camera.position
-.clone()
-.sub(CAMERA_POINT_OF_FOCUS);
-const { dx, dy } = event;
-// z is up so x-drags rotate around the z-axis
-const angleAroundZ = -dx * DRAG_SPEED;
-const angleInXYPlane = Math.atan2(
-cameraDisplacementFromPointOfFocus.y,
-cameraDisplacementFromPointOfFocus.x,
-);
-const angleAroundX = Math.sin(angleInXYPlane) * dy * DRAG_SPEED;
-const angleAroundY = -Math.cos(angleInXYPlane) * dy * DRAG_SPEED;
-cameraDisplacementFromPointOfFocus.applyEuler(
-new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
-);
-const newCameraPos = CAMERA_POINT_OF_FOCUS.clone().add(
-cameraDisplacementFromPointOfFocus,
-);
-camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
+const CAMERA_UP = new THREE.Vector3(0, 0, 1);
+CAMERA_UP.normalize();
+camera.up.copy(CAMERA_UP);
+camera.position.copy(CAMERA_DEFAULT_POSITION);
 camera.lookAt(CAMERA_POINT_OF_FOCUS);
-camera.updateProjectionMatrix();
-renderer.render(scene, camera);
-// updateSlitSeparationTextElemPos();
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+up: CAMERA_UP,
+pointOfFocus: CAMERA_POINT_OF_FOCUS,
 }),
 );
+const PSI_COMPONENTS = {
+real: "real",
+imag: "imag",
+phase: "phase",
+};
+const VISIBILITY_STATE = {
+visible: 0,
+dim: 1,
+hidden: 2,
+};
+const N_VISIBILITY_STATES = Object.keys(VISIBILITY_STATE).length;
+const componentVisibilities = {
+[PSI_COMPONENTS.real]: VISIBILITY_STATE.visible,
+[PSI_COMPONENTS.imag]: VISIBILITY_STATE.hidden,
+[PSI_COMPONENTS.phase]: VISIBILITY_STATE.hidden,
+};
+const AXIS_COLOR = 0xaaaaaa;
 const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
-color: 0xaaaaaa,
+color: AXIS_COLOR,
 side: THREE.DoubleSide,
 transparent: false,
 });
-const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
+const REAL_PART_SELECTED_MATERIAL = new THREE.MeshLambertMaterial({
 color: 0x2277ff,
 side: THREE.DoubleSide,
 transparent: false,
+opacity: 1,
 });
-const INTERSECTOR_MATERIAL = new THREE.MeshLambertMaterial({
+const IMAG_PART_SELECTED_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0xf3b822,
+side: THREE.DoubleSide,
+transparent: false,
+opacity: 1,
+});
+const PHASE_SELECTED_MATERIAL = new THREE.MeshBasicMaterial({
 color: 0xee55dd,
 side: THREE.DoubleSide,
 transparent: false,
+opacity: 1,
 });
-const REAL_PART_MATERIAL = new THREE.MeshBasicMaterial({
-color: 0x55ddff,
-side: THREE.DoubleSide,
-transparent: false,
-});
-const IMAG_PART_MATERIAL = new THREE.MeshBasicMaterial({
-color: 0xf3c002,
-side: THREE.DoubleSide,
-transparent: false,
-});
-camera.up.set(0, 0, 1);
-camera.position.x = CAMERA_DEFAULT_POSITION.x;
-camera.position.y = CAMERA_DEFAULT_POSITION.y;
-camera.position.z = CAMERA_DEFAULT_POSITION.z;
-camera.lookAt(CAMERA_POINT_OF_FOCUS);
-const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
-const xScale = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
-const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT, 0]);
-const curveGenerator = d3
-.line()
-.curve(d3.curveCatmullRom)
-.x(p => xScale(p[0]))
-.y(p => yScale(p[1]));
-const phaseLineGenerator = d3
-.line()
-.curve(d3.curveLinear)
-.defined(p => p !== null)
-.x(p => xScale(p[0]))
-.y(p => yScale(p[1]));
-let currentPhase = 0;
-let isAnimating = false;
-const omegaSlider = (() => {
+const sliders = {
+kx: document.getElementById("slider-wavenumber-x"),
+ky: document.getElementById("slider-wavenumber-y"),
+omega: (() => {
 const slider = document.getElementById("slider-omega");
 slider.min = 0;
 slider.max = 5;
-slider.step = 0.0001;
-slider.oninput = function () {
-if (typeof katex !== "undefined") {
-katex.render(`\\omega=${floatFormatter(+this.value)}`, textSpans.omega);
-}
-};
+slider.step = 0.01;
 return slider;
-})();
-const wavenumberSlider = (() => {
-const slider = document.getElementById("slider-wavenumber");
-slider.min = 0.1;
-slider.max = 2.1;
-slider.step = 0.0001;
-slider.value = 1;
-slider.oninput = function () {
+})(),
+};
+const wavenumberSliders = [sliders.kx, sliders.ky];
+d3.selectAll(".wavenumber-slider").each(function () {
+const slider = this;
+slider.min = -MAX_ABS_WAVENUMBER;
+slider.max = MAX_ABS_WAVENUMBER;
+slider.step = 0.01;
+slider.value = 0;
+d3.select(slider).on("input", () => {
 // eslint-disable-next-line no-use-before-define
 updateOmega();
 // eslint-disable-next-line no-use-before-define
-update(0);
-};
-return slider;
-})();
+update();
+});
+});
 const DISPERSION = {
 nonrelativistic: 0,
 relativistic: 1,
@@ -1132,19 +1144,21 @@ free: 2,
 let currentDispersion = DISPERSION.nonrelativistic;
 const nonRelativisticDispersionScale = d3
 .scalePow(
-[+wavenumberSlider.min, +wavenumberSlider.max],
-[+omegaSlider.min, +omegaSlider.max],
+[2 * MIN_ABS_WAVENUMBER ** 2, 2 * MAX_ABS_WAVENUMBER ** 2],
+[+sliders.omega.min, +sliders.omega.max],
 )
 .exponent(2);
 const relativisticDispersionScale = d3.scaleLinear(
-[+wavenumberSlider.min, +wavenumberSlider.max],
-[+omegaSlider.min, +omegaSlider.max],
+[2 * MIN_ABS_WAVENUMBER ** 2, 2 * MAX_ABS_WAVENUMBER ** 2],
+[+sliders.omega.min, +sliders.omega.max],
 );
 function updateOmega() {
 if (currentDispersion === DISPERSION.free) {
 return;
 }
-const wavenumber = +wavenumberSlider.value;
+const wavenumber = wavenumberSliders
+.map(slider => (+slider.value) ** 2)
+.reduce((a, b) => a + b);
 let currOmega;
 if (currentDispersion === DISPERSION.nonrelativistic) {
 currOmega = nonRelativisticDispersionScale(wavenumber);
@@ -1153,14 +1167,11 @@ currOmega = relativisticDispersionScale(wavenumber);
 } else {
 throw new Error(`Unexpected dispersion ${currentDispersion}`);
 }
-omegaSlider.value = currOmega;
-if (typeof katex !== "undefined") {
-katex.render(`\\omega=${floatFormatter(currOmega)}`, textSpans.omega);
-}
+sliders.omega.value = currOmega;
 }
 function setDispersion(value) {
 currentDispersion = value;
-omegaSlider.disabled = true;
+sliders.omega.disabled = true;
 updateOmega();
 }
 // eslint-disable-next-line no-unused-vars
@@ -1174,418 +1185,405 @@ setDispersion(DISPERSION.relativistic);
 // eslint-disable-next-line no-unused-vars
 function setDispersionFree() {
 currentDispersion = DISPERSION.free;
-omegaSlider.disabled = false;
+sliders.omega.disabled = false;
 }
 setDispersionNonrelativistic();
-function getAxisData() {
-const tickLength = 7;
-const xAxisTicks = xScale.ticks(20).filter(x => x !== X_0);
-const nXAxisLabels = 5;
-const xAxisLabelTicks = xScale.ticks(nXAxisLabels).filter(x => x !== X_0);
-const xAxisFormatter = xScale.tickFormat(nXAxisLabels);
-const yAxisTicks = yScale.ticks(5).filter(y => y !== Y_0);
-const nYAxisLabels = 5;
-const yAxisLabelTicks = yScale.ticks(nYAxisLabels).filter(y => y !== Y_0);
-const yAxisFormatter = yScale.tickFormat(nYAxisLabels, "~g");
-const xs0 = xScale(X_0);
-const ys0 = yScale(Y_0);
-const axisData = [
-{
-shape: "line",
-class: "axis x-axis",
-attrs: {
-x1: xScale(X_MIN),
-x2: xScale(X_MAX),
-y1: ys0,
-y2: ys0,
-},
-},
-{
-shape: "line",
-class: "axis y-axis",
-attrs: {
-x1: xs0,
-x2: xs0,
-y1: yScale(Y_MIN),
-y2: yScale(Y_MAX),
-},
-},
-...xAxisTicks.map(x => {
-const xs = xScale(x);
-return {
-shape: "line",
-class: "axis axis-tick x-axis-tick",
-attrs: {
-x1: xs,
-x2: xs,
-y1: ys0,
-y2: ys0 + tickLength,
-},
+function psi(x, y, kx, ky, omega) {
+const phi = kx * x + ky * y - omega;
+return Complex.cis(phi);
+}
+const MODES = {
+real: 0,
+imag: 1,
 };
-}),
-...xAxisLabelTicks.map(x => {
-const xs = xScale(x);
-return {
-shape: "text",
-class: "axis axis-label x-axis-label",
-text: xAxisFormatter(x),
-attrs: {
-x: xs,
-y: ys0 + 12,
-},
-};
-}),
-...yAxisTicks.map(y => {
-const ys = yScale(y);
-return {
-shape: "line",
-class: "axis axis-tick y-axis-tick",
-attrs: {
-x1: xs0,
-x2: xs0 - tickLength,
-y1: ys,
-y2: ys,
-},
-};
-}),
-...yAxisLabelTicks.map(y => {
-const ys = yScale(y);
-return {
-shape: "text",
-class: "axis axis-label y-axis-label",
-text: yAxisFormatter(y),
-attrs: {
-x: xs0 - 10,
-y: ys,
-},
-};
-}),
-{
-shape: "text",
-class: "axis axis-label x-axis-label x-axis-name",
-text: "𝑥",
-attrs: {
-x: xScale(X_MAX) - 40,
-y: ys0 + 10,
-},
-},
+let currentOmega = 0;
+const X_MIN_LINE = Line2D.fromConstantX(X_MIN);
+const X_MAX_LINE = Line2D.fromConstantX(X_MAX);
+const Y_MIN_LINE = Line2D.fromConstantY(Y_MIN);
+const Y_MAX_LINE = Line2D.fromConstantY(Y_MAX);
+function getWavefunctionFunction(kx, ky, mode) {
+const uSlope = ky / kx;
+const uLine = Line2D.fromPointSlopeForm(X_0, Y_0, uSlope);
+const vSlope = -1 / uSlope;
+const [cornerLines1, cornerLines2] =
+uSlope > 0
+? [
+[X_MIN_LINE, Y_MAX_LINE], // Intersection toward top left
+[X_MAX_LINE, Y_MIN_LINE], // Intersection toward bottom right
+]
+: [
+[X_MIN_LINE, Y_MIN_LINE], // Intersection toward bottom left
+[X_MAX_LINE, Y_MAX_LINE], // Intersection toward top right
 ];
-return axisData;
-}
-applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
-function getWave3DPathAndIntersector(xMin, xMax, amplitude, xScale) {
-amplitude = amplitude ?? 1;
-const wavenumber = +wavenumberSlider.value / xScale;
-const nPoints = 500;
-const dx = (xMax - xMin) / (nPoints - 1);
-const points = [];
-for (let i = 0; i < nPoints; ++i) {
-const x = xMin + i * dx;
-const phase = wavenumber * x - currentPhase;
-const y = amplitude * Math.cos(phase);
-const z = amplitude * Math.sin(phase);
-points.push(new THREE.Vector3(x, y, z));
-}
-const path = new THREE.CatmullRomCurve3(points);
-const yzIntersectionPhase = -currentPhase;
-const re = amplitude * Math.cos(yzIntersectionPhase);
-const im = amplitude * Math.sin(yzIntersectionPhase);
-const intersector = new THREE.LineCurve3(
-new THREE.Vector3(0, 0, 0),
-new THREE.Vector3(0, re, im),
+const boundingVLine1 = Line2D.fromPointSlopeForm(
+X_MIN,
+uSlope > 0 ? Y_MIN : Y_MAX,
+vSlope,
 );
-return { path, intersector, re, im };
-}
-function rotateThenPositionObject(
-object,
-axisV3,
-radiansNum,
-positionV3,
-absoluteRotation,
-) {
-absoluteRotation = absoluteRotation ?? false;
-const rotObjectMatrix = new THREE.Matrix4();
-rotObjectMatrix.makeRotationAxis(axisV3, radiansNum);
-if (absoluteRotation) {
-object.matrix.copy(rotObjectMatrix);
+const boundingVLine2 = Line2D.fromPointSlopeForm(
+X_MAX,
+uSlope > 0 ? Y_MAX : Y_MIN,
+vSlope,
+);
+const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
+const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
+function wavefunctionValue(u, v, vec) {
+// We want to design this so that u moves perpendicular to the waveform (against
+// the grain, so to speak) and v moves parallel (with the grain) while keeping
+// all points within the region [X_MIN, X_MAX] * [Y_MIN, Y_MAX]. The line which
+// u varies along will be y = Y_0 + m * (x - X_0) (i.e., the line of slope m
+// passing through (X_0, Y_0)) where m is the slope of the line that goes
+// against the grain, except if kx === 0 or ky === 0. Note that this u-line must
+// extend beyond the bounds of the box so that the v-line can cover the whole
+// box
+// The components of the vector we'll return
+let x, y;
+// The simple cases, where the line is degenerate (surface is a flat plane),
+// vertical (kx === 0), or horizontal (ky === 0), require some care because the
+// intersections we would otherwise use won't exist. Thankfully these cases are
+// trivial.
+if (kx === 0 || ky === 0) {
+let xVar, yVar;
+if (ky === 0) {
+// Either the degenerate case (if kx === 0) or the horizontal case (if kx
+// !== 0)
+xVar = u;
+yVar = v;
 } else {
-object.matrix.multiply(rotObjectMatrix);
+// the vertical case
+xVar = v;
+yVar = u;
 }
-object.rotation.setFromRotationMatrix(object.matrix);
-const x = positionV3.x ?? 0;
-const y = positionV3.y ?? 0;
-const z = positionV3.z ?? 0;
-object.position.set(x, y, z);
+x = X_MIN + xVar * (X_MAX - X_MIN);
+y = Y_MIN + yVar * (Y_MAX - Y_MIN);
+} else {
+// If kx !== 0 and ky !== 0 then we can actually do this the "right" (i.e.,
+// hard) way
+const [uvIntersectionPointX, uvIntersectionPointY] = d3.interpolate(
+uLineEndpoint1,
+uLineEndpoint2,
+)(u);
+const vLine = Line2D.fromPointSlopeForm(
+uvIntersectionPointX,
+uvIntersectionPointY,
+vSlope,
+);
+const [p1, p2] = [cornerLines1, cornerLines2].map(linePair => {
+const [d1, d2] = linePair.map(line => {
+const point = line.intersectionWith(vLine);
+const sqDist =
+(point[0] - uvIntersectionPointX) ** 2 +
+(point[1] - uvIntersectionPointY) ** 2;
+return { sqDist, point };
+});
+return d1.sqDist < d2.sqDist ? d1.point : d2.point;
+});
+[x, y] = d3.interpolateArray(p1, p2)(v);
 }
-function makeAxisLabel(text) {
-return makeTextSprite(text, { fontface: "Times" });
+const zC = psi(x, y, kx, ky, currentOmega);
+let z;
+if (mode === MODES.real) {
+z = zC.re;
+} else if (mode === MODES.imag) {
+z = zC.im;
 }
+return vec.set(xScale3D(x), yScale3D(y), z * 1.1);
+}
+return wavefunctionValue;
+}
+function setSelectedPsiComponent(comp) {
+// Silly JS, why is (-1) % 3 === -1 and not 2??
+componentVisibilities[comp] =
+(componentVisibilities[comp] + (N_VISIBILITY_STATES - 1)) % N_VISIBILITY_STATES;
+// eslint-disable-next-line no-use-before-define
+update();
+}
+// eslint-disable-next-line no-unused-vars
+function showReal() {
+setSelectedPsiComponent("real");
+}
+// eslint-disable-next-line no-unused-vars
+function showImaginary() {
+setSelectedPsiComponent("imag");
+}
+// eslint-disable-next-line no-unused-vars
+function showPhase() {
+setSelectedPsiComponent("phase");
+}
+const pointerHeight = yScale3D(0.2) - yScale3D(0);
+const pointerZScaled = 1.5;
+function setMaterialOpacity(material, visibilityState) {
+const opacity =
+visibilityState === VISIBILITY_STATE.visible
+? 1
+: visibilityState === VISIBILITY_STATE.dim
+? 0.2
+: visibilityState === VISIBILITY_STATE.hidden
+? 0
+: null;
+if (opacity === null) {
+throw new Error(`Invalid visibilityState ${visibilityState}`);
+}
+material.transparent = opacity !== 1;
+material.visible = opacity !== 0;
+material.opacity = opacity;
+}
+const floatFormatter = d3
+.formatLocale({ minus: "-", decimal: ".", thousands: "," })
+.format(".1f");
+const textSpans = {
+kx: document.getElementById("text-kx"),
+ky: document.getElementById("text-ky"),
+omega: document.getElementById("text-omega"),
+};
 const objs3d = { empty: true };
-function update3D() {
-const xScale = 1.6;
-const xMin = X_MIN * xScale;
-const xMax = X_MAX * xScale;
-const amplitude = 5;
-const yMin = amplitude * Y_MIN;
-const yMax = amplitude * Y_MAX;
-const arrowheadRadius = 0.25;
-const arrowheadHeight = 0.7;
-const arrowheadGeometry = new THREE.ConeBufferGeometry(
-arrowheadRadius,
-arrowheadHeight,
-);
-if (objs3d.empty) {
-objs3d.empty = false;
-const axisRadius = 0.06;
-const axisExtensionFactor = 1.3;
-// x axis
-(() => {
-const xAxixGeometry = new THREE.TubeBufferGeometry(
-new THREE.LineCurve3(
-new THREE.Vector3(xMin, 0, 0),
-new THREE.Vector3(xMax, 0, 0),
-),
-64,
-axisRadius * 1.5,
-8,
-);
-const xAxis = new THREE.Mesh(xAxixGeometry, AXIS_MATERIAL);
-// arrowhead rotation code from https://stackoverflow.com/a/11060965
-const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
-rotateThenPositionObject(
-arrowhead,
-new THREE.Vector3(0, 0, 1),
--Math.PI / 2,
-{ x: xMax },
-);
-scene.add(xAxis, arrowhead);
-})();
-// y axis
-(() => {
-const yAxixGeometry = new THREE.TubeBufferGeometry(
-new THREE.LineCurve3(
-new THREE.Vector3(0, yMin * axisExtensionFactor, 0),
-new THREE.Vector3(0, yMax * axisExtensionFactor, 0),
-),
-64,
-axisRadius,
-8,
-);
-const yAxis = new THREE.Mesh(yAxixGeometry, AXIS_MATERIAL);
-const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
-rotateThenPositionObject(
-arrowhead,
-new THREE.Vector3(0, 1, 0),
--Math.PI / 2,
-{ y: yMax * axisExtensionFactor },
-);
-scene.add(yAxis, arrowhead);
-})();
-// z axis
-(() => {
-const zAxixGeometry = new THREE.TubeBufferGeometry(
-new THREE.LineCurve3(
-new THREE.Vector3(0, 0, yMin * axisExtensionFactor),
-new THREE.Vector3(0, 0, yMax * axisExtensionFactor),
-),
-64,
-axisRadius,
-8,
-);
-const zAxis = new THREE.Mesh(zAxixGeometry, AXIS_MATERIAL);
-const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
-rotateThenPositionObject(
-arrowhead,
-new THREE.Vector3(1, 0, 0),
-Math.PI / 2,
-{ z: yMax * axisExtensionFactor },
-);
-scene.add(zAxis, arrowhead);
-})();
-// axis labels
-(() => {
-const xAxisLabel = makeAxisLabel("𝑥");
-xAxisLabel.position.x = xMax;
-xAxisLabel.position.y = 0;
-xAxisLabel.position.z = 0;
-scene.add(xAxisLabel);
-const yAxisLabel = makeAxisLabel("Re[𝜓]");
-yAxisLabel.position.x = 0;
-yAxisLabel.position.y = yMax * axisExtensionFactor;
-yAxisLabel.position.z = 0;
-scene.add(yAxisLabel);
-const zAxisLabel = makeAxisLabel("Im[𝜓]");
-zAxisLabel.position.x = 0;
-zAxisLabel.position.y = 0;
-zAxisLabel.position.z = yMax * axisExtensionFactor;
-scene.add(zAxisLabel);
-})();
-// wave template geometry
-(() => {
-const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
-scene.add(wave);
-objs3d.wave = wave;
-})();
-// (static) yz plane (C plane)
-(() => {
-const yzPlane = new THREE.Mesh(
-new THREE.RingBufferGeometry(amplitude * 0.98, amplitude * 1.02, 75, 1),
-AXIS_MATERIAL,
-);
-rotateThenPositionObject(
-yzPlane,
-new THREE.Vector3(0, 1, 0),
-Math.PI / 2,
-{},
-);
-scene.add(yzPlane);
-})();
-// intersection with yz plane (C plane)
-(() => {
-const yzPlaneIntersector = new THREE.Mesh(
-new THREE.BufferGeometry(),
-INTERSECTOR_MATERIAL,
-);
-const yzPlaneIntersectorArrowhead = new THREE.Mesh(
-new THREE.ConeBufferGeometry(
-arrowheadRadius * 1.1,
-arrowheadHeight * 1.1,
-),
-INTERSECTOR_MATERIAL,
-);
-const realPartMarker = new THREE.Mesh(
-new THREE.BufferGeometry(),
-REAL_PART_MATERIAL,
-);
-const imagPartMarker = new THREE.Mesh(
-new THREE.BufferGeometry(),
-IMAG_PART_MATERIAL,
-);
-scene.add(
-yzPlaneIntersector,
-yzPlaneIntersectorArrowhead,
-realPartMarker,
-imagPartMarker,
-);
-Object.assign(objs3d, {
-yzPlaneIntersector,
-yzPlaneIntersectorArrowhead,
-realPartMarker,
-imagPartMarker,
-});
-})();
-}
-const {
-wave,
-yzPlaneIntersector,
-yzPlaneIntersectorArrowhead,
-realPartMarker,
-imagPartMarker,
-} = objs3d;
-const { path, intersector, re, im } = getWave3DPathAndIntersector(
-xMin,
-xMax,
-amplitude,
-xScale,
-);
-wave.geometry.dispose();
-wave.geometry = new THREE.TubeBufferGeometry(path, 300, 0.2);
-const markerRadius = 0.15;
-yzPlaneIntersector.geometry.dispose();
-yzPlaneIntersector.geometry = new THREE.TubeBufferGeometry(
-intersector,
-2,
-markerRadius,
-);
-realPartMarker.geometry.dispose();
-realPartMarker.geometry = new THREE.TubeBufferGeometry(
-new THREE.LineCurve3(new THREE.Vector3(0, 0, 0), new THREE.Vector3(0, re, 0)),
-2,
-markerRadius * 1.1,
-);
-imagPartMarker.geometry.dispose();
-imagPartMarker.geometry = new THREE.TubeBufferGeometry(
-new THREE.LineCurve3(new THREE.Vector3(0, re, 0), new THREE.Vector3(0, re, im)),
-2,
-markerRadius * 1.1,
-);
-rotateThenPositionObject(
-yzPlaneIntersectorArrowhead,
-new THREE.Vector3(1, 0, 0),
-Math.atan2(im, re),
-{ y: re, z: im },
-true,
-);
-renderer.render(scene, camera);
-}
-update3D();
-function getData() {
-const wavenumber = +wavenumberSlider.value;
-const nPointsPerPeriod = 35;
-const periodWidth = (2 * Math.PI) / wavenumber;
-const nPeriods = Math.ceil((X_MAX - X_MIN) / periodWidth);
-const dx = periodWidth / (nPointsPerPeriod - 1);
-const curvePoints = []; // list of points [x, real, imag]
-for (let p = 0; p < nPeriods; ++p) {
-const periodX0 = X_MIN + p * periodWidth;
-for (let i = 0; i < nPointsPerPeriod; ++i) {
-const x = periodX0 + i * dx;
-const phase = wavenumber * x - currentPhase;
-const z = Complex.cis(phase);
-const re = z.re;
-const im = z.im;
-curvePoints.push({ x, re, im });
-}
-}
-function nForX(x) {
-return (wavenumber * x - currentPhase) / (2 * Math.PI);
-}
-const nMin = Math.floor(nForX(X_MIN));
-const nMax = Math.ceil(nForX(X_MAX));
-const phaseCurvePoints = d3.range(nMin, nMax + 1).flatMap(n => {
-const xMid = (currentPhase + 2 * Math.PI * n) / wavenumber;
-const xMin = xMid;
-const xMax = xMid + periodWidth;
-return [[xMin, 0], [xMax, 1], null];
-});
-const curveData = [
-...["curve-background", "curve-foreground"].map(c => ({
-shape: "path",
-class: `curve ${c} phase`,
-attrs: {
-d: phaseLineGenerator(phaseCurvePoints),
-},
-})),
-...["curve-background", "curve-foreground"].map(c => ({
-shape: "path",
-class: `curve ${c} imag-part`,
-attrs: {
-d: curveGenerator(curvePoints.map(({ x, im }) => [x, im])),
-},
-})),
-...["curve-background", "curve-foreground"].map(c => ({
-shape: "path",
-class: `curve ${c} real-part`,
-attrs: {
-d: curveGenerator(curvePoints.map(({ x, re }) => [x, re])),
-},
-})),
-];
-return curveData;
-}
 function update(dtMS) {
 dtMS = dtMS ?? 0;
-const omega = +omegaSlider.value;
-currentPhase += (omega * dtMS) / 1000;
-const kx = +wavenumberSlider.value;
-applyGraphicalObjs(plot2D, getData(), { selector: ".curve" });
-update3D();
+const omega = +sliders.omega.value;
+currentOmega += (omega * dtMS) / 500;
+if (objs3d.empty) {
+objs3d.empty = false;
+// Axes and their ticks and labels
+(() => {
+const axisNTubularSegments = 1;
+const axisRadius = 0.1;
+const axisNRadialSegments = 10;
+const nonArrowAxisMeshes = [
+// First create just the pairs of points that will form the axes (exluding arrow axes)
+// Base
+...[
+[
+[X_MAX, Y_MIN],
+[X_MAX, Y_MAX],
+],
+[
+[X_MAX, Y_MAX],
+[X_MIN, Y_MAX],
+],
+].map(([[x1, y1], [x2, y2]]) => [
+[x1, y1, Z_MIN],
+[x2, y2, Z_MIN],
+]),
+// Right back side
+...[
+[
+[Y_MIN, Z_MAX],
+[Y_MAX, Z_MAX],
+],
+[
+[Y_MAX, Z_MAX],
+[Y_MAX, Z_MIN],
+],
+].map(([[y1, z1], [y2, z2]]) => [
+[X_MIN, y1, z1],
+[X_MIN, y2, z2],
+]),
+// Left back side
+...[
+[
+[X_MIN, Z_MAX],
+[X_MAX, Z_MAX],
+],
+[
+[X_MAX, Z_MAX],
+[X_MAX, Z_MIN],
+],
+].map(([[x1, z1], [x2, z2]]) => [
+[x1, Y_MIN, z1],
+[x2, Y_MIN, z2],
+]),
+].map(endpoints => {
+// Now convert these points into a LineCurve3 and then pass to a TubeBufferGeometry
+const [v1, v2] = endpoints.map(
+([x, y, z]) =>
+new THREE.Vector3(xScale3D(x), yScale3D(y), zScale3D(z)),
+);
+const geometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(v1, v2),
+axisNTubularSegments,
+axisRadius,
+axisNRadialSegments,
+);
+return new THREE.Mesh(geometry, AXIS_MATERIAL);
+});
+const arrowLength = 4;
+const arrowheadLength = 1;
+const arrowheadWidth = 0.4;
+const arrowMeshes = [
+{
+points: [
+{ xyz: [X_MIN, Y_MIN, Z_MIN], extend: null },
+{ xyz: [X_MAX, Y_MIN, Z_MIN], extend: "x" },
+],
+rotateZ: -Math.PI / 2,
+},
+{
+points: [
+{ xyz: [X_MIN, Y_MIN, Z_MIN], extend: null },
+{ xyz: [X_MIN, Y_MAX, Z_MIN], extend: "y" },
+],
+},
+{
+points: [
+{ xyz: [X_MIN, Y_MIN, Z_MIN], extend: null },
+{ xyz: [X_MIN, Y_MIN, Z_MAX], extend: "z" },
+],
+rotateX: Math.PI / 2,
+},
+].flatMap(d => {
+const [v1, v2] = d.points.map(({ xyz, extend }) => {
+const [x, y, z] = xyz;
+return new THREE.Vector3(
+xScale3D(x) + (extend === "x" ? arrowLength : 0),
+yScale3D(y) + (extend === "y" ? arrowLength : 0),
+zScale3D(z) + (extend === "z" ? arrowLength : 0),
+);
+});
+const line = new THREE.Mesh(
+new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(v1, v2),
+axisNTubularSegments,
+axisRadius,
+axisNRadialSegments,
+),
+AXIS_MATERIAL,
+);
+const cone = new THREE.Mesh(
+new THREE.ConeBufferGeometry(arrowheadWidth, arrowheadLength, 8),
+AXIS_MATERIAL,
+);
+cone.position.copy(v2);
+if (d.rotateX ?? false) {
+cone.geometry.rotateX(d.rotateX);
+} else if (d.rotateY ?? false) {
+cone.geometry.rotateY(d.rotateY);
+} else if (d.rotateZ ?? false) {
+cone.geometry.rotateZ(d.rotateZ);
+}
+return [line, cone];
+});
+const textColorFloats = new THREE.Color(0xcccccc);
+const textColor = Object.fromEntries(
+["r", "g", "b"].map(c => [c, textColorFloats[c] * 255]),
+);
+const axisLabels = [
+{ xyz: [X_MAX, Y_MIN, Z_MIN], dxyz: [arrowLength, 0, -0.2], text: "𝑥" },
+{ xyz: [X_MIN, Y_MAX, Z_MIN], dxyz: [0, arrowLength, -0.2], text: "𝑦" },
+{
+xyz: [X_MIN, Y_MIN, Z_MAX],
+dxyz: [-0.1, 1.4, arrowLength + 2],
+text: "𝑧",
+},
+].map(({ xyz, dxyz, text }) => {
+const sprite = makeTextSprite(text, {
+fontsize: 40,
+textColor,
+});
+const [x, y, z] = xyz;
+const [dx, dy, dz] = dxyz;
+sprite.position.set(
+xScale3D(x) + dx,
+yScale3D(y) + dy,
+zScale3D(z) + dz,
+);
+sprite.material.depthWrite = false;
+return sprite;
+});
+scene.add(...nonArrowAxisMeshes, ...arrowMeshes, ...axisLabels);
+objs3d.axes = { meshes: nonArrowAxisMeshes };
+})();
+// The real and imaginary parts of the wavefunction
+(() => {
+const wavefunctionRe = new THREE.Mesh(new THREE.BufferGeometry());
+const wavefunctionIm = new THREE.Mesh(new THREE.BufferGeometry());
+scene.add(wavefunctionRe, wavefunctionIm);
+objs3d.wavefunction = { real: wavefunctionRe, imag: wavefunctionIm };
+})();
+// The phase indicators
+(() => {
+const pointerWidth = xScale3D(0.065) - xScale3D(0);
+const gridSpacing = 0.39;
+const nXGridPoints = Math.ceil((X_MAX - X_MIN) / gridSpacing);
+const xGridSpacing = (X_MAX - X_MIN) / (nXGridPoints - 1);
+const nYGridPoints = Math.ceil((Y_MAX - Y_MIN) / gridSpacing);
+const nYGridSpacing = (Y_MAX - Y_MIN) / (nYGridPoints - 1);
+const meshes = [];
+for (let i = 1; i < nXGridPoints - 1; ++i) {
+const x = X_MIN + i * xGridSpacing;
+const xScaled = xScale3D(x);
+for (let j = 1; j < nYGridPoints - 1; ++j) {
+const y = Y_MIN + j * nYGridSpacing;
+const yScaled = yScale3D(y);
+const mesh = new THREE.Mesh(
+new THREE.ConeBufferGeometry(pointerWidth, pointerHeight, 8, 1),
+);
+scene.add(mesh);
+meshes.push({ x, xScaled, yScaled, y, mesh });
+}
+}
+objs3d.pointers = { pointers: meshes };
+})();
+}
+const kx = +sliders.kx.value;
+const ky = +sliders.ky.value;
+const { real: realPartMesh, imag: imagPartMesh } = objs3d.wavefunction;
+realPartMesh.geometry.dispose();
+imagPartMesh.geometry.dispose();
+for (const { mesh, material, mode, thisPsiComponent } of [
+{
+mesh: realPartMesh,
+material: REAL_PART_SELECTED_MATERIAL,
+mode: MODES.real,
+thisPsiComponent: PSI_COMPONENTS.real,
+},
+{
+mesh: imagPartMesh,
+material: IMAG_PART_SELECTED_MATERIAL,
+mode: MODES.imag,
+thisPsiComponent: PSI_COMPONENTS.imag,
+},
+]) {
+const thisComponentVisibility = componentVisibilities[thisPsiComponent];
+let wavenumberSliceScale;
+if (thisComponentVisibility === VISIBILITY_STATE.visible) {
+wavenumberSliceScale = wavenumberToNSlicesForSelected;
+} else {
+wavenumberSliceScale = wavenumberToNSlicesForUnselected;
+}
+setMaterialOpacity(material, thisComponentVisibility);
+mesh.geometry = new THREE.ParametricBufferGeometry(
+getWavefunctionFunction(kx, ky, mode),
+wavenumberSliceScale((kx ** 2 + ky ** 2) ** 0.5), // u components
+1, // v componenets
+);
+mesh.material = material;
+}
+const { pointers } = objs3d.pointers;
+setMaterialOpacity(
+PHASE_SELECTED_MATERIAL,
+componentVisibilities[PSI_COMPONENTS.phase],
+);
+for (const { x, xScaled, y, yScaled, mesh } of pointers) {
+const phase = psi(x, y, kx, ky, currentOmega).phase;
+mesh.position.set(
+xScaled + pointerHeight * Math.sin(-phase) * 0.7,
+yScaled + pointerHeight * Math.cos(-phase) * 0.7,
+pointerZScaled,
+);
+mesh.setRotationFromAxisAngle(new THREE.Vector3(0, 0, 1), phase);
+mesh.material = PHASE_SELECTED_MATERIAL;
+}
+renderer.render(scene, camera);
 if (typeof katex !== "undefined") {
+const omega = +sliders.omega.value;
 katex.render(`k_x=${floatFormatter(kx)}`, textSpans.kx);
+katex.render(`k_y=${floatFormatter(ky)}`, textSpans.ky);
 katex.render(`\\omega=${floatFormatter(omega)}`, textSpans.omega);
 }
 }
-update(0);
+d3.select(sliders.omega).on("input", () => update());
+update();
+let isAnimating = false;
 let animationFrame;
 // eslint-disable-next-line no-unused-vars
 function play() {
@@ -1611,6 +1609,7 @@ isAnimating = false;
 // eslint-disable-next-line no-unused-vars
 function reset() {
 stop();
+currentOmega = 0;
 update();
 }
 </script></body>
