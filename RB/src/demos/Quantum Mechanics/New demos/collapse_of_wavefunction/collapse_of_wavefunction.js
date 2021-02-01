@@ -45,14 +45,16 @@ var Clock = {
   start: function () {
     START.text("Pause");
     START.on("click", function () {
-      this.pause();
+      Clock.pause();
     });
     this.timer = setInterval(this.update, 100);
   },
 
   pause: function () {
     START.text("Resume");
-    START.on("click", this.start);
+    START.on("click", function () {
+      Clock.start();
+    });
     clearInterval(this.timer);
   },
 
