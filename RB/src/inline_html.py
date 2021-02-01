@@ -436,6 +436,21 @@ def main():
                 re.compile(regex) for regex in args.ignore_regex
             ]
 
+            # Add a regex for all things that look like URLs (maybe in the future I'll
+            # support downloading the contents and including them)
+            ignored_link_dest_regexes.append(
+                # https://stackoverflow.com/a/7160778
+                re.compile(
+                    r"^(?:http|ftp)s?://"  # http:// or https://
+                    + r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|"  # noqa:E501 domain...
+                    + r"localhost|"  # localhost...
+                    + r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"  # ...or ip
+                    + r"(?::\d+)?"  # optional port
+                    + r"(?:/?|[/?]\S+)$",
+                    re.IGNORECASE,
+                )
+            )
+
             inline(
                 infile,
                 outfile,
