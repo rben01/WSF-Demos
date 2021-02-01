@@ -9,8 +9,8 @@ var x = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   a = 0,
   m = 1,
   t = 0.02,
-  gaussian,
-  timer;
+  paused = true,
+  gaussian;
 
 g = SVG.append("g").attr("transform", `translate(50, 25)`);
 g.append("g")
@@ -27,9 +27,7 @@ var wave = g
   .attr("stroke", "#5df")
   .attr("stroke-width", 5);
 
-function prob(d, t, m, a, x) {}
-
-function get_gaussian(d, t, m, a) {
+function getGaussian(d, t, m, a) {
   var sigma = (d * Math.sqrt(1 + (t / (m * d ** 2)) ** 2)) / Math.sqrt(2);
   return function (x) {
     return (
@@ -39,51 +37,56 @@ function get_gaussian(d, t, m, a) {
   };
 }
 
-var Clock = {
-  t: 0.01,
+function start() {
+  let prevTimestampMS;
+  START.text("Pause");
+  START.on("click", pause);
 
-  start: function () {
-    START.text("Pause");
-    START.on("click", function () {
-      Clock.pause();
-    });
-    this.timer = setInterval(this.update, 100);
-  },
-
-  pause: function () {
-    START.text("Resume");
-    START.on("click", function () {
-      Clock.start();
-    });
-    clearInterval(this.timer);
-  },
-
-  reset: function () {
-    START.text("Start");
-    a = 0;
-    t = 0.02;
-  },
-
-  update: function () {
-    this.t += 0.01;
-    this.gaussian = get_gaussian(0.04, this.t, m, a);
-
-    var ar = [];
-    for (
-      var i = x.domain()[0];
-      i < x.domain()[1];
-      i += (x.domain()[1] - x.domain()[0]) / 1000
-    ) {
-      ar.push([x(i), y(this.gaussian(i))]);
+  function update(timestampMS) {
+    if (prevTimestampMS == undefined) {
+      prevTimestampMS = timestampMS;
     }
-    wave.attr("d", d3.line()(ar));
-  },
-};
 
-Clock.update();
-START.on("click", function () {
-  Clock.start();
-});
+    const elapsedMS = timestampMS - prevTimestampMS;
+    prevTimestampMS = timestampMS;
+
+    t += elapsedMS / 10000;
+    updateGraph();
+
+    experimentAnimationFrame = window.requestAnimationFrame(update);
+  }
+  experimentAnimationFrame = window.requestAnimationFrame(update);
+}
+
+function updateGraph() {
+  gaussian = getGaussian(0.04, t, m, a);
+  var ar = [];
+  for (
+    var i = x.domain()[0];
+    i < x.domain()[1];
+    i += (x.domain()[1] - x.domain()[0]) / 1000
+  ) {
+    ar.push([x(i), y(gaussian(i))]);
+  }
+  wave.attr("d", d3.line()(ar));
+}
+
+function pause() {
+  START.text("Resume");
+  window.cancelAnimationFrame(experimentAnimationFrame);
+}
+
+function reset() {
+  START.text("Start");
+  a = 0;
+  t = 0.02;
+  window.cancelAnimationFrame(experimentAnimationFrame);
+  updateGraph();
+}
+
+updateGraph();
+START.on("click", start);
+d3.select("#reset").on("click", reset);
 d3.select("#measure").on("click", () => {
   a = get_gaussian(0.04, t, m, a);
 });
