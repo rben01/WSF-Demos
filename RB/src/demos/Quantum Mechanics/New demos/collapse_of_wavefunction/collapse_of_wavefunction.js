@@ -100,6 +100,9 @@ function reset() {
   t = 0.02;
   prevTimestampMS = undefined;
   window.cancelAnimationFrame(experimentAnimationFrame);
+  x.domain([-10, 10]);
+  xaxis.call(d3.axisBottom(x).ticks(5));
+  d3.selectAll(".tick text").attr("class", "axis-label");
   updateGraph();
 }
 
