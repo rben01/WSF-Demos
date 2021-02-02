@@ -1,6 +1,7 @@
 const SVG = d3.select("#svg"),
   START = d3.select("#start"),
   RESET = d3.select("#reset"),
+  MASS = d3.select("#mass"),
   W = 1200,
   H = 750;
 
@@ -9,11 +10,13 @@ var x = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   a = 0,
   m = 1,
   t = 0.02,
+  paused = true,
   gaussian,
-  timer;
+  prevTimestampMS;
 
 g = SVG.append("g").attr("transform", `translate(50, 25)`);
-g.append("g")
+var xaxis = g
+  .append("g")
   .attr("class", "axis")
   .attr("transform", `translate(0, ${H})`)
   .call(d3.axisBottom(x).ticks(5));
@@ -27,9 +30,7 @@ var wave = g
   .attr("stroke", "#5df")
   .attr("stroke-width", 5);
 
-function prob(d, t, m, a, x) {}
-
-function get_gaussian(d, t, m, a) {
+function getGaussian(d, t, m, a) {
   var sigma = (d * Math.sqrt(1 + (t / (m * d ** 2)) ** 2)) / Math.sqrt(2);
   return function (x) {
     return (
@@ -39,53 +40,78 @@ function get_gaussian(d, t, m, a) {
   };
 }
 
-var Clock = {
-  t: 0.01,
+function start() {
+  START.text("Pause");
+  START.on("click", pause);
 
-  start: function () {
-    START.text("Pause");
-    START.on("click", function () {
-      this.pause();
-    });
-    this.timer = setInterval(this.update, 100);
-  },
-
-  pause: function () {
-    START.text("Resume");
-    START.on("click", this.start);
-    clearInterval(this.timer);
-  },
-
-  reset: function () {
-    START.text("Start");
-    a = 0;
-    t = 0.02;
-  },
-
-  update: function () {
-    this.t += 0.01;
-    this.gaussian = get_gaussian(0.04, this.t, m, a);
-
-    var ar = [];
-    for (
-      var i = x.domain()[0];
-      i < x.domain()[1];
-      i += (x.domain()[1] - x.domain()[0]) / 1000
-    ) {
-      ar.push([x(i), y(this.gaussian(i))]);
+  function update(timestampMS) {
+    if (prevTimestampMS == undefined) {
+      prevTimestampMS = timestampMS;
     }
-    wave.attr("d", d3.line()(ar));
-  },
-};
 
-Clock.update();
-START.on("click", function () {
-  Clock.start();
-});
-d3.select("#measure").on("click", () => {
-  a = get_gaussian(0.04, t, m, a);
-});
-d3.select("#mass").on("input", () => {
-  m = this.value;
+    const elapsedMS = timestampMS - prevTimestampMS;
+    prevTimestampMS = timestampMS;
+
+    t += elapsedMS / 10000;
+    updateGraph();
+
+    experimentAnimationFrame = window.requestAnimationFrame(update);
+  }
+  experimentAnimationFrame = window.requestAnimationFrame(update);
+}
+
+function updateGraph() {
+  gaussian = getGaussian(0.04, t, m, a);
+  var ar = [];
+  for (
+    var i = x.domain()[0];
+    i < x.domain()[1];
+    i += (x.domain()[1] - x.domain()[0]) / 1000
+  ) {
+    ar.push([x(i), y(gaussian(i))]);
+  }
+  wave.attr("d", d3.line()(ar));
+}
+
+function measure() {
+  var sigma = (0.04 * Math.sqrt(1 + (t / (m * 0.04 ** 2)) ** 2)) / Math.sqrt(2),
+    u1 = Math.random(),
+    u2 = Math.random();
+  a = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + a;
+  var b = Math.ceil(Math.abs(a) / 10) * 10;
+  x.domain([-b, b]);
+  xaxis.call(d3.axisBottom(x).ticks(5));
+  d3.selectAll(".tick text").attr("class", "axis-label");
+  t = 0.02;
+  prevTimestampMS = undefined;
+  updateGraph();
+}
+
+function pause() {
+  START.text("Resume");
+  START.on("click", start);
+  window.cancelAnimationFrame(experimentAnimationFrame);
+}
+
+function reset() {
+  START.text("Start");
+  START.on("click", start);
+  a = 0;
+  t = 0.02;
+  prevTimestampMS = undefined;
+  window.cancelAnimationFrame(experimentAnimationFrame);
+  x.domain([-10, 10]);
+  xaxis.call(d3.axisBottom(x).ticks(5));
+  d3.selectAll(".tick text").attr("class", "axis-label");
+  updateGraph();
+}
+
+updateGraph();
+START.on("click", start);
+RESET.on("click", reset);
+d3.select("#measure").on("click", measure);
+MASS.on("input", () => {
+  m = MASS.node().value;
+  updateGraph();
 });
 d3.selectAll(".tick text").attr("class", "axis-label");
