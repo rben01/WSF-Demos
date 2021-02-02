@@ -1,6 +1,7 @@
 const SVG = d3.select("#svg"),
   START = d3.select("#start"),
   RESET = d3.select("#reset"),
+  MASS = d3.select("#mass"),
   W = 1200,
   H = 750;
 
@@ -10,7 +11,8 @@ var x = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   m = 1,
   t = 0.02,
   paused = true,
-  gaussian;
+  gaussian,
+  prevTimestampMS;
 
 g = SVG.append("g").attr("transform", `translate(50, 25)`);
 g.append("g")
@@ -38,7 +40,6 @@ function getGaussian(d, t, m, a) {
 }
 
 function start() {
-  let prevTimestampMS;
   START.text("Pause");
   START.on("click", pause);
 
@@ -73,6 +74,7 @@ function updateGraph() {
 
 function pause() {
   START.text("Resume");
+  START.on("click", start);
   window.cancelAnimationFrame(experimentAnimationFrame);
 }
 
@@ -80,17 +82,19 @@ function reset() {
   START.text("Start");
   a = 0;
   t = 0.02;
+  prevTimestampMS = undefined;
   window.cancelAnimationFrame(experimentAnimationFrame);
   updateGraph();
 }
 
 updateGraph();
 START.on("click", start);
-d3.select("#reset").on("click", reset);
+RESET.on("click", reset);
 d3.select("#measure").on("click", () => {
   a = get_gaussian(0.04, t, m, a);
 });
-d3.select("#mass").on("input", () => {
-  m = this.value;
+MASS.on("input", () => {
+  m = MASS.node().value;
+  updateGraph();
 });
 d3.selectAll(".tick text").attr("class", "axis-label");
