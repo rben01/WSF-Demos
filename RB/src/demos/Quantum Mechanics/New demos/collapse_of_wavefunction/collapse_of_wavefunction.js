@@ -77,7 +77,7 @@ function measure() {
   var sigma = (0.04 * Math.sqrt(1 + (t / (m * 0.04 ** 2)) ** 2)) / Math.sqrt(2),
     u1 = Math.random(),
     u2 = Math.random();
-  a = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  a = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + a;
   var b = Math.ceil(Math.abs(a) / 10) * 10;
   x.domain([-b, b]);
   xaxis.call(d3.axisBottom(x).ticks(5));
