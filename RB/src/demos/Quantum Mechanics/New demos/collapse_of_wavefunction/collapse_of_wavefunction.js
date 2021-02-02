@@ -15,7 +15,8 @@ var x = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   prevTimestampMS;
 
 g = SVG.append("g").attr("transform", `translate(50, 25)`);
-g.append("g")
+var xaxis = g
+  .append("g")
   .attr("class", "axis")
   .attr("transform", `translate(0, ${H})`)
   .call(d3.axisBottom(x).ticks(5));
@@ -72,6 +73,20 @@ function updateGraph() {
   wave.attr("d", d3.line()(ar));
 }
 
+function measure() {
+  var sigma = (0.04 * Math.sqrt(1 + (t / (m * 0.04 ** 2)) ** 2)) / Math.sqrt(2),
+    u1 = Math.random(),
+    u2 = Math.random();
+  a = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2);
+  var b = Math.ceil(Math.abs(a) / 10) * 10;
+  x.domain([-b, b]);
+  xaxis.call(d3.axisBottom(x).ticks(5));
+  d3.selectAll(".tick text").attr("class", "axis-label");
+  t = 0.02;
+  prevTimestampMS = undefined;
+  updateGraph();
+}
+
 function pause() {
   START.text("Resume");
   START.on("click", start);
@@ -90,9 +105,7 @@ function reset() {
 updateGraph();
 START.on("click", start);
 RESET.on("click", reset);
-d3.select("#measure").on("click", () => {
-  a = get_gaussian(0.04, t, m, a);
-});
+d3.select("#measure").on("click", measure);
 MASS.on("input", () => {
   m = MASS.node().value;
   updateGraph();
