@@ -95,6 +95,7 @@ function pause() {
 
 function reset() {
   START.text("Start");
+  START.on("click", start);
   a = 0;
   t = 0.02;
   prevTimestampMS = undefined;
