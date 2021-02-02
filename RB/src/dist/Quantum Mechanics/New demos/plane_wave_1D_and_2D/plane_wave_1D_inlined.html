@@ -141,6 +141,9 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container button {
+flex: 1;
+}
 .radio-button-container.vertical {
 display: flex;
 flex-direction: column;
@@ -292,6 +295,7 @@ cursor: pointer;
 }
 .radio-button-container.horizontal button {
 flex: 1;
+white-space: nowrap;
 }
 .grid-left-right {
 grid-template-columns: max-content 1fr;
@@ -357,13 +361,11 @@ background-color: var(--color-phase);
 <span>\(\psi(x,t)=e^{i(kx-\omega t)}=e^{i\phi}\)</span>
 <span>Dispersion</span>
 <div class="radio-button-container horizontal">
-<span><button button-checked="" class="button" id="dispersion-nonrel" onclick="setDispersionNonrelativistic()">
-Nonrelativistic<br/>\(|\omega|=\hbar k^2/2m\)
-</button></span><span><button class="button" id="dispersion-rela" onclick="setDispersionRelativistic()">
-Relativistic<br/>\(|\omega|=ck\)
-</button></span><span><button class="button" id="dispersion-choose" onclick="setDispersionFree()">
+<button button-checked="" class="button" id="dispersion-nonrel" onclick="setDispersionNonrelativistic()">
+Nonrelativistic<br/>\(|\omega|=\hbar k^2/2m\)</button><button class="button" id="dispersion-rela" onclick="setDispersionRelativistic()">
+Relativistic<br/>\(|\omega|=ck\)</button><button class="button" id="dispersion-choose" onclick="setDispersionFree()">
 Choose your<br/>own \(\omega\)
-</button></span>
+</button>
 </div>
 <span>Wavenumber (<span id="text-kx"></span>)</span>
 <span><input class="wavenumber-slider" id="slider-wavenumber" type="range"/></span>
@@ -746,6 +748,7 @@ borderThickness,
 borderColor,
 backgroundColor,
 textColor,
+depthWrite,
 } = {},
 ) {
 // const _black = { r: 0, g: 0, b: 0, a: 1.0 };
@@ -756,6 +759,7 @@ borderThickness = borderThickness ?? 0;
 borderColor = borderColor ?? _three_utils_clear;
 backgroundColor = backgroundColor ?? _three_utils_clear;
 textColor = textColor ?? _three_utils_white;
+depthWrite = depthWrite ?? false;
 const canvas = document.createElement("canvas");
 const context = canvas.getContext("2d");
 context.font = `${fontweight} ${fontsize}px ${fontface}`;
@@ -782,6 +786,7 @@ map: texture,
 const sprite = new THREE.Sprite(spriteMaterial);
 sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
 sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
 return sprite;
 }
 const _three_utils_upZ = new THREE.Vector3(0, 0, 1);

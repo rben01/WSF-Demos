@@ -49,6 +49,7 @@
 			}
 			.radio-button-container.horizontal button {
 				flex: 1;
+				white-space: nowrap;
 			}
 			.grid-left-right {
 				grid-template-columns: max-content 1fr;
@@ -115,32 +116,26 @@
 					<span>\(\psi(x,t)=e^{i(kx-\omega t)}=e^{i\phi}\)</span>
 					<span>Dispersion</span>
 					<div class="radio-button-container horizontal">
-						<span
-							><button
-								id="dispersion-nonrel"
-								class="button"
-								onclick="setDispersionNonrelativistic()"
-								button-checked
-							>
-								Nonrelativistic<br />\(|\omega|=\hbar k^2/2m\)
-							</button></span
-						><span
-							><button
-								id="dispersion-rela"
-								class="button"
-								onclick="setDispersionRelativistic()"
-							>
-								Relativistic<br />\(|\omega|=ck\)
-							</button></span
-						><span
-							><button
-								id="dispersion-choose"
-								class="button"
-								onclick="setDispersionFree()"
-							>
-								Choose your<br />own \(\omega\)
-							</button></span
+						<button
+							id="dispersion-nonrel"
+							class="button"
+							onclick="setDispersionNonrelativistic()"
+							button-checked
 						>
+							Nonrelativistic<br />\(|\omega|=\hbar k^2/2m\)</button
+						><button
+							id="dispersion-rela"
+							class="button"
+							onclick="setDispersionRelativistic()"
+						>
+							Relativistic<br />\(|\omega|=ck\)</button
+						><button
+							id="dispersion-choose"
+							class="button"
+							onclick="setDispersionFree()"
+						>
+							Choose your<br />own \(\omega\)
+						</button>
 					</div>
 					<span>Wavenumber (<span id="text-kx"></span>)</span>
 					<span
