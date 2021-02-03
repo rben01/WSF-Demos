@@ -165,3 +165,27 @@ function makeThreeCameraDrag({
 		}
 	});
 }
+
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+	canvas,
+	camera,
+	scene,
+	renderer,
+	pointOfFocus,
+	up, // Must be normalized
+	dragSpeed,
+	callback,
+}) {
+	d3.select(canvas).call(
+		makeThreeCameraDrag({
+			camera,
+			scene,
+			renderer,
+			pointOfFocus,
+			up,
+			dragSpeed,
+			callback,
+		}),
+	);
+}

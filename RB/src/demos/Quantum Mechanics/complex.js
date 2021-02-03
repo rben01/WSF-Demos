@@ -72,6 +72,13 @@ class Complex {
 		return this.constructor.mul(this, ...others);
 	}
 
+	static div(z1, z2) {
+		if (typeof z1 === "number") {
+			z1 = Complex.fromReal(z1);
+		}
+		return z1.div(z2);
+	}
+
 	div(other) {
 		if (typeof other === "number") {
 			return new this.constructor(this.magnitude * other, this.phase);
@@ -87,8 +94,12 @@ class Complex {
 		let re = 0;
 		let im = 0;
 		for (const arg of args) {
-			re += arg.re;
-			im += arg.im;
+			if (typeof arg === "number") {
+				re += arg;
+			} else {
+				re += arg.re;
+				im += arg.im;
+			}
 		}
 		return this.fromCartesian(re, im);
 	}
@@ -98,16 +109,23 @@ class Complex {
 	}
 
 	static sub(z1, z2) {
-		return this.fromCartesian(z1.re - z2.re, z1.im - z2.im);
+		if (typeof z1 === "number") {
+			z1 = Complex.fromReal(z1);
+		}
+		return z1.sub(z2);
 	}
 
 	sub(other) {
+		if (typeof other === "number") {
+			other = Complex.fromReal(other);
+		}
+
 		return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
 	}
 
 	static exp(z) {
 		if (typeof z === "number") {
-			return Math.exp(z);
+			return Complex.fromReal(Math.exp(z));
 		}
 
 		return z.exp();
