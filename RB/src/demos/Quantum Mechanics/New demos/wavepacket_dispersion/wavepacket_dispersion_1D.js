@@ -262,6 +262,7 @@ function populateWavefunctionPoints(m, sigma, p, t) {
 	const xMin = X_MIN;
 	const xMax = X_MAX;
 
+	// Page 9 of this:
 	// https://www.reed.edu/physics/faculty/wheeler/documents/Quantum%20Mechanics/Miscellaneous%20Essays/Gaussian%20Wavepackets.pdf
 	// A variable name ends in an underscore <==> it's complex
 	const tau = (2 * m * sigma ** 2) / H_BAR;

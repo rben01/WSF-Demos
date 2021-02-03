@@ -5,8 +5,10 @@ class Complex {
 	}
 
 	static from(other) {
-		if (other.constructor === this) {
-			return other;
+		if (other.magnitude !== undefined || other.phase !== undefined) {
+			return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+		} else if (other.re !== undefined || other.im !== undefined) {
+			return this.fromCartesian(other.re ?? 0, other.im ?? 0);
 		} else if (typeof other === "number") {
 			return this.fromReal(other);
 		} else {
@@ -52,17 +54,21 @@ class Complex {
 		return this.constructor.fromPolar(this._$r, -this._$theta);
 	}
 
+	toPolar() {
+		return { magnitude: this.magnitude, phase: this.phase };
+	}
+
+	toCartesian() {
+		return { re: this.re, im: this.im };
+	}
+
 	static mul(...args) {
 		let magnitude = 1;
 		let phase = 0;
 
 		for (const arg of args) {
-			if (typeof arg === "number") {
-				magnitude *= arg;
-			} else {
-				magnitude *= arg.magnitude;
-				phase += arg.phase;
-			}
+			magnitude *= arg.magnitude ?? arg;
+			phase += arg.phase ?? 0;
 		}
 
 		return this.fromPolar(magnitude, phase);
@@ -73,33 +79,22 @@ class Complex {
 	}
 
 	static div(z1, z2) {
-		if (typeof z1 === "number") {
-			z1 = Complex.fromReal(z1);
-		}
-		return z1.div(z2);
+		return this.fromPolar(
+			(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+			(z1.phase ?? 0) - (z2.phase ?? 0),
+		);
 	}
 
 	div(other) {
-		if (typeof other === "number") {
-			return new this.constructor(this.magnitude * other, this.phase);
-		} else {
-			return new this.constructor(
-				this.magnitude / other.magnitude,
-				this.phase - other.phase,
-			);
-		}
+		return this.constructor.div(this, other);
 	}
 
 	static add(...args) {
 		let re = 0;
 		let im = 0;
 		for (const arg of args) {
-			if (typeof arg === "number") {
-				re += arg;
-			} else {
-				re += arg.re;
-				im += arg.im;
-			}
+			re += arg.re ?? arg;
+			im += arg.im ?? 0;
 		}
 		return this.fromCartesian(re, im);
 	}
@@ -109,18 +104,14 @@ class Complex {
 	}
 
 	static sub(z1, z2) {
-		if (typeof z1 === "number") {
-			z1 = Complex.fromReal(z1);
-		}
-		return z1.sub(z2);
+		return this.fromCartesian(
+			(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+			(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+		);
 	}
 
 	sub(other) {
-		if (typeof other === "number") {
-			other = Complex.fromReal(other);
-		}
-
-		return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
+		return this.constructor.sub(this, other);
 	}
 
 	static exp(z) {
