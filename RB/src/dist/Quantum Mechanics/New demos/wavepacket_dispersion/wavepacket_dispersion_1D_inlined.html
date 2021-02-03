@@ -340,14 +340,6 @@ stroke-width: 5px;
 <div class="grid-left-right">
 <div class="controls-container">
 <div class="controls">
-<span>Wavepacket function</span>
-<span>\(\psi(x,t)=\left(\frac{\sigma}{\sigma+\frac{i\hbar
-t}{m}}\right)^3e^{-\frac{x^2}{2(\sigma + \frac{i\hbar
-t}{m})}}\)</span>
-<span>Probability distribution</span>
-<span>\(|\psi(x,t)|^2=\left(\frac{\sigma^2}{\sigma^2+\left(\frac{\hbar
-t}{m}\right)^2}\right)^{\frac{3}{2}}e^{-\frac{\sigma
-x^2}{\sigma^2+\left(\frac{\hbar t}{m}\right)^2}}\)</span>
 <span>Particle mass: <span id="text-m">m</span></span>
 <span><input class="slider" id="slider-m" type="range"/></span>
 <span>Wavepacket initial width:
@@ -1072,38 +1064,12 @@ color: 0x2277ff,
 side: THREE.DoubleSide,
 transparent: false,
 });
-const INTERSECTOR_MATERIAL = new THREE.MeshLambertMaterial({
-color: 0xee55dd,
-side: THREE.DoubleSide,
-transparent: false,
-});
-const REAL_PART_MATERIAL = new THREE.MeshBasicMaterial({
-color: 0x55ddff,
-side: THREE.DoubleSide,
-transparent: false,
-});
-const IMAG_PART_MATERIAL = new THREE.MeshBasicMaterial({
-color: 0xf3c002,
-side: THREE.DoubleSide,
-transparent: false,
-});
 camera.up.copy(CAMERA_UP);
 camera.position.copy(CAMERA_DEFAULT_POSITION);
 camera.lookAt(CAMERA_POINT_OF_FOCUS);
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
 const xScale2D = d3.scaleLinear([xScale3D(X_MIN), xScale3D(X_MAX)], [0, WIDTH]);
-const yScale2D = d3.scaleLinear([-0.15, 1.7], [HEIGHT, 0]);
-const curveGenerator = d3
-.line()
-.curve(d3.curveCatmullRom)
-.x(p => xScale2D(p[0]))
-.y(p => yScale2D(p[1]));
-const phaseLineGenerator = d3
-.line()
-.curve(d3.curveLinear)
-.defined(p => p !== null)
-.x(p => xScale2D(p[0]))
-.y(p => yScale2D(p[1]));
+const yScale2D = d3.scaleLinear([-0.15, 1.7], [HEIGHT - 25, 0]);
 let currentTime = 0;
 let isAnimating = false;
 const sliders = {
@@ -1445,6 +1411,7 @@ let animationFrame;
 // eslint-disable-next-line no-unused-vars
 function play() {
 isAnimating = true;
+d3.selectAll(".slider").property("disabled", true);
 let prevTimestampMS;
 function step(timestampMS) {
 if (prevTimestampMS === undefined) {
@@ -1466,6 +1433,7 @@ isAnimating = false;
 // eslint-disable-next-line no-unused-vars
 function reset() {
 pause();
+d3.selectAll(".slider").property("disabled", false);
 currentTime = 0;
 update();
 }

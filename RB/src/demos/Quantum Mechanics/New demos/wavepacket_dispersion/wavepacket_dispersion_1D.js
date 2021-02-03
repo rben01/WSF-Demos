@@ -94,21 +94,6 @@ const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
 	side: THREE.DoubleSide,
 	transparent: false,
 });
-const INTERSECTOR_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0xee55dd,
-	side: THREE.DoubleSide,
-	transparent: false,
-});
-const REAL_PART_MATERIAL = new THREE.MeshBasicMaterial({
-	color: 0x55ddff,
-	side: THREE.DoubleSide,
-	transparent: false,
-});
-const IMAG_PART_MATERIAL = new THREE.MeshBasicMaterial({
-	color: 0xf3c002,
-	side: THREE.DoubleSide,
-	transparent: false,
-});
 
 camera.up.copy(CAMERA_UP);
 camera.position.copy(CAMERA_DEFAULT_POSITION);
@@ -117,20 +102,7 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
 
 const xScale2D = d3.scaleLinear([xScale3D(X_MIN), xScale3D(X_MAX)], [0, WIDTH]);
-const yScale2D = d3.scaleLinear([-0.15, 1.7], [HEIGHT, 0]);
-
-const curveGenerator = d3
-	.line()
-	.curve(d3.curveCatmullRom)
-	.x(p => xScale2D(p[0]))
-	.y(p => yScale2D(p[1]));
-
-const phaseLineGenerator = d3
-	.line()
-	.curve(d3.curveLinear)
-	.defined(p => p !== null)
-	.x(p => xScale2D(p[0]))
-	.y(p => yScale2D(p[1]));
+const yScale2D = d3.scaleLinear([-0.15, 1.7], [HEIGHT - 25, 0]);
 
 let currentTime = 0;
 let isAnimating = false;
@@ -524,6 +496,8 @@ let animationFrame;
 function play() {
 	isAnimating = true;
 
+	d3.selectAll(".slider").property("disabled", true);
+
 	let prevTimestampMS;
 	function step(timestampMS) {
 		if (prevTimestampMS === undefined) {
@@ -550,6 +524,7 @@ function pause() {
 // eslint-disable-next-line no-unused-vars
 function reset() {
 	pause();
+	d3.selectAll(".slider").property("disabled", false);
 	currentTime = 0;
 	update();
 }
