@@ -9,6 +9,7 @@
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
 --color-quaternary: #e5d;
+--color-graphic-primary: #27f;
 }
 body {
 /* margin-left: 10px;
@@ -23,6 +24,7 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+column-gap: 40px;
 }
 .grid-left-right-2 {
 display: grid;
@@ -133,6 +135,9 @@ display: flex;
 flex-direction: row;
 align-content: stretch;
 line-height: initial;
+}
+.radio-button-container button {
+flex: 1;
 }
 .radio-button-container.vertical {
 display: flex;
@@ -699,6 +704,7 @@ antialias: true,
 powerPreference: "high-performance",
 });
 renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);

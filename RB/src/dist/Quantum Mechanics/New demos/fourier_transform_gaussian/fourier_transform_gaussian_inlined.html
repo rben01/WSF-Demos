@@ -12,6 +12,7 @@
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
 --color-quaternary: #e5d;
+--color-graphic-primary: #27f;
 }
 body {
 /* margin-left: 10px;
@@ -26,6 +27,7 @@ line-height: 1.8em;
 display: grid;
 grid-template-columns: 13em 1fr;
 align-items: start;
+column-gap: 40px;
 }
 .grid-left-right-2 {
 display: grid;
@@ -136,6 +138,9 @@ display: flex;
 flex-direction: row;
 align-content: stretch;
 line-height: initial;
+}
+.radio-button-container button {
+flex: 1;
 }
 .radio-button-container.vertical {
 display: flex;
@@ -713,9 +718,9 @@ throw new Error(`Argument ${other} not understood in Complex.from`);
 static fromPolar(magnitude, phase) {
 return new this(magnitude, phase);
 }
-static fromCartesian(x, y) {
-const magnitude = (x ** 2 + y ** 2) ** 0.5;
-const phase = Math.atan2(y, x);
+static fromCartesian(re, im) {
+const magnitude = (re ** 2 + im ** 2) ** 0.5;
+const phase = Math.atan2(im, re);
 return new this(magnitude, phase);
 }
 static fromReal(realNumber) {
@@ -730,10 +735,10 @@ return this._$r;
 get phase() {
 return this._$theta;
 }
-get x() {
+get re() {
 return this._$r * Math.cos(this._$theta);
 }
-get y() {
+get im() {
 return this._$r * Math.sin(this._$theta);
 }
 conj() {
@@ -755,6 +760,12 @@ return this.fromPolar(magnitude, phase);
 mul(...others) {
 return this.constructor.mul(this, ...others);
 }
+static div(z1, z2) {
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+return z1.div(z2);
+}
 div(other) {
 if (typeof other === "number") {
 return new this.constructor(this.magnitude * other, this.phase);
@@ -766,32 +777,42 @@ this.phase - other.phase,
 }
 }
 static add(...args) {
-let x = 0;
-let y = 0;
+let re = 0;
+let im = 0;
 for (const arg of args) {
-x += arg.x;
-y += arg.y;
+if (typeof arg === "number") {
+re += arg;
+} else {
+re += arg.re;
+im += arg.im;
 }
-return this.fromCartesian(x, y);
+}
+return this.fromCartesian(re, im);
 }
 add(...others) {
 return this.constructor.add(this, ...others);
 }
 static sub(z1, z2) {
-return this.fromCartesian(z1.x - z2.x, z1.y - z2.y);
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+return z1.sub(z2);
 }
 sub(other) {
-return this.constructor.fromCartesian(this.x - other.x, this.y - other.y);
+if (typeof other === "number") {
+other = Complex.fromReal(other);
+}
+return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
 }
 static exp(z) {
 if (typeof z === "number") {
-return Math.exp(z);
+return Complex.fromReal(Math.exp(z));
 }
 return z.exp();
 }
 exp() {
-const magnitude = Math.exp(this.x);
-const phase = this.y;
+const magnitude = Math.exp(this.re);
+const phase = this.im;
 return Complex.fromPolar(magnitude, phase);
 }
 static cis(z) {
@@ -801,7 +822,8 @@ return Complex.fromPolar(1, z);
 return z.cis();
 }
 cis() {
-return Complex.fromCartesian(0, 1).mul(this).exp();
+// exp(i*(x+iy)) = e^(-y)e^(ix)
+return Complex.fromPolar(Math.exp(-this.im), this.re);
 }
 pow(realNumber) {
 const magnitude = Math.pow(this._$r, realNumber);

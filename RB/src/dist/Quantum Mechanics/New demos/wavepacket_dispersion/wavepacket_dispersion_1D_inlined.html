@@ -721,6 +721,7 @@ borderThickness,
 borderColor,
 backgroundColor,
 textColor,
+aspectRatio,
 depthWrite,
 } = {},
 ) {
@@ -732,6 +733,7 @@ borderThickness = borderThickness ?? 0;
 borderColor = borderColor ?? _three_utils_clear;
 backgroundColor = backgroundColor ?? _three_utils_clear;
 textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
 depthWrite = depthWrite ?? false;
 const canvas = document.createElement("canvas");
 const context = canvas.getContext("2d");
@@ -757,7 +759,7 @@ map: texture,
 // useScreenCoordinates: false,
 });
 const sprite = new THREE.Sprite(spriteMaterial);
-sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
 sprite.center.set(0, 1);
 sprite.material.depthWrite = depthWrite;
 return sprite;
@@ -1036,6 +1038,7 @@ antialias: true,
 powerPreference: "high-performance",
 });
 renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(WIDTH, HEIGHT_3D);

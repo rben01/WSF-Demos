@@ -53,6 +53,7 @@ const renderer = new THREE.WebGLRenderer({
 	powerPreference: "high-performance",
 });
 renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;

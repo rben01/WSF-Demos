@@ -141,6 +141,9 @@ flex-direction: row;
 align-content: stretch;
 line-height: initial;
 }
+.radio-button-container button {
+flex: 1;
+}
 .radio-button-container.vertical {
 display: flex;
 flex-direction: column;
@@ -731,6 +734,7 @@ borderThickness,
 borderColor,
 backgroundColor,
 textColor,
+aspectRatio,
 depthWrite,
 } = {},
 ) {
@@ -742,6 +746,7 @@ borderThickness = borderThickness ?? 0;
 borderColor = borderColor ?? _three_utils_clear;
 backgroundColor = backgroundColor ?? _three_utils_clear;
 textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
 depthWrite = depthWrite ?? false;
 const canvas = document.createElement("canvas");
 const context = canvas.getContext("2d");
@@ -767,7 +772,7 @@ map: texture,
 // useScreenCoordinates: false,
 });
 const sprite = new THREE.Sprite(spriteMaterial);
-sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
 sprite.center.set(0, 1);
 sprite.material.depthWrite = depthWrite;
 return sprite;
@@ -843,6 +848,29 @@ callback();
 }
 });
 }
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
 </script><script type="text/javascript">class Complex {
 constructor(magnitude, phase) {
 this._$r = magnitude;
@@ -902,6 +930,12 @@ return this.fromPolar(magnitude, phase);
 mul(...others) {
 return this.constructor.mul(this, ...others);
 }
+static div(z1, z2) {
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+return z1.div(z2);
+}
 div(other) {
 if (typeof other === "number") {
 return new this.constructor(this.magnitude * other, this.phase);
@@ -916,8 +950,12 @@ static add(...args) {
 let re = 0;
 let im = 0;
 for (const arg of args) {
+if (typeof arg === "number") {
+re += arg;
+} else {
 re += arg.re;
 im += arg.im;
+}
 }
 return this.fromCartesian(re, im);
 }
@@ -925,14 +963,20 @@ add(...others) {
 return this.constructor.add(this, ...others);
 }
 static sub(z1, z2) {
-return this.fromCartesian(z1.re - z2.re, z1.im - z2.im);
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+return z1.sub(z2);
 }
 sub(other) {
+if (typeof other === "number") {
+other = Complex.fromReal(other);
+}
 return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
 }
 static exp(z) {
 if (typeof z === "number") {
-return Math.exp(z);
+return Complex.fromReal(Math.exp(z));
 }
 return z.exp();
 }
@@ -1003,6 +1047,7 @@ antialias: true,
 powerPreference: "high-performance",
 });
 renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(WIDTH, HEIGHT);

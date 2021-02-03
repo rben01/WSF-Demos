@@ -30,6 +30,7 @@ function makeTextSprite(
 		borderColor,
 		backgroundColor,
 		textColor,
+		aspectRatio,
 		depthWrite,
 	} = {},
 ) {
@@ -42,9 +43,11 @@ function makeTextSprite(
 	borderColor = borderColor ?? _three_utils_clear;
 	backgroundColor = backgroundColor ?? _three_utils_clear;
 	textColor = textColor ?? _three_utils_white;
+	aspectRatio = aspectRatio ?? 1;
 	depthWrite = depthWrite ?? false;
 
 	const canvas = document.createElement("canvas");
+
 	const context = canvas.getContext("2d");
 	context.font = `${fontweight} ${fontsize}px ${fontface}`;
 	const metrics = context.measureText(message);
@@ -73,7 +76,7 @@ function makeTextSprite(
 		// useScreenCoordinates: false,
 	});
 	const sprite = new THREE.Sprite(spriteMaterial);
-	sprite.scale.set(0.5 * fontsize, 0.25 * fontsize, 0.75 * fontsize);
+	sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
 	sprite.center.set(0, 1);
 
 	sprite.material.depthWrite = depthWrite;
