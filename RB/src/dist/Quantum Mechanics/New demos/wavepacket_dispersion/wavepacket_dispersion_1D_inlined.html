@@ -335,6 +335,9 @@ stroke-width: 8px;
 stroke: white;
 stroke-width: 5px;
 }
+#plots {
+margin-top: 10px;
+}
 </style></head>
 <body>
 <div class="grid-left-right">
@@ -356,7 +359,7 @@ Reset
 </span>
 </div>
 </div>
-<div>
+<div id="plots">
 <canvas class="draggable" id="plot-3D"></canvas>
 <svg id="plot-2D"></svg>
 </div>
@@ -984,8 +987,8 @@ return this.constructor.fromPolar(magnitude, phase);
 Complex.i = Complex.fromImag(1);
 </script><script type="text/javascript">/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex */
 const WIDTH = 800;
-const HEIGHT = 400;
-const HEIGHT_3D = 300;
+const HEIGHT = 350;
+const HEIGHT_3D = 350;
 const X_MIN = -62.2;
 const X_0 = 0;
 const X_MAX = -X_MIN;

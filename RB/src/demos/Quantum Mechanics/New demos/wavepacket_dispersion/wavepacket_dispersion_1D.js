@@ -1,7 +1,7 @@
 /* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex */
 const WIDTH = 800;
-const HEIGHT = 400;
-const HEIGHT_3D = 300;
+const HEIGHT = 350;
+const HEIGHT_3D = 350;
 
 const X_MIN = -62.2;
 const X_0 = 0;
