@@ -124,12 +124,15 @@ function l2Norm(...vector) {
 }
 
 function __matMulHelper(mat1, mat2) {
-	if (typeof mat1[0].length === "undefined") {
+	const mat1IsVector = typeof mat1[0].length === "undefined";
+	if (mat1IsVector) {
+		// Convert to row vector if necessary
 		mat1 = [mat1];
 	}
 
-	const squeezeAns = typeof mat2[0].length === "undefined";
-	if (squeezeAns) {
+	const mat2IsVector = typeof mat2[0].length === "undefined";
+	if (mat2IsVector) {
+		// Convert to column vector if necessary
 		mat2 = mat2.map(elem => [elem]);
 	}
 
@@ -150,7 +153,15 @@ function __matMulHelper(mat1, mat2) {
 		ans.push(rowAns);
 	}
 
-	if (squeezeAns) {
+	if (mat1IsVector) {
+		if (mat2IsVector) {
+			// ans will look like [[x]]
+			return ans[0][0];
+		}
+		// ans will look like [[x, y, z, ...]]
+		return ans[0];
+	} else if (mat2IsVector) {
+		// ans will look like [[x], [y], [z], ...]
 		return ans.map(row => row[0]);
 	}
 

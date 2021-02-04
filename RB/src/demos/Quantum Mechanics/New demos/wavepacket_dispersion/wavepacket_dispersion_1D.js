@@ -45,8 +45,8 @@ const CAMERA_EXTENT = 11;
 const camera = new THREE.OrthographicCamera(
 	-CAMERA_EXTENT,
 	CAMERA_EXTENT,
-	(CAMERA_EXTENT * HEIGHT) / WIDTH,
-	(-CAMERA_EXTENT * HEIGHT) / WIDTH,
+	(CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
+	(-CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
 	-50,
 	50,
 );
@@ -482,7 +482,7 @@ function update(dtMS) {
 	populateWavefunctionPoints(m, sigma, p, currentTime);
 
 	applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
-	update3D();
+	update3D(m, sigma, p);
 
 	if (typeof katex !== "undefined") {
 		katex.render(`m=${floatFormatter(m)}`, textSpans.m);
