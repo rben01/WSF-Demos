@@ -1,4 +1,4 @@
-/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul */
+/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul Line2D */
 const WIDTH = 800;
 const HEIGHT_3D = 700;
 
@@ -68,8 +68,8 @@ renderer.setSize(WIDTH, HEIGHT_3D);
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));
 scene.add(
 	(() => {
-		const pointLight = new THREE.PointLight(0xffffff, 1);
-		pointLight.position.set(2, -3, 5);
+		const pointLight = new THREE.PointLight(0xffffff, 0.8);
+		pointLight.position.set(2, -3, 20);
 		return pointLight;
 	})(),
 );
@@ -105,7 +105,7 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 let currentTime = 0;
 let isAnimating = false;
 
-const MIN_SIGMA = 0.5;
+const MIN_SIGMA = 1;
 const MAX_SIGMA = 2;
 const DEFAULT_SIGMA = 1;
 const MIN_P = -3;
@@ -133,7 +133,7 @@ const sliders = {
 		slider.min = MIN_SIGMA;
 		slider.max = MAX_SIGMA;
 		slider.step = 0.01;
-		slider.value = 0.7;
+		slider.value = DEFAULT_SIGMA;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -151,7 +151,7 @@ const sliders = {
 		slider.min = MIN_SIGMA;
 		slider.max = MAX_SIGMA;
 		slider.step = 0.01;
-		slider.value = 1.3;
+		slider.value = DEFAULT_SIGMA;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -166,10 +166,10 @@ const sliders = {
 	})(),
 	sigmaCorr: (() => {
 		const slider = document.getElementById("slider-sigma-corr");
-		slider.min = -0.75;
-		slider.max = 0.75;
+		slider.min = -0.5;
+		slider.max = 0.5;
 		slider.step = 0.01;
-		slider.value = 0.3;
+		slider.value = 0.5;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -187,7 +187,7 @@ const sliders = {
 		slider.min = MIN_P;
 		slider.max = MAX_P;
 		slider.step = 0.01;
-		slider.value = -1;
+		slider.value = DEFAULT_P;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -202,7 +202,7 @@ const sliders = {
 		slider.min = MIN_P;
 		slider.max = MAX_P;
 		slider.step = 0.01;
-		slider.value = 1;
+		slider.value = DEFAULT_P;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -234,128 +234,67 @@ function dotProd2(v1, v2) {
 	return v1[0] * v2[0] + v1[1] * v2[1];
 }
 
-const X_MIN_LINE = Line2D.fromConstantX(X_MIN);
-const X_MAX_LINE = Line2D.fromConstantX(X_MAX);
-const Y_MIN_LINE = Line2D.fromConstantY(Y_MIN);
-const Y_MAX_LINE = Line2D.fromConstantY(Y_MAX);
+function eigenDecompose(symmetric2By2Mat) {
+	const a = symmetric2By2Mat[0][0];
+	const b = symmetric2By2Mat[0][1];
+	const d = symmetric2By2Mat[1][1];
 
-function getWavefunctionFunction(kx, ky, mode) {
-	const uSlope = ky / kx;
-	const uLine = Line2D.fromPointSlopeForm(X_0, Y_0, uSlope);
-	const vSlope = -1 / uSlope;
+	if (b === 0) {
+		const eigenObjs = [
+			{ lambda: a, eigenvec: [1, 0] },
+			{ lambda: d, eigenvec: [0, 1] },
+		];
 
-	const [cornerLines1, cornerLines2] =
-		uSlope > 0
-			? [
-					[X_MIN_LINE, Y_MAX_LINE], // Intersection toward top left
-					[X_MAX_LINE, Y_MIN_LINE], // Intersection toward bottom right
-			  ]
-			: [
-					[X_MIN_LINE, Y_MIN_LINE], // Intersection toward bottom left
-					[X_MAX_LINE, Y_MAX_LINE], // Intersection toward top right
-			  ];
-
-	const boundingVLine1 = Line2D.fromPointSlopeForm(
-		X_MIN,
-		uSlope > 0 ? Y_MIN : Y_MAX,
-		vSlope,
-	);
-	const boundingVLine2 = Line2D.fromPointSlopeForm(
-		X_MAX,
-		uSlope > 0 ? Y_MAX : Y_MIN,
-		vSlope,
-	);
-
-	const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
-	const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
-
-	function wavefunctionValue(u, v, vec) {
-		// We want to design this so that u moves perpendicular to the waveform (against
-		// the grain, so to speak) and v moves parallel (with the grain) while keeping
-		// all points within the region [X_MIN, X_MAX] * [Y_MIN, Y_MAX]. The line which
-		// u varies along will be y = Y_0 + m * (x - X_0) (i.e., the line of slope m
-		// passing through (X_0, Y_0)) where m is the slope of the line that goes
-		// against the grain, except if kx === 0 or ky === 0. Note that this u-line must
-		// extend beyond the bounds of the box so that the v-line can cover the whole
-		// box
-
-		// The components of the vector we'll return
-		let x, y;
-
-		// The simple cases, where the line is degenerate (surface is a flat plane),
-		// vertical (kx === 0), or horizontal (ky === 0), require some care because the
-		// intersections we would otherwise use won't exist. Thankfully these cases are
-		// trivial.
-		if (kx === 0 || ky === 0) {
-			let xVar, yVar;
-			if (ky === 0) {
-				// Either the degenerate case (if kx === 0) or the horizontal case (if kx
-				// !== 0)
-				xVar = u;
-				yVar = v;
-			} else {
-				// the vertical case
-				xVar = v;
-				yVar = u;
-			}
-			x = X_MIN + xVar * (X_MAX - X_MIN);
-			y = Y_MIN + yVar * (Y_MAX - Y_MIN);
+		if (Math.abs(a) > Math.abs(d)) {
+			return eigenObjs;
 		} else {
-			// If kx !== 0 and ky !== 0 then we can actually do this the "right" (i.e.,
-			// hard) way
-
-			const [uvIntersectionPointX, uvIntersectionPointY] = d3.interpolate(
-				uLineEndpoint1,
-				uLineEndpoint2,
-			)(u);
-
-			const vLine = Line2D.fromPointSlopeForm(
-				uvIntersectionPointX,
-				uvIntersectionPointY,
-				vSlope,
-			);
-
-			const [p1, p2] = [cornerLines1, cornerLines2].map(linePair => {
-				const [d1, d2] = linePair.map(line => {
-					const point = line.intersectionWith(vLine);
-					const sqDist =
-						(point[0] - uvIntersectionPointX) ** 2 +
-						(point[1] - uvIntersectionPointY) ** 2;
-					return { sqDist, point };
-				});
-
-				return d1.sqDist < d2.sqDist ? d1.point : d2.point;
-			});
-
-			[x, y] = d3.interpolateArray(p1, p2)(v);
+			return [eigenObjs[1], eigenObjs[0]];
 		}
-
-		const zC = psi(x, y, kx, ky, currentOmega);
-		let z;
-		if (mode === MODES.real) {
-			z = zC.re;
-		} else if (mode === MODES.imag) {
-			z = zC.im;
-		}
-
-		return vec.set(xScale3D(x), yScale3D(y), z * 1.1);
 	}
 
-	return wavefunctionValue;
+	const discriminant = ((a - d) ** 2 + 4 * b ** 2) ** 0.5;
+
+	const lambda1 = (a + d - discriminant) / 2;
+	const lambda2 = (a + d + discriminant) / 2;
+
+	function toUnitVector(v) {
+		const mag = (v[0] ** 2 + v[1] ** 2) ** 0.5;
+		return v.map(x => x / mag);
+	}
+
+	const eVec1 = toUnitVector([-(-a + d + discriminant) / (2 * b), 1]);
+	const eVec2 = toUnitVector([-(-a + d - discriminant) / (2 * b), 1]);
+
+	// Sort by eigenvalue
+	const eigenObjs = [
+		{ lambda: lambda1, eigenvec: eVec1 },
+		{ lambda: lambda2, eigenvec: eVec2 },
+	];
+	if (Math.abs(lambda1) > Math.abs(lambda2)) {
+		return eigenObjs;
+	} else {
+		return [eigenObjs[1], eigenObjs[0]];
+	}
 }
 
 function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	const xMin = X_MIN;
+	const x0 = X_0;
 	const xMax = X_MAX;
 	const yMin = Y_MIN;
+	const y0 = Y_0;
 	const yMax = Y_MAX;
+
+	const xMinLine = Line2D.fromConstantX(xMin);
+	const xMaxLine = Line2D.fromConstantX(xMax);
+	const yMinLine = Line2D.fromConstantY(yMin);
+	const yMaxLine = Line2D.fromConstantY(yMax);
 
 	// Page 9 of this:
 	// https://www.reed.edu/physics/faculty/wheeler/documents/Quantum%20Mechanics/Miscellaneous%20Essays/Gaussian%20Wavepackets.pdf
 	// Replacing sigma with sqrt(detCov), x^2/sigma^2 with x^T * sigma * x, and v1 * v2 with <v1, v2>
 	// A variable name ends in an underscore <==> it's complex
 	const detCov = det2By2Mat(covarianceMat);
-	// console.log({ detCov, rootDetCov });
 	const covMatInv = inv2By2Mat(covarianceMat);
 
 	const tau = (2 * m * detCov) / H_BAR;
@@ -371,58 +310,122 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	);
 	const coef_ = scalarCoef_.mul(momentumCoef_);
 
-	const centralBias = Math.min(1 / detCov, 50);
-
 	const [centerX, centerY] = pVec.map(p => p * t);
 
 	const cu = (centerX - xMin) / (xMax - xMin);
 	const cv = (centerY - yMin) / (yMax - yMin);
 
-	// const [uRange, vRange] = [cxu, cyv].map(c => {
-	// 	const range = [0, 1].map(bound => 1 / Math.exp(-centralBias * (bound - c)));
-	// 	const width = range[1] - range[0];
-	// 	return range.map(bound => (bound - range[0]) / width);
-	// });
-	// console.log(uRange, vRange);
+	const [
+		{ lambda: uEigenval, eigenvec: uDirection },
+		{ lambda: vEigenval, eigenvec: vDirection },
+	] = eigenDecompose(covarianceMat);
 
-	const [pu, pv] = [cu, cv].map(c => 1 + Math.exp(centralBias * c));
-	const [qu, qv] = [cu, cv].map(c => 1 + Math.exp(-centralBias * (1 - c)));
+	// console.log(uEigenval, uDirection, vEigenval, vDirection, cu, cv);
+	const [uCompression, vCompression] = [uEigenval, vEigenval].map(eigenval =>
+		Math.min((1 + t) ** -0.25 * eigenval ** -4, 25),
+	);
+	// console.log(
+	// 	covarianceMat,
+	// 	covMatInv,
+	// 	uEigenval,
+	// 	uDirection,
+	// 	uCompression,
+	// 	vEigenval,
+	// 	vDirection,
+	// 	vCompression,
+	// );
 
-	const [au, av] = [
-		[pu, qu],
-		[pv, qv],
-	].map(([p, q]) => (p * q) / (p - q));
-	const [du, dv] = [
-		[pu, qu],
-		[pv, qv],
-	].map(([p, q]) => -q / (p - q));
+	const uLine = Line2D.fromPointAndDxDy(x0, y0, uDirection[0], uDirection[1]);
+	const uLineHasPositiveSlope = uDirection[0] * uDirection[1] > 0;
 
-	// console.log(centralBias, au, av, du, dv);
+	const [cornerLines1, cornerLines2] = uLineHasPositiveSlope
+		? [
+				[xMinLine, yMaxLine], // Intersection toward top left
+				[xMaxLine, yMinLine], // Intersection toward bottom right
+		  ]
+		: [
+				[xMinLine, yMinLine], // Intersection toward bottom left
+				[xMaxLine, yMaxLine], // Intersection toward top right
+		  ];
+	const boundingVLine1 = Line2D.fromPointAndDxDy(
+		xMin,
+		uLineHasPositiveSlope ? yMin : yMax,
+		vDirection[0],
+		vDirection[1],
+	);
+	const boundingVLine2 = Line2D.fromPointAndDxDy(
+		xMax,
+		uLineHasPositiveSlope ? yMax : yMin,
+		vDirection[0],
+		vDirection[1],
+	);
+	const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
+	const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
+
+	const [pu, pv] = [
+		[cu, uCompression],
+		[cv, vCompression],
+	].map(([c, compression]) => 1 + Math.exp(compression * c));
+	const [qu, qv] = [
+		[cu, uCompression],
+		[cv, vCompression],
+	].map(([c, compression]) => 1 + Math.exp(-compression * (1 - c)));
+	// console.log(cu, cv, uCompression, vCompression, { pu, pv, qu, qv });
+
+	const au = (pu * qu) / (pu - qu);
+	const av = (pv * qv) / (pv - qv);
+	const du = -qu / (pu - qu);
+	const dv = -qv / (pv - qv);
 
 	function uDensifier(u) {
-		return cu + Math.log((-du + u) / (au + du - u)) / centralBias;
+		return cu + Math.log((-du + u) / (au + du - u)) / uCompression;
 	}
-	// (() => {
-	// 	const n = 99;
-	// 	console.log(d3.range(n + 1).map(i => [i / n, uDensifier(i / n)]));
-	// })();
 
 	function vDensifier(v) {
-		return cv + Math.log((-dv + v) / (av + dv - v)) / centralBias;
+		return cv + Math.log((-dv + v) / (av + dv - v)) / vCompression;
 	}
 
-	// throw new Error();
+	// (() => {
+	// 	const n = 20;
+	// 	console.log(d3.range(n + 1).map(i => [i / n, vDensifier(i / n)]));
+	// })();
 
+	// console.log(uLineEndpoint1, uLineEndpoint2);
+
+	let done1 = false;
+	let done2 = false;
 	function valueAtPoint(u, v, vec) {
-		u = uDensifier(u);
-		v = vDensifier(v);
+		const densifiedU = uDensifier(u);
+		const uvIntersectionPointX =
+			uLineEndpoint1[0] * (1 - densifiedU) + uLineEndpoint2[0] * densifiedU;
+		const uvIntersectionPointY =
+			uLineEndpoint1[1] * (1 - densifiedU) + uLineEndpoint2[1] * densifiedU;
 
-		const x1 = xMin * (1 - u) + xMax * u;
-		const x2 = yMin * (1 - v) + yMax * v;
+		const vLine = Line2D.fromPointAndDxDy(
+			uvIntersectionPointX,
+			uvIntersectionPointY,
+			vDirection[0],
+			vDirection[1],
+		);
+		const [p1, p2] = [cornerLines1, cornerLines2].map(linePair => {
+			const [d1, d2] = linePair.map(line => {
+				const point = line.intersectionWith(vLine);
+				if (!point) {
+					return { sqDist: Infinity };
+				}
+				const sqDist =
+					(point[0] - uvIntersectionPointX) ** 2 +
+					(point[1] - uvIntersectionPointY) ** 2;
+				return { sqDist, point };
+			});
 
-		// if ((u - 1) ** 2 + (v - 1) ** 2 < 1e-6) {
-		// 	console.log(u, x1, v, x2);
-		// }
+			return d1.sqDist < d2.sqDist ? d1.point : d2.point;
+		});
+
+		const densifiedV = vDensifier(v);
+
+		const x1 = p1[0] * (1 - densifiedV) + p2[0] * densifiedV;
+		const x2 = p1[1] * (1 - densifiedV) + p2[1] * densifiedV;
 
 		const xVec = [x1, x2];
 		const positionComponent_ = Complex.exp(
@@ -436,6 +439,34 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 				),
 		);
 		const z = coef_.mul(positionComponent_);
+
+		if (!done1 && (u - 0.5625) ** 2 + (v - 0.5625) ** 2 < 1e-3) {
+			done1 = true;
+			console.log(
+				"1",
+				u,
+				v,
+				[densifiedU, densifiedV],
+				[x1, x2],
+				matMul([x1, x2], covMatInv, [x1, x2]),
+				z,
+				positionComponent_,
+			);
+		}
+		if (!done2 && (u - 0.4325) ** 2 + (v - 0.5625) ** 2 < 1e-3) {
+			done2 = true;
+			console.log(
+				"2",
+				u,
+				v,
+				[densifiedU, densifiedV],
+				[x1, x2],
+				matMul([x1, x2], covMatInv, [x1, x2]),
+				z,
+				positionComponent_,
+			);
+		}
+
 		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(z.magnitude));
 	}
 
@@ -562,14 +593,12 @@ function update3D(m, sigma, p) {
 		})();
 	}
 
-	// console.log(m, sigma, p, currentTime);
-
 	const { wave } = objs3d.wave;
 	wave.geometry.dispose();
 	wave.geometry = new THREE.ParametricBufferGeometry(
 		getWavefunctionFunction(m, sigma, p, currentTime),
-		80,
-		80,
+		70,
+		70,
 	);
 
 	renderer.render(scene, camera);

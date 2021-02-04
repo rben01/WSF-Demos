@@ -15,6 +15,14 @@ class Line2D {
 		return new this(-m, 1, m * x0 - y0);
 	}
 
+	static fromPointAndDxDy(x0, y0, dx, dy) {
+		// y - y0 = (dy/dx) * (x - x0) unless dx === 0
+		if (dx === 0) {
+			return this.fromConstantX(x0);
+		}
+		return this.fromPointSlopeForm(x0, y0, dy / dx);
+	}
+
 	static fromConstantY(y0) {
 		// y = y0
 		return new this(0, 1, -y0);
@@ -23,6 +31,12 @@ class Line2D {
 	static fromConstantX(x0) {
 		// x = x0
 		return new this(1, 0, -x0);
+	}
+
+	toPointSlopeForm() {
+		const m = -this._a / this._b;
+		const k = -this._c / this._b;
+		return { m, k };
 	}
 
 	get a() {
@@ -54,6 +68,9 @@ class Line2D {
 		const { a: a2, b: b2, c: c2 } = other;
 
 		const denominator = a1 * b2 - a2 * b1;
+		if (denominator === 0) {
+			return null;
+		}
 		const x = (b1 * c2 - b2 * c1) / denominator;
 		const y = (a2 * c1 - a1 * c2) / denominator;
 		return [x, y];
