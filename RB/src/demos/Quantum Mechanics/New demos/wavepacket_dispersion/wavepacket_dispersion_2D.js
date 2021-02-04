@@ -226,8 +226,16 @@ function det2By2Mat(mat) {
 }
 
 function inv2By2Mat(mat) {
-	const det = det2By2Mat(mat);
-	return mat.map(row => row.map(x => x / det));
+	const a = mat[0][0];
+	const b = mat[0][1];
+	const c = mat[1][0];
+	const d = mat[1][1];
+	const det = a * d - b * c;
+
+	return [
+		[d / det, -b / det],
+		[-c / det, a / det],
+	];
 }
 
 function dotProd2(v1, v2) {
@@ -324,16 +332,7 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	const [uCompression, vCompression] = [uEigenval, vEigenval].map(eigenval =>
 		Math.min((1 + t) ** -0.25 * eigenval ** -4, 25),
 	);
-	// console.log(
-	// 	covarianceMat,
-	// 	covMatInv,
-	// 	uEigenval,
-	// 	uDirection,
-	// 	uCompression,
-	// 	vEigenval,
-	// 	vDirection,
-	// 	vCompression,
-	// );
+	console.log(covarianceMat, covMatInv);
 
 	const uLine = Line2D.fromPointAndDxDy(x0, y0, uDirection[0], uDirection[1]);
 	const uLineHasPositiveSlope = uDirection[0] * uDirection[1] > 0;
@@ -396,6 +395,8 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	let done2 = false;
 	function valueAtPoint(u, v, vec) {
 		const densifiedU = uDensifier(u);
+		const densifiedV = vDensifier(v);
+
 		const uvIntersectionPointX =
 			uLineEndpoint1[0] * (1 - densifiedU) + uLineEndpoint2[0] * densifiedU;
 		const uvIntersectionPointY =
@@ -422,8 +423,6 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 			return d1.sqDist < d2.sqDist ? d1.point : d2.point;
 		});
 
-		const densifiedV = vDensifier(v);
-
 		const x1 = p1[0] * (1 - densifiedV) + p2[0] * densifiedV;
 		const x2 = p1[1] * (1 - densifiedV) + p2[1] * densifiedV;
 
@@ -439,33 +438,6 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 				),
 		);
 		const z = coef_.mul(positionComponent_);
-
-		if (!done1 && (u - 0.5625) ** 2 + (v - 0.5625) ** 2 < 1e-3) {
-			done1 = true;
-			console.log(
-				"1",
-				u,
-				v,
-				[densifiedU, densifiedV],
-				[x1, x2],
-				matMul([x1, x2], covMatInv, [x1, x2]),
-				z,
-				positionComponent_,
-			);
-		}
-		if (!done2 && (u - 0.4325) ** 2 + (v - 0.5625) ** 2 < 1e-3) {
-			done2 = true;
-			console.log(
-				"2",
-				u,
-				v,
-				[densifiedU, densifiedV],
-				[x1, x2],
-				matMul([x1, x2], covMatInv, [x1, x2]),
-				z,
-				positionComponent_,
-			);
-		}
 
 		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(z.magnitude));
 	}
