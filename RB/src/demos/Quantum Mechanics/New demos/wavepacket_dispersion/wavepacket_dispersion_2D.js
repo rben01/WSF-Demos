@@ -96,6 +96,7 @@ const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
 	color: 0x2277ff,
 	side: THREE.DoubleSide,
 	transparent: false,
+	wireframe: false,
 });
 
 camera.up.copy(CAMERA_UP);
@@ -329,10 +330,9 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	] = eigenDecompose(covarianceMat);
 
 	// console.log(uEigenval, uDirection, vEigenval, vDirection, cu, cv);
-	const [uCompression, vCompression] = [uEigenval, vEigenval].map(eigenval =>
-		Math.min((1 + t) ** -0.25 * eigenval ** -4, 25),
+	const [uCompression, vCompression] = [uEigenval, vEigenval].map(
+		eigenval => (10 * Math.abs(eigenval) ** -0.5) / (1 + t) ** 0.5,
 	);
-	console.log(covarianceMat, covMatInv);
 
 	const uLine = Line2D.fromPointAndDxDy(x0, y0, uDirection[0], uDirection[1]);
 	const uLineHasPositiveSlope = uDirection[0] * uDirection[1] > 0;
@@ -361,28 +361,56 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
 	const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
 
-	const [pu, pv] = [
-		[cu, uCompression],
-		[cv, vCompression],
-	].map(([c, compression]) => 1 + Math.exp(compression * c));
-	const [qu, qv] = [
-		[cu, uCompression],
-		[cv, vCompression],
-	].map(([c, compression]) => 1 + Math.exp(-compression * (1 - c)));
-	// console.log(cu, cv, uCompression, vCompression, { pu, pv, qu, qv });
+	// Densifier: f(x) = a * atan(compression * (x - center)) + d
+	// Solve for a and d using: f(0) === 0, f(1) === 1
+	// Then invert to find u': f(u') = u
+	const [uDensifier, vDensifier] = [
+		[cu, cv, uCompression],
+		[cv, cu, vCompression],
+	].map(([thisC, otherC, compression]) => {
+		const p = Math.atan(compression * thisC);
+		const q = Math.atan(compression * (1 - thisC));
+		const denom = p + q;
 
-	const au = (pu * qu) / (pu - qu);
-	const av = (pv * qv) / (pv - qv);
-	const du = -qu / (pu - qu);
-	const dv = -qv / (pv - qv);
+		const a = 1 / denom;
+		const d = p / denom;
 
-	function uDensifier(u) {
-		return cu + Math.log((-du + u) / (au + du - u)) / uCompression;
-	}
+		function densifier(w, z) {
+			if (
+				Math.abs(w - 1) < 1e-8 ||
+				Math.abs(w) < 1e-8 ||
+				thisC > 1 ||
+				thisC < 0
+			) {
+				return w;
+			}
 
-	function vDensifier(v) {
-		return cv + Math.log((-dv + v) / (av + dv - v)) / vCompression;
-	}
+			const val = thisC + Math.tan((w - d) / a) / compression;
+			const additionalCompressionFactor =
+				Math.abs(0.5 - Math.abs(z - otherC)) * 0.9;
+			const valShiftedTowardsCenter =
+				val * (1 - additionalCompressionFactor) +
+				thisC * additionalCompressionFactor;
+
+			return Math.max(0, Math.min(valShiftedTowardsCenter, 1));
+		}
+		return densifier;
+	});
+
+	// const [pu, pv] = [
+	// 	[cu, uCompression],
+	// 	[cv, vCompression],
+	// ].map(([c, compression]) => 1 + Math.exp(compression * c));
+	// const [qu, qv] = [
+	// 	[cu, uCompression],
+	// 	[cv, vCompression],
+	// ].map(([c, compression]) => 1 + Math.exp(-compression * (1 - c)));
+	// // console.log(cu, cv, uCompression, vCompression, { pu, pv, qu, qv });
+
+	// const au = (pu * qu) / (pu - qu);
+	// const av = (pv * qv) / (pv - qv);
+	// const du = -qu / (pu - qu);
+	// const dv = -qv / (pv - qv);
 
 	// (() => {
 	// 	const n = 20;
@@ -391,11 +419,18 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 
 	// console.log(uLineEndpoint1, uLineEndpoint2);
 
-	let done1 = false;
-	let done2 = false;
+	// console.log(
+	// 	uDirection,
+	// 	uCompression,
+	// 	vDirection,
+	// 	vCompression,
+	// 	uLine.toPointSlopeForm(),
+	// );
 	function valueAtPoint(u, v, vec) {
-		const densifiedU = uDensifier(u);
-		const densifiedV = vDensifier(v);
+		const densifiedU = uDensifier(u, v);
+		// const densifyVAmount = Math.abs(2 * u - 1);
+		// const densifiedV = v * (1 - densifyVAmount) + vDensifier(v) * densifyVAmount;
+		const densifiedV = vDensifier(v, u);
 
 		const uvIntersectionPointX =
 			uLineEndpoint1[0] * (1 - densifiedU) + uLineEndpoint2[0] * densifiedU;
@@ -423,8 +458,11 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 			return d1.sqDist < d2.sqDist ? d1.point : d2.point;
 		});
 
-		const x1 = p1[0] * (1 - densifiedV) + p2[0] * densifiedV;
-		const x2 = p1[1] * (1 - densifiedV) + p2[1] * densifiedV;
+		// const x1 = p1[0] * (1 - densifiedV) + p2[0] * densifiedV;
+		// const x2 = p1[1] * (1 - densifiedV) + p2[1] * densifiedV;
+
+		const x1 = xMin * (1 - densifiedU) + xMax * densifiedU;
+		const x2 = yMin * (1 - densifiedV) + yMax * densifiedV;
 
 		const xVec = [x1, x2];
 		const positionComponent_ = Complex.exp(
@@ -566,19 +604,22 @@ function update3D(m, sigma, p) {
 	}
 
 	const { wave } = objs3d.wave;
-	wave.geometry.dispose();
-	wave.geometry = new THREE.ParametricBufferGeometry(
-		getWavefunctionFunction(m, sigma, p, currentTime),
-		70,
-		70,
-	);
-
+	const wavefunctionFunction = getWavefunctionFunction(m, sigma, p, currentTime);
+	if (wavefunctionFunction !== null) {
+		wave.geometry.dispose();
+		wave.geometry = new THREE.ParametricBufferGeometry(
+			wavefunctionFunction,
+			70,
+			70,
+		);
+	}
 	renderer.render(scene, camera);
 }
 
 function update(dtMS) {
 	dtMS = dtMS ?? 0;
-	currentTime += (3 * dtMS) / 1000;
+	const speed = 3;
+	currentTime += (speed * dtMS) / 1000;
 
 	const [m, sigmaX, sigmaY, sigmaCorr, px, py] = [
 		"m",
