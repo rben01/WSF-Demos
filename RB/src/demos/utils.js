@@ -265,6 +265,7 @@ function getGridlines({
 }) {
 	drawEdges = drawEdges ?? false;
 	swapOrientation = swapOrientation ?? false;
+	nPointsPerGridline = nPointsPerGridline ?? 51;
 
 	if (swapOrientation) {
 		[xMin, yMin] = [yMin, xMin];
@@ -274,7 +275,6 @@ function getGridlines({
 	const iMin = drawEdges ? 0 : 1;
 	const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
 
-	nPointsPerGridline = nPointsPerGridline ?? 51;
 	const dx = (xMax - xMin) / (nGridlines - 1);
 	const dy = (yMax - yMin) / (nPointsPerGridline - 1);
 	const gridlines = [];
@@ -291,10 +291,12 @@ function getGridlines({
 				trueX = y;
 				trueY = x;
 			}
-			const point =
-				zFunc !== undefined
-					? [trueX, trueY, zFunc(trueX, trueY)]
-					: [trueX, trueY];
+			const point = [trueX, trueY];
+			if (zFunc === null) {
+				point.push(null);
+			} else if (zFunc) {
+				point.push(zFunc(trueX, trueY));
+			}
 			gridline.push(point);
 		}
 		gridlines.push(gridline);

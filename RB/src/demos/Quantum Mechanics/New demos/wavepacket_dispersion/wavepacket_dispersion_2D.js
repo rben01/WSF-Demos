@@ -1,4 +1,4 @@
-/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul Line2D */
+/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines */
 const WIDTH = 800;
 const HEIGHT_3D = 700;
 
@@ -97,6 +97,11 @@ const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
 	side: THREE.DoubleSide,
 	transparent: false,
 	wireframe: false,
+});
+const GRIDLINE_MATERIAL = new THREE.MeshBasicMaterial({
+	color: 0x111111,
+	side: THREE.DoubleSide,
+	transparent: false,
 });
 
 camera.up.copy(CAMERA_UP);
@@ -321,6 +326,10 @@ function get_functionThatGetsWavefunctionValueAtXVec(m, covarianceMat, pVec, t) 
 	return getWavefunctionValue;
 }
 
+function zToProbability(z) {
+	return 5 * z.magnitude ** 2;
+}
+
 const FILL_REGION_PROPTN = 0.94;
 function getWavefunctionParametricFunction(
 	getWavefunctionValueAtXVec,
@@ -396,7 +405,7 @@ function getWavefunctionParametricFunction(
 		const xVec = [x1, x2];
 		const z = getWavefunctionValueAtXVec(xVec);
 
-		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(5 * z.magnitude ** 2));
+		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(zToProbability(z)));
 	}
 
 	return valueAtPoint;
@@ -525,6 +534,8 @@ function update3D(m, covarianceMat, pVec, t) {
 			arrowhead.rotateX(Math.PI / 2);
 			arrowhead.position.set(xs0, ys0, zMax);
 
+			objs3d.zAxis = { zAxis, arrowhead };
+
 			scene.add(zAxis, arrowhead);
 		})();
 
@@ -547,13 +558,49 @@ function update3D(m, covarianceMat, pVec, t) {
 			zAxisLabel.position.y = 0.2;
 			zAxisLabel.position.z = zMax;
 			scene.add(zAxisLabel);
+			objs3d.zAxis = { ...objs3d.zAxis, zAxisLabel };
 		})();
 
 		// wave geometry
 		(() => {
 			const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
+
+			const nGridlines = 21;
+			const drawEdges = true;
+			const xGridlinePoints = getGridlines({
+				nGridlines,
+				// These numbers depend on the graph being centered at the origin
+				xMin: X_MIN * FILL_REGION_PROPTN,
+				xMax: X_MAX * FILL_REGION_PROPTN,
+				yMin: Y_MIN * FILL_REGION_PROPTN,
+				yMax: Y_MAX * FILL_REGION_PROPTN,
+				drawEdges,
+			});
+			const yGridlinePoints = getGridlines({
+				nGridlines,
+				// These numbers depend on the graph being centered at the origin
+				xMin: Y_MIN * FILL_REGION_PROPTN,
+				xMax: Y_MAX * FILL_REGION_PROPTN,
+				yMin: X_MIN * FILL_REGION_PROPTN,
+				yMax: X_MAX * FILL_REGION_PROPTN,
+				drawEdges,
+				swapOrientation: true,
+			});
+
+			const gridlines = [];
+			for (const gls of [xGridlinePoints, yGridlinePoints]) {
+				for (const gl of gls) {
+					const mesh = new THREE.Mesh(
+						new THREE.BufferGeometry(),
+						GRIDLINE_MATERIAL,
+					);
+					gridlines.push({ gl, mesh });
+					scene.add(mesh);
+				}
+			}
+
 			scene.add(wave);
-			objs3d.wave = { wave };
+			objs3d.wave = { wave, gridlines };
 		})();
 
 		// spinny bois geometries
@@ -607,7 +654,7 @@ function update3D(m, covarianceMat, pVec, t) {
 
 	const shouldShowSpinners = !shouldShowProbability;
 	if (shouldShowSpinners) {
-		const colorInterpolator = d3.interpolateRgb("#444", "#fff");
+		const colorInterpolator = d3.interpolateRgb("#333", "#fff");
 		for (let i = 0; i < N_GRIDPOINTS; ++i) {
 			const gpIndex = i * GRIDPOINT_LENGTH;
 			const x = GRIDPOINTS[gpIndex + GP_IDX_X];
@@ -630,7 +677,7 @@ function update3D(m, covarianceMat, pVec, t) {
 	}
 
 	if (shouldShowProbability) {
-		const { wave } = objs3d.wave;
+		const { wave, gridlines } = objs3d.wave;
 		const wavefunctionFunction = getWavefunctionParametricFunction(
 			getWavefunctionValueAtXVec,
 			m,
@@ -644,6 +691,25 @@ function update3D(m, covarianceMat, pVec, t) {
 				wavefunctionFunction,
 				70,
 				70,
+			);
+		}
+
+		for (const { gl, mesh } of gridlines) {
+			const curvePoints = gl.map(
+				([x, y]) =>
+					new THREE.Vector3(
+						xScale3D(x),
+						yScale3D(y),
+						zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))) +
+							0.02,
+					),
+			);
+			mesh.geometry.dispose();
+			mesh.geometry = new THREE.TubeBufferGeometry(
+				new THREE.CatmullRomCurve3(curvePoints),
+				100,
+				0.02,
+				4,
 			);
 		}
 	}
@@ -736,7 +802,15 @@ function fillLatex() {
 }
 
 function toggleVisibilities(showProba) {
-	objs3d.wave.wave.visible = showProba;
+	const probaObjs = [
+		objs3d.wave.wave,
+		...objs3d.wave.gridlines.map(o => o.mesh),
+		...Object.values(objs3d.zAxis),
+	];
+	for (const prObj of probaObjs) {
+		prObj.visible = showProba;
+	}
+
 	for (let i = 0; i < N_GRIDPOINTS; ++i) {
 		const mesh = GRIDPOINTS[i * GRIDPOINT_LENGTH + GP_IDX_MESH];
 		mesh.visible = !showProba;
