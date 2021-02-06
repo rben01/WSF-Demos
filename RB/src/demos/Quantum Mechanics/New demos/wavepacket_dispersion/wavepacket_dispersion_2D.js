@@ -611,8 +611,7 @@ function update3D(m, covarianceMat, pVec, t) {
 			arrowShape.lineTo(arrowNotch, 0);
 			for (let i = 0; i < N_GRIDPOINTS; ++i) {
 				const mesh = new THREE.Mesh(
-					new THREE.ShapeBufferGeometry(arrowShape),
-					// new THREE.ConeBufferGeometry(0.08, 0.3, 4, 1),
+					new THREE.ShapeBufferGeometry(arrowShape, 1),
 				);
 				const gpIndex = i * GRIDPOINT_LENGTH;
 				const meshXs = xScale3D(GRIDPOINTS[gpIndex + GP_IDX_X]);
