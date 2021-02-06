@@ -891,11 +891,11 @@ canvas: canvas,
 antialias: !on_iOS,
 powerPreference: on_iOS ? "low-power" : "high-performance",
 });
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 return renderer;
 }
 </script><script type="text/javascript">/* global THREE getGridlines makeRenderer */
@@ -909,6 +909,7 @@ canvas.clientWidth / canvas.clientHeight,
 20,
 );
 const renderer = makeRenderer(canvas);
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 return { canvas, scene, camera, renderer };
 }
 const {

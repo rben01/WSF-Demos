@@ -217,12 +217,13 @@ function makeRenderer(canvas) {
 		antialias: !on_iOS,
 		powerPreference: on_iOS ? "low-power" : "high-performance",
 	});
-	renderer.localClippingEnabled = false;
-	renderer.setPixelRatio(window.devicePixelRatio);
 
 	canvas.width = canvas.clientWidth * window.devicePixelRatio;
 	canvas.height = canvas.clientHeight * window.devicePixelRatio;
 	renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+	renderer.localClippingEnabled = false;
+	renderer.setPixelRatio(window.devicePixelRatio);
 
 	return renderer;
 }

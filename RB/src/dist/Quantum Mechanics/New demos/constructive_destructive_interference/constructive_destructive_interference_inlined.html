@@ -854,11 +854,11 @@ canvas: canvas,
 antialias: !on_iOS,
 powerPreference: on_iOS ? "low-power" : "high-performance",
 });
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
 return renderer;
 }
 </script><script type="text/javascript">/* global THREE makeRenderer */
@@ -871,8 +871,6 @@ canvas.clientWidth / canvas.clientHeight,
 2000,
 );
 const renderer = makeRenderer(canvas);
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 const _PANE_HEIGHT = 10;
 const SOURCE_OUTER_PANE_WIDTH = 20;
