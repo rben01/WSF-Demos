@@ -111,7 +111,7 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 let currentTime = 0;
 let isAnimating = false;
 
-const MIN_SIGMA = 0.75;
+const MIN_SIGMA = 1;
 const MAX_SIGMA = 2;
 const DEFAULT_SIGMA = 1;
 const MIN_P = -3;
@@ -700,15 +700,14 @@ function update3D(m, covarianceMat, pVec, t) {
 					new THREE.Vector3(
 						xScale3D(x),
 						yScale3D(y),
-						zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))) +
-							0.02,
+						zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))),
 					),
 			);
 			mesh.geometry.dispose();
 			mesh.geometry = new THREE.TubeBufferGeometry(
 				new THREE.CatmullRomCurve3(curvePoints),
 				100,
-				0.02,
+				0.025,
 				4,
 			);
 		}
