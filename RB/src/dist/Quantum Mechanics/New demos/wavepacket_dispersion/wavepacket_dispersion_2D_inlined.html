@@ -1548,6 +1548,7 @@ objs3d.zAxis = { ...objs3d.zAxis, zAxisLabel };
 (() => {
 const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
 const nGridlines = 21;
+const nPointsPerGridline = 200;
 const drawEdges = true;
 const xGridlinePoints = getGridlines({
 nGridlines,
@@ -1556,6 +1557,7 @@ xMin: X_MIN * FILL_REGION_PROPTN,
 xMax: X_MAX * FILL_REGION_PROPTN,
 yMin: Y_MIN * FILL_REGION_PROPTN,
 yMax: Y_MAX * FILL_REGION_PROPTN,
+nPointsPerGridline,
 drawEdges,
 });
 const yGridlinePoints = getGridlines({
@@ -1565,6 +1567,7 @@ xMin: Y_MIN * FILL_REGION_PROPTN,
 xMax: Y_MAX * FILL_REGION_PROPTN,
 yMin: X_MIN * FILL_REGION_PROPTN,
 yMax: X_MAX * FILL_REGION_PROPTN,
+nPointsPerGridline,
 drawEdges,
 swapOrientation: true,
 });
@@ -1675,9 +1678,9 @@ zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))),
 mesh.geometry.dispose();
 mesh.geometry = new THREE.TubeBufferGeometry(
 new THREE.CatmullRomCurve3(curvePoints),
-100,
+200,
 0.025,
-4,
+3,
 );
 }
 }

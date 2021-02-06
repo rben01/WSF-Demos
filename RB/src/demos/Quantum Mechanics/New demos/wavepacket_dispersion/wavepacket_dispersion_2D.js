@@ -566,6 +566,7 @@ function update3D(m, covarianceMat, pVec, t) {
 			const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
 
 			const nGridlines = 21;
+			const nPointsPerGridline = 200;
 			const drawEdges = true;
 			const xGridlinePoints = getGridlines({
 				nGridlines,
@@ -574,6 +575,7 @@ function update3D(m, covarianceMat, pVec, t) {
 				xMax: X_MAX * FILL_REGION_PROPTN,
 				yMin: Y_MIN * FILL_REGION_PROPTN,
 				yMax: Y_MAX * FILL_REGION_PROPTN,
+				nPointsPerGridline,
 				drawEdges,
 			});
 			const yGridlinePoints = getGridlines({
@@ -583,6 +585,7 @@ function update3D(m, covarianceMat, pVec, t) {
 				xMax: Y_MAX * FILL_REGION_PROPTN,
 				yMin: X_MIN * FILL_REGION_PROPTN,
 				yMax: X_MAX * FILL_REGION_PROPTN,
+				nPointsPerGridline,
 				drawEdges,
 				swapOrientation: true,
 			});
@@ -706,9 +709,9 @@ function update3D(m, covarianceMat, pVec, t) {
 			mesh.geometry.dispose();
 			mesh.geometry = new THREE.TubeBufferGeometry(
 				new THREE.CatmullRomCurve3(curvePoints),
-				100,
+				200,
 				0.025,
-				4,
+				3,
 			);
 		}
 	}
