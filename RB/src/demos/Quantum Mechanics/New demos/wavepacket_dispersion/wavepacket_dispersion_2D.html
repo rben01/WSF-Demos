@@ -125,7 +125,20 @@
 					<span><input type="range" class="slider" id="slider-p-x" /></span>
 					<span>Particle 𝑦 momentum: <span id="text-p-y">py</span></span>
 					<span><input type="range" class="slider" id="slider-p-y" /></span>
-					<span></span>
+					<div style="margin-bottom: 10px">
+						<span class="radio-button-container horizontal">
+							<button
+								class="button"
+								onclick="showProbability()"
+								button-checked
+							>
+								Show probability
+							</button>
+							<button class="button" onclick="showWavefunction()">
+								Show wavefunction
+							</button>
+						</span>
+					</div>
 					<span class="radio-button-container horizontal">
 						<button class="button" onclick="play()">Play</button
 						><button class="button" onclick="pause()" button-checked>

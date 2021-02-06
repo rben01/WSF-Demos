@@ -106,7 +106,7 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 let currentTime = 0;
 let isAnimating = false;
 
-const MIN_SIGMA = 1;
+const MIN_SIGMA = 0.75;
 const MAX_SIGMA = 2;
 const DEFAULT_SIGMA = 1;
 const MIN_P = -3;
@@ -170,7 +170,7 @@ const sliders = {
 		slider.min = -0.5;
 		slider.max = 0.5;
 		slider.step = 0.01;
-		slider.value = 0.5;
+		slider.value = 0;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
@@ -239,10 +239,6 @@ function inv2By2Mat(mat) {
 	];
 }
 
-function dotProd2(v1, v2) {
-	return v1[0] * v2[0] + v1[1] * v2[1];
-}
-
 function eigenDecompose(symmetric2By2Mat) {
 	const a = symmetric2By2Mat[0][0];
 	const b = symmetric2By2Mat[0][1];
@@ -286,19 +282,7 @@ function eigenDecompose(symmetric2By2Mat) {
 	}
 }
 
-function getWavefunctionFunction(m, covarianceMat, pVec, t) {
-	const xMin = X_MIN;
-	const x0 = X_0;
-	const xMax = X_MAX;
-	const yMin = Y_MIN;
-	const y0 = Y_0;
-	const yMax = Y_MAX;
-
-	const xMinLine = Line2D.fromConstantX(xMin);
-	const xMaxLine = Line2D.fromConstantX(xMax);
-	const yMinLine = Line2D.fromConstantY(yMin);
-	const yMaxLine = Line2D.fromConstantY(yMax);
-
+function get_functionThatGetsWavefunctionValueAtXVec(m, covarianceMat, pVec, t) {
 	// Page 9 of this:
 	// https://www.reed.edu/physics/faculty/wheeler/documents/Quantum%20Mechanics/Miscellaneous%20Essays/Gaussian%20Wavepackets.pdf
 	// Replacing sigma with sqrt(detCov), x^2/sigma^2 with x^T * sigma * x, and v1 * v2 with <v1, v2>
@@ -319,47 +303,50 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 	);
 	const coef_ = scalarCoef_.mul(momentumCoef_);
 
+	function getWavefunctionValue(xVec) {
+		const positionComponent_ = Complex.exp(
+			timeFactor_
+				.pow(-1)
+				.mul(
+					Complex.sub(
+						Complex.i.mul((detCov * matMul(xVec, covMatInv, pVec)) / H_BAR),
+						matMul(xVec, covMatInv, xVec) / 4,
+					),
+				),
+		);
+		const z = coef_.mul(positionComponent_);
+		return z;
+	}
+
+	return getWavefunctionValue;
+}
+
+const FILL_REGION_PROPTN = 0.94;
+function getWavefunctionParametricFunction(
+	getWavefunctionValueAtXVec,
+	m,
+	covarianceMat,
+	pVec,
+	t,
+) {
+	const xMin = X_MIN * FILL_REGION_PROPTN;
+	const xMax = X_MAX * FILL_REGION_PROPTN;
+	const yMin = Y_MIN * FILL_REGION_PROPTN;
+	const yMax = Y_MAX * FILL_REGION_PROPTN;
+
 	const [centerX, centerY] = pVec.map(p => p * t);
 
 	const cu = (centerX - xMin) / (xMax - xMin);
 	const cv = (centerY - yMin) / (yMax - yMin);
 
-	const [
-		{ lambda: uEigenval, eigenvec: uDirection },
-		{ lambda: vEigenval, eigenvec: vDirection },
-	] = eigenDecompose(covarianceMat);
+	const [{ lambda: uEigenval }, { lambda: vEigenval }] = eigenDecompose(
+		covarianceMat,
+	);
 
 	// console.log(uEigenval, uDirection, vEigenval, vDirection, cu, cv);
 	const [uCompression, vCompression] = [uEigenval, vEigenval].map(
 		eigenval => (10 * Math.abs(eigenval) ** -0.5) / (1 + t) ** 0.5,
 	);
-
-	const uLine = Line2D.fromPointAndDxDy(x0, y0, uDirection[0], uDirection[1]);
-	const uLineHasPositiveSlope = uDirection[0] * uDirection[1] > 0;
-
-	const [cornerLines1, cornerLines2] = uLineHasPositiveSlope
-		? [
-				[xMinLine, yMaxLine], // Intersection toward top left
-				[xMaxLine, yMinLine], // Intersection toward bottom right
-		  ]
-		: [
-				[xMinLine, yMinLine], // Intersection toward bottom left
-				[xMaxLine, yMaxLine], // Intersection toward top right
-		  ];
-	const boundingVLine1 = Line2D.fromPointAndDxDy(
-		xMin,
-		uLineHasPositiveSlope ? yMin : yMax,
-		vDirection[0],
-		vDirection[1],
-	);
-	const boundingVLine2 = Line2D.fromPointAndDxDy(
-		xMax,
-		uLineHasPositiveSlope ? yMax : yMin,
-		vDirection[0],
-		vDirection[1],
-	);
-	const uLineEndpoint1 = uLine.intersectionWith(boundingVLine1);
-	const uLineEndpoint2 = uLine.intersectionWith(boundingVLine2);
 
 	// Densifier: f(x) = a * atan(compression * (x - center)) + d
 	// Solve for a and d using: f(0) === 0, f(1) === 1
@@ -380,7 +367,9 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 				Math.abs(w - 1) < 1e-8 ||
 				Math.abs(w) < 1e-8 ||
 				thisC > 1 ||
-				thisC < 0
+				thisC < 0 ||
+				otherC > 1 ||
+				otherC < 0
 			) {
 				return w;
 			}
@@ -397,91 +386,55 @@ function getWavefunctionFunction(m, covarianceMat, pVec, t) {
 		return densifier;
 	});
 
-	// const [pu, pv] = [
-	// 	[cu, uCompression],
-	// 	[cv, vCompression],
-	// ].map(([c, compression]) => 1 + Math.exp(compression * c));
-	// const [qu, qv] = [
-	// 	[cu, uCompression],
-	// 	[cv, vCompression],
-	// ].map(([c, compression]) => 1 + Math.exp(-compression * (1 - c)));
-	// // console.log(cu, cv, uCompression, vCompression, { pu, pv, qu, qv });
-
-	// const au = (pu * qu) / (pu - qu);
-	// const av = (pv * qv) / (pv - qv);
-	// const du = -qu / (pu - qu);
-	// const dv = -qv / (pv - qv);
-
-	// (() => {
-	// 	const n = 20;
-	// 	console.log(d3.range(n + 1).map(i => [i / n, vDensifier(i / n)]));
-	// })();
-
-	// console.log(uLineEndpoint1, uLineEndpoint2);
-
-	// console.log(
-	// 	uDirection,
-	// 	uCompression,
-	// 	vDirection,
-	// 	vCompression,
-	// 	uLine.toPointSlopeForm(),
-	// );
 	function valueAtPoint(u, v, vec) {
 		const densifiedU = uDensifier(u, v);
-		// const densifyVAmount = Math.abs(2 * u - 1);
-		// const densifiedV = v * (1 - densifyVAmount) + vDensifier(v) * densifyVAmount;
 		const densifiedV = vDensifier(v, u);
-
-		const uvIntersectionPointX =
-			uLineEndpoint1[0] * (1 - densifiedU) + uLineEndpoint2[0] * densifiedU;
-		const uvIntersectionPointY =
-			uLineEndpoint1[1] * (1 - densifiedU) + uLineEndpoint2[1] * densifiedU;
-
-		const vLine = Line2D.fromPointAndDxDy(
-			uvIntersectionPointX,
-			uvIntersectionPointY,
-			vDirection[0],
-			vDirection[1],
-		);
-		const [p1, p2] = [cornerLines1, cornerLines2].map(linePair => {
-			const [d1, d2] = linePair.map(line => {
-				const point = line.intersectionWith(vLine);
-				if (!point) {
-					return { sqDist: Infinity };
-				}
-				const sqDist =
-					(point[0] - uvIntersectionPointX) ** 2 +
-					(point[1] - uvIntersectionPointY) ** 2;
-				return { sqDist, point };
-			});
-
-			return d1.sqDist < d2.sqDist ? d1.point : d2.point;
-		});
-
-		// const x1 = p1[0] * (1 - densifiedV) + p2[0] * densifiedV;
-		// const x2 = p1[1] * (1 - densifiedV) + p2[1] * densifiedV;
 
 		const x1 = xMin * (1 - densifiedU) + xMax * densifiedU;
 		const x2 = yMin * (1 - densifiedV) + yMax * densifiedV;
 
 		const xVec = [x1, x2];
-		const positionComponent_ = Complex.exp(
-			timeFactor_
-				.pow(-1)
-				.mul(
-					Complex.sub(
-						Complex.i.mul((detCov * matMul(xVec, covMatInv, pVec)) / H_BAR),
-						matMul(xVec, covMatInv, xVec) / 4,
-					),
-				),
-		);
-		const z = coef_.mul(positionComponent_);
+		const z = getWavefunctionValueAtXVec(xVec);
 
-		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(z.magnitude));
+		return vec.set(xScale3D(x1), yScale3D(x2), zScale3D(5 * z.magnitude ** 2));
 	}
 
 	return valueAtPoint;
 }
+
+const GRIDPOINT_LENGTH = 3;
+const GP_IDX_X = 0;
+const GP_IDX_Y = 1;
+const GP_IDX_MESH = 2;
+// A 1D array of point attributes
+const GRIDPOINTS = (() => {
+	const dx = 2.5;
+	const dy = 2.5;
+
+	const xWidth = FILL_REGION_PROPTN * (X_MAX - X_MIN);
+	const nXPoints = 1 + Math.floor(xWidth / dx);
+	const xSpan = (nXPoints - 1) * dx;
+
+	const yWidth = FILL_REGION_PROPTN * (Y_MAX - Y_MIN);
+	const nYPoints = 1 + Math.floor(yWidth / dy);
+	const ySpan = (nYPoints - 1) * dy;
+
+	const xMin = X_MIN + (X_MAX - X_MIN - xSpan) / 2;
+	const yMin = Y_MIN + (Y_MAX - Y_MIN - ySpan) / 2;
+
+	const points = [];
+	for (let i = 0; i < nXPoints; ++i) {
+		const x = xMin + i * dx;
+		for (let j = 0; j < nYPoints; ++j) {
+			const y = yMin + j * dy;
+			points.push(x, y, null);
+		}
+	}
+
+	return points;
+})();
+const N_GRIDPOINT_INDICES = GRIDPOINTS.length;
+const N_GRIDPOINTS = N_GRIDPOINT_INDICES / GRIDPOINT_LENGTH;
 
 function makeAxisLabel(text) {
 	return makeTextSprite(text, { fontface: "Times", fontsize: 20 });
@@ -501,7 +454,8 @@ const zMax = zScale3D(Z_MAX);
 
 const objs3d = { empty: true };
 
-function update3D(m, sigma, p) {
+let shouldShowProbability = true;
+function update3D(m, covarianceMat, pVec, t) {
 	const arrowheadRadius = 0.25;
 	const arrowheadHeight = 0.7;
 	const arrowheadGeometry = new THREE.ConeBufferGeometry(
@@ -511,7 +465,7 @@ function update3D(m, sigma, p) {
 
 	if (objs3d.empty) {
 		objs3d.empty = false;
-		const axisRadius = 0.06;
+		const axisRadius = 0.03;
 
 		// x axis
 		(() => {
@@ -548,8 +502,8 @@ function update3D(m, sigma, p) {
 			const yAxis = new THREE.Mesh(yAxixGeometry, AXIS_MATERIAL);
 
 			const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
-			arrowhead.rotateX(Math.PI);
-			arrowhead.position.set(xs0, yMin, zs0);
+			arrowhead.rotateX(0);
+			arrowhead.position.set(xs0, yMax, zs0);
 
 			scene.add(yAxis, arrowhead);
 		})();
@@ -582,37 +536,118 @@ function update3D(m, sigma, p) {
 			xAxisLabel.position.z = 0;
 			scene.add(xAxisLabel);
 
-			const yAxisLabel = makeAxisLabel("Im[𝜓]");
+			const yAxisLabel = makeAxisLabel("𝑦");
 			yAxisLabel.position.x = 0;
-			yAxisLabel.position.y = yMin - 0.1;
-			yAxisLabel.position.z = -0.2;
+			yAxisLabel.position.y = yMax + 0.8;
+			yAxisLabel.position.z = 0.5;
 			scene.add(yAxisLabel);
 
-			const zAxisLabel = makeAxisLabel("Re[𝜓]");
+			const zAxisLabel = makeAxisLabel("|𝜓|");
 			zAxisLabel.position.x = 0.1;
 			zAxisLabel.position.y = 0.2;
 			zAxisLabel.position.z = zMax;
 			scene.add(zAxisLabel);
 		})();
 
-		// wave template geometry
+		// wave geometry
 		(() => {
 			const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
 			scene.add(wave);
 			objs3d.wave = { wave };
 		})();
+
+		// spinny bois geometries
+		(() => {
+			const arrowWidth = 0.3;
+			const arrowTip = 0.2;
+			const arrowNotch = -0.1;
+			const arrowTail = -0.2;
+			const arrowShape = new THREE.Shape();
+			arrowShape.moveTo(arrowNotch, 0);
+			arrowShape.lineTo(arrowTail, arrowWidth / 2);
+			arrowShape.lineTo(arrowTip, 0);
+			arrowShape.lineTo(arrowTail, -arrowWidth / 2);
+			arrowShape.lineTo(arrowNotch, 0);
+			for (let i = 0; i < N_GRIDPOINTS; ++i) {
+				const mesh = new THREE.Mesh(
+					new THREE.ShapeBufferGeometry(arrowShape),
+					// new THREE.ConeBufferGeometry(0.08, 0.3, 4, 1),
+				);
+				const gpIndex = i * GRIDPOINT_LENGTH;
+				const meshXs = xScale3D(GRIDPOINTS[gpIndex + GP_IDX_X]);
+				const meshYs = yScale3D(GRIDPOINTS[gpIndex + GP_IDX_Y]);
+
+				mesh.position.set(meshXs, meshYs, 0.3);
+				GRIDPOINTS[gpIndex + GP_IDX_MESH] = mesh;
+
+				scene.add(mesh);
+			}
+
+			const backgroundMesh = new THREE.Mesh(
+				new THREE.PlaneBufferGeometry(
+					xScale3D(X_MAX) - xScale3D(X_MIN),
+					yScale3D(Y_MAX) - yScale3D(Y_MIN),
+				),
+				new THREE.MeshBasicMaterial({
+					color: 0x000000,
+				}),
+			);
+			backgroundMesh.visible = false;
+			scene.add(backgroundMesh);
+			objs3d.spinObjs = { backgroundMesh };
+		})();
 	}
 
-	const { wave } = objs3d.wave;
-	const wavefunctionFunction = getWavefunctionFunction(m, sigma, p, currentTime);
-	if (wavefunctionFunction !== null) {
-		wave.geometry.dispose();
-		wave.geometry = new THREE.ParametricBufferGeometry(
-			wavefunctionFunction,
-			70,
-			70,
-		);
+	const getWavefunctionValueAtXVec = get_functionThatGetsWavefunctionValueAtXVec(
+		m,
+		covarianceMat,
+		pVec,
+		t,
+	);
+
+	const shouldShowSpinners = !shouldShowProbability;
+	if (shouldShowSpinners) {
+		const colorInterpolator = d3.interpolateRgb("#444", "#fff");
+		for (let i = 0; i < N_GRIDPOINTS; ++i) {
+			const gpIndex = i * GRIDPOINT_LENGTH;
+			const x = GRIDPOINTS[gpIndex + GP_IDX_X];
+			const y = GRIDPOINTS[gpIndex + GP_IDX_Y];
+			const z = getWavefunctionValueAtXVec([x, y]);
+
+			const mesh = GRIDPOINTS[gpIndex + GP_IDX_MESH];
+			mesh.material.dispose();
+
+			const zm = 5 * z.magnitude ** 0.75; // We cheat for better coloring
+			const scaledMagnitude = zm / (1 + zm ** 2) ** 0.5;
+			const color = colorInterpolator(scaledMagnitude);
+			mesh.material = new THREE.MeshBasicMaterial({
+				color,
+				wireframe: false,
+			});
+
+			mesh.setRotationFromEuler(new THREE.Euler(0, 0, z.phase, "XYZ"));
+		}
 	}
+
+	if (shouldShowProbability) {
+		const { wave } = objs3d.wave;
+		const wavefunctionFunction = getWavefunctionParametricFunction(
+			getWavefunctionValueAtXVec,
+			m,
+			covarianceMat,
+			pVec,
+			t,
+		);
+		if (wavefunctionFunction ?? false) {
+			wave.geometry.dispose();
+			wave.geometry = new THREE.ParametricBufferGeometry(
+				wavefunctionFunction,
+				70,
+				70,
+			);
+		}
+	}
+
 	renderer.render(scene, camera);
 }
 
@@ -638,6 +673,7 @@ function update(dtMS) {
 			[cov, sigmaY ** 2],
 		],
 		[px, py],
+		currentTime,
 	);
 }
 
@@ -698,3 +734,25 @@ function fillLatex() {
 	katex.render(`p_x=${floatFormatter(px)}`, textSpans.px);
 	katex.render(`p_y=${floatFormatter(py)}`, textSpans.py);
 }
+
+function toggleVisibilities(showProba) {
+	objs3d.wave.wave.visible = showProba;
+	for (let i = 0; i < N_GRIDPOINTS; ++i) {
+		const mesh = GRIDPOINTS[i * GRIDPOINT_LENGTH + GP_IDX_MESH];
+		mesh.visible = !showProba;
+	}
+	objs3d.spinObjs.backgroundMesh.visible = false;
+	shouldShowProbability = showProba;
+	update();
+}
+
+function showProbability() {
+	toggleVisibilities(true);
+}
+
+// eslint-disable-next-line no-unused-vars
+function showWavefunction() {
+	toggleVisibilities(false);
+}
+
+showProbability();
