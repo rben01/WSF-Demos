@@ -74,7 +74,7 @@ function getAxesData(whichGraph) {
 			class: "axis x-axis",
 			attrs: {
 				x1: xScale(X_0),
-				x2: xScale(X_1)
+				x2: xScale(X_1),
 				y1: ys0,
 				y2: ys0,
 			},
@@ -166,8 +166,8 @@ for (const graphType of GRAPH_TYPES) {
 
 function sinePoints(n) {
 	const nPoints = 300;
-	const xMin = X_0
-	const xMax = X_1
+	const xMin = X_0;
+	const xMax = X_1;
 	const dx = (xMax - xMin) / (nPoints - 1);
 	const points = [];
 	for (let i = 0; i < nPoints; ++i) {

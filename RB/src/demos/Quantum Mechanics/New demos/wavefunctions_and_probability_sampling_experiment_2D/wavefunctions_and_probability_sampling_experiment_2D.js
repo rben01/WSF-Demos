@@ -1,4 +1,4 @@
-/* global THREE getGridlines */
+/* global THREE getGridlines makeRenderer */
 
 function makeCanvasObjs(canvasId) {
 	const canvas = document.getElementById(canvasId);
@@ -9,18 +9,9 @@ function makeCanvasObjs(canvasId) {
 		0.1,
 		20,
 	);
-	const renderer = new THREE.WebGLRenderer({
-		canvas,
-		antialias: true,
-		powerPreference: "high-performance",
-	});
-	renderer.localClippingEnabled = false;
-	renderer.setPixelRatio(window.devicePixelRatio);
+	const renderer = makeRenderer(canvas);
 
-	canvas.width = canvas.clientWidth * window.devicePixelRatio;
-	canvas.height = canvas.clientHeight * window.devicePixelRatio;
 	renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-
 	return { canvas, scene, camera, renderer };
 }
 

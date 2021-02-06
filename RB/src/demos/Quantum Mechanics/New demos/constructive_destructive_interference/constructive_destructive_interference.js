@@ -1,4 +1,4 @@
-/* global THREE */
+/* global THREE makeRenderer */
 
 const canvas = document.getElementById("plot");
 const scene = new THREE.Scene();
@@ -8,16 +8,8 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	2000,
 );
-const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
-	antialias: true,
-	powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
 
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 
 const _PANE_HEIGHT = 10;

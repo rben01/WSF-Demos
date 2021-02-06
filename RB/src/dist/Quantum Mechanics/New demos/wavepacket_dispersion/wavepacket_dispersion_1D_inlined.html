@@ -871,6 +871,36 @@ callback,
 }),
 );
 }
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+return renderer;
+}
 </script><script type="text/javascript">class Complex {
 constructor(magnitude, phase) {
 this._$r = magnitude;
@@ -992,7 +1022,7 @@ return this.constructor.fromPolar(magnitude, phase);
 }
 }
 Complex.i = Complex.fromImag(1);
-</script><script type="text/javascript">/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex */
+</script><script type="text/javascript">/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex makeRenderer */
 const WIDTH = 800;
 const HEIGHT = 325;
 const HEIGHT_3D = 325;
@@ -1035,15 +1065,7 @@ CAMERA_EXTENT,
 -50,
 50,
 );
-const renderer = new THREE.WebGLRenderer({
-canvas: canvas,
-antialias: true,
-powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 // z will be up
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));

@@ -885,6 +885,36 @@ callback,
 }),
 );
 }
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+return renderer;
+}
 </script><script type="text/javascript">class Complex {
 constructor(magnitude, phase) {
 this._$r = magnitude;
@@ -1070,7 +1100,7 @@ const y = (a2 * c1 - a1 * c2) / denominator;
 return [x, y];
 }
 }
-</script><script type="text/javascript">/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines */
+</script><script type="text/javascript">/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines makeRenderer */
 const WIDTH = 800;
 const HEIGHT_3D = 700;
 const X_MAX = 32.2;
@@ -1115,15 +1145,7 @@ CAMERA_EXTENT,
 -50,
 50,
 );
-const renderer = new THREE.WebGLRenderer({
-canvas: canvas,
-antialias: true,
-powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 // z will be up
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));
@@ -1672,7 +1694,8 @@ const curvePoints = gl.map(
 new THREE.Vector3(
 xScale3D(x),
 yScale3D(y),
-zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))),
+zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))) +
+0.005,
 ),
 );
 mesh.geometry.dispose();
@@ -1688,7 +1711,7 @@ renderer.render(scene, camera);
 }
 function update(dtMS) {
 dtMS = dtMS ?? 0;
-const speed = 2;
+const speed = 1.5;
 currentTime += (speed * dtMS) / 1000;
 const [m, sigmaX, sigmaY, sigmaCorr, px, py] = [
 "m",

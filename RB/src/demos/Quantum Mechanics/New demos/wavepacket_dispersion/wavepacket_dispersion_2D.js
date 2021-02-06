@@ -1,4 +1,4 @@
-/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines */
+/* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines makeRenderer */
 const WIDTH = 800;
 const HEIGHT_3D = 700;
 
@@ -52,16 +52,7 @@ const camera = new THREE.OrthographicCamera(
 	-50,
 	50,
 );
-const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
-	antialias: true,
-	powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
-
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 
 // z will be up
@@ -703,7 +694,8 @@ function update3D(m, covarianceMat, pVec, t) {
 					new THREE.Vector3(
 						xScale3D(x),
 						yScale3D(y),
-						zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))),
+						zScale3D(zToProbability(getWavefunctionValueAtXVec([x, y]))) +
+							0.005,
 					),
 			);
 			mesh.geometry.dispose();
@@ -721,7 +713,7 @@ function update3D(m, covarianceMat, pVec, t) {
 
 function update(dtMS) {
 	dtMS = dtMS ?? 0;
-	const speed = 2;
+	const speed = 1.5;
 	currentTime += (speed * dtMS) / 1000;
 
 	const [m, sigmaX, sigmaY, sigmaCorr, px, py] = [

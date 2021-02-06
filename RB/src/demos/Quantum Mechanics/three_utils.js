@@ -192,3 +192,37 @@ function enableDragToRotateCamera({
 		}),
 	);
 }
+
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+	return (
+		[
+			"iPad Simulator",
+			"iPhone Simulator",
+			"iPod Simulator",
+			"iPad",
+			"iPhone",
+			"iPod",
+		].includes(navigator.platform) ||
+		// iPad on iOS 13 detection
+		(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+	);
+}
+
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+	const on_iOS = userIsOn_iOS();
+	const renderer = new THREE.WebGLRenderer({
+		canvas: canvas,
+		antialias: !on_iOS,
+		powerPreference: on_iOS ? "low-power" : "high-performance",
+	});
+	renderer.localClippingEnabled = false;
+	renderer.setPixelRatio(window.devicePixelRatio);
+
+	canvas.width = canvas.clientWidth * window.devicePixelRatio;
+	canvas.height = canvas.clientHeight * window.devicePixelRatio;
+	renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+
+	return renderer;
+}

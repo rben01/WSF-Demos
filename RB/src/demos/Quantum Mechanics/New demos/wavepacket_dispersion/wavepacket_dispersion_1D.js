@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex */
+/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex makeRenderer */
 const WIDTH = 800;
 const HEIGHT = 325;
 const HEIGHT_3D = 325;
@@ -50,16 +50,7 @@ const camera = new THREE.OrthographicCamera(
 	-50,
 	50,
 );
-const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
-	antialias: true,
-	powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-renderer.setPixelRatio(window.devicePixelRatio);
-
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 
 // z will be up

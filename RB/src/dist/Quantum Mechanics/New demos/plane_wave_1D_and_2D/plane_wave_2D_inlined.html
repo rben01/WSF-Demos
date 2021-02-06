@@ -478,11 +478,14 @@ const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
 return Math.sqrt(sum);
 }
 function __matMulHelper(mat1, mat2) {
-if (typeof mat1[0].length === "undefined") {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
 mat1 = [mat1];
 }
-const squeezeAns = typeof mat2[0].length === "undefined";
-if (squeezeAns) {
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
 mat2 = mat2.map(elem => [elem]);
 }
 const m = mat1.length;
@@ -500,7 +503,15 @@ rowAns.push(sum);
 }
 ans.push(rowAns);
 }
-if (squeezeAns) {
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
 return ans.map(row => row[0]);
 }
 return ans;
@@ -594,13 +605,13 @@ swapOrientation,
 }) {
 drawEdges = drawEdges ?? false;
 swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
 if (swapOrientation) {
 [xMin, yMin] = [yMin, xMin];
 [xMax, yMax] = [yMax, xMax];
 }
 const iMin = drawEdges ? 0 : 1;
 const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
-nPointsPerGridline = nPointsPerGridline ?? 51;
 const dx = (xMax - xMin) / (nGridlines - 1);
 const dy = (yMax - yMin) / (nPointsPerGridline - 1);
 const gridlines = [];
@@ -617,10 +628,12 @@ trueY = y;
 trueX = y;
 trueY = x;
 }
-const point =
-zFunc !== undefined
-? [trueX, trueY, zFunc(trueX, trueY)]
-: [trueX, trueY];
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
 gridline.push(point);
 }
 gridlines.push(gridline);
@@ -861,14 +874,46 @@ callback,
 }),
 );
 }
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+return renderer;
+}
 </script><script type="text/javascript">class Complex {
 constructor(magnitude, phase) {
 this._$r = magnitude;
 this._$theta = phase;
 }
 static from(other) {
-if (other.constructor === this) {
-return other;
+if (other.magnitude !== undefined || other.phase !== undefined) {
+return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+} else if (other.re !== undefined || other.im !== undefined) {
+return this.fromCartesian(other.re ?? 0, other.im ?? 0);
 } else if (typeof other === "number") {
 return this.fromReal(other);
 } else {
@@ -904,16 +949,18 @@ return this._$r * Math.sin(this._$theta);
 conj() {
 return this.constructor.fromPolar(this._$r, -this._$theta);
 }
+toPolar() {
+return { magnitude: this.magnitude, phase: this.phase };
+}
+toCartesian() {
+return { re: this.re, im: this.im };
+}
 static mul(...args) {
 let magnitude = 1;
 let phase = 0;
 for (const arg of args) {
-if (typeof arg === "number") {
-magnitude *= arg;
-} else {
-magnitude *= arg.magnitude;
-phase += arg.phase;
-}
+magnitude *= arg.magnitude ?? arg;
+phase += arg.phase ?? 0;
 }
 return this.fromPolar(magnitude, phase);
 }
@@ -921,31 +968,20 @@ mul(...others) {
 return this.constructor.mul(this, ...others);
 }
 static div(z1, z2) {
-if (typeof z1 === "number") {
-z1 = Complex.fromReal(z1);
-}
-return z1.div(z2);
-}
-div(other) {
-if (typeof other === "number") {
-return new this.constructor(this.magnitude * other, this.phase);
-} else {
-return new this.constructor(
-this.magnitude / other.magnitude,
-this.phase - other.phase,
+return this.fromPolar(
+(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+(z1.phase ?? 0) - (z2.phase ?? 0),
 );
 }
+div(other) {
+return this.constructor.div(this, other);
 }
 static add(...args) {
 let re = 0;
 let im = 0;
 for (const arg of args) {
-if (typeof arg === "number") {
-re += arg;
-} else {
-re += arg.re;
-im += arg.im;
-}
+re += arg.re ?? arg;
+im += arg.im ?? 0;
 }
 return this.fromCartesian(re, im);
 }
@@ -953,16 +989,13 @@ add(...others) {
 return this.constructor.add(this, ...others);
 }
 static sub(z1, z2) {
-if (typeof z1 === "number") {
-z1 = Complex.fromReal(z1);
-}
-return z1.sub(z2);
+return this.fromCartesian(
+(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+);
 }
 sub(other) {
-if (typeof other === "number") {
-other = Complex.fromReal(other);
-}
-return this.constructor.fromCartesian(this.re - other.re, this.im - other.im);
+return this.constructor.sub(this, other);
 }
 static exp(z) {
 if (typeof z === "number") {
@@ -1006,6 +1039,13 @@ static fromPointSlopeForm(x0, y0, m) {
 // y - y0 = m * (x - x0)
 return new this(-m, 1, m * x0 - y0);
 }
+static fromPointAndDxDy(x0, y0, dx, dy) {
+// y - y0 = (dy/dx) * (x - x0) unless dx === 0
+if (dx === 0) {
+return this.fromConstantX(x0);
+}
+return this.fromPointSlopeForm(x0, y0, dy / dx);
+}
 static fromConstantY(y0) {
 // y = y0
 return new this(0, 1, -y0);
@@ -1013,6 +1053,11 @@ return new this(0, 1, -y0);
 static fromConstantX(x0) {
 // x = x0
 return new this(1, 0, -x0);
+}
+toPointSlopeForm() {
+const m = -this._a / this._b;
+const k = -this._c / this._b;
+return { m, k };
 }
 get a() {
 return this._a;
@@ -1036,12 +1081,15 @@ intersectionWith(other) {
 const { a: a1, b: b1, c: c1 } = this;
 const { a: a2, b: b2, c: c2 } = other;
 const denominator = a1 * b2 - a2 * b1;
+if (denominator === 0) {
+return null;
+}
 const x = (b1 * c2 - b2 * c1) / denominator;
 const y = (a2 * c1 - a1 * c2) / denominator;
 return [x, y];
 }
 }
-</script><script type="text/javascript">/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex */
+</script><script type="text/javascript">/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex makeRenderer */
 const WIDTH = 900;
 const HEIGHT_3D = 700;
 const X_MAX = 2 * Math.PI;
@@ -1082,14 +1130,7 @@ canvas.clientWidth / canvas.clientHeight,
 0.1,
 100,
 );
-const renderer = new THREE.WebGLRenderer({
-canvas: canvas,
-antialias: true,
-powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 // z will be up
 scene.add(new THREE.AmbientLight(0xffffff, 0.7));

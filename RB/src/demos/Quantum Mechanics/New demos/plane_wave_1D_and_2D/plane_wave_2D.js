@@ -1,4 +1,4 @@
-/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex */
+/* global Complex THREE makeTextSprite makeThreeCameraDrag Line2D katex makeRenderer */
 const WIDTH = 900;
 const HEIGHT_3D = 700;
 
@@ -48,15 +48,7 @@ const camera = new THREE.PerspectiveCamera(
 	0.1,
 	100,
 );
-const renderer = new THREE.WebGLRenderer({
-	canvas: canvas,
-	antialias: true,
-	powerPreference: "high-performance",
-});
-renderer.localClippingEnabled = false;
-
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
+const renderer = makeRenderer(canvas);
 renderer.setSize(WIDTH, HEIGHT_3D);
 
 // z will be up

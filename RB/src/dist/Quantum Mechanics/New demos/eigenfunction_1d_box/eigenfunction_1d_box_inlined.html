@@ -468,11 +468,14 @@ const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
 return Math.sqrt(sum);
 }
 function __matMulHelper(mat1, mat2) {
-if (typeof mat1[0].length === "undefined") {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
 mat1 = [mat1];
 }
-const squeezeAns = typeof mat2[0].length === "undefined";
-if (squeezeAns) {
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
 mat2 = mat2.map(elem => [elem]);
 }
 const m = mat1.length;
@@ -490,7 +493,15 @@ rowAns.push(sum);
 }
 ans.push(rowAns);
 }
-if (squeezeAns) {
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
 return ans.map(row => row[0]);
 }
 return ans;
@@ -584,13 +595,13 @@ swapOrientation,
 }) {
 drawEdges = drawEdges ?? false;
 swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
 if (swapOrientation) {
 [xMin, yMin] = [yMin, xMin];
 [xMax, yMax] = [yMax, xMax];
 }
 const iMin = drawEdges ? 0 : 1;
 const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
-nPointsPerGridline = nPointsPerGridline ?? 51;
 const dx = (xMax - xMin) / (nGridlines - 1);
 const dy = (yMax - yMin) / (nPointsPerGridline - 1);
 const gridlines = [];
@@ -607,10 +618,12 @@ trueY = y;
 trueX = y;
 trueY = x;
 }
-const point =
-zFunc !== undefined
-? [trueX, trueY, zFunc(trueX, trueY)]
-: [trueX, trueY];
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
 gridline.push(point);
 }
 gridlines.push(gridline);
