@@ -719,7 +719,7 @@ function update3D(m, covarianceMat, pVec, t) {
 
 function update(dtMS) {
 	dtMS = dtMS ?? 0;
-	const speed = 3;
+	const speed = 2;
 	currentTime += (speed * dtMS) / 1000;
 
 	const [m, sigmaX, sigmaY, sigmaCorr, px, py] = [
