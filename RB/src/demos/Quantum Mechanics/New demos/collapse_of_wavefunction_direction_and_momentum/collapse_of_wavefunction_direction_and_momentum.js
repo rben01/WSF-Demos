@@ -106,6 +106,12 @@ function updateGraph() {
     i += (x1.domain()[1] - x1.domain()[0]) / 1000
   ) {
     ar.push([x1(i), y(psi(i))]);
+  }
+  for (
+    var j = x2.domain()[0];
+    j < x2.domain()[1];
+    j += (x2.domain()[1] - x2.domain()[0]) / 1000
+  ) {
     ar2.push([x2(i), y(phi(i))]);
   }
   psi_path.attr("d", d3.line()(ar));
@@ -136,8 +142,12 @@ function measure_p() {
   b = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + b;
   d = 1 / Math.sqrt(2);
   t = 0.04;
+  prevTimestampMS = undefined;
   var xmax = Math.ceil(Math.abs(b) / 10) * 10;
   x2.domain([-xmax, xmax]);
+  xaxis2.call(d3.axisBottom(x2).ticks(5));
+  d3.selectAll(".tick text").attr("class", "axis-label");
+  updateGraph();
 }
 
 function pause() {
