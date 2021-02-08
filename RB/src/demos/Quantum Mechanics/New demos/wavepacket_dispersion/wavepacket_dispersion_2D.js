@@ -1,5 +1,5 @@
 /* global Complex THREE makeTextSprite enableDragToRotateCamera katex matMul getGridlines makeRenderer */
-const WIDTH = 800;
+const WIDTH = 900;
 const HEIGHT_3D = 700;
 
 const X_MAX = 32.2;
@@ -19,6 +19,16 @@ const Z_0 = 0;
 const Z_MIN = -Z_MAX;
 
 const zScale3D = d3.scaleLinear([0, 1], [0, 7]);
+
+const MIN_SIGMA = 1.25;
+const MAX_SIGMA = 2.25;
+const DEFAULT_SIGMA = 1;
+const sigmaTextScale = d3.scaleLinear([MIN_SIGMA, MAX_SIGMA], [0.5, 1]);
+
+const MIN_P = -2;
+const MAX_P = 2;
+const DEFAULT_P = 0;
+const pTextScale = d3.scaleLinear([MIN_P, MAX_P], [-3, 3]);
 
 const H_BAR = 1;
 
@@ -43,7 +53,7 @@ const scene = new THREE.Scene();
 // 	0.1,
 // 	2000,
 // );
-const CAMERA_EXTENT = 11;
+const CAMERA_EXTENT = 9;
 const camera = new THREE.OrthographicCamera(
 	-CAMERA_EXTENT,
 	CAMERA_EXTENT,
@@ -65,7 +75,7 @@ scene.add(
 	})(),
 );
 
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(1.4, -5.7, 2.2);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(1.4, -5.7, 3.2);
 const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
 const CAMERA_UP = new THREE.Vector3(0, 0, 1);
 
@@ -102,13 +112,6 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 let currentTime = 0;
 let isAnimating = false;
 
-const MIN_SIGMA = 1;
-const MAX_SIGMA = 2;
-const DEFAULT_SIGMA = 1;
-const MIN_P = -3;
-const MAX_P = 3;
-const DEFAULT_P = 0;
-
 const sliders = {
 	m: (() => {
 		const slider = document.getElementById("slider-m");
@@ -135,7 +138,7 @@ const sliders = {
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
 				katex.render(
-					`\\sigma_x=${floatFormatter(+this.value)}`,
+					`\\sigma_x=${floatFormatter(sigmaTextScale(+this.value))}`,
 					textSpans.sigmaX,
 				);
 			}
@@ -153,7 +156,7 @@ const sliders = {
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
 				katex.render(
-					`\\sigma_y=${floatFormatter(this.value)}`,
+					`\\sigma_y=${floatFormatter(sigmaTextScale(this.value))}`,
 					textSpans.sigmaY,
 				);
 			}
@@ -188,7 +191,10 @@ const sliders = {
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
-				katex.render(`p_x=${floatFormatter(+this.value)}`, textSpans.px);
+				katex.render(
+					`p_x=${floatFormatter(pTextScale(+this.value))}`,
+					textSpans.px,
+				);
 			}
 		};
 
@@ -203,7 +209,10 @@ const sliders = {
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {
-				katex.render(`p_y=${floatFormatter(+this.value)}`, textSpans.py);
+				katex.render(
+					`p_y=${floatFormatter(pTextScale(+this.value))}`,
+					textSpans.py,
+				);
 			}
 		};
 
@@ -318,7 +327,7 @@ function get_functionThatGetsWavefunctionValueAtXVec(m, covarianceMat, pVec, t) 
 }
 
 function zToProbability(z) {
-	return 5 * z.magnitude ** 2;
+	return 10 * z.magnitude ** 2;
 }
 
 const FILL_REGION_PROPTN = 0.94;
@@ -544,7 +553,7 @@ function update3D(m, covarianceMat, pVec, t) {
 			yAxisLabel.position.z = 0.5;
 			scene.add(yAxisLabel);
 
-			const zAxisLabel = makeAxisLabel("|𝜓|");
+			const zAxisLabel = makeAxisLabel("|𝜓|²");
 			zAxisLabel.position.x = 0.1;
 			zAxisLabel.position.y = 0.2;
 			zAxisLabel.position.z = zMax;
@@ -712,7 +721,7 @@ function update3D(m, covarianceMat, pVec, t) {
 
 function update(dtMS) {
 	dtMS = dtMS ?? 0;
-	const speed = 1.5;
+	const speed = 2;
 	currentTime += (speed * dtMS) / 1000;
 
 	const [m, sigmaX, sigmaY, sigmaCorr, px, py] = [
@@ -787,11 +796,17 @@ function fillLatex() {
 		"py",
 	].map(k => +sliders[k].value);
 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
-	katex.render(`\\sigma_x=${floatFormatter(sigmaX)}`, textSpans.sigmaX);
-	katex.render(`\\sigma_y=${floatFormatter(sigmaY)}`, textSpans.sigmaY);
+	katex.render(
+		`\\sigma_x=${floatFormatter(sigmaTextScale(sigmaX))}`,
+		textSpans.sigmaX,
+	);
+	katex.render(
+		`\\sigma_y=${floatFormatter(sigmaTextScale(sigmaY))}`,
+		textSpans.sigmaY,
+	);
 	katex.render(`\\rho=${floatFormatter(sigmaCorr)}`, textSpans.sigmaCorr);
-	katex.render(`p_x=${floatFormatter(px)}`, textSpans.px);
-	katex.render(`p_y=${floatFormatter(py)}`, textSpans.py);
+	katex.render(`p_x=${floatFormatter(pTextScale(px))}`, textSpans.px);
+	katex.render(`p_y=${floatFormatter(pTextScale(py))}`, textSpans.py);
 }
 
 function toggleVisibilities(showProba) {
