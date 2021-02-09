@@ -2,8 +2,8 @@ const SVG = d3.select("#svg"),
   START = d3.select("#start"),
   RESET = d3.select("#reset"),
   MASS = d3.select("#mass"),
-  XPREC = d3.select("xprec"),
-  PPREC = d3.select("pprec"),
+  XPREC = d3.select("#xprec"),
+  PPREC = d3.select("#pprec"),
   W = 600,
   H = 700;
 
@@ -112,19 +112,19 @@ function updateGraph() {
     j < x2.domain()[1];
     j += (x2.domain()[1] - x2.domain()[0]) / 1000
   ) {
-    ar2.push([x2(i), y(phi(i))]);
+    ar2.push([x2(j), y(phi(j))]);
   }
   psi_path.attr("d", d3.line()(ar));
   phi_path.attr("d", d3.line()(ar2));
 }
 
 function measure_x() {
+  d = Math.sqrt(2) * xp;
   var sigma = (d * Math.sqrt(1 + (t / (m * d ** 2)) ** 2)) / Math.sqrt(2),
     u1 = Math.random(),
     u2 = Math.random();
   a = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + a;
   b = 0;
-  d = Math.sqrt(2);
   t = 0.04;
   var xmax = Math.ceil(Math.abs(a) / 10) * 10;
   x1.domain([-xmax, xmax]);
@@ -135,12 +135,12 @@ function measure_x() {
 }
 
 function measure_p() {
-  var sigma = 1 / (0.04 * Math.sqrt(2)),
+  d = 1 / (Math.sqrt(2) * pp);
+  var sigma = 1 / (d * Math.sqrt(2)),
     u1 = Math.random(),
     u2 = Math.random();
   a = 0;
   b = sigma * Math.sqrt(-2.0 * Math.log(u1)) * Math.cos(2 * Math.PI * u2) + b;
-  d = 1 / Math.sqrt(2);
   t = 0.04;
   prevTimestampMS = undefined;
   var xmax = Math.ceil(Math.abs(b) / 10) * 10;
