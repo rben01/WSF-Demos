@@ -4,8 +4,8 @@ const SVG = d3.select("#svg"),
   MASS = d3.select("#mass"),
   XPREC = d3.select("#xprec"),
   PPREC = d3.select("#pprec"),
-  W = 600,
-  H = 700;
+  W = 650,
+  H = 650;
 
 var x1 = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   x2 = d3.scaleLinear().range([0, W]).domain([-10, 10]),
