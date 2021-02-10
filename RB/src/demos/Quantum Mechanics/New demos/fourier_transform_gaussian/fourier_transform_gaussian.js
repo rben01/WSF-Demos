@@ -226,10 +226,10 @@ function updateText({ xSpaceMean, xSpaceWidth, pSpaceMean, pSpaceWidth } = {}) {
 	}
 
 	if (xSpaceMean !== undefined) {
-		katex.render(`\\sigma=${floatFormatter(xSpaceMean)}`, textSpans.positionMean);
+		katex.render(`\\mu=${floatFormatter(xSpaceMean)}`, textSpans.positionMean);
 	}
 	if (xSpaceWidth !== undefined) {
-		katex.render(`\\mu=${floatFormatter(xSpaceWidth)}`, textSpans.positionWidth);
+		katex.render(`\\sigma=${floatFormatter(xSpaceWidth)}`, textSpans.positionWidth);
 	}
 	if (pSpaceMean !== undefined) {
 		katex.render(`\\theta=${floatFormatter(pSpaceMean)}`, textSpans.momentumMean);
