@@ -4,8 +4,8 @@ const SVG = d3.select("#svg"),
   MASS = d3.select("#mass"),
   XPREC = d3.select("#xprec"),
   PPREC = d3.select("#pprec"),
-  W = 600,
-  H = 700;
+  W = 650,
+  H = 650;
 
 var x1 = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   x2 = d3.scaleLinear().range([0, W]).domain([-10, 10]),
@@ -23,7 +23,12 @@ var x1 = d3.scaleLinear().range([0, W]).domain([-10, 10]),
   phi,
   prevTimestampMS;
 
-g1 = SVG.append("g").attr("transform", `translate(50, 25)`);
+var g1 = SVG.append("g").attr("transform", `translate(50, 75)`);
+g1.append("text")
+  .attr("transform", `translate(${W / 2 - 30}, -25)`)
+  .attr("stroke", "white")
+  .attr("fill", "white")
+  .text("|ψ(x,t)|²");
 var xaxis1 = g1
   .append("g")
   .attr("class", "axis")
@@ -39,7 +44,7 @@ var psi_path = g1
   .attr("stroke", "#5df")
   .attr("stroke-width", 5);
 
-var g2 = SVG.append("g").attr("transform", `translate(${100 + W}, 25)`),
+var g2 = SVG.append("g").attr("transform", `translate(${100 + W}, 75)`),
   xaxis2 = g2
     .append("g")
     .attr("class", "axis")
@@ -54,6 +59,11 @@ var phi_path = g2
   .attr("fill", "none")
   .attr("stroke", "#5df")
   .attr("stroke-width", 5);
+g2.append("text")
+  .attr("transform", `translate(${W / 2 - 30}, -25)`)
+  .attr("stroke", "white")
+  .attr("fill", "white")
+  .text("|φ(x,t)|²");
 
 function getPsi(d, a, b, m, t) {
   var sigma = (d * Math.sqrt(1 + (t / (m * d ** 2)) ** 2)) / Math.sqrt(2);
