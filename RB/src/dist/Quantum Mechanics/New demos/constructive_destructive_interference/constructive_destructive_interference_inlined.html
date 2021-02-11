@@ -710,6 +710,13 @@ aspectRatio = aspectRatio ?? 1;
 depthWrite = depthWrite ?? false;
 const canvas = document.createElement("canvas");
 const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
 context.font = `${fontweight} ${fontsize}px ${fontface}`;
 const metrics = context.measureText(message);
 const textWidth = metrics.width;
