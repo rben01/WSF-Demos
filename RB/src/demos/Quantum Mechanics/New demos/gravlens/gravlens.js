@@ -132,7 +132,7 @@ var video = document.querySelector("#videoElement");
 
 var x_prime = math.flatten(
   math.add(math.range(0, 960).map(() => x0._data)._data, delta_x)
-);
+)._data;
 var y_prime = math.flatten(
   math.round(
     math.add(
@@ -140,7 +140,7 @@ var y_prime = math.flatten(
       math.dotMultiply(m, delta_x)
     )
   )
-);
+)._data;
 var width = x_range;
 var height = y_range;
 
