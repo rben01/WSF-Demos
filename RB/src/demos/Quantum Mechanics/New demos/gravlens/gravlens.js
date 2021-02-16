@@ -117,14 +117,30 @@ const multiply = (X, y) => {
   return X;
 };
 
-var delta_x = math.round(
-  divide(math.multiply(-1, math.multiply(offset, dx))._data, r)
+const numerator = math.multiply(
+  -1,
+  math.dotMultiply(
+    offset,
+    math.transpose(
+      dx._data.map((elem) => math.range(0, offset.length).map(() => elem))
+    )
+  )
 );
+const delta_x = math.round(math.dotDivide(numerator, r));
 
 var video = document.querySelector("#videoElement");
 
-var x_prime = math.flatten(add(x0, delta_x));
-var y_prime = math.flatten(math.round(add(y0, multiply(m, delta_x))));
+var x_prime = math.flatten(
+  math.add(math.range(0, 960).map(() => x0._data)._data, delta_x)
+);
+var y_prime = math.flatten(
+  math.round(
+    math.add(
+      math.transpose(math.range(0, 1280).map(() => y0._data)._data),
+      math.dotMultiply(m, delta_x)
+    )
+  )
+);
 var width = x_range;
 var height = y_range;
 
