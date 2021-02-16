@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Gravitational Lensing</title>
+ 
+<style>
+#container {
+	margin: auto;
+	text-align: center
+	vertical-alight: middle;
+}
+#videoElement {
+	width: {{ data.x_range }};
+	height: {{ data.y_range }};
+	background-color: #666;
+}
+#canvas {
+    display: block
+    margin-left: auto
+    margin-right: auto
+}
+</style>
+</head>
+ 
+<body>
+<div id="container">
+	<video hidden autoplay="true" id="videoElement">
+	
+	</video>
+	
+	<canvas id="canvas">Your browser doesn't support canvas</canvas>
+</div>
+
+<script src="./gravlens.js"></script>
+
+</body>
+</html>
