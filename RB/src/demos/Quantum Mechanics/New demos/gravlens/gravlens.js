@@ -31,7 +31,8 @@ for (var i = 0; i < y_range; i++) {
 
 var x0 = math.matrix(math.range(0, x_range)),
   y0 = math.matrix(math.range(0, y_range)),
-  dx = math.subtract(x0, mid_x);
+  dx = math.subtract(x0, mid_x),
+  m = math.matrix(m);
 
 var r = math.matrix(r_sq.map((L) => L.map(Math.sqrt)));
 
@@ -51,18 +52,17 @@ var alpha = math.atan(
   );
 
 const divide = (X, y) => {
-  const _X = _.clone(X);
-  for (let rowIndex = 0; rowIndex < _X.length; rowIndex++) {
+  for (let rowIndex = 0; rowIndex < X.length; rowIndex++) {
     const row = X[rowIndex];
     for (let colIndex = 0; colIndex < row.length; colIndex++) {
       const column = row[colIndex];
       // Supports y.length === 1 or y.length === row.length
       if (y.length === 1) {
         const subs = y[0];
-        _X[rowIndex][colIndex] = column / subs;
+        X[rowIndex][colIndex] = column / subs;
       } else if (y.length === row.length) {
         const subs = y[colIndex];
-        _X[rowIndex][colIndex] = column / subs;
+        X[rowIndex][colIndex] = column / subs;
       } else {
         throw Error(
           `Dimension of y ${y.length} and row ${row.length} are not compatible`
@@ -70,7 +70,51 @@ const divide = (X, y) => {
       }
     }
   }
-  return _X;
+  return X;
+};
+
+const add = (X, y) => {
+  for (let rowIndex = 0; rowIndex < X.length; rowIndex++) {
+    const row = X[rowIndex];
+    for (let colIndex = 0; colIndex < row.length; colIndex++) {
+      const column = row[colIndex];
+      // Supports y.length === 1 or y.length === row.length
+      if (y.length === 1) {
+        const subs = y[0];
+        X[rowIndex][colIndex] = column + subs;
+      } else if (y.length === row.length) {
+        const subs = y[colIndex];
+        X[rowIndex][colIndex] = column + subs;
+      } else {
+        throw Error(
+          `Dimension of y ${y.length} and row ${row.length} are not compatible`
+        );
+      }
+    }
+  }
+  return X;
+};
+
+const multiply = (X, y) => {
+  for (let rowIndex = 0; rowIndex < X.length; rowIndex++) {
+    const row = X[rowIndex];
+    for (let colIndex = 0; colIndex < row.length; colIndex++) {
+      const column = row[colIndex];
+      // Supports y.length === 1 or y.length === row.length
+      if (y.length === 1) {
+        const subs = y[0];
+        X[rowIndex][colIndex] = column * subs;
+      } else if (y.length === row.length) {
+        const subs = y[colIndex];
+        X[rowIndex][colIndex] = column * subs;
+      } else {
+        throw Error(
+          `Dimension of y ${y.length} and row ${row.length} are not compatible`
+        );
+      }
+    }
+  }
+  return X;
 };
 
 var delta_x = math.round(
@@ -79,8 +123,8 @@ var delta_x = math.round(
 
 var video = document.querySelector("#videoElement");
 
-var x_prime = math.flatten(x0 + delta_x);
-var y_prime = math.flatten(math.round(y0 + m * delta_x));
+var x_prime = math.flatten(add(x0, delta_x));
+var y_prime = math.flatten(math.round(add(y0, multiply(m, delta_x))));
 var width = x_range;
 var height = y_range;
 
@@ -95,8 +139,8 @@ var processor = {
 
   doLoad: function () {
     this.c1 = document.getElementById("canvas");
-    this.c1.width = data.x_range;
-    this.c1.height = data.y_range;
+    this.c1.width = x_range;
+    this.c1.height = y_range;
     this.ctx1 = this.c1.getContext("2d");
     this.width = width;
     this.height = height;
