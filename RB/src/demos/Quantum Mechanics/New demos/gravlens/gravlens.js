@@ -34,7 +34,7 @@ var x0 = math.matrix(math.range(0, x_range)),
   dx = math.subtract(x0, mid_x),
   m = math.matrix(m);
 
-var r = math.matrix(r_sq.map((L) => L.map(Math.sqrt)));
+var r = r_sq.map((L) => L.map(Math.sqrt));
 
 var alpha = math.atan(
     math.divide(r, (observer_distance_pixels + source_distance_pixels) ** 2)
@@ -118,7 +118,7 @@ const multiply = (X, y) => {
 };
 
 var delta_x = math.round(
-  divide(math.multiply(-1, math.multiply(offset, dx)), r)
+  divide(math.multiply(-1, math.multiply(offset, dx))._data, r)
 );
 
 var video = document.querySelector("#videoElement");
