@@ -8,43 +8,74 @@ const G = 6.67408 * 10 ** -11, //m^3 kg^-1 s^-2
   M = solar_mass * black_hole_size,
   rs = (2 * G * M) / c ** 2,
   observer_distance_pixels = observer_distance / meters_per_pixel,
-  source_distance_pixels = source_distance / meters_per_pixel;
-(rs_pixels = parseInt(Math.round(rs / meters_per_pixel))),
-  (x_range = 1280),
-  (mid_x = x_range / 2),
-  (y_range = 960),
-  (mid_y = y_range / 2),
-  (alpha = math.arctan(
-    r / (observer_distance_pixels + source_distance_pixels) ** 2
-  )),
-  (theta = (2 * rs_pixels) / r),
-  (offset =
-    source_distance_pixels *
-    (1 / Math.tan(Math.PI / 2 + alpha - theta) +
-      1 / Math.tan(Math.PI / 2 - alpha)));
+  source_distance_pixels = source_distance / meters_per_pixel,
+  rs_pixels = parseInt(Math.round(rs / meters_per_pixel)),
+  x_range = 1280,
+  mid_x = x_range / 2,
+  y_range = 960,
+  mid_y = y_range / 2;
 
 var r_sq = [],
-  m = [],
-  dx = [];
+  m = [];
 
-for (var i = 0; i < x_range; i++) {
-  var col = [];
-  var mcol = [];
-  for (var j = 0; j < y_range; j++) {
-    col.push((i - mid_x) ** 2 + (j - mid_y) ** 2);
-    mcol.push((i - mid_x) / (j - mid_y));
+for (var i = 0; i < y_range; i++) {
+  var row = [];
+  var mrow = [];
+  for (var j = 0; j < x_range; j++) {
+    row.push((j - mid_x) ** 2 + (i - mid_y) ** 2);
+    mrow.push((j - mid_x) / (i - mid_y));
   }
-  r_sq.push(col);
-  m.push(mcol);
-  dx.push(i - mid_x);
+  r_sq.push(row);
+  m.push(mrow);
 }
 
-x0 = math.matrix(math.range(0, x_range));
-y0 = math.matrix(math.range(0, y_range));
+var x0 = math.matrix(math.range(0, x_range)),
+  y0 = math.matrix(math.range(0, y_range)),
+  dx = math.subtract(x0, mid_x);
 
 var r = math.matrix(r_sq.map((L) => L.map(Math.sqrt)));
-dx = math.matrix(dx);
-var delta_x = math.round((-1 * offset * dx) / r);
+
+var alpha = math.atan(
+    math.divide(r, (observer_distance_pixels + source_distance_pixels) ** 2)
+  ),
+  theta = math.map(r, (x) => (2 * rs_pixels) / x),
+  offset = math.multiply(
+    source_distance_pixels,
+    math.add(
+      math.map(
+        math.tan(math.add(Math.PI / 2, math.subtract(alpha, theta))),
+        (x) => 1 / x
+      ),
+      math.map(math.tan(math.subtract(Math.PI / 2, alpha)), (x) => 1 / x)
+    )
+  );
+
+const divide = (X, y) => {
+  const _X = _.clone(X);
+  for (let rowIndex = 0; rowIndex < _X.length; rowIndex++) {
+    const row = X[rowIndex];
+    for (let colIndex = 0; colIndex < row.length; colIndex++) {
+      const column = row[colIndex];
+      // Supports y.length === 1 or y.length === row.length
+      if (y.length === 1) {
+        const subs = y[0];
+        _X[rowIndex][colIndex] = column / subs;
+      } else if (y.length === row.length) {
+        const subs = y[colIndex];
+        _X[rowIndex][colIndex] = column / subs;
+      } else {
+        throw Error(
+          `Dimension of y ${y.length} and row ${row.length} are not compatible`
+        );
+      }
+    }
+  }
+  return _X;
+};
+
+var delta_x = math.round(
+  divide(math.multiply(-1, math.multiply(offset, dx)), r)
+);
 
 var video = document.querySelector("#videoElement");
 
