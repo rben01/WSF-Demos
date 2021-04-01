@@ -9,10 +9,27 @@
         </script>
     <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
     <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
+    <link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="update();"
+		></script>
+
 </head>
 
 <body>
     <div class="grid-left-right">
+        <div>
         <div class=controls-container>
             <span class="slider-label">α: <span class="highlighted-text" id="label"></span></span>
             <span class="param-slider-container">
@@ -20,6 +37,9 @@
             </span>
             <br>
             <button id="grab" class="button">Grab Data</button>
+        </div>
+        <br><br>
+        <div><span id="eqn-container" class="math"></span></div>
         </div>
 
         <div class="plot-container">
