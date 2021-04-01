@@ -8,9 +8,27 @@
         crossorigin="anonymous">
         </script>
     <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
+
+    <link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="update();"
+		></script>
+
 </head>
 
 <body style="background-color: black;">
+    <div class="grid-left-right">
     <div class="controls-container">
         <span>
             <label>
@@ -29,6 +47,9 @@
             <button class="button" id="reset" onclick="reset()">Reset</button>
             <button class="button" id="add-remainder" onclick="addRemainder()">Add n=11 through n=21 to sum</button>
         </span>
+    </div>
+
+    <div><span id="eqn-container" class="math"></span></div>
     </div>
 
     <div>
