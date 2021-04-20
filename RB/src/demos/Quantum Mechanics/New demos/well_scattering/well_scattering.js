@@ -191,5 +191,6 @@ d3.select("#width").on("input", update);
 d3.select("#mass").on("input", update);
 d3.select("#energy").on("input", update);
 d3.selectAll(".tick text").attr("class", "axis-label");
+$(".controls-container").draggable();
 
 update();
