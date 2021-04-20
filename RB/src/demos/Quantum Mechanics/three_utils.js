@@ -37,7 +37,7 @@ function makeTextSprite(
 	// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
 
 	fontface = fontface ?? "sans-serif";
-	fontsize = fontsize ?? 27;
+	fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
 	fontweight = fontweight ?? "";
 	borderThickness = borderThickness ?? 0;
 	borderColor = borderColor ?? _three_utils_clear;

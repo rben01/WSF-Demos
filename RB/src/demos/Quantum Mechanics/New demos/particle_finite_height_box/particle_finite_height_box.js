@@ -168,7 +168,7 @@ function makePsiFunction({ even, V, L, m, energy }) {
 // Just... read this:
 // https://en.wikipedia.org/wiki/Finite_potential_well#Finding_wavefunctions_for_the_bound_state
 function findEnergies({ m, L, V, even }) {
-	const nPointsSearched = 20000;
+	const nPointsSearched = 5000;
 
 	const u0_Sqrd = (m * L ** 2 * V) / (2 * HBAR ** 2);
 	const u0 = u0_Sqrd ** 0.5;
@@ -211,6 +211,11 @@ function findEnergies({ m, L, V, even }) {
 				prevU = u;
 				prevError = error;
 			}
+		}
+
+		if (solutions.length === 0) {
+			solutions = [...solnCandidates];
+			break;
 		}
 	}
 

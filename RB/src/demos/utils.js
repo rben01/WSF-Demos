@@ -357,12 +357,15 @@ function _initializeRadioButtons() {
 	for (let i = 0; i < radioButtonContainers.length; ++i) {
 		const rbc = radioButtonContainers[i];
 
-		d3.select(rbc)
+		const sel = d3
+			.select(rbc)
 			.selectAll("button")
 			.each(function () {
 				syncButtonState(this);
-			})
-			.on("click._default", function () {
+			});
+
+		if (!rbc.classList.contains("manual-radio-buttons")) {
+			sel.on("click._default", function () {
 				this.setAttribute("button-checked", "");
 				this.disabled = true;
 				const siblings = this.closest(
@@ -376,6 +379,7 @@ function _initializeRadioButtons() {
 					sibling.removeAttribute("button-checked");
 				}
 			});
+		}
 	}
 }
 _initializeRadioButtons();

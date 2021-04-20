@@ -39,14 +39,27 @@
 					>
 					<span><input type="range" id="slider-slit-sep" /></span>
 					<span
-						>Number of photons:
+						>Photons per second:
 						<span id="text-num-photons" class="sci-num"></span
 					></span>
 					<span><input type="range" id="slider-num-photons" /></span>
 					<span></span>
-					<span
-						><button class="button" onclick="update()">
-							Repeat experiment
+					<span class="radio-button-container horizontal manual-radio-buttons"
+						><button class="button" id="btn-run" onclick="run()">Run</button
+						><button
+							class="button"
+							id="btn-pause"
+							onclick="pause()"
+							button-checked
+						>
+							Pause</button
+						><button
+							class="button"
+							id="btn-reset"
+							onclick="reset()"
+							button-checked
+						>
+							Reset
 						</button></span
 					>
 				</div>
