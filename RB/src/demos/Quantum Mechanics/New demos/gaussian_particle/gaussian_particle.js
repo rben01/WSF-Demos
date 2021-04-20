@@ -1,4 +1,4 @@
-/* global SVDJS Plotly STANDARD_COLORS */
+/* global SVDJS Plotly STANDARD_COLORS katex */
 
 const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
@@ -30,6 +30,14 @@ const sliders = {
 	particle2Spread: document.getElementById("slider-particle-2-spread"),
 	particle1MeanPos: document.getElementById("slider-particle-1-mean-pos"),
 	particle2MeanPos: document.getElementById("slider-particle-2-mean-pos"),
+};
+
+const textSpans = {
+	correlation: document.getElementById("text-correlation"),
+	particle1Spread: document.getElementById("text-particle-1-spread"),
+	particle2Spread: document.getElementById("text-particle-2-spread"),
+	particle1MeanPos: document.getElementById("text-particle-1-mean-pos"),
+	particle2MeanPos: document.getElementById("text-particle-2-mean-pos"),
 };
 
 d3.selectAll(".param-slider").property("step", 0.0017);
@@ -647,7 +655,51 @@ function drawSurface3D() {
 
 drawEllipse2D();
 drawSurface3D();
-d3.selectAll(".param-slider").on("input", () => {
+d3.selectAll(".param-slider").on("input.all", () => {
 	drawEllipse2D();
 	drawSurface3D();
 });
+
+function updateTex(name, latexVariable) {
+	return function () {
+		const slider = this;
+		const scale = d3.scaleLinear(
+			[slider.min, slider.max],
+			[Math.round(slider.min), Math.round(slider.max)],
+		);
+		const value = (() => {
+			let v = scale(+this.value);
+			if (Math.abs(v) < 1e-3) {
+				v = +0;
+				console.log(v);
+			}
+			const s = v.toFixed(2);
+			return s;
+		})();
+
+		if (katex !== undefined) {
+			katex.render(`${latexVariable}=${value}`, textSpans[name]);
+		}
+	};
+}
+
+const variables = [
+	["correlation", "\\rho"],
+	["particle1Spread", "\\sigma_1"],
+	["particle2Spread", "\\sigma_2"],
+	["particle1MeanPos", "\\mu_1"],
+	["particle2MeanPos", "\\mu_2"],
+];
+
+// eslint-disable-next-line no-unused-vars
+function updateAll() {
+	for (const [name, latexVariable] of variables) {
+		updateTex(name, latexVariable).call(sliders[name]);
+	}
+}
+
+for (const [name, latexVariable] of variables) {
+	d3.select(sliders[name]).on("input", updateTex(name, latexVariable));
+}
+
+console.log(sliders.correlation.step);
