@@ -5,6 +5,8 @@
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js">
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script crossorigin="anonymous" integrity="sha256-VazP97ZCwtekAsvgPBSUwPFKdrwD3unUfSGVYrahUqU=" src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <style rel="stylesheet" type="text/css">:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
@@ -286,7 +288,7 @@ cursor: pointer;
 </style></head>
 <body>
 <div class="grid-left-right">
-<div class="controls-container" style="background-color: black; opacity: 0.5; z-index: 10;">
+<div class="controls-container" style="background-color: black; z-index: 10;">
 <span class="slider-label">Well Depth</span>
 <span class="param-slider-container">
 <input class="param-slider" id="depth" max="10" min="5" step="0.01" type="range"/>
@@ -491,6 +493,7 @@ d3.select("#width").on("input", update);
 d3.select("#mass").on("input", update);
 d3.select("#energy").on("input", update);
 d3.selectAll(".tick text").attr("class", "axis-label");
+$(".controls-container").draggable();
 update();
 </script></body>
 </html>
