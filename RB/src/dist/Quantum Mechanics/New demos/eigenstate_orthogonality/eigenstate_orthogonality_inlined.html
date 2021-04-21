@@ -47,6 +47,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -165,7 +166,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -717,12 +718,14 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
@@ -738,7 +741,37 @@ sibling.removeAttribute("button-checked");
 });
 }
 }
+}
 _initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
 </script><script type="text/javascript">/* global applyGraphicalObjs katex */
 const WIDTH = 650;
 const HEIGHT = 300;
@@ -901,12 +934,24 @@ function update() {
 const n1 = +sliderN1.value;
 const n2 = +sliderN2.value;
 if (typeof katex !== "undefined") {
-katex.render(`n_1=${n1}`, textSpans.labelN1);
-katex.render(`n_2=${n2}`, textSpans.labelN2);
-const n1Str = n1 === 1 ? "" : n1;
-const n2Str = n2 === 1 ? "" : n2;
-katex.render(`\\psi_1(x)=\\sin(${n1Str}\\pi x)`, textSpans.graphKeyN1);
-katex.render(`\\psi_2(x)=\\sin(${n2Str}\\pi x)`, textSpans.graphKeyN2);
+katex.render(`n_1=\\htmlClass{highlighted-text}{${n1}}`, textSpans.labelN1, {
+trust: true,
+});
+katex.render(`n_2=\\htmlClass{secondary-text}{${n2}}`, textSpans.labelN2, {
+trust: true,
+});
+const n1Str = n1;
+const n2Str = n2;
+katex.render(
+`\\psi_1(x)=\\sin(\\htmlClass{highlighted-text}{${n1Str}}\\pi x)`,
+textSpans.graphKeyN1,
+{ trust: true },
+);
+katex.render(
+`\\psi_2(x)=\\sin(\\htmlClass{secondary-text}{${n2Str}}\\pi x)`,
+textSpans.graphKeyN2,
+{ trust: true },
+);
 const integralValue = n1 === n2 ? 1 : 0;
 katex.render(
 `\\langle\\psi_1,\\psi_2\\rangle=\\textrm{Integral}=${integralValue}`,

@@ -42,6 +42,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -160,7 +161,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -709,12 +710,14 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
@@ -730,7 +733,37 @@ sibling.removeAttribute("button-checked");
 });
 }
 }
+}
 _initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
 </script><script type="text/javascript">/* global THREE */
 // https://stackoverflow.com/a/27348780
 function roundRect(ctx, x, y, w, h, r) {
@@ -767,7 +800,7 @@ depthWrite,
 ) {
 // const _black = { r: 0, g: 0, b: 0, a: 1.0 };
 fontface = fontface ?? "sans-serif";
-fontsize = fontsize ?? 27;
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
 fontweight = fontweight ?? "";
 borderThickness = borderThickness ?? 0;
 borderColor = borderColor ?? _three_utils_clear;
@@ -776,9 +809,11 @@ textColor = textColor ?? _three_utils_white;
 aspectRatio = aspectRatio ?? 1;
 depthWrite = depthWrite ?? false;
 const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
 const context = canvas.getContext("2d");
 // These three lines have to go right after creating the context, and they have to
 // go in this order
+// https://stackoverflow.com/a/15666143/5496433
 canvas.width *= 2;
 canvas.height *= 2;
 const _pxRat = window.devicePixelRatio;

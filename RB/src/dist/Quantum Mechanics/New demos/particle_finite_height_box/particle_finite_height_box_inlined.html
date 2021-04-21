@@ -36,6 +36,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -154,7 +155,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -296,7 +297,7 @@ transform: translate(0, 1px);
 clip-path: url(#clip-path);
 }
 .energy-line.visible {
-stroke: var(--color-highlight);
+stroke: var(--color-secondary);
 stroke-width: 3px;
 stroke-dasharray: 3px 5px;
 pointer-events: none;
@@ -329,7 +330,7 @@ pointer-events: none;
 stroke: white;
 }
 .curve-foreground.odd {
-stroke: var(--color-secondary);
+stroke: var(--color-highlight);
 }
 .well {
 stroke: #56a;
@@ -371,7 +372,7 @@ width: 40px;
 background-color: white;
 }
 .key-antisymmetric {
-background-color: var(--color-secondary);
+background-color: var(--color-highlight);
 }
 </style></head>
 <body>
@@ -712,12 +713,14 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
 this.setAttribute("button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
@@ -733,7 +736,37 @@ sibling.removeAttribute("button-checked");
 });
 }
 }
+}
 _initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
 </script><script type="text/javascript">/* global applyGraphicalObjs defineArrowhead */
 const WIDTH = 1100;
 const HEIGHT = 750;
@@ -881,7 +914,7 @@ AMPLITUDE *
 // Just... read this:
 // https://en.wikipedia.org/wiki/Finite_potential_well#Finding_wavefunctions_for_the_bound_state
 function findEnergies({ m, L, V, even }) {
-const nPointsSearched = 20000;
+const nPointsSearched = 5000;
 const u0_Sqrd = (m * L ** 2 * V) / (2 * HBAR ** 2);
 const u0 = u0_Sqrd ** 0.5;
 const errorFunc = even
@@ -916,6 +949,10 @@ isDescending = error < prevError;
 prevU = u;
 prevError = error;
 }
+}
+if (solutions.length === 0) {
+solutions = [...solnCandidates];
+break;
 }
 }
 solutions = solutions

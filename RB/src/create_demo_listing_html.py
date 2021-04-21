@@ -1,11 +1,11 @@
 import argparse
-import urllib.parse
 import re
 import time
+import urllib.parse
 from pathlib import Path
-from typing import Optional, Union
+from typing import Optional, Union, cast
 
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Doctype, Tag
 
 
 def get_html_listing_soup(
@@ -17,23 +17,26 @@ def get_html_listing_soup(
     in_folder = Path(in_folder)
 
     soup = BeautifulSoup("", "html5lib")
-    soup.find("html")["lang"] = "en"
+    cast(Tag, soup.find("html"))["lang"] = "en"
+
+    soup.insert(0, Doctype("html"))
 
     if page_title is None:
         page_title = in_folder.stem
 
-    head = soup.find("head")
+    head = cast(Tag, soup.find("head"))
     title = soup.new_tag("title")
     title.string = page_title
     head.append(title)
 
-    body = soup.find("body")
-    ul = soup.new_tag("ul")
+    body = cast(Tag, soup.find("body"))
+    ul: Tag = soup.new_tag("ul")
     body.append(ul)
 
     now_sec = int(time.time())
     inlined_suffix_regex = re.compile(r"_inlined$")
 
+    li: Tag
     for demo_full_path in sorted(in_folder.glob("**/*.html")):
         if demo_full_path.is_dir() or demo_full_path.name == "index.html":
             continue
@@ -44,7 +47,10 @@ def get_html_listing_soup(
         demo_relative_path = urllib.parse.quote(
             str(demo_full_path.relative_to(in_folder)), safe="/"
         )
-        a = soup.new_tag("a", href=(f"./{demo_relative_path}?t={now_sec}"),)
+        a = soup.new_tag(
+            "a",
+            href=(f"./{demo_relative_path}?t={now_sec}"),
+        )
 
         demo_name = inlined_suffix_regex.sub("", demo_full_path.stem)
         a.string = demo_name
@@ -53,9 +59,9 @@ def get_html_listing_soup(
     if out_file is None:
         out_file = in_folder / "index.html"
 
-    html = "<!DOCTYPE html>" + str(soup)
-    html = html.replace(">", "\n>")
-    Path(out_file).write_text(html)
+    _ = Path(out_file).write_text(str(soup))
+
+    return soup
 
 
 if __name__ == "__main__":
