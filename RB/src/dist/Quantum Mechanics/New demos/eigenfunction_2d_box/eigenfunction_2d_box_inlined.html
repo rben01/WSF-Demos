@@ -336,7 +336,7 @@ left: -50px;
 <div class="controls">
 <span>𝑛<sub>𝑥</sub></span>
 <div class="radio-button-container horizontal">
-<button axis="x" button-checked="" class="button n-button" id="btn-nx-1" wavenumber="1">
+<button axis="x" class="button n-button" data-button-checked="" id="btn-nx-1" wavenumber="1">
 1</button><button axis="x" class="button n-button" id="btn-nx-2" wavenumber="2">
 2</button><button axis="x" class="button n-button" id="btn-nx-3" wavenumber="3">
 3</button><button axis="x" class="button n-button" id="btn-nx-4" wavenumber="4">
@@ -346,7 +346,7 @@ left: -50px;
 </div>
 <span>𝑛<sub>𝑦</sub></span>
 <div class="radio-button-container horizontal">
-<button axis="y" button-checked="" class="button n-button" id="btn-ny-1" wavenumber="1">
+<button axis="y" class="button n-button" data-button-checked="" id="btn-ny-1" wavenumber="1">
 1</button><button axis="y" class="button n-button" id="btn-ny-2" wavenumber="2">
 2</button><button axis="y" class="button n-button" id="btn-ny-3" wavenumber="3">
 3</button><button axis="y" class="button n-button" id="btn-ny-4" wavenumber="4">
@@ -674,10 +674,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -694,7 +694,7 @@ syncButtonState(this);
 });
 if (!rbc.classList.contains("manual-radio-buttons")) {
 sel.on("click._default", function () {
-this.setAttribute("button-checked", "");
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -704,7 +704,7 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }

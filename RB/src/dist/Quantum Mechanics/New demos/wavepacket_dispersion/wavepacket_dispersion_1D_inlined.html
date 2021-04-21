@@ -353,8 +353,8 @@ margin-top: 10px;
 <span><input class="slider" id="slider-p" type="range"/></span>
 <span></span>
 <span class="radio-button-container horizontal">
-<button class="button" onclick="play()">Play</button><button button-checked="" class="button" onclick="pause()">
-Pause</button><button button-checked="" class="button" onclick="reset()">
+<button class="button" onclick="play()">Play</button><button class="button" data-button-checked="" onclick="pause()">
+Pause</button><button class="button" data-button-checked="" onclick="reset()">
 Reset
 </button>
 </span>
@@ -671,10 +671,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -691,7 +691,7 @@ syncButtonState(this);
 });
 if (!rbc.classList.contains("manual-radio-buttons")) {
 sel.on("click._default", function () {
-this.setAttribute("button-checked", "");
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -701,7 +701,7 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }

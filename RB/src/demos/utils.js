@@ -343,10 +343,10 @@ function sampleFromCdf(cdfPoints, n) {
 }
 
 function syncButtonState(button) {
-	if (button.hasAttribute("button-checked")) {
+	if (button.hasAttribute("data-button-checked")) {
 		button.disabled = true;
 	} else if (button.disabled) {
-		button.setAttribute("button-checked", "");
+		button.setAttribute("data-button-checked", "");
 	}
 }
 function _initializeRadioButtons() {
@@ -366,7 +366,7 @@ function _initializeRadioButtons() {
 
 		if (!rbc.classList.contains("manual-radio-buttons")) {
 			sel.on("click._default", function () {
-				this.setAttribute("button-checked", "");
+				this.setAttribute("data-button-checked", "");
 				this.disabled = true;
 				const siblings = this.closest(
 					".radio-button-container",
@@ -376,7 +376,7 @@ function _initializeRadioButtons() {
 						continue;
 					}
 					sibling.disabled = false;
-					sibling.removeAttribute("button-checked");
+					sibling.removeAttribute("data-button-checked");
 				}
 			});
 		}

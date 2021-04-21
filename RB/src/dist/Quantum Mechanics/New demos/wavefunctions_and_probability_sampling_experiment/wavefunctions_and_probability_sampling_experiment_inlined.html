@@ -379,7 +379,7 @@ font-size: 20px;
 <div class="slider-container">
 <span>Shape of probability distribution</span>
 <span class="radio-button-container horizontal" id="wavefunction-shape-buttons">
-<button button-checked="" class="button shape-button" shape="gaussian">
+<button class="button shape-button" data-button-checked="" shape="gaussian">
 Gaussian</button><button class="button shape-button" shape="triangle">
 Triangle</button><button class="button shape-button" shape="square">
 Square</button><button class="button shape-button" shape="smallSquare">
@@ -399,8 +399,8 @@ Narrower square
 <span></span>
 <span class="radio-button-container horizontal" id="measurement-buttons">
 <button class="button" id="btn-run" onclick="runExperiment()">
-Run experiment</button><button button-checked="" class="button" id="btn-stop" onclick="stopExperiment()">
-Stop experiment</button><button button-checked="" class="button" id="btn-clear-experiment" onclick="clearExperiment()">
+Run experiment</button><button class="button" data-button-checked="" id="btn-stop" onclick="stopExperiment()">
+Stop experiment</button><button class="button" data-button-checked="" id="btn-clear-experiment" onclick="clearExperiment()">
 Clear
 </button>
 </span>
@@ -713,10 +713,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -733,7 +733,7 @@ syncButtonState(this);
 });
 if (!rbc.classList.contains("manual-radio-buttons")) {
 sel.on("click._default", function () {
-this.setAttribute("button-checked", "");
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -743,7 +743,7 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }
@@ -1449,7 +1449,7 @@ document.body.style.cursor = "grabbing";
 function enableShapeButtons() {
 document.getElementById("number-of-measurements-slider").disabled = false;
 shapeButtonContainer.selectAll(".shape-button").property("disabled", function () {
-return !didModifyOriginalShape && this.hasAttribute("button-checked");
+return !didModifyOriginalShape && this.hasAttribute("data-button-checked");
 });
 }
 function disableShapeButtons() {
