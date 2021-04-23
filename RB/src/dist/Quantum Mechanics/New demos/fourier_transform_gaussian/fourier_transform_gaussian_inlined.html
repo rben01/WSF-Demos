@@ -8,7 +8,7 @@
 <script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update({initial:true})" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 <!-- To automatically render math in text elements, include the auto-render extension: -->
 <script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -429,12 +429,17 @@ Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
 });
 }
-if (typeof datum.text !== "undefined") {
+if (datum.text !== undefined) {
 d3Obj.text(datum.text);
 }
-if (typeof datum.children !== "undefined") {
+if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
 }
 }
 // eslint-disable-next-line no-unused-vars

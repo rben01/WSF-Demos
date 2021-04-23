@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -334,7 +334,7 @@ width: 100%;
 }
 </style></head>
 <body>
-<div class="controls-container">
+<div class="controls-container hides-on-mouse-away">
 <div class="controls">
 <span>Type of wave</span>
 <span class="radio-button-container horizontal" id="shape-button-container"><button class="button" shape="sine">Sine wave</button><button class="button" shape="square">Square wave</button><button class="button" shape="triangle">
@@ -402,12 +402,17 @@ Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
 });
 }
-if (typeof datum.text !== "undefined") {
+if (datum.text !== undefined) {
 d3Obj.text(datum.text);
 }
-if (typeof datum.children !== "undefined") {
+if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
 }
 }
 // eslint-disable-next-line no-unused-vars

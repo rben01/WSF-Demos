@@ -1,6 +1,6 @@
 /* global applyGraphicalObjs */
 
-const WIDTH = 1050;
+const WIDTH = 1350;
 const HEIGHT = 750;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);

@@ -56,13 +56,18 @@ function applyDatum(datum, { transition } = {}) {
 		});
 	}
 
-	if (typeof datum.text !== "undefined") {
+	if (datum.text !== undefined) {
 		d3Obj.text(datum.text);
 	}
 
-	if (typeof datum.children !== "undefined") {
+	if (datum.children !== undefined) {
 		// eslint-disable-next-line no-use-before-define
-		applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+		applyGraphicalObjs(d3Obj, () => datum.children, {
+			selector: function () {
+				return this.childNodes;
+			},
+			transition,
+		});
 	}
 }
 

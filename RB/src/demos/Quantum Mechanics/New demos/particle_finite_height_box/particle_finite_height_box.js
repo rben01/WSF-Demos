@@ -168,7 +168,7 @@ function makePsiFunction({ even, V, L, m, energy }) {
 // Just... read this:
 // https://en.wikipedia.org/wiki/Finite_potential_well#Finding_wavefunctions_for_the_bound_state
 function findEnergies({ m, L, V, even }) {
-	const nPointsSearched = 5000;
+	const nPointsSearched = 20000;
 
 	const u0_Sqrd = (m * L ** 2 * V) / (2 * HBAR ** 2);
 	const u0 = u0_Sqrd ** 0.5;
@@ -182,7 +182,8 @@ function findEnergies({ m, L, V, even }) {
 	// Pick a starting point and a neighborhood (nhbd) around that point to search in
 	// Traverse the neighborhood from left to right. Track whether the error associated with each point in the neighborhood is smaller or larger than that of the previous point
 	// If the previous error was smaller than the one before it, but the current error is larger than the previous error, then the previous point was a local minimum. Add it to the list of candidate solutions.
-	// Once we've traversed every neighborhood of every point, start over using a smaller neighborhood around each of aformentioned candidate solution. Do this until satisfied with precision of solutions (below, while n < 2).
+	// Once we've traversed every neighborhood of every point, start over using a smaller neighborhood around each of aformentioned candidate solution. Do this until satisfied with precision of solutions (below,
+	// twice; increase to get more and more refinement).
 	// Algorithm assumptions:
 	// The function is smooth enough that there won't be any spurious local minima
 	for (let n = 0; n < 2; ++n) {
@@ -191,9 +192,8 @@ function findEnergies({ m, L, V, even }) {
 
 		const nhbdHalfWidth = (u0 / 2) * nPointsSearched ** -n;
 		for (const candidate of solnCandidates) {
+			const du = (2 * nhbdHalfWidth) / (nPointsSearched - 1);
 			const nhbdMin = candidate - nhbdHalfWidth;
-			const nhbdRight = candidate + nhbdHalfWidth;
-			const du = (nhbdRight - nhbdMin) / (nPointsSearched - 1);
 
 			let isDescending = false;
 			let prevU;
@@ -211,11 +211,15 @@ function findEnergies({ m, L, V, even }) {
 				prevU = u;
 				prevError = error;
 			}
+
+			// if (!foundRefinements) {
+			// 	const nhbdMax = candidate + nhbdHalfWidth;
+			// 	solutions.push(d3.min([nhbdMin, candidate, nhbdMax], errorFunc));
+			// }
 		}
 
 		if (solutions.length === 0) {
 			solutions = [...solnCandidates];
-			break;
 		}
 	}
 
