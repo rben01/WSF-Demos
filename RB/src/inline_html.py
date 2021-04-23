@@ -558,6 +558,11 @@ def inline(
     for tc in tag_containers:
         tc.finalize()
 
+    if head.find("title") is None:
+        title = soup.new_tag("title")
+        title.string = infile.name
+        head.insert(0, title)
+
     with outfile.open("w") as f:
         _ = f.write(
             "\n".join(
