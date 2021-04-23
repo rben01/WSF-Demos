@@ -1,17 +1,28 @@
 # %%
+from __future__ import annotations
+from abc import abstractmethod
+
 import argparse
 import base64
 import enum
 import json
 import re
 import sys
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import (
+    Callable,
+    ClassVar,
+    Iterable,
+    Literal,
+    Optional,
+    Type,
+    TypeVar,
+    Union,
+    cast,
+)
 
 import requests
 from bs4 import BeautifulSoup, Tag
-from typing_extensions import Literal
 
 SYMBOLS_TO_REPLACE = [
     "AESTHETIC",
@@ -84,7 +95,7 @@ class Lang(enum.Enum):
 
 
 class SymbolReplacer:
-    KEYWORDS = {
+    KEYWORDS: dict[Optional[Lang], Iterable[str]] = {
         None: [],
         Lang.js: [
             "abstract",
@@ -158,7 +169,7 @@ class SymbolReplacer:
         Lang.js: list("nstcoaeirlpfd"),
     }
 
-    def __init__(self, base_symbols, lang=None):
+    def __init__(self, base_symbols: Iterable[str], lang: Optional[Lang] = None):
         self.symbols_used = set(sorted(s.lower() for s in base_symbols))
         self.symbols_used.update(self.KEYWORDS.get(lang, []))
         self.alphabet = self.ALPHABETS[lang]
@@ -194,77 +205,292 @@ class SymbolReplacer:
             yield self._get_next_symbol()
 
 
-@dataclass
-class TagContainer:
-    content: str
-    attrs: Dict[str, str]
+StrLike = TypeVar("StrLike", str, bytes)
+
+
+class TagContainerABC:
+    read_mode: ClassVar[str]
+
+    _content: Optional[str]
+    _dest: Optional[str]
+    _project_root: Path
+    _tag: Tag
+
+    tag_name: str
+    link_attr: Optional[str]
+    attrs: dict[str, str]
+
+    def __init__(self, tag: Tag, *, project_root: Path):
+        self._content = None
+        self._tag = tag
+        self._project_root = project_root
+
+        self.attrs = {
+            k: v
+            for k, v in cast("dict[str, str]", tag.attrs).items()
+            if self.link_attr is None or k != self.link_attr
+        }
+
+        self._dest = tag.get(self.link_attr)
+
+    def __repr__(self) -> str:
+        attrs = ["tag_name", "link_attr", "_dest"]
+        attr_comps = ", ".join(f"{attr}={repr(getattr(self, attr))}" for attr in attrs)
+        return f"{self.__class__.__name__}({attr_comps})"
+
+    @property
+    def content(self) -> str:
+        if self._content is None:
+            self._content = self._get_content()
+        return self._content
+
+    @property
+    def dest(self) -> Optional[str]:
+        return self._dest
+
+    @abstractmethod
+    def _get_content(self) -> str:
+        raise NotImplementedError
+
+    @classmethod
+    def get_selector(cls) -> Union[str, Callable[[Tag], bool]]:
+        return cls.tag_name
+
+    def finalize(self):
+        return
+
+
+class TextSrcTagContainer(TagContainerABC):
+    read_mode: ClassVar[Literal["r"]] = "r"
+
+    @abstractmethod
+    def _get_content(self) -> str:
+        src: Optional[str] = (
+            None if self.link_attr is None else self._tag.attrs.get(self.link_attr)
+        )
+
+        if src is None:
+            content = self._tag.string
+            return content or ""
+        else:
+            if src.startswith("/"):
+                src = "." + src
+
+            full_path = self._project_root / src
+            with full_path.open(self.read_mode) as f:
+                return f.read()
+
+    def update(self, tag_container_list: list[TextSrcTagContainer]) -> None:
+        tag_container_list.append(self)
+
+    def finalize(self):
+        self._tag.decompose()
+
+
+class BinarySrcTagContainer(TagContainerABC):
+    read_mode: ClassVar[Literal["rb"]] = "rb"
+
+    @abstractmethod
+    def _get_content(self) -> str:
+        src: str = self._tag.attrs.get(self.link_attr)
+        if src.startswith("/"):
+            src = "." + src
+
+        full_path = self._project_root / src
+        with full_path.open(self.read_mode) as f:
+            content = f.read()
+
+        extn = full_path.suffix.strip(".")
+        data = base64.b64encode(content).decode("utf-8")
+
+        return f"data:image/{extn};base64,{data}"
+
+    def update(self) -> None:
+        self._tag["src"] = self.content
+
+
+class ScriptTagContainer(TextSrcTagContainer):
+    tag_name: Literal["script"] = "script"
+    link_attr: Literal["src"] = "src"
+
+    def _get_content(self) -> str:
+        return super()._get_content()
+
+
+class StyleTagContainer(TextSrcTagContainer):
+    tag_name: Literal["style"] = "style"
+
+    def __init__(self, tag: Tag, *, project_root: Path):
+        if tag.name == "style":
+            self.link_attr = None
+        elif tag.name == "link":
+            self.link_attr = "href"
+        else:
+            raise ValueError(f"Invalid tag for {self.__class__}: {tag.name=}")
+
+        super().__init__(tag, project_root=project_root)
+        _ = self.attrs.pop("rel", None)
+
+    def _get_content(self) -> str:
+        return super()._get_content()
+
+    @classmethod
+    def get_selector(cls) -> Callable[[Tag], bool]:
+        def is_style_tag(tag: Tag) -> bool:
+            rel: list[Tag]
+            return (
+                tag.name == "style"
+                or tag.name == "link"
+                and (rel := tag.get("rel")) is not None
+                and "stylesheet" in rel
+            )
+
+        return is_style_tag
+
+
+class LinkImgTagContainer(BinarySrcTagContainer):
+    tag_name: Literal["link"] = "link"
+    link_attr: Literal["href"] = "href"
+
+    @classmethod
+    def get_selector(cls) -> Callable[[Tag], bool]:
+        def is_text_link(tag: Tag) -> bool:
+            rel: Iterable[str]
+            return (
+                tag.name == "link"
+                and (rel := tag.get("rel")) is not None
+                and any("icon" in item for item in rel)
+            )
+
+        return is_text_link
+
+
+class ImgTagContainer(BinarySrcTagContainer):
+    tag_name: Literal["img"] = "img"
+    link_attr: Literal["src"] = "src"
 
 
 def inline(
     infile: Path,
     outfile: Path,
     *,
-    ignored_link_dests,
-    ignored_link_dest_regexes,
-    minify_js=False,
-    minify_css=False,
-    minify_globals=False,
+    ignored_link_dests: Iterable[str],
+    ignored_link_dest_regexes: Iterable[re.Pattern[str]],
+    minify_js: bool = False,
+    minify_css: bool = False,
+    minify_globals: bool = False,
+    project_root: Optional[Union[Path, str]],
 ):
     if infile.resolve() == outfile.resolve():
         sys.exit("infile and outfile are the same; they must be different")
 
-    with infile.open() as f:
-        soup = BeautifulSoup(f.read(), "lxml")
+    if project_root is None:
+        project_root = infile.parent
 
-    js_tags: List[TagContainer] = []
-    css_tags: List[TagContainer] = []
+    project_root = Path(project_root)
 
-    tag_names_and_link_attrs: List[
-        Tuple[str, Optional[str], Optional[List[TagContainer]], Literal["r", "rb"]]
+    with infile.open() as in_fd:
+        soup = BeautifulSoup(in_fd.read(), "lxml")
+
+    js_tags: list[TextSrcTagContainer] = []
+    css_tags: list[TextSrcTagContainer] = []
+
+    tag_container_types: Iterable[
+        tuple[Type[TagContainerABC], Optional[list[TextSrcTagContainer]]]
     ] = [
-        ("script", "src", js_tags, "r"),
-        ("link", "href", css_tags, "r"),
-        ("style", None, css_tags, "r"),
-        ("img", "src", None, "rb"),
+        (ScriptTagContainer, js_tags),
+        (StyleTagContainer, css_tags),
+        (ImgTagContainer, None),
+        (LinkImgTagContainer, None),
     ]
 
-    for tag_name, link_attr, source_tags, file_mode in tag_names_and_link_attrs:
-        tags = soup.find_all(tag_name)
-        for tag in tags:
-            tag: Tag
-            link_dest = tag.attrs.get(link_attr)
+    tag_containers: list[TagContainerABC] = []
 
-            if link_dest is not None and (
-                link_dest in ignored_link_dests
-                or any(regex.search(link_dest) for regex in ignored_link_dest_regexes)
+    for tag_type, tag_list in tag_container_types:
+        tags: Iterable[Tag] = soup.find_all(tag_type.get_selector())
+        for tag in tags:
+            tag_container = tag_type(tag, project_root=project_root)
+            if (dest := tag_container.dest) is not None and (
+                dest in ignored_link_dests
+                or any(regex.search(dest) for regex in ignored_link_dest_regexes)
             ):
                 continue
 
-            if link_dest is None:
-                contents = str(tag.string)
+            if isinstance(tag_container, TextSrcTagContainer):
+                assert tag_list is not None
+                tag_container.update(tag_list)
             else:
-                absolute_src: Path = infile.parent / link_dest
+                assert isinstance(tag_container, BinarySrcTagContainer)
+                tag_container.update()
 
-                with absolute_src.open(file_mode) as f:
-                    contents = f.read()
+            tag_containers.append(tag_container)
 
-            tag_container = TagContainer(
-                contents, {k: v for k, v in tag.attrs.items() if k != link_attr}
-            )
+    # for tag_name, link_attr, source_tags, file_mode in tag_names_and_link_attrs:
+    #     tags = soup.find_all(tag_name)
+    #     tag: Tag
+    #     for tag in tags:
+    #         if tag_name == "link" and any("icon" in r for r in tag["rel"]):
+    #             print(tag["rel"])
+    #             continue
 
-            if tag_name == "img":
-                data = base64.b64encode(contents).decode("utf-8")
-                tag[
-                    "src"
-                ] = f"data:image/{absolute_src.suffix.strip('.')};base64,{data}"
-            else:
-                source_tags.append(tag_container)
-                tag.decompose()
+    #         link_dest: str = tag.attrs.get(link_attr)
+
+    #         if link_dest is not None and (
+    #             link_dest in ignored_link_dests
+    #             or any(regex.search(link_dest) for regex in ignored_link_dest_regexes)
+    #         ):
+    #             continue
+
+    #         absolute_src: Optional[Path]
+    #         contents: Union[str, bytes]
+    #         if link_dest is None:
+    #             absolute_src = None
+    #             contents = str(tag.string)
+    #         else:
+    #             if link_dest.startswith("/"):
+    #                 link_dest = "." + link_dest
+
+    #             absolute_src = project_root / link_dest
+    #             assert absolute_src is not None
+
+    #             try:
+    #                 with absolute_src.open(file_mode) as f:
+    #                     try:
+    #                         contents = f.read()
+    #                     except Exception:
+    #                         print(f"{tag_name=}")
+    #                         print(f"{link_attr=}")
+    #                         print(f"{file_mode=}")
+    #                         print(f"{absolute_src=}")
+    #                         print(f"{link_dest=}")
+
+    #                         raise
+    #             except Exception:
+    #                 print(f"{absolute_src=}")
+    #                 raise
+
+    #         tag_container = TagContainer(
+    #             contents, {k: v for k, v in tag.attrs.items() if k != link_attr}
+    #         )
+
+    #         if tag_name == "img":
+    #             assert absolute_src is not None
+    #             data = base64.b64encode(cast(bytes, contents)).decode("utf-8")
+    #             tag[
+    #                 "src"
+    #             ] = f"data:image/{absolute_src.suffix.strip('.')};base64,{data}"
+    #         else:
+    #             assert source_tags is not None
+    #             source_tags.append(tag_container)
+    #             tag.decompose()
+
+    body: Tag = soup.find("body")
 
     for js_tag in js_tags:
         if minify_js:
             response = requests.post(
-                "https://javascript-minifier.com/raw", data={"input": js_tag.content},
+                "https://javascript-minifier.com/raw",
+                data={"input": js_tag.content},
             )
             js_code = response.text
         else:
@@ -302,7 +528,9 @@ def inline(
                 json.dump(replacements_dict, f, indent=2)
 
         script_tag.string = js_code
-        soup.find("body").append(script_tag)
+        body.append(script_tag)
+
+    head: Tag = soup.find("head")
 
     for css_tag in css_tags:
         if minify_css:
@@ -314,15 +542,24 @@ def inline(
             css_source = css_tag.content
 
         style_tag = soup.new_tag("style")
-        style_tag.string = css_source
+
+        try:
+            style_tag.string = css_source
+        except:
+            print(infile)
+            print(css_source, css_tag)
+            raise
 
         for k, v in css_tag.attrs.items():
             style_tag[k] = v
 
-        soup.find("head").append(style_tag)
+        head.append(style_tag)
+
+    for tc in tag_containers:
+        tc.finalize()
 
     with outfile.open("w") as f:
-        f.write(
+        _ = f.write(
             "\n".join(
                 line.strip() for line in re.sub("\n\n+", "\n", str(soup)).splitlines()
             )
@@ -331,48 +568,53 @@ def inline(
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("infiles", nargs="*", help="The HTML file to inline")
-    parser.add_argument(
+    _ = parser.add_argument("infiles", nargs="*", help="The HTML file to inline")
+    _ = parser.add_argument(
         "-o",
         required=False,
         dest="outfile",
         help="The filename to save the inlined file to",
     )
-    parser.add_argument("--outdir", required=False, help="The directory to save to")
-    parser.add_argument(
+    _ = parser.add_argument("--outdir", required=False, help="The directory to save to")
+    _ = parser.add_argument(
         "--exclude-html-regex",
         required=False,
         help="A regex describing HTML files to skip; ignored if infile is given",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--ignore",
         action="append",
         default=[],
         help="External resources to skip inlining",
     )
-    parser.add_argument(
+    _ = parser.add_argument(
         "--ignore-regex",
         action="append",
         default=[],
         help="A regex describing external resources to skip inlining",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--minify-js",
         action="store_true",
         help="Minify JavaScript (requires an internet connection)",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--minify-css",
         action="store_true",
         help="Minify CSS (requires an internet connection)",
     )
 
-    parser.add_argument(
+    _ = parser.add_argument(
         "--minify-globals",
         action="store_true",
         help="Minify global variables and properties in JS",
+    )
+
+    _ = parser.add_argument(
+        "--project-root",
+        help="The root of the project, where relative paths are based. Default: the infile's parent directory.",
     )
 
     args = parser.parse_args()
@@ -394,6 +636,8 @@ def main():
     else:
         ehr = None
 
+    project_root = Path(pr).resolve() if (pr := args.project_root) is not None else None
+
     for inpath in inpaths:
         inpath = inpath.resolve()
         if inpath.is_dir():
@@ -408,7 +652,7 @@ def main():
             outdir: Path
             if args.outdir is None:
                 outdir = Path(".").resolve()
-                while outdir.name != "src" and outdir.name != "/":
+                while outdir.name != "src" and outdir != Path("/"):
                     outdir = outdir.parent
 
                 outdir = outdir / "dist" / infile.relative_to(outdir / "demos").parent
@@ -459,6 +703,7 @@ def main():
                 minify_js=args.minify_js,
                 minify_css=args.minify_css,
                 minify_globals=args.minify_globals,
+                project_root=project_root,
             )
 
 
