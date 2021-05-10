@@ -11,6 +11,21 @@
 			integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w=="
 			crossorigin="anonymous"
 		></script>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="updateAll();"
+		></script>
 		<script src="https://unpkg.com/svd-js" type="application/javascript"></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
@@ -21,9 +36,9 @@
 			}
 			.grid {
 				display: grid;
-				grid-template-columns: 13em 1fr;
+				grid-template-columns: 18.5em 1fr;
 				align-items: start;
-				column-gap: 65px;
+				column-gap: 35px;
 			}
 			.slider-container {
 				grid-row: span 2;
@@ -74,35 +89,47 @@
 		<div class="grid">
 			<div class="controls-container">
 				<div class="slider-container">
-					<span class="slider-label">Correlation of particles</span>
+					<span class="slider-label"
+						>Correlation of particles, <span id="text-correlation"></span
+					></span>
 					<span class="param-slider-container"
 						><input
 							id="slider-correlation"
 							class="param-slider correlation-slider"
 							type="range"
 					/></span>
-					<span class="slider-label">Spread of particle 1</span>
+					<span class="slider-label"
+						>Particle 1 spread, <span id="text-particle-1-spread"></span
+					></span>
 					<span
 						><input
 							id="slider-particle-1-spread"
 							class="param-slider spread-slider"
 							type="range"
 					/></span>
-					<span class="slider-label">Spread of particle 2</span>
+					<span class="slider-label"
+						>Particle 2 spread, <span id="text-particle-2-spread"></span
+					></span>
 					<span
 						><input
 							id="slider-particle-2-spread"
 							class="param-slider spread-slider"
 							type="range"
 					/></span>
-					<span class="slider-label">Mean position of particle 1</span>
+					<span class="slider-label"
+						>Particle 1 mean position,
+						<span id="text-particle-1-mean-pos"></span
+					></span>
 					<span
 						><input
 							id="slider-particle-1-mean-pos"
 							class="param-slider position-slider"
 							type="range"
 					/></span>
-					<span class="slider-label">Mean position of particle 2</span>
+					<span class="slider-label"
+						>Particle 2 mean position,
+						<span id="text-particle-2-mean-pos"></span
+					></span>
 					<span
 						><input
 							id="slider-particle-2-mean-pos"

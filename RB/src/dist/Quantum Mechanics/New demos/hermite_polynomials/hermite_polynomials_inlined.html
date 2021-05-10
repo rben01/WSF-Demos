@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>hermite_polynomials.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -36,6 +36,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -154,7 +155,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -287,7 +288,7 @@ display: inline-block;
 vertical-align: top;
 }
 .slider-container {
-/* position: absolute; */
+position: absolute;
 top: 5px;
 left: 5px;
 width: 270px;
@@ -301,7 +302,7 @@ stroke: black;
 }
 .curve-foreground {
 stroke-width: 4px;
-stroke: white;
+stroke: var(--color-highlight);
 }
 #plot {
 display: inline-block;
@@ -309,7 +310,7 @@ display: inline-block;
 </style></head>
 <body>
 <div class="container">
-<div class="slider-container controls-container">
+<div class="slider-container controls-container hides-on-mouse-away">
 <span>𝑛<sup>th</sup> Hermite polynomial: <span id="hermite-n"></span></span>
 <span><input id="hermite-n-slider" type="range"/></span>
 <span>Zoom level: |𝑥| ≤ <span id="x-scale"></span></span>
@@ -367,12 +368,17 @@ Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
 });
 }
-if (typeof datum.text !== "undefined") {
+if (datum.text !== undefined) {
 d3Obj.text(datum.text);
 }
-if (typeof datum.children !== "undefined") {
+if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -621,10 +627,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -633,13 +639,15 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
-this.setAttribute("button-checked", "");
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -649,14 +657,44 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }
 }
+}
 _initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
 </script><script type="text/javascript">/* global applyGraphicalObjs */
-const WIDTH = 1050;
+const WIDTH = 1350;
 const HEIGHT = 750;
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
 const plotNode = plot.node();

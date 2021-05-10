@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>resonant_tunneling.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -36,6 +36,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -154,7 +155,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -281,7 +282,7 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
-</style><style>None</style></head>
+</style><style></style></head>
 <body>
 <svg id="plot"></svg>
 <script type="text/javascript">/* global applyGraphicalObjs */

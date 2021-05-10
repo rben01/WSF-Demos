@@ -33,6 +33,7 @@
 		></script>
 
 		<link rel="stylesheet" href="../../qm_demo.css" />
+
 		<style>
 			body {
 				vertical-align: top;
@@ -105,7 +106,7 @@
 				<div class="controls">
 					<span class="header">Properties in position (\(x\)) space</span>
 					<span class=""
-						>\(\displaystyle\psi(x)=\left(\pi^\frac{1}{4}\sqrt{2\sigma}\right)e^{i\theta(x-\mu)}\frac{e^{-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}}{\sigma\sqrt{2\pi}}\)</span
+						>\(\displaystyle\psi(x)=\frac{1}{\pi^\frac{1}{4}\sqrt{\sigma}}e^{i\theta(x-\mu)-\frac{1}{2}(\frac{x-\mu}{\sigma})^2}\)</span
 					>
 					<span class="text-after-slider child"
 						>Gaussian's position space width (<span
@@ -130,7 +131,8 @@
 					>
 					<span class=""
 						>\(\displaystyle(\mathcal
-						F\psi)(p)=\left(\pi^\frac{1}{4}\sqrt{2\sigma^{-1}}\right)e^{-ip\mu}\frac{e^{-\frac{1}{2}(\frac{p-\theta}{\sigma^{-1}})^2}}{\sigma^{-1}\sqrt{2\pi}}\)</span
+						F\psi)(p)=\frac{1}{\pi^\frac{1}{4}\sqrt{\sigma^{-1}}} e^{-i\mu
+						p-\frac{1}{2}(\frac{p-\theta}{\sigma^{-1}})^2}\)</span
 					>
 					<span class="text-after-slider child"
 						>Gaussian's momentum space width (<span

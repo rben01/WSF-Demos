@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>gaussian_particle.html</title>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w==" src="https://cdn.plot.ly/plotly-1.57.0.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="updateAll();" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
 <script src="https://unpkg.com/svd-js" type="application/javascript"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -37,6 +40,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -155,7 +159,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -290,9 +294,9 @@ vertical-align: top;
 }
 .grid {
 display: grid;
-grid-template-columns: 13em 1fr;
+grid-template-columns: 18.5em 1fr;
 align-items: start;
-column-gap: 65px;
+column-gap: 35px;
 }
 .slider-container {
 grid-row: span 2;
@@ -341,15 +345,17 @@ stroke-width: 7;
 <div class="grid">
 <div class="controls-container">
 <div class="slider-container">
-<span class="slider-label">Correlation of particles</span>
+<span class="slider-label">Correlation of particles, <span id="text-correlation"></span></span>
 <span class="param-slider-container"><input class="param-slider correlation-slider" id="slider-correlation" type="range"/></span>
-<span class="slider-label">Spread of particle 1</span>
+<span class="slider-label">Particle 1 spread, <span id="text-particle-1-spread"></span></span>
 <span><input class="param-slider spread-slider" id="slider-particle-1-spread" type="range"/></span>
-<span class="slider-label">Spread of particle 2</span>
+<span class="slider-label">Particle 2 spread, <span id="text-particle-2-spread"></span></span>
 <span><input class="param-slider spread-slider" id="slider-particle-2-spread" type="range"/></span>
-<span class="slider-label">Mean position of particle 1</span>
+<span class="slider-label">Particle 1 mean position,
+<span id="text-particle-1-mean-pos"></span></span>
 <span><input class="param-slider position-slider" id="slider-particle-1-mean-pos" type="range"/></span>
-<span class="slider-label">Mean position of particle 2</span>
+<span class="slider-label">Particle 2 mean position,
+<span id="text-particle-2-mean-pos"></span></span>
 <span><input class="param-slider position-slider" id="slider-particle-2-mean-pos" type="range"/></span>
 </div>
 </div>
@@ -414,12 +420,17 @@ Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
 });
 }
-if (typeof datum.text !== "undefined") {
+if (datum.text !== undefined) {
 d3Obj.text(datum.text);
 }
-if (typeof datum.children !== "undefined") {
+if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -668,10 +679,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -680,13 +691,15 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
-this.setAttribute("button-checked", "");
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -696,13 +709,43 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }
 }
+}
 _initializeRadioButtons();
-</script><script type="text/javascript">/* global SVDJS Plotly STANDARD_COLORS */
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script><script type="text/javascript">/* global SVDJS Plotly STANDARD_COLORS katex */
 const GRAPH_WIDTH = 500;
 const GRAPH_HEIGHT = GRAPH_WIDTH;
 const plot3D = d3
@@ -729,6 +772,13 @@ particle1Spread: document.getElementById("slider-particle-1-spread"),
 particle2Spread: document.getElementById("slider-particle-2-spread"),
 particle1MeanPos: document.getElementById("slider-particle-1-mean-pos"),
 particle2MeanPos: document.getElementById("slider-particle-2-mean-pos"),
+};
+const textSpans = {
+correlation: document.getElementById("text-correlation"),
+particle1Spread: document.getElementById("text-particle-1-spread"),
+particle2Spread: document.getElementById("text-particle-2-spread"),
+particle1MeanPos: document.getElementById("text-particle-1-mean-pos"),
+particle2MeanPos: document.getElementById("text-particle-2-mean-pos"),
 };
 d3.selectAll(".param-slider").property("step", 0.0017);
 d3.selectAll(".correlation-slider")
@@ -1277,9 +1327,47 @@ Plotly.react(plot3DNode, data, layout, config);
 }
 drawEllipse2D();
 drawSurface3D();
-d3.selectAll(".param-slider").on("input", () => {
+d3.selectAll(".param-slider").on("input.all", () => {
 drawEllipse2D();
 drawSurface3D();
 });
+function updateTex(name, latexVariable) {
+return function () {
+const slider = this;
+const scale = d3.scaleLinear(
+[slider.min, slider.max],
+[Math.round(slider.min), Math.round(slider.max)],
+);
+const value = (() => {
+let v = scale(+this.value);
+if (Math.abs(v) < 1e-3) {
+v = +0;
+console.log(v);
+}
+const s = v.toFixed(2);
+return s;
+})();
+if (katex !== undefined) {
+katex.render(`${latexVariable}=${value}`, textSpans[name]);
+}
+};
+}
+const variables = [
+["correlation", "\\rho"],
+["particle1Spread", "\\sigma_1"],
+["particle2Spread", "\\sigma_2"],
+["particle1MeanPos", "\\mu_1"],
+["particle2MeanPos", "\\mu_2"],
+];
+// eslint-disable-next-line no-unused-vars
+function updateAll() {
+for (const [name, latexVariable] of variables) {
+updateTex(name, latexVariable).call(sliders[name]);
+}
+}
+for (const [name, latexVariable] of variables) {
+d3.select(sliders[name]).on("input", updateTex(name, latexVariable));
+}
+console.log(sliders.correlation.step);
 </script></body>
 </html>

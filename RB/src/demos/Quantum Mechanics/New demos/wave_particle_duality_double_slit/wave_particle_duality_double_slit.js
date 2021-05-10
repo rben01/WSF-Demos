@@ -13,6 +13,12 @@ d3.select("#plot-actual")
 	.style("width", `${WIDTH}px`)
 	.style("height", `${HEIGHT_ACTUAL}px`);
 
+const buttons = {
+	run: document.getElementById("btn-run"),
+	pause: document.getElementById("btn-pause"),
+	reset: document.getElementById("btn-reset"),
+};
+
 const canvasExpected = document.getElementById("plot-expected");
 canvasExpected.width = WIDTH * DPI;
 canvasExpected.height = HEIGHT_EXPECTED * DPI;
@@ -40,7 +46,7 @@ const yScaleExpected = d3.scaleLinear(
 const yScaleActual = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT_ACTUAL - margin, margin]);
 
 const colorScale = t =>
-	d3.interpolateRgb(d3.interpolateSinebow((1 - t) * 0.7), "white")(0.05);
+	d3.interpolateRgb(d3.interpolateSinebow((1 - t) * 0.7), "white")(0.1);
 
 const wavelengthScale = d3.scaleLinear([0, 1], [400e-9, 700e-9]);
 
@@ -62,7 +68,7 @@ const wavelengthSlider = (() => {
 		const wavelength = +this.value;
 		wavelengthTextSpan.innerText = wavelenthFormatter(wavelengthScale(wavelength));
 		// eslint-disable-next-line no-use-before-define
-		update();
+		updateExpected();
 	};
 	wavelengthTextSpan.innerText = wavelenthFormatter(wavelengthScale(+slider.value));
 
@@ -89,18 +95,18 @@ const slitSepSlider = (() => {
 		const slitSep = +this.value;
 		slitSepTextSpan.innerText = slitSepFormatter(slitSepScale(slitSep));
 		// eslint-disable-next-line no-use-before-define
-		update();
+		updateExpected();
 	};
 	slitSepTextSpan.innerText = slitSepFormatter(slitSepScale(+slider.value));
 
 	return slider;
 })();
 
-const numPhotonsScale = d3.scaleLinear().domain([0, 1]).rangeRound([500, 10000]);
+const numPhotonsPerSecScale = d3.scaleLinear().domain([0, 1]).rangeRound([100, 1500]);
 
-const numPhotonsSlider = (() => {
+const numPhotonsPerSecSlider = (() => {
 	const slider = document.getElementById("slider-num-photons");
-	const [min, max] = numPhotonsScale.domain();
+	const [min, max] = numPhotonsPerSecScale.domain();
 	slider.min = min;
 	slider.max = max;
 	slider.step = 0.0001;
@@ -114,11 +120,15 @@ const numPhotonsSlider = (() => {
 
 	slider.oninput = function () {
 		const numPhotons = +this.value;
-		numPhotonsTextSpan.innerText = numPhotonsFormatter(numPhotonsScale(numPhotons));
+		numPhotonsTextSpan.innerText = numPhotonsFormatter(
+			numPhotonsPerSecScale(numPhotons),
+		);
 		// eslint-disable-next-line no-use-before-define
-		update();
+		updateExpected();
 	};
-	numPhotonsTextSpan.innerText = numPhotonsFormatter(numPhotonsScale(+slider.value));
+	numPhotonsTextSpan.innerText = numPhotonsFormatter(
+		numPhotonsPerSecScale(+slider.value),
+	);
 
 	return slider;
 })();
@@ -173,33 +183,33 @@ function sample(n, slitSep, wavelength, intensity) {
 	return samples.map(x => [x, Y_MIN + (Y_MAX - Y_MIN) * Math.random()]);
 }
 
-function update() {
+function updateExpected() {
 	const wavelength = wavelengthScale(+wavelengthSlider.value);
 	const slitSep = slitSepScale(+slitSepSlider.value);
-	const numPhotons = numPhotonsScale(+numPhotonsSlider.value);
+	// const numPhotons = numPhotonsPerSecScale(+numPhotonsPerSecSlider.value);
 
-	const samples = sample(numPhotons, slitSep, wavelength);
+	// const samples = sample(numPhotons, slitSep, wavelength);
 	// console.log(samples.map(([x, y]) => [xScale(x), yScale(y)]));
 
-	const color = colorScale(+wavelengthSlider.value);
-	const r = 2.5 * DPI;
-	const borderThickness = 0.5 * DPI;
+	// const color = colorScale(+wavelengthSlider.value);
+	// const r = 2.5 * DPI;
+	// const borderThickness = 0.5 * DPI;
 
-	contextActual.clearRect(0, 0, WIDTH * DPI, HEIGHT_ACTUAL * DPI);
+	// contextActual.clearRect(0, 0, WIDTH * DPI, HEIGHT_ACTUAL * DPI);
 	contextExpected.clearRect(0, 0, WIDTH * DPI, HEIGHT_EXPECTED * DPI);
 
-	for (const sample of samples) {
-		const cx = xScale(sample[0]) * DPI;
-		const cy = yScaleActual(sample[1]) * DPI;
+	// for (const sample of samples) {
+	// 	const cx = xScale(sample[0]) * DPI;
+	// 	const cy = yScaleActual(sample[1]) * DPI;
 
-		contextActual.beginPath();
-		contextActual.arc(cx, cy, r, 0, 2 * Math.PI, false);
-		contextActual.fillStyle = color;
-		contextActual.fill();
-		contextActual.lineWidth = borderThickness;
-		contextActual.strokeStyle = "#000000";
-		contextActual.stroke();
-	}
+	// 	contextActual.beginPath();
+	// 	contextActual.arc(cx, cy, r, 0, 2 * Math.PI, false);
+	// 	contextActual.fillStyle = color;
+	// 	contextActual.fill();
+	// 	contextActual.lineWidth = borderThickness;
+	// 	contextActual.strokeStyle = "#000000";
+	// 	contextActual.stroke();
+	// }
 
 	const boundPdf = x => pdf(x, slitSep, wavelength, 1);
 	const nCurvePoints = 1000;
@@ -218,6 +228,7 @@ function update() {
 		contextExpected.beginPath();
 		contextExpected.lineWidth = lineWidth;
 		contextExpected.strokeStyle = strokeStyle;
+		contextExpected.lineCap = "round";
 		for (let i = 0; i < nCurvePoints; ++i) {
 			const x = X_MIN + i * dx;
 			const y = boundPdf(x);
@@ -227,4 +238,82 @@ function update() {
 	}
 }
 
-update();
+updateExpected();
+
+let experimentAnimationFrame;
+
+// eslint-disable-next-line no-unused-vars
+function run() {
+	buttons.run.disabled = true;
+	buttons.pause.disabled = false;
+	buttons.reset.disabled = false;
+	wavelengthSlider.disabled = true;
+	slitSepSlider.disabled = true;
+
+	const wavelength = wavelengthScale(+wavelengthSlider.value);
+	const slitSep = slitSepScale(+slitSepSlider.value);
+
+	const color = colorScale(+wavelengthSlider.value);
+	const r = 2.5 * DPI;
+	const borderThickness = 0.5 * DPI;
+
+	// contextExpected.clearRect(0, 0, WIDTH * DPI, HEIGHT_EXPECTED * DPI);
+
+	let remainder = 0;
+
+	let prevTimestampMS;
+	function step(timestampMS) {
+		const numPhotonsPerSec = numPhotonsPerSecScale(+numPhotonsPerSecSlider.value);
+
+		if (prevTimestampMS === undefined) {
+			prevTimestampMS = timestampMS;
+		}
+
+		const elapsedSec = (timestampMS - prevTimestampMS) / 1000;
+		prevTimestampMS = timestampMS;
+
+		const numPhotonsTotal = remainder + elapsedSec * numPhotonsPerSec;
+
+		const numWholePhotons = Math.floor(numPhotonsTotal);
+		remainder = numPhotonsTotal % 1;
+
+		const samples = sample(numWholePhotons, slitSep, wavelength);
+		// console.log(remainder, samples);
+
+		for (const sample of samples) {
+			const cx = xScale(sample[0]) * DPI;
+			const cy = yScaleActual(sample[1]) * DPI;
+
+			contextActual.beginPath();
+			contextActual.arc(cx, cy, r, 0, 2 * Math.PI, false);
+			contextActual.fillStyle = color;
+			contextActual.fill();
+			contextActual.lineWidth = borderThickness;
+			contextActual.strokeStyle = "#000000";
+			contextActual.stroke();
+		}
+
+		experimentAnimationFrame = window.requestAnimationFrame(step);
+	}
+
+	experimentAnimationFrame = window.requestAnimationFrame(step);
+}
+
+function pause() {
+	buttons.pause.disabled = true;
+	buttons.run.disabled = false;
+
+	window.cancelAnimationFrame(experimentAnimationFrame);
+}
+
+// eslint-disable-next-line no-unused-vars
+function reset() {
+	pause();
+	buttons.reset.disabled = true;
+	buttons.pause.disabled = true;
+	buttons.run.disabled = false;
+	wavelengthSlider.disabled = false;
+	slitSepSlider.disabled = false;
+
+	contextActual.clearRect(0, 0, WIDTH * DPI, HEIGHT_ACTUAL * DPI);
+}

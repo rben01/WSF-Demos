@@ -428,7 +428,7 @@ function hideNumExperiments() {
 function enableShapeButtons() {
 	document.getElementById("number-of-measurements-slider").disabled = false;
 	shapeButtonContainer.selectAll(".shape-button").property("disabled", function () {
-		return this.hasAttribute("button-checked");
+		return this.hasAttribute("data-button-checked");
 	});
 }
 

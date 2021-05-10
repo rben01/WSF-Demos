@@ -65,7 +65,11 @@
 					id="wavefunction-shape-buttons"
 					class="radio-button-container horizontal"
 				>
-					<button class="button shape-button" shape="gaussian" button-checked>
+					<button
+						class="button shape-button"
+						shape="gaussian"
+						data-button-checked
+					>
 						Gaussian</button
 					><button class="button shape-button" shape="triangle">
 						Pyramid</button
@@ -108,14 +112,14 @@
 						class="button"
 						id="btn-stop"
 						onclick="stopExperiment()"
-						button-checked
+						data-button-checked
 					>
 						Stop experiment</button
 					><button
 						class="button"
 						id="btn-clear-experiment"
 						onclick="clearExperiment()"
-						button-checked
+						data-button-checked
 					>
 						Clear
 					</button>

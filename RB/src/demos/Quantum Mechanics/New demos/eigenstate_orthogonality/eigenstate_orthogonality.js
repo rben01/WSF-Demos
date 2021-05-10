@@ -185,12 +185,25 @@ function update() {
 	const n2 = +sliderN2.value;
 
 	if (typeof katex !== "undefined") {
-		katex.render(`n_1=${n1}`, textSpans.labelN1);
-		katex.render(`n_2=${n2}`, textSpans.labelN2);
-		const n1Str = n1 === 1 ? "" : n1;
-		const n2Str = n2 === 1 ? "" : n2;
-		katex.render(`\\psi_1(x)=\\sin(${n1Str}\\pi x)`, textSpans.graphKeyN1);
-		katex.render(`\\psi_2(x)=\\sin(${n2Str}\\pi x)`, textSpans.graphKeyN2);
+		katex.render(`n_1=\\htmlClass{highlighted-text}{${n1}}`, textSpans.labelN1, {
+			trust: true,
+		});
+		katex.render(`n_2=\\htmlClass{secondary-text}{${n2}}`, textSpans.labelN2, {
+			trust: true,
+		});
+
+		const n1Str = n1;
+		const n2Str = n2;
+		katex.render(
+			`\\psi_1(x)=\\sin(\\htmlClass{highlighted-text}{${n1Str}}\\pi x)`,
+			textSpans.graphKeyN1,
+			{ trust: true },
+		);
+		katex.render(
+			`\\psi_2(x)=\\sin(\\htmlClass{secondary-text}{${n2Str}}\\pi x)`,
+			textSpans.graphKeyN2,
+			{ trust: true },
+		);
 
 		const integralValue = n1 === n2 ? 1 : 0;
 		katex.render(

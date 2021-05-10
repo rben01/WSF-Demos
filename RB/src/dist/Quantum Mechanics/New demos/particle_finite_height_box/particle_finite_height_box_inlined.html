@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>particle_finite_height_box.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
-<style rel="stylesheet">:root {
+<style>:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -36,6 +36,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -154,7 +155,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {
@@ -296,7 +297,7 @@ transform: translate(0, 1px);
 clip-path: url(#clip-path);
 }
 .energy-line.visible {
-stroke: var(--color-highlight);
+stroke: var(--color-secondary);
 stroke-width: 3px;
 stroke-dasharray: 3px 5px;
 pointer-events: none;
@@ -329,7 +330,7 @@ pointer-events: none;
 stroke: white;
 }
 .curve-foreground.odd {
-stroke: var(--color-secondary);
+stroke: var(--color-highlight);
 }
 .well {
 stroke: #56a;
@@ -371,7 +372,7 @@ width: 40px;
 background-color: white;
 }
 .key-antisymmetric {
-background-color: var(--color-secondary);
+background-color: var(--color-highlight);
 }
 </style></head>
 <body>
@@ -446,12 +447,17 @@ Object.entries(datum.styles).forEach(([key, val]) => {
 t.style(key, val);
 });
 }
-if (typeof datum.text !== "undefined") {
+if (datum.text !== undefined) {
 d3Obj.text(datum.text);
 }
-if (typeof datum.children !== "undefined") {
+if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
-applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
 }
 }
 // eslint-disable-next-line no-unused-vars
@@ -700,10 +706,10 @@ samples.push(value);
 return samples;
 }
 function syncButtonState(button) {
-if (button.hasAttribute("button-checked")) {
+if (button.hasAttribute("data-button-checked")) {
 button.disabled = true;
 } else if (button.disabled) {
-button.setAttribute("button-checked", "");
+button.setAttribute("data-button-checked", "");
 }
 }
 function _initializeRadioButtons() {
@@ -712,13 +718,15 @@ const radioButtonContainers = document.getElementsByClassName(
 );
 for (let i = 0; i < radioButtonContainers.length; ++i) {
 const rbc = radioButtonContainers[i];
-d3.select(rbc)
+const sel = d3
+.select(rbc)
 .selectAll("button")
 .each(function () {
 syncButtonState(this);
-})
-.on("click._default", function () {
-this.setAttribute("button-checked", "");
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
 this.disabled = true;
 const siblings = this.closest(
 ".radio-button-container",
@@ -728,12 +736,42 @@ if (this === sibling) {
 continue;
 }
 sibling.disabled = false;
-sibling.removeAttribute("button-checked");
+sibling.removeAttribute("data-button-checked");
 }
 });
 }
 }
+}
 _initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
 </script><script type="text/javascript">/* global applyGraphicalObjs defineArrowhead */
 const WIDTH = 1100;
 const HEIGHT = 750;
@@ -892,7 +930,8 @@ let solutions = [u0 / 2];
 // Pick a starting point and a neighborhood (nhbd) around that point to search in
 // Traverse the neighborhood from left to right. Track whether the error associated with each point in the neighborhood is smaller or larger than that of the previous point
 // If the previous error was smaller than the one before it, but the current error is larger than the previous error, then the previous point was a local minimum. Add it to the list of candidate solutions.
-// Once we've traversed every neighborhood of every point, start over using a smaller neighborhood around each of aformentioned candidate solution. Do this until satisfied with precision of solutions (below, while n < 2).
+// Once we've traversed every neighborhood of every point, start over using a smaller neighborhood around each of aformentioned candidate solution. Do this until satisfied with precision of solutions (below,
+// twice; increase to get more and more refinement).
 // Algorithm assumptions:
 // The function is smooth enough that there won't be any spurious local minima
 for (let n = 0; n < 2; ++n) {
@@ -900,9 +939,8 @@ const solnCandidates = [...solutions];
 solutions = [];
 const nhbdHalfWidth = (u0 / 2) * nPointsSearched ** -n;
 for (const candidate of solnCandidates) {
+const du = (2 * nhbdHalfWidth) / (nPointsSearched - 1);
 const nhbdMin = candidate - nhbdHalfWidth;
-const nhbdRight = candidate + nhbdHalfWidth;
-const du = (nhbdRight - nhbdMin) / (nPointsSearched - 1);
 let isDescending = false;
 let prevU;
 let prevError = Infinity;
@@ -916,6 +954,13 @@ isDescending = error < prevError;
 prevU = u;
 prevError = error;
 }
+// if (!foundRefinements) {
+// 	const nhbdMax = candidate + nhbdHalfWidth;
+// 	solutions.push(d3.min([nhbdMin, candidate, nhbdMax], errorFunc));
+// }
+}
+if (solutions.length === 0) {
+solutions = [...solnCandidates];
 }
 }
 solutions = solutions

@@ -37,7 +37,7 @@ function makeTextSprite(
 	// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
 
 	fontface = fontface ?? "sans-serif";
-	fontsize = fontsize ?? 27;
+	fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
 	fontweight = fontweight ?? "";
 	borderThickness = borderThickness ?? 0;
 	borderColor = borderColor ?? _three_utils_clear;
@@ -48,10 +48,11 @@ function makeTextSprite(
 
 	const canvas = document.createElement("canvas");
 
+	// Create the context and set its scale correctly
 	const context = canvas.getContext("2d");
-
 	// These three lines have to go right after creating the context, and they have to
 	// go in this order
+	// https://stackoverflow.com/a/15666143/5496433
 	canvas.width *= 2;
 	canvas.height *= 2;
 	const _pxRat = window.devicePixelRatio;

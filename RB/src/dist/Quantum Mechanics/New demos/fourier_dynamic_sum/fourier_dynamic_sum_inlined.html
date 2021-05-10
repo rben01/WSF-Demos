@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head>
+<head><title>fourier_dynamic_sum.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js">
 </script>
 <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
 <script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update();" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
-<style rel="stylesheet" type="text/css">:root {
+<style type="text/css">:root {
 --color-highlight: #5df;
 --color-secondary: #f3c002;
 --color-tertiary: #14c778;
@@ -40,6 +40,7 @@ display: inline-block;
 border: 2px solid white;
 border-radius: 5px;
 padding: 10px;
+background-color: black;
 }
 .controls {
 grid-row: span 2;
@@ -158,7 +159,7 @@ background-image: -webkit-linear-gradient(top, #fff, #aaa);
 color: black;
 text-shadow: 1px 1px #ddd;
 }
-.button:hover {
+.button:not(:disabled):hover {
 cursor: pointer;
 }
 .button:active {

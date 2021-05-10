@@ -14,7 +14,7 @@
 				vertical-align: top;
 			}
 			.slider-container {
-				/* position: absolute; */
+				position: absolute;
 				top: 5px;
 				left: 5px;
 				width: 270px;
@@ -28,7 +28,7 @@
 			}
 			.curve-foreground {
 				stroke-width: 4px;
-				stroke: white;
+				stroke: var(--color-highlight);
 			}
 			#plot {
 				display: inline-block;
@@ -37,7 +37,7 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="slider-container controls-container">
+			<div class="slider-container controls-container hides-on-mouse-away">
 				<span
 					>𝑛<sup>th</sup> Hermite polynomial: <span id="hermite-n"></span
 				></span>

@@ -115,10 +115,10 @@ let isAnimating = false;
 const sliders = {
 	m: (() => {
 		const slider = document.getElementById("slider-m");
-		slider.min = 1;
+		slider.min = 0.5;
 		slider.max = 2;
 		slider.step = 0.01;
-		slider.value = slider.min;
+		slider.value = 1;
 
 		slider.oninput = function () {
 			if (typeof katex !== "undefined") {

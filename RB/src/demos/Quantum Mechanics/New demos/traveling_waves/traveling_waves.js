@@ -83,7 +83,7 @@ const _shapeButtons = d3
 	.selectAll(".button")
 	.each(function () {
 		if (this.getAttribute("shape") === INITIAL_SHAPE) {
-			this.setAttribute("button-checked", "");
+			this.setAttribute("data-button-checked", "");
 			syncButtonState(this);
 		}
 	})

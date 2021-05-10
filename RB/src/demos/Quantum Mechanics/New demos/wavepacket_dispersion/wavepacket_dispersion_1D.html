@@ -86,7 +86,7 @@
 				stroke-width: 8px;
 			}
 			.curve-foreground {
-				stroke: white;
+				stroke: var(--color-highlight);
 				stroke-width: 5px;
 			}
 			#plots {
@@ -110,9 +110,9 @@
 					<span></span>
 					<span class="radio-button-container horizontal">
 						<button class="button" onclick="play()">Play</button
-						><button class="button" onclick="pause()" button-checked>
+						><button class="button" onclick="pause()" data-button-checked>
 							Pause</button
-						><button class="button" onclick="reset()" button-checked>
+						><button class="button" onclick="reset()" data-button-checked>
 							Reset
 						</button>
 					</span>

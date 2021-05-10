@@ -56,13 +56,18 @@ function applyDatum(datum, { transition } = {}) {
 		});
 	}
 
-	if (typeof datum.text !== "undefined") {
+	if (datum.text !== undefined) {
 		d3Obj.text(datum.text);
 	}
 
-	if (typeof datum.children !== "undefined") {
+	if (datum.children !== undefined) {
 		// eslint-disable-next-line no-use-before-define
-		applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+		applyGraphicalObjs(d3Obj, () => datum.children, {
+			selector: function () {
+				return this.childNodes;
+			},
+			transition,
+		});
 	}
 }
 
@@ -343,10 +348,10 @@ function sampleFromCdf(cdfPoints, n) {
 }
 
 function syncButtonState(button) {
-	if (button.hasAttribute("button-checked")) {
+	if (button.hasAttribute("data-button-checked")) {
 		button.disabled = true;
 	} else if (button.disabled) {
-		button.setAttribute("button-checked", "");
+		button.setAttribute("data-button-checked", "");
 	}
 }
 function _initializeRadioButtons() {
@@ -357,13 +362,16 @@ function _initializeRadioButtons() {
 	for (let i = 0; i < radioButtonContainers.length; ++i) {
 		const rbc = radioButtonContainers[i];
 
-		d3.select(rbc)
+		const sel = d3
+			.select(rbc)
 			.selectAll("button")
 			.each(function () {
 				syncButtonState(this);
-			})
-			.on("click._default", function () {
-				this.setAttribute("button-checked", "");
+			});
+
+		if (!rbc.classList.contains("manual-radio-buttons")) {
+			sel.on("click._default", function () {
+				this.setAttribute("data-button-checked", "");
 				this.disabled = true;
 				const siblings = this.closest(
 					".radio-button-container",
@@ -373,9 +381,48 @@ function _initializeRadioButtons() {
 						continue;
 					}
 					sibling.disabled = false;
-					sibling.removeAttribute("button-checked");
+					sibling.removeAttribute("data-button-checked");
 				}
 			});
+		}
 	}
 }
 _initializeRadioButtons();
+
+function _initializeHideableControlsContainer() {
+	const MIN_DIST_FOR_FULL_OPACITY = 40;
+	const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+	const opacityScale = d3
+		.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+		.clamp(true);
+
+	function adjustHidableElemOpacity(event) {
+		const [mouseX, mouseY] = d3.pointer(event, document.body);
+
+		const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+		const nHidableElems = hidableElems.length;
+
+		for (let i = 0; i < nHidableElems; ++i) {
+			const elem = hidableElems[i];
+			const { left, right, top, bottom } = elem.getBoundingClientRect();
+			const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+			const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+			const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+
+			const opacity = opacityScale(dist);
+
+			elem.style.opacity = opacity;
+		}
+
+		if (hidableElems.length === 0) {
+			return;
+		}
+	}
+
+	d3.select(document.body).on(
+		"mousemove.hide-container-on-mouse-away",
+		adjustHidableElemOpacity,
+	);
+}
+
+_initializeHideableControlsContainer();
