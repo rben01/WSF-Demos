@@ -211,7 +211,7 @@ StrLike = TypeVar("StrLike", str, bytes)
 class TagContainerABC:
     read_mode: ClassVar[str]
 
-    _content: Optional[str]
+    _content: Optional[str] = None
     _dest: Optional[str]
     _project_root: Path
     _tag: Tag
@@ -221,7 +221,6 @@ class TagContainerABC:
     attrs: dict[str, str]
 
     def __init__(self, tag: Tag, *, project_root: Path):
-        self._content = None
         self._tag = tag
         self._project_root = project_root
 
@@ -240,7 +239,7 @@ class TagContainerABC:
 
     @property
     def content(self) -> str:
-        if self._content is None:
+        if self._content == None:
             self._content = self._get_content()
         return self._content
 
@@ -250,6 +249,14 @@ class TagContainerABC:
 
     @abstractmethod
     def _get_content(self) -> str:
+        """Gets the content from self's tag
+
+        Self must be fully initialized (except for perhaps ._content) before this is called
+
+        :raises NotImplementedError: [description]
+        :return: [description]
+        :rtype: str
+        """
         raise NotImplementedError
 
     @classmethod
@@ -281,10 +288,17 @@ class TextSrcTagContainer(TagContainerABC):
                 return f.read()
 
     def update(self, tag_container_list: list[TextSrcTagContainer]) -> None:
+        self._tag.string = self.content
+
+        _ = self._tag.attrs.clear()
+
+        for k, v in self.attrs.items():
+            self._tag[k] = v
+
         tag_container_list.append(self)
 
-    def finalize(self):
-        self._tag.decompose()
+    # def finalize(self):
+    #     self._tag.decompose()
 
 
 class BinarySrcTagContainer(TagContainerABC):
@@ -300,10 +314,16 @@ class BinarySrcTagContainer(TagContainerABC):
         with full_path.open(self.read_mode) as f:
             content = f.read()
 
-        extn = full_path.suffix.strip(".")
+        extn = full_path.suffix.lstrip(".")
         data = base64.b64encode(content).decode("utf-8")
 
-        return f"data:image/{extn};base64,{data}"
+        img_type: str
+        if extn == "svg":
+            img_type = "svg+xml"
+        else:
+            img_type = extn
+
+        return f"data:image/{img_type};base64,{data}"
 
     def update(self) -> None:
         self._tag["src"] = self.content
@@ -311,10 +331,65 @@ class BinarySrcTagContainer(TagContainerABC):
 
 class ScriptTagContainer(TextSrcTagContainer):
     tag_name: Literal["script"] = "script"
-    link_attr: Literal["src"] = "src"
+
+    def __init__(self, tag: Tag, *, project_root: Path):
+        if tag.name == "script":
+            self.link_attr = "src"
+        elif tag.name == "link":
+            self.link_attr = "href"
+        else:
+            raise ValueError(f"don't know how to handle {tag.name=}")
+
+        super().__init__(tag, project_root=project_root)
+        _ = self.attrs.pop("rel", None)
 
     def _get_content(self) -> str:
         return super()._get_content()
+
+    @classmethod
+    def get_selector(cls) -> Union[str, Callable[[Tag], bool]]:
+        def is_script_tag(tag: Tag) -> bool:
+            rel: list[Tag]
+            return (
+                tag.name == "script"
+                or tag.name == "link"
+                and (rel := tag.get("rel")) is not None
+                and "modulepreload" in rel
+                # and (href := tag.get("href")) is not None
+                # and href.endswidth(".js")
+            )
+
+        return is_script_tag
+
+    def update(self, tag_container_list: list[TextSrcTagContainer]) -> None:
+        # def rewrite_js_path(match: re.Match[str]) -> str:
+        #     before, js_file_str, after = match.groups()
+        #     p = Path(js_file_str)
+        #     assert self.dest is not None
+        #     src_folder = Path(self.dest).parent
+
+        #     rewritten_path_str = str(src_folder / p)
+
+        #     if rewritten_path_str.startswith("/"):
+        #         rewritten_path_str = "." + rewritten_path_str
+
+        #     return before + rewritten_path_str + after
+
+        if self._tag.name == "link":
+            self._tag.name = "script"
+            self.attrs["type"] = "module"
+
+        # if self.dest is not None:
+        #     js_import_regex = (
+        #         r'(?P<before>import[^;]+from")(?P<import>.*?)(?P<after>";)'
+        #     )
+        #     self._content = re.sub(js_import_regex, rewrite_js_path, self.content)
+        # if (m := re.match(js_import_regex, self._content)) is not None:
+        #     print(m.groups(), m.group(0))
+        #     print(self.dest)
+        #     print(re.sub(m.group(0), rewrite_js_path, self._content))
+
+        return super().update(tag_container_list)
 
 
 class StyleTagContainer(TextSrcTagContainer):
@@ -339,13 +414,19 @@ class StyleTagContainer(TextSrcTagContainer):
         def is_style_tag(tag: Tag) -> bool:
             rel: list[Tag]
             return (
-                tag.name == "style"
-                or tag.name == "link"
+                tag.name == "link"
                 and (rel := tag.get("rel")) is not None
                 and "stylesheet" in rel
             )
 
         return is_style_tag
+
+    def update(self, tag_container_list: list[TextSrcTagContainer]) -> None:
+        if self._tag.name == "link":
+            self._tag.name = "style"
+            self.attrs["type"] = "text/css"
+
+        return super().update(tag_container_list)
 
 
 class LinkImgTagContainer(BinarySrcTagContainer):
@@ -484,51 +565,51 @@ def inline(
     #             source_tags.append(tag_container)
     #             tag.decompose()
 
-    body: Tag = soup.find("body")
+    # body: Tag = soup.find("body")
 
-    for js_tag in js_tags:
-        if minify_js:
-            response = requests.post(
-                "https://javascript-minifier.com/raw",
-                data={"input": js_tag.content},
-            )
-            js_code = response.text
-        else:
-            js_code = js_tag.content
+    # for js_tag in js_tags:
+    #     if minify_js:
+    #         response = requests.post(
+    #             "https://javascript-minifier.com/raw",
+    #             data={"input": js_tag.content},
+    #         )
+    #         js_code = response.text
+    #     else:
+    #         js_code = js_tag.content
 
-        script_tag = soup.new_tag("script")
-        script_tag["type"] = "text/javascript"
+    #     script_tag = soup.new_tag("script")
+    #     script_tag["type"] = "text/javascript"
 
-        for k, v in js_tag.attrs.items():
-            script_tag[k] = v
+    #     for k, v in js_tag.attrs.items():
+    #         script_tag[k] = v
 
-        if minify_globals:
-            symbols = [match[1] for match in SYMBOL_RE.findall(js_code) if match[1]]
-            replacer = SymbolReplacer(symbols, lang=Lang.js)
-            replacements_dict = dict(sorted(zip(SYMBOLS_TO_REPLACE, replacer)))
+    #     if minify_globals:
+    #         symbols = [match[1] for match in SYMBOL_RE.findall(js_code) if match[1]]
+    #         replacer = SymbolReplacer(symbols, lang=Lang.js)
+    #         replacements_dict = dict(sorted(zip(SYMBOLS_TO_REPLACE, replacer)))
 
-            # https://stackoverflow.com/a/6464500
-            symbol_regex = (r"{even_num_quotes}|(\b{sym_re}\b)").format(
-                sym_re="|".join(map(re.escape, replacements_dict.keys())),
-                even_num_quotes=_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE,
-            )
+    #         # https://stackoverflow.com/a/6464500
+    #         symbol_regex = (r"{even_num_quotes}|(\b{sym_re}\b)").format(
+    #             sym_re="|".join(map(re.escape, replacements_dict.keys())),
+    #             even_num_quotes=_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE,
+    #         )
 
-            js_code = re.sub(
-                symbol_regex,
-                lambda match: replacements_dict.get(match.group(0), match.group(0)),
-                js_code,
-            )
+    #         js_code = re.sub(
+    #             symbol_regex,
+    #             lambda match: replacements_dict.get(match.group(0), match.group(0)),
+    #             js_code,
+    #         )
 
-            sourcemap_dir = Path(outfile.parent / "source maps")
-            sourcemap_dir.mkdir(exist_ok=True, parents=False)
+    #         sourcemap_dir = Path(outfile.parent / "source maps")
+    #         sourcemap_dir.mkdir(exist_ok=True, parents=False)
 
-            with (sourcemap_dir / outfile.name).with_suffix(".sourcemap.json").open(
-                "w"
-            ) as f:
-                json.dump(replacements_dict, f, indent=2)
+    #         with (sourcemap_dir / outfile.name).with_suffix(".sourcemap.json").open(
+    #             "w"
+    #         ) as f:
+    #             json.dump(replacements_dict, f, indent=2)
 
-        script_tag.string = js_code
-        body.append(script_tag)
+    #     script_tag.string = js_code
+    #     body.append(script_tag)
 
     head: Tag = soup.find("head")
 
