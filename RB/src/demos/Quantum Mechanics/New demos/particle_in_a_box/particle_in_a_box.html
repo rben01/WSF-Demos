@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/three@0.123.0/build/three.min.js"
+			integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/"
+			crossorigin="anonymous"
+		></script>
+
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="update()"
+		></script>
+
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+			integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+			crossorigin="anonymous"
+			onload="renderMathInElement(document.body);"
+		></script>
+
+		<link rel="stylesheet" href="../../qm_demo.css" />
+
+		<style>
+			:root {
+				--color-real-part: #5df;
+				--color-imag-part: #f3c002;
+				--color-phase: #e5d;
+			}
+			.radio-button-container.horizontal button {
+				flex: 1;
+				white-space: nowrap;
+			}
+			.grid-left-right {
+				grid-template-columns: max-content 1fr;
+				column-gap: 50px;
+			}
+			.curve {
+				fill: none;
+				stroke-linejoin: round;
+			}
+			.curve-background {
+				stroke: black;
+				stroke-width: 8px;
+			}
+			.curve-foreground {
+				stroke-width: 4px;
+			}
+			.curve-foreground.real-part {
+				stroke: var(--color-real-part);
+			}
+			.curve-foreground.imag-part {
+				stroke: var(--color-imag-part);
+			}
+			.curve-foreground.phase {
+				stroke: var(--color-phase);
+			}
+			.axis-name {
+				font-size: 30px;
+			}
+			.curve {
+				fill: none;
+			}
+			.curve-background {
+				stroke: black;
+				stroke-width: 8px;
+			}
+			.curve-foreground {
+				stroke: var(--color-highlight);
+				stroke-width: 5px;
+			}
+			#plots {
+				margin-top: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div class="controls-container">
+				<div class="controls">
+					<span>Particle mass: <span id="text-m">m</span></span>
+					<span><input type="range" class="slider" id="slider-m" /></span>
+					<span
+						>Wavepacket initial width:
+						<span id="text-sigma">sigma</span></span
+					>
+					<span><input type="range" class="slider" id="slider-sigma" /></span>
+					<span>Particle momentum: <span id="text-p">p</span></span>
+					<span><input type="range" class="slider" id="slider-p" /></span>
+					<span></span>
+					<span class="radio-button-container horizontal">
+						<button class="button" onclick="play()">Play</button
+						><button class="button" onclick="pause()" data-button-checked>
+							Pause</button
+						><button class="button" onclick="reset()" data-button-checked>
+							Reset
+						</button>
+					</span>
+				</div>
+			</div>
+			<div id="plots">
+				<div><span>Wavefunction</span></div>
+				<canvas id="plot-3D" class="draggable"></canvas>
+				<div><span>Probability distribution</span></div>
+				<svg id="plot-2D"></svg>
+			</div>
+		</div>
+		<script src="../../../utils.js"></script>
+		<script src="../../three_utils.js"></script>
+		<script src="../../complex.js"></script>
+		<script src="./particle_in_a_box.js"></script>
+	</body>
+</html>

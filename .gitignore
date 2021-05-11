@@ -8,3 +8,4 @@ RB/src/demos/CDFs
 *.fdb_latexmk
 *.fls
 *.xdv
+node_modules/*

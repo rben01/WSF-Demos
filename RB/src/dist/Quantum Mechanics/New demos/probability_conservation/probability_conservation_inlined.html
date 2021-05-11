@@ -284,6 +284,286 @@ border-radius: 20px;
 background: #ffffff;
 cursor: pointer;
 }
+</style>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-right: 3px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
 </style></head>
 <body>
 <div class="controls-container">
@@ -302,7 +582,7 @@ cursor: pointer;
 <div class="plot-container">
 <svg height="600" id="svg" style="margin: auto; display: block;" width="1200" xmlns="http://www.w3.org/2000/svg"></svg>
 </div>
-<script type="text/javascript">"use strict";
+<script>"use strict";
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
 // eslint-disable-next-line no-unused-vars
@@ -677,38 +957,67 @@ adjustHidableElemOpacity,
 );
 }
 _initializeHideableControlsContainer();
-</script><script type="text/javascript">const svg = d3.select("#svg"),
+</script>
+<script>const SVG = d3.select("#svg"),
 buttons = d3.selectAll("button"),
-w = 500,
-h = 500,
-x1 = d3.scaleLinear().range([0, w]).domain([0, 1]),
-y1 = d3.scaleLinear().range([h, 0]).domain([0, 7]),
-x2 = d3.scaleLinear().range([0, w]).domain([0, 1]),
-y2 = d3.scaleLinear().range([h / 2, -h / 2]).domain([-0.3, 0.3]);
-var g1 = svg.append("g").attr("transform", "translate(50, 50)");
-g1.append("g").attr("class", "axis").attr("transform", `translate(0, ${h})`).call(d3.axisBottom(x1).ticks(6));
+W = 500,
+H = 500,
+x1 = d3.scaleLinear().range([0, W]).domain([0, 1]),
+y1 = d3.scaleLinear().range([H, 0]).domain([0, 7]),
+x2 = d3.scaleLinear().range([0, W]).domain([0, 1]),
+y2 = d3
+.scaleLinear()
+.range([H / 2, -H / 2])
+.domain([-0.3, 0.3]);
+var g1 = SVG.append("g").attr("transform", "translate(50, 50)");
+g1.append("g")
+.attr("class", "axis")
+.attr("transform", `translate(0, ${H})`)
+.call(d3.axisBottom(x1).ticks(6));
 g1.append("g").attr("class", "axis").call(d3.axisLeft(y1).ticks(8));
-var l1 = g1.append("path").attr("fill", "none").style("stroke", "#5df").attr("stroke-width", 3);
-var l2 = g1.append("path").attr("fill", "none").style("stroke", "#5df").attr("stroke-width", 3).style("stroke-dasharray", "25 25").style("stroke-opacity", 0.5);
-var g2 = svg.append("g").attr("transform", `translate(${150 + w}, ${50 + h / 2})`);
-g2.append("g").attr("class", "axis").call(d3.axisBottom(x2).tickValues([0.2, 0.4, 0.6, 0.8, 1.0]));
-g2.append("g").attr("class", "axis").call(d3.axisLeft(y2).tickValues([-0.2, -0.1, 0.1, 0.2]));
-var bars = []
+var l1 = g1
+.append("path")
+.attr("fill", "none")
+.style("stroke", "#5df")
+.attr("stroke-width", 3);
+var l2 = g1
+.append("path")
+.attr("fill", "none")
+.style("stroke", "#f3c002")
+.attr("stroke-width", 3);
+var g2 = SVG.append("g").attr(
+"transform",
+`translate(${150 + W}, ${50 + H / 2})`
+);
+var bars = [];
 for (var i = 0; i < 20; i++) {
-bars.push(g2.append("rect").attr("x", x2(i * 0.05)).attr("y", y2(0)).attr("width", w / 20).attr("fill-opacity", 0.5));
+bars.push(
+g2
+.append("rect")
+.attr("x", x2(i * 0.05))
+.attr("y", y2(0))
+.attr("width", W / 20)
+);
 }
+g2.append("g")
+.attr("class", "axis")
+.call(d3.axisBottom(x2).tickValues([0.2, 0.4, 0.6, 0.8, 1.0]));
+g2.append("g")
+.attr("class", "axis")
+.call(d3.axisLeft(y2).tickValues([-0.2, -0.1, 0.1, 0.2]));
 // |sqrt(2)(exp(2itπ^2)sin(2πx)+exp(9itπ^2/2)sin(3πx)+exp(8itπ^2)sin(4πx))|^2/3
 function f1(x, t) {
-return (
-math.divide(
-math.pow(math.abs(math.sum(
+return math.divide(
+math.pow(
+math.abs(
+math.sum(
 math.multiply(
 math.sqrt(2),
 math.multiply(
 math.exp(
 math.multiply(
 math.multiply(2, math.i),
-math.multiply(math.pi ** 2, t),
+math.multiply(math.pi ** 2, t)
 )
 ),
 math.sin(math.multiply(math.multiply(2, math.pi), x))
@@ -731,25 +1040,22 @@ math.multiply(
 math.sqrt(2),
 math.multiply(
 math.exp(
-math.multiply(
-math.multiply(8, math.i),
-math.pi ** 2 * t
-)
+math.multiply(math.multiply(8, math.i), math.pi ** 2 * t)
 ),
 math.sin(4 * math.pi * x)
 )
 )
-))),
+)
+)
+),
 2
 ),
 3
-)
-)
+);
 }
 // |sqrt(2)(exp(2itπ^2)sin(2πx)+exp(9itπ^2/2)sin(3πx)+exp(25itπ^2/2)sin(5πx))|^2/2
 function f2(x, t) {
-return (
-math.divide(
+return math.divide(
 math.pow(
 math.abs(
 math.sum(
@@ -757,10 +1063,7 @@ math.multiply(
 math.multiply(
 math.sqrt(2),
 math.exp(
-math.multiply(
-math.multiply(2, math.i),
-math.pi ** 2 * t
-)
+math.multiply(math.multiply(2, math.i), math.pi ** 2 * t)
 )
 ),
 math.sin(2 * math.pi * x)
@@ -796,20 +1099,18 @@ math.sin(5 * math.pi * x)
 2
 ),
 2
-)
-)
+);
 }
 // |sqrt(2)(exp(itπ^2/2)sin(2πx)+exp(8itπ^2)sin(4πx)+exp(25itπ^2/2)sin(5πx))|^2/2
 function f3(x, t) {
-return (
-math.divide(
+return math.divide(
 math.pow(
 math.abs(
 math.sum(
 math.multiply(
 math.sqrt(2),
 math.multiply(
-math.exp(math.multiply(math.i, t * math.pi ** 2 / 2)),
+math.exp(math.multiply(math.i, (t * math.pi ** 2) / 2)),
 math.sin(2 * math.pi * x)
 )
 ),
@@ -824,7 +1125,7 @@ math.sin(4 * math.pi * x)
 math.multiply(
 math.sqrt(2),
 math.multiply(
-math.exp(math.multiply(math.i, 25 * t * math.pi ** 2 / 2)),
+math.exp(math.multiply(math.i, (25 * t * math.pi ** 2) / 2)),
 math.sin(5 * math.pi * x)
 )
 )
@@ -834,13 +1135,16 @@ math.sin(5 * math.pi * x)
 2
 ),
 2
-)
-)
+);
 }
 function setf(x) {
-if (x == 1) { f = f1; }
-else if (x == 2) { f = f2; }
-else { f = f3; }
+if (x == 1) {
+f = f1;
+} else if (x == 2) {
+f = f2;
+} else {
+f = f3;
+}
 update();
 }
 function sett(x) {
@@ -856,18 +1160,25 @@ ar2.push([i, f(i, +t + 0.02)]);
 }
 var bh;
 for (var i = 0; i < 20; i++) {
-bh = y2(ar2.slice(50 * i, 50 * i + 50).reduce((a, b) => { return a + b[1] * 0.001 }, 0)
-- ar.slice(50 * i, 50 * i + 50).reduce((a, b) => { return a + b[1] * 0.001 }, 0));
+bh = y2(
+ar2.slice(50 * i, 50 * i + 50).reduce((a, b) => {
+return a + b[1] * 0.001;
+}, 0) -
+ar.slice(50 * i, 50 * i + 50).reduce((a, b) => {
+return a + b[1] * 0.001;
+}, 0)
+);
 bars[i]
 .attr("y", bh > 0 ? y2(0) : bh)
-.attr(
-"height",
-math.abs(bh)
-)
+.attr("height", math.abs(bh))
 .attr("fill", bh > 0 ? "#5df" : "#f3c002");
 }
-ar = ar.map((val) => { return ([x1(val[0]), y1(val[1])]); })
-ar2 = ar2.map((val) => { return ([x1(val[0]), y1(val[1])]); })
+ar = ar.map((val) => {
+return [x1(val[0]), y1(val[1])];
+});
+ar2 = ar2.map((val) => {
+return [x1(val[0]), y1(val[1])];
+});
 l1.attr("d", d3.line()(ar));
 l2.attr("d", d3.line()(ar2));
 }
@@ -878,5 +1189,6 @@ d3.select("#w1").on("click", () => setf(1));
 d3.select("#w2").on("click", () => setf(2));
 d3.select("#w3").on("click", () => setf(3));
 update();
-</script></body>
+</script>
+</body>
 </html>

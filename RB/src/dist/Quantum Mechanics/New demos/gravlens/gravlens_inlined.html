@@ -3,7 +3,6 @@
 <head>
 <meta charset="utf-8"/>
 <title>Gravitational Lensing</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
 <style>
 #container {
 margin: auto;
@@ -20,14 +19,16 @@ display: block;
 margin-left: auto;
 margin-right: auto;
 }
-</style></head>
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js"></script>
+</head>
 <body>
 <div id="container">
 <video autoplay="true" hidden="" id="videoElement">
 </video>
 <canvas id="canvas">Your browser doesn't support canvas</canvas>
 </div>
-<script type="text/javascript">const G = 6.67408 * 10 ** -11, //m^3 kg^-1 s^-2
+<script>const G = 6.67408 * 10 ** -11, //m^3 kg^-1 s^-2
 solar_mass = 1.989 * 10 ** 30, //kg
 black_hole_size = 100, //solar masses
 c = 299792458, //m/s
@@ -210,5 +211,6 @@ navigator.mediaDevices
 video.srcObject = stream;
 })
 .then(processor.doLoad());
-</script></body>
+</script>
+</body>
 </html>
