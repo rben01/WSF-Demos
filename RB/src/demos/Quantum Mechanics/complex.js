@@ -4,6 +4,14 @@ class Complex {
 		this._$theta = phase;
 	}
 
+	toStr(precision = 2) {
+		const re = this.re.toFixed(precision);
+		const im = this.im.toFixed(precision);
+		const r = this.magnitude.toFixed(precision);
+		const theta = this.phase.toFixed(precision);
+		return `${re} + ${im} j == ${r} expj(${theta})`;
+	}
+
 	static from(other) {
 		if (other.magnitude !== undefined || other.phase !== undefined) {
 			return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
@@ -62,7 +70,7 @@ class Complex {
 		return { re: this.re, im: this.im };
 	}
 
-	static mul(...args) {
+	static prod(args) {
 		let magnitude = 1;
 		let phase = 0;
 
@@ -72,6 +80,10 @@ class Complex {
 		}
 
 		return this.fromPolar(magnitude, phase);
+	}
+
+	static mul(...args) {
+		return this.prod(args);
 	}
 
 	mul(...others) {
@@ -89,7 +101,7 @@ class Complex {
 		return this.constructor.div(this, other);
 	}
 
-	static add(...args) {
+	static sum(args) {
 		let re = 0;
 		let im = 0;
 		for (const arg of args) {
@@ -97,6 +109,10 @@ class Complex {
 			im += arg.im ?? 0;
 		}
 		return this.fromCartesian(re, im);
+	}
+
+	static add(...args) {
+		return this.sum(args);
 	}
 
 	add(...others) {
@@ -148,3 +164,20 @@ class Complex {
 	}
 }
 Complex.i = Complex.fromImag(1);
+
+// eslint-disable-next-line no-unused-vars
+function innerProduct(f, g, { xMin, xMax, nPoints, gComplex = true } = {}) {
+	const dx = (xMax - xMin) / (nPoints - 1);
+
+	const gbar = gComplex ? x => g(x).conj() : g;
+	// console.log(f(2), g(2));
+	const products = [];
+	for (let i = 0; i < nPoints - 1; ++i) {
+		const x = xMin + (i + 0.5) * dx;
+		const v = Complex.mul(f(x), gbar(x));
+		// console.log(f(x).toStr(), ";", gbar(x).toStr(), ";", v.toStr());
+		products.push(v);
+	}
+	console.log(products.map(p => p.toStr()));
+	return Complex.sum(products).mul(dx);
+}
