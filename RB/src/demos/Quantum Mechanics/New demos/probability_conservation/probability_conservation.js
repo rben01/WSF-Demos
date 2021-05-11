@@ -24,10 +24,8 @@ var l1 = g1
 var l2 = g1
   .append("path")
   .attr("fill", "none")
-  .style("stroke", "#5df")
-  .attr("stroke-width", 3)
-  .style("stroke-dasharray", "25 25")
-  .style("stroke-opacity", 0.5);
+  .style("stroke", "#f3c002")
+  .attr("stroke-width", 3);
 
 var g2 = SVG.append("g").attr(
   "transform",
