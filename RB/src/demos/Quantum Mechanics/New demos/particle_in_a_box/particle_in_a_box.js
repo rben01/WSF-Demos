@@ -28,8 +28,8 @@ const zScale3D = yScale3D;
 const H_BAR = 1;
 
 // The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
-const N_MAX = 350;
-const N_WAVEFUNCTION_POINTS = 200;
+const N_MAX = 300;
+const N_WAVEFUNCTION_POINTS = 125;
 
 // This 1D array simulates a 2D array with N_MAX rows and N_WAVEFUNCTION_POINTS columns,
 // where (row,col)=(n-1,i) contains the initial value for the n^th term at x=x_i. In
@@ -110,8 +110,8 @@ const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
 const y2dMax = 2.25;
 const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
 
-let currentLength = 3.5;
-let currentMass = 1;
+let currentLength = 6;
+let currentMass = 0.75;
 let currentTime = 0;
 let isAnimating = false;
 
@@ -136,8 +136,8 @@ const sliders = {
 	// })(),
 	m: (() => {
 		const slider = document.getElementById("slider-m");
-		slider.min = 1;
-		slider.max = 2;
+		slider.min = 0.5;
+		slider.max = 1;
 		slider.step = 0.01;
 		slider.value = currentMass;
 
