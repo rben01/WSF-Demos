@@ -9,3 +9,4 @@ RB/src/demos/CDFs
 *.fls
 *.xdv
 node_modules/*
+anim*.mp4

@@ -613,14 +613,14 @@ def inline(
 
     head: Tag = soup.find("head")
 
-    for css_tag in css_tags:
+    for css_tag_container in css_tags:
         if minify_css:
             response = requests.post(
-                "https://cssminifier.com/raw", data={"input": css_tag.content}
+                "https://cssminifier.com/raw", data={"input": css_tag_container.content}
             )
             css_source = response.text
         else:
-            css_source = css_tag.content
+            css_source = css_tag_container.content
 
         style_tag = soup.new_tag("style")
 
@@ -628,13 +628,13 @@ def inline(
             style_tag.string = css_source
         except:
             print(infile)
-            print(css_source, css_tag)
+            print(css_source, css_tag_container)
             raise
 
-        for k, v in css_tag.attrs.items():
+        for k, v in css_tag_container.attrs.items():
             style_tag[k] = v
 
-        head.append(style_tag)
+        css_tag_container._tag.replace_with(style_tag)
 
     for tc in tag_containers:
         tc.finalize()
