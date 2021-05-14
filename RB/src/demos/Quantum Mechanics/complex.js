@@ -1,10 +1,12 @@
 class Complex {
 	constructor(magnitude, phase) {
-		this._$r = magnitude;
+		this._$mag = magnitude;
 		this._$theta = phase;
+		this._$re = magnitude * Math.cos(phase);
+		this._$im = magnitude * Math.sin(phase);
 	}
 
-	toStr(precision = 2) {
+	toStr(precision = 4) {
 		const re = this.re.toFixed(precision);
 		const im = this.im.toFixed(precision);
 		const r = this.magnitude.toFixed(precision);
@@ -43,7 +45,7 @@ class Complex {
 	}
 
 	get magnitude() {
-		return this._$r;
+		return this._$mag;
 	}
 
 	get phase() {
@@ -51,23 +53,23 @@ class Complex {
 	}
 
 	get re() {
-		return this._$r * Math.cos(this._$theta);
+		return this._$re;
 	}
 
 	get im() {
-		return this._$r * Math.sin(this._$theta);
+		return this._$im;
 	}
 
 	conj() {
-		return this.constructor.fromPolar(this._$r, -this._$theta);
+		return this.constructor.fromPolar(this._$mag, -this._$theta);
 	}
 
 	toPolar() {
-		return { magnitude: this.magnitude, phase: this.phase };
+		return { magnitude: this._$mag, phase: this._$theta };
 	}
 
 	toCartesian() {
-		return { re: this.re, im: this.im };
+		return { re: this._$re, im: this._$im };
 	}
 
 	static prod(args) {
@@ -88,6 +90,10 @@ class Complex {
 
 	mul(...others) {
 		return this.constructor.mul(this, ...others);
+	}
+
+	_mulReal(other) {
+		return this.constructor.fromPolar(this.magnitude * other, this.phase);
 	}
 
 	static div(z1, z2) {
@@ -158,7 +164,7 @@ class Complex {
 	}
 
 	pow(realNumber) {
-		const magnitude = Math.pow(this._$r, realNumber);
+		const magnitude = Math.pow(this._$mag, realNumber);
 		const phase = this._$theta * realNumber;
 		return this.constructor.fromPolar(magnitude, phase);
 	}
@@ -166,18 +172,32 @@ class Complex {
 Complex.i = Complex.fromImag(1);
 
 // eslint-disable-next-line no-unused-vars
-function innerProduct(f, g, { xMin, xMax, nPoints, gComplex = true } = {}) {
-	const dx = (xMax - xMin) / (nPoints - 1);
+function innerProduct(
+	f,
+	g,
+	{ xMin, xMax, nPoints = 1000, fIsComplex = true, gIsComplex = true } = {},
+) {
+	const dx = (xMax - xMin) / nPoints;
+	const v = (() => {
+		if (fIsComplex) {
+			if (gIsComplex) {
+				return x => f(x).mul(g(x).conj());
+			} else {
+				return x => f(x)._mulReal(g(x));
+			}
+		} else {
+			if (gIsComplex) {
+				return x => g(x)._mulReal(f(x));
+			} else {
+				return x => f(x) * g(x);
+			}
+		}
+	})();
 
-	const gbar = gComplex ? x => g(x).conj() : g;
-	// console.log(f(2), g(2));
 	const products = [];
-	for (let i = 0; i < nPoints - 1; ++i) {
+	for (let i = 0; i < nPoints; ++i) {
 		const x = xMin + (i + 0.5) * dx;
-		const v = Complex.mul(f(x), gbar(x));
-		// console.log(f(x).toStr(), ";", gbar(x).toStr(), ";", v.toStr());
-		products.push(v);
+		products.push(v(x));
 	}
-	console.log(products.map(p => p.toStr()));
 	return Complex.sum(products).mul(dx);
 }
