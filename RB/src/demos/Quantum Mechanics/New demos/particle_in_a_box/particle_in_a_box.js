@@ -5,15 +5,19 @@ const HEIGHT_3D = 325;
 
 const X_MIN = -1;
 const X_0 = 0;
-const X_MAX = 5;
+const X_MAX = 9;
 
-const xScale3D = d3.scaleLinear([0, 6], [0, 1]);
+const CAMERA_EXTENT = 11;
+const xScale3D = d3.scaleLinear(
+	[X_MIN, X_MAX],
+	[-CAMERA_EXTENT * 0.95, CAMERA_EXTENT * 0.95],
+);
 
 const Y_MAX = 1.1;
 const Y_0 = 0;
 const Y_MIN = -Y_MAX;
 
-const yScale3D = d3.scaleLinear([0, 1], [0, 4]);
+const yScale3D = d3.scaleLinear([0, 1], [0, 3]);
 
 const Z_MAX = Y_MAX;
 const Z_0 = 0;
@@ -23,8 +27,9 @@ const zScale3D = yScale3D;
 
 const H_BAR = 1;
 
-const N_MAX = 400;
-const N_WAVEFUNCTION_POINTS = 450;
+// The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
+const N_MAX = 350;
+const N_WAVEFUNCTION_POINTS = 200;
 
 // This 1D array simulates a 2D array with N_MAX rows and N_WAVEFUNCTION_POINTS columns,
 // where (row,col)=(n-1,i) contains the initial value for the n^th term at x=x_i. In
@@ -50,7 +55,6 @@ const scene = new THREE.Scene();
 // 	0.1,
 // 	2000,
 // );
-const CAMERA_EXTENT = 11;
 const camera = new THREE.OrthographicCamera(
 	-CAMERA_EXTENT,
 	CAMERA_EXTENT,
@@ -103,7 +107,8 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
 
 const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
-const yScale2D = d3.scaleLinear([-0.15, 1.5], [HEIGHT - 25, 0]);
+const y2dMax = 2.25;
+const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
 
 let currentLength = 3.5;
 let currentMass = 1;
@@ -113,22 +118,22 @@ let isAnimating = false;
 const sliders = {
 	L: (() => {
 		const slider = document.getElementById("slider-L");
-		slider.min = 2;
-		slider.max = 5;
+		slider.min = 4;
+		slider.max = X_MAX - 1;
 		slider.step = 0.01;
 		slider.value = currentLength;
 
 		return slider;
 	})(),
-	x0: (() => {
-		const slider = document.getElementById("slider-x0");
-		slider.min = 1;
-		slider.max = 2;
-		slider.step = 0.01;
-		slider.value = 1;
+	// x0: (() => {
+	// 	const slider = document.getElementById("slider-x0");
+	// 	slider.min = 0.5;
+	// 	slider.max = 1.5;
+	// 	slider.step = 0.01;
+	// 	slider.value = 1;
 
-		return slider;
-	})(),
+	// 	return slider;
+	// })(),
 	m: (() => {
 		const slider = document.getElementById("slider-m");
 		slider.min = 1;
@@ -140,10 +145,10 @@ const sliders = {
 	})(),
 	sigma: (() => {
 		const slider = document.getElementById("slider-sigma");
-		slider.min = 0.5;
-		slider.max = 2;
+		slider.min = 0.3;
+		slider.max = 0.5;
 		slider.step = 0.01;
-		slider.value = 1;
+		slider.value = (slider.min + slider.max) / 2;
 
 		return slider;
 	})(),
@@ -197,26 +202,9 @@ function populateCaches({ L, _m, theta, mu, sigma }) {
 			const x = i * dx;
 			const z0_nx = cn.mul(psi(x));
 
-			// j will be equal to (n-1)*N_WAVEFUNCTION_POINTS + i
 			initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i] = z0_nx;
 		}
 	}
-
-	// cnCache = ns.map(n => {
-	// 	const psi = psiCache[n - 1];
-	// 	return innerProduct(
-	// 		x => psi(x) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
-	// 		x => Complex.fromPolar(1, theta * (x - mu)),
-	// 		{ fIsComplex: false, xMin: 0, xMax: L, nPoints: 1000 },
-	// 	);
-	// });
-	// // Normalize cn's
-	// const cnNorm =
-	// 	cnCache
-	// 		.map(cn => cn.magnitude ** 2)
-	// 		.reverse()
-	// 		.reduce((a, b) => a + b) ** 0.5;
-	// cnCache = cnCache.map(cn => cn.div(cnNorm));
 }
 
 function getAxisData({ L } = {}) {
@@ -345,12 +333,6 @@ function computeWavefunctionPoints() {
 
 	const dx = L / (N_WAVEFUNCTION_POINTS - 1);
 
-	// for (let i = 0; i < nWavefunctionPoints; ++i) {
-	// 	const x = xMin + i * dx;
-	// 	wavefunctionPoints[2 * i] = x;
-	// 	wavefunctionPoints[2 * i + 1] = Complex.fromReal(0);
-	// }
-
 	const baseEnergyTerm = (t * (Math.PI / L) ** 2) / (2 * H_BAR * m);
 
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
@@ -359,34 +341,42 @@ function computeWavefunctionPoints() {
 		const x = i * dx;
 		wavefunctionPoints[2 * i] = x;
 
-		for (let n = N_MAX; n >= 1; --n) {
+		// Trick to keep the magnitude of angles small: e^{in^2} =
+		// e^{i(n-1)^2}*(e^{i*(2n-1)}). So we track e^{i(n-1)^2} (from the previous loop
+		// iteration) and then multiply it by smallish numbers. So, since we want
+		// e^{-i*n^2*b} where b is baseEnergyTerm, we compute e^{in^2} as just
+		// described, and then (e^{in^2})^(-b)
+		let energyNSqExpTerm = Complex.fromPolar(1, 0);
+		for (let n = 1; n <= N_MAX; ++n) {
+			energyNSqExpTerm = Complex.prod([
+				energyNSqExpTerm,
+				Complex.fromPolar(1, 2 * n - 1),
+			]);
 			const zn0 = initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i];
-			const energyTerm = n ** 2 * baseEnergyTerm;
-			zs.push(Complex.prod([zn0, Complex.fromPolar(1, -energyTerm)]));
+			const energyExpTerm = energyNSqExpTerm.pow(-baseEnergyTerm);
+			// if (i === 17 && n === 5) {
+			// 	console.log(
+			// 		energyNSqExpTerm,
+			// 		Complex.fromPolar(1, n).pow(2),
+			// 		Complex.fromPolar(1, -1),
+			// 	);
+			// }
+			zs.push(Complex.prod([zn0, energyExpTerm]));
 		}
 
 		wavefunctionPoints[2 * i + 1] = Complex.sum(zs);
 	}
-
-	// for (let i = 1; i < nWavefunctionPoints; i += 2) {
-	// 	const xIdx = 2 * i;
-	// 	const zIdx = 2 * i + 1;
-	// 	wavefunctionPoints[xIdx] =
-	// 		(wavefunctionPoints[xIdx - 2] + wavefunctionPoints[xIdx + 2]) / 2;
-	// 	wavefunctionPoints[zIdx] = wavefunctionPoints[zIdx - 2]
-	// 		.add(wavefunctionPoints[zIdx + 2])
-	// 		.div(2);
-	// 	if (!wavefunctionPoints[zIdx] && wavefunctionPoints[zIdx] !== 0) {
-	// 		console.log(zIdx, wavefunctionPoints[zIdx]);
-	// 	}
-	// }
 }
 
 function getWavefunctionPath3D() {
-	// TODO: fix this
-	const pathPoints = wavefunctionPoints.map(
-		([x, z]) => new THREE.Vector3(xScale3D(x), yScale3D(-z.im), zScale3D(z.re)),
-	);
+	const pathPoints = [];
+	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+		const x = wavefunctionPoints[2 * i];
+		const z = wavefunctionPoints[2 * i + 1];
+		pathPoints.push(
+			new THREE.Vector3(xScale3D(x), yScale3D(-z.im), zScale3D(z.re)),
+		);
+	}
 	const path = new THREE.CatmullRomCurve3(pathPoints);
 	return path;
 }
@@ -409,7 +399,7 @@ const zMax = zScale3D(Z_MAX);
 
 const objs3d = { empty: true };
 
-function update3D(m, sigma, p) {
+function update3D() {
 	const arrowheadRadius = 0.25;
 	const arrowheadHeight = 0.7;
 	const arrowheadGeometry = new THREE.ConeBufferGeometry(
@@ -486,19 +476,19 @@ function update3D(m, sigma, p) {
 		(() => {
 			const xAxisLabel = makeAxisLabel("𝑥");
 			xAxisLabel.position.x = xMax;
-			xAxisLabel.position.y = 0;
-			xAxisLabel.position.z = 0;
+			xAxisLabel.position.y = ys0;
+			xAxisLabel.position.z = zs0;
 			scene.add(xAxisLabel);
 
 			const yAxisLabel = makeAxisLabel("Im[𝜓]");
-			yAxisLabel.position.x = 0;
+			yAxisLabel.position.x = xs0;
 			yAxisLabel.position.y = yMin - 0.1;
 			yAxisLabel.position.z = -0.2;
 			scene.add(yAxisLabel);
 
 			const zAxisLabel = makeAxisLabel("Re[𝜓]");
-			zAxisLabel.position.x = 0.1;
-			zAxisLabel.position.y = 0.2;
+			zAxisLabel.position.x = xs0 + 0.1;
+			zAxisLabel.position.y = ys0 + 0.2;
 			zAxisLabel.position.z = zMax;
 			scene.add(zAxisLabel);
 		})();
@@ -516,7 +506,7 @@ function update3D(m, sigma, p) {
 	const { wave } = objs3d.wave;
 	wave.geometry.dispose();
 	wave.geometry = new THREE.TubeBufferGeometry(
-		getWavefunctionPath3D(m, sigma, p, currentTime),
+		getWavefunctionPath3D(),
 		1000,
 		0.11,
 		8,
@@ -525,7 +515,7 @@ function update3D(m, sigma, p) {
 	renderer.render(scene, camera);
 }
 
-const line = d3.line().curve(d3.curveLinear);
+const line = d3.line().curve(d3.curveNatural);
 function getData2D() {
 	const points = [];
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
@@ -533,6 +523,8 @@ function getData2D() {
 		const z = wavefunctionPoints[2 * i + 1];
 		points.push([xScale2D(x), yScale2D(z.magnitude ** 2)]);
 	}
+
+	const barrierX = xScale2D(currentLength);
 
 	const data = [
 		{
@@ -549,6 +541,16 @@ function getData2D() {
 				d: line(points),
 			},
 		},
+		{
+			shape: "line",
+			class: "curve barrier",
+			attrs: {
+				x1: barrierX,
+				x2: barrierX,
+				y1: yScale2D(0),
+				y2: yScale2D(y2dMax),
+			},
+		},
 	];
 	return data;
 }
@@ -556,7 +558,7 @@ function getData2D() {
 let isFirstRun = true;
 function update(dtMS, refreshCache = false) {
 	dtMS = dtMS ?? 0;
-	currentTime += (0.003 * dtMS) / 1000;
+	currentTime += (0.5 * dtMS) / 1000;
 
 	const L = +sliders.L.value;
 	const m = +sliders.m.value;
@@ -568,7 +570,8 @@ function update(dtMS, refreshCache = false) {
 			L,
 			m,
 			theta: +sliders.p0.value,
-			mu: +sliders.x0.value,
+			mu: 2,
+			// mu: +sliders.x0.value,
 			sigma: +sliders.sigma.value,
 		});
 	}
@@ -582,7 +585,7 @@ function update(dtMS, refreshCache = false) {
 	// populateWavefunctionPoints(m, sigma, p, currentTime);
 
 	applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
-	// update3D(m, sigma, p);
+	update3D();
 
 	// if (typeof katex !== "undefined") {
 	// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
@@ -628,5 +631,5 @@ function reset() {
 	pause();
 	d3.selectAll(".slider").property("disabled", false);
 	currentTime = 0;
-	update();
+	update(0, true);
 }
