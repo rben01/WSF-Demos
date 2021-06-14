@@ -56,7 +56,31 @@ var xscale = d3.scaleLinear().range([0, W]).domain([-3, 3]),
     .append("path")
     .attr("fill", "none")
     .attr("stroke", "#5df")
-    .attr("stroke-width", 5);
+    .attr("stroke-width", 5),
+  b1 = g1
+    .append("rect")
+    .attr("fill", "gray")
+    .attr("fill-opacity", 0.5)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 5)
+    .attr("x", xscale(0))
+    .attr("y", y(0)),
+  b2 = g2
+    .append("rect")
+    .attr("fill", "gray")
+    .attr("fill-opacity", 0.5)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 5)
+    .attr("x", xscale(0))
+    .attr("y", y(0)),
+  b3 = g3
+    .append("rect")
+    .attr("fill", "gray")
+    .attr("fill-opacity", 0.5)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 5)
+    .attr("x", xscale(0))
+    .attr("y", y(0));
 
 function psi(x, k, w, h) {
   PARSER.evaluate(`x = ${x}`);
@@ -97,10 +121,10 @@ function psi(x, k, w, h) {
     //((-4)e^((-i) k * w +i * (1/1000 +sqrt(2)sqrt(-h + k^2/2)) * w +i k x) k * (1/1000 +sqrt(2)sqrt(-h + k^2/2)))/(-k^2 +e^((2 i) (1/1000 +sqrt(2)sqrt(-h + k^2/2)) * w) k^2 -2 k * (1/1000 +sqrt(2) sqrt(-h + k^2/2)) - 2E^((2 i) (1/1000 +sqrt(2)sqrt(-h + k^2/2)) * w) k * (1/1000 +sqrt(2) sqrt(-h + k^2/2)) - (1/1000 +sqrt(2) sqrt(-h + k^2/2))^2 +e^((2 i) (1/1000 +sqrt(2)sqrt(-h + k^2/2)) * w) (1/1000 +sqrt(2)sqrt(-h+k^2/  2)^2)
   } else if (x < 0) {
     return PARSER.evaluate(
-      `e ^ (i * k * (x)) +
+      `e ^ (i * k * x) +
         ((-1 + e ^ (2 * i * (1 / 1000 + sqrt(2) * sqrt(-h + k ^ 2 / 2)) * w)) *
             (k ^ 2 - (1 / 1000 + sqrt(2) * sqrt(-h + k ^ 2 / 2)) ^ 2)) /
-            (e ^ (i * k * (x)) *
+            (e ^ (i * k * x) *
                 (-(k ^ 2) +
                     e ^ (2 * i * (1 / 1000 + sqrt(2) * sqrt(-h + k ^ 2 / 2)) * w) *
                         k ^ 2 -
@@ -190,6 +214,16 @@ function update() {
   l1.attr("d", LINE(ar1));
   l2.attr("d", LINE(ar2));
   l3.attr("d", LINE(ar3));
+
+  b1.attr("width", xscale(w - 3))
+    .attr("y", y(h))
+    .attr("height", y(2 - h));
+  b2.attr("width", xscale(w - 3))
+    .attr("y", y(h))
+    .attr("height", y(2 - h));
+  b3.attr("width", xscale(w - 3))
+    .attr("y", y(h))
+    .attr("height", y(2 - h));
 }
 
 d3.select("#wavenumber").on("input", update);
