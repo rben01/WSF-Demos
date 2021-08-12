@@ -352,15 +352,8 @@ function computeWavefunctionPoints() {
 				energyNSqExpTerm,
 				Complex.fromPolar(1, 2 * n - 1),
 			]);
-			const zn0 = initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i];
 			const energyExpTerm = energyNSqExpTerm.pow(-baseEnergyTerm);
-			// if (i === 17 && n === 5) {
-			// 	console.log(
-			// 		energyNSqExpTerm,
-			// 		Complex.fromPolar(1, n).pow(2),
-			// 		Complex.fromPolar(1, -1),
-			// 	);
-			// }
+			const zn0 = initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i];
 			zs.push(Complex.prod([zn0, energyExpTerm]));
 		}
 

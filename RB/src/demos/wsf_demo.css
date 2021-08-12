@@ -24,10 +24,19 @@ body {
 	height: 30px;
 	font-size: 15px;
 	border-radius: 4px;
+	border-top: 2px solid #fff;
+	border-right: 2px solid #777;
+	border-bottom: 2px solid #777;
+	border-left: 2px solid #fff;
 	background: #ccc;
 	background-image: -webkit-linear-gradient(top, #fff, #aaa);
 	color: black;
 	text-shadow: 1px 1px #ddd;
+}
+
+.play-button > span {
+	display: inline-block;
+	position: relative;
 }
 
 .play-button:hover {
@@ -36,8 +45,13 @@ body {
 
 .play-button:active {
 	background: #ccc;
-	background-image: -webkit-linear-gradient(top, #999, #fff);
-	color: #333;
+	background-image: -webkit-linear-gradient(top, #9c9c9c, #fff);
+	color: #111;
+	border-top-color: #ddd;
+	border-right-color: #888;
+	border-bottom-color: #888;
+	border-left-color: #ddd;
+	/* text-shadow: -1px -1px #d4d4d4; */
 }
 
 .play-button:disabled {
@@ -46,6 +60,11 @@ body {
 	color: #444;
 	text-shadow: 1px 1px #ccc;
 	cursor: default;
+}
+
+.play-button:active > span {
+	bottom: 1px;
+	transform: scale(0.995, 0.98);
 }
 
 .slider-label {
