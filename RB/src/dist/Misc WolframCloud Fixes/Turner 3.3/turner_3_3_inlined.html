@@ -1,0 +1,1143 @@
+<!DOCTYPE html>
+<html>
+<head><title>turner_3_3.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha384-Eu5tTQS50VVQQxwVanW+THxwAH/xX2V9SQJ9n6BmM7djQDlXsfSoe5Ybt+spysWV" src="https://unpkg.com/three@0.131.3/build/three.min.js"></script>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update3d()" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+<style type="text/css">body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+border-top: 2px solid #fff;
+border-right: 2px solid #777;
+border-bottom: 2px solid #777;
+border-left: 2px solid #fff;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button > span {
+display: inline-block;
+position: relative;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #9c9c9c, #fff);
+color: #111;
+border-top-color: #ddd;
+border-right-color: #888;
+border-bottom-color: #888;
+border-left-color: #ddd;
+/* text-shadow: -1px -1px #d4d4d4; */
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.play-button:active > span {
+bottom: 1px;
+transform: scale(0.995, 0.98);
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+input[type="range"]:not(:disabled)::-webkit-slider-thumb,
+input[type="range"]:not(:disabled)::-moz-slider-thumb,
+input[type="range"]:not(:disabled)::-ms-thumb {
+cursor: pointer !important;
+}
+</style>
+<style>
+body {
+max-width: 800px;
+}
+#plot-container {
+overflow-x: hidden;
+}
+#plot {
+position: relative;
+left: -350px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.play-button {
+width: 15em;
+}
+</style>
+</head>
+<body>
+<div class="controls-container">
+<div class="controls">
+<span class="slider-label">Distance from light source: </span><span><input class="param-slider" id="slider-d" oninput="update3d();" type="range"/></span>
+</div>
+<div class="radio-button-container horizontal">
+<button class="play-button" id="btn-show-screen" onclick="toggleScreen();">
+Fixed-sized screen
+</button>
+<button class="play-button" data-button-checked="" id="btn-show-surf" onclick="toggleScreen();">
+Variable-sized surface
+</button>
+</div>
+<div class="controls">
+<span id="katex"></span>
+</div>
+</div>
+<div id="plot-container">
+<canvas class="draggable" id="plot"></canvas>
+</div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(message, borderThickness, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp = originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is it's transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+originalDisplacementFromPointOfFocus.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(originalDisplacementFromPointOfFocus);
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>/* global katex THREE makeRenderer enableDragToRotateCamera */
+const WIDTH = 550;
+const HEIGHT = 250;
+const minDist = 25;
+const maxDist = 100;
+const initialDist = 50;
+const distSlider = (() => {
+const slider = document.getElementById("slider-d");
+slider.min = minDist;
+slider.max = maxDist;
+slider.step = 0.1;
+slider.value = initialDist;
+return slider;
+})();
+const canvas = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT).node();
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+65,
+canvas.clientWidth / canvas.clientHeight,
+0.1,
+2000,
+);
+const renderer = makeRenderer(canvas);
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+const STAR_POSITION = new THREE.Vector3(0, 0, 0);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(-40, -94, 23);
+const CAMERA_POINT_OF_FOCUS = STAR_POSITION;
+const CAMERA_UP = new THREE.Vector3(0, 0, 1);
+camera.up.copy(CAMERA_UP);
+camera.position.copy(CAMERA_DEFAULT_POSITION);
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus: CAMERA_POINT_OF_FOCUS,
+up: CAMERA_UP,
+});
+const STAR_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0xffff33,
+side: THREE.FrontSide,
+transparent: false,
+});
+const surfaceColorAtMaxBrightness = "#44aaff";
+const surfaceColorScale = d3
+.scalePow(
+[+distSlider.min, +distSlider.max],
+[
+surfaceColorAtMaxBrightness,
+d3.interpolateRgb(
+"black",
+surfaceColorAtMaxBrightness,
+)((+distSlider.min / +distSlider.max) ** 2),
+],
+)
+.exponent(-2);
+const SURFACE_MATERIAL = new THREE.MeshBasicMaterial({
+side: THREE.DoubleSide,
+transparent: true,
+opacity: 0.9,
+});
+const bandColorAtMaxBrightness = "#ffffff";
+const bandColorScale = d3.scalePow(
+// Intentionally linear
+[+distSlider.min, +distSlider.max],
+[
+bandColorAtMaxBrightness,
+d3.interpolateRgb(
+"black",
+bandColorAtMaxBrightness,
+)(+distSlider.min / +distSlider.max),
+],
+);
+const BAND_MATERIAL = new THREE.MeshBasicMaterial({
+side: THREE.DoubleSide,
+transparent: false,
+});
+const RAY_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xffff55,
+side: THREE.DoubleSide,
+transparent: true,
+opacity: 0.4,
+});
+const SCREEN_BORDER_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xffffff,
+side: THREE.DoubleSide,
+transparent: false,
+});
+const STAR_RADIUS = 15;
+const objs3d = { empty: true };
+let screenIsVisible = false;
+const texts = {
+katex: document.getElementById("katex"),
+};
+function update3d() {
+// Centered about phi = 0
+const phiMid = 0 * Math.PI;
+const phiLength = 0.4 * Math.PI;
+const phiStart = phiMid - phiLength / 2;
+// Centered about theta = 1.5 * pi
+const thetaMid = 1.5 * Math.PI;
+const thetaLength = phiLength;
+const thetaStart = thetaMid - thetaLength / 2;
+const surfRadius = 100;
+const nBands = 7;
+const nRays = Math.ceil(nBands / 2);
+const dPhi = phiLength / (nBands - 1);
+const dTheta = thetaLength / (nBands - 1);
+if (objs3d.empty) {
+objs3d.empty = false;
+// Fixed objs
+{
+const starGeometry = new THREE.SphereGeometry(STAR_RADIUS);
+const star = new THREE.Mesh(starGeometry, STAR_MATERIAL);
+star.position.copy(STAR_POSITION);
+scene.add(star);
+const light = new THREE.AmbientLight(0xa06040);
+scene.add(light);
+const starLight = new THREE.PointLight(0xffffff, 1, 300, 2);
+starLight.position.copy(STAR_POSITION);
+const dirLightPositions = [
+[20, 20, 20],
+[20, 20, -20],
+[20, -20, 20],
+[20, -20, -20],
+];
+for (const [x, y, z] of dirLightPositions) {
+const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+directionalLight.target.position.copy(STAR_POSITION);
+directionalLight.position.set(x, y, z);
+scene.add(directionalLight);
+scene.add(directionalLight.target);
+}
+const phi = Math.PI / 2; // +x axis; will be rotated later
+for (let i = 0; i < nRays; i++) {
+const phiAngle = phiStart + i * (phiLength / (nRays - 1));
+for (let j = 0; j < nRays; j++) {
+const r = surfRadius * 1.1;
+const theta =
+thetaStart + (j * thetaLength) / (nRays - 1) + Math.PI / 2;
+const x = r * Math.cos(theta) * Math.sin(phi);
+const y = r * Math.sin(theta) * Math.sin(phi);
+const z = r * Math.cos(phi);
+const rayCurve = new THREE.LineCurve3(
+STAR_POSITION,
+new THREE.Vector3(x, y, z),
+);
+const rayGeom = new THREE.TubeGeometry(rayCurve, 3, 0.3);
+const ray = new THREE.Mesh(rayGeom, RAY_MATERIAL);
+ray.rotateY(phiAngle);
+scene.add(ray);
+}
+}
+}
+// The surface being illuminated
+{
+const surfGeom = new THREE.SphereGeometry(
+surfRadius,
+64,
+64,
+phiStart,
+phiLength,
+thetaStart,
+thetaLength,
+);
+const surf = new THREE.Mesh(surfGeom, SURFACE_MATERIAL);
+surf.position.copy(STAR_POSITION);
+scene.add(surf);
+objs3d.surf = surf;
+// The bands that aid visual clarity
+const xBands = [];
+const yBands = [];
+for (let i = 0; i < nBands; i++) {
+// Horizontal bands
+{
+const phiBand = new THREE.Mesh(
+new THREE.BufferGeometry(),
+BAND_MATERIAL,
+);
+phiBand.rotateY(phiStart + i * dPhi);
+scene.add(phiBand);
+xBands.push(phiBand);
+}
+// Vertical bands
+{
+const thetaBand = new THREE.Mesh(
+new THREE.BufferGeometry(),
+BAND_MATERIAL,
+);
+scene.add(thetaBand);
+yBands.push(thetaBand);
+}
+}
+objs3d.xBands = xBands;
+objs3d.yBands = yBands;
+}
+// The screen of fixed size
+{
+const screenObjs = [];
+const screenSideLength = 35;
+const screenProperGeom = new THREE.PlaneBufferGeometry(
+screenSideLength,
+screenSideLength,
+4,
+4,
+);
+const screenProper = new THREE.Mesh(screenProperGeom, SURFACE_MATERIAL);
+screenProper.rotateY(-Math.PI / 2);
+scene.add(screenProper);
+screenObjs.push(screenProper);
+const borderPoints = [
+[1, 1],
+[-1, 1],
+[-1, -1],
+[1, -1],
+[1, 1],
+];
+const screenBorderPath = new THREE.CurvePath();
+for (let i = 0; i < 4; i++) {
+const x = 0;
+const [[y1, z1], [y2, z2]] = [i, i + 1].map(j =>
+borderPoints[j].map(c => (c * screenSideLength) / 2),
+);
+screenBorderPath.curves.push(
+new THREE.LineCurve3(
+new THREE.Vector3(x, y1, z1),
+new THREE.Vector3(x, y2, z2),
+),
+);
+}
+// scr / order.lineTo(-screenHalfSide, -screenHalfSide);
+const screenBorderGeom = new THREE.TubeGeometry(
+screenBorderPath,
+4,
+0.2,
+4,
+true,
+);
+const screenBorder = new THREE.Mesh(
+screenBorderGeom,
+SCREEN_BORDER_MATERIAL,
+);
+scene.add(screenBorder);
+screenObjs.push(screenBorder);
+objs3d.screenObjs = screenObjs;
+}
+}
+const d = +distSlider.value;
+const scale = d / +distSlider.max;
+const rad = scale * surfRadius;
+for (const o of [objs3d.surf]) {
+o.scale.x = scale;
+o.scale.y = scale;
+o.scale.z = scale;
+o.visible = !screenIsVisible;
+}
+{
+const nBandPoints = 20;
+const bandPointIdxs = d3.range(nBandPoints);
+const bandRadius = 0.3;
+for (let i = 0; i < nBands; i++) {
+{
+const band = objs3d.xBands[i];
+const phi = Math.PI / 2; // +x axis; will be rotated later
+const phiCurvePoints = bandPointIdxs.map(i => {
+const theta =
+thetaStart +
+(i * thetaLength) / (nBandPoints - 1) +
+Math.PI / 2;
+const x = rad * Math.cos(theta) * Math.sin(phi);
+const y = rad * Math.sin(theta) * Math.sin(phi);
+const z = rad * Math.cos(phi);
+return new THREE.Vector3(x, y, z);
+});
+const phiCurve = new THREE.CatmullRomCurve3(phiCurvePoints);
+const phiGeom = new THREE.TubeGeometry(phiCurve, 32, bandRadius);
+band.geometry.dispose();
+band.geometry = phiGeom;
+band.visible = !screenIsVisible;
+}
+{
+const band = objs3d.yBands[i];
+const theta = thetaStart + i * dTheta;
+const thetaCurvePoints = bandPointIdxs.map(i => {
+const phi =
+phiStart + (i * phiLength) / (nBandPoints - 1) - Math.PI;
+// Not an error; the meridians go along the y-axis so we have to
+// change up the spherical coordinate formula
+const x = rad * Math.sin(theta) * Math.cos(phi);
+const y = rad * Math.cos(theta);
+const z = rad * Math.sin(theta) * Math.sin(phi);
+return new THREE.Vector3(x, y, z);
+});
+const thetaCurve = new THREE.CatmullRomCurve3(thetaCurvePoints);
+const thetaGeom = new THREE.TubeGeometry(thetaCurve, 32, bandRadius);
+band.geometry.dispose();
+band.geometry = thetaGeom;
+band.visible = !screenIsVisible;
+}
+}
+}
+{
+for (const so of objs3d.screenObjs) {
+so.position.set(rad, 0, 0);
+so.visible = screenIsVisible;
+// console.log(so.geometry.attributes.position);
+// so.geometry.attributes.position.needsUpdate = true;
+}
+}
+SURFACE_MATERIAL.color = new THREE.Color(surfaceColorScale(d));
+BAND_MATERIAL.color = new THREE.Color(bandColorScale(d));
+renderer.render(scene, camera);
+if (typeof katex.render !== "undefined") {
+const labelScale = +distSlider.value / initialDist;
+const rStr = labelScale.toFixed(3);
+const iStr = (1 / labelScale ** 2).toFixed(3);
+katex.render(String.raw`I=${iStr}I_0, r = ${rStr}r_0`, texts.katex);
+}
+}
+// eslint-disable-next-line no-unused-vars
+function toggleScreen() {
+screenIsVisible = !screenIsVisible;
+update3d();
+}
+update3d();
+</script>
+</body>
+</html>
