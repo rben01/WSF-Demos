@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../wsf_demo.css" />
+		<style>
+			.circle-bd {
+				stroke: #5df;
+				stroke-width: 4;
+				fill: none;
+			}
+			.axis {
+				stroke: #eee;
+				stroke-width: 2;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="controls-container">
+			<span class="slider-label">Time:</span
+			><span><input type="range" id="slider-t" class="param-slider" /></span>
+		</div>
+		<svg id="viz"></svg>
+		<script src="../../utils.js"></script>
+		<script src="./guth_2_3.js"></script>
+	</body>
+</html>

@@ -150,6 +150,7 @@ function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpee
 		.cross(up)
 		.normalize();
 
+	// THIS ASSUMES z IS UP
 	// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
 	// rotation axis line, Line 2 is the segment connecting the two displacements
 	const a1 = origRotAxisFromUp.y;
@@ -171,23 +172,14 @@ function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpee
 	const determinant = a1 * b2 - a2 * b1;
 
 	// The lines are (approximately) parallel iff the determinant is small
-	if (Math.abs(determinant) > 1e-4) {
+	if (Math.abs(determinant) > 1e-5) {
 		// Lines aren't parallel; get intersection x
 		const x = (b1 * c2 - b2 * c1) / determinant;
+
 		// Is x_intersect between the two original points' x's? If yes then that segment
 		// crosses the rotation axis, which is pathological
 		if (x2_1 < x === x < x2_2) {
-			const newVec = (() => {
-				const t = 0.00001;
-				const { x: x1, y: y1, z: z1 } = oldPosition;
-				const { x: x2, y: y2, z: z2 } = newPosition;
-				return new THREE.Vector3(
-					x1 * (1 - t) + x2 * t,
-					y1 * (1 - t) + y2 * t,
-					z1 * (1 - t) + z2 * t,
-				);
-			})();
-			return newVec;
+			return oldPosition;
 		}
 	}
 
