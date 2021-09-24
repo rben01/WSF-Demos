@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>dijkgraaf_1_3.html</title>
+<head><title>dijkgraaf_4_3.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-Eu5tTQS50VVQQxwVanW+THxwAH/xX2V9SQJ9n6BmM7djQDlXsfSoe5Ybt+spysWV" src="https://unpkg.com/three@0.131.3/build/three.min.js"></script>
@@ -189,45 +189,48 @@ cursor: grabbing;
 }
 </style>
 <style>
-.controls-container {
+.top-sliders-sect {
 display: grid;
 grid-template-columns: max-content 1fr;
-}
-.play-button {
-width: unset;
-padding: 0 8px;
-}
-.draggable:hover {
-cursor: grab;
-}
-.draggable:active {
-cursor: grabbing;
 }
 </style>
 </head>
 <body>
-<div class="controls-container">
-<span class="slider-label">Plane displacement from origin:</span><span><input class="param-slider" id="plane-x" type="range"/></span>
-<span class="slider-label">Plane angle:</span><span><input class="param-slider" id="plane-angle" type="range"/></span>
-</div>
-<div class="">
-<button class="play-button" onclick="setPoint()">Point</button>
-<button class="play-button" onclick="setOneLine()">One line</button>
-<button class="play-button" onclick="setTwoLines()">
-Two intersecting lines
-</button>
-<button class="play-button" onclick="setCircle()">Circle</button>
-<button class="play-button" onclick="setEllipse()">Ellipse</button>
-<button class="play-button" onclick="setParabola()">Parabola</button>
-<button class="play-button" onclick="setHyperbola()">Hyperbola</button>
-</div>
 <div>
-<span>The conic section is
-<span class="highlighted-text" id="conic-description"></span></span>
+<div class="top-sliders-sect">
+<span class="slider-label" style="display: none">Inner bound:</span>
+<span style="display: none">
+<label>
+<input id="input-min-extent" name="input-min-extent" type="range"/>
+</label>
+</span>
+<span class="slider-label">n<span class="operator">=</span><span id="text-n"></span>:</span>
+<span>
+<label>
+<input id="input-n" name="input-n" type="range"/>
+</label>
+</span>
+<span class="slider-label">Surface parameter:</span>
+<span>
+<label>
+<input id="input-a" name="input-a" type="range"/>
+</label>
+</span>
+<span class="slider-label">Extent:</span>
+<span>
+<label>
+<input id="input-max-extent" name="input-max-extent" type="range"/>
+</label>
+</span>
+<span class="slider-label">Camera zoom:</span>
+<span>
+<label>
+<input id="input-zoom" name="input-zoom" type="range"/>
+</label>
+</span>
 </div>
-<div id="plot-container">
-<canvas class="draggable" id="plot"></canvas>
 </div>
+<canvas class="draggable" id="cym"></canvas>
 <script>"use strict";
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
@@ -850,68 +853,228 @@ renderer.setPixelRatio(window.devicePixelRatio);
 return renderer;
 }
 </script>
-<script>/* global THREE makeRenderer enableDragToRotateCamera */
-const WIDTH = 350;
-const HEIGHT = 225;
-const X_MIN = -16;
-const X_MID = 0;
-const X_MAX = -X_MIN;
-// In units of Math.PI / 2
-const THETA_MIN = -1;
-const THETA_MID = 0;
-const THETA_MAX = 1;
-const CONE_RADIUS = (X_MAX - X_MIN) / 2;
-const CONE_HEIGHT = 25;
-const CONE_SLOPE = CONE_HEIGHT / CONE_RADIUS;
-const THETA_PARALLEL = Math.atan(CONE_SLOPE) / (Math.PI / 2);
-const posSlider = (() => {
-const slider = document.getElementById("plane-x");
-slider.step = 0.001;
-slider.min = X_MIN;
-slider.max = X_MAX;
-slider.value = X_MID;
-slider.oninput = () => {
-if (Math.abs(slider.value - X_MID) < 0.5) {
-slider.value = X_MID;
+<script>class Complex {
+constructor(magnitude, phase) {
+this._$mag = magnitude;
+this._$theta = phase;
+this._$re = magnitude * Math.cos(phase);
+this._$im = magnitude * Math.sin(phase);
 }
-// eslint-disable-next-line no-use-before-define
-update();
-};
-return slider;
-})();
-const angleSlider = (() => {
-const slider = document.getElementById("plane-angle");
-slider.min = THETA_MIN;
-slider.max = THETA_MAX;
-slider.step = 0.001;
-slider.value = THETA_MID;
-slider.oninput = () => {
-const angleThreshold = 0.03;
-if (Math.abs(slider.value - THETA_MID) < angleThreshold) {
-slider.value = X_MID;
+toStr(precision = 4) {
+const re = this.re.toFixed(precision);
+const im = this.im.toFixed(precision);
+const r = this.magnitude.toFixed(precision);
+const theta = this.phase.toFixed(precision);
+return `${re} + ${im} j == ${r} expj(${theta})`;
+}
+static from(other) {
+if (other.magnitude !== undefined || other.phase !== undefined) {
+return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+} else if (other.re !== undefined || other.im !== undefined) {
+return this.fromCartesian(other.re ?? 0, other.im ?? 0);
+} else if (typeof other === "number") {
+return this.fromReal(other);
 } else {
-if (Math.abs(slider.value - THETA_PARALLEL) < angleThreshold) {
-slider.value = THETA_PARALLEL;
-} else if (Math.abs(-slider.value - THETA_PARALLEL) < angleThreshold) {
-slider.value = -THETA_PARALLEL;
+throw new Error(`Argument ${other} not understood in Complex.from`);
 }
 }
-// eslint-disable-next-line no-use-before-define
-update();
-};
-return slider;
+static fromPolar(magnitude, phase) {
+return new this(magnitude, phase);
+}
+static fromCartesian(re, im) {
+const magnitude = (re ** 2 + im ** 2) ** 0.5;
+const phase = Math.atan2(im, re);
+return new this(magnitude, phase);
+}
+static fromReal(realNumber) {
+return new this(realNumber, 0);
+}
+static fromImag(realNumber) {
+return new this(realNumber, Math.PI / 2);
+}
+get magnitude() {
+return this._$mag;
+}
+get phase() {
+return this._$theta;
+}
+get re() {
+return this._$re;
+}
+get im() {
+return this._$im;
+}
+conj() {
+return this.constructor.fromPolar(this._$mag, -this._$theta);
+}
+toPolar() {
+return { magnitude: this._$mag, phase: this._$theta };
+}
+toCartesian() {
+return { re: this._$re, im: this._$im };
+}
+static prod(args) {
+let magnitude = 1;
+let phase = 0;
+for (const arg of args) {
+magnitude *= arg.magnitude ?? arg;
+phase += arg.phase ?? 0;
+}
+return this.fromPolar(magnitude, phase);
+}
+static mul(...args) {
+return this.prod(args);
+}
+mul(...others) {
+return this.constructor.mul(this, ...others);
+}
+_mulReal(other) {
+return this.constructor.fromPolar(this.magnitude * other, this.phase);
+}
+static div(z1, z2) {
+return this.fromPolar(
+(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+(z1.phase ?? 0) - (z2.phase ?? 0),
+);
+}
+div(other) {
+return this.constructor.div(this, other);
+}
+static sum(args) {
+let re = 0;
+let im = 0;
+for (const arg of args) {
+re += arg.re ?? arg;
+im += arg.im ?? 0;
+}
+return this.fromCartesian(re, im);
+}
+static add(...args) {
+return this.sum(args);
+}
+add(...others) {
+return this.constructor.add(this, ...others);
+}
+static sub(z1, z2) {
+return this.fromCartesian(
+(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+);
+}
+sub(other) {
+return this.constructor.sub(this, other);
+}
+static exp(z) {
+if (typeof z === "number") {
+return Complex.fromReal(Math.exp(z));
+}
+return z.exp();
+}
+exp() {
+const magnitude = Math.exp(this.re);
+const phase = this.im;
+return Complex.fromPolar(magnitude, phase);
+}
+static cis(z) {
+if (typeof z === "number") {
+return Complex.fromPolar(1, z);
+}
+return z.cis();
+}
+cis() {
+// exp(i*(x+iy)) = e^(-y)e^(ix)
+return Complex.fromPolar(Math.exp(-this.im), this.re);
+}
+pow(realNumber) {
+const magnitude = Math.pow(this._$mag, realNumber);
+const phase = this._$theta * realNumber;
+return this.constructor.fromPolar(magnitude, phase);
+}
+}
+Complex.i = Complex.fromImag(1);
+// eslint-disable-next-line no-unused-vars
+function innerProduct(
+f,
+g,
+{ xMin, xMax, nPoints = 1000, fIsComplex = true, gIsComplex = true } = {},
+) {
+const dx = (xMax - xMin) / nPoints;
+const v = (() => {
+if (fIsComplex) {
+if (gIsComplex) {
+return x => f(x).mul(g(x).conj());
+} else {
+return x => f(x)._mulReal(g(x));
+}
+} else {
+if (gIsComplex) {
+return x => g(x)._mulReal(f(x));
+} else {
+return x => f(x) * g(x);
+}
+}
 })();
-const conicTextSpan = document.getElementById("conic-description");
-const canvas = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT).node();
+const products = [];
+for (let i = 0; i < nPoints; ++i) {
+const x = xMin + (i + 0.5) * dx;
+products.push(v(x));
+}
+return Complex.sum(products).mul(dx);
+}
+</script>
+<script>/* global THREE makeRenderer enableDragToRotateCamera Complex */
+const paramSliders = {
+minExt: (() => {
+const slider = document.getElementById("input-min-extent");
+slider.step = 0.001;
+slider.min = 0;
+slider.max = 5;
+slider.value = 0;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})(),
+maxExt: (() => {
+const slider = document.getElementById("input-max-extent");
+slider.step = 0.001;
+slider.min = 0;
+slider.max = 2.5;
+slider.value = 1.5;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})(),
+n: (() => {
+const slider = document.getElementById("input-n");
+slider.step = 1;
+slider.min = 2;
+slider.max = 8;
+slider.value = 5;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})(),
+a: (() => {
+const slider = document.getElementById("input-a");
+slider.step = 0.001;
+slider.min = 0;
+slider.max = 2 * Math.PI;
+slider.value = 0;
+// eslint-disable-next-line no-use-before-define
+slider.oninput = update;
+return slider;
+})(),
+};
+const canvas = d3.select("#cym").attr("width", 400).attr("height", 250).node();
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-30,
+90,
 canvas.clientWidth / canvas.clientHeight,
 0.1,
 500,
 );
 const ORIGIN = new THREE.Vector3(0, 0, 0);
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(63, -110, 60);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(4.8, 1.7, 2.5);
 const CAMERA_POINT_OF_FOCUS = ORIGIN;
 const CAMERA_UP = new THREE.Vector3(0, 0, 1);
 camera.up.copy(CAMERA_UP);
@@ -920,6 +1083,21 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 const renderer = makeRenderer(canvas);
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.localClippingEnabled = true;
+// eslint-disable-next-line no-unused-vars
+const _zoomSlider = (() => {
+const slider = document.getElementById("input-zoom");
+slider.step = 0.001;
+slider.min = 1;
+slider.max = 12;
+slider.value = 10;
+const scaler = d3.scaleLinear([+slider.min, +slider.max], [13, 2]);
+slider.oninput = function () {
+const newDist = scaler(+this.value);
+camera.position.copy(camera.position.normalize().multiplyScalar(newDist));
+renderer.render(scene, camera);
+};
+slider.oninput();
+})();
 enableDragToRotateCamera({
 canvas,
 camera,
@@ -928,469 +1106,92 @@ renderer,
 pointOfFocus: CAMERA_POINT_OF_FOCUS,
 up: CAMERA_UP,
 });
-const PLANE_RENDER_ORDER = 1;
-const CONE_MATERIAL = new THREE.MeshLambertMaterial({
-color: 0xffbbbb,
-side: THREE.DoubleSide,
-transparent: true,
-opacity: 0.9,
-});
-const CONE_BORDER_MATERIAL = new THREE.MeshPhongMaterial({
-color: 0xffdddd,
-side: THREE.DoubleSide,
-transparent: false,
-});
-const PLANE_MATERIAL = new THREE.MeshLambertMaterial({
+const SURF_MATERIAL = new THREE.MeshStandardMaterial({
 color: 0x0088ff,
-side: THREE.DoubleSide,
-transparent: true,
-opacity: 0.3,
-});
-const PLANE_BORDER_MATERIAL = new THREE.MeshPhongMaterial({
-color: PLANE_MATERIAL.color,
-side: THREE.DoubleSide,
 transparent: false,
-});
-const CONIC_MATERIAL = new THREE.MeshPhongMaterial({
-color: 0xffffff,
 side: THREE.DoubleSide,
-transparent: false,
-clippingPlanes: [
-// new THREE.Plane(new THREE.Vector3(0, 0, -1), CONE_HEIGHT),
-// new THREE.Plane(new THREE.Vector3(0, 0, 1), CONE_HEIGHT),
-],
-clipIntersection: false,
 });
 const objs3d = { empty: true };
-const CONICS = {
-point: 0,
-oneLine: 1,
-twoLines: 2,
-circle: 3,
-ellipse: 4,
-parabola: 5,
-hyperbola: 6,
-};
-function isSmall(x) {
-return Math.abs(x) < 1e-2;
-}
-function makeLineCurve([x1, y1, z1], [x2, y2, z2]) {
-return new THREE.LineCurve3(
-new THREE.Vector3(x1, y1, z1),
-new THREE.Vector3(x2, y2, z2),
-);
-}
+const thetaScale = d3.scaleLinear([0, 1], [-Math.PI / 2, Math.PI / 2]);
 function update() {
 if (objs3d.empty) {
 objs3d.empty = false;
+objs3d.patches = {};
+objs3d.patchWireframes = {};
+scene.add(new THREE.AmbientLight(0xffffff, 0.5));
 {
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
-const pointLight = new THREE.PointLight(0xffffff, 0.7, 1000);
-pointLight.position.set(50, -30, 30);
-scene.add(pointLight);
-}
-{
-const coneRadialSegments = 128;
-const coneHeightSegments = 2;
-const coneTopGeom = new THREE.ConeGeometry(
-CONE_RADIUS,
-CONE_HEIGHT,
-coneRadialSegments,
-coneHeightSegments,
-true,
-);
-const coneTop = new THREE.Mesh(coneTopGeom, CONE_MATERIAL);
-coneTop.rotateX(-Math.PI / 2);
-coneTop.position.setZ(CONE_HEIGHT / 2);
-const coneTopRingGeom = new THREE.TorusGeometry(CONE_RADIUS, 0.2, 6, 64);
-const coneTopRing = new THREE.Mesh(coneTopRingGeom, CONE_BORDER_MATERIAL);
-coneTopRing.position.setZ(CONE_HEIGHT);
-const coneBotGeom = coneTopGeom.clone();
-const coneBot = new THREE.Mesh(coneBotGeom, CONE_MATERIAL);
-coneBot.rotateX(Math.PI / 2);
-coneBot.position.setZ(-CONE_HEIGHT / 2);
-const coneBotRingGeom = coneTopRingGeom.clone();
-const coneBotRing = new THREE.Mesh(coneBotRingGeom, CONE_BORDER_MATERIAL);
-coneBotRing.position.setZ(-CONE_HEIGHT);
-scene.add(coneTop, coneBot, coneTopRing, coneBotRing);
+const light = new THREE.DirectionalLight(0xffffff, 0.7);
+light.position.set(0, 0, 10);
+scene.add(light);
 }
 {
-const planeSidelength = 75;
-const planeGeom = new THREE.PlaneGeometry(75, 75);
-const plane = new THREE.Mesh(planeGeom, PLANE_MATERIAL);
-const planeBorderCurvePath = new THREE.CurvePath();
-const planeBorderPathPoints = [
-[1, 1],
-[-1, 1],
-[-1, -1],
-[1, -1],
-[1, 1],
-].map(
-([x, y]) =>
-new THREE.Vector3(
-(x * planeSidelength) / 2,
-(y * planeSidelength) / 2,
-0,
-),
+const light = new THREE.DirectionalLight(0xff8888);
+light.position.set(10, 0, 0);
+scene.add(light);
+}
+}
+const [minExtent, maxExtent, n, a] = ["minExt", "maxExt", "n", "a"].map(
+key => +paramSliders[key].value,
 );
-for (let i = 0; i < 4; i++) {
-planeBorderCurvePath.add(
-new THREE.LineCurve3(
-planeBorderPathPoints[i],
-planeBorderPathPoints[i + 1],
-),
-);
-}
-const planeBorderGeometry = new THREE.TubeGeometry(
-planeBorderCurvePath,
-4,
-0.1,
-6,
-);
-const planeBorder = new THREE.Mesh(
-planeBorderGeometry,
-PLANE_BORDER_MATERIAL,
-);
-plane.renderOrder = PLANE_RENDER_ORDER;
-planeBorder.renderOrder = PLANE_RENDER_ORDER;
-const planeGroup = new THREE.Group();
-planeGroup.add(plane, planeBorder);
-scene.add(planeGroup);
-objs3d.plane = planeGroup;
-}
-{
-const upperConic = new THREE.Mesh(
-new THREE.BufferGeometry(),
-CONIC_MATERIAL,
-);
-const lowerConic = new THREE.Mesh(
-new THREE.BufferGeometry(),
-CONIC_MATERIAL,
-);
-scene.add(upperConic, lowerConic);
-objs3d.upperConic = upperConic;
-objs3d.lowerConic = lowerConic;
-}
-}
-const planePos = +posSlider.value;
-const planeAngle = (+angleSlider.value * Math.PI) / 2;
-// First we need the plane's normal vector (nvX, nvY, nvZ)
-const nvX = Math.sin(planeAngle);
-const nvY = 0;
-const nvZ = Math.cos(planeAngle);
-// Then the plane's displacement (x0, y0, z0) from the origin
-const planeX0 = 0.8 * planePos * nvX;
-const planeY0 = 0;
-const planeZ0 = 1.2 * planePos * nvZ;
-{
-const { plane } = objs3d;
-plane.position.setX(planeX0);
-plane.position.setZ(planeZ0);
-plane.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), planeAngle);
-}
-// This is the tricky part... finding the intersection of the double-cone and the
-// plane
-{
-// Using the fact that the equation of the plane is:
-// nvX * (x - x0) + nvY * (y - y0) + nvZ * (z - z0) = 0
-// then find the equation of the plane a*x + b*y + c*z + d = 0
-const a = nvX;
-const b = nvY;
-const c = nvZ;
-const d = -(a * planeX0 + b * planeY0 + c * planeZ0);
-// console.log(a, b, c, d);
-// console.log(a ** 2 * r ** 2 - c ** 2);
-// The equation of a (right, circular, non-affine...) cone is (x^2+y^2)/r^2 =
-// z^2. Let x = radius, y = 0, z = height, then r = x/z = radius/height
-const r = 1 / CONE_SLOPE;
-const u = (a * r) ** 2 - c ** 2;
-const v = 2 * a * d * r ** 2;
-const w = (d * r) ** 2;
-const conicKind = (() => {
-const passesThroughOrigin = isSmall(d);
-const isHorizontal = isSmall(a);
-const coneSlope = 1 / r;
-const planeSlope = Math.abs(a / c);
-// console.log(planeSlope, coneSlope);
-const isParallelToConeEdge = isSmall(planeSlope - coneSlope);
-const isFlatterThanConeEdge =
-planeSlope < coneSlope && !isParallelToConeEdge;
-const isSteeperThanConeEdge =
-planeSlope > coneSlope && !isParallelToConeEdge;
-if (passesThroughOrigin) {
-return isFlatterThanConeEdge
-? CONICS.point
-: isParallelToConeEdge
-? CONICS.oneLine
-: isSteeperThanConeEdge
-? CONICS.twoLines
-: new Error("Invalid boolean weirdness (thru O)");
-} else {
-return isHorizontal
-? CONICS.circle
-: isFlatterThanConeEdge
-? CONICS.ellipse
-: isParallelToConeEdge
-? CONICS.parabola
-: isSteeperThanConeEdge
-? CONICS.hyperbola
-: new Error("Invalid boolean weirdness (not thru O)");
-}
-})();
-// The width of the conic section indicator
-const conicSize = 0.4;
-const nRadialSegments = 8;
-const { upperConic, lowerConic } = objs3d;
-upperConic.geometry.dispose();
-upperConic.visible = true; // visible by default
-lowerConic.geometry.dispose();
-lowerConic.visible = false; // if we need it, we'll make it visible again
-switch (conicKind) {
-case CONICS.point: {
-conicTextSpan.innerText = "a point (degenerate)";
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.oneLine: {
-conicTextSpan.innerText = "a single line (degenerate)";
-const x1 = a < 0 ? X_MIN : X_MAX;
-const x2 = a < 0 ? X_MAX : X_MIN;
-const z1 = -CONE_HEIGHT;
-const z2 = CONE_HEIGHT;
-const geometry = new THREE.TubeGeometry(
-makeLineCurve([x1, 0, z1], [x2, 0, z2]),
-2,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.twoLines: {
-conicTextSpan.innerText = "two lines (degenerate)";
-const z1 = CONE_HEIGHT;
-const z2 = -CONE_HEIGHT;
-const [x1, x2] = [z1, z2].map(z => (-c / a) * z);
-const [upperGeom, lowerGeom] = [-1, 1].map(sgn => {
-const [y1, y2] = [z1, z2].map(
-z => sgn * z * Math.sqrt(r ** 2 - (c / a) ** 2),
-);
-const geom = new THREE.TubeGeometry(
-makeLineCurve([x1, y1, z1], [x2, y2, z2]),
-2,
-conicSize,
-nRadialSegments,
-);
-return geom;
-});
-upperConic.geometry = upperGeom;
-lowerConic.geometry = lowerGeom;
-lowerConic.visible = true;
-break;
-}
-case CONICS.circle:
-case CONICS.ellipse: {
-if (isSmall(a)) {
-conicTextSpan.innerText = "a circle";
-} else {
-conicTextSpan.innerText = "an ellipse";
-}
-// If it's a circle or ellipse, then u < 0
-const k = Math.sqrt(-u);
-const m = Math.sqrt(w + (v / (2 * k)) ** 2);
-// Yikes
-const zAtTheta0 = (planePos > 0 ? 1 : -1) * CONE_HEIGHT;
-const xAtTheta0 = (-zAtTheta0 * c - d) / a;
-const theta0 = Math.acos(((xAtTheta0 + v / (2 * u)) * k) / m);
-const [thetaMin, thetaMax] = (() => {
-if (isNaN(theta0)) {
-// The entire ellipse fits on the cone
-return [0, 2 * Math.PI];
-}
-const theta1 = 2 * Math.PI - theta0;
-const zAtThetaEquals0 = -(a * (m / k - v / (2 * u)) + d) / c;
-if (Math.abs(zAtThetaEquals0) < CONE_HEIGHT) {
-return [theta1, theta0 + 2 * Math.PI];
-} else {
-return [theta0, theta1];
-}
-})();
-const nPoints = 60;
-const dTheta = (thetaMax - thetaMin) / (nPoints - 1);
-const points = [];
-for (let i = 0; i < nPoints; i++) {
-const theta = thetaMin + i * dTheta;
-// If you're wondering where these come from: start with sin^2 +
-// cos^2 = 1, then work backwards and you'll arrive at (one part of
-// the) solution of the intersection of plane and cone, (cy)^2 =
-// ux^2 + vx + w
-const x = (m / k) * Math.cos(theta) - v / (2 * u);
-const y = (m / c) * Math.sin(theta);
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
-}
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.parabola: {
-conicTextSpan.innerText = "a parabola";
-const nPoints = 50;
-const yMax = Math.abs(
-Math.sqrt(
-w - (v / a) * (c * (planePos > 0 ? 1 : -1) * CONE_HEIGHT + d),
-) / c,
-);
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-const points = [];
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const x = ((c * y) ** 2 - w) / v;
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
-}
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.hyperbola: {
-conicTextSpan.innerText = "a hyperbola";
-const nPoints = 60;
-for (const [sgn, mesh] of [
-[-1, lowerConic],
-[1, upperConic],
-]) {
-const points = [];
-// If the plane is vertical, we base things on x instead of y
-if (isSmall(c)) {
-const x = -d / a;
-const yMax = Math.sqrt((CONE_HEIGHT * r) ** 2 - x ** 2);
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const z = (sgn * Math.sqrt(x ** 2 + y ** 2)) / r;
-points.push(new THREE.Vector3(x, y, z));
-}
-} else {
-const xZ = -(c * (sgn * CONE_HEIGHT) + d) / a;
-const yMax = Math.sqrt(u * xZ ** 2 + v * xZ + w) / c;
-if (isNaN(yMax)) {
+document.getElementById("text-n").innerText = n;
+const extent = maxExtent - minExtent;
+const xiScale = d3.scalePow([0, 1], [minExtent, maxExtent]).exponent(1.1);
+const cosA = Math.cos(a);
+const sinA = Math.sin(a);
+for (const meshes of [objs3d.patches, objs3d.patchWireframes]) {
+for (const mesh of Object.values(meshes)) {
+mesh.geometry.dispose();
 mesh.visible = false;
-continue;
-}
-mesh.visible = true;
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const x =
-(1 / (2 * u)) *
-(-v -
-Math.sign(planeAngle) *
-sgn *
-Math.sqrt(v ** 2 - 4 * u * (w - (y * c) ** 2)));
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
 }
 }
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
+const m = (2 * Math.PI) / n;
+for (let k1 = 0; k1 < n; k1++) {
+const s1 = Complex.fromReal(k1 * m).cis();
+for (let k2 = 0; k2 < n; k2++) {
+const s2 = Complex.fromReal(k2 * m).cis();
+const patchkey = `${k1}_${k2}`;
+let patch = objs3d.patches[patchkey];
+let wireframe = objs3d.patchWireframes[patchkey];
+if (patch === undefined) {
+patch = new THREE.Mesh(new THREE.BufferGeometry(), SURF_MATERIAL);
+objs3d.patches[patchkey] = patch;
+scene.add(patch);
+}
+if (wireframe === undefined) {
+wireframe = new THREE.LineSegments(new THREE.BufferGeometry());
+wireframe.material.color.setHex(0xffffff);
+objs3d.patchWireframes[patchkey] = wireframe;
+scene.add(wireframe);
+}
+patch.visible = true;
+wireframe.visible = true;
+const patchGeom = new THREE.ParametricGeometry(
+(u, v, vec3) => {
+const theta = thetaScale(u);
+const xi = xiScale(v);
+const angle1 = Complex.fromCartesian(xi, theta);
+const angle2 = angle1.mul(-1);
+const e1 = angle1.exp();
+const e2 = angle2.exp();
+const u1 = Complex.add(e1, e2).div(Complex.fromReal(2));
+const u2 = Complex.sub(e1, e2).div(Complex.fromImag(2));
+const z1 = u1.pow(2 / n).mul(s1);
+const z2 = u2.pow(2 / n).mul(s2);
+const x = z1.re;
+const y = z2.re;
+const z = z1.im * cosA + z2.im * sinA;
+vec3.set(x, y, z);
+},
+23, // Angular
+Math.max(2, Math.round(extent * 10)), // Radial
 );
-mesh.geometry = geometry;
-mesh.visible = true;
-}
-break;
-}
-default:
-console.log(conicKind);
-throw new Error("huh??");
+patch.geometry = patchGeom;
+wireframe.geometry = new THREE.WireframeGeometry(patchGeom);
 }
 }
 renderer.render(scene, camera);
 }
 update();
-// eslint-disable-next-line no-unused-vars
-function setPoint() {
-posSlider.value = 0;
-const maxAngle = THETA_PARALLEL * 0.95;
-angleSlider.value = d3.interpolate(-maxAngle, maxAngle)(Math.random());
-update();
-}
-// eslint-disable-next-line no-unused-vars
-function setOneLine() {
-posSlider.value = 0;
-angleSlider.value = (Math.random() < 0.5 ? 1 : -1) * THETA_PARALLEL;
-update();
-}
-// eslint-disable-next-line no-unused-vars
-function setTwoLines() {
-posSlider.value = 0;
-const minAngle = THETA_PARALLEL * 1.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(THETA_MIN, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, THETA_MAX)(2 * (t - 0.5));
-}
-update();
-}
-function setRandomPos() {
-posSlider.value = d3.interpolate(-CONE_HEIGHT, CONE_HEIGHT)(Math.random());
-}
-// eslint-disable-next-line no-unused-vars
-function setCircle() {
-setRandomPos();
-angleSlider.value = 0;
-update();
-}
-// eslint-disable-next-line no-unused-vars
-function setEllipse() {
-setRandomPos();
-const maxAngle = THETA_PARALLEL * 0.95;
-const minAngle = 0.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(-maxAngle, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, maxAngle)(2 * (t - 0.5));
-}
-update();
-}
-// eslint-disable-next-line no-unused-vars
-function setParabola() {
-setRandomPos();
-angleSlider.value = (Math.random() < 0.5 ? 1 : -1) * THETA_PARALLEL;
-update();
-}
-// eslint-disable-next-line no-unused-vars
-function setHyperbola() {
-setRandomPos();
-const minAngle = THETA_PARALLEL * 1.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(THETA_MIN, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, THETA_MAX)(2 * (t - 0.5));
-}
-update();
-}
 </script>
 </body>
 </html>

@@ -1,8 +1,13 @@
 <!DOCTYPE html>
 <html>
-<head><title>guth_2_3.html</title>
+<head><title>tegmark_2_4.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update()" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
 <style type="text/css">body {
 max-width: 800px;
 margin: 50px auto;
@@ -188,44 +193,126 @@ cursor: grabbing;
 }
 </style>
 <style>
-:root {
---axis-color: #eee;
+#main {
+display: grid;
+grid-template-columns: min-content 1fr;
+column-gap: 40px;
 }
-.circle-bd {
-stroke: #5df;
-stroke-width: 4;
-fill: none;
+#table-vars {
+font-size: 65%;
+text-align: left;
+border-collapse: collapse;
+}
+#table-vars,
+#table-vars th,
+#table-vars td {
+border: 1px solid white;
+line-height: 1.3;
+}
+#table-vars th,
+#table-vars td {
+padding: 2px 8px;
+}
+#table-vars th {
+max-width: 105px;
+}
+#table-vars thead {
+vertical-align: text-bottom;
 }
 .axis {
-stroke: var(--axis-color);
-stroke-width: 2;
+stroke: white;
 }
-.text {
+.axis-label {
 stroke: none;
 fill: white;
+font-size: 14px;
 }
-.tick {
-stroke: var(--axis-color);
-stroke-width: 2;
+.point {
+fill: #f3c002;
+stroke: white;
 }
-.name {
+.point-label {
+stroke: none;
+fill: white;
+/* stroke-width: 0.5px; */
+/* font-weight: 700; */
 text-anchor: middle;
+font-size: 14px;
 }
-.y-tick-label {
-text-anchor: end;
+#top-sliders-sect {
+margin-bottom: 30px;
+}
+.slope-line {
+stroke: #5df;
+stroke-width: 2px;
+}
+#eqn-holder {
+margin-top: 30px;
 }
 </style>
 </head>
 <body>
-<div class="controls-container">
-<span class="slider-label">Time:</span><span><input class="param-slider" id="slider-t" type="range"/></span>
-<br/>
-<span>Age of universe:
-<span class="sci-num highlighted-text"><span id="text-age"></span><span class="operator">×</span>10<sup>−37</sup></span>seconds</span><br/>
-<span>Size of universe:
-<span class="sci-num highlighted-text"><span id="text-size-mantissa"></span><span class="operator">×</span>10<sup id="text-size-exp"></sup></span>meters</span>
+<div id="top-sliders-sect">
+<div class="slider-container">
+<div>
+<span class="slider-label">Slope of line, \(𝐻_0=\frac{v}{d}\)</span>
+<label>
+<input id="input-slope" name="input-slope" oninput="update()" type="range"/>
+</label>
 </div>
+</div>
+</div>
+<div id="main">
+<table id="table-vars">
+<thead>
+<th>Supernova</th>
+<th>Distance (Mpc)</th>
+<th>Red-shift (z)</th>
+<th>Receding speed (km/s)</th>
+</thead>
+<tr>
+<td>1995D</td>
+<td>36.14</td>
+<td>0.008</td>
+<td>2.4<span class="operator">×</span>10<sup>3</sup></td>
+</tr>
+<tr>
+<td>1995E</td>
+<td>55.72</td>
+<td>0.012</td>
+<td>3.6<span class="operator">×</span>10<sup>3</sup></td>
+</tr>
+<tr>
+<td>1996C</td>
+<td>145.88</td>
+<td>0.028</td>
+<td>8.4<span class="operator">×</span>10<sup>3</sup></td>
+</tr>
+<tr>
+<td>1990af</td>
+<td>215.77</td>
+<td>0.050</td>
+<td>1.5<span class="operator">×</span>10<sup>4</sup></td>
+</tr>
+<tr>
+<td>1992bs</td>
+<td>335.74</td>
+<td>0.064</td>
+<td>1.92<span class="operator">×</span>10<sup>4</sup></td>
+</tr>
+<tr>
+<td>1992aq</td>
+<td>463.45</td>
+<td>0.101</td>
+<td>3.3<span class="operator">×</span>10<sup>4</sup></td>
+</tr>
+</table>
 <svg id="viz"></svg>
+</div>
+<div id="eqn-holder">
+<span id="eqn-h0"></span>
+<span id="eqn-age"></span>
+</div>
 <script>"use strict";
 // eslint-disable-next-line no-unused-vars
 const C = 299792458;
@@ -602,270 +689,244 @@ adjustHidableElemOpacity,
 }
 _initializeHideableControlsContainer();
 </script>
-<script>/* global applyGraphicalObjs */
+<script>/* global applyGraphicalObjs katex */
 const WIDTH = 500;
-const HEIGHT = WIDTH;
-const MARGIN = 10;
+const HEIGHT = 400;
+const MARGIN = 13;
 const canvas = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
-const X_MIN = -1;
-const X_C = 0;
-const X_MAX = 1;
-const xScale = d3.scaleLinear(
-[X_MIN, X_MAX].map(x => 1.1 * x),
-[MARGIN, WIDTH - MARGIN],
-);
-const Y_MIN = -1;
-const Y_C = 0;
-const Y_MAX = 1;
-const yScale = d3.scaleLinear(
-[Y_MIN, Y_MAX].map(y => 1.1 * y),
-[HEIGHT - MARGIN, MARGIN],
-);
-const CIRCLE_RADIUS = 0.9 * (X_MAX - X_C);
-const T_MIN = 0;
-const T_MAX = 1;
-const timeSlider = (() => {
-const slider = document.getElementById("slider-t");
+const X_MIN = 0;
+const X_MAX = 500;
+const Y_MIN = 0;
+const Y_MAX = 35000;
+const xScale = d3.scaleLinear([X_MIN, X_MAX], [MARGIN + 50, WIDTH - MARGIN]);
+const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT - MARGIN - 25, MARGIN]);
+const SUPERNOVAE = [
+{ name: "1995D", dist: 36.14, speed: 2400, label: { dx: -4, dy: -2 } },
+{ name: "1995E", dist: 55.72, speed: 3600, label: { dx: 24, dy: -20 } },
+{ name: "1996C", dist: 145.88, speed: 8400, label: { dx: 14 } },
+{ name: "1990af", dist: 215.77, speed: 15000 },
+{ name: "1992bs", dist: 335.74, speed: 19200 },
+{ name: "1992aq", dist: 463.45, speed: 30300 },
+];
+const slopeScale = d3.scalePow([0, 1], [20, 175]).exponent(2);
+const slopeSlider = (() => {
+const slider = document.getElementById("input-slope");
+[slider.min, slider.max] = slopeScale.domain();
 slider.step = 0.001;
-slider.min = T_MIN;
-slider.max = T_MAX;
-slider.value = T_MIN;
-// eslint-disable-next-line no-use-before-define
-slider.oninput = update;
+slider.value = slider.min;
 return slider;
 })();
-const labels = {
-age: document.getElementById("text-age"),
-sizeMantissa: document.getElementById("text-size-mantissa"),
-sizeExp: document.getElementById("text-size-exp"),
-};
-const TIME_INIT = 0.106;
-const OBJECTS = [
-[-24, 1, "Radius of 1MeV neutrino"],
-[-21, 20.8, ["Width of cosmic string", "(upper bound)"]],
-[-19, 30.6, ["de Broglie wavelength", "of protons at LHC"]],
-[-17, 39, ["Range of the", "Weak Force"]],
-[-15, 43.8, "Proton radius"],
-[-12, 50.6, "Wavelength of hydrogen"],
-[-10, 60.4, ["Atomic", "radius"]],
-[-9, 67.4, "DNA helix"],
-[-6, 70.4, "Bacterium"],
-[-2, 80.4, "Marble"],
-[1.7, 93.3, "Human being"],
-].map(([sizeMetersPow10, timeScale, fullName]) => ({
-size: sizeMetersPow10,
-time: timeScale,
-fullName,
-name: Array.isArray(fullName) ? fullName.join(" ") : fullName,
-}));
-const N_OBJECTS = OBJECTS.length;
-const timeScale = d3.scaleLinear(
-[T_MIN, T_MAX],
-[d3.min(OBJECTS, o => o.time), d3.max(OBJECTS, o => o.time)],
-);
-const fmtPower = d3.format("d");
-function infoFromUnscaledTime(t) {
-const scaledTime = timeScale(t);
-for (let i = 0; i < N_OBJECTS - 1; i++) {
-const { size: size1, time: time1 } = OBJECTS[i];
-const { size: size2, time: time2 } = OBJECTS[i + 1];
-if (time1 <= scaledTime && scaledTime <= time2) {
-const timeToSizescale = d3.scaleLinear([time1, time2], [size1, size2]);
-const scaledSize = timeToSizescale(scaledTime);
+function getAxisData() {
+const axisBorderVertices = [
+[X_MIN, Y_MIN],
+[X_MIN, Y_MAX],
+[X_MAX, Y_MAX],
+[X_MAX, Y_MIN],
+].map(([x, y]) => [xScale(x), yScale(y)]);
+const axisBorders = axisBorderVertices.map(([x1, y1], i) => {
+const [x2, y2] = axisBorderVertices[(i + 1) % 4];
+const isHorizontal = y1 === y2;
+const isVertical = !isHorizontal;
+const extension = 0.5;
 return {
-// lower: OBJECTS[i],
-// upper: OBJECTS[i + 1],
-size: scaledSize,
-time: scaledTime * TIME_INIT,
-sizeAtOrigin: scaledSize - 1.5,
-sizeAtEdge: scaledSize + 1.5,
-};
-}
-}
-}
-function getData(info) {
-const { sizeAtOrigin, sizeAtEdge } = info;
-// console.log(info);
-const bgData = [
-{
 shape: "line",
 class: "axis",
-id: "x-axis",
 attrs: {
-x1: xScale(X_C),
-x2: xScale(X_C),
-y1: yScale(Y_MIN),
-y2: yScale(Y_MAX),
+x1: x1 + Math.sign(x1 - x2) * isHorizontal * extension,
+x2: x2 - Math.sign(x1 - x2) * isHorizontal * extension,
+y1: y1 + Math.sign(y1 - y2) * isVertical * extension,
+y2: y2 - Math.sign(y1 - y2) * isVertical * extension,
 },
-},
-{
-shape: "line",
-class: "axis",
-id: "y-axis",
-attrs: {
-x1: xScale(X_MIN),
-x2: xScale(X_MAX),
-y1: yScale(Y_C),
-y2: yScale(Y_C),
-},
-},
-{
-shape: "text",
-class: "text y-axis-lab",
-text: "Radius (m)",
-attrs: {
-x: xScale(X_C),
-y: yScale(CIRCLE_RADIUS),
-dx: 10,
-dy: -10,
-"text-anchor": "begin",
-},
-},
-];
-const includedObjects = OBJECTS.filter(
-o => sizeAtOrigin < o.size && o.size < sizeAtEdge,
-);
-const sizeToXScale = d3.scaleLinear(
-[sizeAtOrigin, sizeAtEdge],
-[X_C, CIRCLE_RADIUS],
-);
-const xOpacityScale = d3
-.scalePow(
-[sizeAtOrigin, (sizeAtOrigin + sizeAtEdge) / 2, sizeAtEdge],
-[0.1, 1, 0.1],
-)
-.exponent(0.5);
-const yOpacityScale = d3
-.scalePow(
-[
-sizeAtOrigin,
-(sizeAtOrigin + sizeAtEdge) / 2,
-sizeAtOrigin * 0.1 + sizeAtEdge * 0.9,
-sizeAtEdge,
-],
-[0.5, 0.95, 1, 0.05],
-)
-.exponent(0.5);
-const x0s = xScale(X_C);
-const y0s = yScale(Y_C);
-const tickLength = 10;
-const xObjs = includedObjects.flatMap(o => {
-const xs = xScale(sizeToXScale(o.size));
+};
+});
+const majorTickLength = 8;
+const minorTickLength = 4;
+// X ticks
+const nXMajorTicks = xScale.ticks(5).length;
+const nXMinorTicks = 4 * (nXMajorTicks - 1) + 1;
+const [xMin, xMax] = xScale.range();
+const [yMin, yMax] = yScale.range();
+const xTickObjs = [
+...d3.range(nXMajorTicks).map(i => [i, nXMajorTicks, true]),
+...d3.range(nXMinorTicks).map(i => [i, nXMinorTicks, false]),
+].flatMap(([i, nTicks, isMajor]) => {
+const x = xMin + (i * (xMax - xMin)) / (nTicks - 1);
+const y1 = yScale(Y_MIN);
+const y2 = yScale(Y_MIN) - (isMajor ? majorTickLength : minorTickLength);
 const tick = {
 shape: "line",
-class: "tick x-tick",
-id: `tick-x-${o.name}`,
+class: "axis axis-tick x-axis-tick",
 attrs: {
-x1: xs,
-x2: xs,
-y1: y0s,
-y2: y0s + tickLength,
+x1: x,
+x2: x,
+y1,
+y2,
 },
 };
-const textYs = y0s + tickLength + 15;
-const text = {
+const data = [tick];
+if (isMajor) {
+const xLabel = d3.interpolate(X_MIN, X_MAX)(i / (nTicks - 1));
+data.push({
 shape: "text",
-class: "text name",
-id: `label-${o.name}`,
+class: "axis axis-label x-axis-label",
+text: xLabel,
 attrs: {
-x: xs,
-y: textYs,
-"font-size": 14,
-opacity: xOpacityScale(o.size),
+x,
+y: y1 + 16,
+"text-anchor": "middle",
 },
-};
-if (Array.isArray(o.fullName)) {
-text.children = o.fullName.map((part, i) => ({
-shape: "tspan",
-class: "subname",
-text: part,
-attrs: {
-x: xs,
-y: textYs,
-dy: i * 20,
-},
-}));
-} else {
-text.text = o.name;
-}
-return [tick, text];
 });
-const lowerSize = Math.ceil(sizeAtOrigin);
-const upperSize = Math.floor(sizeAtEdge);
-const yObjs = d3.range(lowerSize, upperSize + 1).flatMap(pow => {
-const ys = yScale(sizeToXScale(pow));
-const tick = {
-shape: "line",
-class: "tick y-tick",
-id: `tick-y-${pow}`,
-attrs: {
-x1: x0s,
-x2: x0s - tickLength,
-y1: ys,
-y2: ys,
-},
-};
-const text = {
-shape: "text",
-class: "text y-tick-label",
-attrs: {
-x: x0s - tickLength - 8,
-y: ys,
-"font-size": 14,
-dy: ".25em",
-opacity: yOpacityScale(pow),
-},
-children: [
-{
-shape: "tspan",
-text: "10",
-},
-{
-shape: "tspan",
-class: "t-sup",
-text: fmtPower(pow),
-attrs: { "font-size": 10, dx: ".2em", dy: "-.65em" },
-},
-],
-};
-return [tick, text];
-});
-// console.log(includedObjects, xObjs);
-const data = [
-...bgData,
-...xObjs,
-...yObjs,
-{
-shape: "circle",
-class: "circle-bd",
-id: "round-boi",
-attrs: {
-cx: xScale(X_C),
-cy: yScale(Y_C),
-r: xScale(CIRCLE_RADIUS) - xScale(X_C),
-},
-},
-];
-for (const datum of data) {
-datum.class = [datum.class ?? null, "graph-obj"].join(" ");
 }
 return data;
-}
-const formatFloat = d3.format(".3f");
-const formatInt = d3.format("d");
-function update() {
-const t = +timeSlider.value;
-const info = infoFromUnscaledTime(t);
-applyGraphicalObjs(canvas, getData(info), {
-selector: ".graph-obj",
-key: d => d.id,
 });
-labels.age.innerText = formatFloat(info.time);
-const universeSizeNicedLog10 = Math.floor(info.sizeAtEdge);
-const mantissa = Math.pow(10, info.sizeAtEdge - universeSizeNicedLog10);
-labels.sizeMantissa.innerText = formatFloat(mantissa);
-labels.sizeExp.innerText = formatInt(universeSizeNicedLog10);
+xTickObjs.push({
+shape: "text",
+class: "axis axis-label x-axis-title",
+text: "Distance (Mpc)",
+attrs: {
+x: (xMin + xMax) / 2,
+y: yMin + 35,
+"text-anchor": "middle",
+},
+});
+// Y Ticks
+const nYMajorTicks = yScale.ticks(7).length;
+const nYMinorTicks = 4 * (nYMajorTicks - 1) + 1;
+const yTickObjs = [
+...d3.range(nYMajorTicks).map(i => [i, nYMajorTicks, true]),
+...d3.range(nYMinorTicks).map(i => [i, nYMinorTicks, false]),
+].flatMap(([i, nTicks, isMajor]) => {
+const y = yMin + (i * (yMax - yMin)) / (nTicks - 1);
+const x1 = xScale(X_MIN);
+const x2 = xScale(Y_MIN) + (isMajor ? majorTickLength : minorTickLength);
+const tick = {
+shape: "line",
+class: "axis axis-tick y-axis-tick",
+attrs: {
+x1,
+x2,
+y1: y,
+y2: y,
+},
+};
+const data = [tick];
+if (isMajor) {
+const formatter = d3.format(".3~s");
+const yLabel = formatter(d3.interpolate(Y_MIN, Y_MAX)(i / (nTicks - 1)));
+data.push({
+shape: "text",
+class: "axis axis-label y-axis-label",
+text: yLabel,
+attrs: {
+x: x1 - 6,
+y,
+"text-anchor": "end",
+"dominant-baseline": "middle",
+},
+});
 }
+return data;
+});
+yTickObjs.push({
+shape: "text",
+class: "axis axis-label y-axis-title",
+text: "Receding Speed (km/s)",
+attrs: {
+"text-anchor": "middle",
+transform: `translate(${xMin - 45} ${(yMin + yMax) / 2}) rotate(-90)`,
+},
+});
+const points = SUPERNOVAE.flatMap(({ name, dist, speed, label: labelInfo }) => {
+const x = xScale(dist);
+const y = yScale(speed);
+const dx = (labelInfo ?? {}).dx ?? 0;
+const dy = 18 + ((labelInfo ?? {}).dy ?? 0);
+const point = {
+shape: "circle",
+class: "point",
+attrs: {
+cx: x,
+cy: y,
+r: 4,
+},
+};
+const label = {
+shape: "text",
+class: "point-label",
+text: name,
+attrs: {
+x,
+y: y,
+dx,
+dy,
+"dominant-baseline": "top",
+},
+};
+return [point, label];
+});
+const slopeLine = {
+shape: "line",
+class: "slope-line",
+};
+return [slopeLine, ...axisBorders, ...xTickObjs, ...yTickObjs, ...points];
+}
+const slopeFormatter = d3.format(".3r");
+function update() {
+const slope = slopeScale(+slopeSlider.value);
+const xTop = X_MIN + (Y_MAX - Y_MIN) / slope;
+const yRight = Y_MIN + (X_MAX - X_MIN) * slope;
+let x2, y2;
+if (xTop > X_MAX) {
+// It hits the right edge before the top edge
+x2 = X_MAX;
+y2 = yRight;
+} else {
+// It hits the top edge before the right edge
+x2 = xTop;
+y2 = Y_MAX;
+}
+// console.log(slope, xTop, yRight);
+const line = {
+shape: "line",
+class: "slope-line",
+attrs: {
+x1: xScale(X_MIN),
+x2: xScale(x2),
+y1: yScale(Y_MIN),
+y2: yScale(y2),
+},
+};
+applyGraphicalObjs(canvas, [line], { selector: ".slope-line" });
+if (typeof katex !== "undefined") {
+katex.render(
+`\\displaystyle H_0 = \\frac{v}{d} = ${slopeFormatter(
+slope,
+)}\\frac{\\textrm{km}/\\textrm{s}}{\\textrm{Mpc}}`,
+document.getElementById("eqn-h0"),
+{ displayMode: true },
+);
+const universeAgeSec = 3e19 / slope;
+const universeAgeYears = universeAgeSec / (60 * 60 * 24 * 365.25);
+const ageFormattingRegex = /([\d.]+)e\+(\d+)/;
+const [ageSecMantissa, ageSecExponent] = universeAgeSec
+.toExponential()
+.match(ageFormattingRegex)
+.slice(1);
+const [ageYearsMantissa, ageYearsExponent] = universeAgeYears
+.toExponential()
+.match(ageFormattingRegex)
+.slice(1);
+katex.render(
+`\\textrm{Age}
+=\\frac{3\\times 10^{19}\\,\\textrm{km}/\\textrm{Mpc}}{H_0}
+=${(+ageSecMantissa).toFixed(2)}\\times 10^{${ageSecExponent}}\\,\\textrm{s}
+=${(+ageYearsMantissa).toFixed(2)}\\times 10^{${ageYearsExponent}}\\,\\textrm{yrs}`,
+document.getElementById("eqn-age"),
+{ displayMode: true },
+);
+}
+}
+applyGraphicalObjs(canvas, getAxisData());
 update();
 </script>
 </body>

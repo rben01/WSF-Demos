@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>dijkgraaf_1_3.html</title>
+<head><title>guth_4_3.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <script crossorigin="anonymous" integrity="sha384-Eu5tTQS50VVQQxwVanW+THxwAH/xX2V9SQJ9n6BmM7djQDlXsfSoe5Ybt+spysWV" src="https://unpkg.com/three@0.131.3/build/three.min.js"></script>
@@ -189,44 +189,57 @@ cursor: grabbing;
 }
 </style>
 <style>
-.controls-container {
+#main {
 display: grid;
-grid-template-columns: max-content 1fr;
+grid-template-columns: 1fr 1fr;
+column-gap: 20px;
+justify-items: center;
 }
-.play-button {
-width: unset;
-padding: 0 8px;
+.header-container {
+text-align: center;
 }
-.draggable:hover {
+.p2d.vertex-dot {
+fill: white;
+stroke: black;
+stroke-width: 3;
+}
+.p2d.vertex-dot {
 cursor: grab;
 }
-.draggable:active {
+.p2d.vertex-dot:active {
 cursor: grabbing;
+}
+.p2d.vertex-label {
+fill: black;
+stroke: none;
+font-size: 15px;
+pointer-events: none;
+}
+.p2d.tri-edge {
+stroke: white;
+stroke-width: 2;
 }
 </style>
 </head>
 <body>
-<div class="controls-container">
-<span class="slider-label">Plane displacement from origin:</span><span><input class="param-slider" id="plane-x" type="range"/></span>
-<span class="slider-label">Plane angle:</span><span><input class="param-slider" id="plane-angle" type="range"/></span>
+<div>
+<div id="main">
+<div class="header-container">
+<span class="header">Euclidean, “flat” geometry</span><br/>
+<span class="header">Sum of angles = 180°</span>
 </div>
-<div class="">
-<button class="play-button" onclick="setPoint()">Point</button>
-<button class="play-button" onclick="setOneLine()">One line</button>
-<button class="play-button" onclick="setTwoLines()">
-Two intersecting lines
-</button>
-<button class="play-button" onclick="setCircle()">Circle</button>
-<button class="play-button" onclick="setEllipse()">Ellipse</button>
-<button class="play-button" onclick="setParabola()">Parabola</button>
-<button class="play-button" onclick="setHyperbola()">Hyperbola</button>
+<div class="header-container">
+<span class="header">Non-Euclidean, “closed” geometry</span>
+<br/>
+<span class="header">Sum of angles = <span id="angle-sum"></span>° &gt; 180°</span>
 </div>
 <div>
-<span>The conic section is
-<span class="highlighted-text" id="conic-description"></span></span>
+<svg id="plot2d"></svg>
 </div>
-<div id="plot-container">
-<canvas class="draggable" id="plot"></canvas>
+<div>
+<canvas class="draggable" id="plot3d"></canvas>
+</div>
+</div>
 </div>
 <script>"use strict";
 // eslint-disable-next-line no-unused-vars
@@ -850,547 +863,302 @@ renderer.setPixelRatio(window.devicePixelRatio);
 return renderer;
 }
 </script>
-<script>/* global THREE makeRenderer enableDragToRotateCamera */
+<script>/* global THREE applyGraphicalObjs enableDragToRotateCamera makeRenderer makeTextSprite */
 const WIDTH = 350;
-const HEIGHT = 225;
-const X_MIN = -16;
-const X_MID = 0;
-const X_MAX = -X_MIN;
-// In units of Math.PI / 2
-const THETA_MIN = -1;
-const THETA_MID = 0;
-const THETA_MAX = 1;
-const CONE_RADIUS = (X_MAX - X_MIN) / 2;
-const CONE_HEIGHT = 25;
-const CONE_SLOPE = CONE_HEIGHT / CONE_RADIUS;
-const THETA_PARALLEL = Math.atan(CONE_SLOPE) / (Math.PI / 2);
-const posSlider = (() => {
-const slider = document.getElementById("plane-x");
-slider.step = 0.001;
-slider.min = X_MIN;
-slider.max = X_MAX;
-slider.value = X_MID;
-slider.oninput = () => {
-if (Math.abs(slider.value - X_MID) < 0.5) {
-slider.value = X_MID;
-}
-// eslint-disable-next-line no-use-before-define
-update();
-};
-return slider;
-})();
-const angleSlider = (() => {
-const slider = document.getElementById("plane-angle");
-slider.min = THETA_MIN;
-slider.max = THETA_MAX;
-slider.step = 0.001;
-slider.value = THETA_MID;
-slider.oninput = () => {
-const angleThreshold = 0.03;
-if (Math.abs(slider.value - THETA_MID) < angleThreshold) {
-slider.value = X_MID;
-} else {
-if (Math.abs(slider.value - THETA_PARALLEL) < angleThreshold) {
-slider.value = THETA_PARALLEL;
-} else if (Math.abs(-slider.value - THETA_PARALLEL) < angleThreshold) {
-slider.value = -THETA_PARALLEL;
-}
-}
-// eslint-disable-next-line no-use-before-define
-update();
-};
-return slider;
-})();
-const conicTextSpan = document.getElementById("conic-description");
-const canvas = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT).node();
+const HEIGHT = 350;
+const MARGIN = 10;
+const plot3d = d3
+.select("#plot3d")
+.attr("width", WIDTH / devicePixelRatio)
+.attr("height", HEIGHT / devicePixelRatio)
+.node();
+const plot2d = d3.select("#plot2d").attr("width", WIDTH).attr("height", HEIGHT);
+const X_MIN_2d = -1;
+const X_MAX_2d = 1;
+const Y_MIN_2d = -1;
+const Y_MAX_2d = 1;
+const xScale2d = d3.scaleLinear([X_MIN_2d, X_MAX_2d], [MARGIN, WIDTH - MARGIN]);
+const yScale2d = d3.scaleLinear([Y_MIN_2d, Y_MAX_2d], [HEIGHT - MARGIN, MARGIN]);
+const thetaScale3d = d3.scaleLinear(xScale2d.range(), [
+-Math.PI / 2 - 0.7,
+-Math.PI / 2 + 0.7,
+]);
+const phiScale3d = d3.scaleLinear(yScale2d.range(), [-0.7, 0.7]);
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
-30,
-canvas.clientWidth / canvas.clientHeight,
+90,
+plot3d.clientWidth / plot3d.clientHeight,
 0.1,
 500,
 );
-const ORIGIN = new THREE.Vector3(0, 0, 0);
-const CAMERA_DEFAULT_POSITION = new THREE.Vector3(63, -110, 60);
-const CAMERA_POINT_OF_FOCUS = ORIGIN;
+const renderer = makeRenderer(plot3d);
+renderer.setSize(plot3d.clientWidth, plot3d.clientHeight);
+const SPHERE_POSITION = new THREE.Vector3(0, 0, 0);
+const SPHERE_RADIUS = 6;
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(0, -10, 1);
+const CAMERA_POINT_OF_FOCUS = SPHERE_POSITION;
 const CAMERA_UP = new THREE.Vector3(0, 0, 1);
 camera.up.copy(CAMERA_UP);
 camera.position.copy(CAMERA_DEFAULT_POSITION);
 camera.lookAt(CAMERA_POINT_OF_FOCUS);
-const renderer = makeRenderer(canvas);
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-renderer.localClippingEnabled = true;
 enableDragToRotateCamera({
-canvas,
+canvas: plot3d,
 camera,
 scene,
 renderer,
 pointOfFocus: CAMERA_POINT_OF_FOCUS,
 up: CAMERA_UP,
 });
-const PLANE_RENDER_ORDER = 1;
-const CONE_MATERIAL = new THREE.MeshLambertMaterial({
-color: 0xffbbbb,
-side: THREE.DoubleSide,
-transparent: true,
-opacity: 0.9,
-});
-const CONE_BORDER_MATERIAL = new THREE.MeshPhongMaterial({
-color: 0xffdddd,
-side: THREE.DoubleSide,
+const SPHERE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x44aaff,
 transparent: false,
 });
-const PLANE_MATERIAL = new THREE.MeshLambertMaterial({
-color: 0x0088ff,
-side: THREE.DoubleSide,
-transparent: true,
-opacity: 0.3,
-});
-const PLANE_BORDER_MATERIAL = new THREE.MeshPhongMaterial({
-color: PLANE_MATERIAL.color,
-side: THREE.DoubleSide,
-transparent: false,
-});
-const CONIC_MATERIAL = new THREE.MeshPhongMaterial({
+const VERTEX_MATERIAL = new THREE.MeshBasicMaterial({
 color: 0xffffff,
-side: THREE.DoubleSide,
 transparent: false,
-clippingPlanes: [
-// new THREE.Plane(new THREE.Vector3(0, 0, -1), CONE_HEIGHT),
-// new THREE.Plane(new THREE.Vector3(0, 0, 1), CONE_HEIGHT),
-],
-clipIntersection: false,
 });
 const objs3d = { empty: true };
-const CONICS = {
-point: 0,
-oneLine: 1,
-twoLines: 2,
-circle: 3,
-ellipse: 4,
-parabola: 5,
-hyperbola: 6,
-};
-function isSmall(x) {
-return Math.abs(x) < 1e-2;
-}
-function makeLineCurve([x1, y1, z1], [x2, y2, z2]) {
-return new THREE.LineCurve3(
-new THREE.Vector3(x1, y1, z1),
-new THREE.Vector3(x2, y2, z2),
-);
-}
-function update() {
+function initialize3d() {
 if (objs3d.empty) {
-objs3d.empty = false;
 {
-const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
-scene.add(ambientLight);
-const pointLight = new THREE.PointLight(0xffffff, 0.7, 1000);
-pointLight.position.set(50, -30, 30);
-scene.add(pointLight);
-}
-{
-const coneRadialSegments = 128;
-const coneHeightSegments = 2;
-const coneTopGeom = new THREE.ConeGeometry(
-CONE_RADIUS,
-CONE_HEIGHT,
-coneRadialSegments,
-coneHeightSegments,
-true,
-);
-const coneTop = new THREE.Mesh(coneTopGeom, CONE_MATERIAL);
-coneTop.rotateX(-Math.PI / 2);
-coneTop.position.setZ(CONE_HEIGHT / 2);
-const coneTopRingGeom = new THREE.TorusGeometry(CONE_RADIUS, 0.2, 6, 64);
-const coneTopRing = new THREE.Mesh(coneTopRingGeom, CONE_BORDER_MATERIAL);
-coneTopRing.position.setZ(CONE_HEIGHT);
-const coneBotGeom = coneTopGeom.clone();
-const coneBot = new THREE.Mesh(coneBotGeom, CONE_MATERIAL);
-coneBot.rotateX(Math.PI / 2);
-coneBot.position.setZ(-CONE_HEIGHT / 2);
-const coneBotRingGeom = coneTopRingGeom.clone();
-const coneBotRing = new THREE.Mesh(coneBotRingGeom, CONE_BORDER_MATERIAL);
-coneBotRing.position.setZ(-CONE_HEIGHT);
-scene.add(coneTop, coneBot, coneTopRing, coneBotRing);
+scene.add(new THREE.AmbientLight(0x555555));
+const dirLight1 = new THREE.DirectionalLight(0xffcccc, 0.5);
+dirLight1.position.set(7, -8, 10);
+scene.add(dirLight1);
+const dirLight2 = new THREE.DirectionalLight(0xccffcc, 0.5);
+dirLight2.position.set(-7, -8, 10);
+scene.add(dirLight2);
+const dirLight3 = new THREE.DirectionalLight(0xffffff, 0.2);
+dirLight3.position.set(0, -10, 0);
+scene.add(dirLight3);
 }
 {
-const planeSidelength = 75;
-const planeGeom = new THREE.PlaneGeometry(75, 75);
-const plane = new THREE.Mesh(planeGeom, PLANE_MATERIAL);
-const planeBorderCurvePath = new THREE.CurvePath();
-const planeBorderPathPoints = [
-[1, 1],
-[-1, 1],
-[-1, -1],
-[1, -1],
-[1, 1],
-].map(
-([x, y]) =>
-new THREE.Vector3(
-(x * planeSidelength) / 2,
-(y * planeSidelength) / 2,
-0,
-),
-);
-for (let i = 0; i < 4; i++) {
-planeBorderCurvePath.add(
-new THREE.LineCurve3(
-planeBorderPathPoints[i],
-planeBorderPathPoints[i + 1],
-),
-);
-}
-const planeBorderGeometry = new THREE.TubeGeometry(
-planeBorderCurvePath,
-4,
-0.1,
-6,
-);
-const planeBorder = new THREE.Mesh(
-planeBorderGeometry,
-PLANE_BORDER_MATERIAL,
-);
-plane.renderOrder = PLANE_RENDER_ORDER;
-planeBorder.renderOrder = PLANE_RENDER_ORDER;
-const planeGroup = new THREE.Group();
-planeGroup.add(plane, planeBorder);
-scene.add(planeGroup);
-objs3d.plane = planeGroup;
-}
-{
-const upperConic = new THREE.Mesh(
-new THREE.BufferGeometry(),
-CONIC_MATERIAL,
-);
-const lowerConic = new THREE.Mesh(
-new THREE.BufferGeometry(),
-CONIC_MATERIAL,
-);
-scene.add(upperConic, lowerConic);
-objs3d.upperConic = upperConic;
-objs3d.lowerConic = lowerConic;
-}
-}
-const planePos = +posSlider.value;
-const planeAngle = (+angleSlider.value * Math.PI) / 2;
-// First we need the plane's normal vector (nvX, nvY, nvZ)
-const nvX = Math.sin(planeAngle);
-const nvY = 0;
-const nvZ = Math.cos(planeAngle);
-// Then the plane's displacement (x0, y0, z0) from the origin
-const planeX0 = 0.8 * planePos * nvX;
-const planeY0 = 0;
-const planeZ0 = 1.2 * planePos * nvZ;
-{
-const { plane } = objs3d;
-plane.position.setX(planeX0);
-plane.position.setZ(planeZ0);
-plane.setRotationFromAxisAngle(new THREE.Vector3(0, 1, 0), planeAngle);
-}
-// This is the tricky part... finding the intersection of the double-cone and the
-// plane
-{
-// Using the fact that the equation of the plane is:
-// nvX * (x - x0) + nvY * (y - y0) + nvZ * (z - z0) = 0
-// then find the equation of the plane a*x + b*y + c*z + d = 0
-const a = nvX;
-const b = nvY;
-const c = nvZ;
-const d = -(a * planeX0 + b * planeY0 + c * planeZ0);
-// console.log(a, b, c, d);
-// console.log(a ** 2 * r ** 2 - c ** 2);
-// The equation of a (right, circular, non-affine...) cone is (x^2+y^2)/r^2 =
-// z^2. Let x = radius, y = 0, z = height, then r = x/z = radius/height
-const r = 1 / CONE_SLOPE;
-const u = (a * r) ** 2 - c ** 2;
-const v = 2 * a * d * r ** 2;
-const w = (d * r) ** 2;
-const conicKind = (() => {
-const passesThroughOrigin = isSmall(d);
-const isHorizontal = isSmall(a);
-const coneSlope = 1 / r;
-const planeSlope = Math.abs(a / c);
-// console.log(planeSlope, coneSlope);
-const isParallelToConeEdge = isSmall(planeSlope - coneSlope);
-const isFlatterThanConeEdge =
-planeSlope < coneSlope && !isParallelToConeEdge;
-const isSteeperThanConeEdge =
-planeSlope > coneSlope && !isParallelToConeEdge;
-if (passesThroughOrigin) {
-return isFlatterThanConeEdge
-? CONICS.point
-: isParallelToConeEdge
-? CONICS.oneLine
-: isSteeperThanConeEdge
-? CONICS.twoLines
-: new Error("Invalid boolean weirdness (thru O)");
-} else {
-return isHorizontal
-? CONICS.circle
-: isFlatterThanConeEdge
-? CONICS.ellipse
-: isParallelToConeEdge
-? CONICS.parabola
-: isSteeperThanConeEdge
-? CONICS.hyperbola
-: new Error("Invalid boolean weirdness (not thru O)");
-}
-})();
-// The width of the conic section indicator
-const conicSize = 0.4;
-const nRadialSegments = 8;
-const { upperConic, lowerConic } = objs3d;
-upperConic.geometry.dispose();
-upperConic.visible = true; // visible by default
-lowerConic.geometry.dispose();
-lowerConic.visible = false; // if we need it, we'll make it visible again
-switch (conicKind) {
-case CONICS.point: {
-conicTextSpan.innerText = "a point (degenerate)";
-const geometry = new THREE.SphereGeometry(1, 32, 32);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.oneLine: {
-conicTextSpan.innerText = "a single line (degenerate)";
-const x1 = a < 0 ? X_MIN : X_MAX;
-const x2 = a < 0 ? X_MAX : X_MIN;
-const z1 = -CONE_HEIGHT;
-const z2 = CONE_HEIGHT;
-const geometry = new THREE.TubeGeometry(
-makeLineCurve([x1, 0, z1], [x2, 0, z2]),
-2,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.twoLines: {
-conicTextSpan.innerText = "two lines (degenerate)";
-const z1 = CONE_HEIGHT;
-const z2 = -CONE_HEIGHT;
-const [x1, x2] = [z1, z2].map(z => (-c / a) * z);
-const [upperGeom, lowerGeom] = [-1, 1].map(sgn => {
-const [y1, y2] = [z1, z2].map(
-z => sgn * z * Math.sqrt(r ** 2 - (c / a) ** 2),
-);
-const geom = new THREE.TubeGeometry(
-makeLineCurve([x1, y1, z1], [x2, y2, z2]),
-2,
-conicSize,
-nRadialSegments,
-);
-return geom;
-});
-upperConic.geometry = upperGeom;
-lowerConic.geometry = lowerGeom;
-lowerConic.visible = true;
-break;
-}
-case CONICS.circle:
-case CONICS.ellipse: {
-if (isSmall(a)) {
-conicTextSpan.innerText = "a circle";
-} else {
-conicTextSpan.innerText = "an ellipse";
-}
-// If it's a circle or ellipse, then u < 0
-const k = Math.sqrt(-u);
-const m = Math.sqrt(w + (v / (2 * k)) ** 2);
-// Yikes
-const zAtTheta0 = (planePos > 0 ? 1 : -1) * CONE_HEIGHT;
-const xAtTheta0 = (-zAtTheta0 * c - d) / a;
-const theta0 = Math.acos(((xAtTheta0 + v / (2 * u)) * k) / m);
-const [thetaMin, thetaMax] = (() => {
-if (isNaN(theta0)) {
-// The entire ellipse fits on the cone
-return [0, 2 * Math.PI];
-}
-const theta1 = 2 * Math.PI - theta0;
-const zAtThetaEquals0 = -(a * (m / k - v / (2 * u)) + d) / c;
-if (Math.abs(zAtThetaEquals0) < CONE_HEIGHT) {
-return [theta1, theta0 + 2 * Math.PI];
-} else {
-return [theta0, theta1];
-}
-})();
-const nPoints = 60;
-const dTheta = (thetaMax - thetaMin) / (nPoints - 1);
-const points = [];
-for (let i = 0; i < nPoints; i++) {
-const theta = thetaMin + i * dTheta;
-// If you're wondering where these come from: start with sin^2 +
-// cos^2 = 1, then work backwards and you'll arrive at (one part of
-// the) solution of the intersection of plane and cone, (cy)^2 =
-// ux^2 + vx + w
-const x = (m / k) * Math.cos(theta) - v / (2 * u);
-const y = (m / c) * Math.sin(theta);
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
-}
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.parabola: {
-conicTextSpan.innerText = "a parabola";
-const nPoints = 50;
-const yMax = Math.abs(
-Math.sqrt(
-w - (v / a) * (c * (planePos > 0 ? 1 : -1) * CONE_HEIGHT + d),
-) / c,
-);
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-const points = [];
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const x = ((c * y) ** 2 - w) / v;
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
-}
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
-);
-upperConic.geometry = geometry;
-break;
-}
-case CONICS.hyperbola: {
-conicTextSpan.innerText = "a hyperbola";
-const nPoints = 60;
-for (const [sgn, mesh] of [
-[-1, lowerConic],
-[1, upperConic],
-]) {
-const points = [];
-// If the plane is vertical, we base things on x instead of y
-if (isSmall(c)) {
-const x = -d / a;
-const yMax = Math.sqrt((CONE_HEIGHT * r) ** 2 - x ** 2);
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const z = (sgn * Math.sqrt(x ** 2 + y ** 2)) / r;
-points.push(new THREE.Vector3(x, y, z));
-}
-} else {
-const xZ = -(c * (sgn * CONE_HEIGHT) + d) / a;
-const yMax = Math.sqrt(u * xZ ** 2 + v * xZ + w) / c;
-if (isNaN(yMax)) {
-mesh.visible = false;
-continue;
-}
-mesh.visible = true;
-const yMin = -yMax;
-const dy = (yMax - yMin) / (nPoints - 1);
-for (let i = 0; i < nPoints; i++) {
-const y = yMin + i * dy;
-const x =
-(1 / (2 * u)) *
-(-v -
-Math.sign(planeAngle) *
-sgn *
-Math.sqrt(v ** 2 - 4 * u * (w - (y * c) ** 2)));
-const z = (a * x + d) / -c;
-points.push(new THREE.Vector3(x, y, z));
-}
-}
-const geometry = new THREE.TubeGeometry(
-new THREE.CatmullRomCurve3(points),
-100,
-conicSize,
-nRadialSegments,
-);
-mesh.geometry = geometry;
-mesh.visible = true;
-}
-break;
-}
-default:
-console.log(conicKind);
-throw new Error("huh??");
+const sphereGeometry = new THREE.SphereGeometry(SPHERE_RADIUS, 128, 64);
+const sphere = new THREE.Mesh(sphereGeometry, SPHERE_MATERIAL);
+scene.add(sphere);
 }
 }
 renderer.render(scene, camera);
 }
-update();
-// eslint-disable-next-line no-unused-vars
-function setPoint() {
-posSlider.value = 0;
-const maxAngle = THETA_PARALLEL * 0.95;
-angleSlider.value = d3.interpolate(-maxAngle, maxAngle)(Math.random());
-update();
+initialize3d();
+const angleFormatter = d3.format(".2f");
+const vertexPositionsScaled = [];
+function initialize() {
+const size = 0.6;
+const nVertices = 3;
+objs3d.vertices = [];
+objs3d.labels = [];
+objs3d.edges = [];
+for (let i = 0; i < nVertices; i++) {
+const _theta2d = (2 * Math.PI * i) / nVertices;
+const x = size * Math.sin(_theta2d);
+const y = size * Math.cos(_theta2d) - 0.1;
+const xs = xScale2d(x);
+const ys = yScale2d(y);
+vertexPositionsScaled.push([xs, ys]);
+const vertex3dGeom = new THREE.SphereGeometry(0.2);
+const vertex3d = new THREE.Mesh(vertex3dGeom, VERTEX_MATERIAL);
+objs3d.vertices.push(vertex3d);
+const label = makeTextSprite(i + 1, {
+fontsize: 16,
+backgroundColor: { r: 255, g: 255, b: 255, a: 1 },
+borderColor: { r: 0, g: 0, b: 0, a: 1 },
+textColor: { r: 0, g: 0, b: 0, a: 1 },
+borderThickness: 2.5,
+});
+objs3d.labels.push(label);
+const edge = new THREE.Mesh(new THREE.BufferGeometry(), VERTEX_MATERIAL);
+objs3d.edges.push(edge);
+scene.add(vertex3d, label, edge);
 }
-// eslint-disable-next-line no-unused-vars
-function setOneLine() {
-posSlider.value = 0;
-angleSlider.value = (Math.random() < 0.5 ? 1 : -1) * THETA_PARALLEL;
-update();
+function getEdgesData() {
+const edges = d3.range(nVertices).map(i => {
+const j = (i + 1) % nVertices;
+const [x1, y1] = vertexPositionsScaled[i];
+const [x2, y2] = vertexPositionsScaled[j];
+return {
+shape: "line",
+class: "p2d tri-edge",
+index1: i,
+index2: j,
+attrs: {
+x1,
+y1,
+x2,
+y2,
+},
+};
+});
+return edges;
 }
-// eslint-disable-next-line no-unused-vars
-function setTwoLines() {
-posSlider.value = 0;
-const minAngle = THETA_PARALLEL * 1.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(THETA_MIN, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, THETA_MAX)(2 * (t - 0.5));
+const edges = getEdgesData();
+const vertexRadius = 13;
+const vertices = vertexPositionsScaled.map(([x, y], i) => ({
+shape: "g",
+class: "p2d vertex-container",
+index: i,
+attrs: {
+transform: `translate(${x} ${y})`,
+},
+children: [
+{
+shape: "circle",
+class: "p2d vertex-dot",
+attrs: { r: vertexRadius },
+},
+{
+shape: "text",
+class: "p2d vertex-label",
+text: i + 1,
+attrs: {
+"text-anchor": "middle",
+"dominant-baseline": "central",
+},
+},
+],
+}));
+const border = (() => {
+const [xMin, xMax] = xScale2d.range().sort();
+const [yMin, yMax] = yScale2d.range().sort();
+return {
+shape: "rect",
+class: "p2d border",
+attrs: {
+x: xMin,
+y: yMin,
+width: xMax - xMin,
+height: yMax - yMin,
+fill: "none",
+stroke: "#ccc",
+"stroke-width": 1,
+"stroke-dasharray": "2 2",
+},
+};
+})();
+applyGraphicalObjs(plot2d, [...edges, ...vertices, border]);
+const dragMargin = vertexRadius + 2;
+const minDragX = xScale2d(X_MIN_2d) + dragMargin;
+const maxDragX = xScale2d(X_MAX_2d) - dragMargin;
+const minDragY = yScale2d(Y_MAX_2d) + dragMargin;
+const maxDragY = yScale2d(Y_MIN_2d) - dragMargin;
+function update(o, dx, dy, index) {
+{
+const [origX1, origY1] = vertexPositionsScaled[index];
+const newX = Math.max(minDragX, Math.min(origX1 + dx, maxDragX));
+const newY = Math.max(minDragY, Math.min(origY1 + dy, maxDragY));
+vertexPositionsScaled[index] = [newX, newY];
+if (o) {
+o.setAttribute("transform", `translate(${newX} ${newY})`);
 }
-update();
+const edges = getEdgesData();
+applyGraphicalObjs(plot2d, edges, { selector: ".p2d.tri-edge" });
+const vertex3d = objs3d.vertices[index];
+const theta3d = thetaScale3d(newX);
+const phi3d = phiScale3d(newY);
+const vx = SPHERE_RADIUS * Math.cos(phi3d) * Math.cos(theta3d);
+const vy = SPHERE_RADIUS * Math.cos(phi3d) * Math.sin(theta3d);
+const vz = SPHERE_RADIUS * Math.sin(phi3d);
+vertex3d.position.set(vx, vy, vz);
+const label = objs3d.labels[index];
+label.position.set(...[vx, vy, vz].map(vv => vv * 1.05));
 }
-function setRandomPos() {
-posSlider.value = d3.interpolate(-CONE_HEIGHT, CONE_HEIGHT)(Math.random());
+{
+const vertexPoints = [];
+const nEdgePoints = 50;
+for (let i = 0; i < nVertices; i++) {
+const edge = objs3d.edges[i];
+edge.geometry.dispose();
+const [x1, y1] = vertexPositionsScaled[i];
+const [x2, y2] = vertexPositionsScaled[(i + 1) % nVertices];
+const [theta1, theta2] = [x1, x2].map(thetaScale3d);
+const [phi1, phi2] = [y1, y2].map(phiScale3d);
+const [vx1, vx2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(
+([theta, phi]) => SPHERE_RADIUS * Math.cos(phi) * Math.cos(theta),
+);
+const [vy1, vy2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(
+([theta, phi]) => SPHERE_RADIUS * Math.cos(phi) * Math.sin(theta),
+);
+const [vz1, vz2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(([_, phi]) => SPHERE_RADIUS * Math.sin(phi));
+const xInterp = d3.interpolateNumber(vx1, vx2);
+const yInterp = d3.interpolateNumber(vy1, vy2);
+const zInterp = d3.interpolateNumber(vz1, vz2);
+const interpolators = [xInterp, yInterp, zInterp];
+const edgePoints = [];
+for (let j = 0; j < nEdgePoints; j++) {
+const t = j / (nEdgePoints - 1);
+let [vx, vy, vz] = interpolators.map(f => f(t));
+const norm = Math.sqrt(vx ** 2 + vy ** 2 + vz ** 2);
+const r = SPHERE_RADIUS / norm;
+vx *= r;
+vy *= r;
+vz *= r;
+edgePoints.push(new THREE.Vector3(vx, vy, vz));
 }
-// eslint-disable-next-line no-unused-vars
-function setCircle() {
-setRandomPos();
-angleSlider.value = 0;
-update();
+const curve = new THREE.CatmullRomCurve3(edgePoints);
+const tube = new THREE.TubeGeometry(curve, 64, 0.05);
+edge.geometry = tube;
+// origin and the actual vector
+vertexPoints.push(new THREE.Vector3(vx1, vy1, vz1));
 }
-// eslint-disable-next-line no-unused-vars
-function setEllipse() {
-setRandomPos();
-const maxAngle = THETA_PARALLEL * 0.95;
-const minAngle = 0.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(-maxAngle, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, maxAngle)(2 * (t - 0.5));
+const angles = [];
+// tl;dr to get angle ABC, we:
+// 1. project BA and BC onto the plane normal to the sphere and incident
+//    with B
+// 2. take the inner product of those two vectors, then use the fact that
+//    |<u,v>| = |u| |v| cos(theta)
+//
+// To compute (1.), we project BA and BC onto B's position vector and then
+// subtract, as a vector is the sum of its components parallel to and
+// perpendicular to another vector
+for (let i = 0; i < nVertices; i++) {
+const p0 = vertexPoints[i];
+const p1 = vertexPoints[(i - 1 + nVertices) % nVertices];
+const p2 = vertexPoints[(i + 1) % nVertices];
+const [v1, v2] = [p1, p2].map(p => p.clone().sub(p0));
+// Project onto normal plane incident with p0
+const [proj1, proj2] = [v1, v2].map(v =>
+v.clone().sub(v.clone().projectOnVector(p0)),
+);
+const innerProduct = proj1.dot(proj2);
+const angle = Math.acos(
+innerProduct / (proj1.length() * proj2.length()),
+);
+angles.push(angle);
 }
-update();
+const angleSumDeg = (angles.reduce((a, b) => a + b) * 180) / Math.PI;
+document.getElementById("angle-sum").innerText =
+angleFormatter(angleSumDeg);
+// for (let i = 0; i < nVertices; i++) {}
 }
-// eslint-disable-next-line no-unused-vars
-function setParabola() {
-setRandomPos();
-angleSlider.value = (Math.random() < 0.5 ? 1 : -1) * THETA_PARALLEL;
-update();
+renderer.render(scene, camera);
 }
-// eslint-disable-next-line no-unused-vars
-function setHyperbola() {
-setRandomPos();
-const minAngle = THETA_PARALLEL * 1.05;
-const t = Math.random();
-if (t < 0.5) {
-angleSlider.value = d3.interpolate(THETA_MIN, -minAngle)(2 * t);
-} else {
-angleSlider.value = d3.interpolate(minAngle, THETA_MAX)(2 * (t - 0.5));
+d3.range(nVertices).forEach(i => update(null, 0, 0, i));
+const dragHandler = d3
+.drag()
+.on("start", () => {
+document.body.style.cursor = "grabbing";
+})
+.on("drag", function (event, d) {
+const { dx, dy } = event;
+const { index } = d;
+update(this, dx, dy, index);
+})
+.on("end", () => {
+document.body.style.cursor = null;
+});
+plot2d.selectAll(".vertex-container").call(dragHandler);
+renderer.render(scene, camera);
 }
-update();
-}
+initialize();
 </script>
 </body>
 </html>

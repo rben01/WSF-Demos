@@ -77,7 +77,7 @@ function makeTextSprite(
 	);
 
 	context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
-	context.fillText(message, borderThickness, fontsize + borderThickness);
+	context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
 
 	const texture = new THREE.CanvasTexture(canvas);
 

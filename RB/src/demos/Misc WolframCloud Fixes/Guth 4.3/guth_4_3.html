@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://unpkg.com/three@0.131.3/build/three.min.js"
+			integrity="sha384-Eu5tTQS50VVQQxwVanW+THxwAH/xX2V9SQJ9n6BmM7djQDlXsfSoe5Ybt+spysWV"
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../wsf_demo.css" />
+		<style>
+			#main {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: 20px;
+				justify-items: center;
+			}
+			.header-container {
+				text-align: center;
+			}
+			.p2d.vertex-dot {
+				fill: white;
+				stroke: black;
+				stroke-width: 3;
+			}
+			.p2d.vertex-dot {
+				cursor: grab;
+			}
+			.p2d.vertex-dot:active {
+				cursor: grabbing;
+			}
+			.p2d.vertex-label {
+				fill: black;
+				stroke: none;
+				font-size: 15px;
+				pointer-events: none;
+			}
+			.p2d.tri-edge {
+				stroke: white;
+				stroke-width: 2;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div id="main">
+				<div class="header-container">
+					<span class="header">Euclidean, &ldquo;flat&rdquo; geometry</span
+					><br />
+					<span class="header">Sum of angles = 180°</span>
+				</div>
+				<div class="header-container">
+					<span class="header"
+						>Non-Euclidean, &ldquo;closed&rdquo; geometry</span
+					>
+					<br />
+					<span class="header"
+						>Sum of angles = <span id="angle-sum"></span>° &gt; 180°</span
+					>
+				</div>
+				<div>
+					<svg id="plot2d"></svg>
+				</div>
+				<div>
+					<canvas id="plot3d" class="draggable"></canvas>
+				</div>
+			</div>
+		</div>
+		<script src="../../utils.js"></script>
+		<script src="../../three_utils.js"></script>
+		<script src="./guth_4_3.js"></script>
+	</body>
+</html>

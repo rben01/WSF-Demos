@@ -1,6 +1,6 @@
 /* global applyGraphicalObjs */
 
-const WIDTH = 600;
+const WIDTH = 500;
 const HEIGHT = WIDTH;
 const MARGIN = 10;
 
