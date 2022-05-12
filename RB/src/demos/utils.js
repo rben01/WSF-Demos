@@ -185,7 +185,8 @@ function matMul(...mats) {
 // eslint-disable-next-line no-unused-vars
 function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
 	attrs = attrs ?? {};
-	flip = flip ?? false;
+	// flip = flip ?? false;
+	flip = false;
 
 	const markerAttrs = {
 		attrs: {
@@ -194,7 +195,7 @@ function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
 			markerUnits: "userSpaceOnUse",
 			markerWidth: length,
 			markerHeight: width,
-			orient: "auto",
+			orient: "auto-start-reverse",
 		},
 	};
 
