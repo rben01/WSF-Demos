@@ -97,6 +97,13 @@ class Complex {
 	}
 
 	static div(z1, z2) {
+		if (typeof z1 === "number") {
+			z1 = Complex.fromReal(z1);
+		}
+		if (typeof z2 === "number") {
+			z2 = Complex.fromReal(z2);
+		}
+
 		return this.fromPolar(
 			(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
 			(z1.phase ?? 0) - (z2.phase ?? 0),
@@ -161,6 +168,21 @@ class Complex {
 	cis() {
 		// exp(i*(x+iy)) = e^(-y)e^(ix)
 		return Complex.fromPolar(Math.exp(-this.im), this.re);
+	}
+
+	static pow(z, realNumber) {
+		if (realNumber.phase !== undefined && realNumber.phase !== 0) {
+			throw new Error(
+				"raising to a complex power with nonzero phase is unsupported",
+			);
+		}
+
+		if (typeof z === "number") {
+			z = Complex.fromReal(z);
+		}
+
+		realNumber = realNumber.magnitude ?? realNumber;
+		return z.pow(realNumber);
 	}
 
 	pow(realNumber) {
