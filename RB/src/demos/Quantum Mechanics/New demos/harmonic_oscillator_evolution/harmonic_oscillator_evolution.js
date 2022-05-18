@@ -1,13 +1,13 @@
 /* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex
-makeRenderer innerProduct basisCoefficient */
+makeRenderer innerProduct basisCoefficient defineArrowhead */
 
 const WIDTH = 800;
 const HEIGHT = 325;
 const HEIGHT_3D = 325;
 
-const X_MIN = -10;
+const X_MIN = -8;
 const X_0 = 0;
-const X_MAX = 10;
+const X_MAX = 8;
 
 const CAMERA_EXTENT = 11;
 const xScale3D = d3.scaleLinear(
@@ -25,13 +25,15 @@ const Z_MAX = Y_MAX;
 const Z_0 = 0;
 const Z_MIN = -Z_MAX;
 
+const XP_MAX = 2.5;
+
 const zScale3D = yScale3D;
 
 const H_BAR = 1;
 
 // The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
-const N_MAX = 10;
-const N_WAVEFUNCTION_POINTS = 125;
+const N_MAX = 20;
+const N_WAVEFUNCTION_POINTS = 100;
 
 // This 1D array simulates a 2D array with N_MAX+1 rows and N_WAVEFUNCTION_POINTS
 // columns, where (row,col)=(n,i) contains the initial value for the n^th (0-indexed)
@@ -106,41 +108,36 @@ camera.position.copy(CAMERA_DEFAULT_POSITION);
 camera.lookAt(CAMERA_POINT_OF_FOCUS);
 
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
+const defs = plot2D.selectAll("defs").data([0]).join("defs");
+defineArrowhead(defs, {
+	id: "arrowhead",
+	length: 18,
+	width: 14,
+	color: "#ccc",
+});
 
-const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
-const y2dMax = 1.6;
+const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH - 10]);
+const y2dMax = 1.2;
 const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
 
 let currentTime = 0;
 let isAnimating = false;
 
 const sliders = {
-	m: (() => {
-		const slider = document.getElementById("slider-mass");
-		const min = 1;
-		const max = 2;
+	omega: (() => {
+		const slider = document.getElementById("slider-omega");
+		const min = 0.5;
+		const max = 5;
 		slider.min = min;
 		slider.max = max;
 		slider.step = 0.01;
-		slider.value = (min + max) / 2;
-
-		return slider;
-	})(),
-	k: (() => {
-		const slider = document.getElementById("slider-k");
-		const min = 1;
-		const max = 2;
-		slider.min = min;
-		slider.max = max;
-		slider.step = 0.01;
-		slider.value = (min + max) / 2;
+		slider.value = (min * max) ** 0.5;
 
 		return slider;
 	})(),
 	mu: (() => {
 		const slider = document.getElementById("slider-mu");
-		const min = 0.5 * X_MIN;
-		const max = 0.5 * X_MAX;
+		const [min, max] = [-XP_MAX, XP_MAX];
 		slider.min = min;
 		slider.max = max;
 		slider.step = 0.01;
@@ -150,8 +147,10 @@ const sliders = {
 	})(),
 	sigma: (() => {
 		const slider = document.getElementById("slider-sigma");
-		const min = 0.1;
-		const max = 0.2;
+		const mid = 2 ** -0.5;
+		const sep = 0.25;
+		const min = mid - sep;
+		const max = mid + sep;
 		slider.min = min;
 		slider.max = max;
 		slider.step = 0.01;
@@ -161,10 +160,9 @@ const sliders = {
 	})(),
 	p: (() => {
 		const slider = document.getElementById("slider-p");
-		const min = -5;
-		const max = 5;
-		slider.min = min;
-		slider.max = max;
+		const [min, max] = [-XP_MAX, XP_MAX];
+		slider.min = -XP_MAX;
+		slider.max = XP_MAX;
 		slider.step = 0.01;
 		slider.value = (min + max) / 2;
 
@@ -177,9 +175,9 @@ d3.selectAll(".slider").on("input", () => update(0, true));
 
 const COEFFS = d3.range(0, N_MAX + 1).map(() => 0);
 
-function populateCaches({ mu, sigma, p }) {
+function populateCaches({ sigma, p }) {
 	for (let n = 0; n <= N_MAX; n++) {
-		COEFFS[n] = basisCoefficient(n, { mu, sigma, p });
+		COEFFS[n] = basisCoefficient(n, { sigma, p });
 	}
 }
 
@@ -200,7 +198,8 @@ function getAxisData() {
 	const ys0 = yScale2D(Y_0);
 
 	const [xMin, xMax] = xScale2D.range();
-	const [yMin, yMax] = yScale2D.range();
+	const yMax = yScale2D.range()[1];
+	const yMin = yScale2D(Y_0);
 
 	const axisData = [
 		{
@@ -211,6 +210,7 @@ function getAxisData() {
 				x2: xMax,
 				y1: ys0,
 				y2: ys0,
+				"marker-end": "url(#arrowhead)",
 			},
 		},
 		{
@@ -223,63 +223,63 @@ function getAxisData() {
 				y2: yMax,
 			},
 		},
-		...xAxisTicks.map(x => {
-			const xs = xScale2D(x);
-			return {
-				shape: "line",
-				class: "axis axis-tick x-axis-tick",
-				attrs: {
-					x1: xs,
-					x2: xs,
-					y1: ys0,
-					y2: ys0 + tickLength,
-				},
-			};
-		}),
-		...xAxisLabelTicks.map(x => {
-			const xs = xScale2D(x);
-			return {
-				shape: "text",
-				class: "axis axis-label x-axis-label",
-				text: xAxisFormatter(x),
-				attrs: {
-					x: xs,
-					y: ys0 + 12,
-				},
-			};
-		}),
-		...yAxisTicks.map(y => {
-			const ys = yScale2D(y);
-			return {
-				shape: "line",
-				class: "axis axis-tick y-axis-tick",
-				attrs: {
-					x1: xs0,
-					x2: xs0 - tickLength,
-					y1: ys,
-					y2: ys,
-				},
-			};
-		}),
-		...yAxisLabelTicks.map(y => {
-			const ys = yScale2D(y);
-			return {
-				shape: "text",
-				class: "axis axis-label y-axis-label",
-				text: yAxisFormatter(y),
-				attrs: {
-					x: xs0 - 10,
-					y: ys,
-				},
-			};
-		}),
+		// ...xAxisTicks.map(x => {
+		// 	const xs = xScale2D(x);
+		// 	return {
+		// 		shape: "line",
+		// 		class: "axis axis-tick x-axis-tick",
+		// 		attrs: {
+		// 			x1: xs,
+		// 			x2: xs,
+		// 			y1: ys0,
+		// 			y2: ys0 + tickLength,
+		// 		},
+		// 	};
+		// }),
+		// ...xAxisLabelTicks.map(x => {
+		// 	const xs = xScale2D(x);
+		// 	return {
+		// 		shape: "text",
+		// 		class: "axis axis-label x-axis-label",
+		// 		text: xAxisFormatter(x),
+		// 		attrs: {
+		// 			x: xs,
+		// 			y: ys0 + 12,
+		// 		},
+		// 	};
+		// }),
+		// ...yAxisTicks.map(y => {
+		// 	const ys = yScale2D(y);
+		// 	return {
+		// 		shape: "line",
+		// 		class: "axis axis-tick y-axis-tick",
+		// 		attrs: {
+		// 			x1: xs0,
+		// 			x2: xs0 - tickLength,
+		// 			y1: ys,
+		// 			y2: ys,
+		// 		},
+		// 	};
+		// }),
+		// ...yAxisLabelTicks.map(y => {
+		// 	const ys = yScale2D(y);
+		// 	return {
+		// 		shape: "text",
+		// 		class: "axis axis-label y-axis-label",
+		// 		text: yAxisFormatter(y),
+		// 		attrs: {
+		// 			x: xs0 - 10,
+		// 			y: ys,
+		// 		},
+		// 	};
+		// }),
 		{
 			shape: "text",
 			class: "axis axis-label x-axis-label axis-name x-axis-name",
 			text: "𝑥",
 			attrs: {
 				x: xScale2D.range()[1] - 40,
-				y: ys0 + 20,
+				y: ys0 + 10,
 			},
 		},
 		{
@@ -293,6 +293,17 @@ function getAxisData() {
 				"dominant-baseline": "hanging",
 			},
 		},
+		{
+			shape: "text",
+			class: "axis axis-label classically-allowed-region",
+			text: "Classically allowed region",
+			attrs: {
+				x: xScale2D(X_0),
+				y: yScale2D(Y_0) + 20,
+				"text-anchor": "middle",
+				"dominant-baseline": "hanging",
+			},
+		},
 	];
 
 	return axisData;
@@ -303,7 +314,7 @@ const PHI_FUNCTIONS = (() => {
 	function getHermitePolynomial(n) {
 		switch (n) {
 			case 0:
-				return () => 1;
+				return x => 1;
 			case 1:
 				return x => 2 * x;
 			case 2:
@@ -386,6 +397,136 @@ const PHI_FUNCTIONS = (() => {
 					33546240 * x ** 11 -
 					1720320 * x ** 13 +
 					32768 * x ** 15;
+			case 16:
+				return x =>
+					518918400 -
+					8302694400 * x ** 2 +
+					19372953600 * x ** 4 -
+					15498362880 * x ** 6 +
+					5535129600 * x ** 8 -
+					984023040 * x ** 10 +
+					89456640 * x ** 12 -
+					3932160 * x ** 14 +
+					65536 * x ** 16;
+			case 17:
+				return x =>
+					17643225600 * x -
+					94097203200 * x ** 3 +
+					131736084480 * x ** 5 -
+					75277762560 * x ** 7 +
+					20910489600 * x ** 9 -
+					3041525760 * x ** 11 +
+					233963520 * x ** 13 -
+					8912896 * x ** 15 +
+					131072 * x ** 17;
+			case 18:
+				return x =>
+					-17643225600 +
+					317578060800 * x ** 2 -
+					846874828800 * x ** 4 +
+					790416506880 * x ** 6 -
+					338749931520 * x ** 8 +
+					75277762560 * x ** 10 -
+					9124577280 * x ** 12 +
+					601620480 * x ** 14 -
+					20054016 * x ** 16 +
+					262144 * x ** 18;
+			case 19:
+				return x =>
+					-670442572800 * x +
+					4022655436800 * x ** 3 -
+					6436248698880 * x ** 5 +
+					4290832465920 * x ** 7 -
+					1430277488640 * x ** 9 +
+					260050452480 * x ** 11 -
+					26671841280 * x ** 13 +
+					1524105216 * x ** 15 -
+					44826624 * x ** 17 +
+					524288 * x ** 19;
+			case 20:
+				return x =>
+					670442572800 -
+					13408851456000 * x ** 2 +
+					40226554368000 * x ** 4 -
+					42908324659200 * x ** 6 +
+					21454162329600 * x ** 8 -
+					5721109954560 * x ** 10 +
+					866834841600 * x ** 12 -
+					76205260800 * x ** 14 +
+					3810263040 * x ** 16 -
+					99614720 * x ** 18 +
+					1048576 * x ** 20;
+			case 21:
+				return x =>
+					28158588057600 * x -
+					187723920384000 * x ** 3 +
+					337903056691200 * x ** 5 -
+					257449947955200 * x ** 7 +
+					100119424204800 * x ** 9 -
+					21844238008320 * x ** 11 +
+					2800543334400 * x ** 13 -
+					213374730240 * x ** 15 +
+					9413591040 * x ** 17 -
+					220200960 * x ** 19 +
+					2097152 * x ** 21;
+			case 22:
+				return x =>
+					-28158588057600 +
+					619488937267200 * x ** 2 -
+					2064963124224000 * x ** 4 +
+					2477955749068800 * x ** 6 -
+					1415974713753600 * x ** 8 +
+					440525466501120 * x ** 10 -
+					80095539363840 * x ** 12 +
+					8801707622400 * x ** 14 -
+					586780508160 * x ** 16 +
+					23011000320 * x ** 18 -
+					484442112 * x ** 20 +
+					4194304 * x ** 22;
+			case 23:
+				return x =>
+					-1295295050649600 * x +
+					9498830371430400 * x ** 3 -
+					18997660742860800 * x ** 5 +
+					16283709208166400 * x ** 7 -
+					7237204092518400 * x ** 9 +
+					1842197405368320 * x ** 11 -
+					283414985441280 * x ** 13 +
+					26991903375360 * x ** 15 -
+					1587759022080 * x ** 17 +
+					55710842880 * x ** 19 -
+					1061158912 * x ** 21 +
+					8388608 * x ** 23;
+			case 24:
+				return x =>
+					1295295050649600 -
+					31087081215590400 * x ** 2 +
+					113985964457164800 * x ** 4 -
+					151981285942886400 * x ** 6 +
+					97702255248998400 * x ** 8 -
+					34738579644088320 * x ** 10 +
+					7368789621473280 * x ** 12 -
+					971708521512960 * x ** 14 +
+					80975710126080 * x ** 16 -
+					4234024058880 * x ** 18 +
+					133706022912 * x ** 20 -
+					2315255808 * x ** 22 +
+					16777216 * x ** 24;
+			case 25:
+				return x =>
+					64764752532480000 * x -
+					518118020259840000 * x ** 3 +
+					1139859644571648000 * x ** 5 -
+					1085580613877760000 * x ** 7 +
+					542790306938880000 * x ** 9 -
+					157902634745856000 * x ** 11 +
+					28341498544128000 * x ** 13 -
+					3239028405043200 * x ** 15 +
+					238163853312000 * x ** 17 -
+					11142168576000 * x ** 19 +
+					318347673600 * x ** 21 -
+					5033164800 * x ** 23 +
+					33554432 * x ** 25;
 		}
 	}
 
@@ -414,29 +555,68 @@ const PHI_FUNCTIONS = (() => {
 // arr[2*i] is x_i, arr[2*i+1] is z_i
 const wavefunctionPoints = d3.range(2 * N_WAVEFUNCTION_POINTS);
 function computeWavefunctionPoints() {
-	const [m, k] = ["m", "k"].map(key => +sliders[key].value);
+	const [mu] = ["mu"].map(key => +sliders[key].value);
 
-	const omega = Math.sqrt(k / m);
+	const xInterp = d3.interpolate(X_MIN, X_MAX);
 
-	const t = currentTime / omega;
+	const t = currentTime;
 
-	wavefunctionPoints.fill(0);
+	const xt = mu * Math.cos(t);
+	const pt = -mu * Math.sin(t);
 
-	const xInterp = d3.interpolate(X_MIN * 2, X_MAX * 2);
+	// const gaussian = x =>
+	// 	Complex.exp(
+	// 		Complex.sub(
+	// 			2 * p ** 2 * t * sigma ** 2 - 4 * m * p * x * sigma ** 2,
+	// 			Complex.i.mul(m * x ** 2 * H_BAR),
+	// 		).div(Complex.sub(Complex.i.mul(4 * m * sigma ** 2), 2 * t * H_BAR ** 2)),
+	// 	)
+	// 		.mul((2 / Math.PI) ** (1 / 4))
+	// 		.div(
+	// 			Complex.pow(
+	// 				Complex.add(2 * sigma, Complex.i.mul(t * H_BAR).div(m * sigma)),
+	// 				0.5,
+	// 			),
+	// 		);
+
+	// const psi = x => {
+	// 	x = x / Math.sqrt((m * omega) / H_BAR);
+
+	// 	return Complex.mul(
+	// 		Complex.cis((mu ** 2 / 4) * Math.sin(2 * t) + pt * x),
+	// 		gaussian(x - xt),
+	// 	);
+	// };
+
+	// wavefunctionPoints.fill(0);
 
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
-		const x = xInterp(i / N_WAVEFUNCTION_POINTS) / Math.sqrt((m * omega) / H_BAR);
-		let z = Complex.fromReal(0);
+		const xNaive = xInterp(i / N_WAVEFUNCTION_POINTS);
+		const x = xNaive - xt;
 
+		let z = Complex.fromReal(0);
 		for (let n = 0; n <= N_MAX; n++) {
 			const energy = n + 1 / 2;
-			const rot = Complex.cis(-energy * t);
-			z = z.add(rot.mul(COEFFS[n], PHI_FUNCTIONS[n](x)));
+			const thisZContribution = Complex.mul(
+				Complex.cis((mu ** 2 / 4) * Math.sin(2 * t) + pt),
+				COEFFS[n],
+				Complex.cis(-energy * t),
+				PHI_FUNCTIONS[n](x),
+			);
+			z = z.add(thisZContribution);
 		}
-		wavefunctionPoints[2 * i] = x;
+
+		wavefunctionPoints[2 * i] = xNaive;
 		wavefunctionPoints[2 * i + 1] = z;
 	}
-	return wavefunctionPoints;
+
+	// 	for (let n = 0; n <= N_MAX; n++) {
+	// 		const energy = n + 1 / 2;
+	// 		const rot = Complex.cis(-energy * t);
+	// 		z = z.add(Complex.mul(rot, COEFFS[n], PHI_FUNCTIONS[n](x)));
+	// 	}
+	// }
+	// return wavefunctionPoints;
 }
 
 function getWavefunctionPath3D() {
@@ -595,6 +775,19 @@ function getData2D() {
 		points.push([xScale2D(x), yScale2D(z.magnitude ** 2)]);
 	}
 
+	// const xScaleRelativeToP = (() => {
+	// 	const [muSlider, pSlider] = ["mu", "p"].map(key => sliders[key]);
+	// 	const [muMin, muMax] = ["min", "max"].map(key => +muSlider[key]);
+	// 	const [pMin, pMax] = ["min", "max"].map(key => +pSlider[key]);
+
+	// 	return (muMax - muMin) / (pMax - pMin);
+	// })();
+
+	const [mu, p] = ["mu", "p"].map(key => +sliders[key].value);
+
+	const energy = mu ** 2 + p ** 2;
+	const amplitude = energy ** 0.5;
+
 	const data = [
 		{
 			shape: "path",
@@ -610,6 +803,19 @@ function getData2D() {
 				d: line(points),
 			},
 		},
+		...[-1, 1].map(sign => {
+			const x = xScale2D(sign * amplitude);
+			return {
+				shape: "line",
+				class: "curve amplitude-line",
+				attrs: {
+					x1: x,
+					x2: x,
+					y1: yScale2D(Y_0) + 15,
+					y2: yScale2D(y2dMax),
+				},
+			};
+		}),
 	];
 	return data;
 }
@@ -617,7 +823,7 @@ function getData2D() {
 let isFirstRun = true;
 function update(dtMS, refreshCache = false) {
 	dtMS = dtMS ?? 0;
-	currentTime += (0.5 * dtMS) / 1000;
+	currentTime += (+sliders.omega.value * (0.5 * dtMS)) / 1000;
 
 	const mu = +sliders.mu.value;
 	const sigma = +sliders.sigma.value;
@@ -656,7 +862,7 @@ let animationFrame;
 function play() {
 	isAnimating = true;
 
-	d3.selectAll(".slider").property("disabled", true);
+	d3.selectAll(".slider.ic").property("disabled", true);
 
 	let prevTimestampMS;
 	function step(timestampMS) {

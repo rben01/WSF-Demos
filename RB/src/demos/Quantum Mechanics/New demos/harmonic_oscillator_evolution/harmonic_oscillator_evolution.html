@@ -93,22 +93,35 @@
 			#plots {
 				margin-top: 10px;
 			}
+			.curve.amplitude-line {
+				stroke: var(--color-secondary);
+				stroke-width: 2px;
+				fill: unset;
+			}
+			.classically-allowed-region {
+				fill: var(--color-secondary);
+				font-size: 20px;
+				stroke: none;
+			}
 		</style>
 	</head>
 	<body>
 		<div class="grid-left-right">
 			<div class="controls-container">
 				<div class="controls">
-					<span>Partical mass, <span id="'text-mass"></span></span>
-					<span><input type="range" class="slider" id="slider-mass" /></span>
-					<span>“Spring constant”, <span id="'text-k"></span></span>
-					<span><input type="range" class="slider" id="slider-k" /></span>
-					<span>Initial position, <span id="text-mu"></span></span>
-					<span><input type="range" class="slider" id="slider-mu" /></span>
-					<span>Initial width, <span id="'text-sigma"></span></span>
-					<span><input type="range" class="slider" id="slider-sigma" /></span>
-					<span>Initial momentum, <span id="'text-p"></span></span>
-					<span><input type="range" class="slider" id="slider-p" /></span>
+					<span
+						>Oscillator frequency,
+						<span id="text-omega">\(\omega\)</span></span
+					>
+					<span><input type="range" class="slider" id="slider-omega" /></span>
+					<span>Initial position, <span id="text-mu">\(x_0\)</span></span>
+					<span><input type="range" class="slider ic" id="slider-mu" /></span>
+					<span>Initial width, <span id="'text-sigma">\(\sigma\)</span></span>
+					<span
+						><input type="range" class="slider ic" id="slider-sigma"
+					/></span>
+					<span>Initial momentum, <span id="'text-p">\(p_0\)</span></span>
+					<span><input type="range" class="slider ic" id="slider-p" /></span>
 
 					<span class="radio-button-container horizontal">
 						<button class="button" onclick="play()">Play</button
