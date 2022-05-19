@@ -253,9 +253,9 @@ function expr_to_js_str(x)
     return string(x)
 end
 
-function exprs_to_switch_case(exprs, n_min)
+function exprs_to_switch_case(exprs, n0)
     comps = ["switch(n){"]
-    for (n, ex) in zip(Iterators.countfrom(n_min, 1), exprs)
+    for (n, ex) in zip(Iterators.countfrom(n0, 1), exprs)
         push!(comps, "case $(n):\n return Complex.mul(coef_, $(expr_to_js_str(ex)));")
     end
     push!(comps, "}")

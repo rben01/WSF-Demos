@@ -1,5 +1,5 @@
-/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex
-makeRenderer innerProduct basisCoefficient defineArrowhead */
+/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera
+makeRenderer basisCoefficient defineArrowhead */
 
 const WIDTH = 800;
 const HEIGHT = 325;
@@ -29,25 +29,9 @@ const XP_MAX = 2.5;
 
 const zScale3D = yScale3D;
 
-const H_BAR = 1;
-
 // The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
 const N_MAX = 20;
 const N_WAVEFUNCTION_POINTS = 100;
-
-// This 1D array simulates a 2D array with N_MAX+1 rows and N_WAVEFUNCTION_POINTS
-// columns, where (row,col)=(n,i) contains the initial value for the n^th (0-indexed)
-// term at x=x_i. In other words, arr[n*N_WF_PTS+i] is zn(x=x_i,t=0).
-const initialStateCache = d3.range((N_MAX + 1) * N_WAVEFUNCTION_POINTS);
-
-const floatFormatter = d3
-	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
-	.format(".2f");
-const textSpans = {
-	m: document.getElementById("text-m"),
-	sigma: document.getElementById("text-sigma"),
-	p: document.getElementById("text-p"),
-};
 
 const canvas = document.getElementById("plot-3D");
 d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
@@ -131,7 +115,7 @@ const sliders = {
 		slider.min = min;
 		slider.max = max;
 		slider.step = 0.01;
-		slider.value = (min * max) ** 0.5;
+		slider.value = (min + max) / 2;
 
 		return slider;
 	})(),
@@ -182,18 +166,6 @@ function populateCaches({ sigma, p }) {
 }
 
 function getAxisData() {
-	const tickLength = 7;
-
-	const xAxisTicks = xScale2D.ticks(20).filter(x => x !== X_0);
-	const nXAxisLabels = 5;
-	const xAxisLabelTicks = xScale2D.ticks(nXAxisLabels).filter(x => x !== X_0);
-	const xAxisFormatter = xScale2D.tickFormat(nXAxisLabels);
-
-	const yAxisTicks = yScale2D.ticks(5).filter(y => y !== Y_0);
-	const nYAxisLabels = 5;
-	const yAxisLabelTicks = yScale2D.ticks(nYAxisLabels).filter(y => y !== Y_0);
-	const yAxisFormatter = yScale2D.tickFormat(nYAxisLabels, "~g");
-
 	const xs0 = xScale2D(X_0);
 	const ys0 = yScale2D(Y_0);
 
@@ -223,56 +195,6 @@ function getAxisData() {
 				y2: yMax,
 			},
 		},
-		// ...xAxisTicks.map(x => {
-		// 	const xs = xScale2D(x);
-		// 	return {
-		// 		shape: "line",
-		// 		class: "axis axis-tick x-axis-tick",
-		// 		attrs: {
-		// 			x1: xs,
-		// 			x2: xs,
-		// 			y1: ys0,
-		// 			y2: ys0 + tickLength,
-		// 		},
-		// 	};
-		// }),
-		// ...xAxisLabelTicks.map(x => {
-		// 	const xs = xScale2D(x);
-		// 	return {
-		// 		shape: "text",
-		// 		class: "axis axis-label x-axis-label",
-		// 		text: xAxisFormatter(x),
-		// 		attrs: {
-		// 			x: xs,
-		// 			y: ys0 + 12,
-		// 		},
-		// 	};
-		// }),
-		// ...yAxisTicks.map(y => {
-		// 	const ys = yScale2D(y);
-		// 	return {
-		// 		shape: "line",
-		// 		class: "axis axis-tick y-axis-tick",
-		// 		attrs: {
-		// 			x1: xs0,
-		// 			x2: xs0 - tickLength,
-		// 			y1: ys,
-		// 			y2: ys,
-		// 		},
-		// 	};
-		// }),
-		// ...yAxisLabelTicks.map(y => {
-		// 	const ys = yScale2D(y);
-		// 	return {
-		// 		shape: "text",
-		// 		class: "axis axis-label y-axis-label",
-		// 		text: yAxisFormatter(y),
-		// 		attrs: {
-		// 			x: xs0 - 10,
-		// 			y: ys,
-		// 		},
-		// 	};
-		// }),
 		{
 			shape: "text",
 			class: "axis axis-label x-axis-label axis-name x-axis-name",
@@ -314,7 +236,7 @@ const PHI_FUNCTIONS = (() => {
 	function getHermitePolynomial(n) {
 		switch (n) {
 			case 0:
-				return x => 1;
+				return () => 1;
 			case 1:
 				return x => 2 * x;
 			case 2:
@@ -564,32 +486,6 @@ function computeWavefunctionPoints() {
 	const xt = mu * Math.cos(t);
 	const pt = -mu * Math.sin(t);
 
-	// const gaussian = x =>
-	// 	Complex.exp(
-	// 		Complex.sub(
-	// 			2 * p ** 2 * t * sigma ** 2 - 4 * m * p * x * sigma ** 2,
-	// 			Complex.i.mul(m * x ** 2 * H_BAR),
-	// 		).div(Complex.sub(Complex.i.mul(4 * m * sigma ** 2), 2 * t * H_BAR ** 2)),
-	// 	)
-	// 		.mul((2 / Math.PI) ** (1 / 4))
-	// 		.div(
-	// 			Complex.pow(
-	// 				Complex.add(2 * sigma, Complex.i.mul(t * H_BAR).div(m * sigma)),
-	// 				0.5,
-	// 			),
-	// 		);
-
-	// const psi = x => {
-	// 	x = x / Math.sqrt((m * omega) / H_BAR);
-
-	// 	return Complex.mul(
-	// 		Complex.cis((mu ** 2 / 4) * Math.sin(2 * t) + pt * x),
-	// 		gaussian(x - xt),
-	// 	);
-	// };
-
-	// wavefunctionPoints.fill(0);
-
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
 		const xNaive = xInterp(i / N_WAVEFUNCTION_POINTS);
 		const x = xNaive - xt;
@@ -609,14 +505,6 @@ function computeWavefunctionPoints() {
 		wavefunctionPoints[2 * i] = xNaive;
 		wavefunctionPoints[2 * i + 1] = z;
 	}
-
-	// 	for (let n = 0; n <= N_MAX; n++) {
-	// 		const energy = n + 1 / 2;
-	// 		const rot = Complex.cis(-energy * t);
-	// 		z = z.add(Complex.mul(rot, COEFFS[n], PHI_FUNCTIONS[n](x)));
-	// 	}
-	// }
-	// return wavefunctionPoints;
 }
 
 function getWavefunctionPath3D() {
@@ -774,14 +662,6 @@ function getData2D() {
 		const z = wavefunctionPoints[2 * i + 1];
 		points.push([xScale2D(x), yScale2D(z.magnitude ** 2)]);
 	}
-
-	// const xScaleRelativeToP = (() => {
-	// 	const [muSlider, pSlider] = ["mu", "p"].map(key => sliders[key]);
-	// 	const [muMin, muMax] = ["min", "max"].map(key => +muSlider[key]);
-	// 	const [pMin, pMax] = ["min", "max"].map(key => +pSlider[key]);
-
-	// 	return (muMax - muMin) / (pMax - pMin);
-	// })();
 
 	const [mu, p] = ["mu", "p"].map(key => +sliders[key].value);
 
