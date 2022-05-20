@@ -1192,7 +1192,7 @@ products.push(v(x));
 return Complex.sum(products).mul(dx);
 }
 </script>
-<script>/* global Complex H_BAR */
+<script>/* global Complex */
 function factorial(n) {
 let acc = 1;
 for (let i = 1; i <= n; i++) {
@@ -1201,6 +1201,7 @@ acc *= i;
 return acc;
 }
 function basisCoefficient(n, { sigma, p }) {
+const H_BAR = 1;
 const coef_ = Complex.div(
 Complex.mul(
 Complex.pow(2, Complex.div(3, 4)),

@@ -1,4 +1,4 @@
-/* global Complex H_BAR */
+/* global Complex */
 
 function factorial(n) {
 	let acc = 1;
@@ -9,6 +9,8 @@ function factorial(n) {
 }
 
 function basisCoefficient(n, { sigma, p }) {
+	const H_BAR = 1;
+
 	const coef_ = Complex.div(
 		Complex.mul(
 			Complex.pow(2, Complex.div(3, 4)),
