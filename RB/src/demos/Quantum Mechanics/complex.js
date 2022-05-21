@@ -171,7 +171,8 @@ class Complex {
 	}
 
 	static pow(z, realNumber) {
-		if (realNumber.phase !== undefined && realNumber.phase !== 0) {
+		if (typeof realNumber.im === "function" && Math.abs(realNumber.im()) < 1e-7) {
+			console.log(JSON.stringify({ z, realNumber }));
 			throw new Error(
 				"raising to a complex power with nonzero phase is unsupported",
 			);
