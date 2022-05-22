@@ -5,9 +5,9 @@ const WIDTH = 800;
 const HEIGHT = 325;
 const HEIGHT_3D = 325;
 
-const X_MIN = -8;
+const X_MIN = -5;
 const X_0 = 0;
-const X_MAX = 8;
+const X_MAX = 5;
 
 const CAMERA_EXTENT = 11;
 const xScale3D = d3.scaleLinear(
@@ -502,7 +502,7 @@ function computeWavefunctionPoints() {
 
 	const xInterp = d3.interpolate(X_MIN, X_MAX);
 
-	const t = currentTime;
+	const t = currentTime * 2;
 
 	const xt = mu * Math.cos(t);
 	const pt = -mu * Math.sin(t);
