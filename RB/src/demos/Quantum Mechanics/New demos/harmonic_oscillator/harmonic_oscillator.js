@@ -1,9 +1,11 @@
-/* global applyGraphicalObjs defineArrowhead katex */
+/* global applyGraphicalObjs defineArrowhead katex psiFunction */
 
 const WIDTH = 800;
 const HEIGHT = 600;
 
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+
+const H_BAR = 1;
 
 const N_MIN = 0;
 const N_MAX = 10;
@@ -31,15 +33,38 @@ const ys0 = yScale(Y_0);
 const ysMax = yScale(Y_MAX);
 
 const sliders = {
-	energyLevel: document.getElementById("slider-energy-level"),
+	k: (() => {
+		const slider = document.getElementById("slider-k");
+		const min = 1;
+		const max = 2.25;
+		slider.min = min;
+		slider.max = max;
+		slider.step = 0.01;
+		slider.value = (min + max) / 2;
+
+		return slider;
+	})(),
+	m: (() => {
+		const slider = document.getElementById("slider-m");
+		const min = 1;
+		const max = 2.25;
+		slider.min = min;
+		slider.max = max;
+		slider.step = 0.01;
+		slider.value = (min + max) / 2;
+
+		return slider;
+	})(),
+	energyLevel: (() => {
+		const slider = document.getElementById("slider-energy-level");
+		slider.min = N_MIN;
+		slider.max = N_MAX;
+		slider.step = 1;
+		slider.value = N_MIN;
+
+		return slider;
+	})(),
 };
-{
-	const slider = sliders.energyLevel;
-	slider.min = N_MIN;
-	slider.max = N_MAX;
-	slider.step = 1;
-	slider.value = N_MIN;
-}
 
 const defs = plot.selectAll("defs").data([0]).join("defs");
 defineArrowhead(defs, {
@@ -74,71 +99,80 @@ applyGraphicalObjs(defs, [
 	},
 ]);
 
-const PHI_FUNCTIONS = (() => {
-	function getHermitePolynomial(n) {
-		switch (n) {
-			case 0:
-				return () => 1;
-			case 1:
-				return x => 2 * x;
-			case 2:
-				return x => 4 * x ** 2 - 2;
-			case 3:
-				return x => 8 * x ** 3 - 12 * x;
-			case 4:
-				return x => 16 * x ** 4 - 48 * x ** 2 + 12;
-			case 5:
-				return x => 32 * x ** 5 - 160 * x ** 3 + 120 * x;
-			case 6:
-				return x => 64 * x ** 6 - 480 * x ** 4 + 720 * x ** 2 - 120;
-			case 7:
-				return x => 128 * x ** 7 - 1344 * x ** 5 + 3360 * x ** 3 - 1680 * x;
-			case 8:
-				return x =>
-					256 * x ** 8 -
-					3584 * x ** 6 +
-					13440 * x ** 4 -
-					13440 * x ** 2 +
-					1680;
-			case 9:
-				return x =>
-					512 * x ** 9 -
-					9216 * x ** 7 +
-					48384 * x ** 5 -
-					80640 * x ** 3 +
-					30240 * x;
-			case 10:
-				return x =>
-					1024 * x ** 10 -
-					23040 * x ** 8 +
-					161280 * x ** 6 -
-					403200 * x ** 4 +
-					302400 * x ** 2 -
-					30240;
-		}
+// eslint-disable-next-line no-unused-vars
+const FACTORIAL = d3.range(0, N_MAX + 1).map(n => {
+	let acc = 1;
+	for (let i = 1; i <= n; i++) {
+		acc *= i;
 	}
+	return acc;
+});
 
-	function factorial(n) {
-		let acc = 1;
-		for (let i = 2; i <= n; i++) {
-			acc *= i;
-		}
-		return acc;
-	}
+// const PHI_FUNCTIONS = (() => {
+// 	function getHermitePolynomial(n) {
+// 		switch (n) {
+// 			case 0:
+// 				return () => 1;
+// 			case 1:
+// 				return x => 2 * x;
+// 			case 2:
+// 				return x => 4 * x ** 2 - 2;
+// 			case 3:
+// 				return x => 8 * x ** 3 - 12 * x;
+// 			case 4:
+// 				return x => 16 * x ** 4 - 48 * x ** 2 + 12;
+// 			case 5:
+// 				return x => 32 * x ** 5 - 160 * x ** 3 + 120 * x;
+// 			case 6:
+// 				return x => 64 * x ** 6 - 480 * x ** 4 + 720 * x ** 2 - 120;
+// 			case 7:
+// 				return x => 128 * x ** 7 - 1344 * x ** 5 + 3360 * x ** 3 - 1680 * x;
+// 			case 8:
+// 				return x =>
+// 					256 * x ** 8 -
+// 					3584 * x ** 6 +
+// 					13440 * x ** 4 -
+// 					13440 * x ** 2 +
+// 					1680;
+// 			case 9:
+// 				return x =>
+// 					512 * x ** 9 -
+// 					9216 * x ** 7 +
+// 					48384 * x ** 5 -
+// 					80640 * x ** 3 +
+// 					30240 * x;
+// 			case 10:
+// 				return x =>
+// 					1024 * x ** 10 -
+// 					23040 * x ** 8 +
+// 					161280 * x ** 6 -
+// 					403200 * x ** 4 +
+// 					302400 * x ** 2 -
+// 					30240;
+// 		}
+// 	}
 
-	const AMPLITUDE = 0.5;
+// 	function factorial(n) {
+// 		let acc = 1;
+// 		for (let i = 2; i <= n; i++) {
+// 			acc *= i;
+// 		}
+// 		return acc;
+// 	}
 
-	const arr = [];
-	for (let n = N_MIN; n <= N_MAX; n++) {
-		const coef =
-			AMPLITUDE *
-			Math.pow(Math.PI, -0.25) *
-			Math.pow(2 ** n * factorial(n), -0.5);
-		const hp = getHermitePolynomial(n);
-		arr.push(x => coef * hp(x) * Math.exp(x ** 2 / -2));
-	}
-	return arr;
-})();
+// 	const AMPLITUDE = 0.5;
+
+// 	const arr = [];
+// 	for (let n = N_MIN; n <= N_MAX; n++) {
+// 		const coef =
+// 			AMPLITUDE *
+// 			Math.pow(Math.PI, -0.25) *
+// 			Math.pow(2 ** n * factorial(n), -0.5);
+// 		const hp = getHermitePolynomial(n);
+// 		arr.push(x => coef * hp(x) * Math.exp(x ** 2 / -2));
+// 	}
+// 	return arr;
+// })();
 
 const SHOW_PROBA = 0;
 const SHOW_WAVEF = 1;
@@ -395,22 +429,28 @@ function update() {
 
 	// the dynamic, wave stuff
 	(() => {
+		const [k, m] = ["k", "m"].map(key => +sliders[key].value);
+		const omega = Math.sqrt(k / m);
+
+		const BASE_SCALE = 0.6;
+		const PROBA_SCALE = 3;
+
 		const nPathPoints = 30;
 		const pathPoints = [];
 		for (let n = N_MIN; n <= N_MAX; n++) {
 			const thisPathPoints = [];
-			const phi_func = PHI_FUNCTIONS[n];
+			const thisPsiFunc = psiFunction(n, { omega, m });
 
 			for (let i = 0; i < nPathPoints; i++) {
 				const x = xInterp(i / (nPathPoints - 1));
-				const y = phi_func(x);
-				thisPathPoints.push([x, y]);
+				const y = thisPsiFunc(x);
+				thisPathPoints.push([x, BASE_SCALE * y.re]);
 			}
 
 			if (show === SHOW_PROBA) {
 				for (let i = 0; i < nPathPoints; i++) {
 					// Artificial amplitude expansion to make probabilities more visible
-					thisPathPoints[i][1] = 2.5 * thisPathPoints[i][1] ** 2;
+					thisPathPoints[i][1] = PROBA_SCALE * thisPathPoints[i][1] ** 2;
 				}
 			}
 

@@ -128,6 +128,19 @@
 					<div class="controls">
 						<div class="slider-container">
 							<span class="slider-label"
+								>“Spring constant”, <span id="text-k">\(k\)</span></span
+							>
+							<span class="param-slider-container"
+								><input id="slider-k" class="param-slider" type="range"
+							/></span>
+
+							<span class="slider-label"
+								>Particle mass, <span id="text-mass">\(m\)</span></span
+							>
+							<span class="param-slider-container"
+								><input id="slider-m" class="param-slider" type="range"
+							/></span>
+							<span class="slider-label"
 								>Index, <span id="text-index"></span
 							></span>
 							<span class="param-slider-container"
@@ -163,9 +176,10 @@
 						>\(H_n(x)=(-1)^n
 						e^{x^2}\frac{\mathrm{d}^n}{\mathrm{d}x^n}e^{-x^2}\)</span
 					><br />
+					<span>\(\tilde x = x\sqrt{\frac{k}{m\hbar}}\)</span><br />
 					<span
-						>\(\psi_n(x)=\frac{\pi^{-\frac{1}{4}}}{\sqrt{2^n
-						n!}}H_n(x)e^{-\frac{x^2}{2}}\)</span
+						>\(\psi_n(x)=\frac{\pi^{-\frac{1}{4}}}{\sqrt{2^n n!}}H_n(\tilde
+						x)e^{-\frac{\tilde x^2}{2}}\)</span
 					>
 				</div>
 			</div>
@@ -192,6 +206,8 @@
 			</div>
 		</div>
 		<script src="../../../utils.js"></script>
+		<script src="../../complex.js"></script>
+		<script src="./psi_functions.js"></script>
 		<script src="./harmonic_oscillator.js"></script>
 	</body>
 </html>

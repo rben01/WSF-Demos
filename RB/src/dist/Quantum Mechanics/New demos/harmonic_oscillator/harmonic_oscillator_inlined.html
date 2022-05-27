@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
-<head><title>harmonic_oscillator.html</title>
+<head>
+<title>Harmonic Oscillator</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <style type="text/css">:root {
@@ -381,6 +382,10 @@ font-size: 24px;
 <div class="controls-container">
 <div class="controls">
 <div class="slider-container">
+<span class="slider-label">“Spring constant”, <span id="text-k">\(k\)</span></span>
+<span class="param-slider-container"><input class="param-slider" id="slider-k" type="range"/></span>
+<span class="slider-label">Particle mass, <span id="text-mass">\(m\)</span></span>
+<span class="param-slider-container"><input class="param-slider" id="slider-m" type="range"/></span>
 <span class="slider-label">Index, <span id="text-index"></span></span>
 <span class="param-slider-container"><input class="param-slider" id="slider-energy-level" type="range"/></span>
 </div>
@@ -399,8 +404,9 @@ Show \(|\psi|^2\)
 <span>\(E_n = n + \frac{1}{2}\)</span><br/>
 <span>\(H_n(x)=(-1)^n
 e^{x^2}\frac{\mathrm{d}^n}{\mathrm{d}x^n}e^{-x^2}\)</span><br/>
-<span>\(\psi_n(x)=\frac{\pi^{-\frac{1}{4}}}{\sqrt{2^n
-n!}}H_n(x)e^{-\frac{x^2}{2}}\)</span>
+<span>\(\tilde x = x\sqrt{\frac{k}{m\hbar}}\)</span><br/>
+<span>\(\psi_n(x)=\frac{\pi^{-\frac{1}{4}}}{\sqrt{2^n n!}}H_n(\tilde
+x)e^{-\frac{\tilde x^2}{2}}\)</span>
 </div>
 </div>
 <div class="plot-eqn-container">
@@ -790,10 +796,227 @@ adjustHidableElemOpacity,
 }
 _initializeHideableControlsContainer();
 </script>
-<script>/* global applyGraphicalObjs defineArrowhead katex */
+<script>class Complex {
+constructor(magnitude, phase) {
+this._$mag = magnitude;
+this._$theta = phase;
+this._$re = magnitude * Math.cos(phase);
+this._$im = magnitude * Math.sin(phase);
+}
+toStr(precision = 4) {
+const re = this.re.toFixed(precision);
+const im = this.im.toFixed(precision);
+const r = this.magnitude.toFixed(precision);
+const theta = this.phase.toFixed(precision);
+return `${re} + ${im} j == ${r} expj(${theta})`;
+}
+static from(other) {
+if (other.magnitude !== undefined || other.phase !== undefined) {
+return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+} else if (other.re !== undefined || other.im !== undefined) {
+return this.fromCartesian(other.re ?? 0, other.im ?? 0);
+} else if (typeof other === "number") {
+return this.fromReal(other);
+} else {
+throw new Error(`Argument ${other} not understood in Complex.from`);
+}
+}
+static fromPolar(magnitude, phase) {
+return new this(magnitude, phase);
+}
+static fromCartesian(re, im) {
+const magnitude = (re ** 2 + im ** 2) ** 0.5;
+const phase = Math.atan2(im, re);
+return new this(magnitude, phase);
+}
+static fromReal(realNumber) {
+return new this(realNumber, 0);
+}
+static fromImag(realNumber) {
+return new this(realNumber, Math.PI / 2);
+}
+get magnitude() {
+return this._$mag;
+}
+get phase() {
+return this._$theta;
+}
+get re() {
+return this._$re;
+}
+get im() {
+return this._$im;
+}
+conj() {
+return this.constructor.fromPolar(this._$mag, -this._$theta);
+}
+toPolar() {
+return { magnitude: this._$mag, phase: this._$theta };
+}
+toCartesian() {
+return { re: this._$re, im: this._$im };
+}
+static prod(args) {
+let magnitude = 1;
+let phase = 0;
+for (const arg of args) {
+magnitude *= arg.magnitude ?? arg;
+phase += arg.phase ?? 0;
+}
+return this.fromPolar(magnitude, phase);
+}
+static mul(...args) {
+return this.prod(args);
+}
+mul(...others) {
+return this.constructor.mul(this, ...others);
+}
+_mulReal(other) {
+return this.constructor.fromPolar(this.magnitude * other, this.phase);
+}
+static div(z1, z2) {
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+if (typeof z2 === "number") {
+z2 = Complex.fromReal(z2);
+}
+return this.fromPolar(
+(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+(z1.phase ?? 0) - (z2.phase ?? 0),
+);
+}
+div(other) {
+return this.constructor.div(this, other);
+}
+static sum(args) {
+let re = 0;
+let im = 0;
+for (const arg of args) {
+re += arg.re ?? arg;
+im += arg.im ?? 0;
+}
+return this.fromCartesian(re, im);
+}
+static add(...args) {
+return this.sum(args);
+}
+add(...others) {
+return this.constructor.add(this, ...others);
+}
+static sub(z1, z2) {
+return this.fromCartesian(
+(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+);
+}
+sub(other) {
+return this.constructor.sub(this, other);
+}
+static exp(z) {
+if (typeof z === "number") {
+return Complex.fromReal(Math.exp(z));
+}
+return z.exp();
+}
+exp() {
+const magnitude = Math.exp(this.re);
+const phase = this.im;
+return Complex.fromPolar(magnitude, phase);
+}
+static cis(z) {
+if (typeof z === "number") {
+return Complex.fromPolar(1, z);
+}
+return z.cis();
+}
+cis() {
+// exp(i*(x+iy)) = e^(-y)e^(ix)
+return Complex.fromPolar(Math.exp(-this.im), this.re);
+}
+static pow(z, realNumber) {
+if (typeof realNumber.im === "function" && Math.abs(realNumber.im()) < 1e-7) {
+console.log(JSON.stringify({ z, realNumber }));
+throw new Error(
+"raising to a complex power with nonzero phase is unsupported",
+);
+}
+if (typeof z === "number") {
+z = Complex.fromReal(z);
+}
+realNumber = realNumber.magnitude ?? realNumber;
+return z.pow(realNumber);
+}
+pow(realNumber) {
+const magnitude = Math.pow(this._$mag, realNumber);
+const phase = this._$theta * realNumber;
+return this.constructor.fromPolar(magnitude, phase);
+}
+}
+Complex.i = Complex.fromImag(1);
+// eslint-disable-next-line no-unused-vars
+function innerProduct(
+f,
+g,
+{ xMin, xMax, nPoints = 1000, fIsComplex = true, gIsComplex = true } = {},
+) {
+const dx = (xMax - xMin) / nPoints;
+const v = (() => {
+if (fIsComplex) {
+if (gIsComplex) {
+return x => f(x).mul(g(x).conj());
+} else {
+return x => f(x)._mulReal(g(x));
+}
+} else {
+if (gIsComplex) {
+return x => g(x)._mulReal(f(x));
+} else {
+return x => f(x) * g(x);
+}
+}
+})();
+const products = [];
+for (let i = 0; i < nPoints; ++i) {
+const x = xMin + (i + 0.5) * dx;
+products.push(v(x));
+}
+return Complex.sum(products).mul(dx);
+}
+</script>
+<script>/* global Complex H_BAR FACTORIAL */
+function psiFunction(n,{ omega, m}) {
+const coef_ = x => Complex.div((Complex.mul((Complex.exp(Complex.sub((0),(Complex.div((Complex.mul((m),(omega),(Complex.pow((x),(2),)),)),(Complex.mul((2),(H_BAR),)),)),))),(Complex.pow((Complex.div((Complex.mul((m),(omega),)),(H_BAR),)),(Complex.div((1),(4),)),)),)),(Complex.mul((Complex.pow((Math.PI),(Complex.div((1),(4),)),)),(Complex.pow(Complex.mul((Complex.pow((2),(n),)),(FACTORIAL[n]),), 1/2)),)),);
+switch(n){
+case 0: return x => Complex.mul(coef_(x), 1);
+case 1: return x => Complex.mul(coef_(x), Complex.mul((2),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),));
+case 2: return x => Complex.mul(coef_(x), Complex.add((-2),(Complex.div((Complex.mul((4),(m),(Complex.pow((x),(2),)),(omega),)),(H_BAR),)),));
+case 3: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((4),(x),(Complex.sub((Complex.mul((2),(m),(Complex.pow((x),(2),)),(omega),)),(Complex.mul((3),(H_BAR),)),)),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),)),(H_BAR),));
+case 4: return x => Complex.mul(coef_(x), Complex.sub((Complex.add((12),(Complex.div((Complex.mul((16),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.div((Complex.mul((48),(m),(Complex.pow((x),(2),)),(omega),)),(H_BAR),)),));
+case 5: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((8),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.mul((4),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),)),(Complex.mul((20),(m),(Complex.pow((x),(2),)),(omega),(H_BAR),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(2),)),)),)),)),(Complex.pow((H_BAR),(2),)),));
+case 6: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((8),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),)),(Complex.mul((60),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((90),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(3),)),)),)),)),(Complex.pow((H_BAR),(3),)),));
+case 7: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((16),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),)),(Complex.mul((84),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((210),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(3),)),)),)),)),(Complex.pow((H_BAR),(3),)),));
+case 8: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((16),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),)),(Complex.mul((224),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((840),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((840),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.pow((H_BAR),(4),)),));
+case 9: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((32),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),)),(Complex.mul((288),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((1512),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((2520),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.pow((H_BAR),(4),)),));
+case 10: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((32),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),)),(Complex.mul((720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((5040),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((12600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((9450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(5),)),)),)),)),(Complex.pow((H_BAR),(5),)),));
+case 11: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((64),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),)),(Complex.mul((880),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((7920),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((27720),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((34650),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(5),)),)),)),)),(Complex.pow((H_BAR),(5),)),));
+case 12: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(6),)),)),(64),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2112),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((23760),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((110880),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((207900),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((124740),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(6),)),)),)),));
+case 13: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(6),)),)),(128),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2496),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((34320),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((205920),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((540540),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((540540),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(6),)),)),)),));
+case 14: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(7),)),)),(128),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),)),(Complex.mul((5824),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((96096),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((720720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((2522520),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3783780),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1891890),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(7),)),)),)),));
+case 15: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(7),)),)),(256),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),)),(Complex.mul((6720),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((131040),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((1201200),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((5405400),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((11351340),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((9459450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(7),)),)),)),));
+case 16: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(8),)),)),(256),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),)),(Complex.mul((15360),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((349440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((3843840),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((21621600),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((60540480),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((75675600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((32432400),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(8),)),)),)),));
+case 17: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(8),)),)),(512),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),)),(Complex.mul((17408),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((456960),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((5940480),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((40840800),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((257297040),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((183783600),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(8),)),)),)),));
+case 18: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(9),)),)),(512),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),)),(Complex.mul((39168),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1175040),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((17821440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((661620960),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1543782240),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((1654052400),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((620269650),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(9),)),)),)),));
+case 19: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(9),)),)),(1024),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),)),(Complex.mul((43776),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1488384),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((26046720),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((253955520),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1396755360),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((4190266080),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((6285399120),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((3928374450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(9),)),)),)),));
+case 20: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(10),)),)),(1024),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((m),(10),)),(Complex.pow((x),(20),)),(Complex.pow((omega),(10),)),)),(Complex.mul((97280),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),(H_BAR),)),)),(Complex.mul((3720960),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((74419200),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((846518400),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((5587021440),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((20951330400),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((41902660800),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((39283744500),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((13094581500),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(10),)),)),)),));
+default: throw new Error("Got n greater than N_MAX");
+}
+}</script>
+<script>/* global applyGraphicalObjs defineArrowhead katex psiFunction */
 const WIDTH = 800;
 const HEIGHT = 600;
 const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+const H_BAR = 1;
 const N_MIN = 0;
 const N_MAX = 10;
 const X_MIN = -6.3;
@@ -815,15 +1038,35 @@ const xInterp = d3.interpolateNumber(X_LEFT, X_RIGHT);
 const ys0 = yScale(Y_0);
 const ysMax = yScale(Y_MAX);
 const sliders = {
-energyLevel: document.getElementById("slider-energy-level"),
-};
-{
-const slider = sliders.energyLevel;
+k: (() => {
+const slider = document.getElementById("slider-k");
+const min = 1;
+const max = 2.25;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+m: (() => {
+const slider = document.getElementById("slider-m");
+const min = 1;
+const max = 2.25;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+energyLevel: (() => {
+const slider = document.getElementById("slider-energy-level");
 slider.min = N_MIN;
 slider.max = N_MAX;
 slider.step = 1;
 slider.value = N_MIN;
-}
+return slider;
+})(),
+};
 const defs = plot.selectAll("defs").data([0]).join("defs");
 defineArrowhead(defs, {
 id: "arrowhead",
@@ -856,68 +1099,76 @@ height: HEIGHT,
 ],
 },
 ]);
-const PHI_FUNCTIONS = (() => {
-function getHermitePolynomial(n) {
-switch (n) {
-case 0:
-return () => 1;
-case 1:
-return x => 2 * x;
-case 2:
-return x => 4 * x ** 2 - 2;
-case 3:
-return x => 8 * x ** 3 - 12 * x;
-case 4:
-return x => 16 * x ** 4 - 48 * x ** 2 + 12;
-case 5:
-return x => 32 * x ** 5 - 160 * x ** 3 + 120 * x;
-case 6:
-return x => 64 * x ** 6 - 480 * x ** 4 + 720 * x ** 2 - 120;
-case 7:
-return x => 128 * x ** 7 - 1344 * x ** 5 + 3360 * x ** 3 - 1680 * x;
-case 8:
-return x =>
-256 * x ** 8 -
-3584 * x ** 6 +
-13440 * x ** 4 -
-13440 * x ** 2 +
-1680;
-case 9:
-return x =>
-512 * x ** 9 -
-9216 * x ** 7 +
-48384 * x ** 5 -
-80640 * x ** 3 +
-30240 * x;
-case 10:
-return x =>
-1024 * x ** 10 -
-23040 * x ** 8 +
-161280 * x ** 6 -
-403200 * x ** 4 +
-302400 * x ** 2 -
-30240;
-}
-}
-function factorial(n) {
+// eslint-disable-next-line no-unused-vars
+const FACTORIAL = d3.range(0, N_MAX + 1).map(n => {
 let acc = 1;
-for (let i = 2; i <= n; i++) {
+for (let i = 1; i <= n; i++) {
 acc *= i;
 }
 return acc;
-}
-const AMPLITUDE = 0.5;
-const arr = [];
-for (let n = N_MIN; n <= N_MAX; n++) {
-const coef =
-AMPLITUDE *
-Math.pow(Math.PI, -0.25) *
-Math.pow(2 ** n * factorial(n), -0.5);
-const hp = getHermitePolynomial(n);
-arr.push(x => coef * hp(x) * Math.exp(x ** 2 / -2));
-}
-return arr;
-})();
+});
+// const PHI_FUNCTIONS = (() => {
+// 	function getHermitePolynomial(n) {
+// 		switch (n) {
+// 			case 0:
+// 				return () => 1;
+// 			case 1:
+// 				return x => 2 * x;
+// 			case 2:
+// 				return x => 4 * x ** 2 - 2;
+// 			case 3:
+// 				return x => 8 * x ** 3 - 12 * x;
+// 			case 4:
+// 				return x => 16 * x ** 4 - 48 * x ** 2 + 12;
+// 			case 5:
+// 				return x => 32 * x ** 5 - 160 * x ** 3 + 120 * x;
+// 			case 6:
+// 				return x => 64 * x ** 6 - 480 * x ** 4 + 720 * x ** 2 - 120;
+// 			case 7:
+// 				return x => 128 * x ** 7 - 1344 * x ** 5 + 3360 * x ** 3 - 1680 * x;
+// 			case 8:
+// 				return x =>
+// 					256 * x ** 8 -
+// 					3584 * x ** 6 +
+// 					13440 * x ** 4 -
+// 					13440 * x ** 2 +
+// 					1680;
+// 			case 9:
+// 				return x =>
+// 					512 * x ** 9 -
+// 					9216 * x ** 7 +
+// 					48384 * x ** 5 -
+// 					80640 * x ** 3 +
+// 					30240 * x;
+// 			case 10:
+// 				return x =>
+// 					1024 * x ** 10 -
+// 					23040 * x ** 8 +
+// 					161280 * x ** 6 -
+// 					403200 * x ** 4 +
+// 					302400 * x ** 2 -
+// 					30240;
+// 		}
+// 	}
+// 	function factorial(n) {
+// 		let acc = 1;
+// 		for (let i = 2; i <= n; i++) {
+// 			acc *= i;
+// 		}
+// 		return acc;
+// 	}
+// 	const AMPLITUDE = 0.5;
+// 	const arr = [];
+// 	for (let n = N_MIN; n <= N_MAX; n++) {
+// 		const coef =
+// 			AMPLITUDE *
+// 			Math.pow(Math.PI, -0.25) *
+// 			Math.pow(2 ** n * factorial(n), -0.5);
+// 		const hp = getHermitePolynomial(n);
+// 		arr.push(x => coef * hp(x) * Math.exp(x ** 2 / -2));
+// 	}
+// 	return arr;
+// })();
 const SHOW_PROBA = 0;
 const SHOW_WAVEF = 1;
 let show = SHOW_PROBA;
@@ -1155,20 +1406,24 @@ attrs: { d: CURVE(parabola), "clip-path": "url(#parabola-clip-path)" },
 }
 // the dynamic, wave stuff
 (() => {
+const [k, m] = ["k", "m"].map(key => +sliders[key].value);
+const omega = Math.sqrt(k / m);
+const BASE_SCALE = 0.6;
+const PROBA_SCALE = 3;
 const nPathPoints = 30;
 const pathPoints = [];
 for (let n = N_MIN; n <= N_MAX; n++) {
 const thisPathPoints = [];
-const phi_func = PHI_FUNCTIONS[n];
+const thisPsiFunc = psiFunction(n, { omega, m });
 for (let i = 0; i < nPathPoints; i++) {
 const x = xInterp(i / (nPathPoints - 1));
-const y = phi_func(x);
-thisPathPoints.push([x, y]);
+const y = thisPsiFunc(x);
+thisPathPoints.push([x, BASE_SCALE * y.re]);
 }
 if (show === SHOW_PROBA) {
 for (let i = 0; i < nPathPoints; i++) {
 // Artificial amplitude expansion to make probabilities more visible
-thisPathPoints[i][1] = 2.5 * thisPathPoints[i][1] ** 2;
+thisPathPoints[i][1] = PROBA_SCALE * thisPathPoints[i][1] ** 2;
 }
 }
 for (let i = 0; i < nPathPoints; i++) {
