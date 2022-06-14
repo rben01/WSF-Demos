@@ -1,0 +1,370 @@
+= Quantum Mechanics Problems and Exercises
+:docinfo: shared
+:toc: left
+:nofooter:
+:stem: latexmath
+:table-settings: pass:[cols="<1s,<~a,<~a",options="header"]
+:imagesdir: images
+:data-uri:
+
+
+== Chapter 1
+
+=== Examples & Exercises
+
+[{table-settings}]
+|===
+|Section
+|Griffiths Essential Problem
+|Our Problem/Exercise
+
+|1.3
+|*1.1* For the distribution of ages in the example in Section 1.3.1:
+
+. Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
+. Determine stem:[\Delta j] for each stem:[j], and use Equation 1.11 to compute the standard deviation.
+. Use your results in (a) and (b) to check Equation 1.12.
+| PROBLEM
+
+|1.3
+|*1.3* Consider the *gaussian* distribution
+
+[stem]
+++++
+\rho(x)= Ae^{-\lambda(x-a)^2}
+++++
+
+where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The necessary integrals are inside the back cover.)
+
+. Use Equation 1.16 to determine stem:[A].
+. Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
+. Sketch the graph of stem:[\rho(x)].
+| PROBLEM
+
+|1.4
+|*1.5* Consider the wave function
+
+[stem]
+++++
+\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i\omega t}
+++++
+
+where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
+(We'll see in Chapter 2 for what potential (stem:[V]) this wave function satisfies the Schrödinger equation.)
+
+. Normalize stem:[\Psi]
+. Determine the expectation values of stem:[x] and stem:[x^2].
+. Find the standard deviation of stem:[x].
+Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
+|PROBLEM
+
+|1.5
+| *1.7* Calculate stem:[d\langle p \rangle / dt]. _Answer_:
+
+[stem]
+++++
+\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.
+++++
+This is an instance of *Ehrenfest’s theorem*, which asserts that
+_expectation values obey the classical laws_.
+
+| PROBLEM
+
+|1.6
+| *1.9* A particle of mass stem:[m] has the wave function
+
+[stem]
+++++
+\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},
+++++
+where stem:[A] and stem:[a] are positive real constants.
+
+. Find stem:[A].
+. For what potential energy function, stem:[V(x)], is this a
+solution to the Schrödinger equation?
+. Calculate the expectation values of stem:[x],
+stem:[x^2], stem:[p], and stem:[p^2].
+. Find stem:[\sigma_{x}] and stem:[\sigma_{p}]. Is their
+product consistent with the uncertainty principle?
+| PROBLEM
+
+|===
+
+=== Problems
+[{table-settings}]
+|===
+|Section|Griffiths Problem|Our Problem
+|1.3
+|*1.2*
+
+. Find the standard deviation of the distribution in Example 1.2.
+. What is the probability that a photograph, selected at random, would
+show a distance stem:[x] more than one standard deviation away
+from the average?
+|PROBLEM
+
+|1.4
+|*1.4* At time stem:[t=0] a particle is represented by the wave
+function
+
+[stem]
+++++
+\[\Psi(x,0)=
+    \begin{cases}
+        A(x/a), & 0\le x \le a,\\
+        A(b-x)/A(b-a), & a \le x \le b,\\
+        0, & \textrm{otherwise},
+    \end{cases}\]
+++++
+where stem:[A], stem:[a], and stem:[b] are
+(positive) constants.
+
+. Normalize stem:[\Psi] (that is, find stem:[A] in terms
+of stem:[a] and stem:[b]).
+. Sketch stem:[\Psi(x,0)] as a function of stem:[x].
+. Where is the particle most likely to be found at stem:[t=0]?
+. What is the probability of finding the particle to the left of
+stem:[a]? Check your result in the limiting cases
+stem:[b=a] and stem:[b=2a].
+. What is the expectation value of stem:[x]?
+|PROBLEM
+
+|1.5
+|*1.8* Suppose you add a constant stem:[V_0] to the
+potential energy (by "`constant`" I mean independent of stem:[x]
+as well as stem:[t]). In _classical_ mechanics this doesn't
+change anything, but what about _quantum_ mechanics? Show that the wave
+function picks up a time-dependent phase factor:
+stem:[\exp(-iV_0t/\hbar)]. What effect does this have on the
+expectation value of a dynamical variable?
+|PROBLEM
+
+|1.P
+|*1.10* Consider the first 25 digits in the decimal expansion of
+stem:[\pi] (stem:[3, 1, 4, 1, 5, 9, \ldots]).
+
+. If you selected one number at random, from this set, what are the
+probabilities of getting each of the 10 digits?
+. What is the most probable digit? What is the median digit? What is the
+average value?
+. Find the standard deviation for this distribution.
+
+|PROBLEM
+
+|1.P
+|*1.11* [This problem generalizes Example 1.2.] Imagine a particle of mass stem:[m] and energy stem:[E] in a potential well stem:[V(x)], sliding frictionlessly back and forth between the classical turning points (stem:[a] and stem:[b] in Figure 1.10).
+Classically, the probability of finding the particle in the range stem:[dx] (if, for example, you took a snapshot at a random time stem:[t]) is equal to the fraction of the time stem:[T] it takes to get from stem:[a] to stem:[b] that it spends in the interval stem:[dx]:
+
+[stem]
+++++
+\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,
+++++
+
+where stem:[v(x)] is the speed, and
+
+[stem]
+++++
+T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.
+++++
+
+Thus
+[stem]
+++++
+\rho(x)=\frac{1}{v(x)T}
+++++
+
+This is perhaps the closest classical analog to stem:[\|\Psi\|^2].
+
+. Use conservation of energy to express stem:[v(x)] in terms of stem:[E] and stem:[V(x)].
+. As an example, find stem:[\rho(x)] for the simple harmonic oscillator, stem:[V(x)=k x^2/2]. Plot stem:[\rho(x)], and check that it is correctly normalized.
+. For the classical harmonic oscillator in part (b), find stem:[\langle x\rangle], stem:[\langle x^2\rangle], and stem:[\sigma_x].
++
+image::ch1_p1.11.jpg[width=300]
+| PROBLEM
+
+|1.P
+|**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
+(stem:[p=mv]) for the classical harmonic oscillator (Problem
+1.11(b)).
+
+. Find the classical probability distribution stem:[\rho(p)]
+(note that stem:[p] ranges from stem:[-\sqrt{2mE}] to
+stem:[+\sqrt{2mE}]).
+. Calculate stem:[\langle p \rangle],
+stem:[\langle p^2 \rangle], and stem:[\sigma_{p}].
+. What’s the _classical_ uncertainty product,
+stem:[\sigma_{x}\sigma_{p}], for this system? Notice that this
+product can be as small as you like, classically, simply by sending
+stem:[E \rightarrow 0]. But in quantum mechanics, as we shall see
+in Chapter 2, the energy of a simple harmonic oscillator cannot be less
+than stem:[\hbar \omega /2], where
+stem:[\omega = \sqrt{k/m}] is the classical frequency. In that
+case what can you say abut the product
+stem:[\sigma_{x}\sigma_{p}]?
+
+|PROBLEM
+
+|1.P
+|*1.13* Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time stem:[t] is
+
+[stem]
+++++
+x(t) = A\cos(\omega t)
+++++
+
+
+You might as well take stem:[\omega=1] (that sets the scale for time) and stem:[A=1] (that sets the scale for length). Make a plot of stem:[x] at 10,000 random times, and compare it with stem:[\rho[x]].
+_Hint_: In Mathematica, first define
+
+[source,mathematica]
+----
+x[t_] := Cos[t]
+----
+
+then construct a table of positions:
+
+[source,mathematica]
+----
+snapshots = Table[x[𝜋 RandomReal[j]], {j, 10000}]
+----
+
+and finally, make a histogram of the data:
+
+[source,mathematica]
+----
+Histogram[snapshots, 100, "PDF", PlotRange -> {0,2}]
+----
+
+Meanwhile, make a plot of the density function, stem:[\rho(x)], and, using `Show`, superimpose the two.
+| PROBLEM
+
+|1.P
+|*1.14* Let stem:[P_{ab}(t)] be the probability of finding the
+particle in the range stem:[(a<x<b)], at time stem:[t].
+
+. Show that
++
+[stem]
+++++
+\[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\]
+++++
+where
++
+[stem]
+++++
+\[J(x,t) \equiv \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
+++++
+What are the units of stem:[J(x,t)]? _Comment:_ stem:[J]
+is called the *probability current* because it tells you the rate at
+which probability is "`flowing`" past the point stem:[x]. If
+stem:[P_{ab}(t)] is increasing, then more probability is flowing
+into the region at one end than flows out the other.
+. Find the probability current for the wave function in Problem 1.9.
+(This is not a very pithy example, I’m afraid; we’ll encounter more
+substantial ones in due course.)
+
+| PROBLEM
+
+| 1.P
+|*1.15* Show that
+
+[latexmath]
+++++
+\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]
+++++
+for any two (normalizable) solutions to the Schrödinger equation (with
+the same latexmath:[$V(x)$]), latexmath:[$\Psi_{1}$] and
+latexmath:[$\Psi_{2}$].
+| PROBLEM
+
+|1.P
+|*1.16* A particle is represented (at time stem:[t=0]) by the wave function
+
+[latexmath]
+++++
+\Psi(x,0)=\begin{cases}
+A(a^2-x^2)&-a\le x\le +a\\
+0 &\textrm{otherwise}
+\end{cases}
+++++
+
+. Determine the normalization constant latexmath:[$A$].
+. What is the expectation value of latexmath:[$x$]?
+. What is the expectation value of latexmath:[$p$]? (Note that you
+_cannot_ get it from
+latexmath:[$\langle p \rangle = m\,d\langle x \rangle/dt$]. Why not?)
+. Find the expectation value of latexmath:[$x^2$].
+. Find the expectation value of latexmath:[$p^2$].
+. Find the uncertainty in latexmath:[$x$] (latexmath:[$\sigma_{x}$]).
+. Find the uncertainty in latexmath:[$p$] (latexmath:[$\sigma_{p}$]).
+. Check that your results are consistent with the uncertainty principle.
+
+|PROBLEM
+
+|1.P
+|*1.17* Suppose you wanted to describe an *unstable particle* that spontaneously
+disintegrates with a ``lifetime'' latexmath:[$\tau$]. In that case the
+total probability of finding the particle somewhere should _not_ be
+constant, but should decrease at (say) an exponential rate:
+
+[latexmath]
+++++
+\[P(t) \equiv \int_{-\infty}^{\infty}\|\Psi(x,t)\|^2dx=e^{-t/\tau}\]
+++++
+A crude way of achieving this result is as follows. In Equation 1.24 we
+tacitly assumed that V (the potential energy) is _real_. That is
+certainly reasonable, but it leads to the "`conservation of
+probability`" enshrined in Equation 1.27. What if we assign to
+latexmath:[$V$] an imaginary part:
+
+[latexmath]
+++++
+\[V=V_{0}-i\Gamma\]
+++++
+where latexmath:[$V_{0}$] is the true potential energy and
+latexmath:[$\Gamma$] is a positive real constant?
+
+. Show that (in place of Equation 1.27) we now get
++
+[latexmath]
+++++
+\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P\]
+++++
+. Solve for latexmath:[$P(t)$], and find the lifetime of the particle in
+terms of latexmath:[$\Gamma$].
+|PROBLEM
+
+|1.P
+|*1.18* Very roughly speaking, quantum mechanics is relevant when the de Broglie
+wavelength of the particle in question (latexmath:[$h/p$]) is greater
+than the characteristic size of the system (latexmath:[$d$]). In thermal
+equilibrium at (Kelvin) temperature latexmath:[$T$], the average kinetic
+energy of a particle is
+
+[latexmath]
+++++
+\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]
+++++
+(where latexmath:[$k_B$] is Boltzmann’s constant), so the typical de
+Broglie wavelength is
+
+[latexmath]
+++++
+\[\lambda = \frac{h}{\sqrt{3mk_BT}}\]
+++++
+The purpose of this problem is to determine which systems will have to
+be treated quantum mechanically and which can safely be described
+classically.
+
+. *Solids.* The lattice spacing in a typical solid is around
+latexmath:[$d=0.3\,\textrm{mm}$]. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
++
+_Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below latexmath:[4\,\textrm{K}].
+
+. *Gases.* For what temperatures are the atoms in an ideal gas at pressure stem:[P] quantum mechanical? Hint: Use the ideal gas law (stem:[PV=Nk_BT]) to deduce the interatomic spacing.
+_Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show quantum behavior) we want stem:[m] to be as small as possible, and stem:[P] as large as possible. Put in the numbers for helium at atmospheric pressure. Is hydrogen in outer space (where the interatomic spacing is about stem:[1\,\textrm{cm}] and the temperature is stem:[3\,\textrm{K}]) quantum mechanical? (Assume it's monatomic hydrogen, not stem:[\require{mhchem}\ce{H2}].)
+
+| PROBLEMS
+
+|===
