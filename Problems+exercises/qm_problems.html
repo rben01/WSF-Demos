@@ -578,16 +578,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div class="stemblock">
 <div class="content">
-\[\rho(x)=\]
+\[\rho(x)=
+    \begin{cases}
+        A(-|x|+a), &amp; -a\le x \le a\\
+        0, &amp; \textrm{otherwise}
+    \end{cases}\]
 </div>
 </div>
 <div class="paragraph">
-<p>where \(A\), \(a\), and \(\lambda\) are positive real constants.</p>
+<p>where \(A\) and \(a\) are positive real constants.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Determine \(A\) by normalizing the  .</p>
+<p>Determine \(A\) given that \(\int_{-\infty}^{\infty}\rho(x)dx = 1\)  .</p>
 </li>
 <li>
 <p>Find \(\langle x \rangle\), \(\langle x^2 \rangle\), and \(\sigma\).</p>
@@ -645,7 +649,15 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <em>expectation values obey the classical laws</em>.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM check Townsend</p>
+<p>Calculate \( \big\langle-\frac{\partial V}{\partial x} \big\rangle\) for the following wavefunction:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,t) =\]
+</div>
+</div>
+<div class="paragraph">
+<p>What quantity is this equal to?</p>
 </div></div></td>
 </tr>
 <tr>
@@ -1083,7 +1095,7 @@ probability&#8221; enshrined in Equation 1.27. What if we assign to
 <p>Show that (in place of Equation 1.27) we now get</p>
 <div class="stemblock">
 <div class="content">
-\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P\]
+\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]
 </div>
 </div>
 </li>
@@ -1146,6 +1158,9 @@ classically.</p>
 </tr>
 </tbody>
 </table>
+<div class="paragraph">
+<p></p>
+</div>
 </div>
 </div>
 </div>
