@@ -3,7 +3,7 @@
 :toc: left
 :nofooter:
 :stem: latexmath
-:table-settings: pass:[cols="<1s,<~a,<~a",options="header"]
+:table-settings: pass:[cols="<1s,<4a,<4a",options="header"]
 :imagesdir: images
 :data-uri:
 
@@ -24,7 +24,25 @@
 . Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
 . Determine stem:[\Delta j] for each stem:[j], and use Equation 1.11 to compute the standard deviation.
 . Use your results in (a) and (b) to check Equation 1.12.
-| PROBLEM survey of the number of pets in a household
+
+| You survey you neighbors to determine the number of pets they have in their households and collect the following data:
+
+0 xxx +
+1 xxxxxx +
+2 xxxxx +
+3 xx +
+4 xx +
+5 +
+6 x +
+7  +
+8 +
+9 +
+10 x +
+
+
+. Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
+. Find stem:[\Delta j] for each stem:[j], and calculate the standard deviation using stem:[\sigma=\sqrt{\langle (\Delta j)^2 \rangle}].
+. Verify that both ways of computing standard deviation give the same answer (i.e. show that stem:[\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}]  )
 
 |1.3
 |*1.3* Consider the *gaussian* distribution
@@ -39,7 +57,19 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 . Use Equation 1.16 to determine stem:[A].
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
 . Sketch the graph of stem:[\rho(x)].
-| PROBLEM use a different distribution
+
+| Consider the probability density distribution
+
+[stem]
+++++
+\rho(x)= 
+++++
+
+where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. 
+
+. Determine stem:[A] by normalizing the  .
+. Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
+. Sketch the graph of stem:[\rho(x)].
 
 |1.4
 |*1.5* Consider the wave function
