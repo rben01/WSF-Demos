@@ -63,11 +63,15 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 [stem]
 ++++
 \rho(x)= 
+    \begin{cases}
+        A(-\|x\|+a), & -a\le x \le a\\
+        0, & \textrm{otherwise}
+    \end{cases}
 ++++
 
-where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. 
+where stem:[A] and stem:[a] are positive real constants. 
 
-. Determine stem:[A] by normalizing the  .
+. Determine stem:[A] given that stem:[\int_{-\infty}^{\infty}\rho(x)dx = 1]  .
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
 . Sketch the graph of stem:[\rho(x)].
 
@@ -98,7 +102,14 @@ Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the p
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| PROBLEM check Townsend
+| Calculate stem:[ \big\langle-\frac{\partial V}{\partial x} \big\rangle] for the following wavefunction:
+
+[stem]
+++++
+\Psi(x,t) = 
+++++
+
+What quantity is this equal to? 
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
