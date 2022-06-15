@@ -62,10 +62,10 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 
 [stem]
 ++++
-\rho(x)= 
+\rho(x)=
 ++++
 
-where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. 
+where stem:[A], stem:[a], and stem:[\lambda] are positive real constants.
 
 . Determine stem:[A] by normalizing the  .
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
@@ -304,8 +304,8 @@ substantial ones in due course.)
 \[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]
 ++++
 for any two (normalizable) solutions to the Schrödinger equation (with
-the same latexmath:[$V(x)$]), latexmath:[$\Psi_{1}$] and
-latexmath:[$\Psi_{2}$].
+the same stem:[V(x)]), stem:[\Psi_{1}] and
+stem:[\Psi_{2}].
 | PROBLEM
 
 |1.P
@@ -319,22 +319,22 @@ A(a^2-x^2)&-a\le x\le +a\\
 \end{cases}
 ++++
 
-. Determine the normalization constant latexmath:[$A$].
-. What is the expectation value of latexmath:[$x$]?
-. What is the expectation value of latexmath:[$p$]? (Note that you
+. Determine the normalization constant stem:[A].
+. What is the expectation value of stem:[x]?
+. What is the expectation value of stem:[p]? (Note that you
 _cannot_ get it from
-latexmath:[$\langle p \rangle = m\,d\langle x \rangle/dt$]. Why not?)
-. Find the expectation value of latexmath:[$x^2$].
-. Find the expectation value of latexmath:[$p^2$].
-. Find the uncertainty in latexmath:[$x$] (latexmath:[$\sigma_{x}$]).
-. Find the uncertainty in latexmath:[$p$] (latexmath:[$\sigma_{p}$]).
+stem:[\langle p \rangle = m\,d\langle x \rangle/dt]. Why not?)
+. Find the expectation value of stem:[x^2].
+. Find the expectation value of stem:[p^2].
+. Find the uncertainty in stem:[x] (stem:[\sigma_{x}]).
+. Find the uncertainty in stem:[p] (stem:[\sigma_{p}]).
 . Check that your results are consistent with the uncertainty principle.
 
 |PROBLEM
 
 |1.P
 |*1.17* Suppose you wanted to describe an *unstable particle* that spontaneously
-disintegrates with a ``lifetime'' latexmath:[$\tau$]. In that case the
+disintegrates with a ``lifetime'' stem:[\tau]. In that case the
 total probability of finding the particle somewhere should _not_ be
 constant, but should decrease at (say) an exponential rate:
 
@@ -346,37 +346,37 @@ A crude way of achieving this result is as follows. In Equation 1.24 we
 tacitly assumed that V (the potential energy) is _real_. That is
 certainly reasonable, but it leads to the "`conservation of
 probability`" enshrined in Equation 1.27. What if we assign to
-latexmath:[$V$] an imaginary part:
+stem:[V] an imaginary part:
 
 [latexmath]
 ++++
 \[V=V_{0}-i\Gamma\]
 ++++
-where latexmath:[$V_{0}$] is the true potential energy and
-latexmath:[$\Gamma$] is a positive real constant?
+where stem:[V_{0}] is the true potential energy and
+stem:[\Gamma] is a positive real constant?
 
 . Show that (in place of Equation 1.27) we now get
 +
 [latexmath]
 ++++
-\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P\]
+\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.
 ++++
-. Solve for latexmath:[$P(t)$], and find the lifetime of the particle in
-terms of latexmath:[$\Gamma$].
+Solve for stem:[P(t)], and find the lifetime of the particle in
+terms of stem:[\Gamma].
 |PROBLEM
 
 |1.P
 |*1.18* Very roughly speaking, quantum mechanics is relevant when the de Broglie
-wavelength of the particle in question (latexmath:[$h/p$]) is greater
-than the characteristic size of the system (latexmath:[$d$]). In thermal
-equilibrium at (Kelvin) temperature latexmath:[$T$], the average kinetic
+wavelength of the particle in question (stem:[h/p]) is greater
+than the characteristic size of the system (stem:[d]). In thermal
+equilibrium at (Kelvin) temperature stem:[T], the average kinetic
 energy of a particle is
 
 [latexmath]
 ++++
 \[\frac{p^2}{2m} = \frac{3}{2}k_BT\]
 ++++
-(where latexmath:[$k_B$] is Boltzmann’s constant), so the typical de
+(where stem:[k_B] is Boltzmann’s constant), so the typical de
 Broglie wavelength is
 
 [latexmath]
@@ -388,9 +388,9 @@ be treated quantum mechanically and which can safely be described
 classically.
 
 . *Solids.* The lattice spacing in a typical solid is around
-latexmath:[$d=0.3\,\textrm{mm}$]. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
+stem:[d=0.3\,\textrm{mm}]. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
 +
-_Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below latexmath:[4\,\textrm{K}].
+_Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below stem:[4\,\textrm{K}].
 
 . *Gases.* For what temperatures are the atoms in an ideal gas at pressure stem:[P] quantum mechanical? Hint: Use the ideal gas law (stem:[PV=Nk_BT]) to deduce the interatomic spacing.
 _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show quantum behavior) we want stem:[m] to be as small as possible, and stem:[P] as large as possible. Put in the numbers for helium at atmospheric pressure. Is hydrogen in outer space (where the interatomic spacing is about stem:[1\,\textrm{cm}] and the temperature is stem:[3\,\textrm{K}]) quantum mechanical? (Assume it's monatomic hydrogen, not stem:[\require{mhchem}\ce{H2}].)
