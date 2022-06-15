@@ -150,7 +150,8 @@ solution to the Schrödinger equation?
 stem:[x^2], stem:[p], and stem:[p^2].
 . Find stem:[\sigma_{x}] and stem:[\sigma_{p}]. Is their
 product consistent with the uncertainty principle?
-| PROBLEM use a different wavefunction
+
+| Use a different wavefunction [in progress]
 
 |===
 
