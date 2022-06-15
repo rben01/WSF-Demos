@@ -116,14 +116,23 @@ Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the p
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| Calculate stem:[ \big\langle-\frac{\partial V}{\partial x} \big\rangle] for the following wavefunction:
+| Verify Ehrenfest's theorem for the following wavefunction:
 
 [stem]
 ++++
-\Psi(x,t) = 
+\Psi(x,t) = \big(\frac{a}{\pi}\big)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
 ++++
 
-What quantity is this equal to? 
+where
+
+[stem]
+++++
+a=\frac{m\omega}{\hbar}
+++++
+. Calculate stem:[\langle p \rangle]
+. Calculate stem:[\frac{d\langle p \rangle}{dt}]
+. Use Schrodinger's equation to find V(x)
+. Calculate stem:[\big\langle -\frac{\partial V}{\partial x} \big\rangle]. Does Ehrenfest's theorem hold?
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
