@@ -62,12 +62,16 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 
 [stem]
 ++++
-\rho(x)=
+\rho(x)= 
+    \begin{cases}
+        A(-\|x\|+a), & -a\le x \le a\\
+        0, & \textrm{otherwise}
+    \end{cases}
 ++++
 
-where stem:[A], stem:[a], and stem:[\lambda] are positive real constants.
+where stem:[A] and stem:[a] are positive real constants. 
 
-. Determine stem:[A] by normalizing the  .
+. Determine stem:[A] given that stem:[\int_{-\infty}^{\infty}\rho(x)dx = 1]  .
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
 . Sketch the graph of stem:[\rho(x)].
 
@@ -76,7 +80,7 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants.
 
 [stem]
 ++++
-\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i\omega t}
+\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i \omega t}
 ++++
 
 where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
@@ -86,7 +90,21 @@ where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
 . Determine the expectation values of stem:[x] and stem:[x^2].
 . Find the standard deviation of stem:[x].
 Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
-|PROBLEM different wavefunction
+
+| Consider the wave function
+
+[stem]
+++++
+\Psi(x,t)= Ae^{-(x-a)^2}e^{-i\omega t }
+++++
+
+where stem:[A], stem:[a], and stem:[\omega] are positive real constants.
+
+. Normalize stem:[\Psi]
+. Determine the expectation values of stem:[x] and stem:[x^2].
+. Find the standard deviation of stem:[x].
+Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
+
 
 |1.5
 | *1.7* Calculate stem:[d\langle p \rangle / dt]. _Answer_:
@@ -98,7 +116,23 @@ Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the p
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| PROBLEM check Townsend
+| Verify Ehrenfest's theorem for the following wavefunction:
+
+[stem]
+++++
+\Psi(x,t) = \big(\frac{a}{\pi}\big)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
+++++
+
+where
+
+[stem]
+++++
+a=\frac{m\omega}{\hbar}
+++++
+. Calculate stem:[\langle p \rangle]
+. Calculate stem:[\frac{d\langle p \rangle}{dt}]
+. Use Schrodinger's equation to find stem:[V(x)].
+. Calculate stem:[\big\langle -\frac{\partial V}{\partial x} \big\rangle]. Does Ehrenfest's theorem hold?
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
@@ -116,7 +150,8 @@ solution to the Schrödinger equation?
 stem:[x^2], stem:[p], and stem:[p^2].
 . Find stem:[\sigma_{x}] and stem:[\sigma_{p}]. Is their
 product consistent with the uncertainty principle?
-| PROBLEM use a different wavefunction
+
+| Use a different wavefunction [in progress]
 
 |===
 
