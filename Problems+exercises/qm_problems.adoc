@@ -80,7 +80,7 @@ where stem:[A] and stem:[a] are positive real constants.
 
 [stem]
 ++++
-\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i\omega t}
+\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i \omega t}
 ++++
 
 where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
@@ -90,7 +90,21 @@ where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
 . Determine the expectation values of stem:[x] and stem:[x^2].
 . Find the standard deviation of stem:[x].
 Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
-|PROBLEM different wavefunction
+
+| Consider the wave function
+
+[stem]
+++++
+\Psi(x,t)= Ae^{-(x-a)^2}e^{-i\omega t }
+++++
+
+where stem:[A], stem:[a], and stem:[\omega] are positive real constants.
+
+. Normalize stem:[\Psi]
+. Determine the expectation values of stem:[x] and stem:[x^2].
+. Find the standard deviation of stem:[x].
+Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
+
 
 |1.5
 | *1.7* Calculate stem:[d\langle p \rangle / dt]. _Answer_:
