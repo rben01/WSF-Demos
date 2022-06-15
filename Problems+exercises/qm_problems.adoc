@@ -131,7 +131,7 @@ a=\frac{m\omega}{\hbar}
 ++++
 . Calculate stem:[\langle p \rangle]
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
-. Use Schrodinger's equation to find V(x)
+. Use Schrodinger's equation to find stem:[V(x)].
 . Calculate stem:[\big\langle -\frac{\partial V}{\partial x} \big\rangle]. Does Ehrenfest's theorem hold?
 
 |1.6
