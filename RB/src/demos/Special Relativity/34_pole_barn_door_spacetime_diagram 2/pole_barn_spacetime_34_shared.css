@@ -1,0 +1,35 @@
+.slider-label-custom {
+	min-width: 9em;
+	text-align: left;
+	margin-bottom: unset;
+}
+.viz-canvas {
+	padding-top: 5px;
+}
+.smaller {
+	font-size: 70%;
+}
+.demo-button {
+	width: unset;
+	margin: unset;
+	margin-right: 5px;
+	position: relative;
+	bottom: 4px;
+}
+.subsubscript {
+	position: relative;
+	top: 0.6em;
+	left: 0em;
+	font-size: 65%;
+}
+
+.radio {
+	margin-right: 20px;
+}
+
+svg {
+	margin-top: 20px;
+}
+body {
+	width: 725px;
+}
