@@ -16,7 +16,7 @@
 |===
 |Section
 |Griffiths Essential Problem
-|Our Problem/Exercise
+|Our Example/Exercise
 
 |1.3
 |*1.1* For the distribution of ages in the example in Section 1.3.1:
@@ -129,7 +129,7 @@ where
 ++++
 a=\frac{m\omega}{\hbar}
 ++++
-. Calculate stem:[\langle p \rangle]
+
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
 . Use Schrodinger's equation to find stem:[V(x)].
 . Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
@@ -151,7 +151,7 @@ stem:[x^2], stem:[p], and stem:[p^2].
 . Find stem:[\sigma_{x}] and stem:[\sigma_{p}]. Is their
 product consistent with the uncertainty principle?
 
-| Use a different wavefunction [in progress]
+| Use a different wavefunction [hermite polynomial]
 
 |===
 
@@ -193,7 +193,26 @@ of stem:[a] and stem:[b]).
 stem:[a]? Check your result in the limiting cases
 stem:[b=a] and stem:[b=2a].
 . What is the expectation value of stem:[x]?
-|PROBLEM
+
+|At time stem:[t=0] a particle is represented by the wave
+function
+
+[stem]
+++++
+\[\Psi(x,0)=
+    \begin{cases}
+        A\sin{\frac{2 \pi x}{L}}, & 0\le x \le L\\
+        0, & \textrm{otherwise}
+    \end{cases}\]
+++++
+where stem:[A] and stem:[L] are
+(positive) constants.
+
+. Normalize stem:[\Psi] (i.e. solve for stem:[A]).
+. Sketch stem:[\Psi(x,0)] as a function of stem:[x].
+. Where is the particle most likely to be found at stem:[t=0]?
+. What is the expectation value of stem:[x]? What is the standard deviation?
+. What is the probability of finding the particle to the left of (stem:[\langle x \rangle - \sigma_{x} ])?
 
 |1.5
 |*1.8* Suppose you add a constant stem:[V_0] to the
@@ -203,7 +222,7 @@ change anything, but what about _quantum_ mechanics? Show that the wave
 function picks up a time-dependent phase factor:
 stem:[\exp(-iV_0t/\hbar)]. What effect does this have on the
 expectation value of a dynamical variable?
-|PROBLEM
+|*Note*: I like this problem, but I am not sure how to alter it...
 
 |1.P
 |*1.10* Consider the first 25 digits in the decimal expansion of
@@ -215,7 +234,14 @@ probabilities of getting each of the 10 digits?
 average value?
 . Find the standard deviation for this distribution.
 
-|Here are the first 20 digits of stem:[\sqrt{2}] ()
+|Here are the first 20 digits of stem:[\sqrt{2}]: 1, 4, 1, 4, 2, 1, 3, 5, 6, 2, 3, 7, 3, 0, 9, 5, 0, 4, 8, 8.
+
+. If you selected one number at random, from this set, what are the
+probabilities of getting each of the 10 digits?
+. What is the most probable digit? What is the median digit? What is the
+average value?
+. Find the standard deviation for this distribution.
+
 
 |1.P
 |*1.11* [This problem generalizes Example 1.2.] Imagine a particle of mass stem:[m] and energy stem:[E] in a potential well stem:[V(x)], sliding frictionlessly back and forth between the classical turning points (stem:[a] and stem:[b] in Figure 1.10).
@@ -445,7 +471,6 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 ==== 1.3 Probability
 
 - A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.
-In addition, we could
 - A demonstration of example 1.2 (the falling object, sampling how far it has fallen).
 - Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter stem:[\sigma]).
 

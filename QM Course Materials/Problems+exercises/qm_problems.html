@@ -497,7 +497,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <tr>
 <th class="tableblock halign-left valign-top">Section</th>
 <th class="tableblock halign-left valign-top">Griffiths Essential Problem</th>
-<th class="tableblock halign-left valign-top">Our Problem/Exercise</th>
+<th class="tableblock halign-left valign-top">Our Example/Exercise</th>
 </tr>
 </thead>
 <tbody>
@@ -691,9 +691,6 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Calculate \(\langle p \rangle\)</p>
-</li>
-<li>
 <p>Calculate \(\frac{d\langle p \rangle}{dt}\)</p>
 </li>
 <li>
@@ -738,7 +735,7 @@ product consistent with the uncertainty principle?</p>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Use a different wavefunction [in progress]</p>
+<p>Use a different wavefunction [hermite polynomial]</p>
 </div></div></td>
 </tr>
 </tbody>
@@ -824,7 +821,40 @@ of \(a\) and \(b\)).</p>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
+<p>At time \(t=0\) a particle is represented by the wave
+function</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,0)=
+    \begin{cases}
+        A\sin{\frac{2 \pi x}{L}}, &amp; 0\le x \le L\\
+        0, &amp; \textrm{otherwise}
+    \end{cases}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(A\) and \(L\) are
+(positive) constants.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Normalize \(\Psi\) (i.e. solve for \(A\)).</p>
+</li>
+<li>
+<p>Sketch \(\Psi(x,0)\) as a function of \(x\).</p>
+</li>
+<li>
+<p>Where is the particle most likely to be found at \(t=0\)?</p>
+</li>
+<li>
+<p>What is the expectation value of \(x\)? What is the standard deviation?</p>
+</li>
+<li>
+<p>What is the probability of finding the particle to the left of (\(\langle x \rangle - \sigma_{x} \))?</p>
+</li>
+</ol>
 </div></div></td>
 </tr>
 <tr>
@@ -839,7 +869,7 @@ function picks up a time-dependent phase factor:
 expectation value of a dynamical variable?</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
+<p><strong>Note</strong>: I like this problem, but I am not sure how to alter it&#8230;&#8203;</p>
 </div></div></td>
 </tr>
 <tr>
@@ -864,7 +894,22 @@ average value?</p>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Here are the first 20 digits of \(\sqrt{2}\) ()</p>
+<p>Here are the first 20 digits of \(\sqrt{2}\): 1, 4, 1, 4, 2, 1, 3, 5, 6, 2, 3, 7, 3, 0, 9, 5, 0, 4, 8, 8.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>If you selected one number at random, from this set, what are the
+probabilities of getting each of the 10 digits?</p>
+</li>
+<li>
+<p>What is the most probable digit? What is the median digit? What is the
+average value?</p>
+</li>
+<li>
+<p>Find the standard deviation for this distribution.</p>
+</li>
+</ol>
 </div></div></td>
 </tr>
 <tr>
@@ -1224,11 +1269,13 @@ classically.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.
-In addition, we could</p>
+<p>A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.</p>
 </li>
 <li>
 <p>A demonstration of example 1.2 (the falling object, sampling how far it has fallen).</p>
+</li>
+<li>
+<p>Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter \(\sigma\)).</p>
 </li>
 </ul>
 </div>
@@ -1239,6 +1286,9 @@ In addition, we could</p>
 <ul>
 <li>
 <p>Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time (particle in a box, harmonic oscillator, etc) by marking the classical position and drawing the momentum vector.</p>
+</li>
+<li>
+<p>Do the probability and sampling demos, simultaneously for position and momentum, i.e., let the harmonic oscillator evolve a bunch, then sample its position and momentum at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).</p>
 </li>
 </ul>
 </div>
