@@ -148,6 +148,9 @@ a=\frac{m\omega}{\hbar}
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
 . Use Schrodinger's equation to find stem:[V(x)].
 . Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
+. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
+What does part (c) tell you about the behavior of the quantum harmonic oscillator?
+How does this compare to the classical harmonic oscillator?
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
