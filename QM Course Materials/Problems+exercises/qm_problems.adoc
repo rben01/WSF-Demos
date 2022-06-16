@@ -446,7 +446,17 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 - A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.
 In addition, we could
+- A demonstration of example 1.2 (the falling object, sampling how far it has fallen).
+- Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter stem:[\sigma]).
 
+==== 1.5 Momentum
+
+- Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time (particle in a box, harmonic oscillator, etc) by marking the classical position and drawing the momentum vector.
+- Do the probability and sampling demos, simultaneously for position and momentum, i.e., let the harmonic oscillator evolve a bunch, then sample its position and momentum at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+
+==== 1.6 The Uncertainty Principle
+
+- https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian]
 
 
 {blank}
