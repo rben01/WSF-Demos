@@ -156,6 +156,7 @@ product consistent with the uncertainty principle?
 |===
 
 === Problems
+
 [{table-settings}]
 |===
 |Section|Griffiths Problem|Our Problem
@@ -214,7 +215,7 @@ probabilities of getting each of the 10 digits?
 average value?
 . Find the standard deviation for this distribution.
 
-|PROBLEM
+|Here are the first 20 digits of stem:[\sqrt{2}] ()
 
 |1.P
 |*1.11* [This problem generalizes Example 1.2.] Imagine a particle of mass stem:[m] and energy stem:[E] in a potential well stem:[V(x)], sliding frictionlessly back and forth between the classical turning points (stem:[a] and stem:[b] in Figure 1.10).
