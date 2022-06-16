@@ -22,7 +22,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 |Our Example/Exercise
 
 |1.3
-|*1.1* For the distribution of ages in the example in Section 1.3.1: 
+|*1.1* For the distribution of ages in the example in Section 1.3.1:
 
 . Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
 . Determine stem:[\Delta j] for each stem:[j], and use Equation 1.11 to compute the standard deviation.
@@ -170,7 +170,7 @@ product consistent with the uncertainty principle?
 . What is the probability that a photograph, selected at random, would
 show a distance stem:[x] more than one standard deviation away
 from the average?
-|PROBLEM TESTING
+|*Note*: This problem and problem 1.11 are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
 
 |1.4
 |*1.4* At time stem:[t=0] a particle is represented by the wave
@@ -275,7 +275,7 @@ This is perhaps the closest classical analog to stem:[\|\Psi\|^2].
 . For the classical harmonic oscillator in part (b), find stem:[\langle x\rangle], stem:[\langle x^2\rangle], and stem:[\sigma_x].
 +
 image::ch1_p1.11.jpg[width=300]
-| PROBLEM
+| *Note*: This problem and problem 1.2 are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
 
 |1.P
 |**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
