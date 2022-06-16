@@ -275,7 +275,8 @@ This is perhaps the closest classical analog to stem:[\|\Psi\|^2].
 . For the classical harmonic oscillator in part (b), find stem:[\langle x\rangle], stem:[\langle x^2\rangle], and stem:[\sigma_x].
 +
 image::ch1_p1.11.jpg[width=300]
-| *Note*: This problem and problem 1.2 are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
+| *Note*: This problem and problem 1.2
+ are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
 
 |1.P
 |**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
@@ -493,6 +494,6 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 ==== Other Materials
 
-- Interactive timeline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo])
+- Interactive timeline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo]).
 
 {blank}
