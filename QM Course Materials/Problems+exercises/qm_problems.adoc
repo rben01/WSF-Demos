@@ -167,7 +167,7 @@ product consistent with the uncertainty principle?
 . What is the probability that a photograph, selected at random, would
 show a distance stem:[x] more than one standard deviation away
 from the average?
-|PROBLEM
+|PROBLEM TESTING
 
 |1.4
 |*1.4* At time stem:[t=0] a particle is represented by the wave
