@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-<plist version="1.0">
-<dict>
-	<key>URL</key>
-	<string>https://www.wolframalpha.com/input/?i=solve+%7B%28x%5E2%2By%5E2%29%2Fr%5E2%3Dz%5E2%2C+ax%2Bcz%2Bd%3D0%7D+for+x%2Cy%2Cz</string>
-</dict>
-</plist>
