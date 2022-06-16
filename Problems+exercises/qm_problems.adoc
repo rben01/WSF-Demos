@@ -62,14 +62,14 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 
 [stem]
 ++++
-\rho(x)= 
+\rho(x)=
     \begin{cases}
         A(-\|x\|+a), & -a\le x \le a\\
         0, & \textrm{otherwise}
     \end{cases}
 ++++
 
-where stem:[A] and stem:[a] are positive real constants. 
+where stem:[A] and stem:[a] are positive real constants.
 
 . Determine stem:[A] given that stem:[\int_{-\infty}^{\infty}\rho(x)dx = 1]  .
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
@@ -120,7 +120,7 @@ _expectation values obey the classical laws_.
 
 [stem]
 ++++
-\Psi(x,t) = \big(\frac{a}{\pi}\big)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
+\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
 ++++
 
 where
@@ -132,7 +132,7 @@ a=\frac{m\omega}{\hbar}
 . Calculate stem:[\langle p \rangle]
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
 . Use Schrodinger's equation to find stem:[V(x)].
-. Calculate stem:[\big\langle -\frac{\partial V}{\partial x} \big\rangle]. Does Ehrenfest's theorem hold?
+. Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
@@ -433,5 +433,7 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 | PROBLEMS
 
 |===
+
+
 
 {blank}
