@@ -101,6 +101,12 @@ defineArrowhead(defs, {
 	width: 14,
 	color: "#ccc",
 });
+defineArrowhead(defs, {
+	id: "arrowhead-small",
+	length: 14,
+	width: 10.5,
+	color: "#eee",
+});
 
 const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH - 10]);
 const y2dMax = 1.5;
@@ -261,240 +267,6 @@ function getAxisData() {
 }
 applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
 
-// const PHI_FUNCTIONS = (() => {
-// 	function getHermitePolynomial(n) {
-// 		switch (n) {
-// 			case 0:
-// 				return () => 1;
-// 			case 1:
-// 				return x => 2 * x;
-// 			case 2:
-// 				return x => -2 + 4 * x ** 2;
-// 			case 3:
-// 				return x => -12 * x + 8 * x ** 3;
-// 			case 4:
-// 				return x => 12 - 48 * x ** 2 + 16 * x ** 4;
-// 			case 5:
-// 				return x => 120 * x - 160 * x ** 3 + 32 * x ** 5;
-// 			case 6:
-// 				return x => -120 + 720 * x ** 2 - 480 * x ** 4 + 64 * x ** 6;
-// 			case 7:
-// 				return x => -1680 * x + 3360 * x ** 3 - 1344 * x ** 5 + 128 * x ** 7;
-// 			case 8:
-// 				return x =>
-// 					1680 -
-// 					13440 * x ** 2 +
-// 					13440 * x ** 4 -
-// 					3584 * x ** 6 +
-// 					256 * x ** 8;
-// 			case 9:
-// 				return x =>
-// 					30240 * x -
-// 					80640 * x ** 3 +
-// 					48384 * x ** 5 -
-// 					9216 * x ** 7 +
-// 					512 * x ** 9;
-// 			case 10:
-// 				return x =>
-// 					-30240 +
-// 					302400 * x ** 2 -
-// 					403200 * x ** 4 +
-// 					161280 * x ** 6 -
-// 					23040 * x ** 8 +
-// 					1024 * x ** 10;
-// 			case 11:
-// 				return x =>
-// 					-665280 * x +
-// 					2217600 * x ** 3 -
-// 					1774080 * x ** 5 +
-// 					506880 * x ** 7 -
-// 					56320 * x ** 9 +
-// 					2048 * x ** 11;
-// 			case 12:
-// 				return x =>
-// 					665280 -
-// 					7983360 * x ** 2 +
-// 					13305600 * x ** 4 -
-// 					7096320 * x ** 6 +
-// 					1520640 * x ** 8 -
-// 					135168 * x ** 10 +
-// 					4096 * x ** 12;
-// 			case 13:
-// 				return x =>
-// 					17297280 * x -
-// 					69189120 * x ** 3 +
-// 					69189120 * x ** 5 -
-// 					26357760 * x ** 7 +
-// 					4392960 * x ** 9 -
-// 					319488 * x ** 11 +
-// 					8192 * x ** 13;
-// 			case 14:
-// 				return x =>
-// 					-17297280 +
-// 					242161920 * x ** 2 -
-// 					484323840 * x ** 4 +
-// 					322882560 * x ** 6 -
-// 					92252160 * x ** 8 +
-// 					12300288 * x ** 10 -
-// 					745472 * x ** 12 +
-// 					16384 * x ** 14;
-// 			case 15:
-// 				return x =>
-// 					-518918400 * x +
-// 					2421619200 * x ** 3 -
-// 					2905943040 * x ** 5 +
-// 					1383782400 * x ** 7 -
-// 					307507200 * x ** 9 +
-// 					33546240 * x ** 11 -
-// 					1720320 * x ** 13 +
-// 					32768 * x ** 15;
-// 			case 16:
-// 				return x =>
-// 					518918400 -
-// 					8302694400 * x ** 2 +
-// 					19372953600 * x ** 4 -
-// 					15498362880 * x ** 6 +
-// 					5535129600 * x ** 8 -
-// 					984023040 * x ** 10 +
-// 					89456640 * x ** 12 -
-// 					3932160 * x ** 14 +
-// 					65536 * x ** 16;
-// 			case 17:
-// 				return x =>
-// 					17643225600 * x -
-// 					94097203200 * x ** 3 +
-// 					131736084480 * x ** 5 -
-// 					75277762560 * x ** 7 +
-// 					20910489600 * x ** 9 -
-// 					3041525760 * x ** 11 +
-// 					233963520 * x ** 13 -
-// 					8912896 * x ** 15 +
-// 					131072 * x ** 17;
-// 			case 18:
-// 				return x =>
-// 					-17643225600 +
-// 					317578060800 * x ** 2 -
-// 					846874828800 * x ** 4 +
-// 					790416506880 * x ** 6 -
-// 					338749931520 * x ** 8 +
-// 					75277762560 * x ** 10 -
-// 					9124577280 * x ** 12 +
-// 					601620480 * x ** 14 -
-// 					20054016 * x ** 16 +
-// 					262144 * x ** 18;
-// 			case 19:
-// 				return x =>
-// 					-670442572800 * x +
-// 					4022655436800 * x ** 3 -
-// 					6436248698880 * x ** 5 +
-// 					4290832465920 * x ** 7 -
-// 					1430277488640 * x ** 9 +
-// 					260050452480 * x ** 11 -
-// 					26671841280 * x ** 13 +
-// 					1524105216 * x ** 15 -
-// 					44826624 * x ** 17 +
-// 					524288 * x ** 19;
-// 			case 20:
-// 				return x =>
-// 					670442572800 -
-// 					13408851456000 * x ** 2 +
-// 					40226554368000 * x ** 4 -
-// 					42908324659200 * x ** 6 +
-// 					21454162329600 * x ** 8 -
-// 					5721109954560 * x ** 10 +
-// 					866834841600 * x ** 12 -
-// 					76205260800 * x ** 14 +
-// 					3810263040 * x ** 16 -
-// 					99614720 * x ** 18 +
-// 					1048576 * x ** 20;
-// 			case 21:
-// 				return x =>
-// 					28158588057600 * x -
-// 					187723920384000 * x ** 3 +
-// 					337903056691200 * x ** 5 -
-// 					257449947955200 * x ** 7 +
-// 					100119424204800 * x ** 9 -
-// 					21844238008320 * x ** 11 +
-// 					2800543334400 * x ** 13 -
-// 					213374730240 * x ** 15 +
-// 					9413591040 * x ** 17 -
-// 					220200960 * x ** 19 +
-// 					2097152 * x ** 21;
-// 			case 22:
-// 				return x =>
-// 					-28158588057600 +
-// 					619488937267200 * x ** 2 -
-// 					2064963124224000 * x ** 4 +
-// 					2477955749068800 * x ** 6 -
-// 					1415974713753600 * x ** 8 +
-// 					440525466501120 * x ** 10 -
-// 					80095539363840 * x ** 12 +
-// 					8801707622400 * x ** 14 -
-// 					586780508160 * x ** 16 +
-// 					23011000320 * x ** 18 -
-// 					484442112 * x ** 20 +
-// 					4194304 * x ** 22;
-// 			case 23:
-// 				return x =>
-// 					-1295295050649600 * x +
-// 					9498830371430400 * x ** 3 -
-// 					18997660742860800 * x ** 5 +
-// 					16283709208166400 * x ** 7 -
-// 					7237204092518400 * x ** 9 +
-// 					1842197405368320 * x ** 11 -
-// 					283414985441280 * x ** 13 +
-// 					26991903375360 * x ** 15 -
-// 					1587759022080 * x ** 17 +
-// 					55710842880 * x ** 19 -
-// 					1061158912 * x ** 21 +
-// 					8388608 * x ** 23;
-// 			case 24:
-// 				return x =>
-// 					1295295050649600 -
-// 					31087081215590400 * x ** 2 +
-// 					113985964457164800 * x ** 4 -
-// 					151981285942886400 * x ** 6 +
-// 					97702255248998400 * x ** 8 -
-// 					34738579644088320 * x ** 10 +
-// 					7368789621473280 * x ** 12 -
-// 					971708521512960 * x ** 14 +
-// 					80975710126080 * x ** 16 -
-// 					4234024058880 * x ** 18 +
-// 					133706022912 * x ** 20 -
-// 					2315255808 * x ** 22 +
-// 					16777216 * x ** 24;
-// 			case 25:
-// 				return x =>
-// 					64764752532480000 * x -
-// 					518118020259840000 * x ** 3 +
-// 					1139859644571648000 * x ** 5 -
-// 					1085580613877760000 * x ** 7 +
-// 					542790306938880000 * x ** 9 -
-// 					157902634745856000 * x ** 11 +
-// 					28341498544128000 * x ** 13 -
-// 					3239028405043200 * x ** 15 +
-// 					238163853312000 * x ** 17 -
-// 					11142168576000 * x ** 19 +
-// 					318347673600 * x ** 21 -
-// 					5033164800 * x ** 23 +
-// 					33554432 * x ** 25;
-// 		}
-// 	}
-
-// 	const AMPLITUDE = 1;
-
-// 	const arr = d3.range(0, N_MAX + 1).map(n => {
-// 		const coef =
-// 			AMPLITUDE *
-// 			Math.pow(Math.PI, -0.25) *
-// 			Math.pow(2 ** n * FACTORIAL[n], -0.5);
-// 		const hp = getHermitePolynomial(n);
-// 		return x => coef * hp(x) * Math.exp(x ** 2 / -2);
-// 	});
-
-// 	return arr;
-// })();
-
 // arr[2*i] is x_i, arr[2*i+1] is z_i
 const wavefunctionPoints = d3.range(2 * N_WAVEFUNCTION_POINTS);
 function computeWavefunctionPoints() {
@@ -502,7 +274,7 @@ function computeWavefunctionPoints() {
 
 	const xInterp = d3.interpolate(X_MIN, X_MAX);
 
-	const t = currentTime * 2;
+	const t = currentTime;
 
 	const xt = mu * Math.cos(t);
 	const pt = -mu * Math.sin(t);
@@ -686,8 +458,20 @@ function getData2D() {
 
 	const { mu, p, omega, m } = sliderValues();
 
+	const cosT = Math.cos(currentTime);
+	const sinT = Math.sin(currentTime);
+	const scaleFactor = (m * omega) / H_BAR;
+	const xt = (sinT * p) / scaleFactor + cosT * mu;
+	const pt = (cosT * p - sinT * mu * scaleFactor) / scaleFactor;
+
+	const xtS = xScale2D(X_0 + xt);
+	const ptS = xScale2D(X_0 + xt + pt);
+	const expectYMax = yScale2D(0.75 * y2dMax);
+
 	const energy = mu ** 2 + p ** 2 / (m ** 2 * omega ** 2);
 	const amplitude = energy ** 0.5;
+
+	const y0S = yScale2D(Y_0);
 
 	const data = [
 		{
@@ -712,12 +496,85 @@ function getData2D() {
 				attrs: {
 					x1: x,
 					x2: x,
-					y1: yScale2D(Y_0) + 15,
+					y1: y0S + 15,
 					y2: yScale2D(y2dMax),
 				},
 			};
 		}),
+		{
+			shape: "line",
+			class: "curve expect-line",
+			attrs: {
+				x1: xtS,
+				x2: xtS,
+				y1: y0S,
+				y2: expectYMax,
+			},
+		},
+		{
+			shape: "text",
+			class: "curve expect-label",
+			text: "⟨𝑥⟩",
+			attrs: {
+				x: xtS,
+				y: expectYMax,
+				dx: 4,
+				dy: 23,
+				"text-anchor": "left",
+				"dominant-baseline": "top",
+			},
+			children: [
+				{
+					shape: "tspan",
+					class: "expect-label expect-label-sub",
+					text: "𝜓",
+					attrs: {
+						dx: -2,
+						dy: 5,
+					},
+				},
+			],
+		},
+		{
+			shape: "text",
+			class: "curve expect-label",
+			text: "⟨𝑝⟩",
+			attrs: {
+				x: ptS,
+				y: expectYMax,
+				dx: 8,
+				dy: -13,
+				"text-anchor": "middle",
+				"dominant-baseline": "bottom",
+			},
+			children: [
+				{
+					shape: "tspan",
+					class: "expect-label expect-label-sub",
+					text: "𝜓",
+					attrs: {
+						dx: -2,
+						dy: 5,
+					},
+				},
+			],
+		},
 	];
+
+	if (Math.abs(pt) > 0.05) {
+		data.push({
+			shape: "line",
+			class: "curve p-expect",
+			attrs: {
+				x1: xtS,
+				x2: ptS,
+				y1: expectYMax,
+				y2: expectYMax,
+				"marker-end": "url(#arrowhead-small)",
+			},
+		});
+	}
+
 	return data;
 }
 
@@ -727,7 +584,8 @@ function update(dtMS, refreshCache = false) {
 
 	const { omega, m, mu, sigma, p } = sliderValues();
 
-	currentTime += (omega * (0.5 * dtMS)) / 1000;
+	const timeScale = 1;
+	currentTime += (timeScale * (omega * dtMS)) / 1000;
 
 	if (refreshCache) {
 		populateCaches({
