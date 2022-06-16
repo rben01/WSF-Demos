@@ -69,12 +69,14 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 
 \rho_1(x)=
     \begin{cases}
-        A(-\|x\|+a), & -a\le x \le a\\
-        0, & \textrm{otherwise}
-    \end{cases}
+        4x, & 0\le x \le \frac{1}{2}\\
+        -4x+4, & \frac{1}{2}\le x\le 1
+    \end{cases}\\
+
+\rho_2(x) = 2\sin^2(2\pi x)
 ++++
 
-. Make a prediction: .
+. Make a prediction: on your graphs,  .
 . Calculate __ and ___ for both distributions.
 . For both distributions, calculate the probability of finding the particle within 1 standard deviation.
 
