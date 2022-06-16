@@ -11,3 +11,12 @@ RB/src/demos/CDFs
 *.xdv
 node_modules/*
 anim*.mp4
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.xdv
