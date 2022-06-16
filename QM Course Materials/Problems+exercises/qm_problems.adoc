@@ -5,7 +5,6 @@
 :stem: latexmath
 :table-settings: pass:[cols="<1s,<4a,<4a",options="header",frame="all",stripes="even",grid="all"]
 :imagesdir: images
-:data-uri:
 :sectlinks:
 :sectanchors:
 
@@ -46,6 +45,12 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 . Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
 . Find stem:[\Delta j] for each stem:[j], and calculate the standard deviation using stem:[\sigma=\sqrt{\langle (\Delta j)^2 \rangle}].
 . Verify that both ways of computing standard deviation give the same answer (i.e. show that stem:[\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}]  )
+
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.3
 |*1.3* Consider the *gaussian* distribution
@@ -494,6 +499,4 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 === Other Materials
 
-- Interactive timeline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
-
-{blank}
+- Interactive timgiteline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
