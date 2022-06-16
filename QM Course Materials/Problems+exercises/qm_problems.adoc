@@ -380,7 +380,10 @@ into the region at one end than flows out the other.
 (This is not a very pithy example, I’m afraid; we’ll encounter more
 substantial ones in due course.)
 
-| PROBLEM
+|
+. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region stem:[S] in stem:[\mathbb R^n].
+. [From the Bernd Thaller book] Write stem:[\psi(x,t)=\|\psi(x,t)\|e^{i\varphi(x,t)}].
+Show that stem:[J] as defined above points in the direction of stem:[\nabla \varphi], i.e., in the direction of increasing phase.
 
 | 1.P
 |*1.15* Show that
