@@ -22,7 +22,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 |Our Example/Exercise
 
 |1.3
-|*1.1* For the distribution of ages in the example in Section 1.3.1: 
+|*1.1* For the distribution of ages in the example in Section 1.3.1:
 
 . Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
 . Determine stem:[\Delta j] for each stem:[j], and use Equation 1.11 to compute the standard deviation.
@@ -493,6 +493,6 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 ==== Other Materials
 
-- Interactive timeline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo])
+- Interactive timeline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo]).
 
 {blank}
