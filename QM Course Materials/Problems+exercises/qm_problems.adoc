@@ -42,10 +42,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 9 +
 10 x +
 
-
-. Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
-. Find stem:[\Delta j] for each stem:[j], and calculate the standard deviation using stem:[\sigma=\sqrt{\langle (\Delta j)^2 \rangle}].
-. Verify that both ways of computing standard deviation give the same answer (i.e. show that stem:[\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}]  )
+Verify that both ways of computing standard deviation give the same answer (i.e. show that stem:[\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}]  )
 
 |1.3
 |*1.3* Consider the *gaussian* distribution
@@ -61,22 +58,20 @@ where stem:[A], stem:[a], and stem:[\lambda] are positive real constants. (The n
 . Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
 . Sketch the graph of stem:[\rho(x)].
 
-| Consider the probability density distribution
-
+| Plot the following two probability density distributions over the interval 0 to 1:
 [stem]
 ++++
-\rho(x)=
+
+\rho_1(x)=
     \begin{cases}
         A(-\|x\|+a), & -a\le x \le a\\
         0, & \textrm{otherwise}
     \end{cases}
 ++++
 
-where stem:[A] and stem:[a] are positive real constants.
-
-. Determine stem:[A] given that stem:[\int_{-\infty}^{\infty}\rho(x)dx = 1]  .
-. Find stem:[\langle x \rangle], stem:[\langle x^2 \rangle], and stem:[\sigma].
-. Sketch the graph of stem:[\rho(x)].
+. Make a prediction: .
+. Calculate __ and ___ for both distributions.
+. For both distributions, calculate the probability of finding the particle within 1 standard deviation.
 
 |1.4
 |*1.5* Consider the wave function
