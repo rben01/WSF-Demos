@@ -185,7 +185,7 @@ product consistent with the uncertainty principle?
 . What is the probability that a photograph, selected at random, would
 show a distance stem:[x] more than one standard deviation away
 from the average?
-|*Note*: This problem and problem 1.11 are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
+|1D random walk?
 
 |1.4
 |*1.4* At time stem:[t=0] a particle is represented by the wave
