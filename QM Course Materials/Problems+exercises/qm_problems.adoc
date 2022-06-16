@@ -19,7 +19,7 @@
 |Our Example/Exercise
 
 |1.3
-|*1.1* For the distribution of ages in the example in Section 1.3.1:
+|*1.1* For the distribution of ages in the example in Section 1.3.1: 
 
 . Compute stem:[\langle j^2 \rangle] and stem:[\langle j \rangle ^2]
 . Determine stem:[\Delta j] for each stem:[j], and use Equation 1.11 to compute the standard deviation.
