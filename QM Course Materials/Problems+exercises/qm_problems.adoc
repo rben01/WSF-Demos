@@ -129,23 +129,24 @@ This is the solution
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| ADJUST PROBLEM Verify Ehrenfest's theorem for the following wavefunction:
+| ADJUST PROBLEM
+// Verify Ehrenfest's theorem for the following wavefunction:
 
-[stem]
-++++
-\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
-++++
+//[stem]
+//++++
+//\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
+//++++
 
-where
+//where
 
-[stem]
-++++
-a=\frac{m\omega}{\hbar}
-++++
+//[stem]
+//++++
+//a=\frac{m\omega}{\hbar}
+//++++
 
-. Calculate stem:[\frac{d\langle p \rangle}{dt}]
-. Use Schrodinger's equation to find stem:[V(x)].
-. Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
+//. Calculate stem:[\frac{d\langle p \rangle}{dt}]
+//. Use Schrodinger's equation to find stem:[V(x)].
+//. Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
 //. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
 //What does part (c) tell you about the behavior of the quantum harmonic oscillator?
 //How does this compare to the classical harmonic oscillator?
@@ -173,7 +174,7 @@ stem:[x^2], stem:[p], and stem:[p^2].
 . Find stem:[\sigma_{x}] and stem:[\sigma_{p}]. Is their
 product consistent with the uncertainty principle?
 
-| Use a different wavefunction [hermite polynomial]
+| PROBLEM
 
 |===
 
@@ -234,25 +235,13 @@ stem:[a]? Check your result in the limiting cases
 stem:[b=a] and stem:[b=2a].
 . What is the expectation value of stem:[x]?
 
-|At time stem:[t=0] a particle is represented by the wave
-function
+| PROBLEM
 
-[stem]
-++++
-\[\Psi(x,0)=
-    \begin{cases}
-        A\sin{\frac{2 \pi x}{L}}, & 0\le x \le L\\
-        0, & \textrm{otherwise}
-    \end{cases}\]
-++++
-where stem:[A] and stem:[L] are
-(positive) constants.
-
-. Normalize stem:[\Psi] (i.e. solve for stem:[A]).
-. Sketch stem:[\Psi(x,0)] as a function of stem:[x].
-. Where is the particle most likely to be found at stem:[t=0]?
-. What is the expectation value of stem:[x]? What is the standard deviation?
-. What is the probability of finding the particle to the left of (stem:[\langle x \rangle - \sigma_{x} ])?
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.5
 |*1.8* Suppose you add a constant stem:[V_0] to the
@@ -262,7 +251,7 @@ change anything, but what about _quantum_ mechanics? Show that the wave
 function picks up a time-dependent phase factor:
 stem:[\exp(-iV_0t/\hbar)]. What effect does this have on the
 expectation value of a dynamical variable?
-|*Note*: I like this problem, but I am not sure how to alter it...
+|PROBLEM
 
 |1.P
 |*1.10* Consider the first 25 digits in the decimal expansion of
@@ -274,7 +263,7 @@ probabilities of getting each of the 10 digits?
 average value?
 . Find the standard deviation for this distribution.
 
-|Here are the first 20 digits of stem:[\sqrt{2}]: 1, 4, 1, 4, 2, 1, 3, 5, 6, 2, 3, 7, 3, 0, 9, 5, 0, 4, 8, 8.
+|ADJUST Here are the first 20 digits of stem:[\sqrt{2}]: 1, 4, 1, 4, 2, 1, 3, 5, 6, 2, 3, 7, 3, 0, 9, 5, 0, 4, 8, 8.
 
 . If you selected one number at random, from this set, what are the
 probabilities of getting each of the 10 digits?
@@ -312,8 +301,7 @@ This is perhaps the closest classical analog to stem:[\|\Psi\|^2].
 . For the classical harmonic oscillator in part (b), find stem:[\langle x\rangle], stem:[\langle x^2\rangle], and stem:[\sigma_x].
 +
 image::ch1_p1.11.jpg[width=300]
-| *Note*: This problem and problem 1.2
- are both based on Griffiths's example 1.2 (which is a cool example!). I'm not sure whether it makes the sense to keep these as is, or entirely change the problems/find new ones.
+| PROBLEM
 
 |1.P
 |**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
