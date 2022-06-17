@@ -556,7 +556,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 10 x<br></p>
 </div>
 <div class="paragraph">
-<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)  )</p>
+<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\))</p>
 </div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -573,7 +573,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>1.3</strong> Consider the <strong>gaussian</strong> distribution</p>
 </div>
 <div class="paragraph">
-<p>\[\rho(x)= Ae<sup>{-\lambda(x-a)</sup>2}\]</p>
+<p>\[\rho(x)= Ae^{-\lambda(x-a)^2}\]</p>
 </div>
 <div class="paragraph">
 <p>where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary integrals are inside the back cover.)</p>
@@ -632,7 +632,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><strong>1.5</strong> Consider the wave function</p>
 </div>
 <div class="paragraph">
-<p>\[\Psi(x,t)=Ae<sup>{-\lambda|x|}e</sup>{-i \omega t}\]</p>
+<p>\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]</p>
 </div>
 <div class="paragraph">
 <p>where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
@@ -658,7 +658,7 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>\(\Psi(x,t)= Ae<sup>{-(\frac{ax</sup>2}{2}+i\omega t)}\)</p>
+<p>\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
 </li>
 <li>
 <p>\(\Psi(x,0)= Ae^{-\kappa|x|}\)</p>
@@ -710,8 +710,10 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 <p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
 </div>
 <div class="paragraph">
-<p>\[\Psi(x,t) = Ae<sup>{-a[(mx</sup>2/\hbar)+it]},\]
-where \(A\) and \(a\) are positive real constants.</p>
+<p>\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]</p>
+</div>
+<div class="paragraph">
+<p>where \(A\) and \(a\) are positive real constants.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1107,10 +1109,8 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.15</strong> Show that</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]
-</div>
+<div class="paragraph">
+<p>\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]</p>
 </div>
 <div class="paragraph">
 <p>for any two (normalizable) solutions to the Schrödinger equation (with
@@ -1126,13 +1126,13 @@ the same \(V(x)\)), \(\Psi_{1}\) and
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.16</strong> A particle is represented (at time \(t=0\)) by the wave function</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\Psi(x,0)=\begin{cases}
+<div class="paragraph">
+<p>\[
+\Psi(x,0)=\begin{cases}
 A(a^2-x^2)&amp;-a\le x\le +a\\
 0 &amp;\textrm{otherwise}
-\end{cases}\]
-</div>
+\end{cases}
+\]</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -1172,14 +1172,12 @@ A(a^2-x^2)&amp;-a\le x\le +a\\
 <td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.17</strong> Suppose you wanted to describe an <strong>unstable particle</strong> that spontaneously
-disintegrates with a ``lifetime'' \(\tau\). In that case the
+disintegrates with a &#8220;lifetime&#8221; \(\tau\). In that case the
 total probability of finding the particle somewhere should <em>not</em> be
 constant, but should decrease at (say) an exponential rate:</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]
-</div>
+<div class="paragraph">
+<p>\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]</p>
 </div>
 <div class="paragraph">
 <p>A crude way of achieving this result is as follows. In Equation 1.24 we
@@ -1188,10 +1186,8 @@ certainly reasonable, but it leads to the &#8220;conservation of
 probability&#8221; enshrined in Equation 1.27. What if we assign to
 \(V\) an imaginary part:</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[V=V_{0}-i\Gamma\]
-</div>
+<div class="paragraph">
+<p>\[V=V_{0}-i\Gamma\]</p>
 </div>
 <div class="paragraph">
 <p>where \(V_{0}\) is the true potential energy and
@@ -1201,10 +1197,8 @@ probability&#8221; enshrined in Equation 1.27. What if we assign to
 <ol class="arabic">
 <li>
 <p>Show that (in place of Equation 1.27) we now get</p>
-<div class="stemblock">
-<div class="content">
-\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]
-</div>
+<div class="paragraph">
+<p>\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]</p>
 </div>
 </li>
 <li>
@@ -1226,19 +1220,15 @@ than the characteristic size of the system (\(d\)). In thermal
 equilibrium at (Kelvin) temperature \(T\), the average kinetic
 energy of a particle is</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]
-</div>
+<div class="paragraph">
+<p>\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]</p>
 </div>
 <div class="paragraph">
 <p>(where \(k_B\) is Boltzmann’s constant), so the typical de
 Broglie wavelength is</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\lambda = \frac{h}{\sqrt{3mk_BT}}\]
-</div>
+<div class="paragraph">
+<p>\[\lambda = \frac{h}{\sqrt{3mk_BT}}\]</p>
 </div>
 <div class="paragraph">
 <p>The purpose of this problem is to determine which systems will have to
@@ -1256,7 +1246,7 @@ classically.</p>
 </li>
 <li>
 <p><strong>Gases.</strong> For what temperatures are the atoms in an ideal gas at pressure \(P\) quantum mechanical? Hint: Use the ideal gas law (\(PV=Nk_BT\)) to deduce the interatomic spacing.
-<em>Answer</em>: \(T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
+<em>Answer</em>: \(T&lt;(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
 Obviously (for the gas to show quantum behavior) we want \(m\) to be as small as possible, and \(P\) as large as possible.
 Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{cm}\) and the temperature is \(3\,\textrm{K}\)) quantum mechanical?
