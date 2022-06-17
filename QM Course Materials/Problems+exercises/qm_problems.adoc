@@ -228,7 +228,13 @@ stem:[a]? Check your result in the limiting cases
 stem:[b=a] and stem:[b=2a].
 . What is the expectation value of stem:[x]?
 
-| PROBLEM
+| Write a normalized wavefunction, stem:[\Psi(x,t)],  with the following values at time stem:[t=0] :
+
+[stem]
+++++
+\langle x \rangle = 3 \\
+\sigma = 2
+++++
 
 .Solution
 [%collapsible]
