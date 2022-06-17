@@ -64,7 +64,7 @@ function applyDatum(datum, { transition } = {}) {
 		// eslint-disable-next-line no-use-before-define
 		applyGraphicalObjs(d3Obj, () => datum.children, {
 			selector: function () {
-				return this.childNodes;
+				return this.childElements;
 			},
 			transition,
 		});
