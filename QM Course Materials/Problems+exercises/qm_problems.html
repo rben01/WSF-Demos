@@ -778,18 +778,25 @@ from the average?</p>
 </ol>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction. Every time you flip tails, you take a unit step in the negative direction.</p>
+<p>Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
+For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
+If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
+We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>You flip the coin one time (n=1). Where on the number line could you end up? How many total paths are there?</p>
+<p>What are the possible values of \(x_1\)? How many total sequences of coin flips are there?</p>
 </li>
 <li>
-<p>For n=0 to n=3, how many times could you end up at each integer? How many total paths are there? Do you notice a pattern?</p>
+<p>For \(n=0\) to \(n=3\), how many sequences of coin flips lead to each possible value of \(N\)?
+How many sequences of coin flips are there in total?
+Do you notice a pattern?</p>
 </li>
 <li>
-<p>Use Pascal&#8217;s triangle to determine the probability of landing at each integer after 7 steps. What is the probability of landing at \(x=5\)? Where are you most likely to land? Calculate the expected value. What is the standard deviation?</p>
+<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 coin flips.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.</p>
 </li>
 </ol>
 </div>
