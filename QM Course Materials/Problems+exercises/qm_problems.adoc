@@ -108,9 +108,9 @@ Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the p
 
 | Normalize the following wavefunctions (i.e. find A):
 
-. stem:[\Psi(x,t)= ]
-. stem:[\Psi(x,0)= ]
-. stem:[\Psi(x,t)= ]
+. stem:[\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}]
+. stem:[\Psi(x,0)= Ae^{-\kappa\|x\|}]
+. stem:[\Psi(x,0)= A\frac{\sin(x)}{x}]
 . stem:[\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}]
 
 .Solution
@@ -129,7 +129,7 @@ This is the solution
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| Verify Ehrenfest's theorem for the following wavefunction:
+| ADJUST PROBLEM Verify Ehrenfest's theorem for the following wavefunction:
 
 [stem]
 ++++
@@ -149,6 +149,12 @@ a=\frac{m\omega}{\hbar}
 //. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
 //What does part (c) tell you about the behavior of the quantum harmonic oscillator?
 //How does this compare to the classical harmonic oscillator?
+
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
