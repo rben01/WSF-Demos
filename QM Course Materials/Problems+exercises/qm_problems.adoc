@@ -515,6 +515,7 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 - Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time (particle in a box, harmonic oscillator, etc) by marking the classical position and drawing the momentum vector.
 - Do the probability and sampling demos, simultaneously for position and momentum, i.e., let the harmonic oscillator evolve a bunch, then sample its position and momentum at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+- Sample demo in which stem:[\langle x\rangle_\psi] and stem:[\langle p\rangle_\psi] have been added: https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543[the quantum harmonic oscillator^].
 
 ==== 1.6 The Uncertainty Principle
 
@@ -523,4 +524,4 @@ _Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show 
 
 === Other Materials
 
-- Interactive timgiteline like the ones in some of our WSU course (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
+- Interactive timgiteline like the ones in some of our WSU courses (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
