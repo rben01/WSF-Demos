@@ -106,20 +106,18 @@ where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
 . Find the standard deviation of stem:[x].
 Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
 
-| Consider the wave function
+| Normalize the following wavefunctions (i.e. find A):
 
-[stem]
-++++
-\Psi(x,t)= Ae^{-(x-a)^2}e^{-i\omega t }
-++++
+. stem:[\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}]
+. stem:[\Psi(x,0)= Ae^{-\kappa\|x\|}]
+. stem:[\Psi(x,0)= A\frac{\sin(x)}{x}]
+. stem:[\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}]
 
-where stem:[A], stem:[a], and stem:[\omega] are positive real constants.
-
-. Normalize stem:[\Psi]
-. Determine the expectation values of stem:[x] and stem:[x^2].
-. Find the standard deviation of stem:[x].
-Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
-
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.5
 | *1.7* Calculate stem:[d\langle p \rangle / dt]. _Answer_:
@@ -131,7 +129,7 @@ Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the p
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| Verify Ehrenfest's theorem for the following wavefunction:
+| ADJUST PROBLEM Verify Ehrenfest's theorem for the following wavefunction:
 
 [stem]
 ++++
@@ -148,9 +146,15 @@ a=\frac{m\omega}{\hbar}
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
 . Use Schrodinger's equation to find stem:[V(x)].
 . Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
-. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
-What does part (c) tell you about the behavior of the quantum harmonic oscillator?
-How does this compare to the classical harmonic oscillator?
+//. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
+//What does part (c) tell you about the behavior of the quantum harmonic oscillator?
+//How does this compare to the classical harmonic oscillator?
+
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
@@ -190,7 +194,7 @@ from the average?
 
 . You flip the coin one time (n=1). Where on the number line could you end up? How many total paths are there?
 . For n=0 to n=3, how many times could you end up at each integer? How many total paths are there? Do you notice a pattern?
-. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps. What is the probability of landing at x=5? Where are you most likely to land? Calculate the expected value. What is the standard deviation?
+. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps. What is the probability of landing at stem:[x=5]? Where are you most likely to land? Calculate the expected value. What is the standard deviation?
 
 .Solution
 [%collapsible]
