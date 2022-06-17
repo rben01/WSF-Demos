@@ -436,6 +436,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<link
+	crossorigin="anonymous"
+	href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+	integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+	rel="stylesheet"
+/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script
+	crossorigin="anonymous"
+	defer=""
+	integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+	onload="update()"
+	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+></script>
+<!-- mhchem, for chemical equations -->
+<script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"
+	integrity="sha384-RTN08a0AXIioPBcVosEqPUfKK+rPp+h1x/izR7xMkdMyuwkcZCWdxO+RSwIFtJXN"
+	crossorigin="anonymous"
+></script>
+
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script
+	crossorigin="anonymous"
+	defer=""
+	integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+	onload="renderMathInElement(document.body);"
+	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+></script>
+
 <style>
 	td.tableblock > .content > div.olist > ol {
 		list-style-type: lower-alpha;
@@ -498,7 +529,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>Compute \(\langle j^2 \rangle\) and \(\langle j \rangle ^2\)</p>
+<p>Compute \(\langle j^2 \rangle_\psi\) and \(\langle j \rangle ^2\)</p>
 </li>
 <li>
 <p>Determine \(\Delta j\) for each \(j\), and use Equation 1.11 to compute the standard deviation.</p>
@@ -541,10 +572,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.3</strong> Consider the <strong>gaussian</strong> distribution</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\rho(x)= Ae^{-\lambda(x-a)^2}\]
-</div>
+<div class="paragraph">
+<p>\[\rho(x)= Ae<sup>{-\lambda(x-a)</sup>2}\]</p>
 </div>
 <div class="paragraph">
 <p>where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary integrals are inside the back cover.)</p>
@@ -565,19 +594,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Plot the following two probability density distributions over the interval 0 to 1:</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\rho_1(x)=
+<div class="paragraph">
+<p>\[\rho_1(x)=
     \begin{cases}
         4x &amp; 0\le x \le \frac{1}{2}\\
         -4x+4 &amp; \frac{1}{2}\le x\le 1
-    \end{cases}\]
+    \end{cases}\]</p>
 </div>
-</div>
-<div class="stemblock">
-<div class="content">
-\[\rho_2(x) = 2\sin^2(2\pi x)\]
-</div>
+<div class="paragraph">
+<p>\[\rho_2(x) = 2\sin^2(2\pi x)\]</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -606,10 +631,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.5</strong> Consider the wave function</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]
-</div>
+<div class="paragraph">
+<p>\[\Psi(x,t)=Ae<sup>{-\lambda|x|}e</sup>{-i \omega t}\]</p>
 </div>
 <div class="paragraph">
 <p>where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
@@ -635,7 +658,7 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <div class="olist arabic">
 <ol class="arabic">
 <li>
-<p>\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
+<p>\(\Psi(x,t)= Ae<sup>{-(\frac{ax</sup>2}{2}+i\omega t)}\)</p>
 </li>
 <li>
 <p>\(\Psi(x,0)= Ae^{-\kappa|x|}\)</p>
@@ -662,25 +685,15 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.7</strong> Calculate \(d\langle p \rangle / dt\). <em>Answer</em>:</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-</div>
-</div>
 <div class="paragraph">
-<p>This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
+<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
+This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
 <em>expectation values obey the classical laws</em>.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:</p>
-</div>
-<div class="stemblock">
-<div class="content">
+<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
-</div>
-</div>
-<div class="paragraph">
-<p>In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
+In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
 </div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -696,13 +709,9 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]
-</div>
-</div>
 <div class="paragraph">
-<p>where \(A\) and \(a\) are positive real constants.</p>
+<p>\[\Psi(x,t) = Ae<sup>{-a[(mx</sup>2/\hbar)+it]},\]
+where \(A\) and \(a\) are positive real constants.</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -830,18 +839,14 @@ Calculate the expected value and standard deviation.</p>
 <p><strong>1.4</strong> At time \(t=0\) a particle is represented by the wave
 function</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\Psi(x,0)=
+<div class="paragraph">
+<p>\[\Psi(x,0)=
     \begin{cases}
         A(x/a), &amp; 0\le x \le a,\\
         A(b-x)/A(b-a), &amp; a \le x \le b,\\
         0, &amp; \textrm{otherwise},
     \end{cases}\]
-</div>
-</div>
-<div class="paragraph">
-<p>where \(A\), \(a\), and \(b\) are
+where \(A\), \(a\), and \(b\) are
 (positive) constants.</p>
 </div>
 <div class="olist arabic">
@@ -869,11 +874,9 @@ of \(a\) and \(b\)).</p>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p>Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\langle x \rangle = 3 \\
-\sigma = 2\]
-</div>
+<div class="paragraph">
+<p>\[\langle x \rangle = 3 \\
+\sigma = 2\]</p>
 </div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -943,26 +946,18 @@ average value?</p>
 <p><strong>1.11</strong> [This problem generalizes Example 1.2.] Imagine a particle of mass \(m\) and energy \(E\) in a potential well \(V(x)\), sliding frictionlessly back and forth between the classical turning points (\(a\) and \(b\) in Figure 1.10).
 Classically, the probability of finding the particle in the range \(dx\) (if, for example, you took a snapshot at a random time \(t\)) is equal to the fraction of the time \(T\) it takes to get from \(a\) to \(b\) that it spends in the interval \(dx\):</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]
-</div>
+<div class="paragraph">
+<p>\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]</p>
 </div>
 <div class="paragraph">
 <p>where \(v(x)\) is the speed, and</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]
-</div>
+<div class="paragraph">
+<p>\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]</p>
 </div>
 <div class="paragraph">
-<p>Thus</p>
-</div>
-<div class="stemblock">
-<div class="content">
-\[\rho(x)=\frac{1}{v(x)T}\]
-</div>
+<p>Thus
+\[\rho(x)=\frac{1}{v(x)T}\]</p>
 </div>
 <div class="paragraph">
 <p>This is perhaps the closest classical analog to \(|\Psi|^2\).</p>
@@ -1029,10 +1024,8 @@ case what can you say abut the product
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
 <p><strong>1.13</strong> Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time \(t\) is</p>
 </div>
-<div class="stemblock">
-<div class="content">
-\[x(t) = A\cos(\omega t)\]
-</div>
+<div class="paragraph">
+<p>\[x(t) = A\cos(\omega t)\]</p>
 </div>
 <div class="paragraph">
 <p>You might as well take \(\omega=1\) (that sets the scale for time) and \(A=1\) (that sets the scale for length). Make a plot of \(x\) at 10,000 random times, and compare it with \(\rho[x\)].
@@ -1076,22 +1069,14 @@ particle in the range \((a&lt;x&lt;b)\), at time \(t\).</p>
 <ol class="arabic">
 <li>
 <p>Show that</p>
-<div class="stemblock">
-<div class="content">
-\[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\]
-</div>
+<div class="paragraph">
+<p>\[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\]
+where</p>
 </div>
 <div class="paragraph">
-<p>where</p>
-</div>
-<div class="stemblock">
-<div class="content">
-\[J(x,t) \equiv \frac{i
+<p>\[J(x,t) \equiv \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
-</div>
-</div>
-<div class="paragraph">
-<p>What are the units of \(J(x,t)\)? <em>Comment:</em> \(J\)
+What are the units of \(J(x,t)\)? <em>Comment:</em> \(J\)
 is called the <strong>probability current</strong> because it tells you the rate at
 which probability is &#8220;flowing&#8221; past the point \(x\). If
 \(P_{ab}(t)\) is increasing, then more probability is flowing
@@ -1271,11 +1256,11 @@ classically.</p>
 </li>
 <li>
 <p><strong>Gases.</strong> For what temperatures are the atoms in an ideal gas at pressure \(P\) quantum mechanical? Hint: Use the ideal gas law (\(PV=Nk_BT\)) to deduce the interatomic spacing.
-<em>Answer</em>: \(T&lt;(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
+<em>Answer</em>: \(T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
 Obviously (for the gas to show quantum behavior) we want \(m\) to be as small as possible, and \(P\) as large as possible.
 Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{cm}\) and the temperature is \(3\,\textrm{K}\)) quantum mechanical?
-(Assume it&#8217;s monatomic hydrogen, not \(\require{mhchem}\ce{H2}\).)</p>
+(Assume it&#8217;s monatomic hydrogen, not \(\ce{H2}\).)</p>
 </li>
 </ol>
 </div></div></td>
@@ -1380,29 +1365,5 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 </div>
 </div>
 </div>
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-  messageStyle: "none",
-  tex2jax: {
-    inlineMath: [["\\(", "\\)"]],
-    displayMath: [["\\[", "\\]"]],
-    ignoreClass: "nostem|nolatexmath"
-  },
-  asciimath2jax: {
-    delimiters: [["\\$", "\\$"]],
-    ignoreClass: "nostem|noasciimath"
-  },
-  TeX: { equationNumbers: { autoNumber: "none" } }
-})
-MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
-  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
-    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
-      data.math.root.display = "block"
-    }
-    return data
-  })
-})
-</script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>
