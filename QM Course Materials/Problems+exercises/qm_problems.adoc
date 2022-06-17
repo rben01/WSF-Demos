@@ -129,7 +129,12 @@ This is the solution
 This is an instance of *Ehrenfest’s theorem*, which asserts that
 _expectation values obey the classical laws_.
 
-| ADJUST PROBLEM
+| Show that in a quadratic potential stem:[V(x)=ax^2+bx+c], the following holds:
+[stem]
+++++
+\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right\|_{x=\langle x\rangle}
+++++
+In other words, if the potential is quadratic then we can say "`the expectation of the force at stem:[x] is the force evaluated at stem:[\langle x\rangle]`".
 // Verify Ehrenfest's theorem for the following wavefunction:
 
 //[stem]
@@ -191,16 +196,30 @@ product consistent with the uncertainty principle?
 show a distance stem:[x] more than one standard deviation away
 from the average?
 
-|Beginning with stem:[x_0=0], you repeatedly flip a fair coin stem:[n] times.
+|
+Wording #1::
+Beginning with stem:[x_0=0], you repeatedly flip a fair coin stem:[n] times.
 For stem:[k=1,\ldots,n], if the stem:[k]^th^ flip is heads, set stem:[x_k=x_{k-1}+1].
 If the stem:[k]^th^ flip is tails, set stem:[x_k=x_{k-1}-1].
 We will investigate the possible values of stem:[x_n] and the number of sequences of coin flips resulting in stem:[x_n=N], i.e., the number of sequences containing stem:[N] more heads than tails (with more tails than heads if stem:[N<0]).
-
 . What are the possible values of stem:[x_1]? How many total sequences of coin flips are there?
 . For stem:[n=0] to stem:[n=3], how many sequences of coin flips lead to each possible value of stem:[N]?
 How many sequences of coin flips are there in total?
 Do you notice a pattern?
 . Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle] to determine the probability of landing at each integer after 7 coin flips.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.
+
+Wording #2::
+You are standing at the center of a number line (stem:[x=0]). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
+Every time you flip tails, you take a unit step in the negative direction.
+. You flip the coin one time (stem:[n=1]).
+Where on the number line could you end up?
+How many total paths are there?
+. For stem:[n=0] to stem:[n=3], how many times could you end up at each integer?
+How many total paths are there?
+Do you notice a pattern?
+. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
@@ -487,7 +506,11 @@ stem:[d=0.3\,\textrm{mm}]. Find the temperature below which the unbound _electro
 _Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below stem:[4\,\textrm{K}].
 
 . *Gases.* For what temperatures are the atoms in an ideal gas at pressure stem:[P] quantum mechanical? Hint: Use the ideal gas law (stem:[PV=Nk_BT]) to deduce the interatomic spacing.
-_Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}]. Obviously (for the gas to show quantum behavior) we want stem:[m] to be as small as possible, and stem:[P] as large as possible. Put in the numbers for helium at atmospheric pressure. Is hydrogen in outer space (where the interatomic spacing is about stem:[1\,\textrm{cm}] and the temperature is stem:[3\,\textrm{K}]) quantum mechanical? (Assume it's monatomic hydrogen, not stem:[\require{mhchem}\ce{H2}].)
+_Answer_: stem:[T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}].
+Obviously (for the gas to show quantum behavior) we want stem:[m] to be as small as possible, and stem:[P] as large as possible.
+Put in the numbers for helium at atmospheric pressure.
+Is hydrogen in outer space (where the interatomic spacing is about stem:[1\,\textrm{cm}] and the temperature is stem:[3\,\textrm{K}]) quantum mechanical?
+(Assume it's monatomic hydrogen, not stem:[\require{mhchem}\ce{H2}].)
 
 | PROBLEMS
 

@@ -436,29 +436,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
-<link
-	crossorigin="anonymous"
-	href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
-	integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
-	rel="stylesheet"
-/>
-<!-- The loading of KaTeX is deferred to speed up page rendering -->
-<script
-	crossorigin="anonymous"
-	defer=""
-	integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
-	onload="update()"
-	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
-></script>
-<!-- To automatically render math in text elements, include the auto-render extension: -->
-<script
-	crossorigin="anonymous"
-	defer=""
-	integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
-	onload="renderMathInElement(document.body);"
-	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
-></script>
-
 <style>
 	td.tableblock > .content > div.olist > ol {
 		list-style-type: lower-alpha;
@@ -695,7 +672,15 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <em>expectation values obey the classical laws</em>.</p>
 </div></div></td>
 <td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>ADJUST PROBLEM</p>
+<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
+</div>
+</div>
+<div class="paragraph">
+<p>In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
 </div>
 <details>
 <summary class="title">Solution</summary>
@@ -778,12 +763,14 @@ from the average?</p>
 </li>
 </ol>
 </div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<td class="tableblock halign-left valign-top"><div class="content"><div class="dlist">
+<dl>
+<dt class="hdlist1">Wording #1</dt>
+<dd>
 <p>Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
 For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
 If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
 We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
-</div>
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -800,6 +787,33 @@ Where are you most likely to land?
 Calculate the expected value and standard deviation.</p>
 </li>
 </ol>
+</div>
+</dd>
+<dt class="hdlist1">Wording #2</dt>
+<dd>
+<p>You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
+Every time you flip tails, you take a unit step in the negative direction.</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>You flip the coin one time (\(n=1\)).
+Where on the number line could you end up?
+How many total paths are there?</p>
+</li>
+<li>
+<p>For \(n=0\) to \(n=3\), how many times could you end up at each integer?
+How many total paths are there?
+Do you notice a pattern?</p>
+</li>
+<li>
+<p>Use Pascal&#8217;s triangle to determine the probability of landing at each integer after 7 steps.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.</p>
+</li>
+</ol>
+</div>
+</dd>
+</dl>
 </div>
 <details>
 <summary class="title">Solution</summary>
@@ -1253,7 +1267,11 @@ classically.</p>
 </li>
 <li>
 <p><strong>Gases.</strong> For what temperatures are the atoms in an ideal gas at pressure \(P\) quantum mechanical? Hint: Use the ideal gas law (\(PV=Nk_BT\)) to deduce the interatomic spacing.
-<em>Answer</em>: \(T&lt;(1/k_B)(h^2/3m)^{3/5}P^{2/5}\). Obviously (for the gas to show quantum behavior) we want \(m\) to be as small as possible, and \(P\) as large as possible. Put in the numbers for helium at atmospheric pressure. Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{cm}\) and the temperature is \(3\,\textrm{K}\)) quantum mechanical? (Assume it&#8217;s monatomic hydrogen, not \(\require{mhchem}\ce{H2}\).)</p>
+<em>Answer</em>: \(T&lt;(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
+Obviously (for the gas to show quantum behavior) we want \(m\) to be as small as possible, and \(P\) as large as possible.
+Put in the numbers for helium at atmospheric pressure.
+Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{cm}\) and the temperature is \(3\,\textrm{K}\)) quantum mechanical?
+(Assume it&#8217;s monatomic hydrogen, not \(\require{mhchem}\ce{H2}\).)</p>
 </li>
 </ol>
 </div></div></td>
