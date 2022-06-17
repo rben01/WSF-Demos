@@ -106,20 +106,18 @@ where stem:[A], stem:[\lambda], and stem:[\omega] are positive real constants.
 . Find the standard deviation of stem:[x].
 Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
 
-| Consider the wave function
+| Normalize the following wavefunctions (i.e. find A):
 
-[stem]
-++++
-\Psi(x,t)= Ae^{-(x-a)^2}e^{-i\omega t }
-++++
+. stem:[\Psi(x,t)= ]
+. stem:[\Psi(x,0)= ]
+. stem:[\Psi(x,t)= ]
+. stem:[\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}]
 
-where stem:[A], stem:[a], and stem:[\omega] are positive real constants.
-
-. Normalize stem:[\Psi]
-. Determine the expectation values of stem:[x] and stem:[x^2].
-. Find the standard deviation of stem:[x].
-Sketch the graph of stem:[\|\Psi\|^2], as a function of stem:[x], and mark the points stem:[(\langle x \rangle + \sigma)] and stem:[(\langle x \rangle - \sigma)], to illustrate the sense in which stem:[\sigma] represents the "`spread`" in stem:[x]. What is the probability that the particle would be found outside this range?
-
+.Solution
+[%collapsible]
+====
+This is the solution
+====
 
 |1.5
 | *1.7* Calculate stem:[d\langle p \rangle / dt]. _Answer_:
@@ -148,9 +146,9 @@ a=\frac{m\omega}{\hbar}
 . Calculate stem:[\frac{d\langle p \rangle}{dt}]
 . Use Schrodinger's equation to find stem:[V(x)].
 . Calculate stem:[\left\langle -\frac{\partial V}{\partial x} \right\rangle]. Does Ehrenfest's theorem hold?
-. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
-What does part (c) tell you about the behavior of the quantum harmonic oscillator?
-How does this compare to the classical harmonic oscillator?
+//. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
+//What does part (c) tell you about the behavior of the quantum harmonic oscillator?
+//How does this compare to the classical harmonic oscillator?
 
 |1.6
 | *1.9* A particle of mass stem:[m] has the wave function
