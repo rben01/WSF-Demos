@@ -190,11 +190,18 @@ product consistent with the uncertainty principle?
 show a distance stem:[x] more than one standard deviation away
 from the average?
 
-|You are standing at the center of a number line (stem:[x=0]). You flip a coin, and every time you flip heads, you take a unit step in the positive direction. Every time you flip tails, you take a unit step in the negative direction.
+|Beginning with stem:[x_0=0], you repeatedly flip a fair coin stem:[n] times.
+For stem:[k=1,\ldots,n], if the stem:[k]^th^ flip is heads, set stem:[x_k=x_{k-1}+1].
+If the stem:[k]^th^ flip is tails, set stem:[x_k=x_{k-1}-1].
+We will investigate the possible values of stem:[x_n] and the number of sequences of coin flips resulting in stem:[x_n=N], i.e., the number of sequences containing stem:[N] more heads than tails (with more tails than heads if stem:[N<0]).
 
-. You flip the coin one time (n=1). Where on the number line could you end up? How many total paths are there?
-. For n=0 to n=3, how many times could you end up at each integer? How many total paths are there? Do you notice a pattern?
-. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps. What is the probability of landing at stem:[x=5]? Where are you most likely to land? Calculate the expected value. What is the standard deviation?
+. What are the possible values of stem:[x_1]? How many total sequences of coin flips are there?
+. For stem:[n=0] to stem:[n=3], how many sequences of coin flips lead to each possible value of stem:[N]?
+How many sequences of coin flips are there in total?
+Do you notice a pattern?
+. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle] to determine the probability of landing at each integer after 7 coin flips.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.
 
 .Solution
 [%collapsible]
