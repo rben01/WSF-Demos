@@ -437,19 +437,20 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
 <link
-	crossorigin="anonymous"
-	href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
-	integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
 	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+	integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+	crossorigin="anonymous"
 />
+
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
 <script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
+	integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja"
 	crossorigin="anonymous"
-	defer=""
-	integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
-	onload="update()"
-	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
 ></script>
+
 <!-- mhchem, for chemical equations -->
 <script
 	defer
@@ -460,11 +461,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 <!-- To automatically render math in text elements, include the auto-render extension: -->
 <script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+	integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
 	crossorigin="anonymous"
-	defer=""
-	integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
 	onload="renderMathInElement(document.body);"
-	src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
 ></script>
 
 <style>
@@ -485,10 +486,45 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_chapter_1">Chapter 1</a>
 <ul class="sectlevel2">
-<li><a href="#_examples_exercises">Examples &amp; Exercises</a></li>
-<li><a href="#_problems">Problems</a></li>
+<li><a href="#_1_1_the_schrödinger_equation">1.1 The Schrödinger Equation</a>
+<ul class="sectlevel3">
 <li><a href="#_demonstrations">Demonstrations</a></li>
 <li><a href="#_other_ideas_notes_materials">Other Ideas, Notes, Materials</a></li>
+</ul>
+</li>
+<li><a href="#_1_2_the_statistical_interpretation">1.2 The Statistical Interpretation</a>
+<ul class="sectlevel3">
+<li><a href="#_demonstrations_2">Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_1_3_probability">1.3 Probability</a>
+<ul class="sectlevel3">
+<li><a href="#_exercises">Exercises</a></li>
+<li><a href="#_problems">Problems</a></li>
+<li><a href="#_demonstrations_3">Demonstrations</a></li>
+<li><a href="#_other_ideas_notes_materials_2">Other Ideas, Notes, Materials</a></li>
+</ul>
+</li>
+<li><a href="#_1_4_normalization">1.4 Normalization</a>
+<ul class="sectlevel3">
+<li><a href="#_exercises_2">Exercises</a></li>
+<li><a href="#_problems_2">Problems</a></li>
+</ul>
+</li>
+<li><a href="#_1_5_momentum">1.5 Momentum</a>
+<ul class="sectlevel3">
+<li><a href="#_exercises_3">Exercises</a></li>
+<li><a href="#_problems_3">Problems</a></li>
+<li><a href="#_demonstrations_4">Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a>
+<ul class="sectlevel3">
+<li><a href="#_exercises_4">Exercises</a></li>
+<li><a href="#_demonstrations_5">Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_griffiths_further_problems_on_chapter_1">Griffiths: Further Problems on Chapter 1</a></li>
 </ul>
 </li>
 </ul>
@@ -498,7 +534,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="preamble">
 <div class="sectionbody">
 <div class="paragraph">
-<p><a href="https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html">Link to this page</a></p>
+<p><a href="https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html">This is a link to this very page.</a></p>
 </div>
 </div>
 </div>
@@ -506,28 +542,65 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_chapter_1"><a class="anchor" href="#_chapter_1"></a><a class="link" href="#_chapter_1">Chapter 1</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_examples_exercises"><a class="anchor" href="#_examples_exercises"></a><a class="link" href="#_examples_exercises">Examples &amp; Exercises</a></h3>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 11.1111%;">
-<col style="width: 44.4444%;">
-<col style="width: 44.4445%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Section</th>
-<th class="tableblock halign-left valign-top">Griffiths Essential Problem</th>
-<th class="tableblock halign-left valign-top">Our Example/Exercise</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.3</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.1</strong> For the distribution of ages in the example in Section 1.3.1:</p>
+<h3 id="_1_1_the_schrödinger_equation"><a class="anchor" href="#_1_1_the_schrödinger_equation"></a><a class="link" href="#_1_1_the_schrödinger_equation">1.1 The Schrödinger Equation</a></h3>
+<div class="sect3">
+<h4 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html">Collapse of Wavefunction Direction and Momentum</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Notes: for this section, show just the position component; remove momentum.</p>
+</li>
+</ul>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_ideas_notes_materials"><a class="anchor" href="#_other_ideas_notes_materials"></a><a class="link" href="#_other_ideas_notes_materials">Other Ideas, Notes, Materials</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Interactive timeline like the ones in some of our WSU courses (e.g., <a href="https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/" target="_blank" rel="noopener">From Einstein to Ligo</a>).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_2_the_statistical_interpretation"><a class="anchor" href="#_1_2_the_statistical_interpretation"></a><a class="link" href="#_1_2_the_statistical_interpretation">1.2 The Statistical Interpretation</a></h3>
+<div class="sect3">
+<h4 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Existing <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment</a> and <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (2D)</a> demos</p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543" target="_blank" rel="noopener">Double slit experiment — detector simulation</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_3_probability"><a class="anchor" href="#_1_3_probability"></a><a class="link" href="#_1_3_probability">1.3 Probability</a></h3>
+<div class="sect3">
+<h4 id="_exercises"><a class="anchor" href="#_exercises"></a><a class="link" href="#_exercises">Exercises</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.1</strong> For the distribution of ages in the example in Section 1.3.1:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Compute \(\langle j^2 \rangle_\psi\) and \(\langle j \rangle ^2\)</p>
 </li>
@@ -538,48 +611,14 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Use your results in (a) and (b) to check Equation 1.12.</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>You survey you neighbors to determine the number of pets they have in their households and collect the following data:</p>
 </div>
-<div class="paragraph">
-<p>0 xxx<br>
-1 xxxxxx<br>
-2 xxxxx<br>
-3 xx<br>
-4 xx<br>
-5<br>
-6 x<br>
-7 <br>
-8<br>
-9<br>
-10 x<br></p>
-</div>
-<div class="paragraph">
-<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\))</p>
-</div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
-<div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
-</div>
-</div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.3</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.3</strong> Consider the <strong>gaussian</strong> distribution</p>
-</div>
-<div class="paragraph">
-<p>\[\rho(x)= Ae^{-\lambda(x-a)^2}\]</p>
-</div>
-<div class="paragraph">
-<p>where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary integrals are inside the back cover.)</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
+</li>
+<li>
+<p><strong>1.3</strong> Consider the <strong>gaussian</strong> distribution
+\[\rho(x)= Ae^{-\lambda(x-a)^2}\]
+where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary integrals are inside the back cover.)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Use Equation 1.16 to determine \(A\).</p>
 </li>
@@ -590,22 +629,106 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Sketch the graph of \(\rho(x)\).</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Plot the following two probability density distributions over the interval 0 to 1:</p>
 </div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>You survey you neighbors to determine the number of pets they have in their households and collect the following data:</p>
+<div class="openblock">
+<div class="content">
+<table class="tableblock frame-all grid-all stripes-even fit-content">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-right valign-top">Number of pets</th>
+<th class="tableblock halign-left valign-top">Number of households</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-right valign-top"><p class="tableblock">10</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
 <div class="paragraph">
-<p>\[\rho_1(x)=
+<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\))</p>
+</div>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>This is the solution</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+</li>
+<li>
+<p>Plot the following two probability density distributions over the interval 0 to 1:</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>\[\begin{align*}
+\rho_1(x)&amp;=
     \begin{cases}
         4x &amp; 0\le x \le \frac{1}{2}\\
         -4x+4 &amp; \frac{1}{2}\le x\le 1
-    \end{cases}\]</p>
+    \end{cases}\\
+    \rho_2(x) &amp;= 2\sin^2(2\pi x)\end{align*}\]</p>
 </div>
-<div class="paragraph">
-<p>\[\rho_2(x) = 2\sin^2(2\pi x)\]</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall.</p>
 </li>
@@ -617,6 +740,87 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ol>
 </div>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problems"><a class="anchor" href="#_problems"></a><a class="link" href="#_problems">Problems</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<p><strong>1.2</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find the standard deviation of the distribution in Example 1.2.</p>
+</li>
+<li>
+<p>What is the probability that a photograph, selected at random, would
+show a distance \(x\) more than one standard deviation away
+from the average?</p>
+</li>
+</ol>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<div class="title">Wording #1</div>
+<p>Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
+For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
+If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
+We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>What are the possible values of \(x_1\)? How many total sequences of coin flips are there?</p>
+</li>
+<li>
+<p>For \(n=0\) to \(n=3\), how many sequences of coin flips lead to each possible value of \(N\)?
+How many sequences of coin flips are there in total?
+Do you notice a pattern?</p>
+</li>
+<li>
+<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle" target="_blank" rel="noopener">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 coin flips.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<div class="title">Wording #2</div>
+<p>You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
+Every time you flip tails, you take a unit step in the negative direction.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>You flip the coin one time (\(n=1\)).
+Where on the number line could you end up?
+How many total paths are there?</p>
+</li>
+<li>
+<p>For \(n=0\) to \(n=3\), how many times could you end up at each integer?
+How many total paths are there?
+Do you notice a pattern?</p>
+</li>
+<li>
+<p>Use Pascal&#8217;s triangle to determine the probability of landing at each integer after 7 steps.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.</p>
+</li>
+</ol>
+</div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -624,13 +828,64 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>This is the solution</p>
 </div>
 </div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.4</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.5</strong> Consider the wave function</p>
+</details>
 </div>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_3"><a class="anchor" href="#_demonstrations_3"></a><a class="link" href="#_demonstrations_3">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.</p>
+</li>
+<li>
+<p>A demonstration of example 1.2 (the falling object, sampling how far it has fallen).</p>
+</li>
+<li>
+<p>Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter \(\sigma\)).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_ideas_notes_materials_2"><a class="anchor" href="#_other_ideas_notes_materials_2"></a><a class="link" href="#_other_ideas_notes_materials_2">Other Ideas, Notes, Materials</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Discuss basic properties of probability distributions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Linearity of expectation</p>
+</li>
+<li>
+<p>How scaling \(x\) affects \(\sigma\)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_4_normalization"><a class="anchor" href="#_1_4_normalization"></a><a class="link" href="#_1_4_normalization">1.4 Normalization</a></h3>
+<div class="sect3">
+<h4 id="_exercises_2"><a class="anchor" href="#_exercises_2"></a><a class="link" href="#_exercises_2">Exercises</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.5</strong> Consider the wave function</p>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]</p>
 </div>
@@ -638,25 +893,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
 (We&#8217;ll see in Chapter 2 for what potential (\(V\)) this wave function satisfies the Schrödinger equation.)</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>Normalize \(\Psi\)</p>
+<p>Normalize \(\Psi\).</p>
 </li>
 <li>
 <p>Determine the expectation values of \(x\) and \(x^2\).</p>
 </li>
 <li>
-<p>Find the standard deviation of \(x\).
-Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
+<p>Find the standard deviation of \(x\).</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Normalize the following wavefunctions (i.e. find A):</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="paragraph">
+<p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
+</div>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>This is the solution</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Normalize the following wavefunctions (i.e. find A):</p>
+<div class="openblock">
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
 </li>
@@ -678,169 +954,29 @@ Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \(
 <p>This is the solution</p>
 </div>
 </div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.5</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.7</strong> Calculate \(d\langle p \rangle / dt\). <em>Answer</em>:</p>
-</div>
-<div class="paragraph">
-<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
-<em>expectation values obey the classical laws</em>.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
-\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
-In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
-</div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
-<div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
+</details>
 </div>
 </div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.6</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
-</div>
-<div class="paragraph">
-<p>\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]</p>
-</div>
-<div class="paragraph">
-<p>where \(A\) and \(a\) are positive real constants.</p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Find \(A\).</p>
 </li>
-<li>
-<p>For what potential energy function, \(V(x)\), is this a
-solution to the Schrödinger equation?</p>
-</li>
-<li>
-<p>Calculate the expectation values of \(x\),
-\(x^2\), \(p\), and \(p^2\).</p>
-</li>
-<li>
-<p>Find \(\sigma_{x}\) and \(\sigma_{p}\). Is their
-product consistent with the uncertainty principle?</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_problems"><a class="anchor" href="#_problems"></a><a class="link" href="#_problems">Problems</a></h3>
-<table class="tableblock frame-all grid-all stripes-even stretch">
-<colgroup>
-<col style="width: 11.1111%;">
-<col style="width: 44.4444%;">
-<col style="width: 44.4445%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Section</th>
-<th class="tableblock halign-left valign-top">Griffiths Problem</th>
-<th class="tableblock halign-left valign-top">Our Problem</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.3</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.2</strong></p>
-</div>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>Find the standard deviation of the distribution in Example 1.2.</p>
-</li>
-<li>
-<p>What is the probability that a photograph, selected at random, would
-show a distance \(x\) more than one standard deviation away
-from the average?</p>
-</li>
-</ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="dlist">
-<dl>
-<dt class="hdlist1">Wording #1</dt>
-<dd>
-<p>Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
-For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
-If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
-We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>What are the possible values of \(x_1\)? How many total sequences of coin flips are there?</p>
-</li>
-<li>
-<p>For \(n=0\) to \(n=3\), how many sequences of coin flips lead to each possible value of \(N\)?
-How many sequences of coin flips are there in total?
-Do you notice a pattern?</p>
-</li>
-<li>
-<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 coin flips.
-Where are you most likely to land?
-Calculate the expected value and standard deviation.</p>
-</li>
-</ol>
-</div>
-</dd>
-<dt class="hdlist1">Wording #2</dt>
-<dd>
-<p>You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
-Every time you flip tails, you take a unit step in the negative direction.</p>
-<div class="olist arabic">
-<ol class="arabic">
-<li>
-<p>You flip the coin one time (\(n=1\)).
-Where on the number line could you end up?
-How many total paths are there?</p>
-</li>
-<li>
-<p>For \(n=0\) to \(n=3\), how many times could you end up at each integer?
-How many total paths are there?
-Do you notice a pattern?</p>
-</li>
-<li>
-<p>Use Pascal&#8217;s triangle to determine the probability of landing at each integer after 7 steps.
-Where are you most likely to land?
-Calculate the expected value and standard deviation.</p>
-</li>
-</ol>
+</ul>
 </div>
 </dd>
 </dl>
 </div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
-<div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
 </div>
-</div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.4</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+<div class="sect3">
+<h4 id="_problems_2"><a class="anchor" href="#_problems_2"></a><a class="link" href="#_problems_2">Problems</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
 <p><strong>1.4</strong> At time \(t=0\) a particle is represented by the wave
 function</p>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>\[\Psi(x,0)=
     \begin{cases}
@@ -851,8 +987,8 @@ function</p>
 where \(A\), \(a\), and \(b\) are
 (positive) constants.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Normalize \(\Psi\) (that is, find \(A\) in terms
 of \(a\) and \(b\)).</p>
@@ -872,13 +1008,21 @@ of \(a\) and \(b\)).</p>
 <p>What is the expectation value of \(x\)?</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 </div>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 <div class="paragraph">
-<p>\[\langle x \rangle = 3 \\
-\sigma = 2\]</p>
+<p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
 </div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -887,11 +1031,65 @@ of \(a\) and \(b\)).</p>
 <p>This is the solution</p>
 </div>
 </div>
-</details></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.5</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+</details>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_5_momentum"><a class="anchor" href="#_1_5_momentum"></a><a class="link" href="#_1_5_momentum">1.5 Momentum</a></h3>
+<div class="sect3">
+<h4 id="_exercises_3"><a class="anchor" href="#_exercises_3"></a><a class="link" href="#_exercises_3">Exercises</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.7</strong> Calculate \(\frac{d\langle p \rangle}{dt}\). Answer:</p>
+<div class="paragraph">
+<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
+This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
+<em>expectation values obey the classical laws</em>.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
+\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
+In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>This is the solution</p>
+</div>
+</div>
+</details>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problems_3"><a class="anchor" href="#_problems_3"></a><a class="link" href="#_problems_3">Problems</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
 <p><strong>1.8</strong> Suppose you add a constant \(V_0\) to the
 potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
 as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
@@ -899,17 +1097,112 @@ change anything, but what about <em>quantum</em> mechanics? Show that the wave
 function picks up a time-dependent phase factor:
 \(\exp(-iV_0t/\hbar)\). What effect does this have on the
 expectation value of a dynamical variable?</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.10</strong> Consider the first 25 digits in the decimal expansion of
-\(\pi\) (\(3, 1, 4, 1, 5, 9, \ldots\)).</p>
+</dd>
+</dl>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_4"><a class="anchor" href="#_demonstrations_4"></a><a class="link" href="#_demonstrations_4">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time by showing \(\langle x\rangle_\psi\) and \(\langle p\rangle_\psi\).</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; Harmonic oscillator: <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543" target="_blank" rel="noopener">the quantum harmonic oscillator</a></p>
+</li>
+<li>
+<p>&#10063; Particle in a box</p>
+</li>
+<li>
+<p>&#10063; others?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+Let the resulting \(\delta\) function evolve (spread out, oscillate), then sample again. Etc.</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h3>
+<div class="sect3">
+<h4 id="_exercises_4"><a class="anchor" href="#_exercises_4"></a><a class="link" href="#_exercises_4">Exercises</a></h4>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]</p>
+</div>
+<div class="paragraph">
+<p>where \(A\) and \(a\) are positive real constants.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(A\).</p>
+</li>
+<li>
+<p>For what potential energy function, \(V(x)\), is this a
+solution to the Schrödinger equation?</p>
+</li>
+<li>
+<p>Calculate the expectation values of \(x\),
+\(x^2\), \(p\), and \(p^2\).</p>
+</li>
+<li>
+<p>Find \(\sigma_{x}\) and \(\sigma_{p}\). Is their
+product consistent with the uncertainty principle?</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_5"><a class="anchor" href="#_demonstrations_5"></a><a class="link" href="#_demonstrations_5">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_griffiths_further_problems_on_chapter_1"><a class="anchor" href="#_griffiths_further_problems_on_chapter_1"></a><a class="link" href="#_griffiths_further_problems_on_chapter_1">Griffiths: Further Problems on Chapter 1</a></h3>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">1.10</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="paragraph">
+<p>Consider the first 25 digits in the decimal expansion of \(\pi\): \(3, 1, 4, 1, 5, 9, \ldots\).</p>
+</div>
+<div class="openblock">
+<div class="content">
 <div class="olist arabic">
 <ol class="arabic">
 <li>
@@ -924,9 +1217,14 @@ average value?</p>
 <p>Find the standard deviation for this distribution.</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>An integer is chosen uniformly at random from the set {0,1, 2,&#8230;&#8203;, 199}.</p>
+</div>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="paragraph">
+<p>An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
 </div>
 <div class="olist arabic">
 <ol class="arabic">
@@ -937,16 +1235,32 @@ average value?</p>
 <p>Calculate the expected number of digits.</p>
 </li>
 <li>
-<p>Find the standard devation of the number of digits.</p>
+<p>Find the standard deviation of the number of digits.</p>
 </li>
 </ol>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.11</strong> [This problem generalizes Example 1.2.] Imagine a particle of mass \(m\) and energy \(E\) in a potential well \(V(x)\), sliding frictionlessly back and forth between the classical turning points (\(a\) and \(b\) in Figure 1.10).
-Classically, the probability of finding the particle in the range \(dx\) (if, for example, you took a snapshot at a random time \(t\)) is equal to the fraction of the time \(T\) it takes to get from \(a\) to \(b\) that it spends in the interval \(dx\):</p>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.11</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="imageblock related thumb right">
+<div class="content">
+<img src="images/ch1_p1.11.jpg" alt="ch1 p1.11" width="225">
+</div>
+</div>
+<div class="paragraph">
+<p>[This problem generalizes Example 1.2.] Imagine a particle of mass \(m\) and energy \(E\) in a potential well \(V(x)\), sliding frictionlessly back and forth between the classical turning points (\(a\) and \(b\) in Figure 1.10).</p>
+</div>
+<div class="paragraph">
+<p>Classically, the probability of finding the particle in the range \(dx\) (if, for example, you took a snapshot at a random time \(t\)) is equal to the fraction of the time \(T\) it takes to get from \(a\) to \(b\) that it spends in the interval \(dx\):</p>
 </div>
 <div class="paragraph">
 <p>\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]</p>
@@ -974,21 +1288,23 @@ Classically, the probability of finding the particle in the range \(dx\) (if, fo
 </li>
 <li>
 <p>For the classical harmonic oscillator in part (b), find \(\langle x\rangle\), \(\langle x^2\rangle\), and \(\sigma_x\).</p>
-<div class="imageblock">
-<div class="content">
-<img src="images/ch1_p1.11.jpg" alt="ch1 p1.11" width="300">
-</div>
-</div>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.11</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<p></p>
+<div class="paragraph">
 <p><strong>** 1.12</strong> What if we were interested in the distribution of <em>momenta</em>
 (\(p=mv\)) for the classical harmonic oscillator (Problem
 1.11(b)).</p>
@@ -1016,15 +1332,21 @@ case what can you say abut the product
 \(\sigma_{x}\sigma_{p}\)?</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.13</strong> Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time \(t\) is</p>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.13</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time \(t\) is</p>
 </div>
 <div class="paragraph">
 <p>\[x(t) = A\cos(\omega t)\]</p>
@@ -1056,44 +1378,53 @@ case what can you say abut the product
 </div>
 <div class="paragraph">
 <p>Meanwhile, make a plot of the density function, \(\rho(x)\), and, using <code>Show</code>, superimpose the two.</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.14</strong> Let \(P_{ab}(t)\) be the probability of finding the
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.14</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Let \(P_{ab}(t)\) be the probability of finding the
 particle in the range \((a&lt;x&lt;b)\), at time \(t\).</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>Show that</p>
-<div class="paragraph">
-<p>\[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\]
-where</p>
-</div>
-<div class="paragraph">
-<p>\[J(x,t) \equiv \frac{i
+<p>Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
+\[J(x,t) \equiv \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
 What are the units of \(J(x,t)\)? <em>Comment:</em> \(J\)
 is called the <strong>probability current</strong> because it tells you the rate at
 which probability is &#8220;flowing&#8221; past the point \(x\). If
 \(P_{ab}(t)\) is increasing, then more probability is flowing
 into the region at one end than flows out the other.</p>
-</div>
 </li>
 <li>
-<p>Find the probability current for the wave function in Problem 1.9.
-(This is not a very pithy example, I’m afraid; we’ll encounter more
-substantial ones in due course.)</p>
+<p>Find the probability current for the wave function in Problem 1.9.</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="olist arabic">
-<ol class="arabic">
+</div>
+<div class="paragraph">
+<p>(This is not a very pithy example, I’m afraid; we’ll encounter more
+substantial ones in due course.)</p>
+</div>
+</div>
+</div>
+</dd>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Use <a href="https://en.wikipedia.org/wiki/Divergence_theorem">Gauss&#8217;s Theorem</a> to extend this result to an arbitrary region \(S\) in \(\mathbb R^n\).</p>
 </li>
@@ -1102,29 +1433,46 @@ substantial ones in due course.)</p>
 Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), i.e., in the direction of increasing phase.</p>
 </li>
 </ol>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.15</strong> Show that</p>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.15</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Show that</p>
 </div>
 <div class="paragraph">
 <p>\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]</p>
 </div>
 <div class="paragraph">
-<p>for any two (normalizable) solutions to the Schrödinger equation (with
+<p>for any two (normalizable) solutions to the same Schrödinger equation (i.e., with
 the same \(V(x)\)), \(\Psi_{1}\) and
 \(\Psi_{2}\).</p>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.16</strong> A particle is represented (at time \(t=0\)) by the wave function</p>
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.16</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A particle is represented (at time \(t=0\)) by the wave function</p>
 </div>
 <div class="paragraph">
 <p>\[
@@ -1145,7 +1493,7 @@ A(a^2-x^2)&amp;-a\le x\le +a\\
 <li>
 <p>What is the expectation value of \(p\)? (Note that you
 <em>cannot</em> get it from
-\(\langle p \rangle = m\,d\langle x \rangle/dt\). Why not?)</p>
+\(\langle p \rangle = m\frac{d\langle x \rangle}{dt}\). Why not?)</p>
 </li>
 <li>
 <p>Find the expectation value of \(x^2\).</p>
@@ -1163,58 +1511,66 @@ A(a^2-x^2)&amp;-a\le x\le +a\\
 <p>Check that your results are consistent with the uncertainty principle.</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.17</strong> Suppose you wanted to describe an <strong>unstable particle</strong> that spontaneously
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.17</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Suppose you wanted to describe an <strong>unstable particle</strong> that spontaneously
 disintegrates with a &#8220;lifetime&#8221; \(\tau\). In that case the
 total probability of finding the particle somewhere should <em>not</em> be
-constant, but should decrease at (say) an exponential rate:</p>
-</div>
-<div class="paragraph">
-<p>\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]</p>
+constant, but should decrease at (say) an exponential rate:
+\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]</p>
 </div>
 <div class="paragraph">
 <p>A crude way of achieving this result is as follows. In Equation 1.24 we
 tacitly assumed that V (the potential energy) is <em>real</em>. That is
 certainly reasonable, but it leads to the &#8220;conservation of
 probability&#8221; enshrined in Equation 1.27. What if we assign to
-\(V\) an imaginary part:</p>
-</div>
-<div class="paragraph">
-<p>\[V=V_{0}-i\Gamma\]</p>
-</div>
-<div class="paragraph">
-<p>where \(V_{0}\) is the true potential energy and
+\(V\) an imaginary part:
+\[V=V_{0}-i\Gamma\]
+where \(V_{0}\) is the true potential energy and
 \(\Gamma\) is a positive real constant?</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
-<p>Show that (in place of Equation 1.27) we now get</p>
-<div class="paragraph">
-<p>\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]</p>
-</div>
+<p>Show that (in place of Equation 1.27) we now get
+\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]</p>
 </li>
 <li>
 <p>Solve for \(P(t)\), and find the lifetime of the particle in
 terms of \(\Gamma\).</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEM</p>
-</div></div></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>1.P</strong></p></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p><strong>1.18</strong> Very roughly speaking, quantum mechanics is relevant when the de Broglie
+</div>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
+<dt class="hdlist1">1.18</dt>
+<dd>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Griffiths</dt>
+<dd>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Very roughly speaking, quantum mechanics is relevant when the de Broglie
 wavelength of the particle in question (\(h/p\)) is greater
 than the characteristic size of the system (\(d\)). In thermal
 equilibrium at (Kelvin) temperature \(T\), the average kinetic
@@ -1235,8 +1591,8 @@ Broglie wavelength is</p>
 be treated quantum mechanically and which can safely be described
 classically.</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p><strong>Solids.</strong> The lattice spacing in a typical solid is around
 \(d=0.3\,\textrm{mm}\). Find the temperature below which the unbound <em>electrons</em> in a solid are quantum mechanical. Below what temperature are the <em>nuclei</em> in a solid quantum mechanical? (Use silicon as an example.)</p>
@@ -1253,103 +1609,14 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 (Assume it&#8217;s monatomic hydrogen, not \(\ce{H2}\).)</p>
 </li>
 </ol>
-</div></div></td>
-<td class="tableblock halign-left valign-top"><div class="content"><div class="paragraph">
-<p>PROBLEMS</p>
-</div></div></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect2">
-<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">Demonstrations</a></h3>
-<div class="sect3">
-<h4 id="_1_1_the_schrödinger_equation"><a class="anchor" href="#_1_1_the_schrödinger_equation"></a><a class="link" href="#_1_1_the_schrödinger_equation">1.1 The Schrödinger Equation</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html">Collapse of Wavefunction Direction and Momentum</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_1_2_the_statistical_interpretation"><a class="anchor" href="#_1_2_the_statistical_interpretation"></a><a class="link" href="#_1_2_the_statistical_interpretation">1.2 The Statistical Interpretation</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Existing <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment</a> and <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (2D)</a> demos</p>
-</li>
-<li>
-<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543" target="_blank" rel="noopener">Double slit experiment — detector simulation</a></p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_1_3_probability"><a class="anchor" href="#_1_3_probability"></a><a class="link" href="#_1_3_probability">1.3 Probability</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p>A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.</p>
-</li>
-<li>
-<p>A demonstration of example 1.2 (the falling object, sampling how far it has fallen).</p>
-</li>
-<li>
-<p>Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter \(\sigma\)).</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_1_5_momentum"><a class="anchor" href="#_1_5_momentum"></a><a class="link" href="#_1_5_momentum">1.5 Momentum</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p>Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time (particle in a box, harmonic oscillator, etc) by marking the classical position and drawing the momentum vector.</p>
-</li>
-<li>
-<p>Do the probability and sampling demos, simultaneously for position and momentum, i.e., let the harmonic oscillator evolve a bunch, then sample its position and momentum at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).</p>
-</li>
-<li>
-<p>Sample demo in which \(\langle x\rangle_\psi\) and \(\langle p\rangle_\psi\) have been added: <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543" target="_blank" rel="noopener">the quantum harmonic oscillator</a>.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
-</li>
-</ul>
 </div>
 </div>
 </div>
-<div class="sect2">
-<h3 id="_other_ideas_notes_materials"><a class="anchor" href="#_other_ideas_notes_materials"></a><a class="link" href="#_other_ideas_notes_materials">Other Ideas, Notes, Materials</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>Discuss basic properties of probability distributions:</p>
-<div class="ulist">
-<ul>
-<li>
-<p>Linearity of expectation</p>
-</li>
-<li>
-<p>How scaling \(x\) affects \(\sigma\)</p>
-</li>
-</ul>
+</dd>
+</dl>
 </div>
-</li>
-<li>
-<p>Interactive timeline like the ones in some of our WSU courses (e.g., <a href="https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/" target="_blank" rel="noopener">From Einstein to Ligo</a>).</p>
-</li>
-</ul>
+</dd>
+</dl>
 </div>
 </div>
 </div>

@@ -6,39 +6,65 @@
 :imagesdir: images
 :sectlinks:
 :sectanchors:
+:sch: Schrödinger
+:toclevels: 3
 
-https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[Link to this page]
+https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[This is a link to this very page.]
+
 
 == Chapter 1
 
-=== Examples & Exercises
+=== 1.1 The {sch} Equation
 
-[{table-settings}]
+==== Demonstrations
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
+** Notes: for this section, show just the position component; remove momentum.
+
+==== Other Ideas, Notes, Materials
+
+* Interactive timeline like the ones in some of our WSU courses (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
+
+
+=== 1.2 The Statistical Interpretation
+
+==== Demonstrations
+* Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
+
+=== 1.3 Probability
+
+==== Exercises
+Griffiths::
+* *1.1* For the distribution of ages in the example in Section 1.3.1:
+.. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
+.. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
+.. Use your results in (a) and (b) to check Equation 1.12.
+* *1.3* Consider the *gaussian* distribution
+++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
+where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
+.. Use Equation 1.16 to determine ++\(A\)++.
+.. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
+.. Sketch the graph of ++\(\rho(x)\)++.
+
+Ours::
+* You survey you neighbors to determine the number of pets they have in their households and collect the following data:
++
+--
+[%header%autowidth,cols=">~,<~",stripes="even"]
 |===
-|Section
-|Griffiths Essential Problem
-|Our Example/Exercise
-
-|1.3
-|*1.1* For the distribution of ages in the example in Section 1.3.1:
-
-. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
-. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
-. Use your results in (a) and (b) to check Equation 1.12.
-
-| You survey you neighbors to determine the number of pets they have in their households and collect the following data:
-
-0 xxx +
-1 xxxxxx +
-2 xxxxx +
-3 xx +
-4 xx +
-5 +
-6 x +
-7  +
-8 +
-9 +
-10 x +
+|Number of pets|Number of households
+|0|3
+|1|6
+|2|5
+|3|2
+|4|2
+|5|0
+|6|1
+|7|0
+|8|0
+|9|0
+|10|1
+|===
 
 Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)++)
 
@@ -47,159 +73,60 @@ Verify that both ways of computing standard deviation give the same answer (i.e.
 ====
 This is the solution
 ====
+--
 
-|1.3
-|*1.3* Consider the *gaussian* distribution
-
-++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
-
-where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
-
-. Use Equation 1.16 to determine ++\(A\)++.
-. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
-. Sketch the graph of ++\(\rho(x)\)++.
-
-| Plot the following two probability density distributions over the interval 0 to 1:
-
-++\[\rho_1(x)=
+* Plot the following two probability density distributions over the interval 0 to 1:
++
+--
+++\[\begin{align*}
+\rho_1(x)&=
     \begin{cases}
         4x & 0\le x \le \frac{1}{2}\\
         -4x+4 & \frac{1}{2}\le x\le 1
-    \end{cases}\]++
+    \end{cases}\\
+    \rho_2(x) &= 2\sin^2(2\pi x)\end{align*}\]++
 
-++\[\rho_2(x) = 2\sin^2(2\pi x)\]++
+.. Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall.
+.. Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
+.. For both distributions, calculate the probability of finding the particle within 1 standard deviation.
+--
 
-
-
-. Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall.
-. Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
-. For both distributions, calculate the probability of finding the particle within 1 standard deviation.
-
-.Solution (placeholder)
-[%collapsible]
-====
-This is the solution
-====
-
-|1.4
-|*1.5* Consider the wave function
-
-++\[\Psi(x,t)=Ae^{-\lambda\|x\|}e^{-i \omega t}\]++
-
-where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
-(We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the Schrödinger equation.)
-
-. Normalize ++\(\Psi\)++
-. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
-. Find the standard deviation of ++\(x\)++.
-Sketch the graph of ++\(\|\Psi\|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
-
-| Normalize the following wavefunctions (i.e. find A):
-
-. ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
-. ++\(\Psi(x,0)= Ae^{-\kappa\|x\|}\)++
-. ++\(\Psi(x,0)= A\frac{\sin(x)}{x}\)++
-. ++\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
-
-.Solution (placeholder)
-[%collapsible]
-====
-This is the solution
-====
-
-|1.5
-| *1.7* Calculate ++\(d\langle p \rangle / dt\)++. _Answer_:
-
-\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-This is an instance of *Ehrenfest’s theorem*, which asserts that
-_expectation values obey the classical laws_.
-
-| Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
-++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right\|_{x=\langle x\rangle}\]++
-In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
-// Verify Ehrenfest's theorem for the following wavefunction:
-
-//[stem]
-//++++
-//\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
-//++++
-
-//where
-
-//[stem]
-//++++
-//a=\frac{m\omega}{\hbar}
-//++++
-
-//. Calculate ++\(\frac{d\langle p \rangle}{dt}\)++
-//. Use Schrodinger's equation to find ++\(V(x)\)++.
-//. Calculate ++\(\left\langle -\frac{\partial V}{\partial x} \right\rangle\)++. Does Ehrenfest's theorem hold?
-//. This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
-//What does part (c) tell you about the behavior of the quantum harmonic oscillator?
-//How does this compare to the classical harmonic oscillator?
-
-.Solution (placeholder)
-[%collapsible]
-====
-This is the solution
-====
-
-|1.6
-| *1.9* A particle of mass ++\(m\)++ has the wave function
-
-++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
-
-where ++\(A\)++ and ++\(a\)++ are positive real constants.
-
-. Find ++\(A\)++.
-. For what potential energy function, ++\(V(x)\)++, is this a
-solution to the Schrödinger equation?
-. Calculate the expectation values of ++\(x\)++,
-++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
-. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
-product consistent with the uncertainty principle?
-
-| PROBLEM
-
-|===
-
-=== Problems
-
-[{table-settings}]
-|===
-|Section|Griffiths Problem|Our Problem
-|1.3
-|*1.2*
-
-. Find the standard deviation of the distribution in Example 1.2.
-. What is the probability that a photograph, selected at random, would
+==== Problems
+Griffiths::
+*1.2*
+.. Find the standard deviation of the distribution in Example 1.2.
+.. What is the probability that a photograph, selected at random, would
 show a distance ++\(x\)++ more than one standard deviation away
 from the average?
 
-|
-Wording #1::
+Ours::
++
+--
+.Wording #1
 Beginning with ++\(x_0=0\)++, you repeatedly flip a fair coin ++\(n\)++ times.
 For ++\(k=1,\ldots,n\)++, if the ++\(k\)++^th^ flip is heads, set ++\(x_k=x_{k-1}+1\)++.
 If the ++\(k\)++^th^ flip is tails, set ++\(x_k=x_{k-1}-1\)++.
 We will investigate the possible values of ++\(x_n\)++ and the number of sequences of coin flips resulting in ++\(x_n=N\)++, i.e., the number of sequences containing ++\(N\)++ more heads than tails (with more tails than heads if ++\(N<0\)++).
-. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
-. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
+
+.. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
+.. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
 How many sequences of coin flips are there in total?
 Do you notice a pattern?
-. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle] to determine the probability of landing at each integer after 7 coin flips.
+.. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle^] to determine the probability of landing at each integer after 7 coin flips.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
-Wording #2::
+.Wording #2
 You are standing at the center of a number line (++\(x=0\)++). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.
-. You flip the coin one time (++\(n=1\)++).
+
+.. You flip the coin one time (++\(n=1\)++).
 Where on the number line could you end up?
 How many total paths are there?
-. For ++\(n=0\)++ to ++\(n=3\)++, how many times could you end up at each integer?
+.. For ++\(n=0\)++ to ++\(n=3\)++, how many times could you end up at each integer?
 How many total paths are there?
 Do you notice a pattern?
-. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
+.. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
@@ -208,11 +135,67 @@ Calculate the expected value and standard deviation.
 ====
 This is the solution
 ====
+--
 
-|1.4
-|*1.4* At time ++\(t=0\)++ a particle is represented by the wave
+==== Demonstrations
+* A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.
+* A demonstration of example 1.2 (the falling object, sampling how far it has fallen).
+* Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter ++\(\sigma\)++).
+
+==== Other Ideas, Notes, Materials
+
+* Discuss basic properties of probability distributions:
+** Linearity of expectation
+** How scaling ++\(x\)++ affects ++\(\sigma\)++
+
+
+=== 1.4 Normalization
+
+==== Exercises
+Griffiths::
+* *1.5* Consider the wave function
++
+--
+++\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]++
+
+where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
+(We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the {sch} equation.)
+
+.. Normalize ++\(\Psi\)++.
+.. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
+.. Find the standard deviation of ++\(x\)++.
+
+Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
+
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+--
+
+Ours::
+* Normalize the following wavefunctions (i.e. find A):
++
+--
+.. ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
+.. ++\(\Psi(x,0)= Ae^{-\kappa|x|}\)++
+.. ++\(\Psi(x,0)= A\frac{\sin(x)}{x}\)++
+.. ++\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
+
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+--
+
+==== Problems
+Griffiths::
+* *1.4* At time ++\(t=0\)++ a particle is represented by the wave
 function
-
++
+--
 \[\Psi(x,0)=
     \begin{cases}
         A(x/a), & 0\le x \le a,\\
@@ -222,55 +205,122 @@ function
 where ++\(A\)++, ++\(a\)++, and ++\(b\)++ are
 (positive) constants.
 
-. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
+.. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
 of ++\(a\)++ and ++\(b\)++).
-. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
-. Where is the particle most likely to be found at ++\(t=0\)++?
-. What is the probability of finding the particle to the left of
+.. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
+.. Where is the particle most likely to be found at ++\(t=0\)++?
+.. What is the probability of finding the particle to the left of
 ++\(a\)++? Check your result in the limiting cases
 ++\(b=a\)++ and ++\(b=2a\)++.
-. What is the expectation value of ++\(x\)++?
+.. What is the expectation value of ++\(x\)++?
+--
 
-| Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
-
-\[\langle x \rangle = 3 \\
-\sigma = 2\]
-
+Ours::
+* Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
++
+++\[\begin{align*}\langle x \rangle &= 3 \\\sigma &= 2\end{align*}\]++
++
 .Solution (placeholder)
 [%collapsible]
 ====
 This is the solution
 ====
 
-|1.5
-|*1.8* Suppose you add a constant ++\(V_0\)++ to the
+
+=== 1.5 Momentum
+
+==== Exercises
+Griffiths::
+* *1.7* Calculate ++\(\frac{d\langle p \rangle}{dt}\)++. Answer:
++
+++\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]++
+This is an instance of *Ehrenfest’s theorem*, which asserts that
+_expectation values obey the classical laws_.
+
+Ours::
+* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
+++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
+In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
+
+==== Problems
+Griffiths::
+*1.8* Suppose you add a constant ++\(V_0\)++ to the
 potential energy (by "`constant`" I mean independent of ++\(x\)++
 as well as ++\(t\)++). In _classical_ mechanics this doesn't
 change anything, but what about _quantum_ mechanics? Show that the wave
 function picks up a time-dependent phase factor:
 ++\(\exp(-iV_0t/\hbar)\)++. What effect does this have on the
 expectation value of a dynamical variable?
-|PROBLEM
 
-|1.P
-|*1.10* Consider the first 25 digits in the decimal expansion of
-++\(\pi\)++ (++\(3, 1, 4, 1, 5, 9, \ldots\)++).
+==== Demonstrations
+* Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++.
+** [x] Harmonic oscillator: https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543[the quantum harmonic oscillator^]
+** [ ] Particle in a box
+** [ ] others?
+* Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then sample again. Etc.
 
+=== 1.6 The Uncertainty Principle
+
+==== Exercises
+Griffiths::
+* *1.9* A particle of mass ++\(m\)++ has the wave function
++
+--
+++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
+
+where ++\(A\)++ and ++\(a\)++ are positive real constants.
+
+.. Find ++\(A\)++.
+.. For what potential energy function, ++\(V(x)\)++, is this a
+solution to the {sch} equation?
+.. Calculate the expectation values of ++\(x\)++,
+++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
+.. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
+product consistent with the uncertainty principle?
+--
+
+==== Demonstrations
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
+
+
+=== Griffiths: Further Problems on Chapter 1
+
+1.10::
+Griffiths:::
++
+Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
++
+--
 . If you selected one number at random, from this set, what are the
 probabilities of getting each of the 10 digits?
 . What is the most probable digit? What is the median digit? What is the
 average value?
 . Find the standard deviation for this distribution.
-
-|An integer is chosen uniformly at random from the set {0,1, 2,..., 199}.
-
+--
+Ours:::
++
+An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
++
 . What are the probabilities of selecting a number with 1, 2, or 3 digits?
 . Calculate the expected number of digits.
-. Find the standard devation of the number of digits.
+. Find the standard deviation of the number of digits.
 
+1.11::
+Griffiths:::
++
+--
+image::ch1_p1.11.jpg[width=225,role="related thumb right"]
 
-|1.P
-|*1.11* [This problem generalizes Example 1.2.] Imagine a particle of mass ++\(m\)++ and energy ++\(E\)++ in a potential well ++\(V(x)\)++, sliding frictionlessly back and forth between the classical turning points (++\(a\)++ and ++\(b\)++ in Figure 1.10).
+[This problem generalizes Example 1.2.] Imagine a particle of mass ++\(m\)++ and energy ++\(E\)++ in a potential well ++\(V(x)\)++, sliding frictionlessly back and forth between the classical turning points (++\(a\)++ and ++\(b\)++ in Figure 1.10).
+
 Classically, the probability of finding the particle in the range ++\(dx\)++ (if, for example, you took a snapshot at a random time ++\(t\)++) is equal to the fraction of the time ++\(T\)++ it takes to get from ++\(a\)++ to ++\(b\)++ that it spends in the interval ++\(dx\)++:
 
 \[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]
@@ -282,20 +332,20 @@ where ++\(v(x)\)++ is the speed, and
 Thus
 \[\rho(x)=\frac{1}{v(x)T}\]
 
-This is perhaps the closest classical analog to ++\(\|\Psi\|^2\)++.
+This is perhaps the closest classical analog to ++\(|\Psi|^2\)++.
 
 . Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
 . As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
 . For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
-+
-image::ch1_p1.11.jpg[width=300]
-| PROBLEM
+--
 
-|1.P
-|**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
+1.11::
+Griffiths::: {blank}
++
+**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
 (++\(p=mv\)++) for the classical harmonic oscillator (Problem
 1.11(b)).
-
++
 . Find the classical probability distribution ++\(\rho(p)\)++
 (note that ++\(p\)++ ranges from ++\(-\sqrt{2mE}\)++ to
 ++\(+\sqrt{2mE}\)++).
@@ -311,10 +361,11 @@ than ++\(\hbar \omega /2\)++, where
 case what can you say abut the product
 ++\(\sigma_{x}\sigma_{p}\)++?
 
-|PROBLEM
-
-|1.P
-|*1.13* Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time ++\(t\)++ is
+1.13::
+Griffiths:::
++
+--
+Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time ++\(t\)++ is
 
 \[x(t) = A\cos(\omega t)\]
 
@@ -342,17 +393,16 @@ Histogram[snapshots, 100, "PDF", PlotRange -> {0,2}]
 ----
 
 Meanwhile, make a plot of the density function, ++\(\rho(x)\)++, and, using `Show`, superimpose the two.
-| PROBLEM
+--
 
-|1.P
-|*1.14* Let ++\(P_{ab}(t)\)++ be the probability of finding the
+1.14::
+Griffiths:::
++
+--
+Let ++\(P_{ab}(t)\)++ be the probability of finding the
 particle in the range ++\((a<x<b)\)++, at time ++\(t\)++.
 
-. Show that
-+
-\[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\]
-where
-+
+.. Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
 ++\[J(x,t) \equiv \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
 What are the units of ++\(J(x,t)\)++? _Comment:_ ++\(J\)++
@@ -360,27 +410,34 @@ is called the *probability current* because it tells you the rate at
 which probability is "`flowing`" past the point ++\(x\)++. If
 ++\(P_{ab}(t)\)++ is increasing, then more probability is flowing
 into the region at one end than flows out the other.
-. Find the probability current for the wave function in Problem 1.9.
+.. Find the probability current for the wave function in Problem 1.9.
+
 (This is not a very pithy example, I’m afraid; we’ll encounter more
 substantial ones in due course.)
-
-|
-. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
-. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=\|\Psi(x,t)\|e^{i\varphi(x,t)}\)++.
+--
+Ours:::
+.. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
+.. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
 Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
 
-| 1.P
-|*1.15* Show that
+1.15::
+Griffiths:::
++
+--
+Show that
 
 ++\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]++
 
-for any two (normalizable) solutions to the Schrödinger equation (with
+for any two (normalizable) solutions to the same {sch} equation (i.e., with
 the same ++\(V(x)\)++), ++\(\Psi_{1}\)++ and
 ++\(\Psi_{2}\)++.
-| PROBLEM
+--
 
-|1.P
-|*1.16* A particle is represented (at time ++\(t=0\)++) by the wave function
+1.16::
+Griffiths:::
++
+--
+A particle is represented (at time ++\(t=0\)++) by the wave function
 
 ++\[
 \Psi(x,0)=\begin{cases}
@@ -393,44 +450,45 @@ A(a^2-x^2)&-a\le x\le +a\\
 . What is the expectation value of ++\(x\)++?
 . What is the expectation value of ++\(p\)++? (Note that you
 _cannot_ get it from
-++\(\langle p \rangle = m\,d\langle x \rangle/dt\)++. Why not?)
+++\(\langle p \rangle = m\frac{d\langle x \rangle}{dt}\)++. Why not?)
 . Find the expectation value of ++\(x^2\)++.
 . Find the expectation value of ++\(p^2\)++.
 . Find the uncertainty in ++\(x\)++ (++\(\sigma_{x}\)++).
 . Find the uncertainty in ++\(p\)++ (++\(\sigma_{p}\)++).
 . Check that your results are consistent with the uncertainty principle.
+--
 
-|PROBLEM
-
-|1.P
-|*1.17* Suppose you wanted to describe an *unstable particle* that spontaneously
+1.17::
+Griffiths:::
++
+--
+Suppose you wanted to describe an *unstable particle* that spontaneously
 disintegrates with a "`lifetime`" ++\(\tau\)++. In that case the
 total probability of finding the particle somewhere should _not_ be
 constant, but should decrease at (say) an exponential rate:
-
-++\[P(t) \equiv \int_{-\infty}^{\infty}\|\Psi(x,t)\|^2dx=e^{-t/\tau}\]++
+++\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]++
 
 A crude way of achieving this result is as follows. In Equation 1.24 we
 tacitly assumed that V (the potential energy) is _real_. That is
 certainly reasonable, but it leads to the "`conservation of
 probability`" enshrined in Equation 1.27. What if we assign to
 ++\(V\)++ an imaginary part:
-
 ++\[V=V_{0}-i\Gamma\]++
-
 where ++\(V_{0}\)++ is the true potential energy and
 ++\(\Gamma\)++ is a positive real constant?
 
-. Show that (in place of Equation 1.27) we now get
-+
+.. Show that (in place of Equation 1.27) we now get
 ++\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]++
 
-. Solve for ++\(P(t)\)++, and find the lifetime of the particle in
+.. Solve for ++\(P(t)\)++, and find the lifetime of the particle in
 terms of ++\(\Gamma\)++.
-|PROBLEM
+--
 
-|1.P
-|*1.18* Very roughly speaking, quantum mechanics is relevant when the de Broglie
+1.18::
+Griffiths:::
++
+--
+Very roughly speaking, quantum mechanics is relevant when the de Broglie
 wavelength of the particle in question (++\(h/p\)++) is greater
 than the characteristic size of the system (++\(d\)++). In thermal
 equilibrium at (Kelvin) temperature ++\(T\)++, the average kinetic
@@ -447,54 +505,36 @@ The purpose of this problem is to determine which systems will have to
 be treated quantum mechanically and which can safely be described
 classically.
 
-. *Solids.* The lattice spacing in a typical solid is around
+.. *Solids.* The lattice spacing in a typical solid is around
 ++\(d=0.3\,\textrm{mm}\)++. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
 +
 _Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below ++\(4\,\textrm{K}\)++.
 
-. *Gases.* For what temperatures are the atoms in an ideal gas at pressure ++\(P\)++ quantum mechanical? Hint: Use the ideal gas law (++\(PV=Nk_BT\)++) to deduce the interatomic spacing.
+.. *Gases.* For what temperatures are the atoms in an ideal gas at pressure ++\(P\)++ quantum mechanical? Hint: Use the ideal gas law (++\(PV=Nk_BT\)++) to deduce the interatomic spacing.
 _Answer_: ++\(T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}\)++.
 Obviously (for the gas to show quantum behavior) we want ++\(m\)++ to be as small as possible, and ++\(P\)++ as large as possible.
 Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textrm{cm}\)++ and the temperature is ++\(3\,\textrm{K}\)++) quantum mechanical?
 (Assume it's monatomic hydrogen, not ++\(\ce{H2}\)++.)
+--
 
-| PROBLEMS
+// Verify Ehrenfest's theorem for the following wavefunction:
 
-|===
+//[stem]
+//++++
+//\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
+//++++
 
-=== Demonstrations
+//where
 
-==== 1.1 The Schrödinger Equation
+//[stem]
+//++++
+//a=\frac{m\omega}{\hbar}
+//++++
 
-* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
-
-==== 1.2 The Statistical Interpretation
-
-* Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
-* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
-
-==== 1.3 Probability
-
-* A discrete version of the above probability sampling demos, replacing the continuous functions with (say) balls in a bag, or dice, or whatever, and showing the same kind of histogram grow over time.
-* A demonstration of example 1.2 (the falling object, sampling how far it has fallen).
-* Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter ++\(\sigma\)++).
-
-==== 1.5 Momentum
-
-* Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time (particle in a box, harmonic oscillator, etc) by marking the classical position and drawing the momentum vector.
-* Do the probability and sampling demos, simultaneously for position and momentum, i.e., let the harmonic oscillator evolve a bunch, then sample its position and momentum at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
-* Sample demo in which ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++ have been added: https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543[the quantum harmonic oscillator^].
-
-==== 1.6 The Uncertainty Principle
-
-* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
-
-
-=== Other Ideas, Notes, Materials
-
-* Discuss basic properties of probability distributions:
-** Linearity of expectation
-** How scaling ++\(x\)++ affects ++\(\sigma\)++
-
-* Interactive timeline like the ones in some of our WSU courses (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
+// . Calculate ++\(\frac{d\langle p \rangle}{dt}\)++
+// . Use Schrodinger's equation to find ++\(V(x)\)++.
+// . Calculate ++\(\left\langle -\frac{\partial V}{\partial x} \right\rangle\)++. Does Ehrenfest's theorem hold?
+// . This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
+//What does part (c) tell you about the behavior of the quantum harmonic oscillator?
+//How does this compare to the classical harmonic oscillator?
