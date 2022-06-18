@@ -9,6 +9,7 @@
 :sch: Schrödinger
 :toclevels: 3
 :!webfonts:
+:sublist-style: pass:[loweralpha]
 
 https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[This is a link to this very page.]
 
@@ -37,15 +38,19 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 ==== Exercises
 Griffiths::
 * *1.1* For the distribution of ages in the example in Section 1.3.1:
-.. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
-.. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
-.. Use your results in (a) and (b) to check Equation 1.12.
++
+[{sublist-style}]
+. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
+. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
+. Use your results in (a) and (b) to check Equation 1.12.
 * *1.3* Consider the *gaussian* distribution
 ++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
 where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
-.. Use Equation 1.16 to determine ++\(A\)++.
-.. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
-.. Sketch the graph of ++\(\rho(x)\)++.
++
+[{sublist-style}]
+. Use Equation 1.16 to determine ++\(A\)++.
+. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
+. Sketch the graph of ++\(\rho(x)\)++.
 
 Ours::
 * You survey your neighbors to determine the number of pets they have in their households and collect the following data:
@@ -78,16 +83,19 @@ This is the solution
     \end{cases}\\
     \rho_2(x) &= 2\sin^2(2\pi x)\end{align*}\]++
 
-.. Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall.
-.. Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
-.. For both distributions, calculate the probability of finding the particle within 1 standard deviation.
+[{sublist-style}]
+. Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall.
+. Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
+. For both distributions, calculate the probability of finding the particle within 1 standard deviation.
 --
 
 ==== Problems
 Griffiths::
 *1.2*
-.. Find the standard deviation of the distribution in Example 1.2.
-.. What is the probability that a photograph, selected at random, would
++
+[{sublist-style}]
+. Find the standard deviation of the distribution in Example 1.2.
+. What is the probability that a photograph, selected at random, would
 show a distance ++\(x\)++ more than one standard deviation away
 from the average?
 
@@ -99,26 +107,26 @@ Beginning with ++\(x_0=0\)++, you repeatedly flip a fair coin ++\(n\)++ times.
 For ++\(k=1,\ldots,n\)++, if the ++\(k\)++^th^ flip is heads, set ++\(x_k=x_{k-1}+1\)++.
 If the ++\(k\)++^th^ flip is tails, set ++\(x_k=x_{k-1}-1\)++.
 We will investigate the possible values of ++\(x_n\)++ and the number of sequences of coin flips resulting in ++\(x_n=N\)++, i.e., the number of sequences containing ++\(N\)++ more heads than tails (with more tails than heads if ++\(N<0\)++).
-
-.. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
-.. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
+[{sublist-style}]
+. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
+. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
 How many sequences of coin flips are there in total?
 Do you notice a pattern?
-.. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle^] to determine the probability of landing at each integer after 7 coin flips.
+. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle^] to determine the probability of landing at each integer after 7 coin flips.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
 .Wording #2
 You are standing at the center of a number line (++\(x=0\)++). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.
-
-.. You flip the coin one time (++\(n=1\)++).
+[{sublist-style}]
+. You flip the coin one time (++\(n=1\)++).
 Where on the number line could you end up?
 How many total paths are there?
-.. For ++\(n=0\)++ to ++\(n=3\)++, how many times could you end up at each integer?
+. For ++\(n=0\)++ to ++\(n=3\)++, how many times could you end up at each integer?
 How many total paths are there?
 Do you notice a pattern?
-.. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
+. Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
@@ -152,10 +160,10 @@ Griffiths::
 
 where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
 (We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the {sch} equation.)
-
-.. Normalize ++\(\Psi\)++.
-.. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
-.. Find the standard deviation of ++\(x\)++.
+[{sublist-style}]
+. Normalize ++\(\Psi\)++.
+. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
+. Find the standard deviation of ++\(x\)++.
 
 Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
 
@@ -170,10 +178,11 @@ Ours::
 * Normalize the following wavefunctions (i.e. find A):
 +
 --
-.. ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
-.. ++\(\Psi(x,0)= Ae^{-\kappa|x|}\)++
-.. ++\(\Psi(x,0)= A\frac{\sin(x)}{x}\)++
-.. ++\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
+[{sublist-style}]
+. ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
+. ++\(\Psi(x,0)= Ae^{-\kappa|x|}\)++
+. ++\(\Psi(x,0)= A\frac{\sin(x)}{x}\)++
+. ++\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
 
 .Solution (placeholder)
 [%collapsible]
@@ -197,14 +206,15 @@ function
 where ++\(A\)++, ++\(a\)++, and ++\(b\)++ are
 (positive) constants.
 
-.. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
+[{sublist-style}]
+. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
 of ++\(a\)++ and ++\(b\)++).
-.. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
-.. Where is the particle most likely to be found at ++\(t=0\)++?
-.. What is the probability of finding the particle to the left of
+. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
+. Where is the particle most likely to be found at ++\(t=0\)++?
+. What is the probability of finding the particle to the left of
 ++\(a\)++? Check your result in the limiting cases
 ++\(b=a\)++ and ++\(b=2a\)++.
-.. What is the expectation value of ++\(x\)++?
+. What is the expectation value of ++\(x\)++?
 --
 
 Ours::
@@ -269,13 +279,13 @@ Griffiths::
 ++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
 
 where ++\(A\)++ and ++\(a\)++ are positive real constants.
-
-.. Find ++\(A\)++.
-.. For what potential energy function, ++\(V(x)\)++, is this a
+[{sublist-style}]
+. Find ++\(A\)++.
+. For what potential energy function, ++\(V(x)\)++, is this a
 solution to the {sch} equation?
-.. Calculate the expectation values of ++\(x\)++,
+. Calculate the expectation values of ++\(x\)++,
 ++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
-.. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
+. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
 product consistent with the uncertainty principle?
 --
 
@@ -291,19 +301,21 @@ Griffiths:::
 Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
 +
 --
-.. If you selected one number at random, from this set, what are the
+[{sublist-style}]
+. If you selected one number at random, from this set, what are the
 probabilities of getting each of the 10 digits?
-.. What is the most probable digit? What is the median digit? What is the
+. What is the most probable digit? What is the median digit? What is the
 average value?
-.. Find the standard deviation for this distribution.
+. Find the standard deviation for this distribution.
 --
 Ours:::
 +
 An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
 +
-.. What are the probabilities of selecting a number with 1, 2, or 3 digits?
-.. Calculate the expected number of digits.
-.. Find the standard deviation of the number of digits.
+[{sublist-style}]
+. What are the probabilities of selecting a number with 1, 2, or 3 digits?
+. Calculate the expected number of digits.
+. Find the standard deviation of the number of digits.
 
 1.11::
 Griffiths:::
@@ -325,10 +337,10 @@ Thus
 \[\rho(x)=\frac{1}{v(x)T}\]
 
 This is perhaps the closest classical analog to ++\(|\Psi|^2\)++.
-
-.. Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
-.. As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
-.. For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
+[{sublist-style}]
+. Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
+. As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
+. For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
 --
 
 1.11::
@@ -338,12 +350,13 @@ Griffiths::: {blank}
 (++\(p=mv\)++) for the classical harmonic oscillator (Problem
 1.11(b)).
 +
-.. Find the classical probability distribution ++\(\rho(p)\)++
+[{sublist-style}]
+. Find the classical probability distribution ++\(\rho(p)\)++
 (note that ++\(p\)++ ranges from ++\(-\sqrt{2mE}\)++ to
 ++\(+\sqrt{2mE}\)++).
-.. Calculate ++\(\langle p \rangle\)++,
+. Calculate ++\(\langle p \rangle\)++,
 ++\(\langle p^2 \rangle\)++, and ++\(\sigma_{p}\)++.
-.. What’s the _classical_ uncertainty product,
+. What’s the _classical_ uncertainty product,
 ++\(\sigma_{x}\sigma_{p}\)++, for this system? Notice that this
 product can be as small as you like, classically, simply by sending
 ++\(E \rightarrow 0\)++. But in quantum mechanics, as we shall see
@@ -394,7 +407,8 @@ Griffiths:::
 Let ++\(P_{ab}(t)\)++ be the probability of finding the
 particle in the range ++\((a<x<b)\)++, at time ++\(t\)++.
 
-.. Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
+[{sublist-style}]
+. Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
 ++\[J(x,t) \equiv \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
 What are the units of ++\(J(x,t)\)++? _Comment:_ ++\(J\)++
@@ -402,14 +416,15 @@ is called the *probability current* because it tells you the rate at
 which probability is "`flowing`" past the point ++\(x\)++. If
 ++\(P_{ab}(t)\)++ is increasing, then more probability is flowing
 into the region at one end than flows out the other.
-.. Find the probability current for the wave function in Problem 1.9.
+. Find the probability current for the wave function in Problem 1.9.
 
 (This is not a very pithy example, I’m afraid; we’ll encounter more
 substantial ones in due course.)
 --
 Ours:::
-.. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
-.. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
+[{sublist-style}]
+. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
+. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
 Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
 
 1.15::
@@ -437,7 +452,7 @@ A(a^2-x^2)&-a\le x\le +a\\
 0 &\textrm{otherwise}
 \end{cases}
 \]++
-
+[{sublist-style}]
 . Determine the normalization constant ++\(A\)++.
 . What is the expectation value of ++\(x\)++?
 . What is the expectation value of ++\(p\)++? (Note that you
@@ -468,11 +483,11 @@ probability`" enshrined in Equation 1.27. What if we assign to
 ++\[V=V_{0}-i\Gamma\]++
 where ++\(V_{0}\)++ is the true potential energy and
 ++\(\Gamma\)++ is a positive real constant?
-
-.. Show that (in place of Equation 1.27) we now get
+[{sublist-style}]
+. Show that (in place of Equation 1.27) we now get
 ++\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]++
 
-.. Solve for ++\(P(t)\)++, and find the lifetime of the particle in
+. Solve for ++\(P(t)\)++, and find the lifetime of the particle in
 terms of ++\(\Gamma\)++.
 --
 
@@ -496,13 +511,13 @@ Broglie wavelength is
 The purpose of this problem is to determine which systems will have to
 be treated quantum mechanically and which can safely be described
 classically.
-
-.. *Solids.* The lattice spacing in a typical solid is around
+[{sublist-style}]
+. *Solids.* The lattice spacing in a typical solid is around
 ++\(d=0.3\,\textrm{mm}\)++. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
 +
 _Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below ++\(4\,\textrm{K}\)++.
 
-.. *Gases.* For what temperatures are the atoms in an ideal gas at pressure ++\(P\)++ quantum mechanical? Hint: Use the ideal gas law (++\(PV=Nk_BT\)++) to deduce the interatomic spacing.
+. *Gases.* For what temperatures are the atoms in an ideal gas at pressure ++\(P\)++ quantum mechanical? Hint: Use the ideal gas law (++\(PV=Nk_BT\)++) to deduce the interatomic spacing.
 _Answer_: ++\(T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}\)++.
 Obviously (for the gas to show quantum behavior) we want ++\(m\)++ to be as small as possible, and ++\(P\)++ as large as possible.
 Put in the numbers for helium at atmospheric pressure.
