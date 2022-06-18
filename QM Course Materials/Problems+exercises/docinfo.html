@@ -30,10 +30,115 @@
 	onload="renderMathInElement(document.body);"
 ></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+	rel="stylesheet"
+/>
+
 <style>
-	td.tableblock > .content > div.olist > ol {
-		list-style-type: lower-alpha;
+	:root {
+		--body-font: "Source Sans Pro", sans-serif;
+		--header-font: "Source Serif Pro", Georgia, serif;
 	}
+
+	html {
+		font-size: 19px;
+	}
+
+	body,
+	#toc ul,
+	#toctitle {
+		font-family: var(--body-font);
+	}
+
+	#toc a:hover {
+		text-decoration: underline;
+	}
+
+	@media screen and (min-width: 1280px) {
+		#toc.toc2 {
+			width: 17em;
+		}
+	}
+
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-size: 1.1rem;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-family: var(--header-font);
+	}
+
+	a {
+		text-decoration-style: dotted;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	a:hover {
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+	:is(ol, ul) > li p {
+		margin-bottom: unset;
+	}
+
+	/* td.tableblock > .content > div.olist > ol {
+		list-style-type: lower-alpha;
+	} */
+
+	/* @media screen and (min-width: 768px) {
+		#toc.toc2 {
+			width: 12em;
+		}
+	} */
 
 	summary::-webkit-details-marker {
 		display: none;

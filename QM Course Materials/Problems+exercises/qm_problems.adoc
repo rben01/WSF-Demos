@@ -8,6 +8,7 @@
 :sectanchors:
 :sch: Schrödinger
 :toclevels: 3
+:!webfonts:
 
 https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[This is a link to this very page.]
 
@@ -47,24 +48,15 @@ where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (Th
 .. Sketch the graph of ++\(\rho(x)\)++.
 
 Ours::
-* You survey you neighbors to determine the number of pets they have in their households and collect the following data:
+* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
 +
 --
-[%header%autowidth,cols=">~,<~",stripes="even"]
+[%autowidth,cols="~s,11*^"]
 |===
-|Number of pets|Number of households
-|0|3
-|1|6
-|2|5
-|3|2
-|4|2
-|5|0
-|6|1
-|7|0
-|8|0
-|9|0
-|10|1
+|Number of pets|0|1|2|3|4|5|6|7|8|9|10
+|Number of households|3|6|5|2|2|0|1|0|0|0|1
 |===
+
 
 Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)++)
 
@@ -299,19 +291,19 @@ Griffiths:::
 Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
 +
 --
-. If you selected one number at random, from this set, what are the
+.. If you selected one number at random, from this set, what are the
 probabilities of getting each of the 10 digits?
-. What is the most probable digit? What is the median digit? What is the
+.. What is the most probable digit? What is the median digit? What is the
 average value?
-. Find the standard deviation for this distribution.
+.. Find the standard deviation for this distribution.
 --
 Ours:::
 +
 An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
 +
-. What are the probabilities of selecting a number with 1, 2, or 3 digits?
-. Calculate the expected number of digits.
-. Find the standard deviation of the number of digits.
+.. What are the probabilities of selecting a number with 1, 2, or 3 digits?
+.. Calculate the expected number of digits.
+.. Find the standard deviation of the number of digits.
 
 1.11::
 Griffiths:::
@@ -334,9 +326,9 @@ Thus
 
 This is perhaps the closest classical analog to ++\(|\Psi|^2\)++.
 
-. Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
-. As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
-. For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
+.. Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
+.. As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
+.. For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
 --
 
 1.11::
@@ -346,12 +338,12 @@ Griffiths::: {blank}
 (++\(p=mv\)++) for the classical harmonic oscillator (Problem
 1.11(b)).
 +
-. Find the classical probability distribution ++\(\rho(p)\)++
+.. Find the classical probability distribution ++\(\rho(p)\)++
 (note that ++\(p\)++ ranges from ++\(-\sqrt{2mE}\)++ to
 ++\(+\sqrt{2mE}\)++).
-. Calculate ++\(\langle p \rangle\)++,
+.. Calculate ++\(\langle p \rangle\)++,
 ++\(\langle p^2 \rangle\)++, and ++\(\sigma_{p}\)++.
-. What’s the _classical_ uncertainty product,
+.. What’s the _classical_ uncertainty product,
 ++\(\sigma_{x}\sigma_{p}\)++, for this system? Notice that this
 product can be as small as you like, classically, simply by sending
 ++\(E \rightarrow 0\)++. But in quantum mechanics, as we shall see

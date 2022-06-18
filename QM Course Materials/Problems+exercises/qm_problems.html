@@ -6,7 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.16">
 <title>Quantum Mechanics Problems and Exercises</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -468,10 +467,115 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	onload="renderMathInElement(document.body);"
 ></script>
 
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+	rel="stylesheet"
+/>
+
 <style>
-	td.tableblock > .content > div.olist > ol {
-		list-style-type: lower-alpha;
+	:root {
+		--body-font: "Source Sans Pro", sans-serif;
+		--header-font: "Source Serif Pro", Georgia, serif;
 	}
+
+	html {
+		font-size: 19px;
+	}
+
+	body,
+	#toc ul,
+	#toctitle {
+		font-family: var(--body-font);
+	}
+
+	#toc a:hover {
+		text-decoration: underline;
+	}
+
+	@media screen and (min-width: 1280px) {
+		#toc.toc2 {
+			width: 17em;
+		}
+	}
+
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-size: 1.1rem;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-family: var(--header-font);
+	}
+
+	a {
+		text-decoration-style: dotted;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	a:hover {
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+	:is(ol, ul) > li p {
+		margin-bottom: unset;
+	}
+
+	/* td.tableblock > .content > div.olist > ol {
+		list-style-type: lower-alpha;
+	} */
+
+	/* @media screen and (min-width: 768px) {
+		#toc.toc2 {
+			width: 12em;
+		}
+	} */
 
 	summary::-webkit-details-marker {
 		display: none;
@@ -639,64 +743,52 @@ where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary 
 <div class="ulist">
 <ul>
 <li>
-<p>You survey you neighbors to determine the number of pets they have in their households and collect the following data:</p>
+<p>You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
 <div class="content">
-<table class="tableblock frame-all grid-all stripes-even fit-content">
+<table class="tableblock frame-all grid-all fit-content">
 <colgroup>
 <col>
 <col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
+<col>
 </colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-right valign-top">Number of pets</th>
-<th class="tableblock halign-left valign-top">Number of households</th>
-</tr>
-</thead>
 <tbody>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">0</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Number of pets</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">4</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">7</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">8</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">9</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">10</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">1</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">2</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">3</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">4</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">5</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">6</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">7</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">8</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">9</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-right valign-top"><p class="tableblock">10</p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Number of households</strong></p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">3</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">6</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">5</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">0</p></td>
+<td class="tableblock halign-center valign-top"><p class="tableblock">1</p></td>
 </tr>
 </tbody>
 </table>
@@ -1203,8 +1295,8 @@ product consistent with the uncertainty principle?</p>
 </div>
 <div class="openblock">
 <div class="content">
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>If you selected one number at random, from this set, what are the
 probabilities of getting each of the 10 digits?</p>
@@ -1226,8 +1318,8 @@ average value?</p>
 <div class="paragraph">
 <p>An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>What are the probabilities of selecting a number with 1, 2, or 3 digits?</p>
 </li>
@@ -1278,8 +1370,8 @@ average value?</p>
 <div class="paragraph">
 <p>This is perhaps the closest classical analog to \(|\Psi|^2\).</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Use conservation of energy to express \(v(x)\) in terms of \(E\) and \(V(x)\).</p>
 </li>
@@ -1309,8 +1401,8 @@ average value?</p>
 (\(p=mv\)) for the classical harmonic oscillator (Problem
 1.11(b)).</p>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>Find the classical probability distribution \(\rho(p)\)
 (note that \(p\) ranges from \(-\sqrt{2mE}\) to
