@@ -637,10 +637,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a>
 <ul class="sectlevel3">
 <li><a href="#_questions_5">Questions</a></li>
-<li><a href="#_demonstrations_5">Demonstrations</a></li>
 </ul>
 </li>
-<li><a href="#_griffiths_chapter_1_questions">Griffiths: Chapter 1 Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -975,7 +973,8 @@ Calculate the expected value and standard deviation.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Normalize the following wavefunctions (i.e. find A):</p>
+<p><strong>1.4.1</strong>
+Normalize the following wavefunctions (i.e. find A):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1008,7 +1007,7 @@ Calculate the expected value and standard deviation.</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
+<p><strong>1.4.2</strong> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 <div class="paragraph">
 <p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
 </div>
@@ -1021,6 +1020,23 @@ Calculate the expected value and standard deviation.</p>
 </div>
 </details>
 </li>
+<li>
+<p><strong>1.4.3</strong></p>
+</li>
+<li>
+<p><strong>1.4.4</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Use <a href="https://en.wikipedia.org/wiki/Divergence_theorem">Gauss&#8217;s Theorem</a> to extend this result to an arbitrary region \(S\) in \(\mathbb R^n\).</p>
+</li>
+<li>
+<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
+Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), i.e., in the direction of increasing phase.</p>
+</li>
+</ol>
+</div>
+</li>
 </ul>
 </div>
 </div>
@@ -1031,46 +1047,6 @@ Calculate the expected value and standard deviation.</p>
 <h3 id="_1_5_momentum"><a class="anchor" href="#_1_5_momentum"></a><a class="link" href="#_1_5_momentum">1.5 Momentum</a></h3>
 <div class="sect3">
 <h4 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">Questions</a></h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>1.7</strong> Calculate \(\frac{d\langle p \rangle}{dt}\). Answer:</p>
-<div class="paragraph">
-<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
-<em>expectation values obey the classical laws</em>.</p>
-</div>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
-<li>
-<p><strong>1.8</strong> Suppose you add a constant \(V_0\) to the
-potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
-as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
-change anything, but what about <em>quantum</em> mechanics? Show that the wave
-function picks up a time-dependent phase factor:
-\(\exp(-iV_0t/\hbar)\). What effect does this have on the
-expectation value of a dynamical variable?</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Ours</dt>
-<dd>
 <div class="ulist">
 <ul>
 <li>
@@ -1080,6 +1056,8 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </li>
 </ul>
 </div>
+<div class="openblock">
+<div class="content">
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1088,8 +1066,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </div>
 </div>
 </details>
-</dd>
-</dl>
+</div>
 </div>
 </div>
 <div class="sect3">
@@ -1124,63 +1101,18 @@ Let the resulting \(\delta\) function evolve (spread out, oscillate), then sampl
 <h3 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h3>
 <div class="sect3">
 <h4 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">Questions</a></h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
+<div class="paragraph">
+<p>placeholder</p>
+</div>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
-<p>\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]</p>
+<p>==== Demonstrations
+* <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
 </div>
 <div class="paragraph">
-<p>where \(A\) and \(a\) are positive real constants.</p>
+<p>=== Griffiths: Chapter 1 Questions</p>
 </div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(A\).</p>
-</li>
-<li>
-<p>For what potential energy function, \(V(x)\), is this a
-solution to the Schrödinger equation?</p>
-</li>
-<li>
-<p>Calculate the expectation values of \(x\),
-\(x^2\), \(p\), and \(p^2\).</p>
-</li>
-<li>
-<p>Find \(\sigma_{x}\) and \(\sigma_{p}\). Is their
-product consistent with the uncertainty principle?</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_demonstrations_5"><a class="anchor" href="#_demonstrations_5"></a><a class="link" href="#_demonstrations_5">Demonstrations</a></h4>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_griffiths_chapter_1_questions"><a class="anchor" href="#_griffiths_chapter_1_questions"></a><a class="link" href="#_griffiths_chapter_1_questions">Griffiths: Chapter 1 Questions</a></h3>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.1</dt>
@@ -1202,8 +1134,8 @@ product consistent with the uncertainty principle?</p>
 </dd>
 </dl>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.2</dt>
@@ -1221,8 +1153,8 @@ from the average?</p>
 </li>
 </ol>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.3</dt>
@@ -1246,8 +1178,8 @@ where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary 
 </dd>
 </dl>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.4</dt>
@@ -1289,8 +1221,6 @@ of \(a\) and \(b\)).</p>
 </li>
 </ol>
 </div>
-</div>
-</div>
 <div class="openblock">
 <div class="content">
 <div class="dlist">
@@ -1322,6 +1252,77 @@ of \(a\) and \(b\)).</p>
 <div class="paragraph">
 <p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
 </div>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">1.6</dt>
+<dd>
+<p>Why can&#8217;t you do integration-by-parts directly on th emiddle expression in Equation 1.29&#8201;&#8212;&#8201;pull the time derivative over onto \(x\), note that \(\partial x / \partial t = 0\), and conclude that \(d\langle x \rangle / dt = 0\)?</p>
+</dd>
+<dt class="hdlist1">1.7</dt>
+<dd>
+<p>Calculate \(\frac{d\langle p \rangle}{dt}\). Answer:</p>
+<div class="paragraph">
+<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
+This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
+<em>expectation values obey the classical laws</em>.</p>
+</div>
+</dd>
+</dl>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="dlist">
+<dl>
+<dt class="hdlist1">1.8</dt>
+<dd>
+<p>Suppose you add a constant \(V_0\) to the
+potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
+as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
+change anything, but what about <em>quantum</em> mechanics? Show that the wave
+function picks up a time-dependent phase factor:
+\(\exp(-iV_0t/\hbar)\). What effect does this have on the
+expectation value of a dynamical variable?</p>
+</dd>
+</dl>
+</div>
+</div>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.9</strong> A particle of mass \(m\) has the wave function</p>
+<div class="paragraph">
+<p>\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]</p>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>where \(A\) and \(a\) are positive real constants.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(A\).</p>
+</li>
+<li>
+<p>For what potential energy function, \(V(x)\), is this a
+solution to the Schrödinger equation?</p>
+</li>
+<li>
+<p>Calculate the expectation values of \(x\),
+\(x^2\), \(p\), and \(p^2\).</p>
+</li>
+<li>
+<p>Find \(\sigma_{x}\) and \(\sigma_{p}\). Is their
+product consistent with the uncertainty principle?</p>
+</li>
+</ol>
+</div>
+<div class="openblock">
+<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.10</dt>
@@ -1540,36 +1541,11 @@ substantial ones in due course.)</p>
 <div class="content">
 <div class="dlist">
 <dl>
-<dt class="hdlist1">Ours</dt>
-</dl>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Use <a href="https://en.wikipedia.org/wiki/Divergence_theorem">Gauss&#8217;s Theorem</a> to extend this result to an arbitrary region \(S\) in \(\mathbb R^n\).</p>
-</li>
-<li>
-<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
-Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), i.e., in the direction of increasing phase.</p>
-<div class="dlist">
-<dl>
 <dt class="hdlist1">1.15</dt>
 <dd>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
+<p>Show that</p>
 </dd>
 </dl>
-</div>
-</li>
-</ol>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>Show that</p>
 </div>
 <div class="paragraph">
 <p>\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]</p>
@@ -1579,24 +1555,15 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 the same \(V(x)\)), \(\Psi_{1}\) and
 \(\Psi_{2}\).</p>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.16</dt>
 <dd>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
+<p>A particle is represented (at time \(t=0\)) by the wave function</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
-<div class="paragraph">
-<p>A particle is represented (at time \(t=0\)) by the wave function</p>
 </div>
 <div class="paragraph">
 <p>\[
@@ -1642,22 +1609,13 @@ A(a^2-x^2)&amp;-a\le x\le +a\\
 <dl>
 <dt class="hdlist1">1.17</dt>
 <dd>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
-<div class="paragraph">
 <p>Suppose you wanted to describe an <strong>unstable particle</strong> that spontaneously
 disintegrates with a &#8220;lifetime&#8221; \(\tau\). In that case the
 total probability of finding the particle somewhere should <em>not</em> be
 constant, but should decrease at (say) an exponential rate:
 \[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>A crude way of achieving this result is as follows. In Equation 1.24 we
@@ -1681,28 +1639,19 @@ terms of \(\Gamma\).</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.18</dt>
 <dd>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
-<div class="paragraph">
 <p>Very roughly speaking, quantum mechanics is relevant when the de Broglie
 wavelength of the particle in question (\(h/p\)) is greater
 than the characteristic size of the system (\(d\)). In thermal
 equilibrium at (Kelvin) temperature \(T\), the average kinetic
 energy of a particle is</p>
+</dd>
+</dl>
 </div>
 <div class="paragraph">
 <p>\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]</p>
@@ -1741,6 +1690,7 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 <div class="openblock">
 <div class="content">
 
+</div>
 </div>
 </div>
 </div>

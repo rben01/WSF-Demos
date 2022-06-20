@@ -153,7 +153,8 @@ This is the solution
 === 1.4 Normalization
 
 ==== Questions
-* Normalize the following wavefunctions (i.e. find A):
+* *1.4.1*
+ Normalize the following wavefunctions (i.e. find A):
 +
 [{sublist-style}]
 . ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
@@ -169,7 +170,7 @@ This is the solution
 ====
 --
 
-* Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
+* *1.4.2* Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
 +
 ++\[\begin{align*}\langle x \rangle &= 3 \\\sigma &= 2\end{align*}\]++
 +
@@ -178,38 +179,29 @@ This is the solution
 ====
 This is the solution
 ====
+
+* *1.4.3*
+
+* *1.4.4*
+[{sublist-style}]
+. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
+. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
+Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
 --
 
 === 1.5 Momentum
 
 ==== Questions
-Griffiths::
-* *1.7* Calculate ++\(\frac{d\langle p \rangle}{dt}\)++. Answer:
-+
-++\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]++
-This is an instance of *Ehrenfest’s theorem*, which asserts that
-_expectation values obey the classical laws_.
---
-
-* *1.8* Suppose you add a constant ++\(V_0\)++ to the
-potential energy (by "`constant`" I mean independent of ++\(x\)++
-as well as ++\(t\)++). In _classical_ mechanics this doesn't
-change anything, but what about _quantum_ mechanics? Show that the wave
-function picks up a time-dependent phase factor:
-++\(\exp(-iV_0t/\hbar)\)++. What effect does this have on the
-expectation value of a dynamical variable?
---
-Ours::
 * Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
 In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
-
-+
+--
 .Solution (placeholder)
 [%collapsible]
 ====
 This is the solution
 ====
+--
 
 ==== Demonstrations
 * Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++.
@@ -222,23 +214,8 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 === 1.6 The Uncertainty Principle
 
 ==== Questions
-Griffiths::
-* *1.9* A particle of mass ++\(m\)++ has the wave function
-+
+placeholder
 --
-++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
-
-where ++\(A\)++ and ++\(a\)++ are positive real constants.
-[{sublist-style}]
-. Find ++\(A\)++.
-. For what potential energy function, ++\(V(x)\)++, is this a
-solution to the {sch} equation?
-. Calculate the expectation values of ++\(x\)++,
-++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
-. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
-product consistent with the uncertainty principle?
---
-
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
 
@@ -289,7 +266,7 @@ of ++\(a\)++ and ++\(b\)++).
 ++\(b=a\)++ and ++\(b=2a\)++.
 . What is the expectation value of ++\(x\)++?
 --
---
+
 1.5:: Consider the wave function
 ++\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]++
 
@@ -301,7 +278,41 @@ where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants
 . Find the standard deviation of ++\(x\)++.
 
 Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
+--
 
+1.6::
+Why can't you do integration-by-parts directly on th emiddle expression in Equation 1.29 -- pull the time derivative over onto \(x\), note that \(\partial x / \partial t = 0\), and conclude that \(d\langle x \rangle / dt = 0\)?
+
+1.7:: Calculate ++\(\frac{d\langle p \rangle}{dt}\)++. Answer:
++
+++\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]++
+This is an instance of *Ehrenfest’s theorem*, which asserts that
+_expectation values obey the classical laws_.
+--
+
+1.8:: Suppose you add a constant ++\(V_0\)++ to the
+potential energy (by "`constant`" I mean independent of ++\(x\)++
+as well as ++\(t\)++). In _classical_ mechanics this doesn't
+change anything, but what about _quantum_ mechanics? Show that the wave
+function picks up a time-dependent phase factor:
+++\(\exp(-iV_0t/\hbar)\)++. What effect does this have on the
+expectation value of a dynamical variable?
+--
+
+* *1.9* A particle of mass ++\(m\)++ has the wave function
++
+++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
+
+where ++\(A\)++ and ++\(a\)++ are positive real constants.
+[{sublist-style}]
+. Find ++\(A\)++.
+. For what potential energy function, ++\(V(x)\)++, is this a
+solution to the {sch} equation?
+. Calculate the expectation values of ++\(x\)++,
+++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
+. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
+product consistent with the uncertainty principle?
+--
 1.10::
 +
 Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
@@ -419,16 +430,9 @@ into the region at one end than flows out the other.
 (This is not a very pithy example, I’m afraid; we’ll encounter more
 substantial ones in due course.)
 --
-Ours:::
-[{sublist-style}]
-. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
-. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
-Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
 
 1.15::
-Griffiths:::
-+
---
+
 Show that
 
 ++\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]++
@@ -439,9 +443,7 @@ the same ++\(V(x)\)++), ++\(\Psi_{1}\)++ and
 --
 
 1.16::
-Griffiths:::
-+
---
+
 A particle is represented (at time ++\(t=0\)++) by the wave function
 
 ++\[
@@ -464,9 +466,7 @@ _cannot_ get it from
 --
 
 1.17::
-Griffiths:::
-+
---
+
 Suppose you wanted to describe an *unstable particle* that spontaneously
 disintegrates with a "`lifetime`" ++\(\tau\)++. In that case the
 total probability of finding the particle somewhere should _not_ be
@@ -490,9 +490,7 @@ terms of ++\(\Gamma\)++.
 --
 
 1.18::
-Griffiths:::
-+
---
+
 Very roughly speaking, quantum mechanics is relevant when the de Broglie
 wavelength of the particle in question (++\(h/p\)++) is greater
 than the characteristic size of the system (++\(d\)++). In thermal
