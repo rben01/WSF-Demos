@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <title>Quantum Mechanics Problems and Exercises</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -192,7 +192,8 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -234,9 +235,8 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
-pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
-pre.pygments .lineno::before{content:"";margin-right:-.125em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -273,7 +273,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -289,10 +289,11 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -335,8 +336,6 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
-.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
-.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -618,28 +617,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li><a href="#_1_3_probability">1.3 Probability</a>
 <ul class="sectlevel3">
-<li><a href="#_exercises">Exercises</a></li>
-<li><a href="#_problems">Problems</a></li>
+<li><a href="#_questions">Questions</a></li>
 <li><a href="#_demonstrations_3">Demonstrations</a></li>
 <li><a href="#_other_ideas_notes_materials_2">Other Ideas, Notes, Materials</a></li>
 </ul>
 </li>
 <li><a href="#_1_4_normalization">1.4 Normalization</a>
 <ul class="sectlevel3">
-<li><a href="#_exercises_2">Exercises</a></li>
-<li><a href="#_problems_2">Problems</a></li>
+<li><a href="#_questions_2">Questions</a></li>
 </ul>
 </li>
 <li><a href="#_1_5_momentum">1.5 Momentum</a>
 <ul class="sectlevel3">
-<li><a href="#_exercises_3">Exercises</a></li>
-<li><a href="#_problems_3">Problems</a></li>
+<li><a href="#_questions_3">Questions</a></li>
 <li><a href="#_demonstrations_4">Demonstrations</a></li>
 </ul>
 </li>
 <li><a href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a>
 <ul class="sectlevel3">
-<li><a href="#_exercises_4">Exercises</a></li>
+<li><a href="#_exercises">Exercises</a></li>
 <li><a href="#_demonstrations_5">Demonstrations</a></li>
 </ul>
 </li>
@@ -709,7 +705,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect2">
 <h3 id="_1_3_probability"><a class="anchor" href="#_1_3_probability"></a><a class="link" href="#_1_3_probability">1.3 Probability</a></h3>
 <div class="sect3">
-<h4 id="_exercises"><a class="anchor" href="#_exercises"></a><a class="link" href="#_exercises">Exercises</a></h4>
+<h4 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">Questions</a></h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
@@ -728,6 +724,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p>Use your results in (a) and (b) to check Equation 1.12.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>1.2</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find the standard deviation of the distribution in Example 1.2.</p>
+</li>
+<li>
+<p>What is the probability that a photograph, selected at random, would
+show a distance \(x\) more than one standard deviation away
+from the average?</p>
 </li>
 </ol>
 </div>
@@ -860,42 +871,24 @@ where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary 
 </div>
 </div>
 </li>
+<li>
+<p>Random Walk</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Wording #1:
+Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
+For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
+If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
+We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
+</li>
+</ul>
+</div>
+</li>
 </ul>
 </div>
 </dd>
 </dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_problems"><a class="anchor" href="#_problems"></a><a class="link" href="#_problems">Problems</a></h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<p><strong>1.2</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find the standard deviation of the distribution in Example 1.2.</p>
-</li>
-<li>
-<p>What is the probability that a photograph, selected at random, would
-show a distance \(x\) more than one standard deviation away
-from the average?</p>
-</li>
-</ol>
-</div>
-</dd>
-<dt class="hdlist1">Ours</dt>
-<dd>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<div class="title">Wording #1</div>
-<p>Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
-For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
-If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
-We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -911,16 +904,16 @@ Do you notice a pattern?</p>
 <p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle" target="_blank" rel="noopener">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 coin flips.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<div class="title">Wording #2</div>
-<p>You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
+<div class="ulist">
+<ul>
+<li>
+<p>Wording #2:
+You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.</p>
+</li>
+</ul>
 </div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
+</li>
 <li>
 <p>You flip the coin one time (\(n=1\)).
 Where on the number line could you end up?
@@ -938,6 +931,8 @@ Calculate the expected value and standard deviation.</p>
 </li>
 </ol>
 </div>
+<div class="openblock">
+<div class="content">
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -947,9 +942,6 @@ Calculate the expected value and standard deviation.</p>
 </div>
 </details>
 </div>
-</div>
-</dd>
-</dl>
 </div>
 </div>
 <div class="sect3">
@@ -992,97 +984,7 @@ Calculate the expected value and standard deviation.</p>
 <div class="sect2">
 <h3 id="_1_4_normalization"><a class="anchor" href="#_1_4_normalization"></a><a class="link" href="#_1_4_normalization">1.4 Normalization</a></h3>
 <div class="sect3">
-<h4 id="_exercises_2"><a class="anchor" href="#_exercises_2"></a><a class="link" href="#_exercises_2">Exercises</a></h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>1.5</strong> Consider the wave function</p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]</p>
-</div>
-<div class="paragraph">
-<p>where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
-(We&#8217;ll see in Chapter 2 for what potential (\(V\)) this wave function satisfies the Schrödinger equation.)</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Normalize \(\Psi\).</p>
-</li>
-<li>
-<p>Determine the expectation values of \(x\) and \(x^2\).</p>
-</li>
-<li>
-<p>Find the standard deviation of \(x\).</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
-</div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
-<div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
-</div>
-</div>
-</details>
-</div>
-</div>
-</li>
-</ul>
-</div>
-</dd>
-<dt class="hdlist1">Ours</dt>
-<dd>
-<div class="ulist">
-<ul>
-<li>
-<p>Normalize the following wavefunctions (i.e. find A):</p>
-<div class="openblock">
-<div class="content">
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
-</li>
-<li>
-<p>\(\Psi(x,0)= Ae^{-\kappa|x|}\)</p>
-</li>
-<li>
-<p>\(\Psi(x,0)= A\frac{\sin(x)}{x}\)</p>
-</li>
-<li>
-<p>\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
-</li>
-</ol>
-</div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
-<div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
-</div>
-</div>
-</details>
-</div>
-</div>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_problems_2"><a class="anchor" href="#_problems_2"></a><a class="link" href="#_problems_2">Problems</a></h4>
+<h4 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">Questions</a></h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
@@ -1092,8 +994,6 @@ Calculate the expected value and standard deviation.</p>
 <li>
 <p><strong>1.4</strong> At time \(t=0\) a particle is represented by the wave
 function</p>
-<div class="openblock">
-<div class="content">
 <div class="paragraph">
 <p>\[\Psi(x,0)=
     \begin{cases}
@@ -1103,6 +1003,12 @@ function</p>
     \end{cases}\]
 where \(A\), \(a\), and \(b\) are
 (positive) constants.</p>
+</div>
+</li>
+</ul>
+</div>
+</dd>
+</dl>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -1126,14 +1032,78 @@ of \(a\) and \(b\)).</p>
 </li>
 </ol>
 </div>
+<div class="openblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.5</strong> Consider the wave function
+\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]</p>
+</li>
+</ul>
 </div>
+<div class="paragraph">
+<p>where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
+(We&#8217;ll see in Chapter 2 for what potential (\(V\)) this wave function satisfies the Schrödinger equation.)</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Normalize \(\Psi\).</p>
+</li>
+<li>
+<p>Determine the expectation values of \(x\) and \(x^2\).</p>
+</li>
+<li>
+<p>Find the standard deviation of \(x\).</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
+</div>
+</div>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">Ours</dt>
+<dd>
+<div class="ulist">
+<ul>
+<li>
+<p>Normalize the following wavefunctions (i.e. find A):</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
+</li>
+<li>
+<p>\(\Psi(x,0)= Ae^{-\kappa|x|}\)</p>
+</li>
+<li>
+<p>\(\Psi(x,0)= A\frac{\sin(x)}{x}\)</p>
+</li>
+<li>
+<p>\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
+</li>
+</ol>
 </div>
 </li>
 </ul>
 </div>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>This is the solution</p>
+</div>
+</div>
+</details>
 </dd>
-<dt class="hdlist1">Ours</dt>
-<dd>
+</dl>
+</div>
+<div class="openblock">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
@@ -1152,15 +1122,14 @@ of \(a\) and \(b\)).</p>
 </li>
 </ul>
 </div>
-</dd>
-</dl>
+</div>
 </div>
 </div>
 </div>
 <div class="sect2">
 <h3 id="_1_5_momentum"><a class="anchor" href="#_1_5_momentum"></a><a class="link" href="#_1_5_momentum">1.5 Momentum</a></h3>
 <div class="sect3">
-<h4 id="_exercises_3"><a class="anchor" href="#_exercises_3"></a><a class="link" href="#_exercises_3">Exercises</a></h4>
+<h4 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">Questions</a></h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
@@ -1178,6 +1147,27 @@ This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts tha
 </ul>
 </div>
 </dd>
+</dl>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.8</strong> Suppose you add a constant \(V_0\) to the
+potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
+as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
+change anything, but what about <em>quantum</em> mechanics? Show that the wave
+function picks up a time-dependent phase factor:
+\(\exp(-iV_0t/\hbar)\). What effect does this have on the
+expectation value of a dynamical variable?</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="dlist">
+<dl>
 <dt class="hdlist1">Ours</dt>
 <dd>
 <div class="ulist">
@@ -1186,6 +1176,9 @@ This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts tha
 <p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
 In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
+</li>
+</ul>
+</div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1194,26 +1187,6 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </div>
 </div>
 </details>
-</li>
-</ul>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_problems_3"><a class="anchor" href="#_problems_3"></a><a class="link" href="#_problems_3">Problems</a></h4>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<p><strong>1.8</strong> Suppose you add a constant \(V_0\) to the
-potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
-as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
-change anything, but what about <em>quantum</em> mechanics? Show that the wave
-function picks up a time-dependent phase factor:
-\(\exp(-iV_0t/\hbar)\). What effect does this have on the
-expectation value of a dynamical variable?</p>
 </dd>
 </dl>
 </div>
@@ -1249,7 +1222,7 @@ Let the resulting \(\delta\) function evolve (spread out, oscillate), then sampl
 <div class="sect2">
 <h3 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h3>
 <div class="sect3">
-<h4 id="_exercises_4"><a class="anchor" href="#_exercises_4"></a><a class="link" href="#_exercises_4">Exercises</a></h4>
+<h4 id="_exercises"><a class="anchor" href="#_exercises"></a><a class="link" href="#_exercises">Exercises</a></h4>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
