@@ -17,6 +17,12 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 == Chapter 1
 
 === 1.1 The {sch} Equation
+==== Questions
+* 1.1.1 Question about demonstration (Robert?)
+
+* 1.1.2 If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution (Modified from Townsend).
+
+* 1.1.3 Show that \() is a solution to the classical wave equation \(\) but *not* the {sch} equation (Modified from Townsend).
 
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
@@ -29,40 +35,25 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 
 === 1.2 The Statistical Interpretation
 
+==== Questions
+Ours::
+* *1.2.1* Question about demonstration? (Robert?)
+* *1.2.2* Question about individual particles interacting/collective motion
+
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
 
 === 1.3 Probability
 
-==== Questions
-Griffiths::
-* *1.1* For the distribution of ages in the example in Section 1.3.1:
+* *1.3.1* An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
 +
 [{sublist-style}]
-. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
-. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
-. Use your results in (a) and (b) to check Equation 1.12.
+. What are the probabilities of selecting a number with 1, 2, or 3 digits?
+. Calculate the expected number of digits.
+. Find the standard deviation of the number of digits.
 
-* *1.2*
-+
-[{sublist-style}]
-. Find the standard deviation of the distribution in Example 1.2.
-. What is the probability that a photograph, selected at random, would
-show a distance ++\(x\)++ more than one standard deviation away
-from the average?
-
-* *1.3* Consider the *gaussian* distribution
-++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
-where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
-+
-[{sublist-style}]
-. Use Equation 1.16 to determine ++\(A\)++.
-. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
-. Sketch the graph of ++\(\rho(x)\)++.
-
-Ours::
-* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
+* *1.3.2* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
 +
 --
 [#pets-table,cols=">1h,<1",stripes=none,frame=all,grid=rows,width=40em]
@@ -92,7 +83,7 @@ This is the solution
 ====
 --
 
-* Plot the following two probability density distributions over the interval 0 to 1:
+* *1.3.3* Plot the following two probability density distributions over the interval 0 to 1:
 +
 --
 ++\[\begin{align*}
@@ -109,22 +100,9 @@ This is the solution
 . For both distributions, calculate the probability of finding the particle within 1 standard deviation.
 --
 
-* Random Walk
+* *1.3.4*
 
 - Wording #1:
-Beginning with ++\(x_0=0\)++, you repeatedly flip a fair coin ++\(n\)++ times.
-For ++\(k=1,\ldots,n\)++, if the ++\(k\)++^th^ flip is heads, set ++\(x_k=x_{k-1}+1\)++.
-If the ++\(k\)++^th^ flip is tails, set ++\(x_k=x_{k-1}-1\)++.
-We will investigate the possible values of ++\(x_n\)++ and the number of sequences of coin flips resulting in ++\(x_n=N\)++, i.e., the number of sequences containing ++\(N\)++ more heads than tails (with more tails than heads if ++\(N<0\)++).
-[{sublist-style}]
-. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
-. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
-How many sequences of coin flips are there in total?
-Do you notice a pattern?
-. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle^] to determine the probability of landing at each integer after 7 coin flips.
-Where are you most likely to land?
-Calculate the expected value and standard deviation.
-- Wording #2:
 You are standing at the center of a number line (++\(x=0\)++). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.
 [{sublist-style}]
@@ -137,6 +115,21 @@ Do you notice a pattern?
 . Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
+
+- Wording #2:
+Beginning with ++\(x_0=0\)++, you repeatedly flip a fair coin ++\(n\)++ times.
+For ++\(k=1,\ldots,n\)++, if the ++\(k\)++^th^ flip is heads, set ++\(x_k=x_{k-1}+1\)++.
+If the ++\(k\)++^th^ flip is tails, set ++\(x_k=x_{k-1}-1\)++.
+We will investigate the possible values of ++\(x_n\)++ and the number of sequences of coin flips resulting in ++\(x_n=N\)++, i.e., the number of sequences containing ++\(N\)++ more heads than tails (with more tails than heads if ++\(N<0\)++).
+[{sublist-style}]
+. What are the possible values of ++\(x_1\)++? How many total sequences of coin flips are there?
+. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of coin flips lead to each possible value of ++\(N\)++?
+How many sequences of coin flips are there in total?
+Do you notice a pattern?
+. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle^] to determine the probability of landing at each integer after 7 coin flips.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.
+
 --
 .Solution (placeholder)
 [%collapsible]
@@ -265,7 +258,7 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 
 === 1.6 The Uncertainty Principle
 
-==== Exercises
+==== Questions
 Griffiths::
 * *1.9* A particle of mass ++\(m\)++ has the wave function
 +
@@ -287,10 +280,32 @@ product consistent with the uncertainty principle?
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
 
 
-=== Griffiths: Further Problems on Chapter 1
+=== Griffiths: Chapter 1 Questions
+* *1.1* For the distribution of ages in the example in Section 1.3.1:
++
+[{sublist-style}]
+. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
+. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
+. Use your results in (a) and (b) to check Equation 1.12.
 
+* *1.2*
++
+[{sublist-style}]
+. Find the standard deviation of the distribution in Example 1.2.
+. What is the probability that a photograph, selected at random, would
+show a distance ++\(x\)++ more than one standard deviation away
+from the average?
+
+* *1.3* Consider the *gaussian* distribution
+++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
+where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
++
+[{sublist-style}]
+. Use Equation 1.16 to determine ++\(A\)++.
+. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
+. Sketch the graph of ++\(\rho(x)\)++.
+--
 1.10::
-Griffiths:::
 +
 Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
 +
@@ -302,14 +317,6 @@ probabilities of getting each of the 10 digits?
 average value?
 . Find the standard deviation for this distribution.
 --
-Ours:::
-+
-An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
-+
-[{sublist-style}]
-. What are the probabilities of selecting a number with 1, 2, or 3 digits?
-. Calculate the expected number of digits.
-. Find the standard deviation of the number of digits.
 
 1.11::
 Griffiths:::
