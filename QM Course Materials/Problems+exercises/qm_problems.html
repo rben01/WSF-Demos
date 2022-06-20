@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <title>Quantum Mechanics Problems and Exercises</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -192,8 +192,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
-details>summary::-webkit-details-marker{display:none}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -235,8 +234,9 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -273,7 +273,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -289,11 +289,10 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
-li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -336,6 +335,8 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -624,8 +625,33 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_1_2_the_statistical_interpretation">1.2 The Statistical Interpretation</a>
 <ul class="sectlevel3">
 <li><a href="#_questions_2">Questions</a></li>
+<li><a href="#_demonstrations_2">Demonstrations</a></li>
 </ul>
 </li>
+<li><a href="#_1_3_probability">1.3 Probability</a>
+<ul class="sectlevel3">
+<li><a href="#_demonstrations_3">Demonstrations</a></li>
+<li><a href="#_other_ideas_notes_materials_2">Other Ideas, Notes, Materials</a></li>
+</ul>
+</li>
+<li><a href="#_1_4_normalization">1.4 Normalization</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_3">Questions</a></li>
+</ul>
+</li>
+<li><a href="#_1_5_momentum">1.5 Momentum</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_4">Questions</a></li>
+<li><a href="#_demonstrations_4">Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_5">Questions</a></li>
+<li><a href="#_demonstrations_5">Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_griffiths_chapter_1_questions">Griffiths: Chapter 1 Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -729,16 +755,23 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>==== Demonstrations
-* Existing <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment</a> and <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (2D)</a> demos
-* <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543" target="_blank" rel="noopener">Double slit experiment — detector simulation</a></p>
 </div>
-<div class="paragraph">
-<p>=== 1.3 Probability</p>
+<div class="sect3">
+<h4 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Existing <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment</a> and <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (2D)</a> demos</p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543" target="_blank" rel="noopener">Double slit experiment — detector simulation</a></p>
+</li>
+</ul>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_3_probability"><a class="anchor" href="#_1_3_probability"></a><a class="link" href="#_1_3_probability">1.3 Probability</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -759,11 +792,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <table id="pets-table" class="tableblock frame-all grid-rows stripes-none" style="width: 40%;">
 <colgroup>
 <col style="width: 50%;">
@@ -831,17 +861,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 </details>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
+</div>
+</div>
+</li>
 <li>
 <p><strong>1.3.3</strong> Plot the following two probability density distributions over the interval 0 to 1:</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>\[\begin{align*}
 \rho_1(x)&amp;=
@@ -864,10 +890,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="ulist">
-<ul>
+</div>
+</div>
+</li>
 <li>
 <p><strong>1.3.4</strong></p>
 <div class="ulist">
@@ -925,8 +950,8 @@ Calculate the expected value and standard deviation.</p>
 </li>
 </ul>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -935,11 +960,10 @@ Calculate the expected value and standard deviation.</p>
 </div>
 </div>
 </details>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>==== Demonstrations</p>
 </div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_3"><a class="anchor" href="#_demonstrations_3"></a><a class="link" href="#_demonstrations_3">Demonstrations</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -953,9 +977,9 @@ Calculate the expected value and standard deviation.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>==== Other Ideas, Notes, Materials</p>
 </div>
+<div class="sect3">
+<h4 id="_other_ideas_notes_materials_2"><a class="anchor" href="#_other_ideas_notes_materials_2"></a><a class="link" href="#_other_ideas_notes_materials_2">Other Ideas, Notes, Materials</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -973,17 +997,17 @@ Calculate the expected value and standard deviation.</p>
 </li>
 </ul>
 </div>
-<div class="paragraph">
-<p>=== 1.4 Normalization</p>
 </div>
-<div class="paragraph">
-<p>==== Questions
-* <strong>1.4.1</strong>
- Normalize the following wavefunctions (i.e. find A):</p>
 </div>
-<div class="paragraph">
-<p>+</p>
-</div>
+<div class="sect2">
+<h3 id="_1_4_normalization"><a class="anchor" href="#_1_4_normalization"></a><a class="link" href="#_1_4_normalization">1.4 Normalization</a></h3>
+<div class="sect3">
+<h4 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">Questions</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.4.1</strong>
+Normalize the following wavefunctions (i.e. find A):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -997,6 +1021,9 @@ Calculate the expected value and standard deviation.</p>
 </li>
 <li>
 <p>\(\Psi(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
+</li>
+</ol>
+</div>
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1006,10 +1033,10 @@ Calculate the expected value and standard deviation.</p>
 </div>
 </details>
 </li>
-</ol>
+</ul>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
@@ -1045,19 +1072,25 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 </li>
 </ul>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>=== 1.5 Momentum</p>
 </div>
-<div class="paragraph">
-<p>==== Questions
-* Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_5_momentum"><a class="anchor" href="#_1_5_momentum"></a><a class="link" href="#_1_5_momentum">1.5 Momentum</a></h3>
+<div class="sect3">
+<h4 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">Questions</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
 In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
+</li>
+</ul>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1066,31 +1099,58 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </div>
 </div>
 </details>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>==== Demonstrations
-* Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time by showing \(\langle x\rangle_\psi\) and \(\langle p\rangle_\psi\).
-<strong> [x] Harmonic oscillator: <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543" target="_blank" rel="noopener">the quantum harmonic oscillator</a>
-</strong> [ ] Particle in a box
-** [ ] others?
-* Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_4"><a class="anchor" href="#_demonstrations_4"></a><a class="link" href="#_demonstrations_4">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time by showing \(\langle x\rangle_\psi\) and \(\langle p\rangle_\psi\).</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p>&#10003; Harmonic oscillator: <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543" target="_blank" rel="noopener">the quantum harmonic oscillator</a></p>
+</li>
+<li>
+<p>&#10063; Particle in a box</p>
+</li>
+<li>
+<p>&#10063; others?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
 Let the resulting \(\delta\) function evolve (spread out, oscillate), then sample again. Etc.</p>
+</li>
+</ul>
 </div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h3>
+<div class="sect3">
+<h4 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">Questions</a></h4>
 <div class="paragraph">
-<p>=== 1.6 The Uncertainty Principle</p>
+<p>placeholder</p>
 </div>
-<div class="paragraph">
-<p>==== Questions
-placeholder</p>
 </div>
-<div class="paragraph">
-<p>==== Demonstrations
-* <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
+<div class="sect3">
+<h4 id="_demonstrations_5"><a class="anchor" href="#_demonstrations_5"></a><a class="link" href="#_demonstrations_5">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
+</li>
+</ul>
 </div>
-<div class="paragraph">
-<p>=== Griffiths: Chapter 1 Questions</p>
 </div>
+</div>
+<div class="sect2">
+<h3 id="_griffiths_chapter_1_questions"><a class="anchor" href="#_griffiths_chapter_1_questions"></a><a class="link" href="#_griffiths_chapter_1_questions">Griffiths: Chapter 1 Questions</a></h3>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.1</dt>
@@ -1112,8 +1172,8 @@ placeholder</p>
 </dd>
 </dl>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.2</dt>
@@ -1131,8 +1191,8 @@ from the average?</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.3</dt>
@@ -1156,8 +1216,8 @@ where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary 
 </dd>
 </dl>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.4</dt>
@@ -1199,8 +1259,8 @@ of \(a\) and \(b\)).</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.5</dt>
@@ -1230,8 +1290,8 @@ of \(a\) and \(b\)).</p>
 <div class="paragraph">
 <p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.6</dt>
@@ -1249,8 +1309,8 @@ This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts tha
 </dd>
 </dl>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.8</dt>
@@ -1265,8 +1325,8 @@ expectation value of a dynamical variable?</p>
 </dd>
 </dl>
 </div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="ulist">
 <ul>
 <li>
@@ -1299,8 +1359,8 @@ product consistent with the uncertainty principle?</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
+</div>
+</div>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">1.10</dt>
@@ -1308,11 +1368,8 @@ product consistent with the uncertainty principle?</p>
 <div class="paragraph">
 <p>Consider the first 25 digits in the decimal expansion of \(\pi\): \(3, 1, 4, 1, 5, 9, \ldots\).</p>
 </div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
+<div class="openblock">
+<div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1328,22 +1385,17 @@ average value?</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="dlist">
-<dl>
+</div>
+</div>
+</dd>
 <dt class="hdlist1">1.11</dt>
 <dd>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
+<dd>
+<div class="openblock">
+<div class="content">
 <div class="imageblock related thumb right">
 <div class="content">
 <img src="images/ch1_p1.11.jpg" alt="ch1 p1.11" width="225">
@@ -1384,10 +1436,12 @@ average value?</p>
 </li>
 </ol>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="dlist">
-<dl>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
 <dt class="hdlist1">1.11</dt>
 <dd>
 <div class="dlist">
@@ -1433,13 +1487,9 @@ case what can you say abut the product
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
+<dd>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time \(t\) is</p>
 </div>
@@ -1474,22 +1524,20 @@ case what can you say abut the product
 <div class="paragraph">
 <p>Meanwhile, make a plot of the density function, \(\rho(x)\), and, using <code>Show</code>, superimpose the two.</p>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="dlist">
-<dl>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
 <dt class="hdlist1">1.14</dt>
 <dd>
 <div class="dlist">
 <dl>
 <dt class="hdlist1">Griffiths</dt>
-</dl>
-</div>
-</dd>
-</dl>
-</div>
-</div>
-</div>
+<dd>
+<div class="openblock">
+<div class="content">
 <div class="paragraph">
 <p>Let \(P_{ab}(t)\) be the probability of finding the
 particle in the range \((a&lt;x&lt;b)\), at time \(t\).</p>
@@ -1515,10 +1563,12 @@ into the region at one end than flows out the other.</p>
 <p>(This is not a very pithy example, I’m afraid; we’ll encounter more
 substantial ones in due course.)</p>
 </div>
-<div class="openblock">
-<div class="content">
-<div class="dlist">
-<dl>
+</div>
+</div>
+</dd>
+</dl>
+</div>
+</dd>
 <dt class="hdlist1">1.15</dt>
 <dd>
 <p>Show that</p>
@@ -1532,8 +1582,6 @@ substantial ones in due course.)</p>
 <p>for any two (normalizable) solutions to the same Schrödinger equation (i.e., with
 the same \(V(x)\)), \(\Psi_{1}\) and
 \(\Psi_{2}\).</p>
-</div>
-</div>
 </div>
 <div class="dlist">
 <dl>
@@ -1668,7 +1716,6 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 <div class="openblock">
 <div class="content">
 
-</div>
 </div>
 </div>
 </div>
