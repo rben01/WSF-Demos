@@ -20,9 +20,9 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 ==== Questions
 * *1.1.1* Question about demonstration (Robert?)
 
-* *1.1.2* If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution (Modified from Townsend).
+* *1.1.2* [Modified from Townsend] If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution .
 
-* *1.1.3* Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but *not* the {sch} equation (Modified from Townsend).
+* *1.1.3* [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but *not* the {sch} equation).
 
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
@@ -36,10 +36,17 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 === 1.2 The Statistical Interpretation
 
 ==== Questions
-Ours::
-* *1.2.1* Question about demonstration? (Robert?)
-* *1.2.2* Question about individual particles interacting/collective motion
 
+* *1.2.1* Question about demonstration? (Robert?)
+--
+* *1.2.2* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
+- Using single photons
+- Using single electrons
+- Using multiple electrons simultaneously
+- Measuring which slit the particle passes through
+- Using bucky balls
+--
+--
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
@@ -215,7 +222,7 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 
 ==== Questions
 placeholder
---
+
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
 
