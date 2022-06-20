@@ -56,10 +56,21 @@ Ours::
 * You survey your neighbors to determine the number of pets they have in their households and collect the following data:
 +
 --
-[%autowidth,cols="~s,11*^"]
+[#pets-table,cols=">1h,<1",stripes=none,frame=all,grid=rows,width=40em]
 |===
-|Number of pets|0|1|2|3|4|5|6|7|8|9|10
-|Number of households|3|6|5|2|2|0|1|0|0|0|1
+|Number of pets in household
+s|Number of households with that number of pets
+|0|3
+|1|3
+|2|6
+|3|5
+|4|2
+|5|2
+|6|0
+|7|1
+|8|0
+|9|0
+|10|1
 |===
 
 
