@@ -18,11 +18,11 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 
 === 1.1 The {sch} Equation
 ==== Questions
-* 1.1.1 Question about demonstration (Robert?)
+* *1.1.1* Question about demonstration (Robert?)
 
-* 1.1.2 If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution (Modified from Townsend).
+* *1.1.2* If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution (Modified from Townsend).
 
-* 1.1.3 Show that \() is a solution to the classical wave equation \(\) but *not* the {sch} equation (Modified from Townsend).
+* *1.1.3* Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but *not* the {sch} equation (Modified from Townsend).
 
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
@@ -153,43 +153,6 @@ This is the solution
 === 1.4 Normalization
 
 ==== Questions
-Griffiths::
-* *1.4* At time ++\(t=0\)++ a particle is represented by the wave
-function
-+
-\[\Psi(x,0)=
-    \begin{cases}
-        A(x/a), & 0\le x \le a,\\
-        A(b-x)/A(b-a), & a \le x \le b,\\
-        0, & \textrm{otherwise},
-    \end{cases}\]
-where ++\(A\)++, ++\(a\)++, and ++\(b\)++ are
-(positive) constants.
-[{sublist-style}]
-. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
-of ++\(a\)++ and ++\(b\)++).
-. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
-. Where is the particle most likely to be found at ++\(t=0\)++?
-. What is the probability of finding the particle to the left of
-++\(a\)++? Check your result in the limiting cases
-++\(b=a\)++ and ++\(b=2a\)++.
-. What is the expectation value of ++\(x\)++?
---
-
-* *1.5* Consider the wave function
-++\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]++
-
-where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
-(We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the {sch} equation.)
-[{sublist-style}]
-. Normalize ++\(\Psi\)++.
-. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
-. Find the standard deviation of ++\(x\)++.
-
-Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
---
-
-Ours::
 * Normalize the following wavefunctions (i.e. find A):
 +
 [{sublist-style}]
@@ -281,22 +244,22 @@ product consistent with the uncertainty principle?
 
 
 === Griffiths: Chapter 1 Questions
-* *1.1* For the distribution of ages in the example in Section 1.3.1:
+
+1.1:: For the distribution of ages in the example in Section 1.3.1:
 +
 [{sublist-style}]
 . Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
 . Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
 . Use your results in (a) and (b) to check Equation 1.12.
-
-* *1.2*
-+
+--
+1.2::
 [{sublist-style}]
 . Find the standard deviation of the distribution in Example 1.2.
 . What is the probability that a photograph, selected at random, would
 show a distance ++\(x\)++ more than one standard deviation away
 from the average?
-
-* *1.3* Consider the *gaussian* distribution
+--
+1.3:: Consider the *gaussian* distribution
 ++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
 where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
 +
@@ -305,6 +268,40 @@ where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (Th
 . Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
 . Sketch the graph of ++\(\rho(x)\)++.
 --
+1.4:: At time ++\(t=0\)++ a particle is represented by the wave
+function
++
+\[\Psi(x,0)=
+    \begin{cases}
+        A(x/a), & 0\le x \le a,\\
+        A(b-x)/A(b-a), & a \le x \le b,\\
+        0, & \textrm{otherwise},
+    \end{cases}\]
+where ++\(A\)++, ++\(a\)++, and ++\(b\)++ are
+(positive) constants.
+[{sublist-style}]
+. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
+of ++\(a\)++ and ++\(b\)++).
+. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
+. Where is the particle most likely to be found at ++\(t=0\)++?
+. What is the probability of finding the particle to the left of
+++\(a\)++? Check your result in the limiting cases
+++\(b=a\)++ and ++\(b=2a\)++.
+. What is the expectation value of ++\(x\)++?
+--
+--
+1.5:: Consider the wave function
+++\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]++
+
+where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
+(We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the {sch} equation.)
+[{sublist-style}]
+. Normalize ++\(\Psi\)++.
+. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
+. Find the standard deviation of ++\(x\)++.
+
+Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
+
 1.10::
 +
 Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
@@ -525,7 +522,7 @@ Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textrm{cm}\)++ and the temperature is ++\(3\,\textrm{K}\)++) quantum mechanical?
 (Assume it's monatomic hydrogen, not ++\(\ce{H2}\)++.)
 --
-
+--
 // Verify Ehrenfest's theorem for the following wavefunction:
 
 //[stem]
