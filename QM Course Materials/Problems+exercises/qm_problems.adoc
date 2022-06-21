@@ -44,8 +44,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 - Using single electrons
 - Using multiple electrons simultaneously
 - Measuring which slit the particle passes through
-- Using bucky balls
---
+- Using Bucky-balls
 --
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
@@ -526,7 +525,6 @@ Obviously (for the gas to show quantum behavior) we want ++\(m\)++ to be as smal
 Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textrm{cm}\)++ and the temperature is ++\(3\,\textrm{K}\)++) quantum mechanical?
 (Assume it's monatomic hydrogen, not ++\(\ce{H2}\)++.)
---
 --
 // Verify Ehrenfest's theorem for the following wavefunction:
 
