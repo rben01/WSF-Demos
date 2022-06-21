@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+			integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
+			integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja"
+			crossorigin="anonymous"
+		></script>
+
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
+			integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
+			crossorigin="anonymous"
+			onload="renderMathInElement(document.body);"
+		></script>
+
+		<link rel="stylesheet" href="./demo.css" />
+
+		<style>
+			:root {
+				--color-real-part: #5df;
+				--color-imag-part: #f3c002;
+				--color-phase: #e5d;
+			}
+			.radio-button-container.horizontal button {
+				flex: 1;
+				white-space: nowrap;
+			}
+			.grid-left-right {
+				grid-template-columns: max-content 1fr;
+				column-gap: 50px;
+			}
+			.curve {
+				fill: none;
+				stroke-linejoin: round;
+			}
+			.curve-foreground.real-part {
+				stroke: var(--color-real-part);
+			}
+			.curve-foreground.imag-part {
+				stroke: var(--color-imag-part);
+			}
+			.curve-foreground.phase {
+				stroke: var(--color-phase);
+			}
+			.axis-name {
+				font-size: 30px;
+			}
+			.curve {
+				fill: none;
+			}
+			.curve-background {
+				stroke: black;
+				stroke-width: 8px;
+			}
+			.curve-foreground {
+				stroke: var(--color-highlight);
+				stroke-width: 5px;
+			}
+			.barrier {
+				stroke: #bbb;
+				stroke-width: 3;
+				stroke-dasharray: 4 4;
+			}
+
+			.source {
+				fill: none;
+			}
+			.source.fg {
+				stroke-width: 3px;
+			}
+			.source.bg {
+				stroke-width: 5px;
+				stroke: black;
+			}
+			.light-source.fg.no-shift {
+				stroke: var(--color-secondary);
+			}
+			.light-source.fg.red-shift {
+				stroke: #f38702;
+			}
+			.light-source.fg.blue-shift {
+				stroke: #97f302;
+			}
+			.z-line {
+				display: none;
+				stroke: var(--color-highlight);
+				stroke-width: 2px;
+			}
+			.slope-line.fg {
+				stroke: var(--color-tertiary);
+				stroke-width: 4px;
+				stroke-dasharray: 4 8;
+			}
+			.slope-line.bg {
+				stroke: black;
+				stroke-width: 6px;
+				stroke-dasharray: 6 6;
+			}
+			.slope-line {
+				display: none;
+			}
+			.slope-line-1 {
+				display: none;
+			}
+			.slope-line-1.fg {
+				stroke-dashoffset: 4;
+			}
+			.slope-line-1.bg {
+				stroke-dashoffset: 5;
+			}
+			.slope-line-2.fg {
+				stroke-dashoffset: -1;
+			}
+			.slope-line-2.bg {
+				stroke-dashoffset: 0;
+			}
+			.z-source {
+				display: none;
+			}
+			.z-source.fg {
+				stroke: var(--color-highlight);
+			}
+			.dot {
+				display: none;
+			}
+			.dot.bg {
+				fill: black;
+			}
+			.z-dot.fg {
+				fill: var(--color-highlight);
+			}
+			.slope-dot.fg {
+				fill: var(--color-tertiary);
+			}
+			.connector-line {
+				display: none;
+			}
+			.connector-line.bg {
+				stroke-width: 8px;
+				stroke: black;
+			}
+			.connector-line.fg {
+				stroke-width: 4px;
+				stroke: white;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div class="controls-container">
+				<div class="controls">
+					<span>Speed: <span id="text-v">\(v\)</span></span>
+					<span
+						><input type="range" class="slider disablable" id="slider-v"
+					/></span>
+					<span>Lattice spacing: <span id="text-R">\(R\)</span></span>
+					<span
+						><input type="range" class="slider disablable" id="slider-R"
+					/></span>
+					<span>Animation speed</span>
+					<span><input type="range" class="slider" id="slider-speed" /></span>
+					<div style="display: none">
+						<span>Position: <span id="text-z0">\(z'_0\)</span></span>
+						<span
+							><input type="range" class="slider" id="slider-z0"
+						/></span>
+					</div>
+					<span></span>
+					<span class="radio-button-container horizontal">
+						<button class="button" onclick="play()">Play</button
+						><button class="button" onclick="pause()" data-button-checked>
+							Pause</button
+						><button class="button" onclick="reset()" data-button-checked>
+							Reset
+						</button>
+					</span>
+				</div>
+			</div>
+			<div id="plots">
+				<svg id="plot-2D"></svg>
+			</div>
+		</div>
+		<script src="./utils.js"></script>
+		<script src="./bg_light_demo.js"></script>
+	</body>
+</html>
