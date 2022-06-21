@@ -528,8 +528,6 @@ Obviously (for the gas to show quantum behavior) we want ++\(m\)++ to be as smal
 Put in the numbers for helium at atmospheric pressure.
 Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textrm{cm}\)++ and the temperature is ++\(3\,\textrm{K}\)++) quantum mechanical?
 (Assume it's monatomic hydrogen, not ++\(\ce{H2}\)++.)
---
---
 // Verify Ehrenfest's theorem for the following wavefunction:
 
 //[stem]
