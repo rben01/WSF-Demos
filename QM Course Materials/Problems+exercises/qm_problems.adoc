@@ -439,7 +439,8 @@ substantial ones in due course.)
 --
 
 1.15::
-
++
+--
 Show that
 
 ++\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]++
@@ -447,9 +448,11 @@ Show that
 for any two (normalizable) solutions to the same {sch} equation (i.e., with
 the same ++\(V(x)\)++), ++\(\Psi_{1}\)++ and
 ++\(\Psi_{2}\)++.
+--
 
 1.16::
-
++
+--
 A particle is represented (at time ++\(t=0\)++) by the wave function
 
 ++\[
@@ -493,7 +496,7 @@ where ++\(V_{0}\)++ is the true potential energy and
 
 . Solve for ++\(P(t)\)++, and find the lifetime of the particle in
 terms of ++\(\Gamma\)++.
---
+
 
 1.18::
 
