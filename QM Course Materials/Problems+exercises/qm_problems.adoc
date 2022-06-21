@@ -183,10 +183,11 @@ This is the solution
 This is the solution
 ====
 
-* *1.4.3*
+* *1.4.3* The probability current describes the rate at which probability flows past point ++\(x\)++. It is given by ++\[J(x,t) = \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
 
-* *1.4.4*
 [{sublist-style}]
+. Show that ++\[\ \frac{d}{dt} \int_a^b |\Psi(x,t)|^2 = J(a,t) - J(b,t) \]++ What happens to the probability current in the region from ++\(-\infty\)++ to ++\(\infty\)++? What does this mean?
 . Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
 . [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
 Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
@@ -194,7 +195,11 @@ Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varp
 === 1.5 Momentum
 
 ==== Questions
-* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
+* *1.5.1*
+
+ * *1.5.2*
+
+* *1.5.3* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
 In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
 +
