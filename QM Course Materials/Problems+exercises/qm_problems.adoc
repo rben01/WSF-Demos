@@ -41,7 +41,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 * *1.2.2* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
 ** Using single photons
 ** Using single electrons
-** Using multiple electrons simultaneously
+** Using a beam of electrons
 ** Measuring which slit the particle passes through
 ** Using Bucky-balls
 
@@ -213,11 +213,11 @@ In other words, if the potential is quadratic then we can say "`the expectation 
 This is the solution
 ====
 
-* *1.5.3* Any dynamical variable can be expressed in terms of position and momentum. Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}\]++ In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4. We will be working in three dimensions, where ++\(\textbf{r} = x\hat{x}+y\hat{y}+z\hat{z}\)++ and ++\(\textbf{p} = \frac{\hbar}{i}\frac{\partial}{\partial x}\hat{x}+\frac{\hbar}{i}\frac{\partial}{\partial y}\hat{y}+\frac{\hbar}{i}\frac{\partial}{\partial z}\hat{z}\)++.
+* *1.5.3* Any dynamical variable can be expressed in terms of position and momentum. Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}\]++ In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4. We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
 [{sublist-style}]
-. Find the expression for ++\(\textbf{L}\)++.
+. Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
 . Find ++\(L^2\)++.
-. Calculate ++\(\langle L^2 \rangle\)++ for the wavefunction *include spherical harmonic here*
+. Calculate ++\(\langle L^2 \rangle\)++ for the spatial component of the wavefunction ++\( \sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++
 
 
 ==== Demonstrations
