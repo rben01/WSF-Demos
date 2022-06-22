@@ -393,7 +393,7 @@ function getData2D() {
 		// y1 is closer to the x-axis
 		const [y1abs, y2abs] = d3.sort([zSourceDotY, slopeLineYAtZ0]);
 
-		if (t - -v * z0 < 0.1) {
+		if (t - -v * z0 < 0.1 || v === 0) {
 			return [];
 		}
 
