@@ -353,6 +353,18 @@ stroke: #f38702;
 .light-source.fg.blue-shift {
 stroke: #97f302;
 }
+.source-dot.bg {
+fill: black;
+}
+.source-dot.fg.no-shift {
+fill: var(--color-secondary);
+}
+.source-dot.fg.red-shift {
+fill: #f38702;
+}
+.source-dot.fg.blue-shift {
+fill: #97f302;
+}
 .z-line {
 display: none;
 stroke: var(--color-highlight);
@@ -403,9 +415,6 @@ fill: var(--color-highlight);
 }
 .slope-dot.fg {
 fill: var(--color-tertiary);
-}
-.connector-line {
-display: none;
 }
 .connector-line.bg {
 stroke-width: 8px;
@@ -1003,11 +1012,11 @@ const nLightSourcesRight = Math.floor(Math.abs(X_MAX - X_0) / interSourceDist);
 const nLightSourcesMid = 1;
 const nLightSources = nLightSourcesLeft + nLightSourcesMid + nLightSourcesRight;
 const t0 = nLightSourcesRight * interSourceDist * v;
+const t = currentTime - t0;
 const lightSources = d3.range(nLightSources).flatMap(i => {
 const k = i - nLightSourcesLeft;
 const x = k * interSourceDist;
 const doppler = k < 0 ? "red-shift" : k === 0 ? "no-shift" : "blue-shift";
-const t = currentTime - t0;
 const emissionTime = -v * x;
 const r = Math.max((t - emissionTime) * C, 0);
 const attrs = {
@@ -1037,10 +1046,18 @@ class: `data source light-source fg ${dashStyle} ${doppler}`,
 key: `lc-fg-${i}`,
 attrs,
 },
+...["bg", "fg"].map(class_ => {
+const r = class_ === "bg" ? 6 : 4;
+return {
+shape: "circle",
+class: `data source-dot ${class_} ${doppler}`,
+attrs: { ...attrs, r },
+};
+}),
 ];
 });
 const z0s = xScale(z0);
-const zSourceR = Math.max((currentTime - -v * z0) * C, 0);
+const zSourceR = Math.max((t - -v * z0) * C, 0);
 const zSources = (() => {
 const attrs = {
 cx: z0s,
@@ -1090,12 +1107,12 @@ if (Math.abs(v) < 1e-5) {
 x0 = X_MIN;
 x1 = X_MIN;
 x2 = X_MAX;
-[y0, y1, y2] = [x0, x1, x2].map(x => gamma * (v * x + currentTime));
+[y0, y1, y2] = [x0, x1, x2].map(x => gamma * (v * x + t));
 } else {
 y0 = Y_0;
 y1 = Y_MIN;
 y2 = Y_MAX;
-[x0, x1, x2] = [y0, y1, y2].map(y => (y / gamma - currentTime) / v);
+[x0, x1, x2] = [y0, y1, y2].map(y => (y / gamma - t) / v);
 }
 return { x0, x1, x2, y0, y1, y2 };
 })();
@@ -1127,7 +1144,7 @@ attrs,
 });
 });
 })();
-const slopeLineYAtZ0 = gamma * (v * z0 + currentTime);
+const slopeLineYAtZ0 = gamma * (v * z0 + t);
 const slopeLineDots = (() => {
 const attrs = {
 cx: z0s,
@@ -1144,7 +1161,7 @@ attrs: { ...attrs, r: class_ === "bg" ? DOT_BG_R : DOT_FG_R },
 })();
 const slopeLineConnectors = (() => {
 const [y1, y2] = [zSourceDotY, slopeLineYAtZ0].sort();
-if (currentTime - -v * z0 < 0.1) {
+if (t - -v * z0 < 0.1) {
 return [];
 }
 return [-1, 1].flatMap(sign => {

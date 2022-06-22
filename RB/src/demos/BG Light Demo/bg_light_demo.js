@@ -203,14 +203,13 @@ function getData2D() {
 	const nLightSources = nLightSourcesLeft + nLightSourcesMid + nLightSourcesRight;
 
 	const t0 = nLightSourcesRight * interSourceDist * v;
+	const t = currentTime - t0;
 
 	const lightSources = d3.range(nLightSources).flatMap(i => {
 		const k = i - nLightSourcesLeft;
 		const x = k * interSourceDist;
 
 		const doppler = k < 0 ? "red-shift" : k === 0 ? "no-shift" : "blue-shift";
-
-		const t = currentTime - t0;
 
 		const emissionTime = -v * x;
 		const r = Math.max((t - emissionTime) * C, 0);
@@ -242,11 +241,19 @@ function getData2D() {
 				key: `lc-fg-${i}`,
 				attrs,
 			},
+			...["bg", "fg"].map(class_ => {
+				const r = class_ === "bg" ? 6 : 4;
+				return {
+					shape: "circle",
+					class: `data source-dot ${class_} ${doppler}`,
+					attrs: { ...attrs, r },
+				};
+			}),
 		];
 	});
 
 	const z0s = xScale(z0);
-	const zSourceR = Math.max((currentTime - -v * z0) * C, 0);
+	const zSourceR = Math.max((t - -v * z0) * C, 0);
 
 	const zSources = (() => {
 		const attrs = {
@@ -305,13 +312,13 @@ function getData2D() {
 				x1 = X_MIN;
 				x2 = X_MAX;
 
-				[y0, y1, y2] = [x0, x1, x2].map(x => gamma * (v * x + currentTime));
+				[y0, y1, y2] = [x0, x1, x2].map(x => gamma * (v * x + t));
 			} else {
 				y0 = Y_0;
 				y1 = Y_MIN;
 				y2 = Y_MAX;
 
-				[x0, x1, x2] = [y0, y1, y2].map(y => (y / gamma - currentTime) / v);
+				[x0, x1, x2] = [y0, y1, y2].map(y => (y / gamma - t) / v);
 			}
 			return { x0, x1, x2, y0, y1, y2 };
 		})();
@@ -347,7 +354,7 @@ function getData2D() {
 		});
 	})();
 
-	const slopeLineYAtZ0 = gamma * (v * z0 + currentTime);
+	const slopeLineYAtZ0 = gamma * (v * z0 + t);
 
 	const slopeLineDots = (() => {
 		const attrs = {
@@ -368,7 +375,7 @@ function getData2D() {
 	const slopeLineConnectors = (() => {
 		const [y1, y2] = [zSourceDotY, slopeLineYAtZ0].sort();
 
-		if (currentTime - -v * z0 < 0.1) {
+		if (t - -v * z0 < 0.1) {
 			return [];
 		}
 
