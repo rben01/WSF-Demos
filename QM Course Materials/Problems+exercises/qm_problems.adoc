@@ -195,8 +195,12 @@ Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varp
 === 1.5 Momentum
 
 ==== Questions
-* *1.5.1*
-
+* *1.5.1* For the following wavefunction ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+[{sublist-style}]
+. Show that ++\(\Psi(x,t)\)++ is normalized.
+. Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
+. Calculate ++\(\frac{d \langle x \rangle}{dt}\)++. Does Ehrenfest's theorem hold?
+. Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
  * *1.5.2*
 
 * *1.5.3* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
