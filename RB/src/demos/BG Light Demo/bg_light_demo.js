@@ -193,6 +193,13 @@ function getAxisData() {
 }
 applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
 
+const maxV = +sliders.v.max;
+const dopplerMaxMagnitude = Math.sqrt((1 + maxV) / (1 - maxV));
+const colorInterpolator = d3.scalePow(
+	[1 / dopplerMaxMagnitude, 1, dopplerMaxMagnitude],
+	["#FF2200", "#FFF000", "#0090FF"],
+);
+
 function getData2D() {
 	const { v, dist: interSourceDist, z0, gamma } = sliderValues();
 	const C = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
@@ -204,6 +211,13 @@ function getData2D() {
 
 	const t0 = nLightSourcesRight * interSourceDist * v;
 	const t = currentTime - t0;
+
+	const dopplerMagnitude = Math.sqrt((1 + v) / (1 - v));
+	console.log(
+		dopplerMagnitude,
+		dopplerMaxMagnitude,
+		colorInterpolator(dopplerMagnitude),
+	);
 
 	const lightSources = d3.range(nLightSources).flatMap(i => {
 		const k = i - nLightSourcesLeft;
@@ -228,25 +242,28 @@ function getData2D() {
 				? "dotted"
 				: undefined;
 
+		const color = colorInterpolator(dopplerMagnitude ** Math.sign(k));
+
 		return [
 			{
 				shape: "circle",
 				class: "data source light-source bg",
 				key: `lc-bg-${i}`,
-				attrs,
+				attrs: { ...attrs, stroke: "black" },
 			},
 			{
 				shape: "circle",
 				class: `data source light-source fg ${dashStyle} ${doppler}`,
 				key: `lc-fg-${i}`,
-				attrs,
+				attrs: { ...attrs, stroke: color },
 			},
 			...["bg", "fg"].map(class_ => {
 				const r = class_ === "bg" ? 6 : 4;
+
 				return {
 					shape: "circle",
 					class: `data source-dot ${class_} ${doppler}`,
-					attrs: { ...attrs, r },
+					attrs: { ...attrs, r, fill: color },
 				};
 			}),
 		];
@@ -373,26 +390,24 @@ function getData2D() {
 	})();
 
 	const slopeLineConnectors = (() => {
-		const [y1, y2] = [zSourceDotY, slopeLineYAtZ0].sort();
+		// y1 is closer to the x-axis
+		const [y1abs, y2abs] = d3.sort([zSourceDotY, slopeLineYAtZ0]);
 
 		if (t - -v * z0 < 0.1) {
 			return [];
 		}
 
 		return [-1, 1].flatMap(sign => {
-			// y1 is closer to the x-axis
 			const attrs = {
 				x1: z0s,
 				x2: z0s,
-				y1: sign * y1,
-				y2: sign * y2,
 			};
 
 			return ["bg", "fg"].map(class_ => {
 				// dy should be half the difference between the bg and fg lines' stroke widths
 				const dy = class_ === "bg" ? 2 : 0;
-				const y1 = yScale(attrs.y1) + sign * dy;
-				const y2 = yScale(attrs.y2) - sign * dy;
+				const y1 = yScale(sign * y1abs) + sign * dy;
+				const y2 = yScale(sign * y2abs) - sign * dy;
 
 				const signName = sign < 0 ? "neg" : "pos";
 
