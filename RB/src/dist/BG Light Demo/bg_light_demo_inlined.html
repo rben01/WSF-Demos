@@ -1175,7 +1175,7 @@ attrs: { ...attrs, r: class_ === "bg" ? DOT_BG_R : DOT_FG_R },
 const slopeLineConnectors = (() => {
 // y1 is closer to the x-axis
 const [y1abs, y2abs] = d3.sort([zSourceDotY, slopeLineYAtZ0]);
-if (t - -v * z0 < 0.1) {
+if (t - -v * z0 < 0.1 || v === 0) {
 return [];
 }
 return [-1, 1].flatMap(sign => {
