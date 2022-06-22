@@ -37,7 +37,7 @@ We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_
 .Solution
 [%collapsible]
 ====
-For ++\(u(x,t)\)++ to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\). For ++\(u(x,t)\)++ to be a solution to the {sch} equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\). Let's begin with the classical wave equation: ++\[1\]++
+For ++\(u(x,t)\)++ to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\). For ++\(u(x,t)\)++ to be a solution to the {sch} equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\). Let's begin with the classical wave equation: ++\[\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = \]++ ++\[\frac{1}{v^2}\frac{\partial ^2}{\partial t^2}(A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) - \frac{\partial ^2}{\partial x^2} (A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) = \]++ ++\[-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) + A(\frac{n\pi}{l})^2 \cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \]++ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solution to the classical wave equation. For the {sch} equation,
 ====
 
 ==== Demonstrations
