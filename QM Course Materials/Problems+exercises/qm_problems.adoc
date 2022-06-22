@@ -27,11 +27,18 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 ====
 If ++\(\Psi_n\)++ is a solution to the {sch} equation then ++\[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V(x)\Psi_n = 0\]++
 Now for ++\(\Psi\)++,
-++\[-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi = \newline -i\hbar \frac{\partial \sum_n c_n\Psi_n}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \sum_n c_n\Psi_n}{\partial x^2}+ V(x)\sum_n c_n\Psi_n =  \]++
+++\[-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi = \]++ ++\[-i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V(x)\sum_n c_n\Psi_n =  \]++  ++\[\sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(x) (c_n\Psi_n) =  \]++  ++\[\sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V(x) \Psi_n )=  \]++ ++\[\sum_n c_n (0)= 0 \]++
+We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_n c_n \Psi_n\)++ is also a solution to the {sch} equation.
 ====
 
 
 * *1.1.3* [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but *not* the {sch} equation).
+
+.Solution
+[%collapsible]
+====
+For ++\(u(x,t)\)++ to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\). For ++\(u(x,t)\)++ to be a solution to the {sch} equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\). Let's begin with the classical wave equation: ++\[1\]++
+====
 
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]

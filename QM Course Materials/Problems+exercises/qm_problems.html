@@ -687,7 +687,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="paragraph">
 <p>If \(\Psi_n\) is a solution to the Schrödinger equation then \[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V(x)\Psi_n = 0\]
 Now for \(\Psi\),
-\[-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi = \newline -i\hbar \frac{\partial \sum_n c_n\Psi_n}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \sum_n c_n\Psi_n}{\partial x^2}+ V(x)\sum_n c_n\Psi_n =  \]</p>
+\[-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi = \] \[-i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V(x)\sum_n c_n\Psi_n =  \]  \[\sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(x) (c_n\Psi_n) =  \]  \[\sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V(x) \Psi_n )=  \] \[\sum_n c_n (0)= 0 \]
+We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum_n c_n \Psi_n\) is also a solution to the Schrödinger equation.</p>
 </div>
 </div>
 </details>
@@ -698,6 +699,14 @@ Now for \(\Psi\),
 </li>
 </ul>
 </div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>For \(u(x,t)\) to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\). For \(u(x,t)\) to be a solution to the Schrödinger equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\). Let&#8217;s begin with the classical wave equation: \[1\]</p>
+</div>
+</div>
+</details>
 </div>
 <div class="sect3">
 <h4 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">Demonstrations</a></h4>
