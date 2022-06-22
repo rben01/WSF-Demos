@@ -18,7 +18,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 
 === 1.1 The {sch} Equation
 ==== Questions
-* *1.1.1* Question about demonstration (Robert?)
+* *1.1.1* Question about demonstration (@Robert)
 
 * *1.1.2* [Modified from Townsend] If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\sum_{n} = c_n \Psi_n\) is also a solution .
 
@@ -37,7 +37,7 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 
 ==== Questions
 
-* *1.2.1* Question about demonstration? (Robert?)
+* *1.2.1* Question about demonstration? (@Robert)
 * *1.2.2* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
 ** Using single photons
 ** Using single electrons
