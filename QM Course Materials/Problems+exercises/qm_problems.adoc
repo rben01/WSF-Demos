@@ -61,6 +61,12 @@ For ++\(u(x,t)\)++ to be a solution to the classical wave equation, \( \frac{1}{
 ** Measuring which slit the particle passes through
 ** Using Bucky-balls
 
+.Solution
+[%collapsible]
+====
+For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even Bucky-balls! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
+====
+
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
