@@ -245,7 +245,16 @@ In other words, if the potential is quadratic then we can say "`the expectation 
 .Solution (placeholder)
 [%collapsible]
 ====
-This is the solution
+Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\partial V}{\partial x}\)++ and use the linearity of expectation:
+
+++\[
+\begin{align*}
+\frac{d\langle p\rangle}{dt}&=\left\langle-\frac{\partial V}{\partial x}\right\rangle\\
+&=\left\langle-(2ax+b)\right\rangle\\
+&=-(2a\langle x\rangle + b)\\
+&=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}
+\end{align*}
+\]++
 ====
 
 * *1.5.3* Any dynamical variable can be expressed in terms of position and momentum. Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}\]++ In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4. We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
