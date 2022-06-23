@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <title>Quantum Mechanics Problems and Exercises</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -192,7 +192,8 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -234,9 +235,8 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
-pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
-pre.pygments .lineno::before{content:"";margin-right:-.125em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -273,7 +273,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -289,10 +289,11 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -335,8 +336,6 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
-.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
-.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -679,44 +678,38 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </li>
 <li>
 <p><strong>1.1.2</strong> [Modified from Townsend] If \(\Psi_{n}\) is a solution to the Schrödinger equation, show that \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
+</li>
+</ul>
+</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>Ultimately this is just due to the linearity of the differentiation operator and of ordinary multiplication.</p>
-</div>
-<div class="paragraph">
-<p>If \(\Psi_n\) is a solution to the Schrödinger equation then \[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V(x)\Psi_n = 0\]
+<p>If \(\Psi_n\) is a solution to the Schrödinger equation then \[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V\Psi_n = 0\]
 Now for \(\Psi\),
-\[\begin{align*}
-&amp;\phantom{=}-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi\\
-&amp;= -i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V(x)\sum_n c_n\Psi_n\\
-&amp; = \sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(x) (c_n\Psi_n) \\
-&amp;= \sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V(x) \Psi_n )\\
-&amp;=\sum_n c_n \cdot 0= 0 \end{align*}\]
+\[-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V\Psi = \] \[-i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V\sum_n c_n\Psi_n =  \]  \[\sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(c_n\Psi_n) =  \]  \[\sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V \Psi_n )=  \] \[\sum_n c_n (0)= 0 \]
 We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum_n c_n \Psi_n\) is also a solution to the Schrödinger equation.</p>
 </div>
 </div>
 </details>
-</li>
+<div class="ulist">
+<ul>
 <li>
-<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation).</p>
+<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), if \(v = \frac{\omega l}{n\pi}\) but <strong>not</strong> a solution to the Schrödinger equation for a free particle (i.e. \(V=0\)).</p>
+</li>
+</ul>
+</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>For \(u(x,t)\) to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\).
-For \(u(x,t)\) to be a solution to the Schrödinger equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\).
-Let&#8217;s begin with the classical wave equation:
-\[\begin{align*}\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} &amp;= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
-&amp;= -A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) \end{align*}\]
-We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solution to the classical wave equation. For the Schrödinger equation,</p>
+<p>For \(u(x,t)\) to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\). For \(u(x,t)\) to be a solution to the Schrödinger equation for a free particle then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = 0\). Let&#8217;s begin with the classical wave equation: \[\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = \] \[\frac{1}{v^2}\frac{\partial ^2}{\partial t^2}(A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) - \frac{\partial ^2}{\partial x^2} (A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) = \] \[-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) + A(\frac{n\pi}{l})^2 \cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \] We see that if \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solution to the classical wave equation. For the Schrödinger equation, \[-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = \] \[-i\hbar \frac{\partial}{\partial t}(A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}(A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l})) = \] \[Ai\hbar\omega\sin(\omega t+ \phi) \sin(\frac{n\pi x}{l})+A\frac{\hbar ^2}{2m}(\frac{n \pi}{l})^2\cos(\omega t+ \phi)\sin(\frac{n\pi x}{l}) \]
+In order for this to equal 0,
+\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}(\frac{n \pi}{l})^2\cos(\omega t+ \phi) = 0\]
+There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is not a solution to the Schrödinger equation for a free particle.</p>
 </div>
 </div>
 </details>
-</li>
-</ul>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">Demonstrations</a></h4>
@@ -792,6 +785,9 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </li>
 </ul>
 </div>
+</li>
+</ul>
+</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -800,9 +796,6 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </div>
 </div>
 </details>
-</li>
-</ul>
-</div>
 </div>
 <div class="sect3">
 <h4 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">Demonstrations</a></h4>
@@ -838,6 +831,28 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </ol>
 </div>
 </li>
+</ul>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers. The probability of selecting a 1, 2, or 3 digit number are: \[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]  \[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\] \[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]</p>
+</li>
+<li>
+<p>The expected number of digits is \[\begin{align*}\langle d \rangle &amp;= (1)P(1)+(2)P(2) + (3)P(3) \\ &amp;=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &amp;=  2.45  \end{align*}\] If you choose a number at random, the expected value for the number of digits is 2.45.</p>
+</li>
+<li>
+<p>Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. \[\begin{align*} \langle d^2 \rangle  =&amp;  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ =&amp;  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ =&amp;  6.35 \end{align*}\] The standard devation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
@@ -858,15 +873,15 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </tr>
 <tr>
 <th class="tableblock halign-right valign-top"><p class="tableblock">1</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
-</tr>
-<tr>
-<th class="tableblock halign-right valign-top"><p class="tableblock">2</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
 </tr>
 <tr>
-<th class="tableblock halign-right valign-top"><p class="tableblock">3</p></th>
+<th class="tableblock halign-right valign-top"><p class="tableblock">2</p></th>
 <td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">3</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-right valign-top"><p class="tableblock">4</p></th>
@@ -874,7 +889,7 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </tr>
 <tr>
 <th class="tableblock halign-right valign-top"><p class="tableblock">5</p></th>
-<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
 </tr>
 <tr>
 <th class="tableblock halign-right valign-top"><p class="tableblock">6</p></th>
@@ -899,13 +914,16 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 </tbody>
 </table>
 <div class="paragraph">
-<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)).</p>
+<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\) where n is the number of pets in the household).</p>
 </div>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>This is the solution</p>
+<p>Calculate \(\langle n \rangle\), \(\langle n^2 \rangle\), and \(\langle (\Delta n)^2 \rangle\)
+\[\begin{align*} \langle n \rangle =&amp; 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1) + \\ &amp;5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\=&amp; 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 \\=&amp; 2.35 \end{align*}\] \[\begin{align*} \langle n^2 \rangle =&amp; 0(.15) + 1(.3) + 4(.25)+ 9(.1)+ 16(.1) + \\ &amp;25(0) + 36(0) + 49(.05) + 64(0) + 81(0) + 100(.05) \\=&amp; 0+ .3 + 1 + .9 + 1.6  + 0 + 0+ 2.45 + 0 + 0 + 5 \\=&amp;  11.25 \end{align*}\]
+\[\begin{align*} \langle (\Delta n)^2) \rangle =&amp; (0-2.35)^2(.15) + (1-2.35)^2(.3) +(2-2.35)^2(.25) +\\ &amp;(3-2.35)^2(.1)+ (4-2.35)^2(.1) + (5-2.35)^2(0) +\\ &amp;(6-2.35)^2(0) + (7-2.35)^2(.05) + (8-2.35)^2(0) +\\ &amp;(9-2.35)^2(0) + (10-2.35)^2(.05) \\=&amp; 0.828375 + 0.54675 + 0.030625 + 0.04225 + \\ &amp; 0.27225 + 0 + 0 + 1.081125 + 0 + 0 + 2.926125\\ =&amp; 5.7275 \end{align*}\]
+We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2} = 2.39\)</p>
 </div>
 </div>
 </details>
@@ -1145,17 +1163,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
 <div class="paragraph">
-<p>Starting with Ehrenfest&#8217;s theorem, all we need to do is compute \(-\frac{\partial V}{\partial x}\) and use the linearity of expectation:</p>
-</div>
-<div class="paragraph">
-<p>\[
-\begin{align*}
-\frac{d\langle p\rangle}{dt}&amp;=\left\langle-\frac{\partial V}{\partial x}\right\rangle\\
-&amp;=\left\langle-(2ax+b)\right\rangle\\
-&amp;=-(2a\langle x\rangle + b)\\
-&amp;=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}
-\end{align*}
-\]</p>
+<p>This is the solution</p>
 </div>
 </div>
 </details>
