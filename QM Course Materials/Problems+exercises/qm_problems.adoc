@@ -39,17 +39,32 @@ We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_
 ====
 
 
-* *1.1.3* [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but *not* the {sch} equation).
+* *1.1.3* [Modified from Townsend] Show that ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ (with appropriate choices of  ++\(\omega,n,l\)++) is a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\)++, but *not* the {sch} equation.
 +
 .Solution
 [%collapsible]
 ====
-For ++\(u(x,t)\)++ to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\).
-For ++\(u(x,t)\)++ to be a solution to the {sch} equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\).
+For \(u(x,t)\) to be a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\)++.
+For ++\(u(x,t)\)++ to be a solution to the {sch} equation for a free particle then ++\(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = 0\)++.
 Let's begin with the classical wave equation:
-++\[\begin{align*}\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} &= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
-&= -A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) \end{align*}\]++
-We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solution to the classical wave equation. For the {sch} equation,
+++\[\begin{align*}
+\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2}
+&= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&=-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\\
+&=\left[\left(\frac{n\pi}{l}\right)^2-\frac{\omega^2}{v^2}\right]A\cos(\omega t+\phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}
+\]++
+We see that if ++\(v = \frac{\omega l}{n \pi}\)++ then \(u(x,t)\) is a solution to the classical wave equation. For the {sch} equation,
+++\[\begin{align*}
+&\phantom{=}-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} \\
+&= [-i\hbar \frac{\partial}{\partial t}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right]
+    - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&= Ai\hbar\omega\sin(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)+A\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}\]++
+In order for this to equal 0 for all ++\(x,t\)++, we must have
+++\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi) = 0\]++
+There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is not a solution to the {sch} equation for a free particle.
+
 ====
 
 ==== Demonstrations
@@ -75,7 +90,7 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 .Solution
 [%collapsible]
 ====
-For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
+For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even Bucky-balls! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
 ====
 
 * *1.2.2* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.

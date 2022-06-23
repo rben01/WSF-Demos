@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.17">
+<meta name="generator" content="Asciidoctor 2.0.16">
 <title>Quantum Mechanics Problems and Exercises</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -192,8 +192,7 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
-details>summary::-webkit-details-marker{display:none}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -235,8 +234,9 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
-pre.pygments span.linenos{display:inline-block;margin-right:.75em}
+table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
+pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
+pre.pygments .lineno::before{content:"";margin-right:-.125em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -273,7 +273,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
+table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -289,11 +289,10 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
-li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -336,6 +335,8 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
+.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
+.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -699,17 +700,31 @@ We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum
 </details>
 </li>
 <li>
-<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation).</p>
+<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
 <p>For \(u(x,t)\) to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\).
-For \(u(x,t)\) to be a solution to the Schrödinger equation then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2}+ V(x)u = 0\).
+For \(u(x,t)\) to be a solution to the Schrödinger equation for a free particle then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = 0\).
 Let&#8217;s begin with the classical wave equation:
-\[\begin{align*}\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} &amp;= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
-&amp;= -A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) \end{align*}\]
-We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solution to the classical wave equation. For the Schrödinger equation,</p>
+\[\begin{align*}
+\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2}
+&amp;= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&amp;=-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\\
+&amp;=\left[\left(\frac{n\pi}{l}\right)^2-\frac{\omega^2}{v^2}\right]A\cos(\omega t+\phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}
+\]
+We see that if \(v = \frac{\omega l}{n \pi}\) then \(u(x,t)\) is a solution to the classical wave equation. For the Schrödinger equation,
+\[\begin{align*}
+&amp;\phantom{=}-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} \\
+&amp;= [-i\hbar \frac{\partial}{\partial t}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right]
+    - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&amp;= Ai\hbar\omega\sin(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)+A\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}\]
+In order for this to equal 0 for all \(x,t\), we must have
+\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi) = 0\]
+There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is not a solution to the Schrödinger equation for a free particle.</p>
 </div>
 </div>
 </details>
@@ -776,7 +791,7 @@ We see that as long as \(v = \frac{\omega l}{n \pi}\) that \(u(x,t)\) is a solut
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion&#8201;&#8212;&#8201;a single particle passes through both slits and interacts with <em>itself</em>! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms! However, if we set up an apparatus to measure which slit the particles travel through, we do <em>not</em> observe an interference pattern because the wavefunctions collapse upon measurement.</p>
+<p>For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion&#8201;&#8212;&#8201;a single particle passes through both slits and interacts with <em>itself</em>! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even Bucky-balls! However, if we set up an apparatus to measure which slit the particles travel through, we do <em>not</em> observe an interference pattern because the wavefunctions collapse upon measurement.</p>
 </div>
 </div>
 </details>
