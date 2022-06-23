@@ -272,6 +272,8 @@ Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\part
 &=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}
 \end{align*}
 \]++
+
+If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedue wouldn't work because in general ++\(\langle x^n\rangle\ne\langle x\rangle^n\)++.
 ====
 
 * *1.5.3* Any dynamical variable can be expressed in terms of position and momentum. Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}\]++ In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4. We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
