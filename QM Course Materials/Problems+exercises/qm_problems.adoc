@@ -79,14 +79,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 === 1.2 The Statistical Interpretation
 
 ==== Questions
-
-* *1.2.1* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
-.. Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by ++\(\Delta l=d\sin\theta\)++.
-.. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
-.. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
-.. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
-
-* *1.2.2* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
+* *1.2.1* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
 ** Using single photons
 ** Using single electrons
 ** Using a beam of electrons
@@ -97,14 +90,14 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 .Solution
 [%collapsible]
 ====
-For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
-====
-
-.Solution
-[%collapsible]
-====
 For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even Bucky-balls! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
 ====
+
+* *1.2.2* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
+.. Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by ++\(\Delta l=d\sin\theta\)++.
+.. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
+.. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
+.. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
 
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
@@ -177,6 +170,16 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 . Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
 . For both distributions, calculate the probability of finding the particle within 1 standard deviation.
 --
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. MAKE GRAPHS
+. For the first probability distribution, \(\rho_1(x)\): ++\[\begin{align*} \langle x \rangle =& \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\ =& \left. \frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\ =& \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} = \frac{1}{2} \\ \langle x^2 \rangle =&   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\ =& \left. x^4
+\right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\ =& \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} = \frac{7}{24} \\  \sigma =& \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} = \sqrt{\frac{1}{24}}\end{align*}\]++
+. part c
+====
 
 * *1.3.4*
 
