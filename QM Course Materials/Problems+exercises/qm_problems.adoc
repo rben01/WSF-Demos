@@ -259,7 +259,7 @@ Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varp
 In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
 +
 
-.Solution (placeholder)
+.Solution
 [%collapsible]
 ====
 Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\partial V}{\partial x}\)++ and use the linearity of expectation:
