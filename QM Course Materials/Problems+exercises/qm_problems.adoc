@@ -83,6 +83,15 @@ For the double slit experiment, all light and matter create a wavelike interfere
 . Calculate the expected number of digits.
 . Find the standard deviation of the number of digits.
 
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers. The probability of selecting a 1, 2, or 3 digit number are: ++\[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]++  ++\[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\]++ ++\[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]++
+. The expected number of digits is ++\[\begin{align*}\langle d \rangle &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++ If you choose a number at random, the expected value for the number of digits is 2.45.
+. Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \langle d^2 \rangle  &=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &=  6.35 \end{align*}\]++ The standard devation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
+====
+
 * *1.3.2* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
 +
 --
@@ -104,12 +113,13 @@ s|Number of households with that number of pets
 |===
 
 
-Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)++).
+Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\) where n is the number of pets in the household).
 
-.Solution (placeholder)
+.Solution
 [%collapsible]
 ====
-This is the solution
+Calculate \(\langle n \rangle\), \(\langle n^2 \rangle\), and \(\langle (\Delta n)^2 \rangle\)
+++\[\begin{align*} \langle x \rangle = 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1) +\\ 5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\=\\ 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 &=\\ 2.35 \end{align*}\]++
 ====
 --
 

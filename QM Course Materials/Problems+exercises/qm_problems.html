@@ -815,6 +815,28 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 </ol>
 </div>
 </li>
+</ul>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers. The probability of selecting a 1, 2, or 3 digit number are: \[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]  \[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\] \[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]</p>
+</li>
+<li>
+<p>The expected number of digits is \[\begin{align*}\langle d \rangle &amp;= (1)P(1)+(2)P(2) + (3)P(3) \\ &amp;=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &amp;=  2.45  \end{align*}\] If you choose a number at random, the expected value for the number of digits is 2.45.</p>
+</li>
+<li>
+<p>Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. \[\begin{align*} \langle d^2 \rangle  &amp;=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &amp;=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &amp;=  6.35 \end{align*}\] The standard devation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+<div class="ulist">
+<ul>
 <li>
 <p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
@@ -876,13 +898,14 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 </tbody>
 </table>
 <div class="paragraph">
-<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta j)^2 \rangle} = \sqrt{\langle j^2 \rangle - \langle j \rangle ^2}\)).</p>
+<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\) where n is the number of pets in the household).</p>
 </div>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>This is the solution</p>
+<p>Calculate \(\langle n \rangle\), \(\langle n^2 \rangle\), and \(\langle (\Delta n)^2 \rangle\)
+\[\begin{align*} \langle x \rangle = 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1) +\\ 5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\=\\ 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 &amp;=\\ 2.35 \end{align*}\]</p>
 </div>
 </div>
 </details>
