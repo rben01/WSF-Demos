@@ -171,8 +171,40 @@ function getAxesData({ nDice }) {
 		.x(p => xScale(p[0]))
 		.y(p => yScale(p[1] / nOutcomes));
 
+	const xTicks = probaXScale.ticks(50).slice(1, -1);
+	const xLabels = xTicks.filter(x => x % 5 === 0);
+
+	const y0s = probaYScale(Y_0);
+
 	const path = line(pathPoints);
 	const data = [
+		...xLabels.map(x => {
+			return {
+				shape: "text",
+				text: `${x}`,
+				class: "axis axis-label x-axis-label",
+				attrs: {
+					x: probaXScale(x + 0.5),
+					y: y0s,
+					dy: 20,
+					"dominant-baseline": "top",
+					"text-anchor": "center",
+				},
+			};
+		}),
+		...xTicks.map(x => {
+			const xs = probaXScale(x);
+			return {
+				shape: "line",
+				class: "axis axis-tick x-axis-tick",
+				attrs: {
+					x1: xs,
+					x2: xs,
+					y1: y0s,
+					y2: y0s + 8,
+				},
+			};
+		}),
 		{
 			shape: "line",
 			classes: ["axis", "axis-axis", "x-axis"],
@@ -260,16 +292,8 @@ function update() {
 	});
 }
 
-function enableShapeButtons() {
-	document.getElementById("number-of-measurements-slider").disabled = false;
-}
-
-function disableShapeButtons() {
-	document.getElementById("number-of-measurements-slider").disabled = true;
-}
-
 function stopExperiment() {
-	enableShapeButtons();
+	d3.select("#slider-num-objects").property("disabled", false);
 	d3.select("#btn-clear-experiment").property("disabled", false);
 	document.getElementById("btn-run").disabled = false;
 	document.getElementById("btn-stop").disabled = true;
@@ -294,8 +318,8 @@ d3.select("#btn-clear-experiment").on("click._default", null);
 // eslint-disable-next-line no-unused-vars
 function runExperiment() {
 	resetExperiment();
-	disableShapeButtons();
 
+	d3.select("#slider-num-objects").property("disabled", true);
 	d3.select("#btn-run").property("disabled", true);
 	d3.select("#btn-stop").property("disabled", false);
 	d3.select("#btn-clear-experiment").property("disabled", true);
@@ -318,11 +342,6 @@ function runExperiment() {
 
 		return cdf;
 	})();
-
-	console.log("cdf", cdf, outcomeCounts, nOutcomes);
-	const _samples = sampleFromCdf(cdf, 1000);
-	console.log(_samples);
-	window.navigator.clipboard.writeText(JSON.stringify(_samples));
 
 	const maxSamplesGathered = 1000;
 	let sampleIndex = maxSamplesGathered;
@@ -374,7 +393,6 @@ function runExperiment() {
 				break;
 			}
 		}
-		console.log(buckets);
 
 		const currentAreaOfSamples = isFinite(nMeasurements)
 			? nMeasurements
