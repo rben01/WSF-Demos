@@ -327,7 +327,7 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 . What is the minimum possible value of ++\(\sigma_x\)++?
 . Calculate ++\(\langle x^2 \rangle\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
 
-* *1.6.2*
+* *1.6.2* Estimate ++\(\sigma_p\)++ for a photon that is confined to a cone cell in the eye with a diameter of 2 ++\(\mu\)++m.
 
 
 
