@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.16">
+<meta name="generator" content="Asciidoctor 2.0.17">
 <title>Quantum Mechanics Problems and Exercises</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -192,7 +192,8 @@ body.toc2.toc-right{padding-left:0;padding-right:20em}}
 #content h1>a.link:hover,h2>a.link:hover,h3>a.link:hover,#toctitle>a.link:hover,.sidebarblock>.content>.title>a.link:hover,h4>a.link:hover,h5>a.link:hover,h6>a.link:hover{color:#a53221}
 details,.audioblock,.imageblock,.literalblock,.listingblock,.stemblock,.videoblock{margin-bottom:1.25em}
 details{margin-left:1.25rem}
-details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;-webkit-tap-highlight-color:transparent}
+details>summary{cursor:pointer;display:block;position:relative;line-height:1.6;margin-bottom:.625rem;outline:none;-webkit-tap-highlight-color:transparent}
+details>summary::-webkit-details-marker{display:none}
 details>summary::before{content:"";border:solid transparent;border-left:solid;border-width:.3em 0 .3em .5em;position:absolute;top:.5em;left:-1.25rem;transform:translateX(15%)}
 details[open]>summary::before{border:solid transparent;border-top:solid;border-width:.5em .3em 0;transform:translateY(15%)}
 details>summary::after{content:"";width:1.25rem;height:1em;position:absolute;top:.3em;left:-1.25rem}
@@ -234,9 +235,8 @@ pre.prettyprint li:not(:first-child) code[data-lang]::before{display:none}
 table.linenotable{border-collapse:separate;border:0;margin-bottom:0;background:none}
 table.linenotable td[class]{color:inherit;vertical-align:top;padding:0;line-height:inherit;white-space:normal}
 table.linenotable td.code{padding-left:.75em}
-table.linenotable td.linenos{border-right:1px solid;opacity:.35;padding-right:.5em}
-pre.pygments .lineno{border-right:1px solid;opacity:.35;display:inline-block;margin-right:.75em}
-pre.pygments .lineno::before{content:"";margin-right:-.125em}
+table.linenotable td.linenos,pre.pygments .linenos{border-right:1px solid;opacity:.35;padding-right:.5em;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}
+pre.pygments span.linenos{display:inline-block;margin-right:.75em}
 .quoteblock{margin:0 1em 1.25em 1.5em;display:table}
 .quoteblock:not(.excerpt)>.title{margin-left:-1.5em;margin-bottom:.75em}
 .quoteblock blockquote,.quoteblock p{color:rgba(0,0,0,.85);font-size:1.15rem;line-height:1.75;word-spacing:.1em;letter-spacing:0;font-style:italic;text-align:justify}
@@ -273,7 +273,7 @@ table.frame-none>colgroup+*>:first-child>*,table.frame-sides>colgroup+*>:first-c
 table.frame-none>:last-child>:last-child>*,table.frame-sides>:last-child>:last-child>*{border-bottom-width:0}
 table.frame-none>*>tr>:first-child,table.frame-ends>*>tr>:first-child{border-left-width:0}
 table.frame-none>*>tr>:last-child,table.frame-ends>*>tr>:last-child{border-right-width:0}
-table.stripes-all tr,table.stripes-odd tr:nth-of-type(odd),table.stripes-even tr:nth-of-type(even),table.stripes-hover tr:hover{background:#f8f8f7}
+table.stripes-all>*>tr,table.stripes-odd>*>tr:nth-of-type(odd),table.stripes-even>*>tr:nth-of-type(even),table.stripes-hover>*>tr:hover{background:#f8f8f7}
 th.halign-left,td.halign-left{text-align:left}
 th.halign-right,td.halign-right{text-align:right}
 th.halign-center,td.halign-center{text-align:center}
@@ -289,10 +289,11 @@ ol{margin-left:1.75em}
 ul li ol{margin-left:1.5em}
 dl dd{margin-left:1.125em}
 dl dd:last-child,dl dd:last-child>:last-child{margin-bottom:0}
-ol>li p,ul>li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
+li p,ul dd,ol dd,.olist .olist,.ulist .ulist,.ulist .olist,.olist .ulist{margin-bottom:.625em}
 ul.checklist,ul.none,ol.none,ul.no-bullet,ol.no-bullet,ol.unnumbered,ul.unstyled,ol.unstyled{list-style-type:none}
 ul.no-bullet,ol.no-bullet,ol.unnumbered{margin-left:.625em}
 ul.unstyled,ol.unstyled{margin-left:0}
+li>p:empty:only-child::before{content:"";display:inline-block}
 ul.checklist>li>p:first-child{margin-left:-1em}
 ul.checklist>li>p:first-child>.fa-square-o:first-child,ul.checklist>li>p:first-child>.fa-check-square-o:first-child{width:1.25em;font-size:.8em;position:relative;bottom:.125em}
 ul.checklist>li>p:first-child>input[type=checkbox]:first-child{margin-right:.25em}
@@ -335,8 +336,6 @@ sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
 #footnotes .footnote a:first-of-type{font-weight:bold;text-decoration:none;margin-left:-1.05em}
 #footnotes .footnote:last-of-type{margin-bottom:0}
 #content #footnotes{margin-top:-.625em;margin-bottom:0;padding:.75em 0}
-.gist .file-data>table{border:0;background:#fff;width:100%;margin-bottom:0}
-.gist .file-data>table td.line-data{width:99%}
 div.unbreakable{page-break-inside:avoid}
 .big{font-size:larger}
 .small{font-size:smaller}
@@ -974,7 +973,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 <p>Calculate \(\langle x \rangle\) and \(\sigma\) for both distributions.</p>
 </li>
 <li>
-<p>For both distributions, calculate the probability of finding the particle within 1 standard deviation.</p>
+<p>For both distributions, calculate the probability of selecting a value that falls within 1 standard deviation of the mean.</p>
 </li>
 </ol>
 </div>
@@ -992,11 +991,14 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 <p>MAKE GRAPHS</p>
 </li>
 <li>
-<p>For the first probability distribution, \(\rho_1(x)\): \[\begin{align*} \langle x \rangle =&amp; \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\ =&amp; \left. \frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\ =&amp; \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} = \frac{1}{2} \\ \langle x^2 \rangle =&amp;   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\ =&amp; \left. x^4
-\right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\ =&amp; \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} = \frac{7}{24} \\  \sigma =&amp; \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} = \sqrt{\frac{1}{24}}\end{align*}\] For the second probability distribution, \(\rho_2(x)\): \[\begin{align*} \langle x \rangle =&amp; \int_0^1 x (2\sin^2{(2 \pi x)}) dx = \int_0^1 x (1-\cos(4 \pi x)) dx \\ =&amp; \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\ =&amp; \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} = \frac{1}{2} \\ \langle x^2 \rangle =&amp; \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx = \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\ =&amp; \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ =&amp; \frac{1}{3} - \frac{1}{8\pi^2}\\  \sigma =&amp; \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{1}{3}-\frac{1}{8\pi^2} - \frac{1}{4}} = \sqrt{\frac{1}{12}-\frac{1}{8\pi^2}}\end{align*}\]</p>
+<p>For the first probability distribution, \(\rho_1(x)\):
+\[\begin{align*} \langle x \rangle =&amp; \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\ =&amp; \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\ =&amp; \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} = \frac{1}{2} \\ \langle x^2 \rangle =&amp;   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\ =&amp; \left. x^4
+\right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\ =&amp; \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} = \frac{7}{24} \\ \sigma =&amp; \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204 \end{align*}\]
+For the second probability distribution, \(\rho_2(x)\): \[\begin{align*} \langle x \rangle =&amp; \int_0^1 x (2\sin^2{(2 \pi x)}) dx = \int_0^1 x (1-\cos(4 \pi x)) dx \\ =&amp; \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\ =&amp; \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} = \frac{1}{2} \\ \langle x^2 \rangle =&amp; \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx = \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\ =&amp; \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ =&amp; \frac{1}{3} - \frac{1}{8\pi^2}\\  \sigma =&amp; \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{1}{3}-\frac{1}{8\pi^2} - \frac{1}{4}} = \sqrt{\frac{1}{12}-\frac{1}{8\pi^2}} \\ \approx&amp; 0.266\end{align*}\]</p>
 </li>
 <li>
-<p>part c</p>
+<p>For \(\rho_1\) the probability of selecting a value within one standard deviation of the mean is given by:
+\[\begin{align*} &amp;\int_{0.296}^{0.5} (4x)dx + \int_{0.5}^{0.704} (-4x+4)dx \\ = &amp; \left. 2x^2 \right|_{0.296}^{0.5} + \left. \left( -2x^2 + 4x \right) \right|_{0.5}^{0.704} = 0.650 \end{align*}\]  For \(\rho_2\) the probability of selecting a value within one standard deviation of the mean is given by: \[\begin{align*} &amp;\int_{0.234}^{0.766} 2\sin^2(2\pi x)dx =  \left. x - \frac{\sin(4 \pi x)}{4 \pi} \right|_{0.234}^{0.766}  = 0.564 \end{align*}\]</p>
 </li>
 </ol>
 </div>
@@ -1277,8 +1279,28 @@ Let the resulting \(\delta\) function evolve (spread out, oscillate), then sampl
 <h3 id="_1_6_the_uncertainty_principle"><a class="anchor" href="#_1_6_the_uncertainty_principle"></a><a class="link" href="#_1_6_the_uncertainty_principle">1.6 The Uncertainty Principle</a></h3>
 <div class="sect3">
 <h4 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">Questions</a></h4>
-<div class="paragraph">
-<p>placeholder</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>1.6.1</strong> For the wavefunction from question 1.5.1, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Calculate \(\langle p^2\rangle\) and \(\sigma_p\)</p>
+</li>
+<li>
+<p>What is the minimum possible value of \(\sigma_x\)?</p>
+</li>
+<li>
+<p>Calculate \(\langle x^2 \rangle\) and \(\sigma_x\). Does the Heisenberg uncertainty principle hold?</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>1.6.2</strong></p>
+</li>
+</ul>
 </div>
 </div>
 <div class="sect3">
