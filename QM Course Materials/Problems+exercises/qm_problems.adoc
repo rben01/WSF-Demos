@@ -22,6 +22,13 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 ++\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]++
 with ++\(\kappa=\frac{i\hbar}{2m}\)++.
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle's position.
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
 
 Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Heat_equation[Heat Equation].
 What does this tell you about how probability density flows over time?
@@ -104,6 +111,14 @@ For the double slit experiment, all light and matter create a wavelike interfere
 .. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
 .. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
 .. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
+
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
 
 ==== Demonstrations
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
@@ -277,6 +292,13 @@ This is the solution
 . [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
 Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
 
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
+
 === 1.5 Momentum
 
 ==== Questions
@@ -286,6 +308,14 @@ Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varp
 . Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
 . Calculate ++\(\frac{d \langle x \rangle}{dt}\)++. Does Ehrenfest's theorem hold?
 . Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
+
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
 
 * *1.5.2* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
@@ -315,6 +345,12 @@ If \(V\) had any higher order \(x\) terms, then its derivative would have a term
 . Find ++\(L^2\)++.
 . Calculate ++\(\langle L^2 \rangle\)++ for the spatial component of the wavefunction ++\( \sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++
 
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
 
 ==== Demonstrations
 * Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++.
@@ -333,7 +369,21 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 . What is the minimum possible value of ++\(\sigma_x\)++?
 . Calculate ++\(\langle x^2 \rangle\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
 
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
+
 * *1.6.2* Estimate ++\(\sigma_p\)++ for a photon that is confined to a cone cell in the eye with a diameter of 2 ++\(\mu\)++m.
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
 
 
 
