@@ -102,63 +102,73 @@
 	</head>
 	<body>
 		<div class="grid-left-right">
-			<div class="controls-container">
-				<div class="slider-container">
-					<span
-						>Number of <span id="text-experiment-type">dice</span>:
-						<span id="text-num-objects">1</span></span
-					>
-					<span
-						><label
-							><input
-								type="range"
-								name="num-objects"
-								id="slider-num-objects" /></label
-					></span>
-					<span>Measurement speed: <span id="experiment-speed"></span></span>
-					<span>
-						<label
-							><input
-								type="range"
-								name="experiment-speed"
-								id="experiment-speed-slider"
-						/></label>
-					</span>
-					<span
-						>Number of measurements: <span id="num-measurements-text"></span
-					></span>
-					<span>
-						<label
-							><input
-								type="range"
-								name="num-measurements"
-								id="number-of-measurements-slider"
-						/></label>
-					</span>
-					<span></span>
-					<span
-						id="measurement-buttons"
-						class="radio-button-container horizontal"
-					>
-						<button class="button" id="btn-run" onclick="runExperiment()">
-							Run experiment</button
-						><button
-							class="button"
-							id="btn-stop"
-							onclick="stopExperiment()"
-							data-button-checked
+			<div>
+				<div class="controls-container">
+					<div class="slider-container">
+						<span
+							>Number of <span id="text-experiment-type">dice</span>:
+							<span id="text-num-objects">1</span></span
 						>
-							Stop experiment</button
-						><button
-							class="button"
-							id="btn-clear-experiment"
-							onclick="clearExperiment()"
-							data-button-checked
+						<span
+							><label
+								><input
+									type="range"
+									name="num-objects"
+									id="slider-num-objects" /></label
+						></span>
+						<span
+							>Measurement speed: <span id="experiment-speed"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="experiment-speed"
+									id="experiment-speed-slider"
+							/></label>
+						</span>
+						<span
+							>Number of measurements:
+							<span id="num-measurements-text"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="num-measurements"
+									id="number-of-measurements-slider"
+							/></label>
+						</span>
+						<span></span>
+						<span
+							id="measurement-buttons"
+							class="radio-button-container horizontal"
 						>
-							Clear
-						</button>
-					</span>
+							<button
+								class="button"
+								id="btn-run"
+								onclick="runExperiment()"
+							>
+								Run experiment</button
+							><button
+								class="button"
+								id="btn-stop"
+								onclick="stopExperiment()"
+								data-button-checked
+							>
+								Stop experiment</button
+							><button
+								class="button"
+								id="btn-clear-experiment"
+								onclick="clearExperiment()"
+								data-button-checked
+							>
+								Clear
+							</button>
+						</span>
+					</div>
 				</div>
+				<div><svg id="dice-plot"></svg></div>
 			</div>
 			<svg id="experiment-plot" class="plot"></svg>
 		</div>

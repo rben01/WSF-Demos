@@ -327,7 +327,7 @@ function sampleFromCdf(cdfPoints, n) {
 			currentIndex = Math.floor((left + right) / 2);
 			const currentPoint = cdfPoints[currentIndex];
 			const y = currentPoint[1];
-			if (y < r) {
+			if (r > y) {
 				left = currentIndex;
 			} else {
 				right = currentIndex;
@@ -335,13 +335,13 @@ function sampleFromCdf(cdfPoints, n) {
 		}
 
 		let value;
-		if (currentIndex < nPoints - 1) {
-			const [x1, a1] = cdfPoints[currentIndex];
-			const [x2, a2] = cdfPoints[currentIndex + 1];
-			const t = (r - a1) / (a2 - a1);
+		if (left < nPoints - 1) {
+			const [x1, y1] = cdfPoints[left];
+			const [x2, y2] = cdfPoints[right];
+			const t = (r - y1) / (y2 - y1);
 			value = (1 - t) * x1 + t * x2;
 		} else {
-			value = cdfPoints[currentIndex][0];
+			value = cdfPoints[left][0];
 		}
 		samples.push(value);
 	}
