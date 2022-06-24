@@ -321,7 +321,14 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 === 1.6 The Uncertainty Principle
 
 ==== Questions
-placeholder
+* *1.6.1* For the wavefunction from question 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+[{sublist-style}]
+. Calculate ++\(\langle p^2\rangle\)++ and ++\(\sigma_p\)++
+. What is the minimum possible value of ++\(\sigma_x\)++?
+. Calculate ++\(\langle x^2 \rangle\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
+
+* *1.6.2*
+
 
 ==== Demonstrations
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
