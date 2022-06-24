@@ -315,11 +315,12 @@ function getGridlines({
 function sampleFromCdf(cdfPoints, n) {
 	n = n ?? 1;
 	const samples = [];
+	const nPoints = cdfPoints.length;
 
 	for (let i = 0; i < n; ++i) {
 		const r = Math.random();
 		let left = 0;
-		let right = cdfPoints.length - 1;
+		let right = nPoints - 1;
 		let currentIndex;
 
 		while (left < right - 1) {
@@ -334,7 +335,7 @@ function sampleFromCdf(cdfPoints, n) {
 		}
 
 		let value;
-		if (currentIndex < cdfPoints.length - 1) {
+		if (currentIndex < nPoints - 1) {
 			const [x1, a1] = cdfPoints[currentIndex];
 			const [x2, a2] = cdfPoints[currentIndex + 1];
 			const t = (r - a1) / (a2 - a1);

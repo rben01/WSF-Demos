@@ -1,5 +1,5 @@
 /* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera
-makeRenderer basisCoefficient defineArrowhead psiFunction */
+makeRenderer basisCoefficient defineArrowhead psiFunction sampleFromCdf */
 
 const WIDTH = 800;
 const HEIGHT = 325;
@@ -8,6 +8,7 @@ const HEIGHT_3D = 325;
 const X_MIN = -5;
 const X_0 = 0;
 const X_MAX = 5;
+const xInterp = d3.interpolate(X_MIN, X_MAX);
 
 const CAMERA_EXTENT = 11;
 const xScale3D = d3.scaleLinear(
@@ -194,9 +195,16 @@ const FACTORIAL = d3.range(0, N_MAX + 1).map(n => {
 
 const COEFFS = d3.range(0, N_MAX + 1).map(() => 0);
 
-function populateCaches({ sigma, p, m, omega }) {
-	for (let n = 0; n <= N_MAX; n++) {
-		COEFFS[n] = basisCoefficient(n, { sigma, p, m, omega });
+function populateCaches({ sigma, p, m, omega, xMeasured }) {
+	if (xMeasured !== undefined) {
+		sigma = 0.1;
+		for (let n = 0; n <= N_MAX; n++) {
+			COEFFS[n] = psiFunction(n, { sigma, p, m, omega })(xMeasured);
+		}
+	} else {
+		for (let n = 0; n <= N_MAX; n++) {
+			COEFFS[n] = basisCoefficient(n, { sigma, p, m, omega });
+		}
 	}
 }
 
@@ -269,16 +277,17 @@ applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
 
 // arr[2*i] is x_i, arr[2*i+1] is z_i
 const wavefunctionPoints = d3.range(2 * N_WAVEFUNCTION_POINTS);
-function computeWavefunctionPoints() {
-	const { omega, m, mu } = sliderValues();
+const cdfPoints = new Array(N_WAVEFUNCTION_POINTS);
 
-	const xInterp = d3.interpolate(X_MIN, X_MAX);
+function computeWavefunctionPoints(xMeasured) {
+	const { omega, m, mu } = sliderValues();
 
 	const t = currentTime;
 
-	const xt = mu * Math.cos(t);
+	const xt = xMeasured === undefined ? mu * Math.cos(t) : xMeasured;
 	const pt = -mu * Math.sin(t);
 
+	let cummProbability = 0;
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
 		const xNaive = xInterp(i / N_WAVEFUNCTION_POINTS);
 		const x = xNaive - xt;
@@ -297,6 +306,15 @@ function computeWavefunctionPoints() {
 
 		wavefunctionPoints[2 * i] = xNaive;
 		wavefunctionPoints[2 * i + 1] = z;
+
+		const probability = z.magnitude ** 2;
+		cummProbability += probability;
+		cdfPoints[i] = [x, cummProbability];
+	}
+
+	// Normalize probability so that it sums to 1 over the region of interest
+	for (let i = 0; i < N_WAVEFUNCTION_POINTS; i++) {
+		cdfPoints[i][1] /= cummProbability;
 	}
 }
 
@@ -578,11 +596,22 @@ function getData2D() {
 	return data;
 }
 
+// eslint-disable-next-line no-unused-vars
+function takeMeasurement() {
+	const xMeasured = sampleFromCdf(cdfPoints)[0];
+
+	const { omega, m, sigma, p } = sliderValues();
+	populateCaches({ sigma, p, m, omega, xMeasured });
+	computeWavefunctionPoints(xMeasured);
+
+	console.log(xMeasured);
+}
+
 let isFirstRun = true;
 function update(dtMS, refreshCache = false) {
 	dtMS = dtMS ?? 0;
 
-	const { omega, m, mu, sigma, p } = sliderValues();
+	const { omega, m, sigma, p } = sliderValues();
 
 	const timeScale = 1;
 	currentTime += (timeScale * (omega * dtMS)) / 1000;
@@ -590,7 +619,6 @@ function update(dtMS, refreshCache = false) {
 	if (refreshCache) {
 		populateCaches({
 			m,
-			mu,
 			sigma,
 			p,
 			omega,

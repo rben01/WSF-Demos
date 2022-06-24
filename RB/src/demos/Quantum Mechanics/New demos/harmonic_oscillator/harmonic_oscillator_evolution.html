@@ -118,6 +118,9 @@
 				stroke: var(--color-expect);
 				stroke-width: 2;
 			}
+			#btn-measure {
+				width: 100%;
+			}
 		</style>
 	</head>
 	<body>
@@ -147,6 +150,17 @@
 							Reset
 						</button>
 					</span>
+					<!--
+						<span></span>
+					<span
+						><button
+							id="btn-measure"
+							class="button"
+							onclick="takeMeasurement()"
+						>
+							Measure position
+						</button></span
+					> -->
 				</div>
 			</div>
 			<div id="plots">
@@ -160,6 +174,7 @@
 		<script src="../../../three_utils.js"></script>
 		<script src="../../complex.js"></script>
 		<script src="./basis_coef.js"></script>
+		<script src="./delta_coeffs.js"></script>
 		<script src="./psi_functions.js"></script>
 		<script src="./harmonic_oscillator_evolution.js"></script>
 	</body>

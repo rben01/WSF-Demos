@@ -190,11 +190,12 @@ function make_diracdelta_functions()
 
     js_src = exprs_to_js_source(
         exprs,
-        expr -> "return x => Complex.mul(coef_, $(expr_to_js_str(expr)))";
-        const_coef_wolfram=raw"""((m \[Omega])^(3/4)/(\[HBar]^(n/2) (\[HBar] \[Pi])^(1/4)
-            Sqrt[2^n Factorial[n]]))""",
-        const_coef_to_js=js -> "const coef_ = $(js)",
-        func_sig="deltaCoef(n, {omega, m})",
+        expr -> "return Complex.mul(coef_, $(expr_to_js_str(expr)))";
+        const_coef_wolfram=raw"""((m \[Omega])^(3/4)
+            Exp[-m x^2 \[Omega]/(2 \[HBar])]/(\[HBar]^(n/2)
+            (\[HBar] \[Pi])^(1/4) Sqrt[2^n Factorial[n]]))""",
+        const_coef_to_js=js -> "const coef_ = $(js);",
+        func_sig="deltaCoef(n, {omega, m, xMeasured: x})",
         initial_lines=["/* global Complex H_BAR FACTORIAL */"],
     )
 
