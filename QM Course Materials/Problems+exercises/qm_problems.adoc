@@ -38,8 +38,8 @@ Now for ++\(\Psi\)++,
 We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_n c_n \Psi_n\)++ is also a solution to the {sch} equation.
 ====
 
-
 * *1.1.3* [Modified from Townsend] Show that ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ (with appropriate choices of  ++\(\omega,n,l\)++) is a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\)++, but *not* the {sch} equation.
+(Ignore the trivial case where \(u=0\).)
 +
 .Solution
 [%collapsible]
@@ -61,9 +61,9 @@ We see that if ++\(v = \frac{\omega l}{n \pi}\)++ then \(u(x,t)\) is a solution 
     - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
 &= Ai\hbar\omega\sin(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)+A\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi)\sin\left(\frac{n\pi x}{l}\right)
 \end{align*}\]++
-In order for this to equal 0 for all ++\(x,t\)++, we must have
+In order for this to equal 0 for all ++\(x,t\)++, and for \(u\) to be nontrivial, we must have
 ++\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi) = 0\]++
-There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is not a solution to the {sch} equation for a free particle.
+There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ is not a solution to the {sch} equation for a free particle.
 
 ====
 

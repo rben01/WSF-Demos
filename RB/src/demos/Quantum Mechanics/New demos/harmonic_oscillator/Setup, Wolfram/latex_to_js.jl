@@ -36,7 +36,7 @@ function wolfram_to_jl_str(s::AbstractString)::String
         replace(s, r"^(?:\d+:\s*)?" => "")
         replace(s, r"\\\[(\w+?)\]" => s"\1")
         replace(s, r"\s+" => "*")
-        replace(s, "n!" => "FACTORIAL[n]")
+        replace(s, "n!" => "factorial[n]")
         # replace(s, "-1+4*sigma^4" => "(s4_)", "1-4*sigma^4" => "(-s4_)")
         replace(s, "hbar" => "H_BAR")
         replace(s, r"\bI\b"i => "Complex.i")
@@ -87,7 +87,7 @@ function expr_to_js_str(expr::Expr)
         elseif func == :(exp)
             rest = expr_to_js_str(args[2])
             return "Complex.exp($rest)"
-        elseif func == :(FACTORIAL)
+        elseif func == :(factorial)
             rest = expr_to_js_str(args[2])
             return "FACTORIAL[n]"
         else
@@ -110,7 +110,7 @@ function exprs_to_switch_case(exprs, expr_to_case_body::Function; n0=0)
         case = expr_to_case_body(expr_to_js_str(ex))
         push!(comps, "case $(n): $(case);")
     end
-    push!(comps, "default: throw new Error(\"Got n greater than N_MAX\")", "}")
+    push!(comps, "default: throw new Error(\"Got n greater than N_MAX\");", "}")
     return join(comps, "\n")
 end
 
@@ -135,6 +135,8 @@ function exprs_to_js_source(
     return join(comps, "\n")
 end
 
+# %%
+
 function make_basis_coefs()
     exprs =
         read(joinpath(@__DIR__, "basis_coeffs.txt"), String) |>
@@ -155,6 +157,7 @@ function make_basis_coefs()
 
     return write(joinpath(dirname(@__DIR__), "basis_coef.js"), js_src)
 end
+make_basis_coefs()
 
 function make_psi_functions()
     exprs =
@@ -175,9 +178,30 @@ function make_psi_functions()
 
     return write(joinpath(dirname(@__DIR__), "psi_functions.js"), js_src)
 end
-
-make_basis_coefs()
 make_psi_functions()
+
+# %%
+function make_diracdelta_functions()
+    exprs =
+        read(joinpath(@__DIR__, "delta_coeffs.txt"), String) |>
+        split_input .|>
+        wolfram_to_jl_str .|>
+        Meta.parse
+
+    js_src = exprs_to_js_source(
+        exprs,
+        expr -> "return Complex.mul(coef_, $(expr_to_js_str(expr)))";
+        const_coef_wolfram=raw"""((m \[Omega])^(3/4)
+            Exp[-m x^2 \[Omega]/(2 \[HBar])]/(\[HBar]^(n/2)
+            (\[HBar] \[Pi])^(1/4) Sqrt[2^n Factorial[n]]))""",
+        const_coef_to_js=js -> "const coef_ = $(js);",
+        func_sig="deltaCoef(n, {omega, m, xMeasured: x})",
+        initial_lines=["/* global Complex H_BAR FACTORIAL */"],
+    )
+
+    return write(joinpath(dirname(@__DIR__), "delta_coeffs.js"), js_src)
+end
+make_diracdelta_functions()
 
 # %%
 
@@ -273,6 +297,8 @@ end
 clipboard(
     hermitians |> split_input .|> hermite_wolfram_to_js_strs |> js_cases_to_switch_case
 )
+
+# %%
 
 # %%
 launched_gaussian = raw"""(E^((2 p^2 t \[Sigma]^2-4 m p x \[Sigma]^2-I m x^2 \[HBar])/(4 I m \[Sigma]^2 \[HBar]-2 t \[HBar]^2)) (2/\[Pi])^(1/4))/Sqrt[2 \[Sigma]+(I t \[HBar])/(m \[Sigma])]"""
