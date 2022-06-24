@@ -323,11 +323,12 @@ Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then s
 ==== Questions
 * *1.6.1* For the wavefunction from question 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
-. Calculate ++\(\langle p^2\rangle\)++ and ++\(\sigma_p\)++
+. Calculate ++\(\langle p^2\rangle\)++ and ++\(\sigma_p\)++.
 . What is the minimum possible value of ++\(\sigma_x\)++?
 . Calculate ++\(\langle x^2 \rangle\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
 
 * *1.6.2*
+
 
 
 ==== Demonstrations
