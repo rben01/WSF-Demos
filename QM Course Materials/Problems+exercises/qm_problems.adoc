@@ -25,7 +25,6 @@ The physical interpretation of the position wavefunction \(\Psi\) is that its sq
 
 Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Heat_equation[Heat Equation].
 What does this tell you about how probability density flows over time?
---
 
 * *1.1.2* [Modified from Townsend] If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
 +
