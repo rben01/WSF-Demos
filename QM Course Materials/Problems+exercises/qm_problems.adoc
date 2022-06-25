@@ -18,7 +18,6 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Link to QM demos]
 
 
-
 == Chapter 1
 
 === 1.1 The {sch} Equation
@@ -28,19 +27,18 @@ https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Li
 with ++\(\kappa=\frac{i\hbar}{2m}\)++.
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle's position.
 +
+Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Heat_equation[Heat Equation].
+What does this tell you about how the wavefunction flows over time?
++
+NOTE: Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
+However it is still instructive and at a high level gives good intuition for how probability density "`flows`" over time.
+
++
 .Solution (placeholder)
 [%collapsible]
 ====
 This is the solution
 ====
-
-
-Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Heat_equation[Heat Equation].
-What does this tell you about how the wavefunction flows over time?
-
-NOTE: Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
-However it is still instructive and at a high level gives good intuition for how probability density "`flows`" over time.
---
 
 * *1.1.2* [Modified from Townsend] If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
 +
