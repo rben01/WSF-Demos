@@ -429,7 +429,7 @@ if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
 applyGraphicalObjs(d3Obj, () => datum.children, {
 selector: function () {
-return this.childNodes;
+return this.childElements;
 },
 transition,
 });
@@ -535,7 +535,8 @@ return ans;
 // eslint-disable-next-line no-unused-vars
 function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
 attrs = attrs ?? {};
-flip = flip ?? false;
+// flip = flip ?? false;
+flip = false;
 const markerAttrs = {
 attrs: {
 refX: length / 2,
@@ -543,7 +544,7 @@ refY: width / 2,
 markerUnits: "userSpaceOnUse",
 markerWidth: length,
 markerHeight: width,
-orient: "auto",
+orient: "auto-start-reverse",
 },
 };
 const path = flip
@@ -652,29 +653,30 @@ return gridlines;
 function sampleFromCdf(cdfPoints, n) {
 n = n ?? 1;
 const samples = [];
+const nPoints = cdfPoints.length;
 for (let i = 0; i < n; ++i) {
 const r = Math.random();
 let left = 0;
-let right = cdfPoints.length - 1;
+let right = nPoints - 1;
 let currentIndex;
 while (left < right - 1) {
 currentIndex = Math.floor((left + right) / 2);
 const currentPoint = cdfPoints[currentIndex];
 const y = currentPoint[1];
-if (y < r) {
+if (r > y) {
 left = currentIndex;
 } else {
 right = currentIndex;
 }
 }
 let value;
-if (currentIndex < cdfPoints.length - 1) {
-const [x1, a1] = cdfPoints[currentIndex];
-const [x2, a2] = cdfPoints[currentIndex + 1];
-const t = (r - a1) / (a2 - a1);
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
 value = (1 - t) * x1 + t * x2;
 } else {
-value = cdfPoints[currentIndex][0];
+value = cdfPoints[left][0];
 }
 samples.push(value);
 }

@@ -423,7 +423,7 @@ if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
 applyGraphicalObjs(d3Obj, () => datum.children, {
 selector: function () {
-return this.childNodes;
+return this.childElements;
 },
 transition,
 });
@@ -529,7 +529,8 @@ return ans;
 // eslint-disable-next-line no-unused-vars
 function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
 attrs = attrs ?? {};
-flip = flip ?? false;
+// flip = flip ?? false;
+flip = false;
 const markerAttrs = {
 attrs: {
 refX: length / 2,
@@ -537,7 +538,7 @@ refY: width / 2,
 markerUnits: "userSpaceOnUse",
 markerWidth: length,
 markerHeight: width,
-orient: "auto",
+orient: "auto-start-reverse",
 },
 };
 const path = flip
@@ -646,29 +647,30 @@ return gridlines;
 function sampleFromCdf(cdfPoints, n) {
 n = n ?? 1;
 const samples = [];
+const nPoints = cdfPoints.length;
 for (let i = 0; i < n; ++i) {
 const r = Math.random();
 let left = 0;
-let right = cdfPoints.length - 1;
+let right = nPoints - 1;
 let currentIndex;
 while (left < right - 1) {
 currentIndex = Math.floor((left + right) / 2);
 const currentPoint = cdfPoints[currentIndex];
 const y = currentPoint[1];
-if (y < r) {
+if (r > y) {
 left = currentIndex;
 } else {
 right = currentIndex;
 }
 }
 let value;
-if (currentIndex < cdfPoints.length - 1) {
-const [x1, a1] = cdfPoints[currentIndex];
-const [x2, a2] = cdfPoints[currentIndex + 1];
-const t = (r - a1) / (a2 - a1);
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
 value = (1 - t) * x1 + t * x2;
 } else {
-value = cdfPoints[currentIndex][0];
+value = cdfPoints[left][0];
 }
 samples.push(value);
 }
@@ -812,7 +814,7 @@ fontsize * 1.4 + borderThickness,
 8,
 );
 context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
-context.fillText(message, borderThickness, fontsize + borderThickness);
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
 const texture = new THREE.CanvasTexture(canvas);
 const spriteMaterial = new THREE.SpriteMaterial({
 map: texture,
@@ -871,6 +873,7 @@ const origRotAxisFromUp = originalDisplacementFromPointOfFocus
 .clone()
 .cross(up)
 .normalize();
+// THIS ASSUMES z IS UP
 // We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
 // rotation axis line, Line 2 is the segment connecting the two displacements
 const a1 = origRotAxisFromUp.y;
@@ -889,23 +892,13 @@ const b2 = -1;
 const c2 = y2_1 - m * x2_1;
 const determinant = a1 * b2 - a2 * b1;
 // The lines are (approximately) parallel iff the determinant is small
-if (Math.abs(determinant) > 1e-4) {
+if (Math.abs(determinant) > 1e-5) {
 // Lines aren't parallel; get intersection x
 const x = (b1 * c2 - b2 * c1) / determinant;
 // Is x_intersect between the two original points' x's? If yes then that segment
 // crosses the rotation axis, which is pathological
 if (x2_1 < x === x < x2_2) {
-const newVec = (() => {
-const t = 0.00001;
-const { x: x1, y: y1, z: z1 } = oldPosition;
-const { x: x2, y: y2, z: z2 } = newPosition;
-return new THREE.Vector3(
-x1 * (1 - t) + x2 * t,
-y1 * (1 - t) + y2 * t,
-z1 * (1 - t) + z2 * t,
-);
-})();
-return newVec;
+return oldPosition;
 }
 }
 return newPosition;
