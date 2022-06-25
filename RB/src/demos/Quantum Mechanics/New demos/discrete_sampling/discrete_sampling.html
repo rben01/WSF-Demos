@@ -16,6 +16,12 @@
 				grid-template-columns: auto 1fr;
 				column-gap: 50px;
 			}
+
+			#dice-plot-container {
+				text-align: center;
+				margin-top: 20px;
+			}
+
 			.vertical-container {
 				height: 100%;
 				display: flex;
@@ -100,6 +106,12 @@
 				fill: white;
 				font-size: 20px;
 			}
+			.die.body {
+				fill: white;
+			}
+			#dice-sum-wrapper {
+				margin-left: 30px;
+			}
 		</style>
 	</head>
 	<body>
@@ -170,7 +182,10 @@
 						</span>
 					</div>
 				</div>
-				<div><svg id="dice-plot"></svg></div>
+				<div id="dice-plot-container"><svg id="dice-plot"></svg></div>
+				<span id="dice-sum-wrapper"
+					>Dice sum: <span id="text-dice-sum"></span
+				></span>
 			</div>
 			<svg id="experiment-plot" class="plot"></svg>
 		</div>

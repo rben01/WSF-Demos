@@ -1,4 +1,4 @@
-/* global applyGraphicalObjs sampleFromCdf */
+/* global applyGraphicalObjs */
 
 const MAX_DICE = 10;
 const N_SIDES = 6;
@@ -29,6 +29,20 @@ const probaPlot = d3
 	.attr("width", PROBA_WIDTH)
 	.attr("height", PROBA_HEIGHT);
 
+const DICE_WIDTH = 300;
+const DICE_HEIGHT = 240;
+
+const dicePlot = d3
+	.select("#dice-plot")
+	.attr("width", DICE_WIDTH)
+	.attr("height", DICE_HEIGHT);
+
+const diceXScale = d3.scaleLinear([0, 1], [_margin, DICE_WIDTH - _margin]);
+const diceYScale = d3.scaleLinear(
+	[0, (DICE_HEIGHT - 2 * _margin) / (DICE_WIDTH - 2 * _margin)],
+	[_margin, DICE_HEIGHT - _margin],
+);
+
 const MIN_EXPERIMENT_SPEED = 1;
 const MAX_EXPERIMENT_SPEED = 100;
 let experimentSpeed = MIN_EXPERIMENT_SPEED;
@@ -48,8 +62,16 @@ const numObjectsSlider = (() => {
 	slider.value = 1;
 	slider.step = 1;
 
-	slider.oninput = () => {
+	slider.oninput = function () {
 		document.getElementById("text-num-objects").innerText = +slider.value;
+
+		// eslint-disable-next-line no-use-before-define
+		const diceData = getDiceData(+this.value);
+		applyGraphicalObjs(dicePlot, diceData, {
+			key: d => d.key,
+			selector: ".die",
+		});
+
 		// eslint-disable-next-line no-use-before-define
 		update();
 	};
@@ -105,6 +127,10 @@ const numMeasurementsSlider = (() => {
 
 updateNumMeasurementsText.call(numMeasurementsSlider);
 
+function rollNDice(n) {
+	return new Int8Array(n).map(() => 1 + Math.floor(Math.random() * 6));
+}
+
 // function sampleDice(n) {
 // 	let sum = 0;
 // 	for (let i = 0; i < n; i++) {
@@ -148,7 +174,7 @@ function getAxesData({ nDice }) {
 
 	const diceCounts = getDiceOutcomeCounts(nDice);
 
-	const pathPoints = [];
+	const pathPoints = [[0, 0]];
 	const maxOutcome = diceCounts.length - 1;
 	const nOutcomes = diceCounts.reduce((a, b) => a + b);
 
@@ -265,6 +291,127 @@ function getAxesData({ nDice }) {
 	return { data, pathPoints };
 }
 
+// Get the data used to draw the dice
+function getDiceData({ diceRoll, nDice } = {}) {
+	const DICE_PER_ROW = 4;
+	const DIE_SIZE = 0.2;
+	const DIE_X_MARGIN = (1 - DICE_PER_ROW * DIE_SIZE) / (DICE_PER_ROW - 1);
+	const DIE_Y_MARGIN =
+		diceYScale.invert(diceXScale(DIE_X_MARGIN) - diceXScale(0)) -
+		diceYScale.invert(0);
+
+	// For the pips
+	// Diff, Small, Medium, Large
+	const D = 0.225;
+	const M = 0.5;
+	const S = M - D;
+	const L = M + D;
+
+	const pip = {
+		topLeft: [S, S],
+		topMid: [M, S],
+		topRight: [L, S],
+		midLeft: [S, M],
+		midMid: [M, M],
+		midRight: [L, M],
+		botLeft: [S, L],
+		botMid: [M, L],
+		botRight: [L, L],
+	};
+
+	if (diceRoll === undefined) {
+		diceRoll = Array(nDice ?? +numObjectsSlider.value).fill(0);
+	}
+
+	const diceData = Array.from(diceRoll).flatMap((value, i) => {
+		const x = (i % DICE_PER_ROW) * (DIE_SIZE + DIE_X_MARGIN);
+		const y = Math.floor(i / DICE_PER_ROW) * (DIE_SIZE + DIE_Y_MARGIN);
+
+		const pips = (() => {
+			if (value === 0) {
+				return [];
+			}
+
+			const rotated = Math.random() < 0.5;
+
+			if (value === 1) {
+				return [pip.midMid, pip.midMid];
+			} else if (value === 2) {
+				return rotated
+					? [pip.topLeft, pip.botRight]
+					: [pip.topRight, pip.botLeft];
+			} else if (value === 3) {
+				return rotated
+					? [pip.topLeft, pip.midMid, pip.botRight]
+					: [pip.topRight, pip.midMid, pip.botLeft];
+			} else if (value === 4) {
+				return [pip.topLeft, pip.topRight, pip.botLeft, pip.botRight];
+			} else if (value === 5) {
+				return [
+					pip.topLeft,
+					pip.topRight,
+					pip.midMid,
+					pip.botLeft,
+					pip.botRight,
+				];
+			} else if (value === 6) {
+				return rotated
+					? [
+							pip.topLeft,
+							pip.topMid,
+							pip.topRight,
+							pip.botLeft,
+							pip.botMid,
+							pip.botRight,
+					  ]
+					: [
+							pip.topLeft,
+							pip.topRight,
+							pip.midLeft,
+							pip.midRight,
+							pip.botLeft,
+							pip.botRight,
+					  ];
+			}
+		})();
+
+		const x0s = diceXScale(0);
+
+		const rectX = diceXScale(x);
+		const rectY = diceYScale(y);
+		const sideLength = diceXScale(DIE_SIZE) - x0s;
+
+		return [
+			{
+				shape: "rect",
+				class: "die body",
+				key: `die-${i}`,
+				attrs: {
+					x: rectX,
+					y: rectY,
+					width: sideLength,
+					height: sideLength,
+					rx: 10,
+					ry: 10,
+				},
+			},
+			...pips.map(([cx, cy], j) => ({
+				shape: "circle",
+				class: "die pip",
+				key: `pip-${i}-${j}`,
+				attrs: {
+					cx: diceXScale(cx * DIE_SIZE) - x0s + rectX,
+					cy: diceYScale(cy * DIE_SIZE) - x0s + rectY,
+					r: 4.5,
+					fill: "black",
+				},
+			})),
+		];
+	});
+
+	return diceData;
+}
+
 let experimentAnimationFrame;
 
 function update() {
@@ -293,10 +440,11 @@ function update() {
 }
 
 function stopExperiment() {
-	d3.select("#slider-num-objects").property("disabled", false);
-	d3.select("#btn-clear-experiment").property("disabled", false);
+	document.getElementById("slider-num-objects").disabled = false;
+	document.getElementById("btn-clear-experiment").disabled = false;
 	document.getElementById("btn-run").disabled = false;
 	document.getElementById("btn-stop").disabled = true;
+	document.getElementById("number-of-measurements-slider").disabled = false;
 	// clearInterval(experimentInterval);
 	window.cancelAnimationFrame(experimentAnimationFrame);
 }
@@ -319,43 +467,31 @@ d3.select("#btn-clear-experiment").on("click._default", null);
 function runExperiment() {
 	resetExperiment();
 
-	d3.select("#slider-num-objects").property("disabled", true);
-	d3.select("#btn-run").property("disabled", true);
-	d3.select("#btn-stop").property("disabled", false);
-	d3.select("#btn-clear-experiment").property("disabled", true);
+	document.getElementById("slider-num-objects").disabled = true;
+	document.getElementById("btn-clear-experiment").disabled = true;
+	document.getElementById("btn-run").disabled = true;
+	document.getElementById("btn-stop").disabled = false;
+	document.getElementById("number-of-measurements-slider").disabled = true;
 
 	const nMeasurements = numMeasurementsSliderScale();
 
-	const outcomeCounts = getDiceOutcomeCounts(+numObjectsSlider.value);
+	const nDice = +numObjectsSlider.value;
+
+	const outcomeCounts = getDiceOutcomeCounts(nDice);
 	const maxOutcome = outcomeCounts.length - 1;
-	const nOutcomes = outcomeCounts.reduce((a, b) => a + b);
-
-	const cdf = (() => {
-		const cdf = Array(maxOutcome + 1);
-		let runningSum = 0;
-
-		for (let i = 0; i <= maxOutcome; i++) {
-			const c = outcomeCounts[i];
-			runningSum += c / nOutcomes;
-			cdf[i] = [i, runningSum];
-		}
-
-		return cdf;
-	})();
 
 	const maxSamplesGathered = 1000;
 	let sampleIndex = maxSamplesGathered;
 	let samples;
 	function sampleCdf() {
 		if (sampleIndex === maxSamplesGathered) {
-			samples = sampleFromCdf(cdf, maxSamplesGathered).map(x =>
-				Math.floor(1 + x),
-			);
+			samples = Array(maxSamplesGathered + 1)
+				.fill(0)
+				.map(() => rollNDice(nDice));
 			sampleIndex = 0;
 		}
-		const s = samples[sampleIndex];
 		sampleIndex += 1;
-		return s;
+		return samples[sampleIndex];
 	}
 
 	const buckets = Array(maxOutcome + 1).fill(0);
@@ -384,14 +520,31 @@ function runExperiment() {
 		const nExperiments = Math.floor(nExperimentsExact);
 		experimentRemainderFrac = nExperimentsExact % 1;
 
-		let bucketIndex;
+		let lastDiceRoll;
 		for (let i = 0; i < nExperiments; ++i) {
-			const sample = sampleCdf();
-			buckets[sample] += 1;
+			const diceRoll = sampleCdf();
+			const sum = diceRoll.reduce((a, b) => a + b);
+			buckets[sum] += 1;
+
+			lastDiceRoll = diceRoll;
+
 			nMeasurementsSoFar += 1;
 			if (nMeasurementsSoFar >= nMeasurements) {
 				break;
 			}
+		}
+
+		if (lastDiceRoll !== undefined) {
+			const diceData = getDiceData({ diceRoll: lastDiceRoll });
+
+			applyGraphicalObjs(dicePlot, diceData, {
+				key: d => d.key,
+				selector: ".die",
+			});
+
+			document.getElementById("text-dice-sum").innerText = lastDiceRoll.reduce(
+				(a, b) => a + b,
+			);
 		}
 
 		const currentAreaOfSamples = isFinite(nMeasurements)
@@ -404,9 +557,9 @@ function runExperiment() {
 			const scaledHeight = scaledY0 - probaYScale(height);
 
 			const classes = ["experiment-indicator", "experiment-bucket"];
-			if (timeBtwnSamplesMS >= 20 && i === bucketIndex) {
-				classes.push("experiment-selected-bucket");
-			}
+			// if (timeBtwnSamplesMS >= 20 && i === bucketIndex) {
+			// 	classes.push("experiment-selected-bucket");
+			// }
 
 			return {
 				shape: "rect",
@@ -452,3 +605,4 @@ function runExperiment() {
 }
 
 update();
+numObjectsSlider.oninput();
