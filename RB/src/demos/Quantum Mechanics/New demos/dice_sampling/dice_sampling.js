@@ -66,7 +66,7 @@ const numObjectsSlider = (() => {
 		document.getElementById("text-num-objects").innerText = +slider.value;
 
 		// eslint-disable-next-line no-use-before-define
-		const diceData = getDiceData(+this.value);
+		const diceData = getDiceData({ nDice: +this.value });
 		applyGraphicalObjs(dicePlot, diceData, {
 			key: d => d.key,
 			selector: ".die",
@@ -74,6 +74,8 @@ const numObjectsSlider = (() => {
 
 		// eslint-disable-next-line no-use-before-define
 		update();
+
+		document.getElementById("text-dice-sum").innerText = "";
 	};
 
 	return slider;
@@ -111,7 +113,7 @@ const numMeasurementsTextSpan = document.getElementById("num-measurements-text")
 function updateNumMeasurementsText() {
 	const value = +(this.value ?? MIN_NUM_MEASUREMENTS);
 	const scaledValue = numMeasurementsSliderScale(value);
-	const scaledText = isFinite(scaledValue) ? `${scaledValue}` : "Infinite";
+	const scaledText = isFinite(scaledValue) ? `${scaledValue}` : "Inf.";
 	numMeasurementsTextSpan.innerText = scaledText;
 }
 

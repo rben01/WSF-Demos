@@ -40,7 +40,7 @@ However it is still instructive and at a high level gives good intuition for how
 This is the solution
 ====
 
-* *1.1.2* [Modified from Townsend] If \(\Psi_{n}\) is a solution to the {sch} equation, show that \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
+* *1.1.2* [Modified from Townsend] Show that the {sch} is linear: if \(\Psi_{n}\) is a solution to the {sch} equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
 +
 .Solution
 [%collapsible]
