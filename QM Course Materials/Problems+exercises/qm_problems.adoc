@@ -11,7 +11,12 @@
 :!webfonts:
 :sublist-style: pass:[loweralpha]
 
-https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[This is a link to this very page.]
+[.lead]
+https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[Link to this very page]
+
+[.lead]
+https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Link to QM demos]
+
 
 
 == Chapter 1

@@ -21,7 +21,6 @@ requests = "^2.25.1"
 ipython = "^7.21.0"
 ipykernel = "^5.5.0"
 jupyter = "^1.0.0"
-black = "^20.8b1"
 mypy = "^0.812"
 
 [build-system]

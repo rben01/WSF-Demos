@@ -30,6 +30,16 @@ def get_html_listing_soup(
     head.append(title)
 
     body = cast(Tag, soup.find("body"))
+
+    link: Tag = soup.new_tag("div")
+    body.append(link)
+    link_a: Tag = soup.new_tag("a")
+    link.append(link_a)
+    link_a[
+        "href"
+    ] = "https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html"
+    link_a.string = "Link to Problems and Exercises Page"
+
     ul: Tag = soup.new_tag("ul")
     body.append(ul)
 
