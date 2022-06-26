@@ -432,6 +432,8 @@ function update() {
 		},
 	];
 
+	console.log(energyCurves);
+
 	applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
 	applyGraphicalObjs(energyLinesContainer, energyLines, {
 		selector: ".energy-line-container",

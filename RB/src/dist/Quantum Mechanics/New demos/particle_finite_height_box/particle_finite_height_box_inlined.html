@@ -456,7 +456,7 @@ if (datum.children !== undefined) {
 // eslint-disable-next-line no-use-before-define
 applyGraphicalObjs(d3Obj, () => datum.children, {
 selector: function () {
-return this.childElements;
+return this.children;
 },
 transition,
 });
@@ -1163,6 +1163,7 @@ y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
 },
 },
 ];
+console.log(energyCurves);
 applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
 applyGraphicalObjs(energyLinesContainer, energyLines, {
 selector: ".energy-line-container",
