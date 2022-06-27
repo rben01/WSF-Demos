@@ -2,6 +2,8 @@
 
 const MAX_DICE = 10;
 const N_SIDES = 6;
+const MAX_ROLL = MAX_DICE * N_SIDES;
+const N_OUTCOMES = MAX_ROLL + 1; // since 0 counts, in a sense
 
 const X_MAX = MAX_DICE * N_SIDES;
 const X_MIN = 0;
@@ -76,6 +78,8 @@ const numObjectsSlider = (() => {
 		update();
 
 		document.getElementById("text-dice-sum").innerText = "";
+
+		document.getElementById("btn-clear-experiment").disabled = true;
 	};
 
 	return slider;
@@ -143,15 +147,14 @@ function rollNDice(n) {
 // }
 
 function getDiceOutcomeCounts(n) {
-	const maxRoll = MAX_DICE * N_SIDES;
 	// counts[i] = cummulative number of ways to roll a sum of i
 	// each roll adds more to counts
-	let rollSumCounts = Array(maxRoll + 1).fill(0);
+	let rollSumCounts = Array(MAX_ROLL + 1).fill(0);
 	rollSumCounts[0] = 1;
 
 	for (let r = 0; r < n; r++) {
-		const newCounts = Array(maxRoll + 1).fill(0);
-		for (let i = 0; i <= maxRoll; i++) {
+		const newCounts = Array(MAX_ROLL + 1).fill(0);
+		for (let i = 0; i <= MAX_ROLL; i++) {
 			const currCount = rollSumCounts[i];
 			for (let j = 0; j <= N_SIDES; j++) {
 				const thisRollCount = j === 0 ? 0 : 1;
@@ -177,10 +180,9 @@ function getAxesData({ nDice }) {
 	const diceCounts = getDiceOutcomeCounts(nDice);
 
 	const pathPoints = [[0, 0]];
-	const maxOutcome = diceCounts.length - 1;
 	const nOutcomes = diceCounts.reduce((a, b) => a + b);
 
-	for (let i = 0; i <= maxOutcome; i++) {
+	for (let i = 0; i <= MAX_ROLL; i++) {
 		const c1 = diceCounts[i];
 		const c2 = diceCounts[i + 1] ?? 0;
 		const bucketCenter = i + 0.5;
@@ -191,7 +193,7 @@ function getAxesData({ nDice }) {
 		);
 	}
 
-	pathPoints.push([maxOutcome + 1, 0]);
+	pathPoints.push([MAX_ROLL + 1, 0]);
 
 	const line = d3
 		.line()
@@ -441,18 +443,32 @@ function update() {
 	});
 }
 
+let buckets;
+function initializeBuckets() {
+	buckets = Array(N_OUTCOMES).fill(0);
+}
+initializeBuckets();
+
 function stopExperiment() {
-	document.getElementById("slider-num-objects").disabled = false;
+	document.getElementById("slider-num-objects").disabled = true;
 	document.getElementById("btn-clear-experiment").disabled = false;
 	document.getElementById("btn-run").disabled = false;
 	document.getElementById("btn-stop").disabled = true;
-	document.getElementById("number-of-measurements-slider").disabled = false;
+	document.getElementById("number-of-measurements-slider").disabled = true;
 	// clearInterval(experimentInterval);
 	window.cancelAnimationFrame(experimentAnimationFrame);
 }
 
 // eslint-disable-next-line no-unused-vars
 function clearExperiment() {
+	stopExperiment();
+
+	document.getElementById("slider-num-objects").disabled = false;
+	document.getElementById("btn-clear-experiment").disabled = true;
+	document.getElementById("btn-run").disabled = false;
+	document.getElementById("btn-stop").disabled = true;
+	document.getElementById("number-of-measurements-slider").disabled = false;
+	initializeBuckets();
 	probaPlot.selectAll(".experiment-indicator").remove();
 	d3.select("#btn-clear-experiment").property("disabled", true);
 }
@@ -467,20 +483,13 @@ d3.select("#btn-clear-experiment").on("click._default", null);
 
 // eslint-disable-next-line no-unused-vars
 function runExperiment() {
-	resetExperiment();
-
 	document.getElementById("slider-num-objects").disabled = true;
-	document.getElementById("btn-clear-experiment").disabled = true;
+	document.getElementById("btn-clear-experiment").disabled = false;
 	document.getElementById("btn-run").disabled = true;
 	document.getElementById("btn-stop").disabled = false;
 	document.getElementById("number-of-measurements-slider").disabled = true;
 
-	const nMeasurements = numMeasurementsSliderScale();
-
 	const nDice = +numObjectsSlider.value;
-
-	const outcomeCounts = getDiceOutcomeCounts(nDice);
-	const maxOutcome = outcomeCounts.length - 1;
 
 	const maxSamplesGathered = 1000;
 	let sampleIndex = maxSamplesGathered;
@@ -496,11 +505,17 @@ function runExperiment() {
 		return samples[sampleIndex];
 	}
 
-	const buckets = Array(maxOutcome + 1).fill(0);
-
 	const scaledX0 = probaXScale(X_0);
 	const scaledY0 = probaYScale(Y_0);
-	let nMeasurementsSoFar = 1;
+
+	const nMeasurements = numMeasurementsSliderScale();
+	let nMeasurementsSoFar = buckets.reduce((a, b) => a + b);
+	console.log("nm", nMeasurementsSoFar);
+
+	if (nMeasurementsSoFar >= nMeasurements) {
+		initializeBuckets();
+		nMeasurementsSoFar = 0;
+	}
 
 	function nextUpdateTimeIntervalMS() {
 		return 1000 * experimentSpeedToTimeIntervalScale(experimentSpeed);
