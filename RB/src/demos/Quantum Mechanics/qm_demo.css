@@ -143,6 +143,7 @@ input[type="range"] {
 	flex-direction: row;
 	align-content: stretch;
 	line-height: initial;
+	column-gap: 1px;
 }
 
 .radio-button-container button {
@@ -158,7 +159,8 @@ input[type="range"] {
 
 .button {
 	padding: 7px 8px;
-	margin-right: 3px;
+	margin-left: 2px;
+	margin-right: 2px;
 	font-size: 15px;
 	border-radius: 4px;
 	background: #ccc;
