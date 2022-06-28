@@ -653,6 +653,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_griffiths_chapter_1_questions">Griffiths: Chapter 1 Questions</a></li>
 </ul>
 </li>
+<li><a href="#_chapter_2">Chapter 2</a></li>
 </ul>
 </div>
 </div>
@@ -699,10 +700,25 @@ However it is still instructive and at a high level gives good intuition for how
 </table>
 </div>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>This is the solution</p>
+<p>Wavefunctions share the following features with solutions to the heat equation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Solutions are waves!</p>
+</li>
+<li>
+<p>In the heat equation, with \(\kappa\) real, heat flows opposite the direction of the temperature gradient, and flows with a magnitude proportional to the magnitude of the gradient.
+In the Schrödinger equation, with \(\kappa\) imaginary, &#8220;probability current&#8221; (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction&#8217;s phase, and with a magnitude proportional to this gradient&#8217;s magnitude.</p>
+</li>
+<li>
+<p>As with the heat equation, solutions to the Schrödinger equation in free space get smoother and more diffuse over time.
+Combined with the above point, this means that the more concentrated a wavefunction is in space initially, the more rapidly it spreads out.</p>
+</li>
+</ul>
 </div>
 </div>
 </details>
@@ -890,9 +906,6 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 </li>
 </ol>
 </div>
-</li>
-</ul>
-</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -905,14 +918,13 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 <p>The expected number of digits is \[\begin{align*}\langle d \rangle &amp;= (1)P(1)+(2)P(2) + (3)P(3) \\ &amp;=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &amp;=  2.45  \end{align*}\] If you choose a number at random, the expected value for the number of digits is 2.45.</p>
 </li>
 <li>
-<p>Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. \[\begin{align*} \langle d^2 \rangle  =&amp;  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ =&amp;  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ =&amp;  6.35 \end{align*}\] The standard devation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
+<p>Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. \[\begin{align*} \langle d^2 \rangle  =&amp;  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ =&amp;  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ =&amp;  6.35 \end{align*}\] The standard deviation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
 </li>
 </ol>
 </div>
 </div>
 </details>
-<div class="ulist">
-<ul>
+</li>
 <li>
 <p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
@@ -1016,11 +1028,6 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </li>
 </ol>
 </div>
-</div>
-</div>
-</li>
-</ul>
-</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -1043,32 +1050,31 @@ For the second probability distribution, \(\rho_2(x)\): \[\begin{align*} \langle
 </div>
 </div>
 </details>
-<div class="ulist">
-<ul>
+</div>
+</div>
+</li>
 <li>
-<p><strong>1.3.4</strong></p>
-<div class="ulist">
-<ul>
-<li>
-<p>Wording #1:
-You are standing at the center of a number line (\(x=0\)). You flip a coin, and every time you flip heads, you take a unit step in the positive direction.
+<p><strong>1.3.4</strong> You are standing at the center of a number line (\(x=0\)).
+You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>You flip the coin one time (\(n=1\)).
-Where on the number line could you end up?
+<p>Where on the number line could you end up after flipping the coin exactly once (\(n=1\))?
 How many total paths are there?</p>
 </li>
 <li>
-<p>For \(n=0\) to \(n=3\), how many times could you end up at each integer?
+<p>For \(n=0\) to \(n=3\), how many sequences of \(n\) coin flips land you at each integer?
 How many total paths are there?
 Do you notice a pattern?</p>
 </li>
 <li>
-<p>Use Pascal&#8217;s triangle to determine the probability of landing at each integer after 7 steps.
+<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.</p>
+</li>
+</ol>
+</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -1100,36 +1106,6 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </div>
 </div>
 </details>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p>Wording #2:
-Beginning with \(x_0=0\), you repeatedly flip a fair coin \(n\) times.
-For \(k=1,\ldots,n\), if the \(k\)<sup>th</sup> flip is heads, set \(x_k=x_{k-1}+1\).
-If the \(k\)<sup>th</sup> flip is tails, set \(x_k=x_{k-1}-1\).
-We will investigate the possible values of \(x_n\) and the number of sequences of coin flips resulting in \(x_n=N\), i.e., the number of sequences containing \(N\) more heads than tails (with more tails than heads if \(N&lt;0\)).</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>What are the possible values of \(x_1\)? How many total sequences of coin flips are there?</p>
-</li>
-<li>
-<p>For \(n=0\) to \(n=3\), how many sequences of coin flips lead to each possible value of \(N\)?
-How many sequences of coin flips are there in total?
-Do you notice a pattern?</p>
-</li>
-<li>
-<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle" target="_blank" rel="noopener">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 coin flips.
-Where are you most likely to land?
-Calculate the expected value and standard deviation.</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
 </li>
 </ul>
 </div>
@@ -1305,7 +1281,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 \]</p>
 </div>
 <div class="paragraph">
-<p>If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order \(x^2\) or higher, and the above procedue wouldn&#8217;t work because in general \(\langle x^n\rangle\ne\langle x\rangle^n\).</p>
+<p>If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order \(x^2\) or higher, and the above procedure wouldn&#8217;t work because in general \(\langle x^n\rangle\ne\langle x\rangle^n\).</p>
 </div>
 </div>
 </details>
@@ -1544,14 +1520,14 @@ where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
 </dd>
 <dt class="hdlist1">1.6</dt>
 <dd>
-<p>Why can&#8217;t you do integration-by-parts directly on th emiddle expression in Equation 1.29&#8201;&#8212;&#8201;pull the time derivative over onto \(x\), note that \(\partial x / \partial t = 0\), and conclude that \(d\langle x \rangle / dt = 0\)?</p>
+<p>Why can&#8217;t you do integration-by-parts directly on the middle expression in Equation 1.29&#8201;&#8212;&#8201;pull the time derivative over onto \(x\), note that \(\partial x / \partial t = 0\), and conclude that \(d\langle x \rangle / dt = 0\)?</p>
 </dd>
 <dt class="hdlist1">1.7</dt>
 <dd>
 <p>Calculate \(\frac{d\langle p \rangle}{dt}\). Answer:</p>
 <div class="paragraph">
 <p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-This is an instance of <strong>Ehrenfest’s theorem</strong>, which asserts that
+This is an instance of <strong>Ehrenfest&#8217;s theorem</strong>, which asserts that
 <em>expectation values obey the classical laws</em>.</p>
 </div>
 </dd>
@@ -1944,6 +1920,12 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 </dl>
 </div>
 </div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_chapter_2"><a class="anchor" href="#_chapter_2"></a><a class="link" href="#_chapter_2">Chapter 2</a></h2>
+<div class="sectionbody">
+
 </div>
 </div>
 </div>
