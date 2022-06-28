@@ -227,6 +227,28 @@ Do you notice a pattern?
 . Use Pascal's triangle to determine the probability of landing at each integer after 7 steps.
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. You could end up at ++\(x = \pm 1\)++. There is 1 path, {T}, to ++\(x = - 1\)++ and 1 path, {H}, to ++\(x = - 1\)++, for a total of 2 paths.
+. For 0 to 3 flips: +
+[underline]#n=0# +
+x=0, 1 path: {X} +
+total: 1 +
+[underline]#n=1# +
+x=-1, 1 path: {T} | x=1, 1 path: {H} +
+total paths: 2 +
+[underline]#n=2# +
+x=-2, 1 path: {TT} | x=0, 2 paths: {TH, HT} | x=2, 1 path: {HH} +
+total paths: 4 +
+[underline]#n=3# +
+x=-3, 1 path: {TTT} | x=-1, 3 paths: {TTH, THT, HTT} | x=1, 3 paths: {HHT, HTH, THH} |x=3, 1 path: {HHH} +
+total paths: 8 +
+For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to each endpoint are given by binomial coefficients, which we see in Pascal's triangle.
+. [Insert triangle here] Using Pascal's triangle, we come up with the following probabilities:
+====
 
 - Wording #2:
 Beginning with ++\(x_0=0\)++, you repeatedly flip a fair coin ++\(n\)++ times.
@@ -242,12 +264,7 @@ Do you notice a pattern?
 Where are you most likely to land?
 Calculate the expected value and standard deviation.
 
-+
-.Solution (placeholder)
-[%collapsible]
-====
-This is the solution
-====
+
 
 ==== Demonstrations
 
