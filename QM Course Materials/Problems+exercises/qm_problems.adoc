@@ -292,7 +292,8 @@ This is the solution
 
 * *1.4.3* The probability current describes the rate at which probability flows past point ++\(x\)++. It is given by ++\[J(x,t) = \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
-
++
+--
 [{sublist-style}]
 . Show that ++\[\ \frac{d}{dt} \int_a^b |\Psi(x,t)|^2 = J(a,t) - J(b,t) \]++ What happens to the probability current in the region from ++\(-\infty\)++ to ++\(\infty\)++? What does this mean?
 . Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
@@ -304,7 +305,7 @@ Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varp
 ====
 This is the solution
 ====
-
+--
 
 === 1.5 Momentum
 
@@ -346,7 +347,12 @@ Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\part
 If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedue wouldn't work because in general ++\(\langle x^n\rangle\ne\langle x\rangle^n\)++.
 ====
 
-* *1.5.3* Any dynamical variable can be expressed in terms of position and momentum. Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}\]++ In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4. We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
+* *1.5.3* Any dynamical variable can be expressed in terms of position and momentum.
+Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}.\]++
+In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
+We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
++
+--
 [{sublist-style}]
 . Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
 . Find ++\(L^2\)++.
@@ -357,7 +363,7 @@ If \(V\) had any higher order \(x\) terms, then its derivative would have a term
 ====
 This is the solution
 ====
-
+--
 
 ==== Demonstrations
 * Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++.
