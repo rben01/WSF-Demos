@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-<head><title>dice_sampling.html</title>
+<head><title>ball_sampling.html</title>
 <meta charset="utf-8"/>
 <script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
 <style type="text/css">:root {
@@ -286,16 +286,25 @@ cursor: pointer;
 }
 </style>
 <style>
+:root {
+--color-red: rgb(255, 24, 51);
+--color-green: rgb(0, 214, 43);
+--color-blue: rgb(41, 159, 255);
+--color-yellow: rgb(244, 220, 0);
+}
 body {
 user-select: none !important;
+}
+.slider-container > :nth-child(2n + 3) {
+margin-top: 8px;
 }
 .grid-left-right {
 grid-template-columns: auto 1fr;
 column-gap: 50px;
 }
-#dice-plot-container {
+#ball-plot-container {
 text-align: center;
-margin-top: 20px;
+margin-top: 5px;
 }
 .vertical-container {
 height: 100%;
@@ -363,10 +372,6 @@ font-size: 24px;
 .axis-label.x-axis-label {
 font-size: 16px;
 }
-.plot {
-align-self: end;
-vertical-align: bottom;
-}
 .experiment-bucket {
 fill: #5df;
 stroke: black;
@@ -381,11 +386,33 @@ fill: greenyellow;
 fill: white;
 font-size: 20px;
 }
-.die.body {
-fill: white;
+.ball-cap.bg {
+stroke-width: 6px;
+stroke: black;
 }
-#dice-sum-wrapper {
-margin-left: 30px;
+.ball-cap.fg {
+stroke-width: 3px;
+stroke: white;
+}
+.ball {
+stroke-width: 3px;
+stroke: black;
+}
+.fill-red {
+fill: var(--color-red);
+}
+.fill-yellow {
+fill: var(--color-yellow);
+}
+.fill-green {
+fill: var(--color-green);
+}
+.fill-blue {
+fill: var(--color-blue);
+}
+.ball.rolled {
+stroke: white;
+stroke-width: 2px;
 }
 </style>
 </head>
@@ -394,9 +421,14 @@ margin-left: 30px;
 <div>
 <div class="controls-container">
 <div class="slider-container">
-<span>Number of <span id="text-experiment-type">dice</span>:
-<span id="text-num-objects">1</span></span>
-<span><label><input id="slider-num-objects" name="num-objects" type="range"/></label></span>
+<span>Number of red balls: <span id="text-num-red"></span></span>
+<span><label><input id="slider-num-reds" name="num-reds" type="range"/></label></span>
+<span>Number of yellow balls: <span id="text-num-yellow"></span></span>
+<span><label><input id="slider-num-yellows" name="num-yellows" type="range"/></label></span>
+<span>Number of green balls: <span id="text-num-green"></span></span>
+<span><label><input id="slider-num-greens" name="num-greens" type="range"/></label></span>
+<span>Number of blue balls: <span id="text-num-blue"></span></span>
+<span><label><input id="slider-num-blues" name="num-blues" type="range"/></label></span>
 <span>Measurement speed: <span id="experiment-speed"></span></span>
 <span>
 <label><input id="experiment-speed-slider" name="experiment-speed" type="range"/></label>
@@ -416,8 +448,7 @@ Reset
 </span>
 </div>
 </div>
-<div id="dice-plot-container"><svg id="dice-plot"></svg></div>
-<span id="dice-sum-wrapper">Dice sum: <span id="text-dice-sum"></span></span>
+<div id="ball-plot-container"><svg id="balls-plot"></svg></div>
 </div>
 <svg class="plot" id="experiment-plot"></svg>
 </div>
@@ -801,16 +832,14 @@ adjustHidableElemOpacity,
 _initializeHideableControlsContainer();
 </script>
 <script>/* global applyGraphicalObjs */
-const MAX_DICE = 10;
-const N_SIDES = 6;
-const MAX_ROLL = MAX_DICE * N_SIDES;
-const N_OUTCOMES = MAX_ROLL + 1; // since 0 counts, in a sense
-const X_MAX = MAX_DICE * N_SIDES;
+const COLORS = ["red", "yellow", "green", "blue"];
+const MAX_PER_COLOR = 10;
+const X_MAX = 4;
 const X_MIN = 0;
 const X_0 = 0;
-const Y_MAX = 1 / 6;
+const Y_MAX = 1;
 const Y_0 = 0;
-const Y_MIN = -0.02;
+const Y_MIN = -0.1;
 // eslint-disable-next-line no-unused-vars
 const _BIG_WIDTH = 900;
 const _BIG_HEIGHT = 700;
@@ -824,16 +853,16 @@ const probaPlot = d3
 .select("#experiment-plot")
 .attr("width", PROBA_WIDTH)
 .attr("height", PROBA_HEIGHT);
-const DICE_WIDTH = 300;
-const DICE_HEIGHT = 240;
-const dicePlot = d3
-.select("#dice-plot")
-.attr("width", DICE_WIDTH)
-.attr("height", DICE_HEIGHT);
-const diceXScale = d3.scaleLinear([0, 1], [_margin, DICE_WIDTH - _margin]);
+const BALLS_WIDTH = 300;
+const BALLS_HEIGHT = 150;
+const ballsPlot = d3
+.select("#balls-plot")
+.attr("width", BALLS_WIDTH)
+.attr("height", BALLS_HEIGHT);
+const diceXScale = d3.scaleLinear([0, 1], [_margin, BALLS_WIDTH - _margin]);
 const diceYScale = d3.scaleLinear(
-[0, (DICE_HEIGHT - 2 * _margin) / (DICE_WIDTH - 2 * _margin)],
-[_margin, DICE_HEIGHT - _margin],
+[0, (BALLS_HEIGHT - 2 * _margin) / (BALLS_WIDTH - 2 * _margin)],
+[_margin, BALLS_HEIGHT - _margin],
 );
 const MIN_EXPERIMENT_SPEED = 1;
 const MAX_EXPERIMENT_SPEED = 100;
@@ -846,27 +875,51 @@ experimentSpeed = speed;
 experimentSpeedTextSpan.innerText = `${speed}x`;
 }
 updateExperimentSpeed();
-const numObjectsSlider = (() => {
-const slider = document.getElementById("slider-num-objects");
-slider.min = 1;
-slider.max = MAX_DICE;
-slider.value = 1;
+const ballSliders = (() => {
+function makeBallSlider(color) {
+const slider = document.getElementById(`slider-num-${color}s`);
+slider.min = 0;
+slider.max = MAX_PER_COLOR;
+slider.value = color === "red" ? 1 : 0;
 slider.step = 1;
 slider.oninput = function () {
-document.getElementById("text-num-objects").innerText = +slider.value;
+document.getElementById(`text-num-${color}`).innerText = +this.value;
 // eslint-disable-next-line no-use-before-define
-const diceData = getDiceData({ nDice: +this.value });
-applyGraphicalObjs(dicePlot, diceData, {
+const { ballCounts, nBalls } = getBallCounts();
+// eslint-disable-next-line no-use-before-define
+const ballData = getBallData(ballCounts, nBalls);
+applyGraphicalObjs(ballsPlot, ballData, {
 key: d => d.key,
-selector: ".die",
+selector: ".ball",
 });
 // eslint-disable-next-line no-use-before-define
 update();
-document.getElementById("text-dice-sum").innerText = "";
-document.getElementById("btn-clear-experiment").disabled = true;
 };
 return slider;
+}
+return COLORS.map(color => makeBallSlider(color));
 })();
+// const numObjectsSlider = (() => {
+// 	const slider = document.getElementById("slider-num-objects");
+// 	slider.min = 1;
+// 	slider.max = MAX_DICE;
+// 	slider.value = 1;
+// 	slider.step = 1;
+// 	slider.oninput = function () {
+// 		document.getElementById("text-num-objects").innerText = +slider.value;
+// 		// eslint-disable-next-line no-use-before-define
+// 		const diceData = getDiceData({ nDice: +this.value });
+// 		applyGraphicalObjs(dicePlot, diceData, {
+// 			key: d => d.key,
+// 			selector: ".die",
+// 		});
+// 		// eslint-disable-next-line no-use-before-define
+// 		update();
+// 		document.getElementById("text-dice-sum").innerText = "";
+// 		document.getElementById("btn-clear-experiment").disabled = true;
+// 	};
+// 	return slider;
+// })();
 // eslint-disable-next-line no-unused-vars
 const experimentSpeedSlider = (() => {
 const slider = document.getElementById("experiment-speed-slider");
@@ -908,97 +961,77 @@ slider.oninput = updateNumMeasurementsText;
 return slider;
 })();
 updateNumMeasurementsText.call(numMeasurementsSlider);
-function rollNDice(n) {
-return new Int8Array(n).map(() => 1 + Math.floor(Math.random() * 6));
+function getBallCounts() {
+const ballCounts = ballSliders.map(slider => +slider.value);
+const nBalls = ballCounts.reduce((a, b) => a + b);
+return { ballCounts, nBalls };
 }
-// function sampleDice(n) {
-// 	let sum = 0;
-// 	for (let i = 0; i < n; i++) {
-// 		const roll = Math.floor(Math.random() * 6) + 1;
-// 		sum += roll;
-// 	}
-// 	return sum;
-// }
-function getDiceOutcomeCounts(n) {
-// counts[i] = cummulative number of ways to roll a sum of i
-// each roll adds more to counts
-let rollSumCounts = Array(MAX_ROLL + 1).fill(0);
-rollSumCounts[0] = 1;
-for (let r = 0; r < n; r++) {
-const newCounts = Array(MAX_ROLL + 1).fill(0);
-for (let i = 0; i <= MAX_ROLL; i++) {
-const currCount = rollSumCounts[i];
-for (let j = 0; j <= N_SIDES; j++) {
-const thisRollCount = j === 0 ? 0 : 1;
-const addedCount = currCount * thisRollCount;
-if (addedCount > 0) {
-newCounts[i + j] += addedCount;
+// ballCounts is an array of ints
+// returns the (random) rolled index as well as the index of the selected ball
+function grabBall(ballCounts, nBalls) {
+const rolledIndex = Math.floor(Math.random() * nBalls);
+let rolledIndexRemaining = rolledIndex;
+for (let i = 0, len = ballCounts.length; i < len; i++) {
+const count = ballCounts[i];
+if (rolledIndexRemaining < count) {
+return { rolled: rolledIndex, ball: i };
+}
+rolledIndexRemaining -= count;
 }
 }
-}
-rollSumCounts = newCounts;
-}
-return rollSumCounts;
-}
-function getAxesData({ nDice }) {
+function getAxesData(ballCounts, nBalls) {
 const yMin = PROBA_Y_MIN;
 const xScale = probaXScale;
 const yScale = probaYScale;
 const yAxisText = "Proportion";
-const diceCounts = getDiceOutcomeCounts(nDice);
-const pathPoints = [[0, 0]];
-const nOutcomes = diceCounts.reduce((a, b) => a + b);
-for (let i = 0; i <= MAX_ROLL; i++) {
-const c1 = diceCounts[i];
-const c2 = diceCounts[i + 1] ?? 0;
-const bucketCenter = i + 0.5;
-pathPoints.push(
-[bucketCenter, c1],
-[bucketCenter + 0.5, c1],
-[bucketCenter + 0.5, c2],
-);
-}
-pathPoints.push([MAX_ROLL + 1, 0]);
-const line = d3
-.line()
-.curve(d3.curveLinear)
-.x(p => xScale(p[0]))
-.y(p => yScale(p[1] / nOutcomes));
-const xTicks = probaXScale.ticks(50).slice(1, -1);
-const xLabels = xTicks.filter(x => x % 5 === 0);
-const y0s = probaYScale(Y_0);
-const path = line(pathPoints);
-const data = [
-...xLabels.map(x => {
-return {
-shape: "text",
-text: `${x}`,
-class: "axis axis-label x-axis-label",
-attrs: {
-x: probaXScale(x + 0.5),
-y: y0s,
-dy: 20,
-"dominant-baseline": "top",
-"text-anchor": "center",
-},
-};
-}),
-...xTicks.map(x => {
-const xs = probaXScale(x);
-return {
+const barHorizMargin = 0.1;
+const barMinX = barHorizMargin;
+const barMaxX = 1 - barHorizMargin;
+const caps = ballCounts.flatMap((c, i) => {
+const proportion = c / nBalls;
+const y = yScale(proportion);
+return [
+{
 shape: "line",
-class: "axis axis-tick x-axis-tick",
+class: "axis ball-cap bg",
+key: `cap-${i}-bg`,
 attrs: {
-x1: xs,
-x2: xs,
-y1: y0s,
-y2: y0s + 8,
+x1: xScale(i + barMinX) - 2,
+x2: xScale(i + barMaxX) + 2,
+y1: y,
+y2: y,
+},
+},
+{
+shape: "line",
+class: "axis ball-cap fg",
+key: `cap-${i}-fg`,
+attrs: {
+x1: xScale(i + barMinX),
+x2: xScale(i + barMaxX),
+y1: y,
+y2: y,
+},
+},
+];
+});
+const labels = COLORS.map((c, i) => {
+return {
+shape: "circle",
+class: `x-axis-circle fill-${c}`,
+key: `label-${i}`,
+attrs: {
+cx: xScale(i + 0.5),
+cy: yScale(-0.05),
+r: 14,
 },
 };
-}),
+});
+const data = [
 {
 shape: "line",
 classes: ["axis", "axis-axis", "x-axis"],
+key: "x-axis",
 attrs: {
 x1: xScale(X_MIN),
 x2: xScale(X_MAX),
@@ -1009,6 +1042,7 @@ y2: yScale(Y_0),
 {
 shape: "line",
 classes: ["axis", "axis-axis", "y-axis"],
+key: "y-axis",
 attrs: {
 x1: xScale(X_0),
 x2: xScale(X_0),
@@ -1018,179 +1052,85 @@ y2: yScale(Y_MAX) - 200,
 },
 {
 shape: "text",
-text: "𝑥",
+text: "Color",
 classes: ["axis", "axis-label", "axis-x-label"],
+key: "x-label",
 attrs: {
-x: xScale(X_MAX) - 15,
-y: yScale(Y_0) + 20,
+x: xScale(X_MAX) - 65,
+y: yScale(Y_0) + 55,
 },
 },
 {
 shape: "text",
 text: yAxisText,
 classes: ["axis", "axis-label", "axis-y-label"],
+key: "y-label",
 attrs: {
 x: xScale(X_0) + 10,
 y: yScale(Y_MAX) - 150,
 },
 },
-// these paths *must* go last to maintain order when moving them to the end
-// after adding histogram bars (this is simpler, if more brittle, than adding a
-// key for the join)
-{
-shape: "path",
-classes: ["axis", "axis-curve", "curve-background"],
-attrs: {
-d: path,
-},
-},
-{
-shape: "path",
-classes: ["axis", "axis-curve", "curve-foreground"],
-attrs: {
-d: path,
-},
-},
+...caps,
+...labels,
 ];
-return { data, pathPoints };
+return data;
 }
-// Get the data used to draw the dice
-function getDiceData({ diceRoll, nDice } = {}) {
-const DICE_PER_ROW = 4;
-const DIE_SIZE = 0.2;
-const DIE_X_MARGIN = (1 - DICE_PER_ROW * DIE_SIZE) / (DICE_PER_ROW - 1);
-const DIE_Y_MARGIN =
-diceYScale.invert(diceXScale(DIE_X_MARGIN) - diceXScale(0)) -
+// Get the data used to draw the balls
+function getBallData(ballCounts, rolledIndex) {
+const BALLS_PER_ROW = 10;
+const BALL_SIZE = 0.1;
+const BALL_X_MARGIN = (1 - BALLS_PER_ROW * BALL_SIZE) / BALLS_PER_ROW;
+const BALL_Y_MARGIN =
+diceYScale.invert(diceXScale(BALL_X_MARGIN) - diceXScale(0)) -
 diceYScale.invert(0);
-// For the pips
-// Diff, Small, Medium, Large
-const D = 0.225;
-const M = 0.5;
-const S = M - D;
-const L = M + D;
-const pip = {
-topLeft: [S, S],
-topMid: [M, S],
-topRight: [L, S],
-midLeft: [S, M],
-midMid: [M, M],
-midRight: [L, M],
-botLeft: [S, L],
-botMid: [M, L],
-botRight: [L, L],
-};
-if (diceRoll === undefined) {
-diceRoll = Array(nDice ?? +numObjectsSlider.value).fill(0);
+let i = 0;
+const data = [];
+for (let bi = 0, len = ballCounts.length; bi < len; bi++) {
+const bc = ballCounts[bi];
+for (let j = 0; j < bc; j++) {
+const xi = i % BALLS_PER_ROW;
+console.log(i, xi);
+const x = (xi + 0.5) * (BALL_SIZE + BALL_X_MARGIN);
+const yi = Math.floor(i / BALLS_PER_ROW);
+const y = (yi + 0.5) * (BALL_SIZE + BALL_Y_MARGIN);
+const cx = diceXScale(x);
+const cy = diceYScale(y);
+const classes = ["ball", "body", `fill-${COLORS[bi]}`];
+if (i === rolledIndex) {
+classes.push("rolled");
 }
-const diceData = Array.from(diceRoll).flatMap((value, i) => {
-const x = (i % DICE_PER_ROW) * (DIE_SIZE + DIE_X_MARGIN);
-const y = Math.floor(i / DICE_PER_ROW) * (DIE_SIZE + DIE_Y_MARGIN);
-const pips = (() => {
-if (value === 0) {
-return [];
-}
-const rotated = Math.random() < 0.5;
-if (value === 1) {
-return [pip.midMid, pip.midMid];
-} else if (value === 2) {
-return rotated
-? [pip.topLeft, pip.botRight]
-: [pip.topRight, pip.botLeft];
-} else if (value === 3) {
-return rotated
-? [pip.topLeft, pip.midMid, pip.botRight]
-: [pip.topRight, pip.midMid, pip.botLeft];
-} else if (value === 4) {
-return [pip.topLeft, pip.topRight, pip.botLeft, pip.botRight];
-} else if (value === 5) {
-return [
-pip.topLeft,
-pip.topRight,
-pip.midMid,
-pip.botLeft,
-pip.botRight,
-];
-} else if (value === 6) {
-return rotated
-? [
-pip.topLeft,
-pip.topMid,
-pip.topRight,
-pip.botLeft,
-pip.botMid,
-pip.botRight,
-]
-: [
-pip.topLeft,
-pip.topRight,
-pip.midLeft,
-pip.midRight,
-pip.botLeft,
-pip.botRight,
-];
-}
-})();
-const x0s = diceXScale(0);
-const rectX = diceXScale(x);
-const rectY = diceYScale(y);
-const sideLength = diceXScale(DIE_SIZE) - x0s;
-return [
-{
-shape: "rect",
-class: "die body",
-key: `die-${i}`,
-attrs: {
-x: rectX,
-y: rectY,
-width: sideLength,
-height: sideLength,
-rx: 10,
-ry: 10,
-},
-},
-...pips.map(([cx, cy], j) => ({
+data.push({
 shape: "circle",
-class: "die pip",
-key: `pip-${i}-${j}`,
+classes,
+key: `axis ball-${i}`,
 attrs: {
-cx: diceXScale(cx * DIE_SIZE) - x0s + rectX,
-cy: diceYScale(cy * DIE_SIZE) - x0s + rectY,
-r: 4.5,
-fill: "black",
+cx,
+cy,
+r: 9,
 },
-})),
-];
 });
-return diceData;
+i += 1;
+}
+}
+return data;
 }
 let experimentAnimationFrame;
 function update() {
 probaPlot.selectAll(".experiment-indicator").remove();
-const initialProbaPathPoints = (() => {
-// Due to lack of foresight, this call is what updates the list of curve points
-const pathPoints = getAxesData({
-nDice: +numObjectsSlider.value,
-}).pathPoints;
-return pathPoints;
-})();
-applyGraphicalObjs(probaPlot, initialProbaPathPoints, { selector: ".axis" });
-const yScaleFactor = 0.5;
+const { nBalls, ballCounts } = getBallCounts();
 d3.selectAll(".plot").each(function () {
 const sel = d3.select(this);
-const data = getAxesData({
-nDice: +numObjectsSlider.value,
-yScaleFactor,
-}).data;
-applyGraphicalObjs(sel, data, { selector: ".axis" });
+const data = getAxesData(ballCounts, nBalls);
+applyGraphicalObjs(sel, data, { key: d => d.key, selector: ".axis" });
 });
 }
 let buckets;
 function initializeBuckets() {
-buckets = Array(N_OUTCOMES).fill(0);
+buckets = Array(4).fill(0);
 }
 initializeBuckets();
 function stopExperiment() {
-document.getElementById("slider-num-objects").disabled = true;
+ballSliders.forEach(slider => (slider.disabled = true));
 document.getElementById("btn-clear-experiment").disabled = false;
 document.getElementById("btn-run").disabled = false;
 document.getElementById("btn-stop").disabled = true;
@@ -1201,7 +1141,7 @@ window.cancelAnimationFrame(experimentAnimationFrame);
 // eslint-disable-next-line no-unused-vars
 function clearExperiment() {
 stopExperiment();
-document.getElementById("slider-num-objects").disabled = false;
+ballSliders.forEach(slider => (slider.disabled = false));
 document.getElementById("btn-clear-experiment").disabled = true;
 document.getElementById("btn-run").disabled = false;
 document.getElementById("btn-stop").disabled = true;
@@ -1210,20 +1150,16 @@ initializeBuckets();
 probaPlot.selectAll(".experiment-indicator").remove();
 d3.select("#btn-clear-experiment").property("disabled", true);
 }
-function resetExperiment() {
-stopExperiment();
-probaPlot.selectAll(".experiment-indicator").remove();
-}
 d3.select("#btn-run").on("click._default", null);
 d3.select("#btn-clear-experiment").on("click._default", null);
 // eslint-disable-next-line no-unused-vars
 function runExperiment() {
-document.getElementById("slider-num-objects").disabled = true;
+ballSliders.forEach(slider => (slider.disabled = true));
 document.getElementById("btn-clear-experiment").disabled = false;
 document.getElementById("btn-run").disabled = true;
 document.getElementById("btn-stop").disabled = false;
 document.getElementById("number-of-measurements-slider").disabled = true;
-const nDice = +numObjectsSlider.value;
+const { ballCounts, nBalls } = getBallCounts();
 const maxSamplesGathered = 1000;
 let sampleIndex = maxSamplesGathered;
 let samples;
@@ -1231,17 +1167,15 @@ function sampleCdf() {
 if (sampleIndex === maxSamplesGathered) {
 samples = Array(maxSamplesGathered + 1)
 .fill(0)
-.map(() => rollNDice(nDice));
+.map(() => grabBall(ballCounts, nBalls));
 sampleIndex = 0;
 }
 sampleIndex += 1;
 return samples[sampleIndex];
 }
-const scaledX0 = probaXScale(X_0);
 const scaledY0 = probaYScale(Y_0);
 const nMeasurements = numMeasurementsSliderScale();
 let nMeasurementsSoFar = buckets.reduce((a, b) => a + b);
-console.log("nm", nMeasurementsSoFar);
 if (nMeasurementsSoFar >= nMeasurements) {
 initializeBuckets();
 nMeasurementsSoFar = 0;
@@ -1262,26 +1196,22 @@ const nExperimentsExact =
 elapsedMS / timeBtwnSamplesMS + experimentRemainderFrac;
 const nExperiments = Math.floor(nExperimentsExact);
 experimentRemainderFrac = nExperimentsExact % 1;
-let lastDiceRoll;
+let lastRolled;
 for (let i = 0; i < nExperiments; ++i) {
-const diceRoll = sampleCdf();
-const sum = diceRoll.reduce((a, b) => a + b);
-buckets[sum] += 1;
-lastDiceRoll = diceRoll;
+const { rolled, ball } = sampleCdf();
+buckets[ball] += 1;
+lastRolled = rolled;
 nMeasurementsSoFar += 1;
 if (nMeasurementsSoFar >= nMeasurements) {
 break;
 }
 }
-if (lastDiceRoll !== undefined) {
-const diceData = getDiceData({ diceRoll: lastDiceRoll });
-applyGraphicalObjs(dicePlot, diceData, {
+if (lastRolled !== undefined) {
+const ballsData = getBallData(ballCounts, lastRolled);
+applyGraphicalObjs(ballsPlot, ballsData, {
 key: d => d.key,
-selector: ".die",
+selector: ".ball",
 });
-document.getElementById("text-dice-sum").innerText = lastDiceRoll.reduce(
-(a, b) => a + b,
-);
 }
 const currentAreaOfSamples = isFinite(nMeasurements)
 ? nMeasurements
@@ -1299,9 +1229,9 @@ return {
 shape: "rect",
 classes,
 attrs: {
-x: probaXScale(i),
+x: probaXScale(i + 0.1),
 y: scaledY,
-width: probaXScale(1) - scaledX0,
+width: probaXScale(0.9) - probaXScale(0.1),
 height: scaledHeight,
 },
 };
@@ -1312,18 +1242,21 @@ text: `Measurements: ${nMeasurementsSoFar}`,
 classes: ["experiment-indicator", "experiment-measurement-counter"],
 attrs: {
 x: probaXScale(X_MIN) + 20,
-y: probaYScale(Y_0) + 60,
+y: probaYScale(Y_0) + 67,
 },
 });
-applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
+applyGraphicalObjs(probaPlot, data, {
+key: d => d.key,
+selector: ".experiment-indicator",
+});
 if (nMeasurementsSoFar <= 1) {
 const probaPlotNode = probaPlot.node();
-probaPlotNode.appendChild(
-probaPlotNode.querySelector(".axis-curve.curve-background"),
-);
-probaPlotNode.appendChild(
-probaPlotNode.querySelector(".axis-curve.curve-foreground"),
-);
+for (const node of probaPlotNode.querySelectorAll(".axis.ball-cap.bg")) {
+probaPlotNode.appendChild(node);
+}
+for (const node of probaPlotNode.querySelectorAll(".axis.ball-cap.fg")) {
+probaPlotNode.appendChild(node);
+}
 }
 if (nMeasurementsSoFar >= nMeasurements) {
 stopExperiment();
@@ -1334,7 +1267,7 @@ experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
 }
 update();
-numObjectsSlider.oninput();
+ballSliders.forEach(slider => slider.oninput());
 </script>
 </body>
 </html>
