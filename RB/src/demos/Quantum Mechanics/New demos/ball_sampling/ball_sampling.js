@@ -495,7 +495,7 @@ function runExperiment() {
 			selector: ".experiment-indicator",
 		});
 
-		if (nMeasurementsSoFar <= 1) {
+		{
 			const probaPlotNode = probaPlot.node();
 			for (const node of probaPlotNode.querySelectorAll(".axis.ball-cap.bg")) {
 				probaPlotNode.appendChild(node);
