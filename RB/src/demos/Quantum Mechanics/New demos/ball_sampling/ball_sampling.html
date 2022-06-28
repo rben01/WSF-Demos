@@ -9,6 +9,12 @@
 		></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
+			:root {
+				--color-red: rgb(255, 24, 51);
+				--color-green: rgb(0, 214, 43);
+				--color-blue: rgb(41, 159, 255);
+				--color-yellow: rgb(244, 220, 0);
+			}
 			body {
 				user-select: none !important;
 			}
@@ -22,7 +28,7 @@
 
 			#ball-plot-container {
 				text-align: center;
-				margin-top: 20px;
+				margin-top: 5px;
 			}
 
 			.vertical-container {
@@ -91,10 +97,6 @@
 			.axis-label.x-axis-label {
 				font-size: 16px;
 			}
-			.plot {
-				align-self: end;
-				vertical-align: bottom;
-			}
 			.experiment-bucket {
 				fill: #5df;
 				stroke: black;
@@ -109,24 +111,33 @@
 				fill: white;
 				font-size: 20px;
 			}
+			.ball-cap.bg {
+				stroke-width: 6px;
+				stroke: black;
+			}
+			.ball-cap.fg {
+				stroke-width: 3px;
+				stroke: white;
+			}
 			.ball {
 				stroke-width: 3px;
 				stroke: black;
 			}
-			.ball.red {
-				fill: rgb(255, 24, 51);
+			.fill-red {
+				fill: var(--color-red);
 			}
-			.ball.green {
-				fill: rgb(0, 214, 43);
+			.fill-yellow {
+				fill: var(--color-yellow);
 			}
-			.ball.blue {
-				fill: rgb(41, 159, 255);
+			.fill-green {
+				fill: var(--color-green);
 			}
-			.ball.yellow {
-				fill: rgb(244, 220, 0);
+			.fill-blue {
+				fill: var(--color-blue);
 			}
-			.ball.selected {
+			.ball.rolled {
 				stroke: white;
+				stroke-width: 2px;
 			}
 		</style>
 	</head>
@@ -136,7 +147,7 @@
 				<div class="controls-container">
 					<div class="slider-container">
 						<span
-							>Number of red balls: <span id="text-num-reds"></span
+							>Number of red balls: <span id="text-num-red"></span
 						></span>
 						<span
 							><label
@@ -146,7 +157,7 @@
 									id="slider-num-reds" /></label
 						></span>
 						<span
-							>Number of yellow balls: <span id="text-num-yellows"></span
+							>Number of yellow balls: <span id="text-num-yellow"></span
 						></span>
 						<span
 							><label
@@ -156,7 +167,7 @@
 									id="slider-num-yellows" /></label
 						></span>
 						<span
-							>Number of green balls: <span id="text-num-greens"></span
+							>Number of green balls: <span id="text-num-green"></span
 						></span>
 						<span
 							><label
@@ -166,7 +177,7 @@
 									id="slider-num-greens" /></label
 						></span>
 						<span
-							>Number of blue balls: <span id="text-num-blues"></span
+							>Number of blue balls: <span id="text-num-blue"></span
 						></span>
 						<span
 							><label
