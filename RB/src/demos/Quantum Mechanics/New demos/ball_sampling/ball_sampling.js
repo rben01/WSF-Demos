@@ -77,6 +77,9 @@ const ballSliders = (() => {
 
 			// eslint-disable-next-line no-use-before-define
 			update();
+
+			// eslint-disable-next-line no-use-before-define
+			document.getElementById("btn-run").disabled = allSlidersAreZero();
 		};
 
 		return slider;
@@ -85,33 +88,9 @@ const ballSliders = (() => {
 	return COLORS.map(color => makeBallSlider(color));
 })();
 
-// const numObjectsSlider = (() => {
-// 	const slider = document.getElementById("slider-num-objects");
-// 	slider.min = 1;
-// 	slider.max = MAX_DICE;
-// 	slider.value = 1;
-// 	slider.step = 1;
-
-// 	slider.oninput = function () {
-// 		document.getElementById("text-num-objects").innerText = +slider.value;
-
-// 		// eslint-disable-next-line no-use-before-define
-// 		const diceData = getDiceData({ nDice: +this.value });
-// 		applyGraphicalObjs(dicePlot, diceData, {
-// 			key: d => d.key,
-// 			selector: ".die",
-// 		});
-
-// 		// eslint-disable-next-line no-use-before-define
-// 		update();
-
-// 		document.getElementById("text-dice-sum").innerText = "";
-
-// 		document.getElementById("btn-clear-experiment").disabled = true;
-// 	};
-
-// 	return slider;
-// })();
+function allSlidersAreZero() {
+	return ballSliders.every(slider => +slider.value === 0);
+}
 
 // eslint-disable-next-line no-unused-vars
 const experimentSpeedSlider = (() => {
@@ -191,13 +170,19 @@ function getAxesData(ballCounts, nBalls) {
 	const barMinX = barHorizMargin;
 	const barMaxX = 1 - barHorizMargin;
 
+	const classes = ["axis", "ball-cap"];
+	if (allSlidersAreZero()) {
+		classes.push("hidden");
+	}
+
 	const caps = ballCounts.flatMap((c, i) => {
 		const proportion = c / nBalls;
 		const y = yScale(proportion);
+
 		return [
 			{
 				shape: "line",
-				class: "axis ball-cap bg",
+				classes: [...classes, "bg"],
 				key: `cap-${i}-bg`,
 				attrs: {
 					x1: xScale(i + barMinX) - 2,
@@ -208,7 +193,7 @@ function getAxesData(ballCounts, nBalls) {
 			},
 			{
 				shape: "line",
-				class: "axis ball-cap fg",
+				classes: [...classes, "fg"],
 				key: `cap-${i}-fg`,
 				attrs: {
 					x1: xScale(i + barMinX),
@@ -298,7 +283,6 @@ function getBallData(ballCounts, rolledIndex) {
 		const bc = ballCounts[bi];
 		for (let j = 0; j < bc; j++) {
 			const xi = i % BALLS_PER_ROW;
-			console.log(i, xi);
 			const x = (xi + 0.5) * (BALL_SIZE + BALL_X_MARGIN);
 
 			const yi = Math.floor(i / BALLS_PER_ROW);
