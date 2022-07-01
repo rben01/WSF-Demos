@@ -1,15 +1,5 @@
 = Quantum Mechanics Problems and Exercises
-:docinfo: shared
-:toc: left
-:nofooter:
-:table-settings: pass:[cols="<1s,<4a,<4a",options="header",frame="all",stripes="even",grid="all"]
-:imagesdir: images
-:sectlinks:
-:sectanchors:
-:sch: Schrödinger
-:toclevels: 3
-:!webfonts:
-:sublist-style: pass:[loweralpha]
+include::shared_attributes.adoc[]
 
 [.lead]
 https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[Link to this very page]
@@ -17,8 +7,6 @@ https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm
 [.lead]
 https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Link to QM demos]
 
-== Chapter 1
 include::./chap-1.adoc[leveloffset=+1]
 
-== Chapter 2
 include::./chap-2.adoc[leveloffset=+1]

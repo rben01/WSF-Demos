@@ -1,0 +1,11 @@
+:docinfo: shared
+:toc: left
+:nofooter:
+:table-settings: pass:[cols="<1s,<4a,<4a",options="header",frame="all",stripes="even",grid="all"]
+:imagesdir: images
+:sectlinks:
+:sectanchors:
+:sch: Schrödinger
+:toclevels: 3
+:!webfonts:
+:sublist-style: pass:[loweralpha]

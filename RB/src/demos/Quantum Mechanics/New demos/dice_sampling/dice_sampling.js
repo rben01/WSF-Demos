@@ -473,11 +473,6 @@ function clearExperiment() {
 	d3.select("#btn-clear-experiment").property("disabled", true);
 }
 
-function resetExperiment() {
-	stopExperiment();
-	probaPlot.selectAll(".experiment-indicator").remove();
-}
-
 d3.select("#btn-run").on("click._default", null);
 d3.select("#btn-clear-experiment").on("click._default", null);
 
