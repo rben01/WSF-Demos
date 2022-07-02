@@ -1,5 +1,6 @@
 = Quantum Mechanics Problems and Exercises
 include::shared_attributes.adoc[]
+:sectnumlevels: 2
 
 [.lead]
 https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[Link to this very page]

@@ -9,3 +9,5 @@
 :toclevels: 3
 :!webfonts:
 :sublist-style: pass:[loweralpha]
+:sectnums:
+:sectnumlevels: 2

@@ -1,7 +1,7 @@
 = Chapter 2
 include::shared_attributes.adoc[]
 
-== 2.1 Stationary States
+== Stationary States
 
 * *2.1.{counter:qn}* The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
 +
@@ -18,11 +18,11 @@ yields ++\(\hat H\psi=E\psi\)++.
 In other words, every measurement of the total energy of a solution to the time-dependent {sch} equation will yield ++\(E\)++.
 
 :!qn:
-== 2.2 The Infinite Square Well
+== The Infinite Square Well
 
 * *2.2.{counter:qn}* The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++.
 Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_n\rangle\)++ is 1 when ++\(m=n\)++ and 0 otherwise.
 (Hint: ++\(\cos\)++ is an even function, ++\(\sin\)++ is an odd function, and ++\(\cos(a+b)=\cos a\cos b-\sin a\sin b\)++.)
 
 :!qn:
-== 2.3 The Harmonic Oscillator
+== The Harmonic Oscillator

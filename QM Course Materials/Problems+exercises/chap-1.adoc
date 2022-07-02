@@ -1,7 +1,7 @@
 = Chapter 1
 include::shared_attributes.adoc[]
 
-== 1.1 The {sch} Equation
+== The {sch} Equation
 === Questions
 * *1.1.1* In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
 ++\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]++
@@ -84,7 +84,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 * Interactive timeline like the ones in some of our WSU courses (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
 
 
-== 1.2 The Statistical Interpretation
+== The Statistical Interpretation
 
 === Questions
 * *1.2.1* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
@@ -119,7 +119,7 @@ This is the solution
 * Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
 
-== 1.3 Probability
+== Probability
 
 * *1.3.1* An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
 +
@@ -252,7 +252,7 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 ** How scaling ++\(x\)++ affects ++\(\sigma\)++
 
 
-== 1.4 Normalization
+== Normalization
 
 === Questions
 * *1.4.1* Normalize the following wavefunctions (i.e. find A):
@@ -297,7 +297,7 @@ This is the solution
 ====
 --
 
-== 1.5 Momentum
+== Momentum
 
 === Questions
 * *1.5.1* For the following wavefunction ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
@@ -363,7 +363,7 @@ This is the solution
 * Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
 Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then sample again. Etc.
 
-== 1.6 The Uncertainty Principle
+== The Uncertainty Principle
 
 === Questions
 * *1.6.1* For the wavefunction from question 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
@@ -716,3 +716,5 @@ Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textr
 // . This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
 //What does part (c) tell you about the behavior of the quantum harmonic oscillator?
 //How does this compare to the classical harmonic oscillator?
+
+// end::content[]
