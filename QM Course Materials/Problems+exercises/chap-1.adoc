@@ -13,7 +13,6 @@ What does this tell you about how the wavefunction flows over time?
 +
 NOTE: Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
 However it is still instructive and at a high level gives good intuition for how probability density "`flows`" over time.
-
 +
 .Solution
 [%collapsible]
@@ -88,6 +87,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 
 === Questions
 * *1.2.1* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
+
 ** Using single photons
 ** Using single electrons
 ** Using a beam of electrons
@@ -98,7 +98,10 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 .Solution
 [%collapsible]
 ====
-For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used. In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_! We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even Bucky-balls! However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
+For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used.
+In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_!
+We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms!
+However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
 ====
 
 * *1.2.2* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
@@ -132,11 +135,14 @@ This is the solution
 .Solution
 [%collapsible]
 ====
-[{sublist-style}]
 
-. There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers. The probability of selecting a 1, 2, or 3 digit number are: ++\[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]++  ++\[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\]++ ++\[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]++
-. The expected number of digits is ++\[\begin{align*}\langle d \rangle &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++ If you choose a number at random, the expected value for the number of digits is 2.45.
-. Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \langle d^2 \rangle  =&  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ =&  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ =&  6.35 \end{align*}\]++ The standard deviation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
+[{sublist-style}]
+. There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers.
+The probability of selecting a 1, 2, or 3 digit number are: ++\[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]++  ++\[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\]++ ++\[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]++
+. The expected number of digits is ++\[\begin{align*}\langle d \rangle &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++
+If you choose a number at random, the expected value for the number of digits is 2.45.
+. Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \langle d^2 \rangle  =&  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ =&  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ =&  6.35 \end{align*}\]++
+The standard deviation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
 ====
 
 * *1.3.2* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
@@ -160,7 +166,8 @@ s|Number of households with that number of pets
 |===
 
 
-Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\) where n is the number of pets in the household).
+Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\)++ where n is the number of pets in the household).
+
 
 .Solution
 [%collapsible]
@@ -194,9 +201,22 @@ We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle
 [{sublist-style}]
 . MAKE GRAPHS
 . For the first probability distribution, ++\(\rho_1(x)\)++:
-++\[\begin{align*} \langle x \rangle =& \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\ =& \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\ =& \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} = \frac{1}{2} \\ \langle x^2 \rangle =&   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\ =& \left. x^4
-\right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\ =& \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} = \frac{7}{24} \\ \sigma =& \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204 \end{align*}\]++
-For the second probability distribution, ++\(\rho_2(x)\)++: ++\[\begin{align*} \langle x \rangle =& \int_0^1 x (2\sin^2{(2 \pi x)}) dx = \int_0^1 x (1-\cos(4 \pi x)) dx \\ =& \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\ =& \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} = \frac{1}{2} \\ \langle x^2 \rangle =& \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx = \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\ =& \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ =& \frac{1}{3} - \frac{1}{8\pi^2}\\  \sigma =& \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{1}{3}-\frac{1}{8\pi^2} - \frac{1}{4}} = \sqrt{\frac{1}{12}-\frac{1}{8\pi^2}} \\ \approx& 0.266\end{align*}\]++
+++\[\begin{align*} \langle x \rangle =& \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\
+=& \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\
+=& \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} = \frac{1}{2} \\
+  \langle x^2 \rangle =&   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\
+=& \left. x^4 \right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\
+=& \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} = \frac{7}{24} \\
+\sigma =& \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204
+\end{align*}\]++
+
+For the second probability distribution, ++\(\rho_2(x)\)++:
+++\[\begin{align*} \langle x \rangle =& \int_0^1 x (2\sin^2{(2 \pi x)}) dx = \int_0^1 x (1-\cos(4 \pi x)) dx \\
+=& \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\
+=& \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} = \frac{1}{2} \\ \langle x^2 \rangle =& \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx = \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\
+ =& \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ =& \frac{1}{3} - \frac{1}{8\pi^2}
+ \\  \sigma =& \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{1}{3}-\frac{1}{8\pi^2} - \frac{1}{4}} = \sqrt{\frac{1}{12}-\frac{1}{8\pi^2}} \\
+  \approx& 0.266\end{align*}\]++
 . For ++\(\rho_1\)++ the probability of selecting a value within one standard deviation of the mean is given by:
 ++\[\begin{align*} &\int_{0.296}^{0.5} (4x)dx + \int_{0.5}^{0.704} (-4x+4)dx \\ = & \left. 2x^2 \right|_{0.296}^{0.5} + \left. \left( -2x^2 + 4x \right) \right|_{0.5}^{0.704} = 0.650 \end{align*}\]++  For ++\(\rho_2\)++ the probability of selecting a value within one standard deviation of the mean is given by: ++\[\begin{align*} &\int_{0.234}^{0.766} 2\sin^2(2\pi x)dx =  \left. x - \frac{\sin(4 \pi x)}{4 \pi} \right|_{0.234}^{0.766}  = 0.564 \end{align*}\]++
 ====
@@ -223,16 +243,16 @@ Calculate the expected value and standard deviation.
 . You could end up at ++\(x = \pm 1\)++. There is 1 path, {T}, to ++\(x = - 1\)++ and 1 path, {H}, to ++\(x = - 1\)++, for a total of 2 paths.
 . For 0 to 3 flips: +
 [underline]#n=0# +
-x=0, 1 path: {X} +
+x=0, 1 path: \{X\} +
 total: 1 +
 [underline]#n=1# +
-x=-1, 1 path: {T} | x=1, 1 path: {H} +
+x=-1, 1 path: \{T\} | x=1, 1 path: \{H\} +
 total paths: 2 +
 [underline]#n=2# +
-x=-2, 1 path: {TT} | x=0, 2 paths: {TH, HT} | x=2, 1 path: {HH} +
+x=-2, 1 path: \{TT\} | x=0, 2 paths: \{TH, HT\} | x=2, 1 path: \{HH\} +
 total paths: 4 +
 [underline]#n=3# +
-x=-3, 1 path: {TTT} | x=-1, 3 paths: {TTH, THT, HTT} | x=1, 3 paths: {HHT, HTH, THH} |x=3, 1 path: {HHH} +
+x=-3, 1 path: \{TTT\} | x=-1, 3 paths: \{TTH, THT, HTT\} | x=1, 3 paths: \{HHT, HTH, THH\} |x=3, 1 path: \{HHH\} +
 total paths: 8 +
 For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to each endpoint are given by binomial coefficients, which we see in Pascal's triangle.
 . [Insert triangle here] Using Pascal's triangle, we come up with the following probabilities:
@@ -507,14 +527,14 @@ image::ch1_p1.11.jpg[width=225,role="related thumb right"]
 
 Classically, the probability of finding the particle in the range ++\(dx\)++ (if, for example, you took a snapshot at a random time ++\(t\)++) is equal to the fraction of the time ++\(T\)++ it takes to get from ++\(a\)++ to ++\(b\)++ that it spends in the interval ++\(dx\)++:
 
-\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]
+++\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]++
 
 where ++\(v(x)\)++ is the speed, and
 
-\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]
+++\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]++
 
 Thus
-\[\rho(x)=\frac{1}{v(x)T}\]
+++\[\rho(x)=\frac{1}{v(x)T}\]++
 
 This is perhaps the closest classical analog to ++\(|\Psi|^2\)++.
 [{sublist-style}]
@@ -552,10 +572,10 @@ Griffiths:::
 --
 Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time ++\(t\)++ is
 
-\[x(t) = A\cos(\omega t)\]
+++\[x(t) = A\cos(\omega t)\]++
 
 
-You might as well take ++\(\omega=1\)++ (that sets the scale for time) and ++\(A=1\)++ (that sets the scale for length). Make a plot of ++\(x\)++ at 10,000 random times, and compare it with ++\(\rho[x\)++].
+You might as well take ++\(\omega=1\)++ (that sets the scale for time) and ++\(A=1\)++ (that sets the scale for length). Make a plot of ++\(x\)++ at 10,000 random times, and compare it with ++\(\rho[x]\)++.
 _Hint_: In Mathematica, first define
 
 [source,mathematica]
