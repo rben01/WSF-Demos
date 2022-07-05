@@ -10,7 +10,7 @@
 				"run",
 				"python",
 				"RB/src/inline_html.py",
-				"RB/src/demos/Quantum Mechanics/"
+				"RB/src/demos/Quantum Mechanics/New Demos"
 			],
 			"detail": "Inlines the QM demos",
 			"group": "build",
