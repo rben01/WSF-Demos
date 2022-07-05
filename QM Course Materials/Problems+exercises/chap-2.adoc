@@ -3,6 +3,24 @@ include::shared_attributes.adoc[]
 
 == Stationary States
 
+* *2.1.{counter:qn}* Which of the following are always true when we use separation of variables to solve the Schrodinger equation?
+** ++\(\Psi(x,t)=\psi(x)\phi(t)\)++
+** Both sides of the Schrodinger equation are constant
+** ++\(\Psi(x,t)\)++ is a stationary state
+** ++\(V(x,t) = V(x)\)++
+** ++\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)++
+
+
+* *2.1.{counter:qn}* Why is ++\(\Psi(x,t)\)++ called a stationary state if it is time-dependent?
++
+[{sublist-style}]
+. Show that ++\(|\Psi(x,t)|^2 = |\psi(x)|^2\)++
+. Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi(x,t) = \psi(x)e^{-iEt/\hbar}\)++
+
+
+* *2.1.{counter:qn}* If you were to measure the energy of a particle with the wavefunction ++\(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\)++, what is the probability that you’d measure the energy to be ++\(E_2\)++?
+
+
 * *2.1.{counter:qn}* The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
 +
 [{sublist-style}]
