@@ -11,3 +11,9 @@
 :sublist-style: pass:[loweralpha]
 :sectnums:
 :sectnumlevels: 2
+:expect-x: pass:[\(\langle x\rangle\)]
+:expect-x2: pass:[\(\langle x^2\rangle\)]
+:expect-p: pass:[\(\langle p\rangle\)]
+:expect-p2: pass:[\(\langle p^2\rangle\)]
+:xl: pass:[\(\langle ]
+:xr: pass:[\rangle\)]
