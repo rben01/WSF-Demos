@@ -86,7 +86,7 @@ SYMBOLS_TO_REPLACE = [
 _PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE = r'(\\"|"(?:\\"|[^"])*")'
 # https://stackoverflow.com/a/23667311
 SYMBOL_RE: re.Pattern = re.compile(
-    fr"{_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE}|(\b[a-zA-Z_]\w*\b)"
+    rf"{_PRECEDED_BY_EVEN_NUMBER_OF_QUOTES_RE}|(\b[a-zA-Z_]\w*\b)"
 )
 
 
@@ -737,7 +737,7 @@ def main():
 
             outdir: Path
             if args.outdir is None:
-                outdir = Path(".").resolve()
+                outdir = Path(__file__).resolve().parent
                 while outdir.name != "src" and outdir != Path("/"):
                     outdir = outdir.parent
 

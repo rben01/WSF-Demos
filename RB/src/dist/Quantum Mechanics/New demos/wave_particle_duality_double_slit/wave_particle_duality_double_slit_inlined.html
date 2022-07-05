@@ -743,8 +743,10 @@ const yScaleExpected = d3.scaleLinear(
 [HEIGHT_EXPECTED - margin, margin],
 );
 const yScaleActual = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT_ACTUAL - margin, margin]);
-const colorScale = t =>
-d3.interpolateRgb(d3.interpolateSinebow((1 - t) * 0.7), "white")(0.1);
+// Remove rainbowness because green won't work well with projector
+// const colorScale = t =>
+// 	d3.interpolateRgb(d3.interpolateSinebow((1 - t) * 0.7), "white")(0.1);
+const colorScale = () => "white";
 const wavelengthScale = d3.scaleLinear([0, 1], [400e-9, 700e-9]);
 const wavelengthSlider = (() => {
 const slider = document.getElementById("slider-wavelength");

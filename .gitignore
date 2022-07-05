@@ -1,5 +1,5 @@
 .DS_Store
-.vscode
+.vscode/*
 .venv
 __pycache__
 *.min.*
@@ -20,3 +20,6 @@ anim*.mp4
 *.snm
 *.toc
 *.xdv
+
+!.vscode/tasks.json
+!.vscode/launch.json
