@@ -119,7 +119,13 @@ This is the solution
 
 
 === Demonstrations
-* Existing https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment^] and https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^] demos
+* Sampling experiments
+** Discrete
+*** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/ball_sampling/ball_sampling_inlined.html?t=1656456918[Balls in a bag^]
+*** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/dice_sampling/dice_sampling_inlined.html?t=1656456918[Sum of N dice^]
+** Continuous
+*** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment (1D)^]
+*** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^]
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit experiment — detector simulation^]
 
 == Probability
