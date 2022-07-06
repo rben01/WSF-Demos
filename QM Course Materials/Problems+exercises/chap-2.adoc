@@ -68,11 +68,15 @@ _Comment_: In this and other problems involving the harmonic oscillator it simpl
 :!qn:
 == The Free Particle
 
-* *2.4.{counter:qn}* Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = \)++
+* *2.4.{counter:qn}* Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++
+[{sublist-style}]
+. Normalize ++\(\Psi(x,0)\)++
+. Solve for ++\(F(k)\)++
+. Write the integral for ++\(\Psi(x,t)\)++
 
-
-
-* *2.4.{counter:qn}*
+* *2.4.{counter:qn}* Using the same steps as in 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = \)++
++
+NOTE: In this case, you can perform the final integral for ++\(\Psi(x,t)\)++.
 
 * *2.4.{counter:qn}*
 
