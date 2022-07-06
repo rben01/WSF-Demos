@@ -119,5 +119,52 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 === Demonstrations
 
-* http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816[Harmonic oscillator stationary states (static)]
-* http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816[Harmonic oscillator evolution over time]
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816[Harmonic oscillator stationary states (static)^]
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816[Harmonic oscillator evolution over time^]
+
+== The Finite Square Well
+
+=== Questions
+
+* Griffiths
+** *2.29* Analyze the odd bound state wave functions for the finite square well.
+Derive the transcendental equation for the allowed energies, and solve it graphically.
+Examine the two limiting cases.
+Is there always an odd bound state?
+
+** *2.30* For a fixed integer ++\(l\)++, normalize the following expression for the even solutions of the finite square well potential by finding ++\(F\)++ and ++\(D\)++:
+++\[
+\psi=\begin{cases}
+Fe^{-\kappa x}& x > a\\
+D\cos(l x) & 0<x<a\\
+\psi(-x)&x<0
+\end{cases}\]++
+
+** *2.31* Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
+Show that the delta-function well, ++\(V(x)=-\alpha \delta(x)\)++, where
+++\[
+\begin{align*}
+\delta(x):=
+\begin{dcases}
+0&x\ne0\\
+\infty&x=0
+\end{dcases}, \int_{-\infty}^\infty \delta(x)\,dx=1
+\end{align*}
+\]++
+is a “weak” potential (even though it is infinitely deep), in the sense that ++\(z_0:=\frac{a}{\hbar}\sqrt{2mV_0}\rightarrow0\)++.
+Determine the bound state energy for the delta-function potential, by treating it as the limit of a finite square well.
+Check that your answer is consistent with the following:
+++\[
+\begin{align*}
+\psi(x)&=\frac{\sqrt{m\alpha}}{\hbar}e^{-m\alpha|x|/\hbar^2}\\
+E&=-\frac{m\alpha^2}{2\hbar^2}.
+\end{align*}\]++
+<This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn't really helpful here so I've omitted them.>
+
+=== Demonstrations
+
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816[Finite square well stationary states (static)^]
++
+NOTE: The stationary states are solved numerically in the browser (requires solving something like ++\(\tan z=\sqrt{(z_0/z)^2-1}\)++, which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)

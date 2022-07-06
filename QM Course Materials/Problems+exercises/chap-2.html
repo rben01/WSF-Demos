@@ -624,6 +624,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_demonstrations">3.2. Demonstrations</a></li>
 </ul>
 </li>
+<li><a href="#_the_finite_square_well">4. The Finite Square Well</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_2">4.1. Questions</a></li>
+<li><a href="#_demonstrations_2">4.2. Demonstrations</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -870,10 +876,96 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="ulist">
 <ul>
 <li>
-<p><a href="http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816">Harmonic oscillator stationary states (static)</a></p>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816" target="_blank" rel="noopener">Harmonic oscillator stationary states (static)</a></p>
 </li>
 <li>
-<p><a href="http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816">Harmonic oscillator evolution over time</a></p>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816" target="_blank" rel="noopener">Harmonic oscillator evolution over time</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_finite_square_well"><a class="anchor" href="#_the_finite_square_well"></a><a class="link" href="#_the_finite_square_well">4. The Finite Square Well</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">4.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>Griffiths</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>2.29</strong> Analyze the odd bound state wave functions for the finite square well.
+Derive the transcendental equation for the allowed energies, and solve it graphically.
+Examine the two limiting cases.
+Is there always an odd bound state?</p>
+</li>
+<li>
+<p><strong>2.30</strong> For a fixed integer \(l\), normalize the following expression for the even solutions of the finite square well potential by finding \(F\) and \(D\):
+\[
+\psi=\begin{cases}
+Fe^{-\kappa x}&amp; x &gt; a\\
+D\cos(l x) &amp; 0&lt;x&lt;a\\
+\psi(-x)&amp;x&lt;0
+\end{cases}\]</p>
+</li>
+<li>
+<p><strong>2.31</strong> Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
+Show that the delta-function well, \(V(x)=-\alpha \delta(x)\), where
+\[
+\begin{align*}
+\delta(x):=
+\begin{dcases}
+0&amp;x\ne0\\
+\infty&amp;x=0
+\end{dcases}, \int_{-\infty}^\infty \delta(x)\,dx=1
+\end{align*}
+\]
+is a “weak” potential (even though it is infinitely deep), in the sense that \(z_0:=\frac{a}{\hbar}\sqrt{2mV_0}\rightarrow0\).
+Determine the bound state energy for the delta-function potential, by treating it as the limit of a finite square well.
+Check that your answer is consistent with the following:
+\[
+\begin{align*}
+\psi(x)&amp;=\frac{\sqrt{m\alpha}}{\hbar}e^{-m\alpha|x|/\hbar^2}\\
+E&amp;=-\frac{m\alpha^2}{2\hbar^2}
+\end{align*}\]</p>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Also show that Equation 2.172 reduces to Equation 2.144 in the appropriate limit.</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">4.2. Demonstrations</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816" target="_blank" rel="noopener">Finite square well stationary states (static)</a></p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The stationary states are solved numerically in the browser (requires solving something like \(\tan z=\sqrt{(z_0/z)^2-1}\), which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ul>
 </div>
