@@ -118,6 +118,7 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 *** Show that ++\(H_n\)++ satisfies ++\(\frac{d H_n(x)}{dx}=2nH_{n-1}(x)\)++.
 *** Show that ++\(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\)++.
 
+:!qn:
 === Demonstrations
 
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816[Harmonic oscillator stationary states (static)^]
@@ -128,14 +129,12 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 * *2.4.{counter:qn}* Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++
 [{sublist-style}]
 . Normalize ++\(\Psi(x,0)\)++
-. Solve for ++\(F(k)\)++
-. Write the integral for ++\(\Psi(x,t)\)++
+. Solve for ++\(F(k)\)++. You may use computational software to help you calculate the integral.
+. Find ++\(\Psi(x,t)\)++
 
-* *2.4.{counter:qn}* Using the same steps as in 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = \)++
-+
-NOTE: In this case, you can perform the final integral for ++\(\Psi(x,t)\)++.
+* *2.4.{counter:qn}* Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.
 
-* *2.4.{counter:qn}*
+* *2.4.{counter:qn}* Phase and group velocity
 
 * *2.4.{counter:qn}*
 
