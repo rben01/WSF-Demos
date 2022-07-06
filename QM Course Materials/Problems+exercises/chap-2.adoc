@@ -64,3 +64,26 @@ Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_
 _Comment_: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable ++\(\xi =\sqrt{\frac{m\omega}{\hbar x}}\)++ and the constant ++\(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)++
 . Check the uncertainty principle for these states.
 . Compute {xl}T{xr} and {xl}V{xr} for these states. (No new integration allowed!) Is their sum what you would expect?
+
+:!qn:
+== The Free Particle
+
+* *2.4.{counter:qn}* Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = \)++
+
+
+
+* *2.4.{counter:qn}*
+
+* *2.4.{counter:qn}*
+
+* *2.4.{counter:qn}*
+
+* *2.4.{counter:qn}*
+
+:!qn:
+
+== The Delta-Function Potential
+
+
+
+== The Finite Square Well
