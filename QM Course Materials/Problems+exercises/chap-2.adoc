@@ -51,43 +51,7 @@ Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_
 
 === Questions
 
-* Griffiths
-** *2.10*
-+
-[{sublist-style}]
-. Compute ++\(\psi_2(x)\)++. (Hint: ++\(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\)++)
-. Sketch ++\(\psi_0(x)\)++, ++\(\psi_1(x)\)++, and ++\(\psi_2(x)\)++.
-. Check the orthogonality of , and , by explicit integration.
-(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)
-
-** *2.11*
-+
-[{sublist-style}]
-. Compute {expect-x}, {expect-p}, {expect-x2}, and {expect-p2}, for the states ++\(\psi_0\)++ (Equation 2.60) and ++\(\psi_1\)++ (Equation 2.63), by explicit integration.
-_Comment_: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable ++\(\xi =\sqrt{\frac{m\omega}{\hbar x}}\)++ and the constant ++\(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)++
-. Check the uncertainty principle for these states.
-. Compute {xl}T{xr} and {xl}V{xr} for these states. (No new integration allowed!) Is their sum what you would expect?
-
-** *2.12*
-+
-[{sublist-style}]
-. Find {expect-x}, {expect-p}, {expect-x2}, {expect-p2}, and {xl}T{xr} for the \(n\)^th^ stationary state of the harmonic oscillator, using the method of Example 2.5.
-Check that the uncertainty principle is satisfied.
-
-** *2.13*
-A particle in the harmonic oscillator potential starts out in the state ++\[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]++
-+
-[{sublist-style}]
-. Find \(A\).
-. Construct ++\(\Psi(x,t)\)++ and ++\(|\Psi(x,t)|\)++.
-Don't get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of ++\(\psi_1\)++?
-. Find {expect-x} and {expect-p}. Check that Ehrenfest's theorem (Equation 1.38) holds, for this wave function.
-. If you measured the energy of this particle, what values might you get, and with what probabilities?
-
-
-
-* Ours
-** *2.3.{counter:qn}* Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++, there is some \(n\) for which ++\(\psi_a=\hat a_{\pm}^n\psi_b\)++.
+* *2.3.{counter:qn}* Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++, there is some \(n\) for which ++\(\psi_a=\hat a_{\pm}^n\psi_b\)++.
 +
 NOTE: I actually don't know if this is possible with the ladder operators alone, or if you have to actually solve the {sch} equation in its entirety to deduce that the ladder operators give _all_ the solutions.
 +
@@ -97,7 +61,7 @@ NOTE: I actually don't know if this is possible with the ladder operators alone,
 {blank}
 ====
 
-** *2.3.{counter:qn}* For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+* *2.3.{counter:qn}* For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field ++\(V(x)\)++ for which the harmonic oscillator is _not_ a good approximation?
 +
 .Solution (placeholder)
@@ -106,17 +70,17 @@ What is an example of a potential field ++\(V(x)\)++ for which the harmonic osci
 ++\(V(x)=x^4\)++ is one such potential, as it has no quadratic terms.
 ====
 
-** *2.3.{counter:qn}* [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)h
+* *2.3.{counter:qn}* [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)h
 
-** *2.3.{counter:qn}* Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
+* *2.3.{counter:qn}* Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
 
-** *2.3.{counter:qn}* [Adapted from Griffiths 2.16]
+* *2.3.{counter:qn}* [Adapted from Griffiths 2.16]
 The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\)++.
 +
 [{sublist-style}]
-*** Use this to derive the recurrence relation ++\(H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x)\)++.
-*** Show that ++\(H_n\)++ satisfies ++\(\frac{d H_n(x)}{dx}=2nH_{n-1}(x)\)++.
-*** Show that ++\(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\)++.
+** Use this to derive the recurrence relation ++\(H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x)\)++.
+** Show that ++\(H_n\)++ satisfies ++\(\frac{d H_n(x)}{dx}=2nH_{n-1}(x)\)++.
+** Show that ++\(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\)++.
 
 :!qn:
 === Demonstrations
@@ -149,13 +113,62 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 === Questions
 
-* Griffiths
-** *2.29* Analyze the odd bound state wave functions for the finite square well.
+
+=== Demonstrations
+
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816[Finite square well stationary states (static)^]
++
+NOTE: The stationary states are solved numerically in the browser (requires solving something like ++\(\tan z=\sqrt{(z_0/z)^2-1}\)++, which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
+
+== Griffiths Problems
+
+=== The Harmonic Oscillator
+=== The Delta-Function Potential
+
+* *2.10*
++
+[{sublist-style}]
+. Compute ++\(\psi_2(x)\)++. (Hint: ++\(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\)++)
+. Sketch ++\(\psi_0(x)\)++, ++\(\psi_1(x)\)++, and ++\(\psi_2(x)\)++.
+. Check the orthogonality of , and , by explicit integration.
+(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)
+
+* *2.11*
++
+[{sublist-style}]
+. Compute {expect-x}, {expect-p}, {expect-x2}, and {expect-p2}, for the states ++\(\psi_0\)++ (Equation 2.60) and ++\(\psi_1\)++ (Equation 2.63), by explicit integration.
+_Comment_: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable ++\(\xi =\sqrt{\frac{m\omega}{\hbar x}}\)++ and the constant ++\(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)++
+. Check the uncertainty principle for these states.
+. Compute {xl}T{xr} and {xl}V{xr} for these states. (No new integration allowed!) Is their sum what you would expect?
+
+* *2.12*
++
+[{sublist-style}]
+. Find {expect-x}, {expect-p}, {expect-x2}, {expect-p2}, and {xl}T{xr} for the \(n\)^th^ stationary state of the harmonic oscillator, using the method of Example 2.5.
+Check that the uncertainty principle is satisfied.
+
+* *2.13*
+A particle in the harmonic oscillator potential starts out in the state ++\[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]++
++
+[{sublist-style}]
+. Find \(A\).
+. Construct ++\(\Psi(x,t)\)++ and ++\(|\Psi(x,t)|\)++.
+Don't get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of ++\(\psi_1\)++?
+. Find {expect-x} and {expect-p}. Check that Ehrenfest's theorem (Equation 1.38) holds, for this wave function.
+. If you measured the energy of this particle, what values might you get, and with what probabilities?
+
+
+
+=== The Finite Square Well
+
+* *2.29* Analyze the odd bound state wave functions for the finite square well.
 Derive the transcendental equation for the allowed energies, and solve it graphically.
 Examine the two limiting cases.
 Is there always an odd bound state?
 
-** *2.30* For a fixed integer ++\(l\)++, normalize the following expression for the even solutions of the finite square well potential by finding ++\(F\)++ and ++\(D\)++:
+* *2.30* For a fixed integer ++\(l\)++, normalize the following expression for the even solutions of the finite square well potential by finding ++\(F\)++ and ++\(D\)++:
 ++\[
 \psi=\begin{cases}
 Fe^{-\kappa x}& x > a\\
@@ -163,7 +176,7 @@ D\cos(l x) & 0<x<a\\
 \psi(-x)&x<0
 \end{cases}\]++
 
-** *2.31* Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
+* *2.31* Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
 Show that the delta-function well, ++\(V(x)=-\alpha \delta(x)\)++, where
 ++\[
 \begin{align*}
@@ -183,13 +196,3 @@ Check that your answer is consistent with the following:
 E&=-\frac{m\alpha^2}{2\hbar^2}.
 \end{align*}\]++
 <This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn't really helpful here so I've omitted them.>
-
-=== Demonstrations
-
-* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816[Finite square well stationary states (static)^]
-+
-NOTE: The stationary states are solved numerically in the browser (requires solving something like ++\(\tan z=\sqrt{(z_0/z)^2-1}\)++, which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
-This is just a bug due to limited precision/compute time.
-(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
-
-:!qn:
