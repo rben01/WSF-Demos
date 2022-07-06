@@ -662,7 +662,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_stationary_states">2.1. Stationary States</a></li>
 <li><a href="#_the_infinite_square_well">2.2. The Infinite Square Well</a></li>
-<li><a href="#_the_harmonic_oscillator">2.3. The Harmonic Oscillator</a></li>
+<li><a href="#_the_harmonic_oscillator">2.3. The Harmonic Oscillator</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_6">Questions</a></li>
+<li><a href="#_demonstrations_7">Demonstrations</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -2087,6 +2092,8 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 </div>
 <div class="sect2">
 <h3 id="_the_harmonic_oscillator"><a class="anchor" href="#_the_harmonic_oscillator"></a><a class="link" href="#_the_harmonic_oscillator">2.3. The Harmonic Oscillator</a></h3>
+<div class="sect3">
+<h4 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">Questions</a></h4>
 <div class="ulist">
 <ul>
 <li>
@@ -2094,7 +2101,7 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.3.1</strong></p>
+<p><strong>2.10</strong></p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -2111,11 +2118,11 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 </div>
 </li>
 <li>
-<p><strong>2.3.2</strong></p>
+<p><strong>2.11</strong></p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\) and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
+<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
 <em>Comment</em>: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable \(\xi =\sqrt{\frac{m\omega}{\hbar x}}\) and the constant \(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)</p>
 </li>
 <li>
@@ -2127,10 +2134,121 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 </ol>
 </div>
 </li>
+<li>
+<p><strong>2.12</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), \(\langle p^2\rangle\), and \(\langle T\rangle\) for the \(n\)<sup>th</sup> stationary state of the harmonic oscillator, using the method of Example 2.5.
+Check that the uncertainty principle is satisfied.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>2.13</strong>
+A particle in the harmonic oscillator potential starts out in the state \[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(A\).</p>
+</li>
+<li>
+<p>Construct \(\Psi(x,t)\) and \(|\Psi(x,t)|\).
+Don&#8217;t get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of \(\psi_1\)?</p>
+</li>
+<li>
+<p>Find \(\langle x\rangle\) and \(\langle p\rangle\). Check that Ehrenfest&#8217;s theorem (Equation 1.38) holds, for this wave function.</p>
+</li>
+<li>
+<p>If you measured the energy of this particle, what values might you get, and with what probabilities?</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Ours</p>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>2.3.1</strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+I actually don&#8217;t know if this is possible with the ladder operators alone, or if you have to actually solve the Schrödinger equation in its entirety to deduce that the ladder operators give <em>all</em> the solutions.
+</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p></p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><strong>2.3.2</strong> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+What is an example of a potential field \(V(x)\) for which the harmonic oscillator is <em>not</em> a good approximation?</p>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>\(V(x)=x^4\) is one such potential, as it has no quadratic terms.</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><strong>2.3.3</strong> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)h</p>
+</li>
+<li>
+<p><strong>2.3.4</strong> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
+</li>
+<li>
+<p><strong>2.3.5</strong> [Adapted from Griffiths 2.16]
+The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\).</p>
+<div class="ulist loweralpha">
+<ul class="loweralpha">
+<li>
+<p>Use this to derive the recurrence relation \(H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x)\).</p>
+</li>
+<li>
+<p>Show that \(H_n\) satisfies \(\frac{d H_n(x)}{dx}=2nH_{n-1}(x)\).</p>
+</li>
+<li>
+<p>Show that \(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\).</p>
+</li>
 </ul>
 </div>
 </li>
 </ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_7"><a class="anchor" href="#_demonstrations_7"></a><a class="link" href="#_demonstrations_7">Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816">Harmonic oscillator stationary states (static)</a></p>
+</li>
+<li>
+<p><a href="http://127.0.0.1:5500/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816">Harmonic oscillator evolution over time</a></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
