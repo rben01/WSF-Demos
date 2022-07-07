@@ -632,6 +632,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_demonstrations_2">6.2. Demonstrations</a></li>
 </ul>
 </li>
+<li><a href="#_griffiths_problems">7. Griffiths Problems</a>
+<ul class="sectlevel2">
+<li><a href="#_the_harmonic_oscillator_2">7.1. The Harmonic Oscillator</a></li>
+<li><a href="#_the_delta_function_potential_2">7.2. The Delta-Function Potential</a></li>
+<li><a href="#_the_finite_square_well_2">7.3. The Finite Square Well</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -733,83 +740,6 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 <div class="ulist">
 <ul>
 <li>
-<p>Griffiths</p>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>2.10</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\psi_2(x)\). (Hint: \(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\))</p>
-</li>
-<li>
-<p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
-</li>
-<li>
-<p>Check the orthogonality of , and , by explicit integration.
-(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.11</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
-<em>Comment</em>: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable \(\xi =\sqrt{\frac{m\omega}{\hbar x}}\) and the constant \(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)</p>
-</li>
-<li>
-<p>Check the uncertainty principle for these states.</p>
-</li>
-<li>
-<p>Compute \(\langle T\rangle\) and \(\langle V\rangle\) for these states. (No new integration allowed!) Is their sum what you would expect?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.12</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), \(\langle p^2\rangle\), and \(\langle T\rangle\) for the \(n\)<sup>th</sup> stationary state of the harmonic oscillator, using the method of Example 2.5.
-Check that the uncertainty principle is satisfied.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.13</strong>
-A particle in the harmonic oscillator potential starts out in the state \[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(A\).</p>
-</li>
-<li>
-<p>Construct \(\Psi(x,t)\) and \(|\Psi(x,t)|\).
-Don&#8217;t get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of \(\psi_1\)?</p>
-</li>
-<li>
-<p>Find \(\langle x\rangle\) and \(\langle p\rangle\). Check that Ehrenfest&#8217;s theorem (Equation 1.38) holds, for this wave function.</p>
-</li>
-<li>
-<p>If you measured the energy of this particle, what values might you get, and with what probabilities?</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-</li>
-<li>
-<p>Ours</p>
-<div class="ulist">
-<ul>
-<li>
 <p><strong>2.3.1</strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
 <div class="admonitionblock note">
 <table>
@@ -863,9 +793,6 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 </li>
 <li>
 <p>Show that \(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\).</p>
-</li>
-</ul>
-</div>
 </li>
 </ul>
 </div>
@@ -936,10 +863,116 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">6.1. Questions</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">6.2. Demonstrations</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p>Griffiths</p>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816" target="_blank" rel="noopener">Finite square well stationary states (static)</a></p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The stationary states are solved numerically in the browser (requires solving something like \(\tan z=\sqrt{(z_0/z)^2-1}\), which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_griffiths_problems"><a class="anchor" href="#_griffiths_problems"></a><a class="link" href="#_griffiths_problems">7. Griffiths Problems</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_harmonic_oscillator_2"><a class="anchor" href="#_the_harmonic_oscillator_2"></a><a class="link" href="#_the_harmonic_oscillator_2">7.1. The Harmonic Oscillator</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_the_delta_function_potential_2"><a class="anchor" href="#_the_delta_function_potential_2"></a><a class="link" href="#_the_delta_function_potential_2">7.2. The Delta-Function Potential</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>2.10</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Compute \(\psi_2(x)\). (Hint: \(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\))</p>
+</li>
+<li>
+<p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
+</li>
+<li>
+<p>Check the orthogonality of , and , by explicit integration.
+(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>2.11</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
+<em>Comment</em>: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable \(\xi =\sqrt{\frac{m\omega}{\hbar x}}\) and the constant \(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)</p>
+</li>
+<li>
+<p>Check the uncertainty principle for these states.</p>
+</li>
+<li>
+<p>Compute \(\langle T\rangle\) and \(\langle V\rangle\) for these states. (No new integration allowed!) Is their sum what you would expect?</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>2.12</strong></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), \(\langle p^2\rangle\), and \(\langle T\rangle\) for the \(n\)<sup>th</sup> stationary state of the harmonic oscillator, using the method of Example 2.5.
+Check that the uncertainty principle is satisfied.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><strong>2.13</strong>
+A particle in the harmonic oscillator potential starts out in the state \[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(A\).</p>
+</li>
+<li>
+<p>Construct \(\Psi(x,t)\) and \(|\Psi(x,t)|\).
+Don&#8217;t get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of \(\psi_1\)?</p>
+</li>
+<li>
+<p>Find \(\langle x\rangle\) and \(\langle p\rangle\). Check that Ehrenfest&#8217;s theorem (Equation 1.38) holds, for this wave function.</p>
+</li>
+<li>
+<p>If you measured the energy of this particle, what values might you get, and with what probabilities?</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_finite_square_well_2"><a class="anchor" href="#_the_finite_square_well_2"></a><a class="link" href="#_the_finite_square_well_2">7.3. The Finite Square Well</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -978,33 +1011,6 @@ Check that your answer is consistent with the following:
 E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
 \end{align*}\]
 &lt;This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn&#8217;t really helpful here so I&#8217;ve omitted them.&gt;</p>
-</li>
-</ul>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">6.2. Demonstrations</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816" target="_blank" rel="noopener">Finite square well stationary states (static)</a></p>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-The stationary states are solved numerically in the browser (requires solving something like \(\tan z=\sqrt{(z_0/z)^2-1}\), which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
-This is just a bug due to limited precision/compute time.
-(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
-</td>
-</tr>
-</table>
-</div>
 </li>
 </ul>
 </div>
