@@ -10,7 +10,6 @@ include::shared_attributes.adoc[]
 ** ++\(V(x,t) = V(x)\)++
 ** ++\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)++
 
-
 * *2.1.{counter:qn}* Why is ++\(\Psi(x,t)\)++ called a stationary state if it is time-dependent?
 +
 [{sublist-style}]
