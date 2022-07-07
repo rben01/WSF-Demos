@@ -1,4 +1,4 @@
-= Chapter 1
+= Chapter 1: The Wave Function
 include::shared_attributes.adoc[]
 
 == The {sch} Equation

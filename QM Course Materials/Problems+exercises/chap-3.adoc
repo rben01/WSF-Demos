@@ -1,0 +1,25 @@
+= Chapter 3: Formalism
+include::shared_attributes.adoc[]
+
+== Hilbert Space
+
+=== Questions
+
+* *3.1.{counter:qn}*
+** Find a continuous function ++\(f\)++ that is absolutely integrable, but not square-integrable, over ++\(\mathbb R\)++. (A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.)
+** Find a continuous function ++\(f\)++ that is square-integrable, but not absolutely integrable, over ++\(\mathbb R\)++.
++
+[%collapsible%open]
+====
+** ++\(f(x)=\frac{1}{x^2}\)++
+** One example is
+++\[\begin{align*}
+f(x)=\begin{cases}
+\frac{1}{|x|}&|x|\ge1\\
+1&|x|<1
+\end{cases}
+\end{align*}
+\]++
+====
+
+=== Demonstrations
