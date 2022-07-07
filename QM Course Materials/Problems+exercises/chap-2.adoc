@@ -18,7 +18,7 @@ include::shared_attributes.adoc[]
 . Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi(x,t) = \psi(x)e^{-iEt/\hbar}\)++
 
 
-* *2.1.{counter:qn}* The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
+* *2.1.{counter:qn}* [Similar to Griffiths. Need to modify more]The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
 +
 [{sublist-style}]
 ** Using the quantum mechanical substitution rule ++\(p \rightarrow -i\hbar \frac{\partial}{\partial x}\)++, find the quantum mechanical Hamiltonian ++\(\hat H\)++.
@@ -162,6 +162,7 @@ Fe^{-\kappa x}& x > a\\
 D\cos(l x) & 0<x<a\\
 \psi(-x)&x<0
 \end{cases}\]++
+
 
 ** *2.31* Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
 Show that the delta-function well, ++\(V(x)=-\alpha \delta(x)\)++, where
