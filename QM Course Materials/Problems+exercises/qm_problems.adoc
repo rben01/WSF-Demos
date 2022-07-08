@@ -11,3 +11,5 @@ https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Li
 include::./chap-1.adoc[leveloffset=+1]
 
 include::./chap-2.adoc[leveloffset=+1]
+
+include::./chap-3.adoc[leveloffset=+1]

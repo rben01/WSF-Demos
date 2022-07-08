@@ -622,7 +622,16 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_demonstrations">1.2. Demonstrations</a></li>
 </ul>
 </li>
-<li><a href="#_observables">2. Observables</a></li>
+<li><a href="#_observables">2. Observables</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_2">2.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_eigenfunctions_of_a_hermitian_operator">3. Eigenfunctions of a Hermitian Operator</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_3">3.1. Questions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -710,6 +719,8 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <div class="sect1">
 <h2 id="_observables"><a class="anchor" href="#_observables"></a><a class="link" href="#_observables">2. Observables</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">2.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -734,7 +745,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
-<p><strong>3.2.2</strong> Show that \((Q^\dagger)^\dagger=Q\) for any operator \(Q\).</p>
+<p><strong>3.2.2</strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -742,7 +753,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <p>Simply by the definition of the adjoint and the fact that \(\langle g|f\rangle=\langle f|g\rangle^*\), we have, for all \(f\) and \(g\),
 \[
 \begin{align*}
-\langle (Q^\dagger)^\dagger f|g\rangle&amp;=\langle f|Q^\dagger g\rangle\\
+\langle Q^{\dagger\dagger} f|g\rangle&amp;=\langle f|Q^\dagger g\rangle\\
 &amp;=\langle Q^\dagger g|f\rangle^*\\
 &amp;=\langle g|Qf\rangle^*\\
 &amp;=\langle Qf|g\rangle^{**}\\
@@ -754,31 +765,48 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <p>Now, because the inner product is linear,
 \[
 \begin{align*}
-0&amp;=\langle (Q^\dagger)^\dagger f|g\rangle-\langle Qf|g\rangle\\
-&amp;=\langle (Q^\dagger)^\dagger f-Qf|g\rangle\\
-&amp;=\langle ((Q^\dagger)^\dagger -Q)f|g\rangle
+0&amp;=\langle Q^{\dagger\dagger} f|g\rangle-\langle Qf|g\rangle\\
+&amp;=\langle Q^{\dagger\dagger} f-Qf|g\rangle\\
+&amp;=\langle (Q^{\dagger\dagger} -Q)f|g\rangle
 \end{align*}
 \]</p>
 </div>
 <div class="paragraph">
-<p>In particular, taking \(g=((Q^\dagger)^\dagger -Q)f\), we have</p>
+<p>In particular, taking \(g=(Q^{\dagger\dagger} -Q)f\), we have</p>
 </div>
 <div class="paragraph">
 <p>\[
 \begin{align*}
-0&amp;=\langle ((Q^\dagger)^\dagger -Q)f|((Q^\dagger)^\dagger -Q)f\rangle\\
-&amp;=|((Q^\dagger)^\dagger -Q)f|^2
+0&amp;=\langle (Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f\rangle\\
+&amp;=|(Q^{\dagger\dagger} -Q)f|^2
 \end{align*}
 \]</p>
 </div>
 <div class="paragraph">
-<p>Hence \(((Q^\dagger)^\dagger -Q)f=0\).
-Since \(f\) was arbitrary, \((Q^\dagger)^\dagger -Q\) must be the zero operator, and so \((Q^\dagger)^\dagger =Q\).</p>
+<p>Hence \((Q^{\dagger\dagger} -Q)f=0\).
+Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, and so \(Q^{\dagger\dagger} =Q\).</p>
 </div>
 </div>
 </details>
 </li>
 </ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_eigenfunctions_of_a_hermitian_operator"><a class="anchor" href="#_eigenfunctions_of_a_hermitian_operator"></a><a class="link" href="#_eigenfunctions_of_a_hermitian_operator">3. Eigenfunctions of a Hermitian Operator</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">3.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong>2.3.3</strong> Find the eigenfunctions and corresponding eigenvalues of the operator \(\frac{d}{dx^n}\) for positive integer \(n\).
+(Hint: the only eigenfunction of \(\frac{d^1}{dx^1}\) is \(f(x)=e^x\).)</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>

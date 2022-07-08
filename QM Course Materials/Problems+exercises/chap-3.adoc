@@ -51,6 +51,7 @@ So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 :!qn:
 == Observables
 
+=== Questions
 * *3.2.{counter:qn}* Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
 +
 .Solution
@@ -69,7 +70,7 @@ Since ++\(|Qf|^2\)++ is nonnegative, so is any integral of it.
 ====
 
 
-* *3.2.{counter:qn}* Show that ++\((Q^\dagger)^\dagger=Q\)++ for any operator ++\(Q\)++.
+* *3.2.{counter:qn}* Show that ++\(Q^{\dagger\dagger}=Q\)++ for any operator ++\(Q\)++. (In other words, show that the adjoint of the adjoint is the original operator.)
 +
 .Solution
 [%collapsible]
@@ -77,7 +78,7 @@ Since ++\(|Qf|^2\)++ is nonnegative, so is any integral of it.
 Simply by the definition of the adjoint and the fact that ++\(\langle g|f\rangle=\langle f|g\rangle^*\)++, we have, for all ++\(f\)++ and ++\(g\)++,
 ++\[
 \begin{align*}
-\langle (Q^\dagger)^\dagger f|g\rangle&=\langle f|Q^\dagger g\rangle\\
+\langle Q^{\dagger\dagger} f|g\rangle&=\langle f|Q^\dagger g\rangle\\
 &=\langle Q^\dagger g|f\rangle^*\\
 &=\langle g|Qf\rangle^*\\
 &=\langle Qf|g\rangle^{**}\\
@@ -88,21 +89,28 @@ Simply by the definition of the adjoint and the fact that ++\(\langle g|f\rangle
 Now, because the inner product is linear,
 ++\[
 \begin{align*}
-0&=\langle (Q^\dagger)^\dagger f|g\rangle-\langle Qf|g\rangle\\
-&=\langle (Q^\dagger)^\dagger f-Qf|g\rangle\\
-&=\langle ((Q^\dagger)^\dagger -Q)f|g\rangle
+0&=\langle Q^{\dagger\dagger} f|g\rangle-\langle Qf|g\rangle\\
+&=\langle Q^{\dagger\dagger} f-Qf|g\rangle\\
+&=\langle (Q^{\dagger\dagger} -Q)f|g\rangle
 \end{align*}
 \]++
 
-In particular, taking ++\(g=((Q^\dagger)^\dagger -Q)f\)++, we have
+In particular, taking ++\(g=(Q^{\dagger\dagger} -Q)f\)++, we have
 
 ++\[
 \begin{align*}
-0&=\langle ((Q^\dagger)^\dagger -Q)f|((Q^\dagger)^\dagger -Q)f\rangle\\
-&=|((Q^\dagger)^\dagger -Q)f|^2
+0&=\langle (Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f\rangle\\
+&=|(Q^{\dagger\dagger} -Q)f|^2
 \end{align*}
 \]++
 
-Hence ++\(((Q^\dagger)^\dagger -Q)f=0\)++.
-Since ++\(f\)++ was arbitrary, ++\((Q^\dagger)^\dagger -Q\)++ must be the zero operator, and so ++\((Q^\dagger)^\dagger =Q\)++.
+Hence ++\((Q^{\dagger\dagger} -Q)f=0\)++.
+Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero operator, and so ++\(Q^{\dagger\dagger} =Q\)++.
 ====
+
+== Eigenfunctions of a Hermitian Operator
+
+=== Questions
+
+* *2.3.{counter:qn}* Find the eigenfunctions and corresponding eigenvalues of the operator ++\(\frac{d}{dx^n}\)++ for positive integer ++\(n\)++.
+(Hint: the only eigenfunction of ++\(\frac{d^1}{dx^1}\)++ is ++\(f(x)=e^x\)++.)
