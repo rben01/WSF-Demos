@@ -17,7 +17,8 @@ include::shared_attributes.adoc[]
 . Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi(x,t) = \psi(x)e^{-iEt/\hbar}\)++
 
 
-* *2.1.{counter:qn}* [Similar to Griffiths. Need to modify more]The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
+* *2.1.{counter:qn}* [Similar to Griffiths text (not a problem). Need to modify more]
+The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
 +
 [{sublist-style}]
 ** Using the quantum mechanical substitution rule ++\(p \rightarrow -i\hbar \frac{\partial}{\partial x}\)++, find the quantum mechanical Hamiltonian ++\(\hat H\)++.
@@ -69,7 +70,7 @@ What is an example of a potential field ++\(V(x)\)++ for which the harmonic osci
 ++\(V(x)=x^4\)++ is one such potential, as it has no quadratic terms.
 ====
 
-* *2.3.{counter:qn}* [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)h
+* *2.3.{counter:qn}* [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)
 
 * *2.3.{counter:qn}* Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
 
@@ -129,7 +130,7 @@ This is just a bug due to limited precision/compute time.
 * *2.10*
 +
 [{sublist-style}]
-. Compute ++\(\psi_2(x)\)++. (Hint: ++\(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\)++)
+. Compute ++\(\psi_2(x)\)++. (Hint: ++\(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\)++.)
 . Sketch ++\(\psi_0(x)\)++, ++\(\psi_1(x)\)++, and ++\(\psi_2(x)\)++.
 . Check the orthogonality of , and , by explicit integration.
 (Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)
