@@ -6,13 +6,32 @@ include::shared_attributes.adoc[]
 === Questions
 
 * *3.1.{counter:qn}*
-** Find a continuous function ++\(f\)++ that is absolutely integrable, but not square-integrable, over ++\(\mathbb R\)++. (A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.)
-** Find a continuous function ++\(f\)++ that is square-integrable, but not absolutely integrable, over ++\(\mathbb R\)++.
+A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.
+.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is absolutely integrable, but not square-integrable.
+.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.
+
 +
+.Solution
 [%collapsible%open]
 ====
-** ++\(f(x)=\frac{1}{x^2}\)++
-** One example is
+The "`trick`" is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
+
+[{sublist-style}]
+* One example is
+++\[\begin{align*}
+f(x)=\begin{cases}
+|x|^{-\frac{1}{2}}-1&|x|\le1\\
+0&|x|>1
+\end{cases}
+\end{align*}
+\]++
++
+image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,width=500,role="text-center"]
++
+This is because ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
+So ++\(x^{-\frac{1}{2}}\)++ is integrable, but its square, ++\(x^{-1}\)++, is not.
+
+* One example is
 ++\[\begin{align*}
 f(x)=\begin{cases}
 \frac{1}{|x|}&|x|\ge1\\
@@ -20,6 +39,13 @@ f(x)=\begin{cases}
 \end{cases}
 \end{align*}
 \]++
++
+image::fig-3.1.1-f2.svg[A function that is square-integrable but not integrable,width=500,role="text-center"]
++
+This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n>1\)++.
+So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
 === Demonstrations
+
+== Observables
