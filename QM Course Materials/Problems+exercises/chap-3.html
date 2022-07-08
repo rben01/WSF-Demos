@@ -622,6 +622,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_demonstrations">1.2. Demonstrations</a></li>
 </ul>
 </li>
+<li><a href="#_observables">2. Observables</a></li>
 </ul>
 </div>
 </div>
@@ -646,7 +647,7 @@ A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -703,6 +704,81 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <div class="sect2">
 <h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.2. Demonstrations</a></h3>
 
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_observables"><a class="anchor" href="#_observables"></a><a class="link" href="#_observables">2. Observables</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><strong>3.2.1</strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>If \(Q\) is defined on domain \(\mathcal D\), then
+\[
+\begin{align*}
+\langle f|Pf\rangle&amp;=\langle f|Q^\dagger Qf\rangle\\
+&amp;=\langle Qf| Qf\rangle\\
+&amp;=\int_\mathcal{D} |Qf|^2\,dx
+\end{align*}
+\]</p>
+</div>
+<div class="paragraph">
+<p>Since \(|Qf|^2\) is nonnegative, so is any integral of it.</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><strong>3.2.2</strong> Show that \((Q^\dagger)^\dagger=Q\) for any operator \(Q\).</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Simply by the definition of the adjoint and the fact that \(\langle g|f\rangle=\langle f|g\rangle^*\), we have, for all \(f\) and \(g\),
+\[
+\begin{align*}
+\langle (Q^\dagger)^\dagger f|g\rangle&amp;=\langle f|Q^\dagger g\rangle\\
+&amp;=\langle Q^\dagger g|f\rangle^*\\
+&amp;=\langle g|Qf\rangle^*\\
+&amp;=\langle Qf|g\rangle^{**}\\
+&amp;=\langle Qf|g\rangle
+\end{align*}
+\]</p>
+</div>
+<div class="paragraph">
+<p>Now, because the inner product is linear,
+\[
+\begin{align*}
+0&amp;=\langle (Q^\dagger)^\dagger f|g\rangle-\langle Qf|g\rangle\\
+&amp;=\langle (Q^\dagger)^\dagger f-Qf|g\rangle\\
+&amp;=\langle ((Q^\dagger)^\dagger -Q)f|g\rangle
+\end{align*}
+\]</p>
+</div>
+<div class="paragraph">
+<p>In particular, taking \(g=((Q^\dagger)^\dagger -Q)f\), we have</p>
+</div>
+<div class="paragraph">
+<p>\[
+\begin{align*}
+0&amp;=\langle ((Q^\dagger)^\dagger -Q)f|((Q^\dagger)^\dagger -Q)f\rangle\\
+&amp;=|((Q^\dagger)^\dagger -Q)f|^2
+\end{align*}
+\]</p>
+</div>
+<div class="paragraph">
+<p>Hence \(((Q^\dagger)^\dagger -Q)f=0\).
+Since \(f\) was arbitrary, \((Q^\dagger)^\dagger -Q\) must be the zero operator, and so \((Q^\dagger)^\dagger =Q\).</p>
+</div>
+</div>
+</details>
+</li>
+</ul>
 </div>
 </div>
 </div>

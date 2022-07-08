@@ -12,7 +12,7 @@ A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integr
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 The "`trick`" is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
 
@@ -48,4 +48,61 @@ So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 
 === Demonstrations
 
+:!qn:
 == Observables
+
+* *3.2.{counter:qn}* Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
++
+.Solution
+[%collapsible]
+====
+If ++\(Q\)++ is defined on domain ++\(\mathcal D\)++, then
+++\[
+\begin{align*}
+\langle f|Pf\rangle&=\langle f|Q^\dagger Qf\rangle\\
+&=\langle Qf| Qf\rangle\\
+&=\int_\mathcal{D} |Qf|^2\,dx
+\end{align*}
+\]++
+
+Since ++\(|Qf|^2\)++ is nonnegative, so is any integral of it.
+====
+
+
+* *3.2.{counter:qn}* Show that ++\((Q^\dagger)^\dagger=Q\)++ for any operator ++\(Q\)++.
++
+.Solution
+[%collapsible]
+====
+Simply by the definition of the adjoint and the fact that ++\(\langle g|f\rangle=\langle f|g\rangle^*\)++, we have, for all ++\(f\)++ and ++\(g\)++,
+++\[
+\begin{align*}
+\langle (Q^\dagger)^\dagger f|g\rangle&=\langle f|Q^\dagger g\rangle\\
+&=\langle Q^\dagger g|f\rangle^*\\
+&=\langle g|Qf\rangle^*\\
+&=\langle Qf|g\rangle^{**}\\
+&=\langle Qf|g\rangle
+\end{align*}
+\]++
+
+Now, because the inner product is linear,
+++\[
+\begin{align*}
+0&=\langle (Q^\dagger)^\dagger f|g\rangle-\langle Qf|g\rangle\\
+&=\langle (Q^\dagger)^\dagger f-Qf|g\rangle\\
+&=\langle ((Q^\dagger)^\dagger -Q)f|g\rangle
+\end{align*}
+\]++
+
+In particular, taking ++\(g=((Q^\dagger)^\dagger -Q)f\)++, we have
+
+++\[
+\begin{align*}
+0&=\langle ((Q^\dagger)^\dagger -Q)f|((Q^\dagger)^\dagger -Q)f\rangle\\
+&=|((Q^\dagger)^\dagger -Q)f|^2
+\end{align*}
+\]++
+
+Hence ++\(((Q^\dagger)^\dagger -Q)f=0\)++.
+Since ++\(f\)++ was arbitrary, ++\((Q^\dagger)^\dagger -Q\)++ must be the zero operator, and so ++\((Q^\dagger)^\dagger =Q\)++.
+====
