@@ -492,11 +492,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	body {
 		font-family: var(--body-font);
-	}
-
-	body {
 		margin-right: 2vw;
 	}
+
+	/* begin question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3;
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+	/* end question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -666,7 +712,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.1.1</strong> In the absence of potential (\(V(x,t)=0\)), the Schrödinger equation can be written as
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> In the absence of potential (\(V(x,t)=0\)), the Schrödinger equation can be written as
 \[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]
 with \(\kappa=\frac{i\hbar}{2m}\).
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle&#8217;s position.</p>
@@ -712,7 +758,7 @@ Combined with the above point, this means that the more concentrated a wavefunct
 </details>
 </li>
 <li>
-<p><strong>1.1.2</strong> [Modified from Townsend] Show that the Schrödinger is linear: if \(\Psi_{n}\) is a solution to the Schrödinger equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Modified from Townsend] Show that the Schrödinger is linear: if \(\Psi_{n}\) is a solution to the Schrödinger equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -734,7 +780,7 @@ We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum
 </details>
 </li>
 <li>
-<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.
 (Ignore the trivial case where \(u=0\).)</p>
 <details>
 <summary class="title">Solution</summary>
@@ -804,7 +850,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.2.1</strong> In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?</p>
 <div class="ulist">
 <ul>
 <li>
@@ -837,7 +883,7 @@ However, if we set up an apparatus to measure which slit the particles travel th
 </details>
 </li>
 <li>
-<p><strong>1.2.2</strong> Let&#8217;s derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Let&#8217;s derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -887,7 +933,7 @@ However, if we set up an apparatus to measure which slit the particles travel th
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.3.1</strong> An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -924,7 +970,7 @@ The standard deviation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
 </details>
 </li>
 <li>
-<p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
 <div class="content">
 <table id="pets-table" class="tableblock frame-all grid-rows stripes-none" style="width: 40%;">
@@ -1001,7 +1047,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </div>
 </li>
 <li>
-<p><strong>1.3.3</strong> Plot the following two probability density distributions over the interval 0 to 1:</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Plot the following two probability density distributions over the interval 0 to 1:</p>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
@@ -1064,7 +1110,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </div>
 </li>
 <li>
-<p><strong>1.3.4</strong> You are standing at the center of a number line (\(x=0\)).
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> You are standing at the center of a number line (\(x=0\)).
 You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.</p>
 <div class="olist loweralpha">
@@ -1185,7 +1231,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.4.1</strong> Normalize the following wavefunctions (i.e. find A):</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Normalize the following wavefunctions (i.e. find A):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1212,7 +1258,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </details>
 </li>
 <li>
-<p><strong>1.4.2</strong> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 <div class="paragraph">
 <p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
 </div>
@@ -1226,7 +1272,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </details>
 </li>
 <li>
-<p><strong>1.4.3</strong> The probability current describes the rate at which probability flows past point \(x\). It is given by \[J(x,t) = \frac{i
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> The probability current describes the rate at which probability flows past point \(x\). It is given by \[J(x,t) = \frac{i
 \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
 <div class="openblock">
 <div class="content">
@@ -1285,7 +1331,7 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.5.1</strong> For the following wavefunction \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For the following wavefunction \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1312,7 +1358,7 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 </details>
 </li>
 <li>
-<p><strong>1.5.2</strong> Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
 In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
 <details>
@@ -1338,7 +1384,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </details>
 </li>
 <li>
-<p><strong>1.5.3</strong> Any dynamical variable can be expressed in terms of position and momentum.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Any dynamical variable can be expressed in terms of position and momentum.
 Angular momentum is given by \[\textbf{L} = \textbf{r} \times \textbf{p}.\]
 In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
 We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\textbf{p} = -i \hbar \nabla \).</p>
@@ -1417,7 +1463,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.6.1</strong> For the wavefunction from question 1.5.1, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For the wavefunction from question <span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span>, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1441,7 +1487,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 </details>
 </li>
 <li>
-<p><strong>1.6.2</strong> Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1473,7 +1519,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 <dl>
 <dt class="hdlist1">1.1</dt>
 <dd>
-<p>For the distribution of ages in the example in Section 1.3.1:</p>
+<p>For the distribution of ages in the example in Section <span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span>:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>

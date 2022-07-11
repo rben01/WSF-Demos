@@ -1,3 +1,4 @@
+[.qm-chapter.chap-3]
 = Chapter 3: Formalism
 include::shared_attributes.adoc[]
 
@@ -5,7 +6,7 @@ include::shared_attributes.adoc[]
 
 === Questions
 
-* *3.1.{counter:qn}*
+* *{q-num}*
 A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.
 .. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is absolutely integrable, but not square-integrable.
 .. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.
@@ -17,7 +18,7 @@ A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integr
 The "`trick`" is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
 
 [{sublist-style}]
-* One example is
+. One example is
 ++\[\begin{align*}
 f(x)=\begin{cases}
 |x|^{-\frac{1}{2}}-1&|x|\le1\\
@@ -31,7 +32,7 @@ image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,
 This is because ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
 So ++\(x^{-\frac{1}{2}}\)++ is integrable, but its square, ++\(x^{-1}\)++, is not.
 
-* One example is
+. One example is
 ++\[\begin{align*}
 f(x)=\begin{cases}
 \frac{1}{|x|}&|x|\ge1\\
@@ -42,17 +43,16 @@ f(x)=\begin{cases}
 +
 image::fig-3.1.1-f2.svg[A function that is square-integrable but not integrable,width=500,role="text-center"]
 +
-This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n>1\)++.
+This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\)++.
 So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
 === Demonstrations
 
-:!qn:
 == Observables
 
 === Questions
-* *3.2.{counter:qn}* Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
+* *{q-num}* Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
 +
 .Solution
 [%collapsible]
@@ -69,8 +69,7 @@ If ++\(Q\)++ is defined on domain ++\(\mathcal D\)++, then
 Since ++\(|Qf|^2\)++ is nonnegative, so is any integral of it.
 ====
 
-
-* *3.2.{counter:qn}* Show that ++\(Q^{\dagger\dagger}=Q\)++ for any operator ++\(Q\)++. (In other words, show that the adjoint of the adjoint is the original operator.)
+* *{q-num}* Show that ++\(Q^{\dagger\dagger}=Q\)++ for any operator ++\(Q\)++. (In other words, show that the adjoint of the adjoint is the original operator.)
 +
 .Solution
 [%collapsible]
@@ -112,5 +111,41 @@ Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero op
 
 === Questions
 
-* *2.3.{counter:qn}* Find the eigenfunctions and corresponding eigenvalues of the operator ++\(\frac{d}{dx^n}\)++ for positive integer ++\(n\)++.
-(Hint: the only eigenfunction of ++\(\frac{d^1}{dx^1}\)++ is ++\(f(x)=e^x\)++.)
+* *{q-num}* find the eigenfunctions and eigenvalues of the position operator ++\(x\)++, defined by ++\(x(f)=xf\)++, and ++\(p\)++, defined by ++\(p(f)=-i\hbar \frac{\partial f}{\partial x}\)++.
+
+* *{q-num}* Suppose that ++\(f\)++ is an eigenfunction of operators ++\(Q_1\)++ and ++\(Q_2\)++ with eigenvalues ++\(q_1\)++ and ++\(q_2\)++, respectively.
+When is ++\(f\)++ an eigenfunction  of ++\(Q_1+Q_2\)++, ++\(Q_1Q_2\)++, and ++\(Q_2Q_1\)++?
+What are the corresponding eigenvalues?
+
+* *{q-num}* Find the eigenfunctions and eigenvalues of the operator ++\(\frac{d^n}{dx^n}\)++ for positive integer ++\(n\)++.
+(Don't worry about whether the solutions are square-integrable.)
++
+.Solution
+[%collapsible]
+====
+Unsurprisingly, the eigenfunctions of powers of the differential operator are linear combinations of exponentials.
+For fixed ++\(q\ne 0\)++, solving ++\(\frac{d^n}{dx^n}f(x)=qf(x)\)++ yields
+++\[ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right] \]++
+where ++\(f_q\)++ is the eigenfunction belonging to eigenvalue ++\(q\)++, and the ++\(c_k\)++ are constants determined by the boundary conditions.
+Evidently, every nonzero complex number is an eigenvalue.
+
+If ++\(q=0\)++, then the solutions to ++\(\frac{d^n}{dx^n}f(x)=0\)++ are simply the polynomials of degree at most ++\(n-1\)++.
+
+[sidebar]
+--
+This problem highlights the fact that the eigenfunctions of an operator depend on the _precise_ operator in question; ++\(\frac{d^n}{dx^n}-q\)++ is quite different from ++\(\frac{d^n}{dx^n}\)++ when ++\(q\ne0\)++.
+--
+====
+
+== Generalized Statistical Interpretation
+
+== The Uncertainty Principle
+
+== Vectors and Operators
+
+=== Questions
+
+* *{q-num}* Find the eigenvalues and normalized eigenvectors of
+++\[M=\begin{pmatrix}4&2\\1&5\end{pmatrix}\]++
+
+* *{q-num}* What are the eigenvalues and normalized eigenvectors of a diagonal matrix with diagonal entries ++\(m_1, \ldots, m_n\)++?

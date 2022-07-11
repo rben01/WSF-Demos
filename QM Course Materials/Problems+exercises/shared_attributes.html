@@ -492,11 +492,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	body {
 		font-family: var(--body-font);
-	}
-
-	body {
 		margin-right: 2vw;
 	}
+
+	/* begin question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3;
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+	/* end question numbering */
 
 	#toctitle,
 	#toc ul {

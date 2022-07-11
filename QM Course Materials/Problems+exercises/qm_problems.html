@@ -492,11 +492,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	body {
 		font-family: var(--body-font);
-	}
-
-	body {
 		margin-right: 2vw;
 	}
+
+	/* begin question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3;
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+	/* end question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -703,6 +749,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_questions_10">Questions</a></li>
 </ul>
 </li>
+<li><a href="#_generalized_statistical_interpretation">3.4. Generalized Statistical Interpretation</a></li>
+<li><a href="#_the_uncertainty_principle_2">3.5. The Uncertainty Principle</a></li>
+<li><a href="#_vectors_and_operators">3.6. Vectors and Operators</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_11">Questions</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -729,7 +782,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.1.1</strong> In the absence of potential (\(V(x,t)=0\)), the Schrödinger equation can be written as
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> In the absence of potential (\(V(x,t)=0\)), the Schrödinger equation can be written as
 \[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]
 with \(\kappa=\frac{i\hbar}{2m}\).
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle&#8217;s position.</p>
@@ -775,7 +828,7 @@ Combined with the above point, this means that the more concentrated a wavefunct
 </details>
 </li>
 <li>
-<p><strong>1.1.2</strong> [Modified from Townsend] Show that the Schrödinger is linear: if \(\Psi_{n}\) is a solution to the Schrödinger equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Modified from Townsend] Show that the Schrödinger is linear: if \(\Psi_{n}\) is a solution to the Schrödinger equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -797,7 +850,7 @@ We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum
 </details>
 </li>
 <li>
-<p><strong>1.1.3</strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.
 (Ignore the trivial case where \(u=0\).)</p>
 <details>
 <summary class="title">Solution</summary>
@@ -865,7 +918,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.2.1</strong> In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?</p>
 <div class="ulist">
 <ul>
 <li>
@@ -898,7 +951,7 @@ However, if we set up an apparatus to measure which slit the particles travel th
 </details>
 </li>
 <li>
-<p><strong>1.2.2</strong> Let&#8217;s derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Let&#8217;s derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -946,7 +999,7 @@ However, if we set up an apparatus to measure which slit the particles travel th
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.3.1</strong> An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -983,7 +1036,7 @@ The standard deviation is: \[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]</p>
 </details>
 </li>
 <li>
-<p><strong>1.3.2</strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
 <div class="openblock">
 <div class="content">
 <table id="pets-table" class="tableblock frame-all grid-rows stripes-none" style="width: 40%;">
@@ -1060,7 +1113,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </div>
 </li>
 <li>
-<p><strong>1.3.3</strong> Plot the following two probability density distributions over the interval 0 to 1:</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Plot the following two probability density distributions over the interval 0 to 1:</p>
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
@@ -1123,7 +1176,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </div>
 </li>
 <li>
-<p><strong>1.3.4</strong> You are standing at the center of a number line (\(x=0\)).
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> You are standing at the center of a number line (\(x=0\)).
 You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.</p>
 <div class="olist loweralpha">
@@ -1242,7 +1295,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.4.1</strong> Normalize the following wavefunctions (i.e. find A):</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Normalize the following wavefunctions (i.e. find A):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1269,7 +1322,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </details>
 </li>
 <li>
-<p><strong>1.4.2</strong> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
 <div class="paragraph">
 <p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
 </div>
@@ -1283,7 +1336,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </details>
 </li>
 <li>
-<p><strong>1.4.3</strong> The probability current describes the rate at which probability flows past point \(x\). It is given by \[J(x,t) = \frac{i
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> The probability current describes the rate at which probability flows past point \(x\). It is given by \[J(x,t) = \frac{i
 \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
 <div class="openblock">
 <div class="content">
@@ -1340,7 +1393,7 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.5.1</strong> For the following wavefunction \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For the following wavefunction \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1367,7 +1420,7 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 </details>
 </li>
 <li>
-<p><strong>1.5.2</strong> Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]
 In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\langle x\rangle\)&#8221;.</p>
 <details>
@@ -1393,7 +1446,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 </details>
 </li>
 <li>
-<p><strong>1.5.3</strong> Any dynamical variable can be expressed in terms of position and momentum.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Any dynamical variable can be expressed in terms of position and momentum.
 Angular momentum is given by \[\textbf{L} = \textbf{r} \times \textbf{p}.\]
 In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
 We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\textbf{p} = -i \hbar \nabla \).</p>
@@ -1470,7 +1523,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 <div class="ulist">
 <ul>
 <li>
-<p><strong>1.6.1</strong> For the wavefunction from question 1.5.1, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For the wavefunction from question <span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span>, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1494,7 +1547,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 </details>
 </li>
 <li>
-<p><strong>1.6.2</strong> Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
 <details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
@@ -1524,7 +1577,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 <dl>
 <dt class="hdlist1">1.1</dt>
 <dd>
-<p>For the distribution of ages in the example in Section 1.3.1:</p>
+<p>For the distribution of ages in the example in Section <span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span>:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -2037,7 +2090,7 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 </div>
 </div>
 </div>
-<div class="sect1">
+<div class="sect1 qm-chapter chap-2">
 <h2 id="_chapter_2_time_independent_schrödinger_equation"><a class="anchor" href="#_chapter_2_time_independent_schrödinger_equation"></a><a class="link" href="#_chapter_2_time_independent_schrödinger_equation">2. Chapter 2: Time-Independent Schrödinger Equation</a></h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -2045,7 +2098,7 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.1.1</strong> Which of the following are always true when we use separation of variables to solve the Schrodinger equation?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Which of the following are always true when we use separation of variables to solve the Schrodinger equation?</p>
 <div class="ulist">
 <ul>
 <li>
@@ -2067,7 +2120,7 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 </div>
 </li>
 <li>
-<p><strong>2.1.2</strong> Why is \(\Psi(x,t)\) called a stationary state if it is time-dependent?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Why is \(\Psi(x,t)\) called a stationary state if it is time-dependent?</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -2080,7 +2133,8 @@ Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{
 </div>
 </li>
 <li>
-<p><strong>2.1.3</strong> [Similar to Griffiths text (not a problem). Need to modify more] The classical Hamiltonian, the total energy in a system, is given by \(H(x,p)=\frac{p^2}{2m}+V(x)\), where \(\frac{p^2}{2m}\) is the kinetic energy and \(V(x)\) is the potential energy.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Similar to Griffiths text (not a problem). Need to modify more]
+The classical Hamiltonian, the total energy in a system, is given by \(H(x,p)=\frac{p^2}{2m}+V(x)\), where \(\frac{p^2}{2m}\) is the kinetic energy and \(V(x)\) is the potential energy.</p>
 <div class="ulist loweralpha">
 <ul class="loweralpha">
 <li>
@@ -2105,10 +2159,10 @@ yields \(\hat H\psi=E\psi\).</p>
 </div>
 </li>
 <li>
-<p><strong>2.1.4</strong> If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
 </li>
 <li>
-<p><strong>2.1.5</strong> Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
 </li>
 </ul>
 </div>
@@ -2118,7 +2172,7 @@ yields \(\hat H\psi=E\psi\).</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.2.1</strong> The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\).
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\).
 Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,\psi_n\rangle\) is 1 when \(m=n\) and 0 otherwise.
 (Hint: \(\cos\) is an even function, \(\sin\) is an odd function, and \(\cos(a+b)=\cos a\cos b-\sin a\sin b\).)</p>
 </li>
@@ -2132,7 +2186,7 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.3.1</strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -2155,7 +2209,7 @@ I actually don&#8217;t know if this is possible with the ladder operators alone,
 </details>
 </li>
 <li>
-<p><strong>2.3.2</strong> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field \(V(x)\) for which the harmonic oscillator is <em>not</em> a good approximation?</p>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -2167,13 +2221,13 @@ What is an example of a potential field \(V(x)\) for which the harmonic oscillat
 </details>
 </li>
 <li>
-<p><strong>2.3.3</strong> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)</p>
 </li>
 <li>
-<p><strong>2.3.4</strong> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
 </li>
 <li>
-<p><strong>2.3.5</strong> [Adapted from Griffiths 2.16]
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Adapted from Griffiths 2.16]
 The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\).</p>
 <div class="ulist loweralpha">
 <ul class="loweralpha">
@@ -2211,7 +2265,7 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.4.1</strong> Find \(\Psi(x,t)\) given \(\Psi(x,0) = A\frac{\sin(x)}{x}\)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find \(\Psi(x,t)\) given \(\Psi(x,0) = A\frac{\sin(x)}{x}\)</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -2227,16 +2281,16 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 </div>
 </li>
 <li>
-<p><strong>2.4.2</strong> Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
 </li>
 <li>
-<p><strong>2.4.3</strong> Phase and group velocity</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Phase and group velocity</p>
 </li>
 <li>
-<p><strong>2.4.4</strong></p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong></p>
 </li>
 <li>
-<p><strong>2.4.5</strong></p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong></p>
 </li>
 </ul>
 </div>
@@ -2291,7 +2345,7 @@ This is just a bug due to limited precision/compute time.
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Compute \(\psi_2(x)\). (Hint: \(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\).)</p>
+<p>Compute \(\psi_2(x)\). (Hint: \( \psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}}\psi_n \).)</p>
 </li>
 <li>
 <p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
@@ -2402,7 +2456,7 @@ E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
 </div>
 </div>
 </div>
-<div class="sect1">
+<div class="sect1 qm-chapter chap-3">
 <h2 id="_chapter_3_formalism"><a class="anchor" href="#_chapter_3_formalism"></a><a class="link" href="#_chapter_3_formalism">3. Chapter 3: Formalism</a></h2>
 <div class="sectionbody">
 <div class="sect2">
@@ -2412,7 +2466,7 @@ E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
 <div class="ulist">
 <ul>
 <li>
-<p><strong>3.1.1</strong>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong>
 A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -2430,8 +2484,8 @@ A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p
 <div class="paragraph">
 <p>The &#8220;trick&#8221; is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).</p>
 </div>
-<div class="ulist loweralpha">
-<ul class="loweralpha">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>One example is
 \[\begin{align*}
@@ -2466,11 +2520,11 @@ f(x)=\begin{cases}
 </div>
 </div>
 <div class="paragraph">
-<p>This is because \(\int_1^\infty x^n\,dx\) is finite if and only if \(n&gt;1\).
+<p>This is because \(\int_1^\infty x^n\,dx\) is finite if and only if \(n&lt;-1\).
 So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </div>
 </li>
-</ul>
+</ol>
 </div>
 </div>
 </details>
@@ -2490,7 +2544,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>3.2.1</strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -2511,7 +2565,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
-<p><strong>3.2.2</strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -2566,8 +2620,63 @@ Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, 
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.3.3</strong> Find the eigenfunctions and corresponding eigenvalues of the operator \(\frac{d}{dx^n}\) for positive integer \(n\).
-(Hint: the only eigenfunction of \(\frac{d^1}{dx^1}\) is \(f(x)=e^x\).)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
+When is \(f\) an eigenfunction  of \(Q_1+Q_2\), \(Q_1Q_2\), and \(Q_2Q_1\)?
+What are the corresponding eigenvalues?</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenfunctions and eigenvalues of the operator \(\frac{d^n}{dx^n}\) for positive integer \(n\).
+(Don&#8217;t worry about whether the solutions are square-integrable.)</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Unsurprisingly, the eigenfunctions of powers of the differential operator are linear combinations of exponentials.
+For fixed \(q\ne 0\), solving \(\frac{d^n}{dx^n}f(x)=qf(x)\) yields
+\[ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right] \]
+where \(f_q\) is the eigenfunction belonging to eigenvalue \(q\), and the \(c_k\) are constants determined by the boundary conditions.
+Evidently, every nonzero complex number is an eigenvalue.</p>
+</div>
+<div class="paragraph">
+<p>If \(q=0\), then the solutions to \(\frac{d^n}{dx^n}f(x)=0\) are simply the polynomials of degree at most \(n-1\).</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>This problem highlights the fact that the eigenfunctions of an operator depend on the <em>precise</em> operator in question; \(\frac{d^n}{dx^n}-q\) is quite different from \(\frac{d^n}{dx^n}\) when \(q\ne0\).</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_generalized_statistical_interpretation"><a class="anchor" href="#_generalized_statistical_interpretation"></a><a class="link" href="#_generalized_statistical_interpretation">3.4. Generalized Statistical Interpretation</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_the_uncertainty_principle_2"><a class="anchor" href="#_the_uncertainty_principle_2"></a><a class="link" href="#_the_uncertainty_principle_2">3.5. The Uncertainty Principle</a></h3>
+
+</div>
+<div class="sect2">
+<h3 id="_vectors_and_operators"><a class="anchor" href="#_vectors_and_operators"></a><a class="link" href="#_vectors_and_operators">3.6. Vectors and Operators</a></h3>
+<div class="sect3">
+<h4 id="_questions_11"><a class="anchor" href="#_questions_11"></a><a class="link" href="#_questions_11">Questions</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenvalues and normalized eigenvectors of
+\[M=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix with diagonal entries \(m_1, \ldots, m_n\)?</p>
 </li>
 </ul>
 </div>

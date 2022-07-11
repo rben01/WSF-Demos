@@ -492,11 +492,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	body {
 		font-family: var(--body-font);
-	}
-
-	body {
 		margin-right: 2vw;
 	}
+
+	/* begin question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3;
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+	/* end question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -610,7 +656,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article toc2 toc-left qm-chapter chap-3">
 <div id="header">
 <h1>Chapter 3: Formalism</h1>
 <div id="toc" class="toc2">
@@ -632,6 +678,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_questions_3">3.1. Questions</a></li>
 </ul>
 </li>
+<li><a href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a></li>
+<li><a href="#_the_uncertainty_principle">5. The Uncertainty Principle</a></li>
+<li><a href="#_vectors_and_operators">6. Vectors and Operators</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_4">6.1. Questions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -644,7 +697,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>3.1.1</strong>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong>
 A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -662,8 +715,8 @@ A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p
 <div class="paragraph">
 <p>The &#8220;trick&#8221; is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).</p>
 </div>
-<div class="ulist loweralpha">
-<ul class="loweralpha">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>One example is
 \[\begin{align*}
@@ -698,11 +751,11 @@ f(x)=\begin{cases}
 </div>
 </div>
 <div class="paragraph">
-<p>This is because \(\int_1^\infty x^n\,dx\) is finite if and only if \(n&gt;1\).
+<p>This is because \(\int_1^\infty x^n\,dx\) is finite if and only if \(n&lt;-1\).
 So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </div>
 </li>
-</ul>
+</ol>
 </div>
 </div>
 </details>
@@ -724,7 +777,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>3.2.1</strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -745,7 +798,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
-<p><strong>3.2.2</strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -802,8 +855,69 @@ Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, 
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.3.3</strong> Find the eigenfunctions and corresponding eigenvalues of the operator \(\frac{d}{dx^n}\) for positive integer \(n\).
-(Hint: the only eigenfunction of \(\frac{d^1}{dx^1}\) is \(f(x)=e^x\).)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
+When is \(f\) an eigenfunction  of \(Q_1+Q_2\), \(Q_1Q_2\), and \(Q_2Q_1\)?
+What are the corresponding eigenvalues?</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenfunctions and eigenvalues of the operator \(\frac{d^n}{dx^n}\) for positive integer \(n\).
+(Don&#8217;t worry about whether the solutions are square-integrable.)</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Unsurprisingly, the eigenfunctions of powers of the differential operator are linear combinations of exponentials.
+For fixed \(q\ne 0\), solving \(\frac{d^n}{dx^n}f(x)=qf(x)\) yields
+\[ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right] \]
+where \(f_q\) is the eigenfunction belonging to eigenvalue \(q\), and the \(c_k\) are constants determined by the boundary conditions.
+Evidently, every nonzero complex number is an eigenvalue.</p>
+</div>
+<div class="paragraph">
+<p>If \(q=0\), then the solutions to \(\frac{d^n}{dx^n}f(x)=0\) are simply the polynomials of degree at most \(n-1\).</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>This problem highlights the fact that the eigenfunctions of an operator depend on the <em>precise</em> operator in question; \(\frac{d^n}{dx^n}-q\) is quite different from \(\frac{d^n}{dx^n}\) when \(q\ne0\).</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generalized_statistical_interpretation"><a class="anchor" href="#_generalized_statistical_interpretation"></a><a class="link" href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a></h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_uncertainty_principle"><a class="anchor" href="#_the_uncertainty_principle"></a><a class="link" href="#_the_uncertainty_principle">5. The Uncertainty Principle</a></h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vectors_and_operators"><a class="anchor" href="#_vectors_and_operators"></a><a class="link" href="#_vectors_and_operators">6. Vectors and Operators</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">6.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenvalues and normalized eigenvectors of
+\[M=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]</p>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix with diagonal entries \(m_1, \ldots, m_n\)?</p>
 </li>
 </ul>
 </div>

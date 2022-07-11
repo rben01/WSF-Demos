@@ -17,3 +17,7 @@
 :expect-p2: pass:[\(\langle p^2\rangle\)]
 :xl: pass:[\(\langle ]
 :xr: pass:[\rangle\)]
+:html-num-chapter-num: pass:[<span class="chapter-num"></span>]
+:html-num-topic-num: pass:[<span class="topic-num"></span>]
+:html-num-question-num: pass:[<span class="question-num"></span>]
+:q-num: {html-num-chapter-num}.{html-num-topic-num}.{html-num-question-num}

@@ -3,7 +3,7 @@ include::shared_attributes.adoc[]
 
 == The {sch} Equation
 === Questions
-* *1.1.1* In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
+* *{q-num}* In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
 ++\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]++
 with ++\(\kappa=\frac{i\hbar}{2m}\)++.
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle's position.
@@ -27,7 +27,7 @@ In the {sch} equation, with ++\(\kappa\)++ imaginary, "`probability current`" (w
 Combined with the above point, this means that the more concentrated a wavefunction is in space initially, the more rapidly it spreads out.
 ====
 
-* *1.1.2* [Modified from Townsend] Show that the {sch} is linear: if \(\Psi_{n}\) is a solution to the {sch} equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
+* *{q-num}* [Modified from Townsend] Show that the {sch} is linear: if \(\Psi_{n}\) is a solution to the {sch} equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
 +
 .Solution
 [%collapsible]
@@ -45,7 +45,7 @@ Now for ++\(\Psi\)++,
 We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_n c_n \Psi_n\)++ is also a solution to the {sch} equation.
 ====
 
-* *1.1.3* [Modified from Townsend] Show that ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ (with appropriate choices of  ++\(\omega,n,l\)++) is a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\)++, but *not* the {sch} equation.
+* *{q-num}* [Modified from Townsend] Show that ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ (with appropriate choices of  ++\(\omega,n,l\)++) is a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\)++, but *not* the {sch} equation.
 (Ignore the trivial case where \(u=0\).)
 +
 .Solution
@@ -86,7 +86,7 @@ There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so
 == The Statistical Interpretation
 
 === Questions
-* *1.2.1* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
+* *{q-num}* In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
 
 ** Using single photons
 ** Using single electrons
@@ -104,7 +104,7 @@ We see a wavelike interference pattern for a single photon, a single electron, a
 However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
 ====
 
-* *1.2.2* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
+* *{q-num}* Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
 .. Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by ++\(\Delta l=d\sin\theta\)++.
 .. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
 .. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
@@ -124,7 +124,7 @@ This is the solution
 
 == Probability
 
-* *1.3.1* An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
+* *{q-num}* An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
 +
 [{sublist-style}]
 .. What are the probabilities of selecting a number with 1, 2, or 3 digits?
@@ -145,7 +145,7 @@ If you choose a number at random, the expected value for the number of digits is
 The standard deviation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
 ====
 
-* *1.3.2* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
+* *{q-num}* You survey your neighbors to determine the number of pets they have in their households and collect the following data:
 +
 --
 [#pets-table,cols=">1h,<1",stripes=none,frame=all,grid=rows,width=40em]
@@ -179,7 +179,7 @@ We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle
 ====
 --
 
-* *1.3.3* Plot the following two probability density distributions over the interval 0 to 1:
+* *{q-num}* Plot the following two probability density distributions over the interval 0 to 1:
 +
 --
 ++\[\begin{align*}
@@ -222,7 +222,7 @@ For the second probability distribution, ++\(\rho_2(x)\)++:
 ====
 --
 
-* *1.3.4* You are standing at the center of a number line (++\(x=0\)++).
+* *{q-num}* You are standing at the center of a number line (++\(x=0\)++).
 You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
 Every time you flip tails, you take a unit step in the negative direction.
 [{sublist-style}]
@@ -280,7 +280,7 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 == Normalization
 
 === Questions
-* *1.4.1* Normalize the following wavefunctions (i.e. find A):
+* *{q-num}* Normalize the following wavefunctions (i.e. find A):
 +
 [{sublist-style}]
 . ++\(\Psi(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
@@ -295,7 +295,7 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 This is the solution
 ====
 
-* *1.4.2* Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
+* *{q-num}* Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
 +
 ++\[\begin{align*}\langle x \rangle &= 3 \\\sigma &= 2\end{align*}\]++
 +
@@ -305,7 +305,7 @@ This is the solution
 This is the solution
 ====
 
-* *1.4.3* The probability current describes the rate at which probability flows past point ++\(x\)++. It is given by ++\[J(x,t) = \frac{i
+* *{q-num}* The probability current describes the rate at which probability flows past point ++\(x\)++. It is given by ++\[J(x,t) = \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
 +
 --
@@ -330,7 +330,7 @@ This is the solution
 == Momentum
 
 === Questions
-* *1.5.1* For the following wavefunction ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+* *{q-num}* For the following wavefunction ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
 . Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
@@ -345,7 +345,7 @@ This is the solution
 ====
 
 
-* *1.5.2* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
+* *{q-num}* Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
 In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
 +
@@ -367,7 +367,7 @@ Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\part
 If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedure wouldn't work because in general ++\(\langle x^n\rangle\ne\langle x\rangle^n\)++.
 ====
 
-* *1.5.3* Any dynamical variable can be expressed in terms of position and momentum.
+* *{q-num}* Any dynamical variable can be expressed in terms of position and momentum.
 Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}.\]++
 In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
 We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
@@ -400,7 +400,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 == The Uncertainty Principle
 
 === Questions
-* *1.6.1* For the wavefunction from question 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+* *{q-num}* For the wavefunction from question {q-num}, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Calculate ++\(\langle p^2\rangle\)++ and ++\(\sigma_p\)++.
 . What is the minimum possible value of ++\(\sigma_x\)++?
@@ -414,7 +414,7 @@ This is the solution
 ====
 
 
-* *1.6.2* Estimate ++\(\sigma_p\)++ for a photon that is confined to a cone cell in the eye with a diameter of 2 ++\(\mu\)++m.
+* *{q-num}* Estimate ++\(\sigma_p\)++ for a photon that is confined to a cone cell in the eye with a diameter of 2 ++\(\mu\)++m.
 +
 .Solution (placeholder)
 [%collapsible]
@@ -430,7 +430,7 @@ This is the solution
 
 == Griffiths: Chapter 1 Questions
 
-1.1:: For the distribution of ages in the example in Section 1.3.1:
+1.1:: For the distribution of ages in the example in Section {q-num}:
 +
 [{sublist-style}]
 . Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++

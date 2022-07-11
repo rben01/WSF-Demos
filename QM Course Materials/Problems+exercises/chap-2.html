@@ -492,11 +492,57 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	body {
 		font-family: var(--body-font);
-	}
-
-	body {
 		margin-right: 2vw;
 	}
+
+	/* begin question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3;
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+	/* end question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -610,7 +656,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article toc2 toc-left">
+<body class="article toc2 toc-left qm-chapter chap-2">
 <div id="header">
 <h1>Chapter 2: Time-Independent Schrödinger Equation</h1>
 <div id="toc" class="toc2">
@@ -649,7 +695,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.1.1</strong> Which of the following are always true when we use separation of variables to solve the Schrodinger equation?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Which of the following are always true when we use separation of variables to solve the Schrodinger equation?</p>
 <div class="ulist">
 <ul>
 <li>
@@ -671,7 +717,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p><strong>2.1.2</strong> Why is \(\Psi(x,t)\) called a stationary state if it is time-dependent?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Why is \(\Psi(x,t)\) called a stationary state if it is time-dependent?</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -684,7 +730,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </li>
 <li>
-<p><strong>2.1.3</strong> [Similar to Griffiths text (not a problem). Need to modify more] The classical Hamiltonian, the total energy in a system, is given by \(H(x,p)=\frac{p^2}{2m}+V(x)\), where \(\frac{p^2}{2m}\) is the kinetic energy and \(V(x)\) is the potential energy.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Similar to Griffiths text (not a problem). Need to modify more]
+The classical Hamiltonian, the total energy in a system, is given by \(H(x,p)=\frac{p^2}{2m}+V(x)\), where \(\frac{p^2}{2m}\) is the kinetic energy and \(V(x)\) is the potential energy.</p>
 <div class="ulist loweralpha">
 <ul class="loweralpha">
 <li>
@@ -709,10 +756,10 @@ yields \(\hat H\psi=E\psi\).</p>
 </div>
 </li>
 <li>
-<p><strong>2.1.4</strong> If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
 </li>
 <li>
-<p><strong>2.1.5</strong> Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
 </li>
 </ul>
 </div>
@@ -724,7 +771,7 @@ yields \(\hat H\psi=E\psi\).</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.2.1</strong> The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\).
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\).
 Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,\psi_n\rangle\) is 1 when \(m=n\) and 0 otherwise.
 (Hint: \(\cos\) is an even function, \(\sin\) is an odd function, and \(\cos(a+b)=\cos a\cos b-\sin a\sin b\).)</p>
 </li>
@@ -740,7 +787,7 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.3.1</strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -763,7 +810,7 @@ I actually don&#8217;t know if this is possible with the ladder operators alone,
 </details>
 </li>
 <li>
-<p><strong>2.3.2</strong> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field \(V(x)\) for which the harmonic oscillator is <em>not</em> a good approximation?</p>
 <details>
 <summary class="title">Solution (placeholder)</summary>
@@ -775,13 +822,13 @@ What is an example of a potential field \(V(x)\) for which the harmonic oscillat
 </details>
 </li>
 <li>
-<p><strong>2.3.3</strong> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)</p>
 </li>
 <li>
-<p><strong>2.3.4</strong> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
 </li>
 <li>
-<p><strong>2.3.5</strong> [Adapted from Griffiths 2.16]
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [Adapted from Griffiths 2.16]
 The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\).</p>
 <div class="ulist loweralpha">
 <ul class="loweralpha">
@@ -821,7 +868,7 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="ulist">
 <ul>
 <li>
-<p><strong>2.4.1</strong> Find \(\Psi(x,t)\) given \(\Psi(x,0) = A\frac{\sin(x)}{x}\)</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find \(\Psi(x,t)\) given \(\Psi(x,0) = A\frac{\sin(x)}{x}\)</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -837,16 +884,16 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 </div>
 </li>
 <li>
-<p><strong>2.4.2</strong> Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
 </li>
 <li>
-<p><strong>2.4.3</strong> Phase and group velocity</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Phase and group velocity</p>
 </li>
 <li>
-<p><strong>2.4.4</strong></p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong></p>
 </li>
 <li>
-<p><strong>2.4.5</strong></p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong></p>
 </li>
 </ul>
 </div>
@@ -907,7 +954,7 @@ This is just a bug due to limited precision/compute time.
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Compute \(\psi_2(x)\). (Hint: \(\psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}\psi_n\).)</p>
+<p>Compute \(\psi_2(x)\). (Hint: \( \psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}}\psi_n \).)</p>
 </li>
 <li>
 <p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
