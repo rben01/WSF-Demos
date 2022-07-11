@@ -1,6 +1,8 @@
 .DS_Store
 .vscode/*
 .venv
+.mypy_cache
+.grok
 __pycache__
 *.min.*
 RB/src/demos/CDFs

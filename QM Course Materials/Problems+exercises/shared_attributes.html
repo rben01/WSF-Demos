@@ -434,6 +434,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<!-- spell-checker: disable -->
+
 <link
 	rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
@@ -495,7 +497,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		margin-right: 2vw;
 	}
 
-	/* begin question numbering */
+	/* BEGIN question numbering */
 	/* create counters in all documents */
 	body {
 		counter-reset: chapter-section topic-section question;
@@ -522,6 +524,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	body.chap-3 {
 		counter-reset: chapter-section 3;
 	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
+	}
 
 	/* for complete doc with all chapters, increment chapter and reset topic */
 	body > #content h2 {
@@ -542,7 +550,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	.question-num {
 		counter-increment: question;
 	}
-	/* end question numbering */
+	/* END question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -561,6 +569,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	dt {
 		font-family: var(--sans-font);
+	}
+
+	a {
+		text-decoration-style: dotted;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	a:hover {
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+	:is(ol, ul) > li p {
+		margin-bottom: unset;
+	}
+
+	.paragraph ~ .sidebarblock {
+		margin-top: 10px;
+	}
+
+	.katex {
+		font-size: 1.13em;
+	}
+
+	.katex-display > .katex {
+		font-size: 1.21em;
 	}
 
 	.admonitionblock td.content > .title,
@@ -609,25 +648,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	.qlist > .title,
 	.hdlist > .title {
 		font-family: var(--header-font);
-	}
-
-	a {
-		text-decoration-style: dotted;
-		text-decoration-skip-ink: auto;
-		-webkit-text-decoration-skip: skip;
-	}
-
-	a:hover {
-		text-decoration-style: solid;
-		text-decoration-skip-ink: auto;
-		-webkit-text-decoration-skip: skip;
-	}
-
-	p {
-		margin-bottom: 0.5rem;
-	}
-	:is(ol, ul) > li p {
-		margin-bottom: unset;
 	}
 
 	/* td.tableblock > .content > div.olist > ol {

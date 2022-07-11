@@ -434,6 +434,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 #footer-text{color:rgba(0,0,0,.6);font-size:.9em}}
 @media amzn-kf8{#header,#content,#footnotes,#footer{padding:0}}
 </style>
+<!-- spell-checker: disable -->
+
 <link
 	rel="stylesheet"
 	href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
@@ -495,7 +497,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		margin-right: 2vw;
 	}
 
-	/* begin question numbering */
+	/* BEGIN question numbering */
 	/* create counters in all documents */
 	body {
 		counter-reset: chapter-section topic-section question;
@@ -522,6 +524,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	body.chap-3 {
 		counter-reset: chapter-section 3;
 	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1;
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
+	}
 
 	/* for complete doc with all chapters, increment chapter and reset topic */
 	body > #content h2 {
@@ -542,7 +550,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	.question-num {
 		counter-increment: question;
 	}
-	/* end question numbering */
+	/* END question numbering */
 
 	#toctitle,
 	#toc ul {
@@ -561,6 +569,37 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 
 	dt {
 		font-family: var(--sans-font);
+	}
+
+	a {
+		text-decoration-style: dotted;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	a:hover {
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+	:is(ol, ul) > li p {
+		margin-bottom: unset;
+	}
+
+	.paragraph ~ .sidebarblock {
+		margin-top: 10px;
+	}
+
+	.katex {
+		font-size: 1.13em;
+	}
+
+	.katex-display > .katex {
+		font-size: 1.21em;
 	}
 
 	.admonitionblock td.content > .title,
@@ -611,25 +650,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		font-family: var(--header-font);
 	}
 
-	a {
-		text-decoration-style: dotted;
-		text-decoration-skip-ink: auto;
-		-webkit-text-decoration-skip: skip;
-	}
-
-	a:hover {
-		text-decoration-style: solid;
-		text-decoration-skip-ink: auto;
-		-webkit-text-decoration-skip: skip;
-	}
-
-	p {
-		margin-bottom: 0.5rem;
-	}
-	:is(ol, ul) > li p {
-		margin-bottom: unset;
-	}
-
 	/* td.tableblock > .content > div.olist > ol {
 		list-style-type: lower-alpha;
 	} */
@@ -676,13 +696,6 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel2">
 <li><a href="#_questions_2">6.1. Questions</a></li>
 <li><a href="#_demonstrations_2">6.2. Demonstrations</a></li>
-</ul>
-</li>
-<li><a href="#_griffiths_problems">7. Griffiths Problems</a>
-<ul class="sectlevel2">
-<li><a href="#_the_harmonic_oscillator_2">7.1. The Harmonic Oscillator</a></li>
-<li><a href="#_the_delta_function_potential_2">7.2. The Delta-Function Potential</a></li>
-<li><a href="#_the_finite_square_well_2">7.3. The Finite Square Well</a></li>
 </ul>
 </li>
 </ul>
@@ -932,132 +945,6 @@ This is just a bug due to limited precision/compute time.
 </tr>
 </table>
 </div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_griffiths_problems"><a class="anchor" href="#_griffiths_problems"></a><a class="link" href="#_griffiths_problems">7. Griffiths Problems</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_the_harmonic_oscillator_2"><a class="anchor" href="#_the_harmonic_oscillator_2"></a><a class="link" href="#_the_harmonic_oscillator_2">7.1. The Harmonic Oscillator</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="_the_delta_function_potential_2"><a class="anchor" href="#_the_delta_function_potential_2"></a><a class="link" href="#_the_delta_function_potential_2">7.2. The Delta-Function Potential</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>2.10</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\psi_2(x)\). (Hint: \( \psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}}\psi_n \).)</p>
-</li>
-<li>
-<p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
-</li>
-<li>
-<p>Check the orthogonality of , and , by explicit integration.
-(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.11</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
-<em>Comment</em>: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable \(\xi =\sqrt{\frac{m\omega}{\hbar x}}\) and the constant \(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)</p>
-</li>
-<li>
-<p>Check the uncertainty principle for these states.</p>
-</li>
-<li>
-<p>Compute \(\langle T\rangle\) and \(\langle V\rangle\) for these states. (No new integration allowed!) Is their sum what you would expect?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.12</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), \(\langle p^2\rangle\), and \(\langle T\rangle\) for the \(n\)<sup>th</sup> stationary state of the harmonic oscillator, using the method of Example 2.5.
-Check that the uncertainty principle is satisfied.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>2.13</strong>
-A particle in the harmonic oscillator potential starts out in the state \[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(A\).</p>
-</li>
-<li>
-<p>Construct \(\Psi(x,t)\) and \(|\Psi(x,t)|\).
-Don&#8217;t get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of \(\psi_1\)?</p>
-</li>
-<li>
-<p>Find \(\langle x\rangle\) and \(\langle p\rangle\). Check that Ehrenfest&#8217;s theorem (Equation 1.38) holds, for this wave function.</p>
-</li>
-<li>
-<p>If you measured the energy of this particle, what values might you get, and with what probabilities?</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_the_finite_square_well_2"><a class="anchor" href="#_the_finite_square_well_2"></a><a class="link" href="#_the_finite_square_well_2">7.3. The Finite Square Well</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>2.29</strong> Analyze the odd bound state wave functions for the finite square well.
-Derive the transcendental equation for the allowed energies, and solve it graphically.
-Examine the two limiting cases.
-Is there always an odd bound state?</p>
-</li>
-<li>
-<p><strong>2.30</strong> For a fixed integer \(l\), normalize the following expression for the even solutions of the finite square well potential by finding \(F\) and \(D\):
-\[
-\psi=\begin{cases}
-Fe^{-\kappa x}&amp; x &gt; a\\
-D\cos(l x) &amp; 0&lt;x&lt;a\\
-\psi(-x)&amp;x&lt;0
-\end{cases}\]</p>
-</li>
-<li>
-<p><strong>2.31</strong> Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
-Show that the delta-function well, \(V(x)=-\alpha \delta(x)\), where
-\[
-\begin{align*}
-\delta(x):=
-\begin{dcases}
-0&amp;x\ne0\\
-\infty&amp;x=0
-\end{dcases}, \int_{-\infty}^\infty \delta(x)\,dx=1
-\end{align*}
-\]
-is a “weak” potential (even though it is infinitely deep), in the sense that \(z_0:=\frac{a}{\hbar}\sqrt{2mV_0}\rightarrow0\).
-Determine the bound state energy for the delta-function potential, by treating it as the limit of a finite square well.
-Check that your answer is consistent with the following:
-\[
-\begin{align*}
-\psi(x)&amp;=\frac{\sqrt{m\alpha}}{\hbar}e^{-m\alpha|x|/\hbar^2}\\
-E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
-\end{align*}\]
-&lt;This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn&#8217;t really helpful here so I&#8217;ve omitted them.&gt;</p>
 </li>
 </ul>
 </div>

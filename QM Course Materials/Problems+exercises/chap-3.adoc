@@ -9,7 +9,7 @@ include::shared_attributes.adoc[]
 * *{q-num}*
 A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.
 .. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is absolutely integrable, but not square-integrable.
-.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.
+.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.abcd
 
 +
 .Solution
@@ -103,7 +103,7 @@ In particular, taking ++\(g=(Q^{\dagger\dagger} -Q)f\)++, we have
 \end{align*}
 \]++
 
-Hence ++\((Q^{\dagger\dagger} -Q)f=0\)++.
+Hence ++\((Q^{\dagger\dagger} -Q)f=\vec 0\)++ (0⃗ the vector/function, not 0 the number).
 Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero operator, and so ++\(Q^{\dagger\dagger} =Q\)++.
 ====
 
@@ -114,8 +114,38 @@ Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero op
 * *{q-num}* find the eigenfunctions and eigenvalues of the position operator ++\(x\)++, defined by ++\(x(f)=xf\)++, and ++\(p\)++, defined by ++\(p(f)=-i\hbar \frac{\partial f}{\partial x}\)++.
 
 * *{q-num}* Suppose that ++\(f\)++ is an eigenfunction of operators ++\(Q_1\)++ and ++\(Q_2\)++ with eigenvalues ++\(q_1\)++ and ++\(q_2\)++, respectively.
-When is ++\(f\)++ an eigenfunction  of ++\(Q_1+Q_2\)++, ++\(Q_1Q_2\)++, and ++\(Q_2Q_1\)++?
-What are the corresponding eigenvalues?
+Show that ++\(f\)++ is an eigenfunction of the following operators, and find the corresponding eigenvalues.
+. ++\(\alpha Q_1\)++ for ++\(\alpha\in\mathbb C \)++
+. ++\(Q_1+Q_2\)++
+. ++\(Q_1Q_2\)++
+. ++\(Q_2Q_1\)++
+
++
+.Solution
+[%collapsible]
+====
+The following laws are helpful:
+
+* Operator application is associative
+* Operator application distributes over addition
+* Scalars commute with everything
+
+//
+
+. ++\(((\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f\)++, so ++\(f\)++ is an eigenfunction of ++\(\alpha Q_1\)++ with eigenvalue ++\(\alpha q_1\)++.
+. ++\((Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f\)++, so ++\(f\)++ is an eigenfunction of ++\(Q_1+Q_2\)++ with eigenvalue ++\(q_1+q_2\)++.
+.
+++\[
+\begin{align*}
+(Q_1Q_2)f&=Q_1(Q_2f)\\
+&=Q_1(q_2f)\\
+&=q_2(Q_1f)\\
+&=q_2q_1f
+\end{align*}
+\]++
+So ++\(f\)++ is an eigenfunction of ++\(Q_1Q_2\)++ with eigenvalue ++\(q_1q_2\)++
+. The proof proceeds exactly as above. The eigenvalue is again ++\(q_1q_2\)++. So, while operators may not commute, the eigenvalues of the product of two operators does not depend on the order of the product.
+====
 
 * *{q-num}* Find the eigenfunctions and eigenvalues of the operator ++\(\frac{d^n}{dx^n}\)++ for positive integer ++\(n\)++.
 (Don't worry about whether the solutions are square-integrable.)
@@ -123,7 +153,6 @@ What are the corresponding eigenvalues?
 .Solution
 [%collapsible]
 ====
-Unsurprisingly, the eigenfunctions of powers of the differential operator are linear combinations of exponentials.
 For fixed ++\(q\ne 0\)++, solving ++\(\frac{d^n}{dx^n}f(x)=qf(x)\)++ yields
 ++\[ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right] \]++
 where ++\(f_q\)++ is the eigenfunction belonging to eigenvalue ++\(q\)++, and the ++\(c_k\)++ are constants determined by the boundary conditions.
@@ -131,10 +160,7 @@ Evidently, every nonzero complex number is an eigenvalue.
 
 If ++\(q=0\)++, then the solutions to ++\(\frac{d^n}{dx^n}f(x)=0\)++ are simply the polynomials of degree at most ++\(n-1\)++.
 
-[sidebar]
---
-This problem highlights the fact that the eigenfunctions of an operator depend on the _precise_ operator in question; ++\(\frac{d^n}{dx^n}-q\)++ is quite different from ++\(\frac{d^n}{dx^n}\)++ when ++\(q\ne0\)++.
---
+NOTE: This problem highlights the fact that the eigenfunctions of an operator depend on the _precise_ operator in question; ++\(\frac{d^n}{dx^n}-q\)++ is quite different from ++\(\frac{d^n}{dx^n}\)++ when ++\(q\ne0\)++.
 ====
 
 == Generalized Statistical Interpretation
@@ -147,5 +173,15 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 
 * *{q-num}* Find the eigenvalues and normalized eigenvectors of
 ++\[M=\begin{pmatrix}4&2\\1&5\end{pmatrix}\]++
++
+.Solution
+[%collapsible%open]
+====
+The characteristic polynomial of ++\(M\)++ is
+++\[\begin{align*}
+0&=(4-x)(5-x)-1\cdot 2\\&=x^2-9x+18\\&=(x-3)(x-6)
+\end{align*}\]++
+So the eigenvalues are 3 and 6.
+====
 
 * *{q-num}* What are the eigenvalues and normalized eigenvectors of a diagonal matrix with diagonal entries ++\(m_1, \ldots, m_n\)++?

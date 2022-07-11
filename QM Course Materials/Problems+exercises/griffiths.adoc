@@ -1,0 +1,382 @@
+[.qm-chapter.chap-griffiths]
+= Chapter 2: Time-Independent {sch} Equation
+include::shared_attributes.adoc[]
+
+== Chapter 1: The Wave Function
+
+* *G.1.1* For the distribution of ages in the example in Section 1.3.1:
++
+[{sublist-style}]
+. Compute ++\(\langle j^2 \rangle_\psi\)++ and ++\(\langle j \rangle ^2\)++
+. Determine ++\(\Delta j\)++ for each ++\(j\)++, and use Equation 1.11 to compute the standard deviation.
+. Use your results in (a) and (b) to check Equation 1.12.
+
+* *G.1.2*
++
+[{sublist-style}]
+. Find the standard deviation of the distribution in Example 1.2.
+. What is the probability that a photograph, selected at random, would
+show a distance ++\(x\)++ more than one standard deviation away
+from the average?
+
+* *G.1.3* Consider the *gaussian* distribution
+++\[\rho(x)= Ae^{-\lambda(x-a)^2}\]++
+where ++\(A\)++, ++\(a\)++, and ++\(\lambda\)++ are positive real constants. (The necessary integrals are inside the back cover.)
++
+[{sublist-style}]
+. Use Equation 1.16 to determine ++\(A\)++.
+. Find ++\(\langle x \rangle\)++, ++\(\langle x^2 \rangle\)++, and ++\(\sigma\)++.
+. Sketch the graph of ++\(\rho(x)\)++.
+
+* *G.1.4* At time ++\(t=0\)++ a particle is represented by the wave
+function
++
+\[\Psi(x,0)=
+    \begin{cases}
+        A(x/a), & 0\le x \le a,\\
+        A(b-x)/A(b-a), & a \le x \le b,\\
+        0, & \textrm{otherwise},
+    \end{cases}\]
+where ++\(A\)++, ++\(a\)++, and ++\(b\)++ are
+(positive) constants.
++
+[{sublist-style}]
+. Normalize ++\(\Psi\)++ (that is, find ++\(A\)++ in terms
+of ++\(a\)++ and ++\(b\)++).
+. Sketch ++\(\Psi(x,0)\)++ as a function of ++\(x\)++.
+. Where is the particle most likely to be found at ++\(t=0\)++?
+. What is the probability of finding the particle to the left of
+++\(a\)++? Check your result in the limiting cases
+++\(b=a\)++ and ++\(b=2a\)++.
+. What is the expectation value of ++\(x\)++?
+
+
+* *G.1.5* Consider the wave function
+++\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]++
+where ++\(A\)++, ++\(\lambda\)++, and ++\(\omega\)++ are positive real constants.
+(We'll see in Chapter 2 for what potential (++\(V\)++) this wave function satisfies the {sch} equation.)
++
+[{sublist-style}]
+. Normalize ++\(\Psi\)++.
+. Determine the expectation values of ++\(x\)++ and ++\(x^2\)++.
+. Find the standard deviation of ++\(x\)++.
++
+Sketch the graph of ++\(|\Psi|^2\)++, as a function of ++\(x\)++, and mark the points ++\((\langle x \rangle + \sigma)\)++ and ++\((\langle x \rangle - \sigma)\)++, to illustrate the sense in which ++\(\sigma\)++ represents the "`spread`" in ++\(x\)++. What is the probability that the particle would be found outside this range?
+
+* *G.1.6*
+Why can't you do integration-by-parts directly on the middle expression in Equation 1.29 -- pull the time derivative over onto \(x\), note that ++\(\partial x / \partial t = 0\)++, and conclude that ++\(d\langle x \rangle / dt = 0\)++?
+
+* *G.1.7* Calculate ++\(\frac{d\langle p \rangle}{dt}\)++. Answer:
++
+++\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]++
+This is an instance of *Ehrenfest's theorem*, which asserts that
+_expectation values obey the classical laws_.
+
+
+* *G.1.8* Suppose you add a constant ++\(V_0\)++ to the
+potential energy (by "`constant`" I mean independent of ++\(x\)++
+as well as ++\(t\)++). In _classical_ mechanics this doesn't
+change anything, but what about _quantum_ mechanics? Show that the wave
+function picks up a time-dependent phase factor:
+++\(\exp(-iV_0t/\hbar)\)++. What effect does this have on the
+expectation value of a dynamical variable?
+
+* *G.1.9* A particle of mass ++\(m\)++ has the wave function
+++\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]++
+where ++\(A\)++ and ++\(a\)++ are positive real constants.
++
+[{sublist-style}]
+. Find ++\(A\)++.
+. For what potential energy function, ++\(V(x)\)++, is this a
+solution to the {sch} equation?
+. Calculate the expectation values of ++\(x\)++,
+++\(x^2\)++, ++\(p\)++, and ++\(p^2\)++.
+. Find ++\(\sigma_{x}\)++ and ++\(\sigma_{p}\)++. Is their
+product consistent with the uncertainty principle?
+
+* *G.1.10*
++
+Consider the first 25 digits in the decimal expansion of ++\(\pi\)++: ++\(3, 1, 4, 1, 5, 9, \ldots\)++.
++
+[{sublist-style}]
+. If you selected one number at random, from this set, what are the
+probabilities of getting each of the 10 digits?
+. What is the most probable digit? What is the median digit? What is the
+average value?
+. Find the standard deviation for this distribution.
+
+* *G.1.11*
+Griffiths:::
++
+--
+image::ch1_p1.11.jpg[width=225,role="related thumb right"]
+
+[This problem generalizes Example 1.2.] Imagine a particle of mass ++\(m\)++ and energy ++\(E\)++ in a potential well ++\(V(x)\)++, sliding frictionlessly back and forth between the classical turning points (++\(a\)++ and ++\(b\)++ in Figure 1.10).
+
+Classically, the probability of finding the particle in the range ++\(dx\)++ (if, for example, you took a snapshot at a random time ++\(t\)++) is equal to the fraction of the time ++\(T\)++ it takes to get from ++\(a\)++ to ++\(b\)++ that it spends in the interval ++\(dx\)++:
+
+++\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]++
+
+where ++\(v(x)\)++ is the speed, and
+
+++\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]++
+
+Thus
+++\[\rho(x)=\frac{1}{v(x)T}\]++
+
+This is perhaps the closest classical analog to ++\(|\Psi|^2\)++.
+[{sublist-style}]
+. Use conservation of energy to express ++\(v(x)\)++ in terms of ++\(E\)++ and ++\(V(x)\)++.
+. As an example, find ++\(\rho(x)\)++ for the simple harmonic oscillator, ++\(V(x)=k x^2/2\)++. Plot ++\(\rho(x)\)++, and check that it is correctly normalized.
+. For the classical harmonic oscillator in part (b), find ++\(\langle x\rangle\)++, ++\(\langle x^2\rangle\)++, and ++\(\sigma_x\)++.
+--
+
+* *G.1.11*
+Griffiths:::
++
+**{blank}*{blank}* 1.12** What if we were interested in the distribution of _momenta_
+(++\(p=mv\)++) for the classical harmonic oscillator (Problem
+1.11(b)).
++
+[{sublist-style}]
+. Find the classical probability distribution ++\(\rho(p)\)++
+(note that ++\(p\)++ ranges from ++\(-\sqrt{2mE}\)++ to
+++\(+\sqrt{2mE}\)++).
+. Calculate ++\(\langle p \rangle\)++,
+++\(\langle p^2 \rangle\)++, and ++\(\sigma_{p}\)++.
+. What’s the _classical_ uncertainty product,
+++\(\sigma_{x}\sigma_{p}\)++, for this system? Notice that this
+product can be as small as you like, classically, simply by sending
+++\(E \rightarrow 0\)++. But in quantum mechanics, as we shall see
+in Chapter 2, the energy of a simple harmonic oscillator cannot be less
+than ++\(\hbar \omega /2\)++, where
+++\(\omega = \sqrt{k/m}\)++ is the classical frequency. In that
+case what can you say abut the product
+++\(\sigma_{x}\sigma_{p}\)++?
+
+* *G.1.13*
+Griffiths:::
++
+--
+Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time ++\(t\)++ is
+
+++\[x(t) = A\cos(\omega t)\]++
+
+
+You might as well take ++\(\omega=1\)++ (that sets the scale for time) and ++\(A=1\)++ (that sets the scale for length). Make a plot of ++\(x\)++ at 10,000 random times, and compare it with ++\(\rho[x]\)++.
+_Hint_: In Mathematica, first define
+
+[source,mathematica]
+----
+x[t_] := Cos[t]
+----
+
+then construct a table of positions:
+
+[source,mathematica]
+----
+snapshots = Table[x[𝜋 RandomReal[j]], {j, 10000}]
+----
+
+and finally, make a histogram of the data:
+
+[source,mathematica]
+----
+Histogram[snapshots, 100, "PDF", PlotRange -> {0,2}]
+----
+
+Meanwhile, make a plot of the density function, ++\(\rho(x)\)++, and, using `Show`, superimpose the two.
+--
+
+* *G.1.14*
+Griffiths:::
++
+--
+Let ++\(P_{ab}(t)\)++ be the probability of finding the
+particle in the range ++\((a<x<b)\)++, at time ++\(t\)++.
+
+[{sublist-style}]
+. Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
+++\[J(x,t) \equiv \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
+What are the units of ++\(J(x,t)\)++? _Comment:_ ++\(J\)++
+is called the *probability current* because it tells you the rate at
+which probability is "`flowing`" past the point ++\(x\)++. If
+++\(P_{ab}(t)\)++ is increasing, then more probability is flowing
+into the region at one end than flows out the other.
+. Find the probability current for the wave function in Problem 1.9.
+
+(This is not a very pithy example, I’m afraid; we’ll encounter more
+substantial ones in due course.)
+--
+
+* *G.1.15*
++
+--
+Show that
+
+++\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]++
+
+for any two (normalizable) solutions to the same {sch} equation (i.e., with
+the same ++\(V(x)\)++), ++\(\Psi_{1}\)++ and
+++\(\Psi_{2}\)++.
+--
+
+* *G.1.16*
++
+--
+A particle is represented (at time ++\(t=0\)++) by the wave function
+
+++\[
+\Psi(x,0)=\begin{cases}
+A(a^2-x^2)&-a\le x\le +a\\
+0 &\textrm{otherwise}
+\end{cases}
+\]++
+[{sublist-style}]
+. Determine the normalization constant ++\(A\)++.
+. What is the expectation value of ++\(x\)++?
+. What is the expectation value of ++\(p\)++? (Note that you
+_cannot_ get it from
+++\(\langle p \rangle = m\frac{d\langle x \rangle}{dt}\)++. Why not?)
+. Find the expectation value of ++\(x^2\)++.
+. Find the expectation value of ++\(p^2\)++.
+. Find the uncertainty in ++\(x\)++ (++\(\sigma_{x}\)++).
+. Find the uncertainty in ++\(p\)++ (++\(\sigma_{p}\)++).
+. Check that your results are consistent with the uncertainty principle.
+--
+
+* *G.1.17*
++
+--
+Suppose you wanted to describe an *unstable particle* that spontaneously
+disintegrates with a "`lifetime`" ++\(\tau\)++. In that case the
+total probability of finding the particle somewhere should _not_ be
+constant, but should decrease at (say) an exponential rate:
+++\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]++
+
+A crude way of achieving this result is as follows. In Equation 1.24 we
+tacitly assumed that V (the potential energy) is _real_. That is
+certainly reasonable, but it leads to the "`conservation of
+probability`" enshrined in Equation 1.27. What if we assign to
+++\(V\)++ an imaginary part:
+++\[V=V_{0}-i\Gamma\]++
+where ++\(V_{0}\)++ is the true potential energy and
+++\(\Gamma\)++ is a positive real constant?
+[{sublist-style}]
+. Show that (in place of Equation 1.27) we now get
+++\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]++
+
+. Solve for ++\(P(t)\)++, and find the lifetime of the particle in
+terms of ++\(\Gamma\)++.
+--
+
+* *G.1.18*
++
+--
+Very roughly speaking, quantum mechanics is relevant when the de Broglie
+wavelength of the particle in question (++\(h/p\)++) is greater
+than the characteristic size of the system (++\(d\)++). In thermal
+equilibrium at (Kelvin) temperature ++\(T\)++, the average kinetic
+energy of a particle is
+
+++\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]++
+
+(where ++\(k_B\)++ is Boltzmann’s constant), so the typical de
+Broglie wavelength is
+
+++\[\lambda = \frac{h}{\sqrt{3mk_BT}}\]++
+
+The purpose of this problem is to determine which systems will have to
+be treated quantum mechanically and which can safely be described
+classically.
+[{sublist-style}]
+. *Solids.* The lattice spacing in a typical solid is around
+++\(d=0.3\,\textrm{mm}\)++. Find the temperature below which the unbound _electrons_ in a solid are quantum mechanical. Below what temperature are the _nuclei_ in a solid quantum mechanical? (Use silicon as an example.)
++
+_Moral_: The free electrons in a solid are _always_ quantum mechanical; the nuclei are generally _not_ quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below ++\(4\,\textrm{K}\)++.
+
+. *Gases.* For what temperatures are the atoms in an ideal gas at pressure ++\(P\)++ quantum mechanical? Hint: Use the ideal gas law (++\(PV=Nk_BT\)++) to deduce the interatomic spacing.
+_Answer_: ++\(T<(1/k_B)(h^2/3m)^{3/5}P^{2/5}\)++.
+Obviously (for the gas to show quantum behavior) we want ++\(m\)++ to be as small as possible, and ++\(P\)++ as large as possible.
+Put in the numbers for helium at atmospheric pressure.
+Is hydrogen in outer space (where the interatomic spacing is about ++\(1\,\textrm{cm}\)++ and the temperature is ++\(3\,\textrm{K}\)++) quantum mechanical?
+(Assume it's monatomic hydrogen, not ++\(\ce{H2}\)++.)
+--
+
+== Chapter 2
+
+=== The Harmonic Oscillator
+=== The Delta-Function Potential
+
+* *G.2.10*
++
+[{sublist-style}]
+. Compute ++\(\psi_2(x)\)++. (Hint: ++\( \psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}}\psi_n \)++.)
+. Sketch ++\(\psi_0(x)\)++, ++\(\psi_1(x)\)++, and ++\(\psi_2(x)\)++.
+. Check the orthogonality of , and , by explicit integration.
+(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)
+
+* *G.2.11*
++
+[{sublist-style}]
+. Compute {expect-x}, {expect-p}, {expect-x2}, and {expect-p2}, for the states ++\(\psi_0\)++ (Equation 2.60) and ++\(\psi_1\)++ (Equation 2.63), by explicit integration.
+_Comment_: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable ++\(\xi =\sqrt{\frac{m\omega}{\hbar x}}\)++ and the constant ++\(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)++
+. Check the uncertainty principle for these states.
+. Compute {xl}T{xr} and {xl}V{xr} for these states. (No new integration allowed!) Is their sum what you would expect?
+
+* *G.2.12*
++
+[{sublist-style}]
+. Find {expect-x}, {expect-p}, {expect-x2}, {expect-p2}, and {xl}T{xr} for the \(n\)^th^ stationary state of the harmonic oscillator, using the method of Example 2.5.
+Check that the uncertainty principle is satisfied.
+
+* *G.2.13*
+A particle in the harmonic oscillator potential starts out in the state ++\[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]++
++
+[{sublist-style}]
+. Find \(A\).
+. Construct ++\(\Psi(x,t)\)++ and ++\(|\Psi(x,t)|\)++.
+Don't get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of ++\(\psi_1\)++?
+. Find {expect-x} and {expect-p}. Check that Ehrenfest's theorem (Equation 1.38) holds, for this wave function.
+. If you measured the energy of this particle, what values might you get, and with what probabilities?
+
+
+
+=== The Finite Square Well
+
+* *G.2.29* Analyze the odd bound state wave functions for the finite square well.
+Derive the transcendental equation for the allowed energies, and solve it graphically.
+Examine the two limiting cases.
+Is there always an odd bound state?
+
+* *G.2.30* For a fixed integer ++\(l\)++, normalize the following expression for the even solutions of the finite square well potential by finding ++\(F\)++ and ++\(D\)++:
+++\[
+\psi=\begin{cases}
+Fe^{-\kappa x}& x > a\\
+D\cos(l x) & 0<x<a\\
+\psi(-x)&x<0
+\end{cases}\]++
+
+* *G.2.31* Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
+Show that the delta-function well, ++\(V(x)=-\alpha \delta(x)\)++, where
+++\[
+\begin{align*}
+\delta(x):=
+\begin{dcases}
+0&x\ne0\\
+\infty&x=0
+\end{dcases}, \int_{-\infty}^\infty \delta(x)\,dx=1
+\end{align*}
+\]++
+is a “weak” potential (even though it is infinitely deep), in the sense that ++\(z_0:=\frac{a}{\hbar}\sqrt{2mV_0}\rightarrow0\)++.
+Determine the bound state energy for the delta-function potential, by treating it as the limit of a finite square well.
+Check that your answer is consistent with the following:
+++\[
+\begin{align*}
+\psi(x)&=\frac{\sqrt{m\alpha}}{\hbar}e^{-m\alpha|x|/\hbar^2}\\
+E&=-\frac{m\alpha^2}{2\hbar^2}.
+\end{align*}\]++
+<This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn't really helpful here so I've omitted them.>
+
+== Chapter 3: Formalism
