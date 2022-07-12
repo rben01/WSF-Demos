@@ -25,3 +25,4 @@ anim*.mp4
 
 !.vscode/tasks.json
 !.vscode/launch.json
+!.vscode/snippets.code-snippets

@@ -1845,7 +1845,7 @@ A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p
 <p>Find a continuous function \(f:\mathbb R\to\mathbb R\) that is absolutely integrable, but not square-integrable.</p>
 </li>
 <li>
-<p>Find a continuous function \(f:\mathbb R\to\mathbb R\) that is square-integrable, but not absolutely integrable.abcd</p>
+<p>Find a continuous function \(f:\mathbb R\to\mathbb R\) that is square-integrable, but not absolutely integrable.</p>
 </li>
 </ol>
 </div>
@@ -1996,8 +1996,8 @@ Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, 
 <li>
 <p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
 Show that \(f\) is an eigenfunction of the following operators, and find the corresponding eigenvalues.</p>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>\(\alpha Q_1\) for \(\alpha\in\mathbb C \)</p>
 </li>
@@ -2012,7 +2012,7 @@ Show that \(f\) is an eigenfunction of the following operators, and find the cor
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -2031,14 +2031,16 @@ Show that \(f\) is an eigenfunction of the following operators, and find the cor
 </li>
 </ul>
 </div>
-<div class="olist arabic">
-<ol class="arabic">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
 <li>
 <p>\(((\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f\), so \(f\) is an eigenfunction of \(\alpha Q_1\) with eigenvalue \(\alpha q_1\).</p>
 </li>
 <li>
-<p>\((Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f\), so \(f\) is an eigenfunction of \(Q_1+Q_2\) with eigenvalue \(q_1+q_2\).
-.
+<p>\((Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f\), so \(f\) is an eigenfunction of \(Q_1+Q_2\) with eigenvalue \(q_1+q_2\).</p>
+</li>
+<li>
+<p>
 \[
 \begin{align*}
 (Q_1Q_2)f&amp;=Q_1(Q_2f)\\
@@ -2107,22 +2109,105 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 <ul>
 <li>
 <p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenvalues and normalized eigenvectors of
-\[M=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]</p>
+\[A=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]</p>
 <details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>The characteristic polynomial of \(M\) is
+<p>We wish to solve \(A|x\rangle=\lambda |x\rangle\) with \(|x\rangle\ne |0\rangle\).
+Subtracting \(\lambda|x\rangle\) from both sides and factoring, we obtain \((A-\lambda I)|x\rangle=|0\rangle\), where \(I\) is the identity matrix (of the correct dimensions; in this case, \(2\times 2\)).
+Since \(|x\rangle\ne |0\rangle\), \(A-\lambda I\) must be singular (non-invertible), which means its determinant is 0.
+So, we have
 \[\begin{align*}
-0&amp;=(4-x)(5-x)-1\cdot 2\\&amp;=x^2-9x+18\\&amp;=(x-3)(x-6)
+0&amp;=\det (A-\lambda I)\\&amp;=(4-\lambda)(5-\lambda)-1\cdot 2\\&amp;=\lambda^2-9\lambda+18\\&amp;=(\lambda-3)(\lambda-6)
 \end{align*}\]
-So the eigenvalues are 3 and 6.</p>
+So the eigenvalues are \(\lambda_1=3\) and \(\lambda_2=6\).</p>
+</div>
+<div class="paragraph">
+<p>Now we must solve \(\lambda_i|x\rangle x=A|x\rangle\) for the concrete eigenvalues \(\lambda_1, \lambda_2\).
+If \(|x\rangle=\begin{bmatrix}x\\y\end{bmatrix}\), then we find the eigenvectors corresponding to \(\lambda_1\) as follows:
+\[
+\begin{align*}
+3\begin{bmatrix}x\\y\end{bmatrix}&amp;=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}4x+2y\\x+5y\end{bmatrix}
+\end{align*}
+\]
+Since equal vectors must have equal components, we have the system of equations \(3x=4x+2y,3y=x+5y\).
+This has solution \(x=-2y\), which means the eigenvectors corresponding to \(\lambda_1=3\) are of the form \(\begin{bmatrix}-2y\\y\end{bmatrix}\), which as a unit vector is \(\dfrac{1}{\sqrt{5}}\begin{bmatrix}-2\\1\end{bmatrix}\).</p>
+</div>
+<div class="paragraph">
+<p>Similarly, for \(\lambda_2=6\), we obtain \(6x=4x+2y,6y=x+5y\) which has solution \(x=y\), so the unit eigenvector is \(\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\end{bmatrix}\).</p>
 </div>
 </div>
 </details>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix with diagonal entries \(m_1, \ldots, m_n\)?</p>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix \(A\) with diagonal entries \(m_1, \ldots, m_n\)?</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>An \(n\)-dimensional matrix can have at most \(n\) linearly independent eigenvectors, so if we find \(n\) eigenvectors then we&#8217;re done.
+If we define \(v_k:=\) the \(k\)<sup>th</sup> column of the \(n\times n\) identity matrix — i.e., \(v_k\) is the vector whose only nonzero component is component \(k\), which is 1 — then clearly \(Av_k=m_k v_k\).
+So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalues are \(\lambda_k=m_k\).</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=|a\rangle\langle a|\) for some unit vector \(a\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \(P\) is <em>idempotent</em>, i.e., that \(P^2=P\).
+(Corollary: \(P^n=P\) for every positive integer \(n\).)</p>
+</li>
+<li>
+<p>What are the eigenvalues of \(P\)?</p>
+</li>
+<li>
+<p>What are the corresponding eigenvectors? (With \(P\) arbitrary, can&#8217;t write out the eigenvectors explicitly, so merely describe them in terms of \(a\).)</p>
+</li>
+</ol>
+</div>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Every projection operator is of the form \(P=|a\rangle\langle a|\) where \(a\) is a unit vector.
+So
+\[\begin{align*}
+P^2&amp;=(|a\rangle\langle a|)(|a\rangle\langle a|)\\
+&amp;=|a\rangle(\langle a|a\rangle)\langle a|\\
+&amp;=|a\rangle(1)\langle a|\\
+&amp;=|a\rangle\langle a|\\
+&amp;=P
+\end{align*}\]</p>
+</li>
+<li>
+<p>We wish to solve \(P|x\rangle=\lambda|x\rangle\) for \(|x\rangle\ne |0\rangle\).
+By the corollary to part (a), for every positive integer \(n\), we have \(\lambda^{n+1}|x\rangle=P^{n+1}|x\rangle=P|x\rangle=\lambda x\), and so \((\lambda^{n+1}-\lambda)|x\rangle=|0\rangle\).
+Since \(|x\rangle\ne |0\rangle\), we have \(\lambda^{n+1}=\lambda\).
+The only values of \(\lambda\) for which this holds for all \(n\) are \(\lambda_0=0\) and \(\lambda_1=1\), so those are the two eigenvalues.</p>
+</li>
+<li>
+<p>We simply solve:
+\[
+P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_0|x\rangle=|0\rangle
+\]
+\(|a\rangle\ne|0\rangle\), so \(\langle a|x\rangle=|0\rangle\).
+Thus the eigenvectors corresponding to \(\lambda_0=0\) are the vectors orthogonal to \(a\).</p>
+<div class="paragraph">
+<p>Now we solve \[
+P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_1|x\rangle=|x\rangle
+\]</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
 </li>
 </ul>
 </div>

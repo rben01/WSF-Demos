@@ -74,7 +74,8 @@
 				{
 					"value": "--ignore=**/.vscode/**",
 					"quoting": "strong"
-				}
+				},
+				"--wait=1000"
 			],
 			"presentation": {
 				"echo": true,
