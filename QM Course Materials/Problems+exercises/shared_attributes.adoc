@@ -20,4 +20,4 @@
 :html-num-chapter-num: pass:[<span class="chapter-num"></span>]
 :html-num-topic-num: pass:[<span class="topic-num"></span>]
 :html-num-question-num: pass:[<span class="question-num"></span>]
-:q-num: {html-num-chapter-num}.{html-num-topic-num}.{html-num-question-num}
+:q-num: pass:a[<span class="problem-number">{html-num-chapter-num}.{html-num-topic-num}.{html-num-question-num}</span>]

@@ -85,6 +85,26 @@
 				"showReuseMessage": false,
 				"clear": false
 			}
+		},
+		{
+			"label": "Start node.js dead-server",
+			"detail": "Starts the node.js live-server package without auto-reload",
+			"group": "build",
+			"command": "live-server",
+			"args": [
+				{
+					"value": "--ignore=**",
+					"quoting": "strong"
+				},
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false
+			}
 		}
 	]
 }

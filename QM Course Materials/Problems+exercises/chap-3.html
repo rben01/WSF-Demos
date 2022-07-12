@@ -550,6 +550,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	.question-num {
 		counter-increment: question;
 	}
+
+	.problem-number {
+		font-weight: bold;
+	}
 	/* END question numbering */
 
 	#toctitle,
@@ -717,7 +721,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong>
 A function \(f\) is said to absolutely integrable when \(|f|\) is integrable.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -797,7 +801,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -818,7 +822,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -875,10 +879,10 @@ Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, 
 <div class="ulist">
 <ul>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
 Show that \(f\) is an eigenfunction of the following operators, and find the corresponding eigenvalues.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -896,7 +900,7 @@ Show that \(f\) is an eigenfunction of the following operators, and find the cor
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -944,7 +948,7 @@ So \(f\) is an eigenfunction of \(Q_1Q_2\) with eigenvalue \(q_1q_2\)</p>
 </details>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenfunctions and eigenvalues of the operator \(\frac{d^n}{dx^n}\) for positive integer \(n\).
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> Find the eigenfunctions and eigenvalues of the operator \(\frac{d^n}{dx^n}\) for positive integer \(n\).
 (Don&#8217;t worry about whether the solutions are square-integrable.)</p>
 <details>
 <summary class="title">Solution</summary>
@@ -998,9 +1002,9 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 <div class="ulist">
 <ul>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> Find the eigenvalues and normalized eigenvectors of
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> Find the eigenvalues and normalized eigenvectors of
 \[A=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]</p>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -1031,7 +1035,7 @@ This has solution \(x=-2y\), which means the eigenvectors corresponding to \(\la
 </details>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix \(A\) with diagonal entries \(m_1, \ldots, m_n\)?</p>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> What are the eigenvalues and normalized eigenvectors of a diagonal matrix \(A\) with diagonal entries \(m_1, \ldots, m_n\)?</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -1044,7 +1048,7 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 </details>
 </li>
 <li>
-<p><strong><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></strong> [This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=|a\rangle\langle a|\) for some unit vector \(a\).</p>
+<p><strong><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></strong> [This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=|a\rangle\langle a|\) for some unit vector \(a\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1059,7 +1063,7 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1076,28 +1080,65 @@ P^2&amp;=(|a\rangle\langle a|)(|a\rangle\langle a|)\\
 \end{align*}\]</p>
 </li>
 <li>
-<p>We wish to solve \(P|x\rangle=\lambda|x\rangle\) for \(|x\rangle\ne |0\rangle\).
+<p>We wish to solve \(P|x\rangle=\lambda|x\rangle\) (with \(|x\rangle\ne |0\rangle\)).
 By the corollary to part (a), for every positive integer \(n\), we have \(\lambda^{n+1}|x\rangle=P^{n+1}|x\rangle=P|x\rangle=\lambda x\), and so \((\lambda^{n+1}-\lambda)|x\rangle=|0\rangle\).
 Since \(|x\rangle\ne |0\rangle\), we have \(\lambda^{n+1}=\lambda\).
 The only values of \(\lambda\) for which this holds for all \(n\) are \(\lambda_0=0\) and \(\lambda_1=1\), so those are the two eigenvalues.</p>
 </li>
 <li>
-<p>We simply solve:
+<p>We simply solve for \(|x\rangle\) corresponding to \(\lambda_0\):
 \[
-P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_0|x\rangle=|0\rangle
+|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_0|x\rangle=|0\rangle
 \]
-\(|a\rangle\ne|0\rangle\), so \(\langle a|x\rangle=|0\rangle\).
+\(|a\rangle\ne|0\rangle\), so \(\langle a|x\rangle=0\).
 Thus the eigenvectors corresponding to \(\lambda_0=0\) are the vectors orthogonal to \(a\).</p>
 <div class="paragraph">
-<p>Now we solve \[
-P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_1|x\rangle=|x\rangle
-\]</p>
+<p>Now we solve for \(|x\rangle\) corresponding to \(\lambda_1\): \[
+|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_1|x\rangle=|x\rangle
+\]
+Since \(\langle a|x\rangle\) is just a scalar, the eigenvectors corresponding to \(\lambda_1=1\) are the vectors parallel to \(a\).</p>
 </div>
 </li>
 </ol>
 </div>
 </div>
 </details>
+</li>
+<li>
+<p>For an operator \(A\), the <em>operator exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
+\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
+The operator exponential \(e^A\) shares some properties with the ordinary exponential \(e^x\) over complex numbers.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \(e^A\) is always invertible.</p>
+</li>
+<li>
+<p>Show that \(e^{A^*}=(e^A)^*\).</p>
+</li>
+<li>
+<p>Show that if \(A\) is hermitian then so is \(e^A\).</p>
+</li>
+<li>
+<p>Under what conditions on operators \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)?</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\langle \frac{d}{dt}|x(t)\rangle=\langle A|x(t)\rangle\) with initial condition \(|x(0)\rangle=|x_0\rangle\) is \(x=x_0 e^{At}\).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+This exactly mirrors the differential equation \(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\), which has solution \(y(t)=y_0 e^{kt}\).
+</td>
+</tr>
+</table>
+</div>
 </li>
 </ul>
 </div>
