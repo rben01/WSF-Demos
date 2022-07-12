@@ -6,7 +6,7 @@ include::shared_attributes.adoc[]
 
 === Questions
 
-* *{q-num}*
+* {q-num}
 A function ++\(f\)++ is said to absolutely integrable when ++\(|f|\)++ is integrable.
 .. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is absolutely integrable, but not square-integrable.
 .. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.
@@ -52,7 +52,7 @@ So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 == Observables
 
 === Questions
-* *{q-num}* Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
+* {q-num} Show that if ++\(P=Q^\dagger Q\)++ for some operator ++\(Q\)++, then ++\(\langle f|Pf\rangle\ge 0\)++ for all ++\(f\)++.
 +
 .Solution
 [%collapsible]
@@ -69,7 +69,7 @@ If ++\(Q\)++ is defined on domain ++\(\mathcal D\)++, then
 Since ++\(|Qf|^2\)++ is nonnegative, so is any integral of it.
 ====
 
-* *{q-num}* Show that ++\(Q^{\dagger\dagger}=Q\)++ for any operator ++\(Q\)++. (In other words, show that the adjoint of the adjoint is the original operator.)
+* {q-num} Show that ++\(Q^{\dagger\dagger}=Q\)++ for any operator ++\(Q\)++. (In other words, show that the adjoint of the adjoint is the original operator.)
 +
 .Solution
 [%collapsible]
@@ -111,9 +111,9 @@ Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero op
 
 === Questions
 
-* *{q-num}* find the eigenfunctions and eigenvalues of the position operator ++\(x\)++, defined by ++\(x(f)=xf\)++, and ++\(p\)++, defined by ++\(p(f)=-i\hbar \frac{\partial f}{\partial x}\)++.
+* {q-num} find the eigenfunctions and eigenvalues of the position operator ++\(x\)++, defined by ++\(x(f)=xf\)++, and ++\(p\)++, defined by ++\(p(f)=-i\hbar \frac{\partial f}{\partial x}\)++.
 
-* *{q-num}* Suppose that ++\(f\)++ is an eigenfunction of operators ++\(Q_1\)++ and ++\(Q_2\)++ with eigenvalues ++\(q_1\)++ and ++\(q_2\)++, respectively.
+* {q-num} Suppose that ++\(f\)++ is an eigenfunction of operators ++\(Q_1\)++ and ++\(Q_2\)++ with eigenvalues ++\(q_1\)++ and ++\(q_2\)++, respectively.
 Show that ++\(f\)++ is an eigenfunction of the following operators, and find the corresponding eigenvalues.
 +
 [{sublist-style}]
@@ -150,7 +150,7 @@ So ++\(f\)++ is an eigenfunction of ++\(Q_1Q_2\)++ with eigenvalue ++\(q_1q_2\)+
 . The proof proceeds exactly as above. The eigenvalue is again ++\(q_1q_2\)++. So, while operators may not commute, the eigenvalues of the product of two operators does not depend on the order of the product.
 ====
 
-* *{q-num}* Find the eigenfunctions and eigenvalues of the operator ++\(\frac{d^n}{dx^n}\)++ for positive integer ++\(n\)++.
+* {q-num} Find the eigenfunctions and eigenvalues of the operator ++\(\frac{d^n}{dx^n}\)++ for positive integer ++\(n\)++.
 (Don't worry about whether the solutions are square-integrable.)
 +
 .Solution
@@ -174,7 +174,7 @@ NOTE: This problem highlights the fact that the eigenfunctions of an operator de
 
 === Questions
 
-* *{q-num}* Find the eigenvalues and normalized eigenvectors of
+* {q-num} Find the eigenvalues and normalized eigenvectors of
 ++\[A=\begin{pmatrix}4&2\\1&5\end{pmatrix}\]++
 +
 .Solution
@@ -202,7 +202,7 @@ This has solution ++\(x=-2y\)++, which means the eigenvectors corresponding to +
 Similarly, for ++\(\lambda_2=6\)++, we obtain ++\(6x=4x+2y,6y=x+5y\)++ which has solution ++\(x=y\)++, so the unit eigenvector is ++\(\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\end{bmatrix}\)++.
 ====
 
-* *{q-num}* What are the eigenvalues and normalized eigenvectors of a diagonal matrix ++\(A\)++ with diagonal entries ++\(m_1, \ldots, m_n\)++?
+* {q-num} What are the eigenvalues and normalized eigenvectors of a diagonal matrix ++\(A\)++ with diagonal entries ++\(m_1, \ldots, m_n\)++?
 +
 .Solution
 [%collapsible]
@@ -212,7 +212,7 @@ If we define ++\(v_k:=\)++ the ++\(k\)++^th^ column of the ++\(n\times n\)++ ide
 So the normalized eigenvalues are these ++\(v_k\)++ and the corresponding eigenvalues are ++\(\lambda_k=m_k\)++.
 ====
 
-* *{q-num}* [This problem is technically in Griffiths but I imagine it's also in every linear algebra book ever written.] Suppose ++\(P\)++ is a projection operator, i.e., that it can be written as ++\(P=|a\rangle\langle a|\)++ for some unit vector ++\(a\)++.
+* {q-num} [This problem is technically in Griffiths but I imagine it's also in every linear algebra book ever written.] Suppose ++\(P\)++ is a projection operator, i.e., that it can be written as ++\(P=|a\rangle\langle a|\)++ for some unit vector ++\(a\)++.
 +
 [{sublist-style}]
 . Show that ++\(P\)++ is _idempotent_, i.e., that ++\(P^2=P\)++.

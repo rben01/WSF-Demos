@@ -4,21 +4,21 @@ include::shared_attributes.adoc[]
 
 == Stationary States
 
-* *{q-num}* Which of the following are always true when we use separation of variables to solve the Schrodinger equation?
+* {q-num} Which of the following are always true when we use separation of variables to solve the Schrodinger equation?
 ** ++\(\Psi(x,t)=\psi(x)\phi(t)\)++
 ** Both sides of the Schrodinger equation are constant
 ** ++\(\Psi(x,t)\)++ is a stationary state
 ** ++\(V(x,t) = V(x)\)++
 ** ++\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)++
 
-* *{q-num}* Why is ++\(\Psi(x,t)\)++ called a stationary state if it is time-dependent?
+* {q-num} Why is ++\(\Psi(x,t)\)++ called a stationary state if it is time-dependent?
 +
 [{sublist-style}]
 . Show that ++\(|\Psi(x,t)|^2 = |\psi(x)|^2\)++
 . Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi(x,t) = \psi(x)e^{-iEt/\hbar}\)++
 
 
-* *{q-num}* [Similar to Griffiths text (not a problem). Need to modify more]
+* {q-num} [Similar to Griffiths text (not a problem). Need to modify more]
 The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=\frac{p^2}{2m}+V(x)\)++, where ++\(\frac{p^2}{2m}\)++ is the kinetic energy and ++\(V(x)\)++ is the potential energy.
 +
 [{sublist-style}]
@@ -35,15 +35,15 @@ In other words, every measurement of the total energy of a solution to the time-
 
 
 
-* *{q-num}* If you were to measure the energy of a particle with the wavefunction ++\(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\)++, what is the probability that you’d measure the energy to be ++\(E_2\)++?
+* {q-num} If you were to measure the energy of a particle with the wavefunction ++\(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\)++, what is the probability that you’d measure the energy to be ++\(E_2\)++?
 
-* *{q-num}* Griffiths's questions 2.1 and 2.2 are very good. Check to see how those can be modified.
+* {q-num} Griffiths's questions 2.1 and 2.2 are very good. Check to see how those can be modified.
 
 :!qn:
 
 == The Infinite Square Well
 
-* *{q-num}* The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++.
+* {q-num} The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++.
 Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_n\rangle\)++ is 1 when ++\(m=n\)++ and 0 otherwise.
 (Hint: ++\(\cos\)++ is an even function, ++\(\sin\)++ is an odd function, and ++\(\cos(a+b)=\cos a\cos b-\sin a\sin b\)++.)
 
@@ -52,7 +52,7 @@ Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_
 
 === Questions
 
-* *{q-num}* Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++, there is some \(n\) for which ++\(\psi_a=\hat a_{\pm}^n\psi_b\)++.
+* {q-num} Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++, there is some \(n\) for which ++\(\psi_a=\hat a_{\pm}^n\psi_b\)++.
 +
 NOTE: I actually don't know if this is possible with the ladder operators alone, or if you have to actually solve the {sch} equation in its entirety to deduce that the ladder operators give _all_ the solutions.
 +
@@ -62,7 +62,7 @@ NOTE: I actually don't know if this is possible with the ladder operators alone,
 {blank}
 ====
 
-* *{q-num}* For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+* {q-num} For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field ++\(V(x)\)++ for which the harmonic oscillator is _not_ a good approximation?
 +
 .Solution (placeholder)
@@ -71,11 +71,11 @@ What is an example of a potential field ++\(V(x)\)++ for which the harmonic osci
 ++\(V(x)=x^4\)++ is one such potential, as it has no quadratic terms.
 ====
 
-* *{q-num}* [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)
+* {q-num} [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)
 
-* *{q-num}* Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
+* {q-num} Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
 
-* *{q-num}* [Adapted from Griffiths 2.16]
+* {q-num} [Adapted from Griffiths 2.16]
 The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\)++.
 +
 [{sublist-style}]
@@ -91,19 +91,19 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 == The Free Particle
 
-* *{q-num}* Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++
+* {q-num} Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++
 [{sublist-style}]
 . Normalize ++\(\Psi(x,0)\)++
 . Solve for ++\(F(k)\)++. You may use computational software to help you calculate the integral.
 . Find ++\(\Psi(x,t)\)++
 
-* *{q-num}* Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.
+* {q-num} Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.
 
-* *{q-num}* Phase and group velocity
+* {q-num} Phase and group velocity
 
-* *{q-num}*
+* {q-num}
 
-* *{q-num}*
+* {q-num}
 
 :!qn:
 
