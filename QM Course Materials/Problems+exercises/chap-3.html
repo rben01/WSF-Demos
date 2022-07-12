@@ -1105,28 +1105,34 @@ Since \(\langle a|x\rangle\) is just a scalar, the eigenvectors corresponding to
 </details>
 </li>
 <li>
-<p>For an operator \(A\), the <em>operator exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a matrix \(A\), the <em>matrix exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
 \[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
-The operator exponential \(e^A\) shares some properties with the ordinary exponential \(e^x\) over complex numbers.</p>
+The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^x\) over complex numbers.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Show that \(e^A\) is always invertible.</p>
+<p>show that the matrix exponential of the zero operator is the identity operator.</p>
 </li>
 <li>
-<p>Show that \(e^{A^*}=(e^A)^*\).</p>
+<p>Show that \(e^A\) is always invertible. (Analog: \(e^x\) is always nonzero.)</p>
 </li>
 <li>
-<p>Show that if \(A\) is hermitian then so is \(e^A\).</p>
+<p>Show that \(e^{A^\dagger}=(e^A)^\dagger\). (Analog: \(e^{z^*}=(e^z)^*\).)</p>
 </li>
 <li>
-<p>Under what conditions on operators \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)?</p>
+<p>Show that if \(A\) is hermitian then so is \(e^A\). (Analog: the exponential of a real number is real.)</p>
+</li>
+<li>
+<p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{x+y}=e^x e^y\), always.)</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\langle \frac{d}{dt}|x(t)\rangle=\langle A|x(t)\rangle\) with initial condition \(|x(0)\rangle=|x_0\rangle\) is \(x=x_0 e^{At}\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(e^{\langle x|}=e^x\), i.e., the operator exponential of the \(\hat x\) observable is multiplication by \(e^x\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\frac{d}{dt}|x(t)\rangle= A|x(t)\rangle\) with initial condition \(|x(0)\rangle=|x_0\rangle\), where the operator \(A\) is constant, is \(|x(t)\rangle=e^{At}|x_0\rangle\).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1134,11 +1140,32 @@ The operator exponential \(e^A\) shares some properties with the ordinary expone
 <div class="title">Note</div>
 </td>
 <td class="content">
-This exactly mirrors the differential equation \(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\), which has solution \(y(t)=y_0 e^{kt}\).
+This exactly mirrors the scalar-valued differential equation \(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\) with \(k\) constant, which has solution \(y(t)=e^{kt}y_0\).
 </td>
 </tr>
 </table>
 </div>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>First we&#8217;ll check the initial condition:
+\[e^{A\cdot 0}|x_0\rangle=I|x_0\rangle=|x_0\rangle\]
+Now we&#8217;ll check that the proposed solution satisfies the differential equation.
+\[\begin{align*}
+\frac{d}{dt}\Big|x(t)\Big\rangle&amp;=\frac{d}{dt}\Big|\left(e^{At}|x_0\rangle\right)\Big\rangle\\
+&amp;=\left(\frac{d}{dt}e^{At}\right)|x_0\rangle\\
+&amp;=\frac{d}{dt}\left(\sum_{n=0}^\infty \frac{(At)^n}{n!}\right)|x_0\rangle\\
+&amp;=\left(\sum_{n=1}^\infty \frac{A^n\,nt^{n-1}}{n!}\right)|x_0\rangle\\
+&amp;=A\left(\sum_{n=1}^\infty \frac{A^{n-1}t^{n-1}}{(n-1)!}\right)|x_0\rangle\\
+&amp;=A\left(\sum_{n=0}^\infty \frac{A^{n}t^{n}}{n!}\right)|x_0\rangle\\
+&amp;=Ae^{At}|x_0\rangle\\
+&amp;=A|x(t)\rangle
+\end{align*}\]
+as desired.</p>
+</div>
+</div>
+</details>
 </li>
 </ul>
 </div>
