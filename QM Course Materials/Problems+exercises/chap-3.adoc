@@ -124,7 +124,7 @@ Show that ++\(f\)++ is an eigenfunction of the following operators, and find the
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 The following laws are helpful:
 
@@ -178,7 +178,7 @@ NOTE: This problem highlights the fact that the eigenfunctions of an operator de
 ++\[A=\begin{pmatrix}4&2\\1&5\end{pmatrix}\]++
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 We wish to solve ++\(A|x\rangle=\lambda |x\rangle\)++ with ++\(|x\rangle\ne |0\rangle\)++.
 Subtracting ++\(\lambda|x\rangle\)++ from both sides and factoring, we obtain ++\((A-\lambda I)|x\rangle=|0\rangle\)++, where ++\(I\)++ is the identity matrix (of the correct dimensions; in this case, ++\(2\times 2\)++).
@@ -222,7 +222,7 @@ So the normalized eigenvalues are these ++\(v_k\)++ and the corresponding eigenv
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . Every projection operator is of the form ++\(P=|a\rangle\langle a|\)++ where ++\(a\)++ is a unit vector.
@@ -237,18 +237,32 @@ P^2&=(|a\rangle\langle a|)(|a\rangle\langle a|)\\
 
 . We wish to solve ++\(P|x\rangle=\lambda|x\rangle\)++ (with ++\(|x\rangle\ne |0\rangle\)++).
 By the corollary to part (a), for every positive integer ++\(n\)++, we have ++\(\lambda^{n+1}|x\rangle=P^{n+1}|x\rangle=P|x\rangle=\lambda x\)++, and so ++\((\lambda^{n+1}-\lambda)|x\rangle=|0\rangle\)++.
-Since ++\(|x\rangle\ne |0\raSngle\)++, we have ++\(\lambda^{n+1}=\lambda\)++.
+Since ++\(|x\rangle\ne |0\rangle\)++, we have ++\(\lambda^{n+1}=\lambda\)++.
 The only values of ++\(\lambda\)++ for which this holds for all ++\(n\)++ are ++\(\lambda_0=0\)++ and ++\(\lambda_1=1\)++, so those are the two eigenvalues.
-. We simply solve:
+. We simply solve for ++\(|x\rangle\)++ corresponding to ++\(\lambda_0\)++:
 ++\[
-P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_0|x\rangle=|0\rangle
+|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_0|x\rangle=|0\rangle
 \]++
-++\(|a\rangle\ne|0\rangle\)++, so ++\(\langle a|x\rangle=|0\rangle\)++.
+++\(|a\rangle\ne|0\rangle\)++, so ++\(\langle a|x\rangle=0\)++.
 Thus the eigenvectors corresponding to ++\(\lambda_0=0\)++ are the vectors orthogonal to ++\(a\)++.
 +
-Now we solve ++\[
-P|x\rangle=|a\rangle\langle a|x\rangle=\lambda_1|x\rangle=|x\rangle
+Now we solve for ++\(|x\rangle\)++ corresponding to ++\(\lambda_1\)++: ++\[
+|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_1|x\rangle=|x\rangle
 \]++
-Since ++\(\langle a|x\rangle\)++ is just a scalar, ++\(|x\rangle\)++ is parallel to ++\(|a\rangle\)++.
-Thus the eigenvectors corresponding to ++\(\lambda_1=1\)++ are the vectors parallel to ++\(a\)++.
+Since ++\(\langle a|x\rangle\)++ is just a scalar, the eigenvectors corresponding to ++\(\lambda_1=1\)++ are the vectors parallel to ++\(a\)++.
 ====
+
+* For an operator ++\(A\)++, the _operator exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
+++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
+The operator exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^x\)++ over complex numbers.
++
+[{sublist-style}]
+.. Show that ++\(e^A\)++ is always invertible.
+.. Show that ++\(e^{A^*}=(e^A)^*\)++.
+.. Show that if ++\(A\)++ is hermitian then so is ++\(e^A\)++.
+.. Under what conditions on operators ++\(A\)++ and ++\(B\)++ does it hold that ++\(e^{A+B}=e^Ae^B\)++?
+
+
+* {q-num} Show that the solution to the differential equation ++\(\langle \frac{d}{dt}|x(t)\rangle=\langle A|x(t)\rangle\)++ with initial condition ++\(|x(0)\rangle=|x_0\rangle\)++ is ++\(x=x_0 e^{At}\)++.
++
+NOTE: This exactly mirrors the differential equation ++\(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\)++, which has solution ++\(y(t)=y_0 e^{kt}\)++.
