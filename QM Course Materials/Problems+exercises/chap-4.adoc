@@ -1,0 +1,7 @@
+[.qm-chapter.chap-4]
+= Chapter 4: Quantum Mechanics in Three Dimensions
+include::shared_attributes.adoc[]
+
+== The {sch} Equation
+
+* {q-num} Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that ++\(x\)++ and ++\(p_y\)++ are compatible operators and so ++\(\sigma_x\sigma_{p_y}\)++ can equal 0.

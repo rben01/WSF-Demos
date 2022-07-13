@@ -524,6 +524,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	body.chap-3 {
 		counter-reset: chapter-section 3;
 	}
+	body.chap-4 {
+		counter-reset: chapter-section 4;
+	}
 	body.chap-griffiths {
 		counter-reset: chapter-section 1;
 	}
@@ -772,6 +775,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_questions_11">Questions</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li><a href="#_chapter_4_quantum_mechanics_in_three_dimensions">4. Chapter 4: Quantum Mechanics in Three Dimensions</a>
+<ul class="sectlevel2">
+<li><a href="#_the_schrödinger_equation_2">4.1. The Schrödinger Equation</a></li>
 </ul>
 </li>
 </ul>
@@ -2169,7 +2177,7 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 <p>What are the eigenvalues of \(P\)?</p>
 </li>
 <li>
-<p>What are the corresponding eigenvectors? (With \(P\) arbitrary, can&#8217;t write out the eigenvectors explicitly, so merely describe them in terms of \(a\).)</p>
+<p>What are the corresponding eigenvectors? (With \(P\) arbitrary, you can&#8217;t write out the eigenvectors explicitly, so merely describe them in terms of \(a\).)</p>
 </li>
 </ol>
 </div>
@@ -2217,14 +2225,12 @@ Since \(\langle a|x\rangle\) is just a scalar, the eigenvectors corresponding to
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a matrix \(A\), the <em>matrix exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
 \[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
-The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^x\) over complex numbers.</p>
+(By analogy with numbers, \(A^0\) is defined to be the identity operator.)
+The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers:</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>show that the matrix exponential of the zero operator is the identity operator.</p>
-</li>
-<li>
-<p>Show that \(e^A\) is always invertible. (Analog: \(e^x\) is always nonzero.)</p>
+<p>Show that the matrix exponential of the zero operator is the identity operator. (Analog: \(e^0=1\).)</p>
 </li>
 <li>
 <p>Show that \(e^{A^\dagger}=(e^A)^\dagger\). (Analog: \(e^{z^*}=(e^z)^*\).)</p>
@@ -2233,13 +2239,85 @@ The matrix exponential \(e^A\) shares some properties with the ordinary exponent
 <p>Show that if \(A\) is hermitian then so is \(e^A\). (Analog: the exponential of a real number is real.)</p>
 </li>
 <li>
-<p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{x+y}=e^x e^y\), always.)</p>
+<p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{z+w}=e^z e^w\), always.)</p>
 </li>
 </ol>
 </div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Let \(\mathbf 0\) denote the zero operator.
+\(e^{\mathbf 0}=\sum_{n=0}^\infty \frac{\mathbf 0^n}{n!}\).
+The only nonzero term of this sum is the \(n=0\) term, which by definition is the identity matrix.</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(e^{\langle x|}=e^x\), i.e., the operator exponential of the \(\hat x\) observable is multiplication by \(e^x\).</p>
+<p>First, note that since \((AB)^\dagger=B^\dagger A^\dagger\) for all operators \(A,B\), we have \((A^\dagger)^n=(A^n)^\dagger\).
+Also recall that \((A+B)^\dagger=A^\dagger+B^\dagger\).
+Then,
+\[\begin{align*}
+e^{A^\dagger}&amp;=\sum_{n=0}^\infty \frac{(A^\dagger)^n}{n!}\\
+&amp;=\sum_{n=0}^\infty \frac{(A^n)^\dagger}{n!}\\
+&amp;=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)^\dagger\\
+&amp;=(e^A)^\dagger
+\end{align*}\]
+as desired.</p>
+</li>
+<li>
+<p>Recall that the inner product is linear. Also, if \(A\) is hermitian, then \((A^n)^\dagger=(A^\dagger)^n=A^n\), so \(A^n\) is also hermitian. Then,
+\[\begin{align*}
+\langle f|e^A g\rangle&amp;=\left\langle f\middle|\sum_{n=0}^\infty \frac{A^n}{n!} g\right\rangle\\
+&amp;=\sum_{n=0}^\infty\langle f|A^n g\rangle\\
+&amp;=\sum_{n=0}^\infty\langle A^n f|g\rangle\\
+&amp;=\left\langle\sum_{n=0}^\infty A^n f\middle|g\right\rangle\\
+&amp;=\langle e^A f|g\rangle
+\end{align*}\]
+as desired.</p>
+</li>
+<li>
+<p>For \(e^{A+B}=e^A e^B\) to hold, \(A\) and \(B\) must commute.
+If and only if \(A\) and \(B\) commute, we have
+\[\begin{align*}
+(A+B)^n&amp;=\sum_{k=0}^n \binom{n}{k}A^kB^{n-k}
+\end{align*}\]
+where \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) denotes the binomial coefficient.
+For instance, regardless of whether \(A\) and \(B\) commute,
+\[\begin{align*}
+(A+B)^3&amp;=(A+B)(A+B)(A+B)\\
+&amp;=(A^3+AB+BA+B^2)(A+B)\\
+&amp;=A^2+ABA+BA^2+B^2A\\
+&amp;\phantom{=}+A^2B+AB^2+BAB+B^3
+\end{align*}\]
+Only if \(A\) and \(B\) commute can this be simplified to \(A^3+3A^2B+3AB^2+3B^3\).</p>
+<div class="paragraph">
+<p>Then,
+\[\begin{align*}
+e^{A+B}&amp;=\sum_{n=0}^\infty \frac{(A+B)^n}{n!}\\
+&amp;=\sum_{n=0}^\infty \left(\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}A^kB^{n-k}\right)\\
+&amp;=\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\\
+&amp;=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\\
+&amp;=e^Ae^B
+\end{align*}\]
+as desired.</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+How did we turn \(\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\) into \(\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\)?
+This is just an advanced application of the distributive property.
+Simply write out the second expression by hand, apply the distributive property, and group terms according to the sum of the powers of \(A\) and \(B\) (so that e.g., the \(A^3\), \(A^2B\), \(AB^2\), and \(B^3\) terms are grouped together).
+You&#8217;ll see the first expression appear.
+</div>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(\langle e^{\langle x|}|f\rangle=e^x |f\rangle\), i.e., the operator exponential of the \(\hat x\) observable is multiplication by \(e^x\).</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\frac{d}{dt}|x(t)\rangle= A|x(t)\rangle\) with initial condition \(|x(0)\rangle=|x_0\rangle\), where the operator \(A\) is constant, is \(|x(t)\rangle=e^{At}|x_0\rangle\).</p>
@@ -2255,7 +2333,7 @@ This exactly mirrors the scalar-valued differential equation \(\frac{d}{dt}y(t)=
 </tr>
 </table>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -2279,6 +2357,21 @@ as desired.</p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1 qm-chapter chap-4">
+<h2 id="_chapter_4_quantum_mechanics_in_three_dimensions"><a class="anchor" href="#_chapter_4_quantum_mechanics_in_three_dimensions"></a><a class="link" href="#_chapter_4_quantum_mechanics_in_three_dimensions">4. Chapter 4: Quantum Mechanics in Three Dimensions</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_schrödinger_equation_2"><a class="anchor" href="#_the_schrödinger_equation_2"></a><a class="link" href="#_the_schrödinger_equation_2">4.1. The Schrödinger Equation</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that \(x\) and \(p_y\) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>

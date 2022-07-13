@@ -218,7 +218,7 @@ So the normalized eigenvalues are these ++\(v_k\)++ and the corresponding eigenv
 . Show that ++\(P\)++ is _idempotent_, i.e., that ++\(P^2=P\)++.
 (Corollary: ++\(P^n=P\)++ for every positive integer ++\(n\)++.)
 . What are the eigenvalues of ++\(P\)++?
-. What are the corresponding eigenvectors? (With ++\(P\)++ arbitrary, can't write out the eigenvectors explicitly, so merely describe them in terms of ++\(a\)++.)
+. What are the corresponding eigenvectors? (With ++\(P\)++ arbitrary, you can't write out the eigenvectors explicitly, so merely describe them in terms of ++\(a\)++.)
 
 +
 .Solution
@@ -254,7 +254,8 @@ Since ++\(\langle a|x\rangle\)++ is just a scalar, the eigenvectors correspondin
 
 * {q-num} For a matrix ++\(A\)++, the _matrix exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
 ++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
-The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers.
+(By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator.)
+The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers:
 +
 [{sublist-style}]
 .. Show that the matrix exponential of the zero operator is the identity operator. (Analog: ++\(e^0=1\)++.)
@@ -262,14 +263,73 @@ The matrix exponential ++\(e^A\)++ shares some properties with the ordinary expo
 .. Show that if ++\(A\)++ is hermitian then so is ++\(e^A\)++. (Analog: the exponential of a real number is real.)
 .. Under what conditions on matrices ++\(A\)++ and ++\(B\)++ does it hold that ++\(e^{A+B}=e^Ae^B\)++? (Analog: ++\(e^{z+w}=e^z e^w\)++, always.)
 
-* {q-num} Show that ++\(e^{\langle x|}=e^x\)++, i.e., the operator exponential of the ++\(\hat x\)++ observable is multiplication by ++\(e^x\)++.
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Let ++\(\mathbf 0\)++ denote the zero operator.
+++\(e^{\mathbf 0}=\sum_{n=0}^\infty \frac{\mathbf 0^n}{n!}\)++.
+The only nonzero term of this sum is the ++\(n=0\)++ term, which by definition is the identity matrix.
+. First, note that since ++\((AB)^\dagger=B^\dagger A^\dagger\)++ for all operators ++\(A,B\)++, we have ++\((A^\dagger)^n=(A^n)^\dagger\)++.
+Also recall that ++\((A+B)^\dagger=A^\dagger+B^\dagger\)++.
+Then,
+++\[\begin{align*}
+e^{A^\dagger}&=\sum_{n=0}^\infty \frac{(A^\dagger)^n}{n!}\\
+&=\sum_{n=0}^\infty \frac{(A^n)^\dagger}{n!}\\
+&=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)^\dagger\\
+&=(e^A)^\dagger
+\end{align*}\]++
+as desired.
+. Recall that the inner product is linear. Also, if ++\(A\)++ is hermitian, then ++\((A^n)^\dagger=(A^\dagger)^n=A^n\)++, so ++\(A^n\)++ is also hermitian. Then,
+++\[\begin{align*}
+\langle f|e^A g\rangle&=\left\langle f\middle|\sum_{n=0}^\infty \frac{A^n}{n!} g\right\rangle\\
+&=\sum_{n=0}^\infty\langle f|A^n g\rangle\\
+&=\sum_{n=0}^\infty\langle A^n f|g\rangle\\
+&=\left\langle\sum_{n=0}^\infty A^n f\middle|g\right\rangle\\
+&=\langle e^A f|g\rangle
+\end{align*}\]++
+as desired.
+. For ++\(e^{A+B}=e^A e^B\)++ to hold, ++\(A\)++ and ++\(B\)++ must commute.
+If and only if ++\(A\)++ and ++\(B\)++ commute, we have
+++\[\begin{align*}
+(A+B)^n&=\sum_{k=0}^n \binom{n}{k}A^kB^{n-k}
+\end{align*}\]++
+where ++\(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\)++ denotes the binomial coefficient.
+For instance, regardless of whether ++\(A\)++ and ++\(B\)++ commute,
+++\[\begin{align*}
+(A+B)^3&=(A+B)(A+B)(A+B)\\
+&=(A^3+AB+BA+B^2)(A+B)\\
+&=A^2+ABA+BA^2+B^2A\\
+&\phantom{=}+A^2B+AB^2+BAB+B^3
+\end{align*}\]++
+Only if ++\(A\)++ and ++\(B\)++ commute can this be simplified to ++\(A^3+3A^2B+3AB^2+3B^3\)++.
++
+Then,
+++\[\begin{align*}
+e^{A+B}&=\sum_{n=0}^\infty \frac{(A+B)^n}{n!}\\
+&=\sum_{n=0}^\infty \left(\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}A^kB^{n-k}\right)\\
+&=\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\\
+&=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\\
+&=e^Ae^B
+\end{align*}\]++
+as desired.
+
+[sidebar]
+How did we turn ++\(\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\)++ into ++\(\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\)++?
+This is just an advanced application of the distributive property.
+Simply write out the second expression by hand, apply the distributive property, and group terms according to the sum of the powers of ++\(A\)++ and ++\(B\)++ (so that e.g., the ++\(A^3\)++, ++\(A^2B\)++, ++\(AB^2\)++, and ++\(B^3\)++ terms are grouped together).
+You'll see the first expression appear.
+====
+
+* {q-num} Show that ++\(\langle e^{\langle x|}|f\rangle=e^x |f\rangle\)++, i.e., the operator exponential of the ++\(\hat x\)++ observable is multiplication by ++\(e^x\)++.
 
 * {q-num} Show that the solution to the differential equation ++\(\frac{d}{dt}|x(t)\rangle= A|x(t)\rangle\)++ with initial condition ++\(|x(0)\rangle=|x_0\rangle\)++, where the operator ++\(A\)++ is constant, is ++\(|x(t)\rangle=e^{At}|x_0\rangle\)++.
 +
 NOTE: This exactly mirrors the scalar-valued differential equation ++\(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\)++ with ++\(k\)++ constant, which has solution ++\(y(t)=e^{kt}y_0\)++.
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 First we'll check the initial condition:
 ++\[e^{A\cdot 0}|x_0\rangle=I|x_0\rangle=|x_0\rangle\]++
