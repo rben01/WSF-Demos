@@ -66,10 +66,29 @@
 	body {
 		counter-reset: chapter-section topic-section question;
 	}
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1 topic-section question;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2 topic-section question;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3 topic-section question;
+	}
+	body.chap-4 {
+		counter-reset: chapter-section 4 topic-section question;
+	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1 topic-section question;
+	}
 
 	/* render numbers */
 	.chapter-num::before {
 		content: counter(chapter-section);
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
 	}
 	.topic-num::before {
 		content: counter(topic-section);
@@ -78,33 +97,13 @@
 		content: counter(question);
 	}
 
-	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
-	body.chap-1 {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-2 {
-		counter-reset: chapter-section 2;
-	}
-	body.chap-3 {
-		counter-reset: chapter-section 3;
-	}
-	body.chap-4 {
-		counter-reset: chapter-section 4;
-	}
-	body.chap-griffiths {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-griffiths .chapter-num::before {
-		content: "G";
-	}
-
 	/* for complete doc with all chapters, increment chapter and reset topic */
-	body > #content h2 {
+	body:not(.qm-chapter) > #content h2 {
 		counter-increment: chapter-section;
 		counter-reset: topic-section;
 	}
 	/* for complete doc with all chapters, increment topic */
-	body > #content h3 {
+	body:not(.qm-chapter) > #content h3 {
 		counter-increment: topic-section;
 		counter-reset: question;
 	}
