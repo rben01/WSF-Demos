@@ -293,23 +293,48 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 == Normalization
 
 === Questions
-* {q-num} Normalize the following wavefunctions (i.e. find ++\(A\)++):
+* {q-num} Normalize the following wavefunctions (i.e. find ++\(A_i\)++) over the domain ++\(x\in \mathbb R\)++:
 +
 [{sublist-style}]
-. ++\(\Psi_1(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)++
-. ++\(\Psi_2(x,0)= Ae^{-\kappa|x|}\)++
-. ++\(\Psi_3(x,0)= A\frac{\sin(x)}{x}\)++
-. ++\(\Psi_4(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
+. ++\(\Psi_1(x,t)= A_1e^{-(\frac{ax^2}{2}+i\omega t)}\)++
+. ++\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)++
+. ++\(\Psi_3(x,0)= A_3\frac{\sin(x)}{x}\)++
+. ++\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
 
 +
 .Solution (placeholder)
-[%collapsible]
+[%collapsible%open]
 ====
-Normalizing a wavefunction simply requires finding its norm, or the square root of its inner product with itself.
-The normalization constant, ++\(A\)++, will be the reciprocal of the norm (so that ++\(A\)++ times the unnormalized wavefunction is a unit wavefunction).
+The squared norm of a wavefunction ++\(\Psi\)++ is ++\(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\)++.
+Normalizing a wavefunction simply requires setting its (squared) norm to 1, then solving for the normalization constant ++\(A\)++.
+
+Recall that a complex number ++\(ke^{ix}\)++ has magnitude ++\(k\)++.
 
 [{sublist-style}]
-. ++\[\begin{align*}\end{align*}\]++
+. Let ++\(\sigma=\frac{1}{\sqrt{2a}}\)++. Then ++\[\begin{align*}
+|\Psi_1|^2&=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
+&=\int_{-\infty}^\infty A_1^2e^{-ax^2}\,dx\\
+&=\sigma\sqrt{2\pi}A_1^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
+&= \sigma\sqrt{2\pi}A_1^2\cdot 1\\
+&=\sqrt{\frac{\pi}{a}}
+\end{align*}\]++
+Setting this equal to 1, we obtain ++\(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\)++.
+
+. ++\[\begin{align*}
+|\Psi_2|^2&=\int_{-\infty}^\infty \left|A_2 e^{-\kappa|x|}\right|^2\,dx\\
+&=\int_{-\infty}^\infty A_2^2 e^{-2\kappa|x|}\,dx\\
+&=\int_{-\infty}^0 A_2^2 e^{2\kappa x}\,dx+\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
+&=2\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
+&=2 A_2^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
+&=\frac{A_2^2}{\kappa}
+\end{align*}\]++
++
+Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
+
+. ++\[\begin{align*}
+|\Psi_3|^3&=\int_{-\infty}^\infty \left|A_3 \frac{\sin (x)}{x}\right|^2\,dx\\
+&=\int_{-\infty}^\infty A_3^2 \frac{\sin^2 (x)}{x^2}\,dx\\
+\end{align*}\]++
 ====
 
 * {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :

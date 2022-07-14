@@ -1343,34 +1343,63 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Normalize the following wavefunctions (i.e. find \(A\)):</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Normalize the following wavefunctions (i.e. find \(A_i\)) over the domain \(x\in \mathbb R\):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>\(\Psi_1(x,t)= Ae^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
+<p>\(\Psi_1(x,t)= A_1e^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
 </li>
 <li>
-<p>\(\Psi_2(x,0)= Ae^{-\kappa|x|}\)</p>
+<p>\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)</p>
 </li>
 <li>
-<p>\(\Psi_3(x,0)= A\frac{\sin(x)}{x}\)</p>
+<p>\(\Psi_3(x,0)= A_3\frac{\sin(x)}{x}\)</p>
 </li>
 <li>
-<p>\(\Psi_4(x,t)= A\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
+<p>\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
 <div class="paragraph">
-<p>Normalizing a wavefunction simply requires finding its norm, or the square root of its inner product with itself.
-The normalization constant, \(A\), will be the reciprocal of the norm (so that \(A\) times the unnormalized wavefunction is a unit wavefunction).</p>
+<p>The squared norm of a wavefunction \(\Psi\) is \(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\).
+Normalizing a wavefunction simply requires setting its (squared) norm to 1, then solving for the normalization constant \(A\).</p>
+</div>
+<div class="paragraph">
+<p>Recall that a complex number \(ke^{ix}\) has magnitude \(k\).</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>\[\begin{align*}\end{align*}\]</p>
+<p>Let \(\sigma=\frac{1}{\sqrt{2a}}\). Then \[\begin{align*}
+|\Psi_1|^2&amp;=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
+&amp;=\int_{-\infty}^\infty A_1^2e^{-ax^2}\,dx\\
+&amp;=\sigma\sqrt{2\pi}A_1^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
+&amp;= \sigma\sqrt{2\pi}A_1^2\cdot 1\\
+&amp;=\sqrt{\frac{\pi}{a}}
+\end{align*}\]
+Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\).</p>
+</li>
+<li>
+<p>\[\begin{align*}
+|\Psi_2|^2&amp;=\int_{-\infty}^\infty \left|A_2 e^{-\kappa|x|}\right|^2\,dx\\
+&amp;=\int_{-\infty}^\infty A_2^2 e^{-2\kappa|x|}\,dx\\
+&amp;=\int_{-\infty}^0 A_2^2 e^{2\kappa x}\,dx+\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
+&amp;=2\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
+&amp;=2 A_2^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
+&amp;=\frac{A_2^2}{\kappa}
+\end{align*}\]</p>
+<div class="paragraph">
+<p>Setting this equal to 1, we obtain \(A_2=\sqrt\kappa\).</p>
+</div>
+</li>
+<li>
+<p>\[\begin{align*}
+|\Psi_3|^3&amp;=\int_{-\infty}^\infty \left|A_3 \frac{\sin (x)}{x}\right|^2\,dx\\
+&amp;=\int_{-\infty}^\infty A_3^2 \frac{\sin^2 (x)}{x^2}\,dx\\
+\end{align*}\]</p>
 </li>
 </ol>
 </div>
