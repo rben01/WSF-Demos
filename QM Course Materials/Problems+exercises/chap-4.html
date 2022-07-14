@@ -502,10 +502,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	body {
 		counter-reset: chapter-section topic-section question;
 	}
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1 topic-section question;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2 topic-section question;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3 topic-section question;
+	}
+	body.chap-4 {
+		counter-reset: chapter-section 4 topic-section question;
+	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1 topic-section question;
+	}
 
 	/* render numbers */
 	.chapter-num::before {
 		content: counter(chapter-section);
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
 	}
 	.topic-num::before {
 		content: counter(topic-section);
@@ -514,33 +533,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		content: counter(question);
 	}
 
-	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
-	body.chap-1 {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-2 {
-		counter-reset: chapter-section 2;
-	}
-	body.chap-3 {
-		counter-reset: chapter-section 3;
-	}
-	body.chap-4 {
-		counter-reset: chapter-section 4;
-	}
-	body.chap-griffiths {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-griffiths .chapter-num::before {
-		content: "G";
-	}
-
 	/* for complete doc with all chapters, increment chapter and reset topic */
-	body > #content h2 {
+	body:not(.qm-chapter) > #content h2 {
 		counter-increment: chapter-section;
 		counter-reset: topic-section;
 	}
 	/* for complete doc with all chapters, increment topic */
-	body > #content h3 {
+	body:not(.qm-chapter) > #content h3 {
 		counter-increment: topic-section;
 		counter-reset: question;
 	}
@@ -690,6 +689,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#_the_schrödinger_equation">1. The Schrödinger Equation</a></li>
+<li><a href="#_the_hydrogen_atom">2. The Hydrogen Atom</a>
+<ul class="sectlevel2">
+<li><a href="#_demonstrations">2.1. Demonstrations</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -703,6 +707,21 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that \(x\) and \(p_y\) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
 </li>
 </ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_hydrogen_atom"><a class="anchor" href="#_the_hydrogen_atom"></a><a class="link" href="#_the_hydrogen_atom">2. The Hydrogen Atom</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">2.1. Demonstrations</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A demo showing the orbitals?</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>

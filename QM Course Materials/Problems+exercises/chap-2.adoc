@@ -65,7 +65,7 @@ NOTE: I actually don't know if this is possible with the ladder operators alone,
 * {q-num} For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field ++\(V(x)\)++ for which the harmonic oscillator is _not_ a good approximation?
 +
-.Solution (placeholder)
+.Solution
 [%collapsible]
 ====
 ++\(V(x)=x^4\)++ is one such potential, as it has no quadratic terms.

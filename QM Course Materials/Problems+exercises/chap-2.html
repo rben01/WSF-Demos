@@ -502,10 +502,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	body {
 		counter-reset: chapter-section topic-section question;
 	}
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1 topic-section question;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2 topic-section question;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3 topic-section question;
+	}
+	body.chap-4 {
+		counter-reset: chapter-section 4 topic-section question;
+	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1 topic-section question;
+	}
 
 	/* render numbers */
 	.chapter-num::before {
 		content: counter(chapter-section);
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
 	}
 	.topic-num::before {
 		content: counter(topic-section);
@@ -514,33 +533,13 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		content: counter(question);
 	}
 
-	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
-	body.chap-1 {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-2 {
-		counter-reset: chapter-section 2;
-	}
-	body.chap-3 {
-		counter-reset: chapter-section 3;
-	}
-	body.chap-4 {
-		counter-reset: chapter-section 4;
-	}
-	body.chap-griffiths {
-		counter-reset: chapter-section 1;
-	}
-	body.chap-griffiths .chapter-num::before {
-		content: "G";
-	}
-
 	/* for complete doc with all chapters, increment chapter and reset topic */
-	body > #content h2 {
+	body:not(.qm-chapter) > #content h2 {
 		counter-increment: chapter-section;
 		counter-reset: topic-section;
 	}
 	/* for complete doc with all chapters, increment topic */
-	body > #content h3 {
+	body:not(.qm-chapter) > #content h3 {
 		counter-increment: topic-section;
 		counter-reset: question;
 	}
@@ -833,7 +832,7 @@ I actually don&#8217;t know if this is possible with the ladder operators alone,
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
 What is an example of a potential field \(V(x)\) for which the harmonic oscillator is <em>not</em> a good approximation?</p>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
 <p>\(V(x)=x^4\) is one such potential, as it has no quadratic terms.</p>
