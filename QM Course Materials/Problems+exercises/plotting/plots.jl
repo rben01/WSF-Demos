@@ -74,10 +74,20 @@ save_spec("fig-3.1.1-f2.svg")
 f3(x) = x < 0.5 ? 4x : 4(1 - x);
 f4(x) = 2 * sin(2 * pi * x)^2
 
-# for (f, name) in [("𝜌₁" => f3, "f1"), ("𝜌₂" => f4, "f2")]
 make_df(range(; start=0, stop=1, length=250), "𝜌₁" => f3, "𝜌₂" => f4) |>
 @vlplot(
+    config = {axisX = {title = "x"}},
     facet = {column = {field = :name, title = nothing}},
+    transform = [
+        {
+            calculate = """if(datum.name == "𝜌₁", $(sqrt(7/24 - 1/4)), $(sqrt(1/3 - 1/4 -
+            1/(8 * pi^2))))""",
+            as = "stddev",
+        },
+        {calculate = "0.5", as = "x_mean"},
+        {calculate = "datum.x_mean - datum.stddev", as = "lower"},
+        {calculate = "datum.x_mean + datum.stddev", as = "upper"},
+    ],
     spec = {
         layer = [
             {
@@ -87,96 +97,29 @@ make_df(range(; start=0, stop=1, length=250), "𝜌₁" => f3, "𝜌₂" => f4) 
                 },
             },
             {
-                transform = [
-                    {
-                        aggregate = [
-                            {op = "mean", field = "x", as = "mean_x"},
-                            {op = "stdev", field = "x", as = "std_x_minus"},
-                        ],
-                        groupby = ["name"],
-                    },
-                    {calculate = "datum.mean_x + datum.std_x_minus", as = "std_x_plus"},
-                ],
-                layer = [
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "mean_x"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        size = {value = 3},
-                    },
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "std_x_minus"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        strokeDash = {value = [3, 3]},
-                        size = {value = 2},
-                    },
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "std_x_plus"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        strokeDash = {value = [3, 3]},
-                        size = {value = 2},
-                    },
-                ],
+                mark = :rule,
+                encoding = {x = {field = "x_mean", aggregate = "mean"}},
+                color = {value = "#333"},
+                opacity = {value = 0.6},
+                size = {value = 3},
+            },
+            {
+                mark = :rule,
+                encoding = {x = {field = "lower", aggregate = "mean"}},
+                color = {value = "#333"},
+                opacity = {value = 0.6},
+                strokeDash = {value = [3, 3]},
+                size = {value = 2},
+            },
+            {
+                mark = :rule,
+                encoding = {x = {field = "upper", aggregate = "mean"}},
+                color = {value = "#333"},
+                opacity = {value = 0.6},
+                strokeDash = {value = [3, 3]},
+                size = {value = 2},
             },
         ],
     },
 ) |>
 save_spec("fig-1.3.1-graphs.svg")
-# end
-
-# %%
-make_df(range(; start=0, stop=1, length=250), "𝜌₁" => f3, "𝜌₂" => f4) |> @vlplot(
-    facet = {column = {field = :name, title = nothing}},
-    spec = {
-        layer = [
-            {
-                mark = :line,
-                encoding = {
-                    x = :x, y = {field = :y, axis = {titleAngle = 0, titlePadding = 8}}
-                },
-            },
-            {
-                transform = [
-                    {
-                        aggregate = [
-                            {op = "mean", field = "x", as = "mean_x"},
-                            {op = "stdev", field = "x", as = "std_x_minus"},
-                        ],
-                        groupby = ["name"],
-                    },
-                    {calculate = "datum.mean_x + datum.std_x_minus", as = "std_x_plus"},
-                ],
-                layer = [
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "mean_x"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        size = {value = 3},
-                    },
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "std_x_minus"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        strokeDash = {value = [3, 3]},
-                        size = {value = 2},
-                    },
-                    {
-                        mark = :rule,
-                        encoding = {x = {field = "std_x_plus"}},
-                        color = {value = "#333"},
-                        opacity = {value = 0.6},
-                        strokeDash = {value = [3, 3]},
-                        size = {value = 2},
-                    },
-                ],
-            },
-        ],
-    },
-)
