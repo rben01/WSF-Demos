@@ -1169,7 +1169,7 @@ We find that \(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle -
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1361,7 +1361,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </ol>
 </div>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
 <p>The squared norm of a wavefunction \(\Psi\) is \(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\).
@@ -1407,10 +1407,7 @@ Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write a normalized wavefunction, \(\Psi(x,t)\),  with the following values at time \(t=0\) :</p>
-<div class="paragraph">
-<p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
-</div>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write a normalized wavefunction, \(\Psi(x,t)\),  with expectation \(\langle x\rangle\) and standard deviation \(\sigma\) at time \(t=0\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -1434,7 +1431,7 @@ The normal distribution with mean \(\langle x\rangle\) and standard deviation \(
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In one dimension, the <em>probability current</em> describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In one dimension, the <em>probability current</em> \(J\) describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by
 \[J(x,t) = \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
     x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
@@ -1449,15 +1446,12 @@ What happens to the probability current in the region from \(-\infty\) to \(\inf
 What does this mean?</p>
 </li>
 <li>
-<p>Use <a href="https://en.wikipedia.org/wiki/Divergence_theorem">Gauss&#8217;s Theorem</a> to extend this result to an arbitrary region \(S\) in \(\mathbb R^n\).</p>
-</li>
-<li>
-<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
-Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), i.e., in the direction of increasing phase.</p>
+<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\). (Here, \(|\Psi(x,t)|\) represents the magnitude of the wavefunction at \((x,t)\), not the norm of the wavefunction over all space.)
+Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.</p>
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1500,6 +1494,23 @@ This indicates that probability is <em>globally</em> conserved: it cannot just a
 (This is good — we <em>need</em> probabilities to always add up to 1.)</p>
 </div>
 </li>
+<li>
+<p>First,
+\[\begin{align*}
+\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&amp;=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
+&amp;=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
+&amp;= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
+\end{align*}\]
+And, finally,
+\[\begin{align*}
+J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
+&amp;=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
+&amp;\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
+&amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
+&amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
+\end{align*}\]
+which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\).</p>
+</li>
 </ol>
 </div>
 </div>
@@ -1535,11 +1546,11 @@ This indicates that probability is <em>globally</em> conserved: it cannot just a
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the following wavefunction \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the following wavefunction over the interval \([0,1]\) \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Show that \(\Psi(x,t)\) is normalized.</p>
+<p>Show that \(\Psi(x,t)\) is normalized. (Hint: \(\sin^2(x)=\frac{1}{2}(1-\cos(2x))\) and \(\sin(mx)\sin(nx)=\frac{1}{2}(\cos((m-n)x)-\cos((m+n)x))\).)</p>
 </li>
 <li>
 <p>Calculate \(\langle x \rangle\) and \(\langle p \rangle \)</p>
@@ -1552,11 +1563,48 @@ This indicates that probability is <em>globally</em> conserved: it cannot just a
 </li>
 </ol>
 </div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
+<details open>
+<summary class="title">Solution</summary>
 <div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First note that if \(m,n\in\mathbb Z\), then
+\[\begin{align*}
+\int_0^1\sin^2(n\pi x)\,dx &amp;=\int_0^1\frac{1}{2}(1-\cos(n\pi x))\,dx\\
+&amp;=\frac{1}{2}\left.\left(x-\frac{1}{n\pi}\sin(n\pi x)\right)\right|^1_0\\
+&amp;=\frac{1}{2}
+\end{align*}\]
+And if \(m\ne n\) then
+\[\begin{align*}
+&amp;\phantom{=}\int_0^1\sin(m\pi x)\sin(n \pi x)\,dx\\
+&amp;=\int_0^1\frac{1}{2}(\cos((m-n)\pi x)-\cos((m+n)\pi x))\,dx\\
+&amp;=\frac{1}{2}\left.\left(\frac{\sin((m-n)\pi x)}{m-n}-\frac{\sin((m+n)\pi x)}{m+n}\right)\right|^1_0\\
+&amp;=0
+\end{align*}\]
+Now,
+\[\begin{align*}
+|\Psi(x,t)|^2&amp;=\Psi^*\Psi\\
+&amp;=(e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x))\\
+&amp;\phantom{=}\cdot (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x))\\
+&amp;=\sin^2(\pi x)+\sin^2(2\pi x) \\
+&amp;\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
+&amp;=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
+\end{align*}\]
+where \(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\) (its value won&#8217;t actually matter).
+Now we simply compute:
+\[\begin{align*}
+|\Psi|^2&amp;=\int_{0}^1 \Psi^*\Psi \,dx\\
+&amp;=\int_0^1 \sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)\,dx\\
+&amp;=\frac{1}{2}+\frac{1}{2}+0\\
+&amp;=1
+\end{align*}\]
+So \(\Psi\) is indeed normalized.</p>
+</li>
+<li>
+<p>These integrals won&#8217;t be pretty. \(\langle x\rangle=\int_0^1x|\Psi(x,t)|^2\,dx\), so</p>
+</li>
+</ol>
 </div>
 </div>
 </details>
@@ -1972,10 +2020,10 @@ A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Find a continuous function \(f:\mathbb R\to\mathbb R\) that is absolutely integrable, but not square-integrable.</p>
+<p>Find a continuous function (on any domain) that is absolutely integrable, but not square-integrable.</p>
 </li>
 <li>
-<p>Find a continuous function \(f:\mathbb R\to\mathbb R\) that is square-integrable, but not absolutely integrable.</p>
+<p>Find a continuous function (on any domain) that is square-integrable, but not absolutely integrable.</p>
 </li>
 </ol>
 </div>
@@ -1988,11 +2036,11 @@ A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>One example is
+<p>One example is the following function defined on the positive reals:
 \[\begin{align*}
 f(x)=\begin{cases}
-|x|^{-\frac{1}{2}}-1&amp;|x|\le1\\
-0&amp;|x|&gt;1
+x^{-\frac{1}{2}}-1&amp;x\le1\\
+0&amp;x&gt;1
 \end{cases}
 \end{align*}
 \]</p>
@@ -2007,7 +2055,7 @@ So \(x^{-\frac{1}{2}}\) is integrable, but its square, \(x^{-1}\), is not.</p>
 </div>
 </li>
 <li>
-<p>One example is
+<p>One example is the following function defined on the reals:
 \[\begin{align*}
 f(x)=\begin{cases}
 \frac{1}{|x|}&amp;|x|\ge1\\
