@@ -1506,8 +1506,8 @@ which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x
 <li>
 <p>First note that if \(m,n\in\mathbb Z\), then
 \[\begin{align*}
-\int_0^1\sin^2(n\pi x)\,dx &amp;=\int_0^1\frac{1}{2}(1-\cos(n\pi x))\,dx\\
-&amp;=\frac{1}{2}\left.\left(x-\frac{1}{n\pi}\sin(n\pi x)\right)\right|^1_0\\
+\int_0^1\sin^2(n\pi x)\,dx &amp;=\int_0^1\frac{1}{2}(1-\cos(2n\pi x))\,dx\\
+&amp;=\frac{1}{2}\left.\left(x-\frac{\sin(2n\pi x)}{2n\pi}\right)\right|^1_0\\
 &amp;=\frac{1}{2}
 \end{align*}\]
 And if \(m\ne n\) then
@@ -1537,9 +1537,58 @@ Now we simply compute:
 So \(\Psi\) is indeed normalized.</p>
 </li>
 <li>
-<p>These integrals won&#8217;t be pretty. \(\langle x\rangle=\int_0^1x|\Psi(x,t)|^2\,dx\), so</p>
+<p>These integrals won&#8217;t be pretty.
+\[\begin{align*}
+\langle x\rangle&amp;=\int_0^1x|\Psi(x,t)|^2\,dx\\
+&amp;=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
+\end{align*}\]
+We&#8217;ll do the three components one at a time.
+\[\begin{align*}
+\int_0^1x\sin^2(n\pi x)&amp;=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
+&amp;=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)
+\end{align*}\]
+The first integral is \(\frac{1}{2}\); for the second we need integration by parts. Let \(u=x,dv=\cos(m\pi x)\,dx\) (for any integer \(m\); certainly this will hold for \(m=2n\)).
+Then \(du=dx\) and \(v=\frac{\sin(m\pi x)}{m \pi }\), and so
+\[\begin{align*}
+\int_0^1x\cos(m \pi x)\,dx&amp;=\int_0^1 u\,dv\\
+&amp;=uv\Bigr|^1_0-\int_0^1 v\,du\\
+&amp;=\left.\frac{x\sin(m \pi x)}{m \pi}\right|^1_0-\int_0^1 \frac{\sin(m \pi x)}{m \pi}\,dx\\
+&amp;=0 - \left.\frac{-\cos(m\pi x)}{(m\pi)^2}\right|^1_0\\
+&amp;=\frac{(-1)^m-1}{(m\pi)^2}
+\end{align*}\]
+Now, with \(m=2n\), \(\frac{(-1)^m-1}{(m\pi)^2}=\frac{1-1}{(m\pi)^2}=0\), and so,
+\[\begin{align*}
+\int_0^1x\sin^2(n\pi x)=\frac{1}{2}\left(\frac{1}{2}-0\right)&amp;=\frac{1}{4}
+\end{align*}\]
+Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(phi\) constant for now). (Below, \(m=1,n=2\), so \(m-n=-1\) and \(m+n=3\).)</p>
 </li>
 </ol>
+</div>
+<div class="paragraph">
+<p>\[\begin{align*}
+&amp;\phantom{=}\int_0^1x\sin(m\pi x)\sin(n\pi x)\,dx\\
+&amp;=\int_0^1 x\cdot\frac{1}{2}\left(\cos((m-n)x)-\cos((m+n)x)\right)\,dx\\
+&amp;=\frac{1}{2}\left(\frac{(-1)^{m-n}-1}{((m-n)\pi)^2}-\frac{(-1)^{m+n}-1}{((m+n)\pi)^2}\right)\\
+&amp;=\left(-\frac{1}{\pi^2}+\frac{1}{9\pi^2}\right)\\
+&amp;=-\frac{8}{9\pi^2}
+\end{align*}\]
+And so, we finally obtain
+\[\langle x\rangle=\frac{1}{4}+\frac{1}{4}-\frac{8\phi}{9\pi^2}=\frac{1}{2}-\frac{8\phi}{9\pi^2}\]
+Wait a minute — \(\phi\) is complex, but \(\langle x\rangle\) must be real.
+Well, if \(w\in\mathbb R\), then
+\[\begin{align*}
+e^{iw}+e^{-iw}&amp;=e^{iw}+(e^{iw})^*\\
+&amp;=2\,\mathfrak{Re}[e^{iw}]\\
+&amp;=2\cos(w)
+\end{align*}\]
+So,
+\[\begin{align*}
+\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}=2\cos((\lambda_1-\lambda_2)t)
+\end{align*}\]
+and thus we have
+\[\begin{align*}
+\langle x\rangle = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
+\end{align*}\]</p>
 </div>
 </div>
 </details>
