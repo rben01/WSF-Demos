@@ -41,5 +41,11 @@
 		"body": "\\frac{$1}{$2}$0",
 		"description": "LaTeX frac",
 		"scope": "asciidoc"
+	},
+	"partial derivative": {
+		"prefix": "\\pd",
+		"body": "\\frac{\\partial $1}{\\partial ${2:x}}",
+		"description": "Insert a partial derivative",
+		"scope": "asciidoc"
 	}
 }

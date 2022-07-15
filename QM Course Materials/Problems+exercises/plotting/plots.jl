@@ -37,7 +37,7 @@ function f1(x)
 end
 
 make_df(
-    range(; start=-0.5, stop=0.5, length=1000),
+    range(; start=0, stop=0.5, length=1000),
     "𝑓, convergent" => f1,
     "𝑓², divergent" => x -> f1(x)^2,
 ) |>

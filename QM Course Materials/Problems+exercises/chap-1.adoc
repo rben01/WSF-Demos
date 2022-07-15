@@ -198,7 +198,7 @@ We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle
 . For both distributions, calculate the probability of selecting a value that falls within 1 standard deviation of the mean.
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . The correct graphs are below.
@@ -302,7 +302,7 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 . ++\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
 
 +
-.Solution (placeholder)
+.Solution
 [%collapsible]
 ====
 The squared norm of a wavefunction ++\(\Psi\)++ is ++\(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\)++.
@@ -337,9 +337,7 @@ Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
 \end{align*}\]++
 ====
 
-* {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with the following values at time ++\(t=0\)++ :
-+
-++\[\begin{align*}\langle x \rangle &= 3 \\\sigma &= 2\end{align*}\]++
+* {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with expectation ++\(\langle x\rangle\)++ and standard deviation ++\(\sigma\)++ at time ++\(t=0\)++.
 +
 .Solution
 [%collapsible]
@@ -358,7 +356,7 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 
 ====
 
-* {q-num} In one dimension, the _probability current_ describes the rate at which probability flows past point ++\(x\)++. For a free particle with mass ++\(m\)++ whose wavefunction is ++\(\Psi(x,t)\)++, or ++\(\Psi\)++ for short, it is given by
+* {q-num} In one dimension, the _probability current_ ++\(J\)++ describes the rate at which probability flows past point ++\(x\)++. For a free particle with mass ++\(m\)++ whose wavefunction is ++\(\Psi(x,t)\)++, or ++\(\Psi\)++ for short, it is given by
 ++\[J(x,t) = \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
     x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
@@ -369,12 +367,11 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 What "`law`" does this equation represent?
 What happens to the probability current in the region from ++\(-\infty\)++ to ++\(\infty\)++?
 What does this mean?
-. Use https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem] to extend this result to an arbitrary region ++\(S\)++ in ++\(\mathbb R^n\)++.
-. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
-Show that ++\(J\)++ as defined above points in the direction of ++\(\nabla \varphi\)++, i.e., in the direction of increasing phase.
+. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++. (Here, ++\(|\Psi(x,t)|\)++ represents the magnitude of the wavefunction at ++\((x,t)\)++, not the norm of the wavefunction over all space.)
+Show that ++\(J\)++ as defined above points in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or in the 3D case, ++\(\nabla \varphi\)++), i.e., in the direction of increasing phase.
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . First, recall the {sch} equation,
@@ -412,7 +409,33 @@ Since ++\(\Psi\)++ is square integrable, it must go to 0 as ++\(x\to\pm\infty\)+
 And so ++\[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]++
 This indicates that probability is _globally_ conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
 (This is good — we _need_ probabilities to always add up to 1.)
-+
+
+. First,
+// ++\[\begin{align*}
+// \frac{\partial |\Psi(x,t)|}{\partial x}&=\frac{\partial \sqrt{\Psi^* \Psi}}{\partial x}\\
+// &=\frac{1}{2\sqrt{\Psi^* \Psi}}\frac{\partial (\Psi^* \Psi)}{\partial x}\\
+// &=\frac{1}{2|\Psi|}\left(\frac{\partial \Psi^* }{\partial x}\Psi+ \Psi^* \frac{\partial \Psi}{\partial x}\right)\\
+// &=\frac{1}{2}\left(\frac{\partial \Psi^* }{\partial x}\frac{\Psi}{|\Psi|}+ \frac{\Psi^*}{|\Psi|}  \frac{\partial \Psi}{\partial x}\right)\\
+// &=\frac{1}{2}\left(\frac{\partial \Psi^* }{\partial x}+ \frac{\partial \Psi}{\partial x}\right)\\
+// &=\frac{1}{2}\left(\frac{\partial (\Psi^* + \Psi) }{\partial x}\right)\\
+// &=\frac{1}{2}\left(\frac{\partial (2\,\mathfrak{Re}[ \Psi ]) }{\partial x}\right)\\
+// &=\frac{\partial \,\mathfrak{Re}[ \Psi ] }{\partial x}
+// \end{align*}\]++
+// Crucially, this is a real number that depends on ++\(x\)++; for brevity, call it ++\(r_x\)++.
+++\[\begin{align*}
+\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
+&=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
+&= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
+\end{align*}\]++
+And, finally,
+++\[\begin{align*}
+J&=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
+&=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
+&\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
+&=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
+&=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
+\end{align*}\]++
+which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++.
 ====
 --
 
@@ -424,7 +447,7 @@ This indicates that probability is _globally_ conserved: it cannot just appear o
 == Momentum
 
 === Questions
-* {q-num} For the following wavefunction ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+* {q-num} For the following wavefunction over the reals ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
 . Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
@@ -432,10 +455,29 @@ This indicates that probability is _globally_ conserved: it cannot just appear o
 . Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
 
 +
-.Solution (placeholder)
-[%collapsible]
+.Solution
+[%collapsible%open]
 ====
-This is the solution
+[{sublist-style}]
+. First note that
+++\[\begin{align*}
+e^{-ix}+e^{ix } &= (e^{ix})^* + e^{ix }\\
+&=2\,\mathfrak{Re}[e^{ix}]\\
+&=2\cos(x)
+\end{align*}\]++
+First,
+++\[\begin{align*}
+|\Psi(x,t)|^2&=\Psi^*\Psi\\
+&=(e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x))\\
+&\phantom{=}\cdot (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x))\\
+&=\sin^2(\pi x)+\sin^2(2\pi x) \\
+&\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)
+\end{align*}\]++
+ We simply compute:
+++\[\begin{align*}
+|\Psi|^2&=\int_{-\infty}^\infty \Psi^*\Psi \,dx\\
+&=\int_{-\infty}^\infty (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)) \,dx\\
+\end{align*}\]++
 ====
 
 

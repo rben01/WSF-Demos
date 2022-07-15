@@ -8,8 +8,8 @@ include::shared_attributes.adoc[]
 
 * {q-num}
 A function ++\(f\)++ is said to be absolutely integrable when ++\(|f|\)++ is integrable.
-.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is absolutely integrable, but not square-integrable.
-.. Find a continuous function ++\(f:\mathbb R\to\mathbb R\)++ that is square-integrable, but not absolutely integrable.
+.. Find a continuous function (on any domain) that is absolutely integrable, but not square-integrable.
+.. Find a continuous function (on any domain) that is square-integrable, but not absolutely integrable.
 
 +
 .Solution
@@ -18,11 +18,11 @@ A function ++\(f\)++ is said to be absolutely integrable when ++\(|f|\)++ is int
 The "`trick`" is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
 
 [{sublist-style}]
-. One example is
+. One example is the following function defined on the positive reals:
 ++\[\begin{align*}
 f(x)=\begin{cases}
-|x|^{-\frac{1}{2}}-1&|x|\le1\\
-0&|x|>1
+x^{-\frac{1}{2}}-1&x\le1\\
+0&x>1
 \end{cases}
 \end{align*}
 \]++
@@ -32,7 +32,7 @@ image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,
 This is because ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
 So ++\(x^{-\frac{1}{2}}\)++ is integrable, but its square, ++\(x^{-1}\)++, is not.
 
-. One example is
+. One example is the following function defined on the reals:
 ++\[\begin{align*}
 f(x)=\begin{cases}
 \frac{1}{|x|}&|x|\ge1\\
