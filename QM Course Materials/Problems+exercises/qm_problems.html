@@ -1550,10 +1550,10 @@ which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Show that \(\Psi(x,t)\) is normalized. (Hint: \(\sin^2(x)=\frac{1}{2}(1-\cos(2x))\) and \(\sin(mx)\sin(nx)=\frac{1}{2}(\cos((m-n)x)-\cos((m+n)x))\).)</p>
+<p>Show that \(\Psi(x,t)\) is normalized.</p>
 </li>
 <li>
-<p>Calculate \(\langle x \rangle\) and \(\langle p \rangle \)</p>
+<p>Calculate \(\langle x \rangle\) and \(\langle p \rangle \).</p>
 </li>
 <li>
 <p>Calculate \(\frac{d \langle x \rangle}{dt}\). Does Ehrenfest&#8217;s theorem hold?</p>
@@ -1566,6 +1566,17 @@ which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x
 <details open>
 <summary class="title">Solution</summary>
 <div class="content">
+<div class="paragraph">
+<p>You will want to have on hand a big list of trigonometric identities.
+Here are the main ones we&#8217;ll use:</p>
+</div>
+<div class="paragraph">
+<p>\[\begin{align*}
+\sin^2(x)&amp;=\frac{1}{2}(1-\cos(2x))\\
+\sin(\alpha)\sin(\beta)&amp;=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&amp;=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))\\
+\end{align*}\]</p>
+</div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1591,7 +1602,7 @@ Now,
 &amp;\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
 &amp;=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
 \end{align*}\]
-where \(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\) (its value won&#8217;t actually matter).
+where \(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\).
 Now we simply compute:
 \[\begin{align*}
 |\Psi|^2&amp;=\int_{0}^1 \Psi^*\Psi \,dx\\
@@ -1602,9 +1613,23 @@ Now we simply compute:
 So \(\Psi\) is indeed normalized.</p>
 </li>
 <li>
-<p>These integrals won&#8217;t be pretty.
-\[\begin{align*}
-\langle x\rangle&amp;=\int_0^1x|\Psi(x,t)|^2\,dx\\
+<p></p>
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Warning</div>
+</td>
+<td class="content">
+These integrals won&#8217;t be pretty.
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>\[\begin{align*}
+\langle x\rangle&amp;=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
+&amp;=\int_0^1x|\Psi(x,t)|^2\,dx\\
 &amp;=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
 \end{align*}\]
 We&#8217;ll do the three components one at a time.
@@ -1625,12 +1650,8 @@ Now, with \(m=2n\), \(\frac{(-1)^m-1}{(m\pi)^2}=\frac{1-1}{(m\pi)^2}=0\), and so
 \[\begin{align*}
 \int_0^1x\sin^2(n\pi x)=\frac{1}{2}\left(\frac{1}{2}-0\right)&amp;=\frac{1}{4}
 \end{align*}\]
-Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(phi\) constant for now). (Below, \(m=1,n=2\), so \(m-n=-1\) and \(m+n=3\).)</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>\[\begin{align*}
+Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(\phi\) constant for now). Below, \(m=1,n=2\), so \(m-n=-1\) and \(m+n=3\).
+\[\begin{align*}
 &amp;\phantom{=}\int_0^1x\sin(m\pi x)\sin(n\pi x)\,dx\\
 &amp;=\int_0^1 x\cdot\frac{1}{2}\left(\cos((m-n)x)-\cos((m+n)x)\right)\,dx\\
 &amp;=\frac{1}{2}\left(\frac{(-1)^{m-n}-1}{((m-n)\pi)^2}-\frac{(-1)^{m+n}-1}{((m+n)\pi)^2}\right)\\
@@ -1650,10 +1671,65 @@ So,
 \[\begin{align*}
 \phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}=2\cos((\lambda_1-\lambda_2)t)
 \end{align*}\]
-and thus we have
+So \(\phi\) was real along. We finally obtain
 \[\begin{align*}
 \langle x\rangle = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
 \end{align*}\]</p>
+</div>
+<div class="paragraph">
+<p>On to \(\langle p\rangle\)!
+\[\begin{align*}
+\langle p\rangle&amp;=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
+&amp;=-i\hbar\int_0^1\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\,dx
+\end{align*}\]
+Let&#8217;s compute the integrand:
+\[\begin{align*}
+&amp;\phantom{=}\textrm{Integrand}\\
+&amp;\phantom{=}\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\\
+&amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)+\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
+&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
+&amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&amp;\phantom{=}+\,\sin(\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{=}+\,\sin(3\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]
+Now, we need to integrate this.
+Thankfully,
+\[\begin{align*}
+\int_0^1\sin(n\pi x)\,dx&amp;=\left.\frac{-\cos(n\pi x)}{n\pi}\right|^1_0=\frac{1-(-1)^n}{n\pi}
+\end{align*}\]
+Therefore \[\begin{align*}
+\int_0^1\sin(2\pi x)\,dx=\int_0^1\sin(4\pi x)\,dx=0
+\end{align*}\]
+and \[\begin{align*}
+\int_0^1\sin(\pi x)\,dx&amp;=\frac{2}{\pi}\\
+\int_0^1\sin(3\pi x)\,dx&amp;=\frac{2}{3\pi}
+\end{align*}\]
+And so we&#8217;re left with
+\[\begin{align*}
+\langle p\rangle=&amp;-i\hbar\int_0^1\textrm{Integrand}\,dx\\
+=&amp;-i\hbar\left[\frac{2}{\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&amp;\quad\quad+\,\left.\frac{2}{3\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+&amp;=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;=-\frac{8i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]
+Uh oh, this looks like it might not be real as well.
+But,
+\[\begin{align*}
+e^{iw}-e^{-iw}&amp;=e^{iw}-(e^{iw})^*\\
+&amp;=2i\,\mathfrak{Im}[e^{iw}]\\
+&amp;=2i\sin(w)
+\end{align*}\]
+and so, finally,
+\[\begin{align*}
+\langle p\rangle&amp;=-\frac{8i\hbar}{3}\left(2i\sin((\lambda_1-\lambda_2)t)\right)\\
+&amp;=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
+\end{align*}\]</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </details>

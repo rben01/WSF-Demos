@@ -449,8 +449,8 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 === Questions
 * {q-num} For the following wavefunction over the interval ++\([0,1]\)++ ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
-. Show that ++\(\Psi(x,t)\)++ is normalized. (Hint: ++\(\sin^2(x)=\frac{1}{2}(1-\cos(2x))\)++ and ++\(\sin(mx)\sin(nx)=\frac{1}{2}(\cos((m-n)x)-\cos((m+n)x))\)++.)
-. Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
+. Show that ++\(\Psi(x,t)\)++ is normalized.
+. Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++.
 . Calculate ++\(\frac{d \langle x \rangle}{dt}\)++. Does Ehrenfest's theorem hold?
 . Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
 
@@ -458,6 +458,15 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 .Solution
 [%collapsible%open]
 ====
+You will want to have on hand a big list of trigonometric identities.
+Here are the main ones we'll use:
+
+++\[\begin{align*}
+\sin^2(x)&=\frac{1}{2}(1-\cos(2x))\\
+\sin(\alpha)\sin(\beta)&=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))\\
+\end{align*}\]++
+
 [{sublist-style}]
 . First note that if ++\(m,n\in\mathbb Z\)++, then
 ++\[\begin{align*}
@@ -481,7 +490,7 @@ Now,
 &\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
 &=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
 \end{align*}\]++
-where ++\(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\)++ (its value won't actually matter).
+where ++\(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\)++.
 Now we simply compute:
 ++\[\begin{align*}
 |\Psi|^2&=\int_{0}^1 \Psi^*\Psi \,dx\\
@@ -490,9 +499,13 @@ Now we simply compute:
 &=1
 \end{align*}\]++
 So ++\(\Psi\)++ is indeed normalized.
-. These integrals won't be pretty.
+. {blank}
++
+WARNING: These integrals won't be pretty.
++
 ++\[\begin{align*}
-\langle x\rangle&=\int_0^1x|\Psi(x,t)|^2\,dx\\
+\langle x\rangle&=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
+&=\int_0^1x|\Psi(x,t)|^2\,dx\\
 &=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
 \end{align*}\]++
 We'll do the three components one at a time.
@@ -513,8 +526,7 @@ Now, with ++\(m=2n\)++, ++\(\frac{(-1)^m-1}{(m\pi)^2}=\frac{1-1}{(m\pi)^2}=0\)++
 ++\[\begin{align*}
 \int_0^1x\sin^2(n\pi x)=\frac{1}{2}\left(\frac{1}{2}-0\right)&=\frac{1}{4}
 \end{align*}\]++
-Great, that's two components down. Now let's do the third component (without the ++\(phi\)++ constant for now). (Below, ++\(m=1,n=2\)++, so ++\(m-n=-1\)++ and ++\(m+n=3\)++.)
-
+Great, that's two components down. Now let's do the third component (without the ++\(\phi\)++ constant for now). Below, ++\(m=1,n=2\)++, so ++\(m-n=-1\)++ and ++\(m+n=3\)++.
 ++\[\begin{align*}
 &\phantom{=}\int_0^1x\sin(m\pi x)\sin(n\pi x)\,dx\\
 &=\int_0^1 x\cdot\frac{1}{2}\left(\cos((m-n)x)-\cos((m+n)x)\right)\,dx\\
@@ -535,10 +547,62 @@ So,
 ++\[\begin{align*}
 \phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}=2\cos((\lambda_1-\lambda_2)t)
 \end{align*}\]++
-and thus we have
+So ++\(\phi\)++ was real along. We finally obtain
 ++\[\begin{align*}
 \langle x\rangle = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
 \end{align*}\]++
++
+On to ++\(\langle p\rangle\)++!
+++\[\begin{align*}
+\langle p\rangle&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
+&=-i\hbar\int_0^1\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\,dx
+\end{align*}\]++
+Let's compute the integrand:
+++\[\begin{align*}
+&\phantom{=}\textrm{Integrand}\\
+&\phantom{=}\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\\
+&=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+&\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)+\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
+&\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
+&=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&\phantom{=}+\,\sin(\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\\
+&\phantom{=}+\,\sin(3\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]++
+Now, we need to integrate this.
+Thankfully,
+++\[\begin{align*}
+\int_0^1\sin(n\pi x)\,dx&=\left.\frac{-\cos(n\pi x)}{n\pi}\right|^1_0=\frac{1-(-1)^n}{n\pi}
+\end{align*}\]++
+Therefore ++\[\begin{align*}
+\int_0^1\sin(2\pi x)\,dx=\int_0^1\sin(4\pi x)\,dx=0
+\end{align*}\]++
+and ++\[\begin{align*}
+\int_0^1\sin(\pi x)\,dx&=\frac{2}{\pi}\\
+\int_0^1\sin(3\pi x)\,dx&=\frac{2}{3\pi}
+\end{align*}\]++
+And so we're left with
+++\[\begin{align*}
+\langle p\rangle=&-i\hbar\int_0^1\textrm{Integrand}\,dx\\
+=&-i\hbar\left[\frac{2}{\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&\quad\quad+\,\left.\frac{2}{3\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+&=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
+&=-\frac{8i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]++
+Uh oh, this looks like it might not be real as well.
+But,
+++\[\begin{align*}
+e^{iw}-e^{-iw}&=e^{iw}-(e^{iw})^*\\
+&=2i\,\mathfrak{Im}[e^{iw}]\\
+&=2i\sin(w)
+\end{align*}\]++
+and so, finally,
+++\[\begin{align*}
+\langle p\rangle&=-\frac{8i\hbar}{3}\left(2i\sin((\lambda_1-\lambda_2)t)\right)\\
+&=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
+\end{align*}\]++
+
 ====
 
 
