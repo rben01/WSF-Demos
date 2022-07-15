@@ -447,9 +447,9 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 == Momentum
 
 === Questions
-* {q-num} For the following wavefunction over the reals ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+* {q-num} For the following wavefunction over the interval ++\([0,1]\)++ ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
-. Show that ++\(\Psi(x,t)\)++ is normalized.
+. Show that ++\(\Psi(x,t)\)++ is normalized. (Hint: ++\(\sin^2(x)=\frac{1}{2}(1-\cos(2x))\)++ and ++\(\sin(mx)\sin(nx)=\frac{1}{2}(\cos((m-n)x)-\cos((m+n)x))\)++.)
 . Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++
 . Calculate ++\(\frac{d \langle x \rangle}{dt}\)++. Does Ehrenfest's theorem hold?
 . Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
@@ -459,25 +459,38 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 [%collapsible%open]
 ====
 [{sublist-style}]
-. First note that
+. First note that if ++\(m,n\in\mathbb Z\)++, then
 ++\[\begin{align*}
-e^{-ix}+e^{ix } &= (e^{ix})^* + e^{ix }\\
-&=2\,\mathfrak{Re}[e^{ix}]\\
-&=2\cos(x)
+\int_0^1\sin^2(n\pi x)\,dx &=\int_0^1\frac{1}{2}(1-\cos(n\pi x))\,dx\\
+&=\frac{1}{2}\left.\left(x-\frac{1}{n\pi}\sin(n\pi x)\right)\right|^1_0\\
+&=\frac{1}{2}
 \end{align*}\]++
-First,
+And if ++\(m\ne n\)++ then
+++\[\begin{align*}
+&\phantom{=}\int_0^1\sin(m\pi x)\sin(n \pi x)\,dx\\
+&=\int_0^1\frac{1}{2}(\cos((m-n)\pi x)-\cos((m+n)\pi x))\,dx\\
+&=\frac{1}{2}\left.\left(\frac{\sin((m-n)\pi x)}{m-n}-\frac{\sin((m+n)\pi x)}{m+n}\right)\right|^1_0\\
+&=0
+\end{align*}\]++
+Now,
 ++\[\begin{align*}
 |\Psi(x,t)|^2&=\Psi^*\Psi\\
 &=(e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x))\\
 &\phantom{=}\cdot (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x))\\
 &=\sin^2(\pi x)+\sin^2(2\pi x) \\
-&\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)
+&\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
+&=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
 \end{align*}\]++
- We simply compute:
+where ++\(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\)++ (its value won't actually matter).
+Now we simply compute:
 ++\[\begin{align*}
-|\Psi|^2&=\int_{-\infty}^\infty \Psi^*\Psi \,dx\\
-&=\int_{-\infty}^\infty (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)) \,dx\\
+|\Psi|^2&=\int_{0}^1 \Psi^*\Psi \,dx\\
+&=\int_0^1 \sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)\,dx\\
+&=\frac{1}{2}+\frac{1}{2}+0\\
+&=1
 \end{align*}\]++
+So ++\(\Psi\)++ is indeed normalized.
+. These integrals won't be pretty. ++\(\langle x\rangle=\int_0^1x|\Psi(x,t)|^2\,dx\)++, so
 ====
 
 
