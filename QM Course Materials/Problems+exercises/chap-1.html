@@ -1293,7 +1293,7 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution (placeholder)</summary>
 <div class="content">
 <div class="paragraph">
@@ -1345,23 +1345,41 @@ Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}
 <p>\[\begin{align*}\langle x \rangle &amp;= 3 \\\sigma &amp;= 2\end{align*}\]</p>
 </div>
 <details>
-<summary class="title">Solution (placeholder)</summary>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>This is the solution</p>
+<p>It&#8217;s easiest to start with a known probability distribution — their means and standard deviations are often part of their parameterization, and by definition they&#8217;re normalized — and then work backwards to the wavefunction.</p>
+</div>
+<div class="paragraph">
+<p>One probability distribution parameterized by its mean and standard deviation is the normal distribution.
+The normal distribution with mean \(\langle x\rangle\) and standard deviation \(\sigma\) is
+\[f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]</p>
+</div>
+<div class="paragraph">
+<p>One wavefunction whose probability distribution is \(f\) is \(f\)’s square root:
+\[\psi(x)=\sqrt{f(x)} =\frac{1}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]</p>
+</div>
+<div class="paragraph">
+<p>For fun, we can throw in a phase dependence on \(t\); it won&#8217;t affect the magnitude:
+\[\Psi(x,t)=\frac{e^{-it}}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]</p>
 </div>
 </div>
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The probability current describes the rate at which probability flows past point \(x\). It is given by \[J(x,t) = \frac{i
-\hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In one dimension, the <em>probability current</em> describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by
+\[J(x,t) = \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
+    x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
 <div class="openblock">
 <div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Show that \[\ \frac{d}{dt} \int_a^b |\Psi(x,t)|^2 = J(a,t) - J(b,t) \] What happens to the probability current in the region from \(-\infty\) to \(\infty\)? What does this mean?</p>
+<p>Show that \[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]
+What &#8220;law&#8221; does this equation represent?
+What happens to the probability current in the region from \(-\infty\) to \(\infty\)?
+What does this mean?</p>
 </li>
 <li>
 <p>Use <a href="https://en.wikipedia.org/wiki/Divergence_theorem">Gauss&#8217;s Theorem</a> to extend this result to an arbitrary region \(S\) in \(\mathbb R^n\).</p>
@@ -1372,11 +1390,50 @@ Show that \(J\) as defined above points in the direction of \(\nabla \varphi\), 
 </li>
 </ol>
 </div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
+<details open>
+<summary class="title">Solution</summary>
 <div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First, recall the Schrödinger equation,
+\[ i\hbar\frac{\partial \Psi}{\partial t}=\hat H\Psi \]
+For a free particle, the Hamiltonian is simply its kinetic energy, and so
+\[ i\hbar\frac{\partial \Psi}{\partial t}=\frac{p^2}{2m}\Psi=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]
+Now recall that \(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\). Then,
+\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&amp;=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
+\frac{\partial \Psi^*}{\partial t}&amp;=-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}
+\end{align*}\]
+Now, applying the product rule twice, once forwards and once backwards,
+\[\begin{align*}
+\frac{d}{dt}|\Psi|^2&amp;=\frac{d}{dt} (\Psi^*\Psi)\\
+&amp;=\frac{d\Psi^*}{dt}\Psi +\Psi^*\frac{d\Psi}{dt}\\
+&amp;=\left(-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}\right)\Psi+\Psi^*\left(\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}-\Psi^*\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left[\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}+\frac{\partial \Psi}{\partial x}\frac{\partial\Psi^*}{\partial x}\right)\right.\\
+&amp;\phantom{=\frac{i\hbar}{2m}[}-\left.\left(\Psi^*\frac{\partial^2\Psi}{\partial x^2}+\frac{\partial \Psi^*}{\partial x}\frac{\partial\Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{i\hbar}{2m}\left[\frac{\partial}{\partial x} \left(\Psi\frac{\partial\Psi^*}{\partial x}\right)-\frac{\partial}{\partial x}\left(\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial}{\partial x}\left[\frac{i\hbar}{2m}\left(\Psi\frac{\partial\Psi^*}{\partial x}-\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial J}{\partial x}
+\end{align*}\]
+And the integral is now trivial:
+\[\begin{align*}
+\frac{d}{dt}\int_a^b |\Psi|^2\,dx&amp;=\int_a^b\frac{d}{dt} |\Psi|^2\,dx\\
+&amp;=\int_a^b-\frac{\partial J}{\partial x}\,dx\\
+&amp;=-J(x,t)\Bigr|^{x=b}_{x=a}\\
+&amp;=J(a,t)-J(b,t)
+\end{align*}\]
+This represents, roughly speaking, the fact that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the amount entering at \(a\) and the amount leaving at \(b\).
+In other words, probability is locally conserved: in order for the net probability in a region to change over time, it must enter or exit through the boundary of that region.</p>
 <div class="paragraph">
-<p>This is the solution</p>
+<p>Since \(\Psi\) is square integrable, it must go to 0 as \(x\to\pm\infty\), and therefore so must \(J\) (just by the definition).
+And so \[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]
+This indicates that probability is <em>globally</em> conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
+(This is good — we <em>need</em> probabilities to always add up to 1.)</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </details>

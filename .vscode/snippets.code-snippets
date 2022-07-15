@@ -27,5 +27,19 @@
 		],
 		"description": "Insert a solution block",
 		"scope": "asciidoc"
+	},
+	"Math Align": {
+		"prefix": "\\align",
+		"body": [
+			"++\\[\\begin{align*}\n$0\n\\end{align*}\\]++"
+		],
+		"description": "Block math with align*",
+		"scope": "asciidoc"
+	},
+	"frac": {
+		"prefix": "\\frac",
+		"body": "\\frac{$1}{$2}$0",
+		"description": "LaTeX frac",
+		"scope": "asciidoc"
 	}
 }

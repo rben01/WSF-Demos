@@ -1,5 +1,0 @@
-{"code-runner.executorMap": {
-    "asciidoc": "asciidoctor $dirWithoutTrailingSlash/*.adoc",
-},
-"code-runner.saveFileBeforeRun": true,
-}
