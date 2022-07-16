@@ -612,6 +612,7 @@ This doesn't look like ++\(\frac{\langle p\rangle}{m}\)++ yet, but we can apply 
 ====
 
 
+
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
 In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".

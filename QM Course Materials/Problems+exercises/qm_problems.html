@@ -1688,8 +1688,7 @@ Let&#8217;s compute the integrand:
 \[\begin{align*}
 \Psi^* &amp;=e^{i\lambda_1 t}\sin(\pi x)+e^{\lambda_2 t}\sin(2\pi x)\\
 \frac{\partial \Psi}{\partial x} &amp;=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\\\\
-&amp;\phantom{=}\Psi^* \frac{\partial \Psi}{\partial x}\\
-&amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+\Psi^* \frac{\partial \Psi}{\partial x}&amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
 &amp;\phantom{=}+\,\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
 &amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
 &amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
@@ -1732,6 +1731,22 @@ and so, finally,
 &amp;=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
 \end{align*}\]</p>
 </div>
+</li>
+<li>
+<p>We have
+\[\begin{align*}
+\frac{d\langle x\rangle}{dt}&amp;=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
+&amp;=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
+\end{align*}\]
+This doesn&#8217;t look like \(\frac{\langle p\rangle}{m}\) yet, but we can apply the Schrödinger equation to make it so.
+\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&amp;=\frac{\partial }{\partial t}\left(e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \right)\\
+&amp;=-i\lambda_1e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2t}\sin(2\pi x)\\
+&amp;=-i\left[\lambda_1(\cos(-\lambda_1 t)+i\sin(-\lambda_1 t))\sin(\pi x)\right.\\
+&amp;\phantom{=}\,\quad+\left.\lambda_2 (\cos(-\lambda_2 t)+i\sin(-\lambda_2 t))\sin(2\pi x)\right]\\
+&amp;=-\left(\lambda_1\sin(\lambda_1 t)\sin(\pi x)+\lambda_2\sin(\lambda_2 t)\sin(2\pi x)\right)\\
+&amp;\phantom{=}-i\left(\lambda_1\cos(\lambda_1 t)\sin(\pi x)+\lambda_2\cos(\lambda_2 t)\sin(2\pi x)\right)
+\end{align*}\]</p>
 </li>
 </ol>
 </div>
