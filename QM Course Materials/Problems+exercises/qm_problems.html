@@ -1447,7 +1447,8 @@ What does this mean?</p>
 </li>
 <li>
 <p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\). (Here, \(|\Psi(x,t)|\) represents the magnitude of the wavefunction at \((x,t)\), not the norm of the wavefunction over all space.)
-Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.</p>
+Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.
+(This is not so interesting in the one-dimensional case, in which there is only one direction to point, but the same idea holds in higher dimensions; \(J\) points in the direction of \(\nabla \varphi\).)</p>
 </li>
 </ol>
 </div>
@@ -1573,8 +1574,9 @@ Here are the main ones we&#8217;ll use:</p>
 <div class="paragraph">
 <p>\[\begin{align*}
 \sin^2(x)&amp;=\frac{1}{2}(1-\cos(2x))\\
+\sin(2\alpha)&amp;=2\sin(\alpha)\cos(\alpha)\\
 \sin(\alpha)\sin(\beta)&amp;=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
-\sin(\alpha)\cos(\beta)&amp;=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&amp;=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))
 \end{align*}\]</p>
 </div>
 <div class="olist loweralpha">
@@ -1632,7 +1634,7 @@ These integrals won&#8217;t be pretty.
 &amp;=\int_0^1x|\Psi(x,t)|^2\,dx\\
 &amp;=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
 \end{align*}\]
-We&#8217;ll do the three components one at a time.
+We&#8217;ll do the three components separately, starting with the first two.
 \[\begin{align*}
 \int_0^1x\sin^2(n\pi x)&amp;=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
 &amp;=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)
@@ -1680,14 +1682,16 @@ So \(\phi\) was real along. We finally obtain
 <p>On to \(\langle p\rangle\)!
 \[\begin{align*}
 \langle p\rangle&amp;=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
-&amp;=-i\hbar\int_0^1\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\,dx
+&amp;=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
 \end{align*}\]
 Let&#8217;s compute the integrand:
 \[\begin{align*}
-&amp;\phantom{=}\textrm{Integrand}\\
-&amp;\phantom{=}\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\\
+\Psi^* &amp;=e^{i\lambda_1 t}\sin(\pi x)+e^{\lambda_2 t}\sin(2\pi x)\\
+\frac{\partial \Psi}{\partial x} &amp;=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\\\\
+&amp;\phantom{=}\Psi^* \frac{\partial \Psi}{\partial x}\\
 &amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
-&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)+\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&amp;\phantom{=}+\,\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
 &amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
 &amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
 &amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
@@ -1709,7 +1713,7 @@ and \[\begin{align*}
 \end{align*}\]
 And so we&#8217;re left with
 \[\begin{align*}
-\langle p\rangle=&amp;-i\hbar\int_0^1\textrm{Integrand}\,dx\\
+\langle p\rangle=&amp;-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
 =&amp;-i\hbar\left[\frac{2}{\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
 &amp;\quad\quad+\,\left.\frac{2}{3\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
 &amp;=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\

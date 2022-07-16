@@ -369,6 +369,7 @@ What happens to the probability current in the region from ++\(-\infty\)++ to ++
 What does this mean?
 . [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++. (Here, ++\(|\Psi(x,t)|\)++ represents the magnitude of the wavefunction at ++\((x,t)\)++, not the norm of the wavefunction over all space.)
 Show that ++\(J\)++ as defined above points in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or in the 3D case, ++\(\nabla \varphi\)++), i.e., in the direction of increasing phase.
+(This is not so interesting in the one-dimensional case, in which there is only one direction to point, but the same idea holds in higher dimensions; ++\(J\)++ points in the direction of ++\(\nabla \varphi\)++.)
 
 .Solution
 [%collapsible]
@@ -463,8 +464,9 @@ Here are the main ones we'll use:
 
 ++\[\begin{align*}
 \sin^2(x)&=\frac{1}{2}(1-\cos(2x))\\
+\sin(2\alpha)&=2\sin(\alpha)\cos(\alpha)\\
 \sin(\alpha)\sin(\beta)&=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
-\sin(\alpha)\cos(\beta)&=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))
 \end{align*}\]++
 
 [{sublist-style}]
@@ -508,7 +510,7 @@ WARNING: These integrals won't be pretty.
 &=\int_0^1x|\Psi(x,t)|^2\,dx\\
 &=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
 \end{align*}\]++
-We'll do the three components one at a time.
+We'll do the three components separately, starting with the first two.
 ++\[\begin{align*}
 \int_0^1x\sin^2(n\pi x)&=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
 &=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)
@@ -555,14 +557,16 @@ So ++\(\phi\)++ was real along. We finally obtain
 On to ++\(\langle p\rangle\)++!
 ++\[\begin{align*}
 \langle p\rangle&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
-&=-i\hbar\int_0^1\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\,dx
+&=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
 \end{align*}\]++
 Let's compute the integrand:
 ++\[\begin{align*}
-&\phantom{=}\textrm{Integrand}\\
-&\phantom{=}\Psi^*\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\right)\\
+\Psi^* &=e^{i\lambda_1 t}\sin(\pi x)+e^{\lambda_2 t}\sin(2\pi x)\\
+\frac{\partial \Psi}{\partial x} &=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\\\\
+&\phantom{=}\Psi^* \frac{\partial \Psi}{\partial x}\\
 &=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
-&\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)+\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&\phantom{=}+\,\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
 &=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
 &\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
 &\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
@@ -584,7 +588,7 @@ and ++\[\begin{align*}
 \end{align*}\]++
 And so we're left with
 ++\[\begin{align*}
-\langle p\rangle=&-i\hbar\int_0^1\textrm{Integrand}\,dx\\
+\langle p\rangle=&-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
 =&-i\hbar\left[\frac{2}{\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
 &\quad\quad+\,\left.\frac{2}{3\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
 &=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
