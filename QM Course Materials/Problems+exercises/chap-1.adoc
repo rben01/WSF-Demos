@@ -412,17 +412,6 @@ This indicates that probability is _globally_ conserved: it cannot just appear o
 (This is good — we _need_ probabilities to always add up to 1.)
 
 . First,
-// ++\[\begin{align*}
-// \frac{\partial |\Psi(x,t)|}{\partial x}&=\frac{\partial \sqrt{\Psi^* \Psi}}{\partial x}\\
-// &=\frac{1}{2\sqrt{\Psi^* \Psi}}\frac{\partial (\Psi^* \Psi)}{\partial x}\\
-// &=\frac{1}{2|\Psi|}\left(\frac{\partial \Psi^* }{\partial x}\Psi+ \Psi^* \frac{\partial \Psi}{\partial x}\right)\\
-// &=\frac{1}{2}\left(\frac{\partial \Psi^* }{\partial x}\frac{\Psi}{|\Psi|}+ \frac{\Psi^*}{|\Psi|}  \frac{\partial \Psi}{\partial x}\right)\\
-// &=\frac{1}{2}\left(\frac{\partial \Psi^* }{\partial x}+ \frac{\partial \Psi}{\partial x}\right)\\
-// &=\frac{1}{2}\left(\frac{\partial (\Psi^* + \Psi) }{\partial x}\right)\\
-// &=\frac{1}{2}\left(\frac{\partial (2\,\mathfrak{Re}[ \Psi ]) }{\partial x}\right)\\
-// &=\frac{\partial \,\mathfrak{Re}[ \Psi ] }{\partial x}
-// \end{align*}\]++
-// Crucially, this is a real number that depends on ++\(x\)++; for brevity, call it ++\(r_x\)++.
 ++\[\begin{align*}
 \frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
 &=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
@@ -563,8 +552,7 @@ Let's compute the integrand:
 ++\[\begin{align*}
 \Psi^* &=e^{i\lambda_1 t}\sin(\pi x)+e^{\lambda_2 t}\sin(2\pi x)\\
 \frac{\partial \Psi}{\partial x} &=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\\\\
-&\phantom{=}\Psi^* \frac{\partial \Psi}{\partial x}\\
-&=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+\Psi^* \frac{\partial \Psi}{\partial x}&=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
 &\phantom{=}+\,\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
 &\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
 &=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
@@ -607,6 +595,20 @@ and so, finally,
 &=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
 \end{align*}\]++
 
+. We have
+++\[\begin{align*}
+\frac{d\langle x\rangle}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
+&=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
+\end{align*}\]++
+This doesn't look like ++\(\frac{\langle p\rangle}{m}\)++ yet, but we can apply the {sch} equation to make it so.
+++\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&=\frac{\partial }{\partial t}\left(e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \right)\\
+&=-i\lambda_1e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2t}\sin(2\pi x)\\
+&=-i\left[\lambda_1(\cos(-\lambda_1 t)+i\sin(-\lambda_1 t))\sin(\pi x)\right.\\
+&\phantom{=}\,\quad+\left.\lambda_2 (\cos(-\lambda_2 t)+i\sin(-\lambda_2 t))\sin(2\pi x)\right]\\
+&=-\left(\lambda_1\sin(\lambda_1 t)\sin(\pi x)+\lambda_2\sin(\lambda_2 t)\sin(2\pi x)\right)\\
+&\phantom{=}-i\left(\lambda_1\cos(\lambda_1 t)\sin(\pi x)+\lambda_2\cos(\lambda_2 t)\sin(2\pi x)\right)
+\end{align*}\]++
 ====
 
 
