@@ -497,6 +497,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		margin-right: 2vw;
 	}
 
+	:is(.sect2, .sect3) {
+		contain: layout paint;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 0.8em;
+		margin-bottom: 0.4em;
+	}
+
+	h2 + .sectionbody > .sect2 > h3:first-child,
+	h3 ~ .sect3 > h4 {
+		margin-top: 0.2em;
+	}
+
 	/* BEGIN question numbering */
 	/* create counters in all documents */
 	body {
@@ -1615,7 +1634,7 @@ Now we simply compute:
 So \(\Psi\) is indeed normalized.</p>
 </li>
 <li>
-<p></p>
+<p>&#160;</p>
 <div class="admonitionblock warning">
 <table>
 <tr>
@@ -1738,8 +1757,19 @@ and so, finally,
 \frac{d\langle x\rangle}{dt}&amp;=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
 &amp;=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
 \end{align*}\]
-This doesn&#8217;t look like \(\frac{\langle p\rangle}{m}\) yet, but we can apply the Schrödinger equation to make it so.
+This doesn&#8217;t quite look like \(\frac{\langle p\rangle}{m}\) yet, but we can apply the Schrödinger equation to make it so.
+First,
 \[\begin{align*}
+\frac{\partial ^2\Psi}{\partial x^2}&amp;=\frac{\partial }{\partial x}\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\right)\\
+&amp;=-\pi^2 e^{-i\lambda_1t}\sin(\pi x)-4\pi^2 e^{-i\lambda_2 t}\sin(2\pi x)\\
+&amp;=-\pi^2\left(e^{-i\lambda_1 t}\sin(\pi x)+4e^{-i\lambda_2 t}\sin(2\pi x)\right) \\\\
+\frac{\partial \Psi}{\partial t}&amp;=-i\lambda_1 e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2 t}\sin(2\pi x)
+\end{align*}\]</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>\[\begin{align*}
 \frac{\partial \Psi}{\partial t}&amp;=\frac{\partial }{\partial t}\left(e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \right)\\
 &amp;=-i\lambda_1e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2t}\sin(2\pi x)\\
 &amp;=-i\left[\lambda_1(\cos(-\lambda_1 t)+i\sin(-\lambda_1 t))\sin(\pi x)\right.\\
@@ -1747,8 +1777,6 @@ This doesn&#8217;t look like \(\frac{\langle p\rangle}{m}\) yet, but we can appl
 &amp;=-\left(\lambda_1\sin(\lambda_1 t)\sin(\pi x)+\lambda_2\sin(\lambda_2 t)\sin(2\pi x)\right)\\
 &amp;\phantom{=}-i\left(\lambda_1\cos(\lambda_1 t)\sin(\pi x)+\lambda_2\cos(\lambda_2 t)\sin(2\pi x)\right)
 \end{align*}\]</p>
-</li>
-</ol>
 </div>
 </div>
 </details>

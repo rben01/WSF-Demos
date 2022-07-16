@@ -497,6 +497,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		margin-right: 2vw;
 	}
 
+	:is(.sect2, .sect3) {
+		contain: layout paint;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 0.8em;
+		margin-bottom: 0.4em;
+	}
+
+	h2 + .sectionbody > .sect2 > h3:first-child,
+	h3 ~ .sect3 > h4 {
+		margin-top: 0.2em;
+	}
+
 	/* BEGIN question numbering */
 	/* create counters in all documents */
 	body {
