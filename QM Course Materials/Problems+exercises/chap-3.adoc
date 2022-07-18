@@ -168,6 +168,29 @@ NOTE: This problem highlights the fact that the eigenfunctions of an operator de
 
 == Generalized Statistical Interpretation
 
+* {q-num} Recall that if ++\(A\)++ is an observable with (normalized) eigenvectors ++\(f_\alpha\)++, we can write
+++\[\begin{align*}
+\Psi&=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
+\Psi&=\int_{\mathcal D} c_t f_t\,dt\quad \textrm{(continuous spectrum)}\\
+\end{align*}\]++
+and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++.
+Show that this is equivalent to "`projecting`" ++\(\Psi\)++ onto ++\(f_\alpha\)++: if ++\(P_\alpha=|f_\alpha\rangle\langle f_\alpha|\)++, then ++\(P_\alpha|\Psi\rangle=c_\alpha |f_\alpha\rangle\)++.
++
+.Solution
+[%collapsible%open]
+====
+The computation is straightforward:
+++\[\begin{align*}
+P_\alpha|\Psi\rangle&=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
+&=|f_\alpha\rangle\ \langle f_\alpha|\Psi\rangle\\
+&=\langle f_\alpha|\Psi\rangle\ |f_\alpha\rangle\\
+&=c_\alpha |f_\alpha\rangle
+\end{align*}\]++
+
+NOTE: This is exactly why we can say that ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equvalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
+For a concrete example, consider the vector space ++\(\mathbb R^n\)++, where projecting a vector ++\(v\)++ onto the ++\(k\)++^th^ basis vector ++\(e_n\)++, i.e., computing ++\(\langle v|e_k\rangle\)++, picks out the ++\(k\)++^th^ component of ++\(v\)++ — that's what the components of a vector in ++\(\mathbb R^n\)++ _mean_.
+====
+
 == The Uncertainty Principle
 
 == Vectors and Operators
@@ -254,7 +277,7 @@ Since ++\(\langle a|x\rangle\)++ is just a scalar, the eigenvectors correspondin
 
 * {q-num} For a matrix ++\(A\)++, the _matrix exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
 ++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
-(By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator.)
+(By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator — perhaps the summation should be written ++\(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\)++)
 The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers:
 +
 [{sublist-style}]
@@ -322,7 +345,8 @@ Simply write out the second expression by hand, apply the distributive property,
 You'll see the first expression appear.
 ====
 
-* {q-num} Show that ++\(\langle e^{\langle x|}|f\rangle=e^x |f\rangle\)++, i.e., the operator exponential of the ++\(\hat x\)++ observable is multiplication by ++\(e^x\)++.
+* {q-num} Let ++\(\hat x\)++ be the operator corresponding to the ++\(x\)++ observable, which is multiplication by ++\(x\)++ (in position space).
+Show that ++\(e^{\hat x}|f\rangle=e^x |f\rangle\)++, i.e., the operator exponential of ++\(\hat x\)++ is multiplication by ++\(e^x\)++.
 
 * {q-num} Show that the solution to the differential equation ++\(\frac{d}{dt}|x(t)\rangle= A|x(t)\rangle\)++ with initial condition ++\(|x(0)\rangle=|x_0\rangle\)++, where ++\(A\)++ is a constant nonzero operator, is ++\(|x(t)\rangle=e^{At}|x_0\rangle\)++.
 +

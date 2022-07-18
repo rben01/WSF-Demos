@@ -91,11 +91,11 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 == The Free Particle
 
-* {q-num} Find ++\(\Psi(x,t)\)++ given ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++
+* {q-num} Suppose a free particle has the initial wavefunction ++\(\Psi(x,0) = \frac{\sin(x)}{\pi x}\)++.
+(Take our word for it that this wavefunction is already normalized.)
 [{sublist-style}]
-. Normalize ++\(\Psi(x,0)\)++
-. Solve for ++\(F(k)\)++. You may use computational software to help you calculate the integral.
-. Find ++\(\Psi(x,t)\)++
+. Find ++\(\mathcal{F}[\Psi](k)\)++. You may use computational software to help you calculate the integral.
+. Find ++\(\Psi(x,t)\)++.
 
 * {q-num} Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.
 
