@@ -74,52 +74,55 @@ save_spec("fig-3.1.1-f2.svg")
 f3(x) = x < 0.5 ? 4x : 4(1 - x);
 f4(x) = 2 * sin(2 * pi * x)^2
 
+dash_line_attrs = [
+    :(color = {value = "#333"}),
+    :(opacity = {value = 0.6}),
+    :(strokeDash = {value = [3, 3]}),
+    :(size = {value = 2}),
+]
+
 make_df(range(; start=0, stop=1, length=250), "𝜌₁" => f3, "𝜌₂" => f4) |>
-@vlplot(
-    config = {axisX = {title = "x"}},
-    facet = {column = {field = :name, title = nothing}},
-    transform = [
-        {
-            calculate = """if(datum.name == "𝜌₁", $(sqrt(7/24 - 1/4)), $(sqrt(1/3 - 1/4 -
-            1/(8 * pi^2))))""",
-            as = "stddev",
-        },
-        {calculate = "0.5", as = "x_mean"},
-        {calculate = "datum.x_mean - datum.stddev", as = "lower"},
-        {calculate = "datum.x_mean + datum.stddev", as = "upper"},
-    ],
-    spec = {
-        layer = [
+eval(
+    :(@vlplot(
+        facet = {column = {field = :name, title = nothing}},
+        transform = [
             {
-                mark = :line,
-                encoding = {
-                    x = :x, y = {field = :y, axis = {titleAngle = 0, titlePadding = 8}}
-                },
+                calculate = """if(datum.name == "𝜌₁", $(sqrt(7/24 - 1/4)), $(sqrt(1/3 - 1/4 -
+                1/(8 * pi^2))))""",
+                as = "stddev",
             },
-            {
-                mark = :rule,
-                encoding = {x = {field = "x_mean", aggregate = "mean"}},
-                color = {value = "#333"},
-                opacity = {value = 0.6},
-                size = {value = 3},
-            },
-            {
-                mark = :rule,
-                encoding = {x = {field = "lower", aggregate = "mean"}},
-                color = {value = "#333"},
-                opacity = {value = 0.6},
-                strokeDash = {value = [3, 3]},
-                size = {value = 2},
-            },
-            {
-                mark = :rule,
-                encoding = {x = {field = "upper", aggregate = "mean"}},
-                color = {value = "#333"},
-                opacity = {value = 0.6},
-                strokeDash = {value = [3, 3]},
-                size = {value = 2},
-            },
+            {calculate = "0.5", as = "x_mean"},
+            {calculate = "datum.x_mean - datum.stddev", as = "lower"},
+            {calculate = "datum.x_mean + datum.stddev", as = "upper"},
         ],
-    },
+        spec = {
+            layer = [
+                {
+                    mark = :line,
+                    encoding = {
+                        x = {field = :x, title = "x"},
+                        y = {field = :y, axis = {titleAngle = 0, titlePadding = 8}},
+                    },
+                },
+                {
+                    mark = :rule,
+                    encoding = {x = {field = "x_mean", aggregate = "min"}},
+                    color = {value = "#333"},
+                    opacity = {value = 0.6},
+                    size = {value = 3},
+                },
+                {
+                    mark = :rule,
+                    encoding = {x = {field = "lower", aggregate = "min"}},
+                    $(dash_line_attrs...),
+                },
+                {
+                    mark = :rule,
+                    encoding = {x = {field = "upper", aggregate = "min"}},
+                    $(dash_line_attrs...),
+                },
+            ],
+        },
+    )),
 ) |>
 save_spec("fig-1.3.1-graphs.svg")

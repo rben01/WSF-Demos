@@ -1,5 +1,6 @@
 :docinfo: shared
 :toc: left
+:!linkcss:
 :nofooter:
 :table-settings: pass:[cols="<1s,<4a,<4a",options="header",frame="all",stripes="even",grid="all"]
 :imagesdir: images

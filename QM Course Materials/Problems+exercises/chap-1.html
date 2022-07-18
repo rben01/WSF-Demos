@@ -1410,10 +1410,8 @@ Show that \(J\) as defined above points in the direction of \(\frac{\partial \va
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>First, recall the Schrödinger equation,
-\[ i\hbar\frac{\partial \Psi}{\partial t}=\hat H\Psi \]
-For a free particle, the Hamiltonian is simply its kinetic energy, and so
-\[ i\hbar\frac{\partial \Psi}{\partial t}=\frac{p^2}{2m}\Psi=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]
+<p>First, recall the Schrödinger equation for a free particle,
+\[ i\hbar\frac{\partial \Psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]
 Now recall that \(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\). Then,
 \[\begin{align*}
 \frac{\partial \Psi}{\partial t}&amp;=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
@@ -1438,12 +1436,15 @@ And the integral is now trivial:
 &amp;=-J(x,t)\Bigr|^{x=b}_{x=a}\\
 &amp;=J(a,t)-J(b,t)
 \end{align*}\]
-This represents, roughly speaking, the fact that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the amount entering at \(a\) and the amount leaving at \(b\).
-In other words, probability is locally conserved: in order for the net probability in a region to change over time, it must enter or exit through the boundary of that region.</p>
+We see that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the values of the probability current at \(a\) and \(b\).
+This means that &#8220;probability current&#8221; is, in fact, a good name for this quantity:
+if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region&#8217;s boundary, then, via <a href="https://en.wikipedia.org/wiki/Divergence_theorem" target="_blank" rel="noopener">Gauss&#8217;s Theorem</a>, we can liken the function&#8217;s value on the surface to a current. (For more info, see <a href="https://en.wikipedia.org/wiki/Continuity_equation" target="_blank" rel="noopener">Transport Equation</a>.)
+From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region&#8217;s boundary.
+(This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when \(\frac{\partial \Psi}{\partial x}\) is replaced by \(\nabla \Psi\) and the region&#8217;s boundary is an actual surface and not just two points on either side.)</p>
 <div class="paragraph">
 <p>Since \(\Psi\) is square integrable, it must go to 0 as \(x\to\pm\infty\), and therefore so must \(J\) (just by the definition).
 And so \[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]
-This indicates that probability is <em>globally</em> conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
+This indicates that probability is conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
 (This is good — we <em>need</em> probabilities to always add up to 1.)</p>
 </div>
 </li>
@@ -1454,7 +1455,7 @@ This indicates that probability is <em>globally</em> conserved: it cannot just a
 &amp;=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
 &amp;= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
 \end{align*}\]
-And, finally,
+And so
 \[\begin{align*}
 J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
 &amp;=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
@@ -1462,7 +1463,7 @@ J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\
 &amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
 &amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
 \end{align*}\]
-which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\).</p>
+which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, \(\nabla \varphi\)).</p>
 </li>
 </ol>
 </div>
@@ -1533,20 +1534,38 @@ Here are the main ones we&#8217;ll use:</p>
 \sin(\alpha)\cos(\beta)&amp;=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))
 \end{align*}\]</p>
 </div>
+<div class="paragraph">
+<p>We&#8217;ll also want the following two integrals: for integer \(n\),
+\[\begin{align*}
+\int_0^1\cos(n\pi x)\,dx&amp;=\left.\frac{\sin(n\pi x)}{n\pi}\right|^1_0=0\\
+\int_0^1\sin(n\pi x)\,dx&amp;=\left.-\frac{\cos(n\pi x)}{n\pi}\right|^1_0=\begin{cases}\frac{2}{n\pi}&amp;n\ \textrm{odd}\\0&amp;n\ \textrm{even}\end{cases}
+\end{align*}\]</p>
+</div>
+<div class="paragraph">
+<p>And we&#8217;ll want the following, which requires integration by parts.
+Let \(u=x,dv=\cos(n\pi x)\,dx\).
+Then \(du=dx\) and \(v=\frac{\sin(n\pi x)}{n \pi }\).
+\[\begin{align*}
+\int_0^1x\cos(n\pi x)\,dx&amp;=\int_0^1u\,dv\\
+&amp;=uv\Bigr|^1_0 - \int_0^1v\,du\\
+&amp;=\left.\frac{x\sin(n\pi x)}{n\pi}\right|^1_0-\int_0^1\frac{\sin(n\pi x)}{n\pi }\,dx\\
+&amp;=\begin{cases}-\frac{2}{(n\pi)^2}&amp;n\ \textrm{odd}\\0&amp;n\ \textrm{even}\end{cases}
+\end{align*}\]</p>
+</div>
+<div class="paragraph">
+<p>Ok, on to the task at hand.</p>
+</div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>First note that if \(m,n\in\mathbb Z\), then
+<p>First note that
 \[\begin{align*}
-\int_0^1\sin^2(n\pi x)\,dx &amp;=\int_0^1\frac{1}{2}(1-\cos(2n\pi x))\,dx\\
-&amp;=\frac{1}{2}\left.\left(x-\frac{\sin(2n\pi x)}{2n\pi}\right)\right|^1_0\\
-&amp;=\frac{1}{2}
+\int_0^1\sin^2(n\pi x)\,dx =\int_0^1\frac{1}{2}(1-\cos(2n\pi x))\,dx=\frac{1}{2}
 \end{align*}\]
 And if \(m\ne n\) then
 \[\begin{align*}
 &amp;\phantom{=}\int_0^1\sin(m\pi x)\sin(n \pi x)\,dx\\
 &amp;=\int_0^1\frac{1}{2}(\cos((m-n)\pi x)-\cos((m+n)\pi x))\,dx\\
-&amp;=\frac{1}{2}\left.\left(\frac{\sin((m-n)\pi x)}{m-n}-\frac{\sin((m+n)\pi x)}{m+n}\right)\right|^1_0\\
 &amp;=0
 \end{align*}\]
 Now,
@@ -1591,27 +1610,15 @@ These integrals won&#8217;t be pretty.
 We&#8217;ll do the three components separately, starting with the first two.
 \[\begin{align*}
 \int_0^1x\sin^2(n\pi x)&amp;=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
-&amp;=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)
+&amp;=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)\\
+&amp;=\frac{1}{2}\left(\left.\frac{x^2}{2}\right|^1_0-0\right)\\
+&amp;=\frac{1}{4}
 \end{align*}\]
-The first integral is \(\frac{1}{2}\); for the second we need integration by parts. Let \(u=x,dv=\cos(m\pi x)\,dx\) (for any integer \(m\); certainly this will hold for \(m=2n\)).
-Then \(du=dx\) and \(v=\frac{\sin(m\pi x)}{m \pi }\), and so
+Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(\phi\) constant for now).
 \[\begin{align*}
-\int_0^1x\cos(m \pi x)\,dx&amp;=\int_0^1 u\,dv\\
-&amp;=uv\Bigr|^1_0-\int_0^1 v\,du\\
-&amp;=\left.\frac{x\sin(m \pi x)}{m \pi}\right|^1_0-\int_0^1 \frac{\sin(m \pi x)}{m \pi}\,dx\\
-&amp;=0 - \left.\frac{-\cos(m\pi x)}{(m\pi)^2}\right|^1_0\\
-&amp;=\frac{(-1)^m-1}{(m\pi)^2}
-\end{align*}\]
-Now, with \(m=2n\), \(\frac{(-1)^m-1}{(m\pi)^2}=\frac{1-1}{(m\pi)^2}=0\), and so,
-\[\begin{align*}
-\int_0^1x\sin^2(n\pi x)=\frac{1}{2}\left(\frac{1}{2}-0\right)&amp;=\frac{1}{4}
-\end{align*}\]
-Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(\phi\) constant for now). Below, \(m=1,n=2\), so \(m-n=-1\) and \(m+n=3\).
-\[\begin{align*}
-&amp;\phantom{=}\int_0^1x\sin(m\pi x)\sin(n\pi x)\,dx\\
-&amp;=\int_0^1 x\cdot\frac{1}{2}\left(\cos((m-n)x)-\cos((m+n)x)\right)\,dx\\
-&amp;=\frac{1}{2}\left(\frac{(-1)^{m-n}-1}{((m-n)\pi)^2}-\frac{(-1)^{m+n}-1}{((m+n)\pi)^2}\right)\\
-&amp;=\left(-\frac{1}{\pi^2}+\frac{1}{9\pi^2}\right)\\
+&amp;\phantom{=}\int_0^1x\sin(\pi x)\sin(2\pi x)\,dx\\
+&amp;=\int_0^1 x\cdot\frac{1}{2}\left(\cos(-x)-\cos(3x)\right)\,dx\\
+&amp;=\frac{1}{2}\left(-\frac{2}{(-\pi)^2}-\frac{2}{(3\pi)^2}\right)\\
 &amp;=-\frac{8}{9\pi^2}
 \end{align*}\]
 And so, we finally obtain
@@ -1649,30 +1656,22 @@ Let&#8217;s compute the integrand:
 &amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
 &amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
 &amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
-&amp;\phantom{=}+\,\sin(\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\\
-&amp;\phantom{=}+\,\sin(3\pi x)\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)
+&amp;\phantom{=}+\,\pi\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{=}+\,\pi\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)
 \end{align*}\]
 Now, we need to integrate this.
-Thankfully,
+Thankfully we already know how to compute \(\int_0^1 \sin(n\pi x)\,dx\), and so we obtain
 \[\begin{align*}
-\int_0^1\sin(n\pi x)\,dx&amp;=\left.\frac{-\cos(n\pi x)}{n\pi}\right|^1_0=\frac{1-(-1)^n}{n\pi}
-\end{align*}\]
-Therefore \[\begin{align*}
-\int_0^1\sin(2\pi x)\,dx=\int_0^1\sin(4\pi x)\,dx=0
-\end{align*}\]
-and \[\begin{align*}
-\int_0^1\sin(\pi x)\,dx&amp;=\frac{2}{\pi}\\
-\int_0^1\sin(3\pi x)\,dx&amp;=\frac{2}{3\pi}
-\end{align*}\]
-And so we&#8217;re left with
-\[\begin{align*}
-\langle p\rangle=&amp;-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
-=&amp;-i\hbar\left[\frac{2}{\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}-2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
-&amp;\quad\quad+\,\left.\frac{2}{3\pi}\left(\pi e^{-i(\lambda_1-\lambda_2)t}+2\pi e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+\langle p\rangle&amp;=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
+&amp;=-i\hbar\int_0^1\left[\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\right.\\
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\pi\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\left.\pi\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
+&amp;=-i\hbar\left[2\left( e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&amp;\quad\quad+\,\left.\frac{2}{3}\left( e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
 &amp;=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
 &amp;=-\frac{8i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
 \end{align*}\]
-Uh oh, this looks like it might not be real as well.
+Uh oh, this also looks like it might not be real.
 But,
 \[\begin{align*}
 e^{iw}-e^{-iw}&amp;=e^{iw}-(e^{iw})^*\\
