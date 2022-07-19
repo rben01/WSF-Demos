@@ -46,7 +46,7 @@
 			}
 			.grid-left-right {
 				grid-template-columns: max-content 1fr;
-				column-gap: 50px;
+				column-gap: 30px;
 			}
 			.curve {
 				fill: none;
@@ -64,6 +64,9 @@
 			.axis-name {
 				font-size: 30px;
 			}
+			.axis-name.hyperbola {
+				font-size: 23px;
+			}
 			.curve {
 				fill: none;
 			}
@@ -74,6 +77,12 @@
 			.curve-foreground {
 				stroke: var(--color-highlight);
 				stroke-width: 5px;
+			}
+			.curve.hyperbola.bg {
+				stroke-width: 4px;
+			}
+			.curve.hyperbola.fg {
+				stroke-width: 2px;
 			}
 			.barrier {
 				stroke: #bbb;
@@ -171,6 +180,15 @@
 				stroke-width: 4px;
 				stroke: white;
 			}
+			#plots {
+				display: flex;
+				flex-direction: row;
+				column-gap: 40px;
+				align-items: flex-start;
+			}
+			svg {
+				vertical-align: text-top;
+			}
 		</style>
 	</head>
 	<body>
@@ -184,6 +202,10 @@
 					<span>Lattice spacing: <span id="text-R">\(R\)</span></span>
 					<span
 						><input type="range" class="slider disablable" id="slider-R"
+					/></span>
+					<span>B: <span id="text-B">\(B\)</span></span>
+					<span
+						><input type="range" class="slider disablable" id="slider-B"
 					/></span>
 					<span>Animation speed</span>
 					<span><input type="range" class="slider" id="slider-speed" /></span>
@@ -206,6 +228,7 @@
 			</div>
 			<div id="plots">
 				<svg id="plot-2D"></svg>
+				<svg id="plot-hyperbola"></svg>
 			</div>
 		</div>
 		<script src="./utils.js"></script>

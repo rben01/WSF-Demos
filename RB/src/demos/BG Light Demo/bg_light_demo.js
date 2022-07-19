@@ -1,5 +1,5 @@
 /* global applyGraphicalObjs katex */
-const WIDTH = 800;
+const WIDTH = 650;
 const HEIGHT = 600;
 
 const X_MAX = 10;
@@ -16,9 +16,34 @@ const [Y_MIN, Y_MAX] = (() => {
 
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
 
-const xScale = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
-const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT, 0]);
+const MARGIN = 0;
+const xScale = d3.scaleLinear([X_MIN, X_MAX], [MARGIN, WIDTH - MARGIN]);
+const yScale = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT - MARGIN, MARGIN]);
 const y0s = yScale(Y_0);
+
+const HYPERBOLA_X_MIN = -20;
+const HYPERBOLA_X_MAX = -HYPERBOLA_X_MIN;
+const HYPERBOLA_WIDTH = 400;
+const HYPERBOLA_HEIGHT = 600;
+const [HYPERBOLA_Y_MIN, HYPERBOLA_Y_MAX] = (() => {
+	const aspect = HYPERBOLA_WIDTH / HYPERBOLA_HEIGHT;
+	const yMin = Y_0 + (HYPERBOLA_X_MIN - X_0) / aspect;
+	const yMax = Y_0 + (HYPERBOLA_X_MAX - X_0) / aspect;
+	return [yMin, yMax];
+})();
+
+const plotHyperbola = d3
+	.select("#plot-hyperbola")
+	.attr("width", HYPERBOLA_WIDTH)
+	.attr("height", HYPERBOLA_HEIGHT);
+const hyperbolaXScale = d3.scaleLinear(
+	[HYPERBOLA_X_MIN, HYPERBOLA_X_MAX],
+	[MARGIN, HYPERBOLA_WIDTH - MARGIN],
+);
+const hyperbolaYScale = d3.scaleLinear(
+	[HYPERBOLA_Y_MIN, HYPERBOLA_Y_MAX],
+	[HYPERBOLA_HEIGHT - MARGIN, MARGIN],
+);
 
 let currentTime = 0;
 
@@ -36,6 +61,15 @@ const sliders = {
 		const slider = document.getElementById("slider-R");
 		slider.min = 0.1;
 		slider.max = 0.7;
+		slider.step = 0.001;
+		slider.value = (+slider.min + +slider.max) / 2;
+
+		return slider;
+	})(),
+	B: (() => {
+		const slider = document.getElementById("slider-B");
+		slider.min = 0.0;
+		slider.max = 0.85;
 		slider.step = 0.001;
 		slider.value = (+slider.min + +slider.max) / 2;
 
@@ -64,17 +98,150 @@ const sliders = {
 
 function sliderValues() {
 	const v = +sliders.v.value;
-	const gamma = 1 / Math.sqrt(1 - v ** 2);
+	const B = +sliders.B.value;
 
+	const gamma = (1 - v ** 2) ** -0.5;
+	const Gamma = (1 - B ** 2) ** -0.5;
+
+	const z0 = +sliders.z0.value;
 	const R = +sliders.R.value;
 	const dist = 2 * gamma * Math.PI * R;
-	return { v, R, z0: +sliders.z0.value, gamma, dist };
+	return { v, R, B, z0, gamma, Gamma, dist };
 }
 
-// eslint-disable-next-line no-use-before-define
-d3.selectAll(".slider").on("input", () => update(0, true));
+function initialize() {
+	// eslint-disable-next-line no-use-before-define
+	const data = update(0);
+	applyGraphicalObjs(plotHyperbola, data.hyperbola, {
+		key: d => d.key,
+		selector: ".hyperbola",
+	});
+}
 
-function getAxisData() {
+d3.selectAll(".slider").on("input", () => {
+	initialize();
+});
+
+function getHyperbolaAxisData() {
+	const tickLength = 4;
+
+	const xAxisTicks = hyperbolaXScale.ticks(20).filter(x => x !== X_0);
+	const nXAxisLabels = 10;
+	const xAxisLabelTicks = hyperbolaXScale
+		.ticks(nXAxisLabels)
+		.filter(x => x !== X_0)
+		.slice(1, -1);
+	const xAxisFormatter = hyperbolaXScale.tickFormat(nXAxisLabels);
+
+	const yAxisTicks = hyperbolaYScale.ticks(15).filter(y => y !== Y_0);
+	const nYAxisLabels = 7;
+	const yAxisLabelTicks = hyperbolaYScale.ticks(nYAxisLabels).filter(y => y !== Y_0);
+	const yAxisFormatter = hyperbolaYScale.tickFormat(nYAxisLabels);
+
+	const xs0 = hyperbolaXScale(X_0);
+	const ys0 = hyperbolaYScale(Y_0);
+
+	const [xMin, xMax] = hyperbolaXScale.range();
+	const [yMin, yMax] = hyperbolaYScale.range();
+
+	const axisData = [
+		{
+			shape: "line",
+			class: "axis x-axis",
+			attrs: {
+				x1: xMin - 1.5,
+				x2: xMax + 1.5,
+				y1: ys0,
+				y2: ys0,
+			},
+		},
+		{
+			shape: "line",
+			class: "axis y-axis",
+			attrs: {
+				x1: xs0,
+				x2: xs0,
+				y1: yMin,
+				y2: yMax,
+			},
+		},
+		...xAxisTicks.map(x => {
+			const xs = hyperbolaXScale(x);
+			return {
+				shape: "line",
+				class: "axis axis-tick x-axis-tick",
+				attrs: {
+					x1: xs,
+					x2: xs,
+					y1: ys0,
+					y2: ys0 + tickLength,
+				},
+			};
+		}),
+		...xAxisLabelTicks.map(x => {
+			const xs = hyperbolaXScale(x);
+			return {
+				shape: "text",
+				class: "axis axis-label x-axis-label",
+				text: xAxisFormatter(x),
+				attrs: {
+					x: xs,
+					y: ys0 + 12,
+				},
+			};
+		}),
+		...yAxisTicks.map(y => {
+			const ys = hyperbolaYScale(y);
+			return {
+				shape: "line",
+				class: "axis axis-tick y-axis-tick",
+				attrs: {
+					x1: xs0,
+					x2: xs0 - tickLength,
+					y1: ys,
+					y2: ys,
+				},
+			};
+		}),
+		...yAxisLabelTicks.map(y => {
+			const ys = hyperbolaYScale(y);
+			return {
+				shape: "text",
+				class: "axis axis-label y-axis-label",
+				text: yAxisFormatter(y),
+				attrs: {
+					x: xs0 - 10,
+					y: ys,
+				},
+			};
+		}),
+		{
+			shape: "text",
+			class: "axis hyperbola axis-label x-axis-label axis-name x-axis-name",
+			text: "𝑥″",
+			attrs: {
+				x: hyperbolaXScale.range()[1] - 14,
+				y: ys0 + 5,
+			},
+		},
+		{
+			shape: "text",
+			class: "axis hyperbola axis-label axis-name",
+			text: "𝑡″",
+			attrs: {
+				x: xs0 + 10,
+				y: hyperbolaYScale.range()[1] + 5,
+				"text-anchor": "start",
+				"dominant-baseline": "hanging",
+			},
+		},
+	];
+
+	return axisData;
+}
+applyGraphicalObjs(plotHyperbola, getHyperbolaAxisData(), { selector: ".axis" });
+
+function getPlotAxisData() {
 	const tickLength = 7;
 
 	const xAxisTicks = xScale.ticks(20).filter(x => x !== X_0);
@@ -101,8 +268,8 @@ function getAxisData() {
 			shape: "line",
 			class: "axis x-axis",
 			attrs: {
-				x1: xMin,
-				x2: xMax,
+				x1: xMin - 1.5,
+				x2: xMax + 1.5,
 				y1: ys0,
 				y2: ys0,
 			},
@@ -170,7 +337,7 @@ function getAxisData() {
 		{
 			shape: "text",
 			class: "axis axis-label x-axis-label axis-name x-axis-name",
-			text: "𝑧′",
+			text: "𝑧′′",
 			attrs: {
 				x: xScale.range()[1] - 40,
 				y: ys0 + 20,
@@ -179,7 +346,7 @@ function getAxisData() {
 		{
 			shape: "text",
 			class: "axis axis-label axis-name",
-			text: "𝑥′",
+			text: "𝑥′′",
 			attrs: {
 				x: xs0 + 15,
 				y: yScale.range()[1] + 5,
@@ -191,7 +358,7 @@ function getAxisData() {
 
 	return axisData;
 }
-applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
+applyGraphicalObjs(plot2D, getPlotAxisData(), { selector: ".axis" });
 
 const maxV = +sliders.v.max;
 const dopplerMaxMagnitude = Math.sqrt((1 + maxV) / (1 - maxV));
@@ -200,38 +367,106 @@ const colorInterpolator = d3.scalePow(
 	["#FF2200", "#FFF000", "#0090FF"],
 );
 
+const hyperbolaLine = d3
+	.line()
+	.curve(d3.curveNatural)
+	.x(pair => pair[0])
+	.y(pair => pair[1]);
+
+function getHyperbolaDatum({ index, x0, y0, te, C, color }) {
+	const Y = 0;
+
+	const pathPoints = [];
+	const nPathPoints = 250;
+
+	const [xMin, xMax] = [HYPERBOLA_X_MIN, HYPERBOLA_X_MAX];
+	const dx = (xMax - xMin) / (nPathPoints - 1);
+
+	for (let i = 0; i < nPathPoints; i++) {
+		const x = xMin + i * dx;
+		const sqrt = Math.sqrt(((x - x0) ** 2 + (Y - y0) ** 2) / C);
+		const yUp = te + sqrt;
+
+		pathPoints.push([hyperbolaXScale(x), hyperbolaYScale(yUp)]);
+	}
+
+	return ["bg", "fg"].map(class_ => ({
+		shape: "path",
+		class: `hyperbola curve ${class_}`,
+		key: `hyper-${index}-${class_}`,
+		attrs: {
+			d: hyperbolaLine(pathPoints),
+			stroke: class_ === "bg" ? "black" : color,
+		},
+	}));
+}
+
 function getData2D() {
-	const { v, dist: interSourceDist, z0, gamma } = sliderValues();
+	const { v, dist: interSourceDistX, z0, gamma, Gamma, B } = sliderValues();
+	const interSourceDistY = interSourceDistX * v * B * Gamma;
+
 	const C = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
 
-	const nLightSourcesLeft = Math.floor(Math.abs(X_MIN - X_0) / interSourceDist);
-	const nLightSourcesRight = Math.floor(Math.abs(X_MAX - X_0) / interSourceDist);
-	const nLightSourcesMid = 1;
-	const nLightSources = nLightSourcesLeft + nLightSourcesMid + nLightSourcesRight;
+	const nLightSourcesLeft = Math.floor(Math.abs(X_MIN - X_0) / interSourceDistX);
+	const nLightSourcesBelow = Math.floor(Math.abs(Y_MIN - Y_0) / interSourceDistY);
 
-	const t0 = nLightSourcesRight * interSourceDist * v;
+	const nLightSourcesRight = Math.floor(Math.abs(X_MAX - X_0) / interSourceDistX);
+	const nLightSourcesAbove = Math.floor(Math.abs(Y_MAX - Y_0) / interSourceDistY);
+
+	const nLightSourcesMid = 1;
+
+	const nLightSourcesHorizontal =
+		nLightSourcesLeft + nLightSourcesMid + nLightSourcesRight;
+	const nLightSourcesVertical =
+		nLightSourcesBelow + nLightSourcesMid + nLightSourcesAbove;
+
+	const widerThanTall = nLightSourcesHorizontal <= nLightSourcesVertical;
+
+	const nLightSources = widerThanTall
+		? nLightSourcesHorizontal
+		: nLightSourcesVertical;
+	const nLightSourcesQuadrant1 = widerThanTall
+		? nLightSourcesRight
+		: nLightSourcesAbove;
+	const nLightSourcesQuadrant3 = widerThanTall
+		? nLightSourcesLeft
+		: nLightSourcesBelow;
+
+	const t0 = nLightSourcesQuadrant1 * interSourceDistX * v * Gamma;
+	console.log({
+		t0,
+		Gamma,
+		widerThanTall,
+		nLightSources,
+		nLightSourcesQuadrant1,
+		nLightSourcesAbove,
+	});
 	const t = currentTime - t0;
 
 	const dopplerMagnitude = Math.sqrt((1 + v) / (1 - v));
-	console.log(
-		dopplerMagnitude,
-		dopplerMaxMagnitude,
-		colorInterpolator(dopplerMagnitude),
-	);
+	// console.log(
+	// 	dopplerMagnitude,
+	// 	dopplerMaxMagnitude,
+	// 	colorInterpolator(dopplerMagnitude),
+	// );
+
+	const hyperbolaData = [];
 
 	const lightSources = d3.range(nLightSources).flatMap(i => {
-		const k = i - nLightSourcesLeft;
-		const x = k * interSourceDist;
+		const k = i - nLightSourcesQuadrant3;
+		const x = k * interSourceDistX;
+		const y = x * v * B * Gamma;
 
 		const doppler = k < 0 ? "red-shift" : k === 0 ? "no-shift" : "blue-shift";
 
-		const emissionTime = -v * x;
+		const emissionTime = (-v * Gamma * x) / B;
 		const r = Math.max((t - emissionTime) * C, 0);
 		const attrs = {
 			cx: xScale(x),
-			cy: y0s,
+			cy: yScale(y),
 			r,
 		};
+
 		const mod = ((k % 3) + 3) % 3;
 		const dashStyle =
 			mod === 0
@@ -243,6 +478,8 @@ function getData2D() {
 				: undefined;
 
 		const color = colorInterpolator(dopplerMagnitude ** Math.sign(k));
+
+		hyperbolaData.push({ index: i, x0: x, y0: y, te: emissionTime, C, color });
 
 		return [
 			{
@@ -421,15 +658,18 @@ function getData2D() {
 		});
 	})();
 
-	return [
-		zLine,
-		...lightSources,
-		...zSources,
-		...slopeLines,
-		...zSourceDots,
-		...slopeLineDots,
-		...slopeLineConnectors,
-	];
+	return {
+		lights: [
+			zLine,
+			...lightSources,
+			...zSources,
+			...slopeLines,
+			...zSourceDots,
+			...slopeLineDots,
+			...slopeLineConnectors,
+		],
+		hyperbola: hyperbolaData.flatMap(getHyperbolaDatum),
+	};
 	// const points = [];
 	// for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
 	// 	const x = wavefunctionPoints[2 * i];
@@ -473,16 +713,19 @@ function update(dtMS) {
 	const speed = +sliders.speed.value;
 	currentTime += (speed * dtMS) / 1000;
 
-	applyGraphicalObjs(plot2D, getData2D(), { key: d => d.key, selector: ".data" });
+	const data = getData2D();
+	applyGraphicalObjs(plot2D, data.lights, { key: d => d.key, selector: ".data" });
 
 	// if (typeof katex !== "undefined") {
 	// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
 	// 	katex.render(`\\sigma=${floatFormatter(sigma)}`, textSpans.sigma);
 	// 	katex.render(`p=${floatFormatter(p)}`, textSpans.p);
 	// }
+
+	return data;
 }
 
-update(0, true);
+initialize();
 
 let isAnimating = false;
 let animationFrame;
