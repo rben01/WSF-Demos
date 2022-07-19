@@ -432,15 +432,15 @@ function getData2D() {
 		? nLightSourcesLeft
 		: nLightSourcesBelow;
 
-	const t0 = nLightSourcesQuadrant1 * interSourceDistX * v * Gamma;
-	console.log({
-		t0,
-		Gamma,
-		widerThanTall,
-		nLightSources,
-		nLightSourcesQuadrant1,
-		nLightSourcesAbove,
-	});
+	const t0 = (nLightSourcesQuadrant1 * interSourceDistX * v * Gamma) / B;
+	// console.log({
+	// 	t0,
+	// 	Gamma,
+	// 	widerThanTall,
+	// 	nLightSources,
+	// 	nLightSourcesQuadrant1,
+	// 	nLightSourcesAbove,
+	// });
 	const t = currentTime - t0;
 
 	const dopplerMagnitude = Math.sqrt((1 + v) / (1 - v));
