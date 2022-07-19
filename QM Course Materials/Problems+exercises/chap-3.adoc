@@ -170,7 +170,7 @@ NOTE: This problem highlights the fact that the eigenfunctions of an operator de
 * {q-num} Recall that if ++\(A\)++ is an observable with (normalized) eigenvectors ++\(f_\alpha\)++, we can write
 ++\[\begin{align*}
 \Psi&=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
-\Psi&=\int_{\mathcal D} c_t f_t\,dt\quad \textrm{(continuous spectrum)}\\
+\Psi&=\int_{\mathcal D} c_z f_z\,dz\quad \textrm{(continuous spectrum)}\\
 \end{align*}\]++
 and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++.
 Show that this is equivalent to "`projecting`" ++\(\Psi\)++ onto ++\(f_\alpha\)++: if ++\(P_\alpha=|f_\alpha\rangle\langle f_\alpha|\)++, then ++\(P_\alpha|\Psi\rangle=c_\alpha |f_\alpha\rangle\)++.
@@ -211,7 +211,6 @@ Then
 &=(AB)^\dagger-(BA)^\dagger\\
 &=B^\dagger A^\dagger - A^\dagger B^\dagger\\
 &=BA-AB\\
-&=[B,A]\\
 &=-[A,B]
 \end{align*}\]++
 Therefore,
