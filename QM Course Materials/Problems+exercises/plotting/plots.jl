@@ -50,15 +50,11 @@ make_df(
 save_spec("fig-3.1.1-f1.svg")
 # %%
 function f2(x)
-    return if abs(x) < 1
-        1
-    else
-        1 / abs(x)
-    end
+    return 1 / abs(x + 1)
 end
 
 make_df(
-    range(; start=-30, stop=30, length=250),
+    range(; start=0, stop=30, length=250),
     "𝑓, divergent" => f2,
     "𝑓², convergent" => x -> f2(x)^2,
 ) |>

@@ -8,21 +8,21 @@ include::shared_attributes.adoc[]
 
 * {q-num}
 A function ++\(f\)++ is said to be absolutely integrable when ++\(|f|\)++ is integrable.
-.. Find a continuous function (on any domain) that is absolutely integrable, but not square-integrable.
-.. Find a continuous function (on any domain) that is square-integrable, but not absolutely integrable.
+.. Find a continuous real-valued function on ++\((0,\infty)\)++ that is absolutely integrable, but not square-integrable.
+.. Find a continuous real-valued function on ++\((0,\infty)\)++ that is square-integrable, but not absolutely integrable.
 
 +
 .Solution
 [%collapsible]
 ====
-The "`trick`" is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
+The "`trick`" is find functions that approach the ++\(x\)++- or ++\(y\)++-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
 
 [{sublist-style}]
-. One example is the following function defined on the positive reals:
+. One example is the following function:
 ++\[\begin{align*}
 f(x)=\begin{cases}
 x^{-\frac{1}{2}}-1&x\le1\\
-0&x>1
+0&x\ge 1
 \end{cases}
 \end{align*}
 \]++
@@ -32,12 +32,9 @@ image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,
 This is because ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
 So ++\(x^{-\frac{1}{2}}\)++ is integrable, but its square, ++\(x^{-1}\)++, is not.
 
-. One example is the following function defined on the reals:
+. One example is the following function:
 ++\[\begin{align*}
-f(x)=\begin{cases}
-\frac{1}{|x|}&|x|\ge1\\
-1&|x|<1
-\end{cases}
+f(x)=\frac{1}{x+1}
 \end{align*}
 \]++
 +
@@ -168,6 +165,8 @@ NOTE: This problem highlights the fact that the eigenfunctions of an operator de
 
 == Generalized Statistical Interpretation
 
+=== Questions
+
 * {q-num} Recall that if ++\(A\)++ is an observable with (normalized) eigenvectors ++\(f_\alpha\)++, we can write
 ++\[\begin{align*}
 \Psi&=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
@@ -187,11 +186,50 @@ P_\alpha|\Psi\rangle&=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
 &=c_\alpha |f_\alpha\rangle
 \end{align*}\]++
 
-NOTE: This is exactly why we can say that ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equvalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
+[NOTE]
+--
+This is exactly why we can say that ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equvalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
 For a concrete example, consider the vector space ++\(\mathbb R^n\)++, where projecting a vector ++\(v\)++ onto the ++\(k\)++^th^ basis vector ++\(e_n\)++, i.e., computing ++\(\langle v|e_k\rangle\)++, picks out the ++\(k\)++^th^ component of ++\(v\)++ — that's what the components of a vector in ++\(\mathbb R^n\)++ _mean_.
+
+The Fourier transform is nothing more than a projection of a function onto the basis of complex exponentials ++\(e^{-i\omega x}\)++.
+--
 ====
 
 == The Uncertainty Principle
+
+=== Questions
+
+* {q-num} Show that the commutator of two hermitian operators is of the form ++\(iQ\)++ where ++\(Q\)++ is hermitian.
++
+.Solution
+[%collapsible%open]
+====
+Let ++\(A\)++ and ++\(B\)++ be two hermitian operators, i.e., ++\(A=A^\dagger\)++ and ++\(B=B^\dagger\)++.
+Then
+++\[\begin{align*}
+[A,B]^\dagger&=(AB-BA)^\dagger\\
+&=(AB)^\dagger-(BA)^\dagger\\
+&=B^\dagger A^\dagger - A^\dagger B^\dagger\\
+&=BA-AB\\
+&=[B,A]\\
+&=-[A,B]
+\end{align*}\]++
+Therefore,
+++\[\begin{align*}
+(-i[A,B])^\dagger&=(-i)^*[A,B]^\dagger\\
+&=i(-[A,B])\\
+&=-i[A,B]
+\end{align*}\]++
+So ++\(-i[A,B]\)++ is hermitian.
+Letting ++\(Q=-i[A,B]\)++, we have ++\([A,B]=iQ\)++ with ++\(Q\)++ hermitian, as desired.
+
+NOTE: The operators ++\(R\)++ for which ++\(R^\dagger=-R\)++ are known as https://en.wikipedia.org/wiki/Skew-Hermitian_matrix[_anti-hermitian_].
+As we saw above, just as an imaginary number is ++\(i\)++ times a real number, an anti-hermitian matrix is ++\(i\)++ times a hermitian matrix.
+And in the same way that hermitian operators are akin to real numbers (e.g., their eigenvalues are all real), anti-hermitian operators are akin to imaginary numbers (e.g., their eigenvalues are all imaginary).
+====
+
+* {q-num} The uncertainty principle ++\(\sigma_x \sigma_p\ge \frac{\hbar}{2}\)++ only holds in one dimension.
+Show that in ++\(n\)++ dimensions, in which ++\(\hat x|f\rangle=\vec x f\)++ and ++\(\hat p|f\rangle=i\hbar \nabla f\)++, the uncertainty principle becomes ++\(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)++
 
 == Vectors and Operators
 

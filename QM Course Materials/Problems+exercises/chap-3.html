@@ -723,11 +723,19 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_questions_3">3.1. Questions</a></li>
 </ul>
 </li>
-<li><a href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a></li>
-<li><a href="#_the_uncertainty_principle">5. The Uncertainty Principle</a></li>
+<li><a href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_4">4.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_the_uncertainty_principle">5. The Uncertainty Principle</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_5">5.1. Questions</a></li>
+</ul>
+</li>
 <li><a href="#_vectors_and_operators">6. Vectors and Operators</a>
 <ul class="sectlevel2">
-<li><a href="#_questions_4">6.1. Questions</a></li>
+<li><a href="#_questions_6">6.1. Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -747,10 +755,10 @@ A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Find a continuous function (on any domain) that is absolutely integrable, but not square-integrable.</p>
+<p>Find a continuous real-valued function on \((0,\infty)\) that is absolutely integrable, but not square-integrable.</p>
 </li>
 <li>
-<p>Find a continuous function (on any domain) that is square-integrable, but not absolutely integrable.</p>
+<p>Find a continuous real-valued function on \((0,\infty)\) that is square-integrable, but not absolutely integrable.</p>
 </li>
 </ol>
 </div>
@@ -758,16 +766,16 @@ A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>The &#8220;trick&#8221; is find functions that approach the x- or y-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).</p>
+<p>The &#8220;trick&#8221; is find functions that approach the \(x\)- or \(y\)-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).</p>
 </div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>One example is the following function defined on the positive reals:
+<p>One example is the following function:
 \[\begin{align*}
 f(x)=\begin{cases}
 x^{-\frac{1}{2}}-1&amp;x\le1\\
-0&amp;x&gt;1
+0&amp;x\ge 1
 \end{cases}
 \end{align*}
 \]</p>
@@ -782,12 +790,9 @@ So \(x^{-\frac{1}{2}}\) is integrable, but its square, \(x^{-1}\), is not.</p>
 </div>
 </li>
 <li>
-<p>One example is the following function defined on the reals:
+<p>One example is the following function:
 \[\begin{align*}
-f(x)=\begin{cases}
-\frac{1}{|x|}&amp;|x|\ge1\\
-1&amp;|x|&lt;1
-\end{cases}
+f(x)=\frac{1}{x+1}
 \end{align*}
 \]</p>
 <div class="imageblock text-center">
@@ -1006,6 +1011,8 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 <div class="sect1">
 <h2 id="_generalized_statistical_interpretation"><a class="anchor" href="#_generalized_statistical_interpretation"></a><a class="link" href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">4.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
@@ -1035,8 +1042,13 @@ P_\alpha|\Psi\rangle&amp;=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
 <div class="title">Note</div>
 </td>
 <td class="content">
-This is exactly why we can say that \(c_\alpha =\langle f_\alpha | \Psi\rangle\) tells you how much of \(f_\alpha\) is in \(\Psi\). Because the inner project with a normalized vector \(u\) is equvalent to a projection onto \(u\), the inner product picks out just the component corresponding to \(u\).
-For a concrete example, consider the vector space \(\mathbb R^n\), where projecting a vector \(v\) onto the \(k\)<sup>th</sup> basis vector \(e_n\), i.e., computing \(\langle v|e_k\rangle\), picks out the \(k\)<sup>th</sup> component of \(v\) — that&#8217;s what the components of a vector in \(\mathbb R^n\) <em>mean</em>.
+<div class="paragraph">
+<p>This is exactly why we can say that \(c_\alpha =\langle f_\alpha | \Psi\rangle\) tells you how much of \(f_\alpha\) is in \(\Psi\). Because the inner project with a normalized vector \(u\) is equvalent to a projection onto \(u\), the inner product picks out just the component corresponding to \(u\).
+For a concrete example, consider the vector space \(\mathbb R^n\), where projecting a vector \(v\) onto the \(k\)<sup>th</sup> basis vector \(e_n\), i.e., computing \(\langle v|e_k\rangle\), picks out the \(k\)<sup>th</sup> component of \(v\) — that&#8217;s what the components of a vector in \(\mathbb R^n\) <em>mean</em>.</p>
+</div>
+<div class="paragraph">
+<p>The Fourier transform is nothing more than a projection of a function onto the basis of complex exponentials \(e^{-i\omega x}\).</p>
+</div>
 </td>
 </tr>
 </table>
@@ -1048,17 +1060,70 @@ For a concrete example, consider the vector space \(\mathbb R^n\), where project
 </div>
 </div>
 </div>
+</div>
 <div class="sect1">
 <h2 id="_the_uncertainty_principle"><a class="anchor" href="#_the_uncertainty_principle"></a><a class="link" href="#_the_uncertainty_principle">5. The Uncertainty Principle</a></h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">5.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the commutator of two hermitian operators is of the form \(iQ\) where \(Q\) is hermitian.</p>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Let \(A\) and \(B\) be two hermitian operators, i.e., \(A=A^\dagger\) and \(B=B^\dagger\).
+Then
+\[\begin{align*}
+[A,B]^\dagger&amp;=(AB-BA)^\dagger\\
+&amp;=(AB)^\dagger-(BA)^\dagger\\
+&amp;=B^\dagger A^\dagger - A^\dagger B^\dagger\\
+&amp;=BA-AB\\
+&amp;=[B,A]\\
+&amp;=-[A,B]
+\end{align*}\]
+Therefore,
+\[\begin{align*}
+(-i[A,B])^\dagger&amp;=(-i)^*[A,B]^\dagger\\
+&amp;=i(-[A,B])\\
+&amp;=-i[A,B]
+\end{align*}\]
+So \(-i[A,B]\) is hermitian.
+Letting \(Q=-i[A,B]\), we have \([A,B]=iQ\) with \(Q\) hermitian, as desired.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+The operators \(R\) for which \(R^\dagger=-R\) are known as <a href="https://en.wikipedia.org/wiki/Skew-Hermitian_matrix"><em>anti-hermitian</em></a>.
+As we saw above, just as an imaginary number is \(i\) times a real number, an anti-hermitian matrix is \(i\) times a hermitian matrix.
+And in the same way that hermitian operators are akin to real numbers (e.g., their eigenvalues are all real), anti-hermitian operators are akin to imaginary numbers (e.g., their eigenvalues are all imaginary).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
+Show that in \(n\) dimensions, in which \(\hat x|f\rangle=\vec x f\) and \(\hat p|f\rangle=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)</p>
+</li>
+</ul>
+</div>
+</div>
 </div>
 </div>
 <div class="sect1">
 <h2 id="_vectors_and_operators"><a class="anchor" href="#_vectors_and_operators"></a><a class="link" href="#_vectors_and_operators">6. Vectors and Operators</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">6.1. Questions</a></h3>
+<h3 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">6.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
