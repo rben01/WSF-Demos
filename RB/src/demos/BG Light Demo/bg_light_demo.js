@@ -90,7 +90,7 @@ const sliders = {
 		slider.min = 0.1;
 		slider.max = 1.5;
 		slider.step = 0.001;
-		slider.value = (+slider.min + +slider.max) / 2;
+		slider.value = 1; //(+slider.min + +slider.max) / 2;
 
 		return slider;
 	})(),
@@ -356,11 +356,17 @@ applyGraphicalObjs(plot2D, getPlotAxisData(), { selector: ".axis" });
 
 const maxV = +sliders.v.max;
 const dopplerMaxMagnitude = Math.sqrt((1 + maxV) / (1 - maxV));
-const colorInterpolator = d3.scalePow(
+const _baseColorInterpolator = d3.scalePow(
 	[1 / dopplerMaxMagnitude, 1, dopplerMaxMagnitude],
 	["#FF2200", "#FFF000", "#0090FF"],
 );
+const colorInterpolator = function (t) {
+	if (t === 1) {
+		return "#FF00A4";
+	}
 
+	return _baseColorInterpolator(t);
+};
 const hyperbolaLine = d3
 	.line()
 	.curve(d3.curveLinear)
@@ -425,11 +431,10 @@ function getHyperbolaDatum({ index, z0, x0, r, tEmitted, color }) {
 	}));
 }
 
+const speedOfLight = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
 function getData2D() {
 	const { v, dist: interSourceDistX, z0, gamma, Gamma, B } = sliderValues();
 	const interSourceDistY = interSourceDistX * v * B * Gamma;
-
-	const C = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
 
 	const nLightSourcesLeft = Math.floor(Math.abs(X_MIN - X_0) / interSourceDistX);
 	const nLightSourcesBelow = Math.floor(Math.abs(Y_MIN - Y_0) / interSourceDistY);
@@ -456,8 +461,8 @@ function getData2D() {
 		? nLightSourcesLeft
 		: nLightSourcesBelow;
 
-	const bFactor = B === 0 ? 1 : Gamma / B;
-	const t0 = nLightSourcesQuadrant1 * interSourceDistX * v * bFactor;
+	// const bFactor = B === 0 ? 1 : Gamma / B;
+	const t0 = nLightSourcesQuadrant1 * interSourceDistX * v * Gamma;
 	const t = currentTime - t0;
 
 	const dopplerMagnitude = Math.sqrt((1 + v) / (1 - v));
@@ -473,16 +478,16 @@ function getData2D() {
 
 		const doppler = k < 0 ? "red-shift" : k === 0 ? "no-shift" : "blue-shift";
 
-		const emissionTime = -v * z * bFactor;
+		const emissionTime = -v * z * Gamma;
 		const tElapsed = t - emissionTime;
-		const r = Math.max(tElapsed * C, 0);
+		const r = Math.max(tElapsed * speedOfLight, 0);
 		const attrs = {
 			cx: xScale(z),
 			cy: yScale(x),
 			r,
 		};
 
-		const xHalfSpan = Math.sqrt((r / C) ** 2 - z ** 2);
+		const xHalfSpan = Math.sqrt((r / speedOfLight) ** 2 - z ** 2);
 		const xAxisDistUp = x + xHalfSpan;
 		const xAxisDistDown = x - xHalfSpan;
 
@@ -560,7 +565,7 @@ function getData2D() {
 	})();
 
 	const z0s = xScale(z0);
-	const zSourceR = Math.max((t - -v * z0) * C, 0);
+	const zSourceR = Math.max((t - -v * z0) * speedOfLight, 0);
 
 	const zSources = (() => {
 		const attrs = {
@@ -580,7 +585,7 @@ function getData2D() {
 	const DOT_BG_R = 6;
 	const DOT_FG_R = 3;
 
-	const zSourceDotY = zSourceR / C;
+	const zSourceDotY = zSourceR / speedOfLight;
 
 	const zSourceDots = (() => {
 		const attrs = {
@@ -687,8 +692,6 @@ function getData2D() {
 			{ sign: -1, ys: [maxFlashXAxisDistDown, -zSourceDotY] },
 			{ sign: 1, ys: [zSourceDotY, maxFlashXAxisDistUp] },
 		];
-
-		console.log(linePoints);
 
 		if (t - -v * z0 < 0.1 || v === 0) {
 			return [];
