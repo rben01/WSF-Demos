@@ -62,9 +62,6 @@
 				stroke: var(--color-phase);
 			}
 			.axis-name {
-				font-size: 30px;
-			}
-			.axis-name.hyperbola {
 				font-size: 23px;
 			}
 			.curve {
@@ -182,9 +179,10 @@
 			}
 			#plots {
 				display: flex;
-				flex-direction: row;
-				column-gap: 40px;
-				align-items: flex-start;
+				flex-direction: column;
+				row-gap: 40px;
+				align-items: center;
+				width: min-content;
 			}
 			svg {
 				vertical-align: text-top;
@@ -195,17 +193,17 @@
 		<div class="grid-left-right">
 			<div class="controls-container">
 				<div class="controls">
-					<span>Speed: <span id="text-v">\(v\)</span></span>
+					<span>Brane velocity: <span id="text-v">\(\beta\)</span></span>
 					<span
 						><input type="range" class="slider disablable" id="slider-v"
+					/></span>
+					<span>Brane observer velocity: <span id="text-B">\(B\)</span></span>
+					<span
+						><input type="range" class="slider disablable" id="slider-B"
 					/></span>
 					<span>Lattice spacing: <span id="text-R">\(R\)</span></span>
 					<span
 						><input type="range" class="slider disablable" id="slider-R"
-					/></span>
-					<span>B: <span id="text-B">\(B\)</span></span>
-					<span
-						><input type="range" class="slider disablable" id="slider-B"
 					/></span>
 					<span>Animation speed</span>
 					<span><input type="range" class="slider" id="slider-speed" /></span>
