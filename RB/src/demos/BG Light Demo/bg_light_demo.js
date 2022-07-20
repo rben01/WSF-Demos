@@ -429,22 +429,10 @@ function getHyperbolaDatum({ index, z0, x0, r, tEmitted, color }) {
 	}));
 }
 
+const B_LABEL = document.getElementById("text-B");
 const speedOfLight = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
 function getData2D() {
 	const { v, dist: interSourceDistX, z0, gamma, Gamma, B } = sliderValues();
-	{
-		const colorAttrs = ["stroke", "fill", "color"];
-		const sels = [plot2D.selectAll(".axis"), plotHyperbola.selectAll(".axis")];
-		if (B > 1 / gamma) {
-			for (const attr of colorAttrs) {
-				sels.forEach(sel => sel.style(attr, "#FF9FFD"));
-			}
-		} else {
-			for (const attr of colorAttrs) {
-				sels.forEach(sel => sel.style(attr, null));
-			}
-		}
-	}
 	const interSourceDistY = interSourceDistX * v * B * Gamma;
 
 	const nLightSourcesLeft = Math.floor(Math.abs(X_MIN - X_0) / interSourceDistX);
@@ -745,6 +733,7 @@ function getData2D() {
 			...slopeLineConnectors,
 		],
 		hyperbola: hyperbolaData.flatMap(getHyperbolaDatum),
+		vars: { B, gamma },
 	};
 	// const points = [];
 	// for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
@@ -784,6 +773,25 @@ function getData2D() {
 	// return data;
 }
 
+function renderB(B, gamma) {
+	if (typeof katex !== "undefined") {
+		if (B > 1 / gamma) {
+			katex.render("B > \\frac{1}{\\gamma}", B_LABEL);
+			document.getElementById("slider-B").style.background = "#5df";
+
+			// for (const attr of colorAttrs) {
+			// 	sels.forEach(sel => sel.style(attr, "#FF9FFD"));
+			// }
+		} else {
+			katex.render("B < \\frac{1}{\\gamma}", B_LABEL);
+			document.getElementById("slider-B").style.background = null;
+			// for (const attr of colorAttrs) {
+			// 	sels.forEach(sel => sel.style(attr, null));
+			// }
+		}
+	}
+}
+
 function update(dtMS) {
 	dtMS = dtMS ?? 0;
 	const speed = +sliders.speed.value;
@@ -795,6 +803,14 @@ function update(dtMS) {
 		key: d => d.key,
 		selector: ".hyperbola.curve",
 	});
+
+	const { B, gamma } = data.vars;
+	renderB(B, gamma);
+
+	{
+		// const colorAttrs = ["stroke", "fill", "color"];
+		// const sels = [plot2D.selectAll(".axis"), plotHyperbola.selectAll(".axis")];
+	}
 
 	// if (typeof katex !== "undefined") {
 	// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
