@@ -90,7 +90,7 @@ const sliders = {
 		slider.min = 0.1;
 		slider.max = 1.5;
 		slider.step = 0.001;
-		slider.value = 1; //(+slider.min + +slider.max) / 2;
+		slider.value = (+slider.min + +slider.max) / 2;
 
 		return slider;
 	})(),
