@@ -69,7 +69,7 @@ const sliders = {
 	B: (() => {
 		const slider = document.getElementById("slider-B");
 		slider.min = 0.0;
-		slider.max = 0.85;
+		slider.max = 0.99;
 		slider.step = 0.001;
 		slider.value = (+slider.min + +slider.max) / 2;
 
@@ -775,8 +775,8 @@ function getData2D() {
 
 function renderB(B, gamma) {
 	if (typeof katex !== "undefined") {
-		if (B > 1 / gamma) {
-			katex.render("B > \\frac{1}{\\gamma}", B_LABEL);
+		if (B >= 1 / gamma) {
+			katex.render("B \\ge \\frac{1}{\\gamma}", B_LABEL);
 			document.getElementById("slider-B").style.background = "#5df";
 
 			// for (const attr of colorAttrs) {
