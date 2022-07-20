@@ -358,14 +358,17 @@ const maxV = +sliders.v.max;
 const dopplerMaxMagnitude = Math.sqrt((1 + maxV) / (1 - maxV));
 const _baseColorInterpolator = d3.scalePow(
 	[1 / dopplerMaxMagnitude, 1, dopplerMaxMagnitude],
-	["#FF2200", "#FFF000", "#0090FF"],
+	[0, 0.5, 1],
 );
 const colorInterpolator = function (t) {
 	if (t === 1) {
 		return "#FF00A4";
 	}
 
-	return _baseColorInterpolator(t);
+	const color = d3.interpolateTurbo(1 - (0.1 + 0.8 * _baseColorInterpolator(t)));
+	// color.v = 1;
+
+	return `${color}`;
 };
 const hyperbolaLine = d3
 	.line()
@@ -375,26 +378,18 @@ const hyperbolaLine = d3
 
 // xyz
 function getHyperbolaDatum({ index, z0, x0, r, tEmitted, color }) {
-	// Very unfortunate naming... x0 is the z" value in the original graph, which will not
-	// be plotted here. y0 is the x" value in the original graph, which will be plotted
-	// on this graph's x-axis. Variables named t* will be plotted on this graph's y-axis.
-
-	// const diff = (r - y0) ** 2 - y0 ** 2;
 	const distToXppAxis = Math.abs(z0);
 	if (r <= distToXppAxis) {
 		return [];
 	}
 
 	const xHalfSpan = Math.sqrt(r ** 2 - z0 ** 2);
-	// if (isNaN(xHalfSpan)) {
-	// 	return [];
-	// }
 
 	const xMin = x0 - xHalfSpan;
 	const xMax = x0 + xHalfSpan;
 
 	const pathPoints = [];
-	const pp = [];
+	// const pp = [];
 
 	let nPathPoints = Math.max(Math.ceil((xMax - xMin) * 4), 8);
 	if (nPathPoints % 2 === 0) {
@@ -407,7 +402,7 @@ function getHyperbolaDatum({ index, z0, x0, r, tEmitted, color }) {
 		const x = xMin + i * dx;
 		const tx = tEmitted + Math.sqrt((x - x0) ** 2 + z0 ** 2);
 		pathPoints.push([hyperbolaXScale(x), hyperbolaYScale(tx)]);
-		pp.push([x, tx]);
+		// pp.push([x, tx]);
 	}
 
 	// const dx = Math.sqrt(r ** 2 - x0 ** 2);
@@ -434,6 +429,19 @@ function getHyperbolaDatum({ index, z0, x0, r, tEmitted, color }) {
 const speedOfLight = WIDTH / (X_MAX - X_MIN); // scale factor to make angles work out, idk
 function getData2D() {
 	const { v, dist: interSourceDistX, z0, gamma, Gamma, B } = sliderValues();
+	{
+		const colorAttrs = ["stroke", "fill", "color"];
+		const sels = [plot2D.selectAll(".axis"), plotHyperbola.selectAll(".axis")];
+		if (B > 1 / gamma) {
+			for (const attr of colorAttrs) {
+				sels.forEach(sel => sel.style(attr, "#5df"));
+			}
+		} else {
+			for (const attr of colorAttrs) {
+				sels.forEach(sel => sel.style(attr, null));
+			}
+		}
+	}
 	const interSourceDistY = interSourceDistX * v * B * Gamma;
 
 	const nLightSourcesLeft = Math.floor(Math.abs(X_MIN - X_0) / interSourceDistX);
