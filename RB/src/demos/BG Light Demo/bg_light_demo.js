@@ -27,7 +27,7 @@ const HYPERBOLA_WIDTH = 575;
 const HYPERBOLA_HEIGHT = 575;
 const [HYPERBOLA_Y_MIN, HYPERBOLA_Y_MAX] = (() => {
 	const aspect = HYPERBOLA_WIDTH / HYPERBOLA_HEIGHT;
-	const yMin = -5.5;
+	const yMin = Y_0 + (HYPERBOLA_X_MIN - X_0) / aspect; // -5.5;
 	const yMax = Y_0 + (HYPERBOLA_X_MAX - X_0) / aspect;
 	return [yMin, yMax];
 })();
@@ -127,9 +127,7 @@ function getHyperbolaAxisData() {
 
 	const yAxisTicks = hyperbolaYScale.ticks(15).filter(y => y !== Y_0);
 	const nYAxisLabels = 7;
-	const yAxisLabelTicks = hyperbolaYScale
-		.ticks(nYAxisLabels)
-		.filter(y => y !== Y_0 && Math.abs(HYPERBOLA_Y_MAX - Math.abs(y)) > 1);
+	const yAxisLabelTicks = hyperbolaYScale.ticks(nYAxisLabels).filter(y => y !== Y_0);
 	const yAxisFormatter = hyperbolaYScale.tickFormat(nYAxisLabels);
 
 	const xs0 = hyperbolaXScale(X_0);
@@ -439,7 +437,7 @@ function getData2D() {
 		const sels = [plot2D.selectAll(".axis"), plotHyperbola.selectAll(".axis")];
 		if (B > 1 / gamma) {
 			for (const attr of colorAttrs) {
-				sels.forEach(sel => sel.style(attr, "#5df"));
+				sels.forEach(sel => sel.style(attr, "#FF9FFD"));
 			}
 		} else {
 			for (const attr of colorAttrs) {
