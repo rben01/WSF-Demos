@@ -1,6 +1,6 @@
 /* global applyGraphicalObjs katex */
-const WIDTH = 500;
-const HEIGHT = 500;
+const WIDTH = 575;
+const HEIGHT = 575;
 
 const X_MAX = 10;
 const X_0 = 0;
@@ -23,8 +23,8 @@ const y0s = yScale(Y_0);
 
 const HYPERBOLA_X_MIN = -50;
 const HYPERBOLA_X_MAX = -HYPERBOLA_X_MIN;
-const HYPERBOLA_WIDTH = 500;
-const HYPERBOLA_HEIGHT = 500;
+const HYPERBOLA_WIDTH = 575;
+const HYPERBOLA_HEIGHT = 575;
 const [HYPERBOLA_Y_MIN, HYPERBOLA_Y_MAX] = (() => {
 	const aspect = HYPERBOLA_WIDTH / HYPERBOLA_HEIGHT;
 	const yMin = -5.5;
