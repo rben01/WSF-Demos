@@ -88,7 +88,7 @@ const sliders = {
 	speed: (() => {
 		const slider = document.getElementById("slider-speed");
 		slider.min = 0.1;
-		slider.max = 12; //1.2
+		slider.max = 1.5;
 		slider.step = 0.001;
 		slider.value = (+slider.min + +slider.max) / 2;
 
