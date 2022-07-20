@@ -1,5 +1,5 @@
 /* global applyGraphicalObjs katex */
-const WIDTH = 600;
+const WIDTH = 500;
 const HEIGHT = 500;
 
 const X_MAX = 10;
@@ -24,7 +24,7 @@ const y0s = yScale(Y_0);
 const HYPERBOLA_X_MIN = -50;
 const HYPERBOLA_X_MAX = -HYPERBOLA_X_MIN;
 const HYPERBOLA_WIDTH = 500;
-const HYPERBOLA_HEIGHT = 250;
+const HYPERBOLA_HEIGHT = 500;
 const [HYPERBOLA_Y_MIN, HYPERBOLA_Y_MAX] = (() => {
 	const aspect = HYPERBOLA_WIDTH / HYPERBOLA_HEIGHT;
 	const yMin = -5.5;
@@ -248,8 +248,13 @@ function getPlotAxisData() {
 
 	const yAxisTicks = yScale.ticks(15).filter(y => y !== Y_0);
 	const nYAxisLabels = 7;
-	const yAxisLabelTicks = yScale.ticks(nYAxisLabels).filter(y => y !== Y_0);
-	const yAxisFormatter = yScale.tickFormat(nYAxisLabels, "~g");
+	const yAxisLabelTicks = (() => {
+		const ticks = yScale.ticks(nYAxisLabels);
+		const nTicks = ticks.length;
+		return ticks.filter((y, i) => i !== 0 && i !== nTicks - 1 && y !== Y_0);
+	})();
+
+	const yAxisFormatter = yScale.tickFormat(nYAxisLabels);
 
 	const xs0 = xScale(X_0);
 	const ys0 = yScale(Y_0);
