@@ -100,7 +100,7 @@ In particular, taking ++\(g=(Q^{\dagger\dagger} -Q)f\)++, we have
 \end{align*}
 \]++
 
-Hence ++\((Q^{\dagger\dagger} -Q)f=\vec 0\)++ (0⃗ the vector/function, not 0 the number).
+Hence ++\((Q^{\dagger\dagger} -Q)f=\vec 0\)++ (++\(\vec 0\)++ the vector/function, not ++\(0\)++ the number).
 Since ++\(f\)++ was arbitrary, ++\(Q^{\dagger\dagger} -Q\)++ must be the zero operator, and so ++\(Q^{\dagger\dagger} =Q\)++.
 ====
 
