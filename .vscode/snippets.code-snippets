@@ -47,5 +47,11 @@
 		"body": "\\frac{\\partial $1}{\\partial ${2:x}}",
 		"description": "Insert a partial derivative",
 		"scope": "asciidoc"
+	},
+	"left-right parentheses": {
+		"prefix": "\\lrp",
+		"body": "\\left($0\\right)",
+		"description": "Insert a pair of LaTeX \\left(\\right) parentheses",
+		"scope": "asciidoc"
 	}
 }

@@ -5,17 +5,46 @@ include::shared_attributes.adoc[]
 == Stationary States
 
 * {q-num} Which of the following are always true when we use separation of variables to solve the Schrodinger equation?
-** ++\(\Psi(x,t)=\psi(x)\phi(t)\)++
-** Both sides of the Schrodinger equation are constant
-** ++\(\Psi(x,t)\)++ is a stationary state
-** ++\(V(x,t) = V(x)\)++
-** ++\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)++
+.. ++\(\Psi(x,t)=\psi(x)\phi(t)\)++
+.. Both sides of the Schrodinger equation are constant
+.. ++\(\Psi(x,t)\)++ is a stationary state
+.. ++\(V(x,t) = V(x)\)++
+.. ++\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)++
 
-* {q-num} Why is ++\(\Psi(x,t)\)++ called a stationary state if it is time-dependent?
++
+.Solution
+[%collapsible]
+====
+Only (a) is true.
+====
+
+* {q-num} Why is ++\(\Psi_E(x,t)= \psi_E(x)e^{-iEt/\hbar}\)++ called a stationary state if it is time-dependent?
 +
 [{sublist-style}]
-. Show that ++\(|\Psi(x,t)|^2 = |\psi(x)|^2\)++
-. Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi(x,t) = \psi(x)e^{-iEt/\hbar}\)++
+. Show that ++\(|\Psi_E(x,t)|^2 = |\psi_E(x)|^2\)++.
+. Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi_E(x,t)\)++.
+
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. {nbsp}
+++\[\begin{align*}|
+\Psi_E(x,t)|^2 &= \Psi_E^* \Psi_E\\
+&= (\psi_E^*(x)e^{iEt/\hbar}) (\psi_E(x) e^{-iEt/\hbar}) \\
+&= |\psi_E(x)|^2
+\end{align*}\]++
+. For a particle in state ++\(\Psi_E\)++,
+++\[\begin{align*}
+\langle x\rangle&=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
+&=\int_{\mathcal D} x|\psi_E(x)|^2\,dx\\
+&=\textrm{constant w.r.t time}
+\end{align*}\]++
+So ++\(\frac{d\langle x\rangle}{dt}=0\)++.
+Then, Ehrenfest's theorem says that ++\(\langle p\rangle=m\frac{d\langle x\rangle}{dt}=0\)++.
+
+====
 
 
 * {q-num} [Similar to Griffiths text (not a problem). Need to modify more]
@@ -39,15 +68,138 @@ In other words, every measurement of the total energy of a solution to the time-
 
 * {q-num} Griffiths's questions 2.1 and 2.2 are very good. Check to see how those can be modified.
 
-:!qn:
 
 == The Infinite Square Well
+=== Questions
 
-* {q-num} The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++.
+* {q-num} The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++ with ++\(n\ge 1\)++.
 Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_n\rangle\)++ is 1 when ++\(m=n\)++ and 0 otherwise.
 (Hint: ++\(\cos\)++ is an even function, ++\(\sin\)++ is an odd function, and ++\(\cos(a+b)=\cos a\cos b-\sin a\sin b\)++.)
++
+.Solution
+[%collapsible]
+====
+Using the trigonometric identities in the hint, we have
+++\[\begin{align*}
+\cos(a+b)&=\cos a\cos b-\sin a\sin b\\
+\cos(a-b)&=\cos a\cos b+\sin a\sin b\\
+\cos(a+b)-\cos(a-b)&=-2\sin a\sin b\\
+\sin a \sin b &=\frac{1}{2}(\cos(a-b) - \cos(a+b))
+\end{align*}\]++
+Regardless of whether ++\(m=n\)++,
+++\[\begin{align*}
+\langle \psi_m,\psi_n\rangle&= \int_0^a \psi_m^*\psi_n\,dx\\
+&=\int_0^a \sqrt\frac{2}{a}\sin\left(\frac{m\pi}{a}x\right)\ \sqrt\frac{2}{a}\sin\left(\frac{n\pi}{a}x\right)\,dx\\
+&=\frac{1}{a}\int_0^a \cos\left(\frac{(m-n)\pi}{a}x\right)-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx
+\end{align*}\]++
+And for ++\(k\ne 0\)++,
+++\[\begin{align*}
+\int_0^a \cos\left(\frac{k\pi}{a}x\right)\,dx=\left.\frac{a}{k\pi}\sin\left(\frac{k\pi}{a}x\right)\right|^a_0=0
+\end{align*}\]++
+When ++\(m=n\)++, ++\(\langle\psi_m,\psi_n\rangle\)++ becomes
+++\[\begin{align*}
+\frac{1}{a}\int_0^a \cos 0-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx=\frac{1}{a}\int_0^a dx=1
+\end{align*}\]++
+When ++\(m\ne n\)++, both of the ++\(\cos\)++ terms in the integral are of the form ++\(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\)++ and so they both integrate to 0, and then ++\(\langle \psi_m,\psi_n\rangle=0\)++.
+====
 
-:!qn:
+* {q-num} Let ++\(V\)++ be the potential in the infinite square well:
+\[V(x) = \begin{cases}
+            0 &  0 \leq x \leq a \\
+            \infty &  \textrm{otherwise}
+\end{cases}
+\]
++
+[{sublist-style}]
+.. Find the general solution using the time-independent {sch} equation, the simple harmonic oscillator equation, and applying the constraints of the infinite square well.
+.. Apply the boundary conditions to solve for the constants ++\(A\)++ and ++\(B\)++.
+.. Find solutions for ++\(kx\)++ and, using those results, solve for the possible values of the energy ++\(E\)++.
+.. How does this result compare to what we’d expect from a classical case?
+.. Use this result and normalize ++\(\Psi\)++ to solve for stationary states.
+.. What is the significance of this result?
+
++
+.Solution
+[%collapsible%open]
+====
+[{sublist-style}]
+. Inside the well, ++\(V(x) = 0\)++, and so the {sch} equation says ++\(\frac{-\hbar^2}{2m}\frac{\partial^2\psi}{\partial x^2}=E\psi(x)\)++.
+Letting ++\(k=\sqrt{2mE/\hbar}\)++, we have
+++\(\frac{d^2\psi(x)}{dx^2}= -k^2\psi(x)\)++.
+ Assuming ++\(E\geq0\)++, the
+solution isn’t contradicting the boundary conditions. Recognize:
+++\(\frac{d^2\psi(x)}{dx^2} + k^2\psi = 0\)++ as the equation of the
+simple harmonic oscillator.
+The solution of this equation is
+++\(\psi(x)=A\sin(kx)+B\cos(kx)\)++ where ++\(A,B\)++ are constants determined by the boundary conditions.
+
+. For ++\(\psi\)++ to be continuous at ++\(0\)++ and ++\(a\)++, we must have ++\(\psi(0) =\psi(a)=0\)++.
+So ++\(\psi(0) = A\sin(0) + B\cos(0) = B\)++, and hence
+++\(B=0\)++.
+This leaves us with: ++\(\psi(x)=A\sin(kx)\)++,
+so either ++\(A=0\)++ — in which case ++\(\psi\)++ is 0 everywhere, which is not a valid wavefunction — or ++\(\sin(ka)=0\)++.
+. The boundary condition ++\(\psi(a)=A\sin(ka)=0\)++ requires that ++\(k= \frac{n\pi}{a}\)++ with ++\(n\)++ an integer.
+But if ++\(n=0\)++ then ++\(\psi(x)=0\)++ everywhere, so ++\(n\)++ must in fact be nonzero.
+Additionally, ++\(\sin\left(\frac{-n\pi}{a}x\right)=-\sin\left(\frac{n\pi}{a}x\right)\)++ — a solution we've already accounted for, since ++\(A\)++ can absorb the leading minus sign — so the distinct solutions are ++\(k= \frac{n\pi}{a}\)++ for positive integer ++\(n\)++.
+Therefore the permissible values of the energy ++\(E\)++ are
+++\(E_n=\frac{\hbar^2 k_n^2}{2m} =\frac{\pi^2 n^2\hbar^2}{2ma^2}\)++ with ++\(n\)++ a positive integer.
+
+. Unlike the classical case, a quantum particle in the infinite square well cannot have an arbitrary value of energy.
+Instead, a quantum particle can only be in a superposition of one of these special _allowed_ states that fit within the constraints of the infinite square well.
+When observed, a quantum particle in the infinite square well will have an energy that is one of the ++\(E_n\)++.
+. To compute the integral, we'll need the fact that ++\(\sin^2(a)=\frac{1}{2}(1-\cos(2a))\)++.
+++\[\begin{align*}
+|\psi_n(x)|^2&=\int_0^a |A|^2\sin^2\left(\frac{n\pi}{a}x\right)\,dx\\
+&=|A|^2\int_0^a\frac{1}{2}\left[1-\cos\left(\frac{2n\pi}{a}x\right)\right]\,dx\\
+&=\frac{|A|^2}{2}\left.\left[x-\frac{\sin(\frac{2n\pi}{a}x)}{\frac{2n\pi}{a}}\right]\right|^a_0\\
+&=\frac{|A|^2a}{2}
+\end{align*}\]++
+For the norm to be 1, we must have ++\(|A|=\sqrt{\frac{2}{a}}\)++.
+Any choice of ++\(A\)++ satisfying this will do — ++\(A\)++ can be complex, but its phase doesn't matter — so let's pick the most obvious and simplest choice, ++\(A=\sqrt{\frac{2}{a}}\)++, to obtain ++\(\psi_n(x)=\sqrt\frac{2}{a}\sin\left(\frac{\pi}{a}x\right)\)++.
+(In general, it's always simplest to choose the stationary states that are real-valued.)
+
+====
+
+* {q-num} What are the four properties of the functions
+++\(\Psi_n(x)\)++?
+Are these properties unique to the infinite square well?
+Why are they so important?
++
+.Solution
+[%collapsible]
+====
+. These functions are alternatively even and odd about
+the center of the potential well.
+This is true for any symmetrical potential well.
+. With increasing ++\(n\)++, each successive state has one more node in the wavefunction.
+This is true regardless of the shape of the potential well.
+. They are mutually orthogonal: ++\(\int \psi_m(x)^*\psi_n(x)\,dx=\delta_{mn}\)++. This is true regardless of the potential well, as
+long as it's normalized.
+. The state functions form a complete set. This is not
+universal, but is almost always applicable for any potential we will
+encounter.
+
+These properties are so important because they hold true for almost all potentials, which means we can apply these four properties to help solve many different types of problems.
+====
+
+* {q-num} A particle in the infinite square well has an initial wave function with an even combination of the first three stationary states: ++\(\Psi(x,0)=A(\psi_1(x) + \psi_2(x) + \psi_3(x))\)++.
++
+[{sublist-style}]
+.. Normalize to find A.
+.. Find ++\(c_n\)++ and ++\(\psi(x,t)\)++. (Hint: let ++\(\omega=\pi^2\hbar/2ma^2\)++.)
+.. Find ++\(|\Psi(x,t)|^2\)++.
+.. Find {expect-x}.
+What is the frequency of oscillations?
+What is the amplitude?
+
++
+.Solution
+[%collapsible]
+====
+Unsure if this is possible, I may have to re-write with two stationary states w/ coefficients.
+====
+
+
 == The Harmonic Oscillator
 
 === Questions
@@ -108,12 +260,68 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 :!qn:
 
 == The Delta-Function Potential
+=== Questions
+
+* {q-num} Graph an example of:
+(Show the classical turning points, ++\(E\)++, and label your axes.)
+(problem may be too similar to the textbook chapter)
++
+[{sublist-style}]
+.. A bound state
+.. A scattering state
+.. A classical bound state/quantum scattering state (made
+possible by quantum tunneling), and explain what quantum tunneling is.
+
++
+.Solution
+[%collapsible]
+====
+Graphs vary, but potential solutions on pg. 62 of Griffiths.
+====
+
+* {q-num} Derive the reflection and transmission coefficients for the delta-function well.
+When are these coefficients exactly the same?
 
 
 == The Finite Square Well
-
 === Questions
 
+* {q-num} When is the square well approximation valid and why is it usable to make fair predictions?
+
+* [[question-finite-well-diff-eq,2.6.2]]#{q-num}# Find the general solution to the finite square well differential equations for each section of the well:
+\[V(x) = \begin{cases}
+-V_0 &  |x| \le a \\
+0 &  |x| > a
+\end{cases}
+\]
++
+[{sublist-style}]
+.. Left side of the well
+.. Middle of the well
+.. Right side of the well
+
++
+.Solution
+[%collapsible]
+====
+
+====
+
+* {q-num} Using your results from xref:question-finite-well-diff-eq[], apply the boundary conditions to all the general solutions.
+Use these equations and their coefficients to derive the transcendental equation:
+++\((k-il)/(k+il)= \pm e^{2ila}\)++. (Hint: ++\(k\)++ as coefficient from ++\(a\)++ and ++\(l\)++ as coefficient from ++\(b\)++.)
+
+* {q-num} {blank}
++
+[{sublist-style}]
+.. Calculate the transmission and reflection coefficients for xref:question-finite-well-diff-eq[].
+.. What happens as ++\(T\to 1\)++ and ++\(R\to 1\)++?
+
+* {q-num} Graph the allowed energies for the even bound state wave function of the finite square well.
+Show the possible energy values and explain your reasoning.
+
+* {q-num} How do the amount of bound states change based on the depth of the well?
+How does a wide, deep well differ from a shallow, narrow well?
 
 === Demonstrations
 

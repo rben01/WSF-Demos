@@ -1,0 +1,91 @@
+= Chapter 2 — Jared
+include::./shared_attributes.adoc[]
+
+
+== 2.6 The Finite Potential Well
+=== Questions
+
+
+== Solutions
+
+
+2.2.5 idea: add Q abt deriving ++\(c_n\)++ using Fourier’s trick?
+
+2.4.1 Solution) a)
+++\(\int_{-\infty}^{\infty} |\Psi(x,0)|^2 dx\)++ = 1 =
+++\(|A|^2 \int_{-\infty}^\infty sin^2x/x^2 dx\)++ =
+++\(|A|^2\pi\)++ |A|++\(^2 = 1/\pi\)++
+A=1/++\(\sqrt{\pi}\)++
+
+{empty}b)
+++\(\phi(k) = (1/\sqrt{2\pi}) (1/\sqrt{\pi}) \int_{-\infty}^{\infty} (sinx/x) e^{ikx} dx =\)++
+
+{empty}c)
+++\(\Psi(x,t) = 1/\sqrt{2\pi}\int_{-\infty}^{\infty} \phi(k)e^{i(kx-(\hbar k^2t/2m))} dk\)++
+(as far as I made it on 2.4.1...)
+
+
+2.6.1 Solution) If the de Broglie wavelength of the particle
+(++\(\lambda = \hbar/p\)++) ++\(<\)++
+++\(\Delta x_1\)++ ++\(\Delta x_2\)++, the square well
+approximation is valid. (Unless the particle is relativistic). Nothing
+we are trying to predict, like transmission and reflection coefficients,
+changes after making this approximation (as long as the above condition
+is met).
+
+2.6.2 Solution) a) V(x) = 0 ++\(-\hbar^2/2m\)++
+++\(d^2\psi(x)/dx^2 = E\psi(x)\)++
+++\(d^2\psi(x)/dx^2 = k^2\psi(x)\)++ where
+++\(k=-\sqrt{2mE/\hbar}>0\)++ (because E++\(<\)++0)
+++\(\psi_1(x)=Ae^{-kx} + Be^{kx}\)++
+
+{empty}b) ++\(V(x) = -V_0\)++++\(-\hbar^2/2m\)++
+++\(d^2\psi(x)/dx^2\)++ ++\(-V_0\psi(x) = E\psi(x)\)++
+++\(d^2\psi(x)/dx^2 = -l^2\psi(x)\)++ where
+++\(l=\sqrt{2m(E+V_0)} > 0\)++ (because E ++\(>-V_0\)++
+++\(\psi_2(x)=Csin(lx)+Dcos(lx)\)++
+
+c)same as part a: ++\(\psi_3(x) = Ee^{-kx}+Fe^{kx}\)++ (scroll
+down for 2.6.3 solution)
+
+2.6.3 Solution) Boundary conditions constitute the following: . Finite
+as x-: ++\(\psi_1(x\rightarrow-\infty) < \infty\)++ . Finite as x:
+++\(\psi_3(x\rightarrow\infty) < \infty\)++ . Continuous at
+boundaries: ++\(\psi_1(x=a)=\psi_2(x=-a)\)++ and
+++\(\psi_2(x=a) = \psi_3(x=a)\)++ . Derivative of the wave
+function is continuous at boundaries:
+++\(d\psi_1/dx|_{x=-a} = d\psi_2/dx|_{x=-a}\)++ AND
+++\(d\psi_2/dx|_{x=a} = d\psi_3/dx|_{x=a}\)++
+
+Applying these conditions to the results from 2.6.2: .
+++\(\psi_1(x=-\infty)<\infty\)++ A=0
+++\(\psi_1(x) =  Be^{kx}\)++
+
+{empty}2. ++\(\psi_3(x=\infty)<\infty\)++ D=0
+++\(\psi_3(x)=Ce^{-kx}\)++
+
+{empty}3. Let ++\(\psi_2 = Ce^{ilx} + De^{-ilx}\)++
+++\(Be^{-ka}=Ce^{-ila} + De^{ila}\)++(eq.1) and
+++\(Be^{-ka} = Cile^{-ila} - Dile^{ila}\)++(eq.2) Now take:
+k(eq.1) - (eq.2):
+++\(Cke^{-ila} + Dke^{ila} = Cile^{-ila} - Dile^{ila}\)++
+++\(C(ile^{-ila} - ke^{-ila})  = D(ke^{-ila} + ile^{ila})\)++
+++\(C/D = - ((k+il)/(k-il))e^{2ila}\)++ (eq.*)
+
+{empty}4.
+++\(\psi_2(x=a)=\psi_3(x=a) and d\psi_2/dx|_{x=a} = d\psi_3/dx|_{x=a}\)++
+++\(Ce^{-ila} + De^{-ila} = Ee^{-ka}\)++(eq.3) and
+++\(ilCe^{-ila}-ilDe^{-ila}=-kEe^{-ka}\)++(eq.4)
+
+Now take: k(eq.3) + (eq.4):
+
+++\(Cke^{-ila}+Dke^{-ila}+ilCe^{-ila}-ilDe^{-ila}=0\)++
+
+++\(C(ke^{-ila}+ile^{-ila})=-D(ke^{-ila}-ile^{-ila})\)++
+
+++\(C/D = - ((k+il)/(k-il))e^{-2ila}\)++ (eq.**)
+
+Now set (eq.* = eq. **):
+++\(((k+il)/(k-il))e^{2ila}=((k-il)/(k+il))e^{-2ila}\)++
+++\(((k-il)/(k+il))^2=e^{4ila}\)++
+++\((k-il)/(k+il) = \pm e^{2ila}\)++
