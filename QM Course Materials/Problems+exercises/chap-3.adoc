@@ -74,7 +74,7 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 [%collapsible%open]
 ====
 [{sublist-style}]
-.. Since ++\(x\)++ and ++\(y\)++ are orthogonal, ++\(\langle x|y\rangle=\langle x|y\rangle=0\)++. Now we simply apply the linearity of the inner product:
+.. Since ++\(x\)++ and ++\(y\)++ are orthogonal, ++\(\langle x|y\rangle=\langle y|x\rangle=0\)++. Now we simply apply the linearity of the inner product:
 ++\[\begin{align*}
 \|x+y\|^2&=\langle x+y|x+y\rangle\\
 &=\langle x|x\rangle+\langle x|y\rangle +\langle y|x\rangle +\langle y|y\rangle\\
