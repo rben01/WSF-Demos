@@ -6,6 +6,21 @@ include::shared_attributes.adoc[]
 
 === Questions
 
+* {q-num} [This problem is Griffiths 3.1 but is too simple to be his I.P.] Formally, a _vector space_ is a set ++\(S\)++ closed under linear combinations: if for all ++\(\vec u,\vec v\in S\)++ and for all ++\(a,b\in\mathbb C\)++, ++\(a\vec u+b\vec v\)++ is also in ++\(V\)++, then ++\(S\)++ is a vector space.
+Show that the set of square-integrable functions does indeed form a vector space.
+
+* {q-num} [Griffiths 3.2; same caveat as above] A vector space ++\(S\)++ is said to have an inner product ++\(\langle\cdot|\cdot\rangle\)++ when, for all ++\(u,v,w\in S\)++ and ++\(a,b\in\mathbb C\)++, the following properties hold:
+** Conjugate symmetry: ++\(\langle v|u\rangle=\langle u|v\rangle^*\)++
+** Nonnegativity: ++\(\langle u|u\rangle\ge 0\)++ (in particular, it's real), and ++\(\langle u|u \rangle=0\)++ if and only if ++\(u=\vec 0\)++ (++\(\vec 0\)++ the vector, not ++\(0\)++ the number)
+** Linearity: ++\(\langle u|(av+bw)\rangle=a\langle u|v\rangle + b\langle u|w\rangle\)++
+
++
+Show that the inner product below, defined on the set of square-integrable functions over domain ++\((a,b)\)++, satisfies these properties.
+++\[\begin{align*}
+\langle f|g\rangle:=\int_a^b f^*(x)g(x)\,dx
+\end{align*}\]++
+
+
 * {q-num}
 A function ++\(f\)++ is said to be absolutely integrable when ++\(|f|\)++ is integrable.
 .. Find a continuous real-valued function on ++\((0,\infty)\)++ that is absolutely integrable, but not square-integrable.
@@ -42,6 +57,53 @@ image::fig-3.1.1-f2.svg[A function that is square-integrable but not integrable,
 +
 This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\)++.
 So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
+====
+
+* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\)++, also written ++\(|\langle x|y\rangle|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
+This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all non-commuting pairs of observables (i.e., hermitian operators with a nonzero commutator).
++
+[{sublist-style}]
+.. First, prove the Pythagorean Theorem for vectors: If ++\(x\)++ and ++\(y\)++ are orthogonal, then ++\(\|x+y\|^2=\|x\|^2+\|y\|^2\)++.
+.. Use this to prove the Cauchy-Schwarz Inequality.
+(Hint: let ++\(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++.)
+.. For which pairs of vectors ++\(x,y\)++ is the quantity on the left hand side maximized, i.e., when is the inequality an equality?
+
++
+.Solution
+[%collapsible%open]
+====
+[{sublist-style}]
+.. Since ++\(x\)++ and ++\(y\)++ are orthogonal, ++\(\langle x|y\rangle=\langle x|y\rangle=0\)++. Now we simply apply the linearity of the inner product:
+++\[\begin{align*}
+\|x+y\|^2&=\langle x+y|x+y\rangle\\
+&=\langle x|x\rangle+\langle x|y\rangle +\langle y|x\rangle +\langle y|y\rangle\\
+&=\langle x|x\rangle+\langle y|y\rangle\\
+&=\|x\|^2+\|y\|^2
+\end{align*}\]++
+.. First, if ++\(y=|0\rangle\)++, this is trivial; both sides of the inequality are 0.
+So assume ++\(y\ne| 0\rangle\)++, so ++\(\|y\|\ne 0\)++.
+As the hint suggests, let ++\(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++. This reason for this choice of ++\(z\)++ will soon be clear:
+++\[\begin{align*}
+\left\langle y|z\right\rangle&=\left\langle y\middle| x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y \right\rangle\\
+&=\langle y|x\rangle-\frac{\langle y|x\rangle}{\langle y|y\rangle}\langle y|y\rangle\\
+&=\langle y|x\rangle-\langle y|x\rangle\\
+&=0
+\end{align*}\]++
+So ++\(y\)++ and ++\(z\)++ are orthogonal.
+(In fact, ++\(\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++ is the projection of ++\(x\)++ onto ++\(y\)++, which when subtracted from ++\(x\)++ leaves the portion of ++\(x\)++ orthogonal to ++\(y\)++.)
+Now, ++\(x=z+\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++, the sum of two orthogonal vectors.
+And, of course, ++\(\|z\|\ge 0\)++.
+So, applying the Pythagorean Theorem, we have
+++\[\begin{align*}
+\|x\|^2&=\|z\|^2+\left\|\frac{\langle y|x\rangle}{\langle y|y\rangle}y\right\|^2\\
+&=\|z\|^2+\left|\frac{\langle y|x\rangle}{\|y\|^2}\right|^2\|y\|^2\\
+&=\|z\|^2+\frac{|\langle y|x\rangle|^2}{\|y\|^2}\\
+&\ge \frac{|\langle y|x\rangle|^2}{\|y\|^2}
+\end{align*}\]++
+Multiplying both sides by ++\(\|y\|^2\)++ and using the fact that ++\(|\langle y|x\rangle|=|\langle x|y\rangle|\)++, we obtain
+++\[\|x\|^2\|y\|^2\ge |\langle x|y\rangle|^2\]++
+as desired.
+.. For this inequality to be an equality, we need ++\(\|z\|^2=0\)++, which implies ++\(x=\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++. So ++\(x\)++ must be a scalar multiple of ++\(y\)++ (which, in the finite-dimensional case, would mean they're parallel).
 ====
 
 === Demonstrations
@@ -191,7 +253,7 @@ P_\alpha|\Psi\rangle&=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
 This is exactly why we can say that ++\(c_\alpha =\langle f_\alpha | \Psi\rangle\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equvalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
 For a concrete example, consider the vector space ++\(\mathbb R^n\)++, where projecting a vector ++\(v\)++ onto the ++\(k\)++^th^ basis vector ++\(e_n\)++, i.e., computing ++\(\langle v|e_k\rangle\)++, picks out the ++\(k\)++^th^ component of ++\(v\)++ — that's what the components of a vector in ++\(\mathbb R^n\)++ _mean_.
 
-The Fourier transform is nothing more than a projection of a function onto the basis of complex exponentials ++\(e^{-i\omega x}\)++.
+The Fourier transform is nothing more than a projection of a function onto the complex exponentials ++\(e^{-i\omega x}\)++.
 --
 ====
 
@@ -228,7 +290,8 @@ And in the same way that hermitian operators are akin to real numbers (e.g., the
 ====
 
 * {q-num} The uncertainty principle ++\(\sigma_x \sigma_p\ge \frac{\hbar}{2}\)++ only holds in one dimension.
-Show that in ++\(n\)++ dimensions, in which ++\(\hat x|f\rangle=\vec x f\)++ and ++\(\hat p|f\rangle=i\hbar \nabla f\)++, the uncertainty principle becomes ++\(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)++
+Show that in ++\(n\)++ dimensions, in which ++\(\hat x|f\rangle=\vec x f\)++ and ++\(\hat p|f\rangle=i\hbar \nabla f\)++, the uncertainty principle becomes ++\(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)++.
+(Hint: what's ++\([x,p]\)++ with these new definitions of ++\(\hat x\)++ and ++\(\hat p\)++?)
 
 == Vectors and Operators
 

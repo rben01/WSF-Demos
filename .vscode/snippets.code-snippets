@@ -53,5 +53,17 @@
 		"body": "\\left($0\\right)",
 		"description": "Insert a pair of LaTeX \\left(\\right) parentheses",
 		"scope": "asciidoc"
+	},
+	"left-right angle": {
+		"prefix": "\\lra",
+		"body": "\\left\\langle$0\\right\\rangle",
+		"description": "Insert a pair of LaTeX \\left\\langle\\right\\rangle angle brackets",
+		"scope": "asciidoc"
+	},
+	"inner product": {
+		"prefix": "\\ip",
+		"body": "\\langle $1|$2\\rangle$0",
+		"description": "Insert an inner product",
+		"scope": "asciidoc"
 	}
 }

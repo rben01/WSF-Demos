@@ -359,7 +359,7 @@ Nothing we are trying to predict, like transmission and reflection coefficients,
 changes after making this approximation (as long as the above condition is met).
 ====
 
-* [[question-finite-well-diff-eq,2.6.2]]#{q-num}# Find the general solution to the finite square well differential equations for each section of the well (with ++\(V_0>0\)++):
+* [[question-finite-well-diff-eq,2.6.2]]{q-num} Find the general solution to the finite square well differential equations for each section of the well (with ++\(V_0>0\)++):
 \[V(x) = \begin{cases}
 -V_0 &   |x| \le a \\
 0 &  |x| > a
