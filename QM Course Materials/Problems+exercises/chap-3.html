@@ -892,6 +892,17 @@ So, applying the Pythagorean Theorem, we have
 Multiplying both sides by \(\|y\|^2\) and using the fact that \(|\langle y|x\rangle|=|\langle x|y\rangle|\), we obtain
 \[\|x\|^2\|y\|^2\ge |\langle x|y\rangle|^2\]
 as desired.</p>
+<div class="paragraph">
+<p>Let&#8217;s think about what this actually means.
+Consider the expression from above \(\|x\|^2\ge \frac{|\langle y|x\rangle|^2}{\|y\|^2}\), or equivalently, \(\|x\|\ge \frac{|\langle y|x\rangle|}{\|y\|}\).
+If we define \(y'=\frac{y}{\|y\|}\) to be \(y\) normalized, and define \(P_{y'}=|y'\rangle\langle y'|\) to be the projection operator onto \(y'\), then
+\[\begin{align*}
+\Bigl\|P_{y'}|x\rangle\Bigr\|&amp;=\Bigl\||y'\rangle\langle y'|x\rangle\Bigr\|\\
+&amp;=\frac{|\langle y|x\rangle|}{\|y\|}\Bigl\||y'\rangle\Bigr\|\\
+&amp;=\frac{|\langle y|x\rangle|}{\|y\|}
+\end{align*}\]
+So all the Cuachy-Schwarz Inequality says is that the norm of the projection of a vector \(x\) onto some other vector cannot exceed the norm of \(x\) itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).</p>
+</div>
 </li>
 <li>
 <p>For this inequality to be an equality, we need \(\|z\|^2=0\), which implies \(x=\frac{\langle y|x\rangle}{\langle y|y\rangle}y\). So \(x\) must be a scalar multiple of \(y\) (which, in the finite-dimensional case, would mean they&#8217;re parallel).</p>
