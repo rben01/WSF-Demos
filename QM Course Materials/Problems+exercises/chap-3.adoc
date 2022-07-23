@@ -59,7 +59,7 @@ This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\
 So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
-* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\)++, also written ++\(|\langle x|y\rangle|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
+* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\)++, or equivalently ++\(|\langle x|y\rangle|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
 This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all non-commuting pairs of observables (i.e., hermitian operators with a nonzero commutator).
 +
 [{sublist-style}]
