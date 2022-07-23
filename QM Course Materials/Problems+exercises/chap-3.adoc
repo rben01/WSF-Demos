@@ -106,7 +106,7 @@ Multiplying both sides by ++\(\|y\|^2\)++ and using the fact that ++\(|\langle y
 as desired.
 +
 Let's think about what this actually means.
-Consider the expression from above ++\(\|x\|^2\ge \frac{|\langle y|x\rangle|^2}{\|y\|^2}\)++, or equivalently, ++\(\|x\|\ge \frac{|\langle y|x\rangle|}{\|y\|}\)++.
+Consider the statement ++\(\|x\|\ge \frac{|\langle y|x\rangle|}{\|y\|}\)++.
 If we define ++\(y'=\frac{y}{\|y\|}\)++ to be ++\(y\)++ normalized, and define ++\(P_{y'}=|y'\rangle\langle y'|\)++ to be the projection operator onto ++\(y'\)++, then
 ++\[\begin{align*}
 \Bigl\|P_{y'}|x\rangle\Bigr\|&=\Bigl\||y'\rangle\langle y'|x\rangle\Bigr\|\\
