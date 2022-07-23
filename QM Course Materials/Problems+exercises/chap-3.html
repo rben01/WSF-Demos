@@ -769,7 +769,8 @@ Show that the set of square-integrable functions does indeed form a vector space
 </ul>
 </div>
 <div class="paragraph">
-<p>Show that the inner product below, defined on the set of square-integrable functions over domain \((a,b)\), satisfies these properties.
+<p>In addition, we define the <em>norm</em> of a vector, corresponding to the length of a vector in \(\mathbb R^n\), to be \(\|v\|=\sqrt{\langle v|v\rangle}\).<br>
+Show that the inner product below, defined on the set of square-integrable functions over domain \((a,b)\), satisfies these properties.
 \[\begin{align*}
 \langle f|g\rangle:=\int_a^b f^*(x)g(x)\,dx
 \end{align*}\]</p>
@@ -838,7 +839,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </li>
 <li>
 <p><a id="Cauchy-Schwarz"></a><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Let&#8217;s prove the Cauchy-Schwarz Inequality: \(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\), or equivalently \(|\langle x|y\rangle|\le \|x\|\|y\|\) (&#8220;the magnitude of the inner product is at most the product of the norms.&#8221;).
-This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all non-commuting pairs of observables (i.e., hermitian operators with a nonzero commutator).</p>
+This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -869,7 +870,7 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 </li>
 <li>
 <p>First, if \(y=|0\rangle\), this is trivial; both sides of the inequality are 0.
-So assume \(y\ne| 0\rangle\), so \(\|y\|\ne 0\).
+So assume \(y\ne| 0\rangle\), from which it follows that \(\langle y|y\rangle\ne 0\).
 As the hint suggests, let \(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\). This reason for this choice of \(z\) will soon be clear:
 \[\begin{align*}
 \left\langle y|z\right\rangle&amp;=\left\langle y\middle| x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y \right\rangle\\

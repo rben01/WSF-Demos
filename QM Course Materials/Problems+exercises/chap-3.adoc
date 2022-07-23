@@ -15,6 +15,7 @@ Show that the set of square-integrable functions does indeed form a vector space
 ** Linearity: ++\(\langle u|(av+bw)\rangle=a\langle u|v\rangle + b\langle u|w\rangle\)++
 
 +
+In addition, we define the _norm_ of a vector, corresponding to the length of a vector in ++\(\mathbb R^n\)++, to be ++\(\|v\|=\sqrt{\langle v|v\rangle}\)++. +
 Show that the inner product below, defined on the set of square-integrable functions over domain ++\((a,b)\)++, satisfies these properties.
 ++\[\begin{align*}
 \langle f|g\rangle:=\int_a^b f^*(x)g(x)\,dx
@@ -60,7 +61,7 @@ So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
 * [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\)++, or equivalently ++\(|\langle x|y\rangle|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
-This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all non-commuting pairs of observables (i.e., hermitian operators with a nonzero commutator).
+This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).
 +
 [{sublist-style}]
 .. First, prove the Pythagorean Theorem for vectors: If ++\(x\)++ and ++\(y\)++ are orthogonal, then ++\(\|x+y\|^2=\|x\|^2+\|y\|^2\)++.
@@ -81,7 +82,7 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 &=\|x\|^2+\|y\|^2
 \end{align*}\]++
 .. First, if ++\(y=|0\rangle\)++, this is trivial; both sides of the inequality are 0.
-So assume ++\(y\ne| 0\rangle\)++, so ++\(\|y\|\ne 0\)++.
+So assume ++\(y\ne| 0\rangle\)++, from which it follows that ++\(\langle y|y\rangle\ne 0\)++.
 As the hint suggests, let ++\(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\)++. This reason for this choice of ++\(z\)++ will soon be clear:
 ++\[\begin{align*}
 \left\langle y|z\right\rangle&=\left\langle y\middle| x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y \right\rangle\\
