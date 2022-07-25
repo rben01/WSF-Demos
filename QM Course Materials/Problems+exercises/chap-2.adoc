@@ -22,7 +22,7 @@ Only (a) is true.
 +
 [{sublist-style}]
 . Show that ++\(|\Psi_E(x,t)|^2 = |\psi_E(x)|^2\)++.
-. Show that ++\( \langle p \rangle = 0\)++ for ++\(\Psi_E(x,t)\)++.
+. Show that ++\( \Braket{p} = 0\)++ for ++\(\Psi_E(x,t)\)++.
 
 +
 .Solution
@@ -37,12 +37,12 @@ Only (a) is true.
 \end{align*}\]++
 . For a particle in state ++\(\Psi_E\)++,
 ++\[\begin{align*}
-\langle x\rangle&=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
+\Braket{x}&=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
 &=\int_{\mathcal D} x|\psi_E(x)|^2\,dx\\
 &=\textrm{constant w.r.t time}
 \end{align*}\]++
-So ++\(\frac{d\langle x\rangle}{dt}=0\)++.
-Then, Ehrenfest's theorem says that ++\(\langle p\rangle=m\frac{d\langle x\rangle}{dt}=0\)++.
+So ++\(\frac{d\Braket{x}}{dt}=0\)++.
+Then, Ehrenfest's theorem says that ++\(\Braket{p}=m\frac{d\Braket{x}}{dt}=0\)++.
 
 ====
 
@@ -55,8 +55,8 @@ The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=
 Substituting this Hamiltonian into the time-independent {sch} equation
 ++\[-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V\psi = E\psi\]++
 yields ++\(\hat H\psi=E\psi\)++.
-** Show that ++\(\langle \hat H \rangle = E\)++.
-** Show that ++\(\langle \hat H^2 \rangle = E^2\)++. (Hint: first show that ++\(\hat H^2\psi=E^2\psi\)++)
+** Show that ++\(\Braket{\hat H} = E\)++.
+** Show that ++\(\Braket{\hat H^2} = E^2\)++. (Hint: first show that ++\(\hat H^2\psi=E^2\psi\)++)
 ** Conclude that the variance of ++\(\hat H\)++ is 0.
 
 +
@@ -73,7 +73,7 @@ In other words, every measurement of the total energy of a solution to the time-
 === Questions
 
 * {q-num} The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are ++\(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\)++ with ++\(n\ge 1\)++.
-Show that these functions are _orthonormal_, i.e., that ++\(\langle \psi_m,\psi_n\rangle\)++ is 1 when ++\(m=n\)++ and 0 otherwise.
+Show that these functions are _orthonormal_, i.e., that ++\(\Braket{\psi_m,\psi_n}\)++ is 1 when ++\(m=n\)++ and 0 otherwise.
 (Hint: ++\(\cos\)++ is an even function, ++\(\sin\)++ is an odd function, and ++\(\cos(a+b)=\cos a\cos b-\sin a\sin b\)++.)
 +
 .Solution
@@ -88,7 +88,7 @@ Using the trigonometric identities in the hint, we have
 \end{align*}\]++
 Regardless of whether ++\(m=n\)++,
 ++\[\begin{align*}
-\langle \psi_m,\psi_n\rangle&= \int_0^a \psi_m^*\psi_n\,dx\\
+\Braket{\psi_m,\psi_n}&= \int_0^a \psi_m^*\psi_n\,dx\\
 &=\int_0^a \sqrt\frac{2}{a}\sin\left(\frac{m\pi}{a}x\right)\ \sqrt\frac{2}{a}\sin\left(\frac{n\pi}{a}x\right)\,dx\\
 &=\frac{1}{a}\int_0^a \cos\left(\frac{(m-n)\pi}{a}x\right)-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx
 \end{align*}\]++
@@ -96,11 +96,11 @@ And for ++\(k\ne 0\)++,
 ++\[\begin{align*}
 \int_0^a \cos\left(\frac{k\pi}{a}x\right)\,dx=\left.\frac{a}{k\pi}\sin\left(\frac{k\pi}{a}x\right)\right|^a_0=0
 \end{align*}\]++
-When ++\(m=n\)++, ++\(\langle\psi_m,\psi_n\rangle\)++ becomes
+When ++\(m=n\)++, ++\(\Braket{\psi_m,\psi_n}\)++ becomes
 ++\[\begin{align*}
 \frac{1}{a}\int_0^a \cos 0-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx=\frac{1}{a}\int_0^a dx=1
 \end{align*}\]++
-When ++\(m\ne n\)++, both of the ++\(\cos\)++ terms in the integral are of the form ++\(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\)++ and so they both integrate to 0, and then ++\(\langle \psi_m,\psi_n\rangle=0\)++.
+When ++\(m\ne n\)++, both of the ++\(\cos\)++ terms in the integral are of the form ++\(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\)++ and so they both integrate to 0, and then ++\(\Braket{\psi_m,\psi_n}=0\)++.
 ====
 
 * {q-num} Let ++\(V\)++ be the potential in the infinite square well:

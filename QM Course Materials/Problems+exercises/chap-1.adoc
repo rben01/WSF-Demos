@@ -141,9 +141,9 @@ This is the solution
 [{sublist-style}]
 . There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers.
 The probability of selecting a 1, 2, or 3 digit number are: ++\[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]++  ++\[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\]++ ++\[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]++
-. The expected number of digits is ++\[\begin{align*}\langle d \rangle &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++
+. The expected number of digits is ++\[\begin{align*}\Braket{d} &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++
 If you choose a number at random, the expected value for the number of digits is 2.45.
-. Standard deviation is given by \(\sqrt{\langle d^2\rangle - \langle d \rangle^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \langle d^2 \rangle  &=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &=  6.35 \end{align*}\]++
+. Standard deviation is given by \(\sqrt{\Braket{d^2} - \Braket{d}^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \Braket{d^2}  &=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &=  6.35 \end{align*}\]++
 The standard deviation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
 ====
 
@@ -168,16 +168,16 @@ s|Number of households with that number of pets
 |===
 
 
-Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2}\)++ where n is the number of pets in the household).
+Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2}\)++ where n is the number of pets in the household).
 
 
 .Solution
 [%collapsible]
 ====
-Calculate \(\langle n \rangle\), \(\langle n^2 \rangle\), and \(\langle (\Delta n)^2 \rangle\)
-++\[\begin{align*} \langle n \rangle &= 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1) + \\ &5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\&= 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 \\&= 2.35 \end{align*}\]++ ++\[\begin{align*} \langle n^2 \rangle &= 0(.15) + 1(.3) + 4(.25)+ 9(.1)+ 16(.1) + \\ &25(0) + 36(0) + 49(.05) + 64(0) + 81(0) + 100(.05) \\&= 0+ .3 + 1 + .9 + 1.6  + 0 + 0+ 2.45 + 0 + 0 + 5 \\&=  11.25 \end{align*}\]++
-++\[\begin{align*} \langle (\Delta n)^2) \rangle &= (0-2.35)^2(.15) + (1-2.35)^2(.3) +(2-2.35)^2(.25) +\\ &(3-2.35)^2(.1)+ (4-2.35)^2(.1) + (5-2.35)^2(0) +\\ &(6-2.35)^2(0) + (7-2.35)^2(.05) + (8-2.35)^2(0) +\\ &(9-2.35)^2(0) + (10-2.35)^2(.05) \\&= 0.828375 + 0.54675 + 0.030625 + 0.04225 + \\ & 0.27225 + 0 + 0 + 1.081125 + 0 + 0 + 2.926125\\ &= 5.7275 \end{align*}\]++
-We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle - \langle n \rangle ^2} = 2.39\)++
+Calculate ++\(\Braket{n}\)++, ++\(\Braket{n^2}\)++, and ++\(\Braket{(\Delta n)^2}\)++
+++\[\begin{align*} \Braket{n} &= 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1) + \\ &5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\&= 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 \\&= 2.35 \end{align*}\]++ ++\[\begin{align*} \Braket{n^2} &= 0(.15) + 1(.3) + 4(.25)+ 9(.1)+ 16(.1) + \\ &25(0) + 36(0) + 49(.05) + 64(0) + 81(0) + 100(.05) \\&= 0+ .3 + 1 + .9 + 1.6  + 0 + 0+ 2.45 + 0 + 0 + 5 \\&=  11.25 \end{align*}\]++
+++\[\begin{align*} \Braket{(\Delta n)^2)} &= (0-2.35)^2(.15) + (1-2.35)^2(.3) +(2-2.35)^2(.25) +\\ &(3-2.35)^2(.1)+ (4-2.35)^2(.1) + (5-2.35)^2(0) +\\ &(6-2.35)^2(0) + (7-2.35)^2(.05) + (8-2.35)^2(0) +\\ &(9-2.35)^2(0) + (10-2.35)^2(.05) \\&= 0.828375 + 0.54675 + 0.030625 + 0.04225 + \\ & 0.27225 + 0 + 0 + 1.081125 + 0 + 0 + 2.926125\\ &= 5.7275 \end{align*}\]++
+We find that ++\(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2} = 2.39\)++
 ====
 --
 
@@ -194,7 +194,7 @@ We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle
 
 [{sublist-style}]
 . Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall, one line at a standard deviation below the mean and one line at a standard deviation above the mean.
-. Calculate ++\(\langle x \rangle\)++ and ++\(\sigma\)++ for both distributions.
+. Calculate ++\(\Braket{x}\)++ and ++\(\sigma\)++ for both distributions.
 . For both distributions, calculate the probability of selecting a value that falls within 1 standard deviation of the mean.
 
 .Solution
@@ -205,27 +205,27 @@ We find that ++\(\sqrt{\langle (\Delta n)^2 \rangle} = \sqrt{\langle n^2 \rangle
 +
 image::fig-1.3.1-graphs.svg[width=450]
 . For the first probability distribution, ++\(\rho_1(x)\)++:
-++\[\begin{align*} \langle x \rangle &= \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\
+++\[\begin{align*} \Braket{x} &= \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\
 &= \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\
 &= \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} \\
 &= \frac{1}{2} \\\\
-  \langle x^2 \rangle &=   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\
+  \Braket{x^2} &=   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\
 &= \left. x^4 \right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\
 &= \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} \\
 &= \frac{7}{24} \\
-\sigma &= \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204
+\sigma &= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204
 \end{align*}\]++
 +
 For the second probability distribution, ++\(\rho_2(x)\)++:
-++\[\begin{align*} \langle x \rangle &= \int_0^1 x (2\sin^2{(2 \pi x)}) dx \\
+++\[\begin{align*} \Braket{x} &= \int_0^1 x (2\sin^2{(2 \pi x)}) dx \\
 &= \int_0^1 x (1-\cos(4 \pi x)) dx \\
 &= \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\
 &= \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} \\
 &= \frac{1}{2} \\
-\langle x^2 \rangle &= \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx \\
+\Braket{x^2} &= \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx \\
 &= \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\
  &= \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ &= \frac{1}{3} - \frac{1}{8\pi^2}
- \\  \sigma &= \sqrt{\langle x^2\rangle - \langle x \rangle^2} = \sqrt{\left(\frac{1}{3}-\frac{1}{8\pi^2}\right) - \frac{1}{4}}
+ \\  \sigma &= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\left(\frac{1}{3}-\frac{1}{8\pi^2}\right) - \frac{1}{4}}
   \approx 0.266
   \end{align*}\]++
 . For ++\(\rho_1\)++ the probability of selecting a value within one standard deviation of the mean is given by:
@@ -337,7 +337,7 @@ Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
 \end{align*}\]++
 ====
 
-* {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with expectation ++\(\langle x\rangle\)++ and standard deviation ++\(\sigma\)++ at time ++\(t=0\)++.
+* {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with expectation ++\(\Braket{x}\)++ and standard deviation ++\(\sigma\)++ at time ++\(t=0\)++.
 +
 .Solution
 [%collapsible]
@@ -345,14 +345,14 @@ Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
 It's easiest to start with a known probability distribution — their means and standard deviations are often part of their parameterization, and by definition they're normalized — and then work backwards to the wavefunction.
 
 One probability distribution parameterized by its mean and standard deviation is the normal distribution.
-The normal distribution with mean ++\(\langle x\rangle\)++ and standard deviation ++\(\sigma\)++ is
-++\[f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]++
+The normal distribution with mean ++\(\Braket{x}\)++ and standard deviation ++\(\sigma\)++ is
+++\[f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
 
 One wavefunction whose probability distribution is ++\(f\)++ is ++\(f\)++’s square root:
-++\[\psi(x)=\sqrt{f(x)} =\frac{1}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]++
+++\[\psi(x)=\sqrt{f(x)} =\frac{1}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
 
 For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the magnitude:
-++\[\Psi(x,t)=\frac{e^{-it}}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\langle x\rangle}{\sigma}\right)}\]++
+++\[\Psi(x,t)=\frac{e^{-it}}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
 
 ====
 
@@ -441,9 +441,9 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 * {q-num} For the following wavefunction over the interval ++\([0,1]\)++ ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
-. Calculate ++\(\langle x \rangle\)++ and ++\(\langle p \rangle \)++.
-. Calculate ++\(\frac{d \langle x \rangle}{dt}\)++. Does Ehrenfest's theorem hold?
-. Find ++\(\langle - \frac{\partial V}{\partial x}\rangle \)++.
+. Calculate ++\(\Braket{x}\)++ and ++\(\Braket{p} \)++.
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++. Does Ehrenfest's theorem hold?
+. Find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
 
 +
 .Solution
@@ -511,7 +511,7 @@ So ++\(\Psi\)++ is indeed normalized.
 WARNING: These integrals won't be pretty.
 +
 ++\[\begin{align*}
-\langle x\rangle&=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
+\Braket{x}&=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
 &=\int_0^1x|\Psi(x,t)|^2\,dx\\
 &=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
 \end{align*}\]++
@@ -530,8 +530,8 @@ Great, that's two components down. Now let's do the third component (without the
 &=-\frac{8}{9\pi^2}
 \end{align*}\]++
 And so, we finally obtain
-++\[\langle x\rangle=\frac{1}{4}+\frac{1}{4}-\frac{8\phi}{9\pi^2}=\frac{1}{2}-\frac{8\phi}{9\pi^2}\]++
-Wait a minute — ++\(\phi\)++ is complex, but ++\(\langle x\rangle\)++ must be real.
+++\[\Braket{x}=\frac{1}{4}+\frac{1}{4}-\frac{8\phi}{9\pi^2}=\frac{1}{2}-\frac{8\phi}{9\pi^2}\]++
+Wait a minute — ++\(\phi\)++ is complex, but ++\(\Braket{x}\)++ must be real.
 Well, if ++\(w\in\mathbb R\)++, then
 ++\[\begin{align*}
 e^{iw}+e^{-iw}&=e^{iw}+(e^{iw})^*\\
@@ -544,12 +544,12 @@ So,
 \end{align*}\]++
 So ++\(\phi\)++ was real along. We finally obtain
 ++\[\begin{align*}
-\langle x\rangle = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
+\Braket{x} = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
 \end{align*}\]++
 +
-On to ++\(\langle p\rangle\)++!
+On to ++\(\Braket{p}\)++!
 ++\[\begin{align*}
-\langle p\rangle&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
+\Braket{p}&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
 &=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
 \end{align*}\]++
 Let's compute the integrand:
@@ -569,7 +569,7 @@ Let's compute the integrand:
 Now, we need to integrate this.
 Thankfully we already know how to compute ++\(\int_0^1 \sin(n\pi x)\,dx\)++, and so we obtain
 ++\[\begin{align*}
-\langle p\rangle&=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
+\Braket{p}&=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
 &=-i\hbar\int_0^1\left[\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\right.\\
 &\phantom{i\hbar\int_0^1}\quad\quad+\pi\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
 &\phantom{i\hbar\int_0^1}\quad\quad+\left.\pi\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
@@ -587,16 +587,16 @@ e^{iw}-e^{-iw}&=e^{iw}-(e^{iw})^*\\
 \end{align*}\]++
 and so, finally,
 ++\[\begin{align*}
-\langle p\rangle&=-\frac{8i\hbar}{3}\left(2i\sin((\lambda_1-\lambda_2)t)\right)\\
+\Braket{p}&=-\frac{8i\hbar}{3}\left(2i\sin((\lambda_1-\lambda_2)t)\right)\\
 &=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
 \end{align*}\]++
 
 . We have
 ++\[\begin{align*}
-\frac{d\langle x\rangle}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
+\frac{d\Braket{x}}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
 &=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
 \end{align*}\]++
-This doesn't quite look like ++\(\frac{\langle p\rangle}{m}\)++ yet, but we can apply the {sch} equation to make it so.
+This doesn't quite look like ++\(\frac{\Braket{p}}{m}\)++ yet, but we can apply the {sch} equation to make it so.
 First,
 ++\[\begin{align*}
 \frac{\partial ^2\Psi}{\partial x^2}&=\frac{\partial }{\partial x}\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\right)\\
@@ -617,8 +617,8 @@ First,
 
 
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
-++\[\frac{d\langle p \rangle}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}\]++
-In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\langle x\rangle\)++`".
+++\[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]++
+In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\Braket{x}\)++`".
 +
 
 .Solution
@@ -628,14 +628,14 @@ Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\part
 
 ++\[
 \begin{align*}
-\frac{d\langle p\rangle}{dt}&=\left\langle-\frac{\partial V}{\partial x}\right\rangle\\
-&=\left\langle-(2ax+b)\right\rangle\\
-&=-(2a\langle x\rangle + b)\\
-&=-\left.\frac{\partial V}{\partial x}\right|_{x=\langle x\rangle}
+\frac{d\Braket{p}}{dt}&=\Braket{-\frac{\partial V}{\partial x}}\\
+&=\Braket{-(2ax+b)}\\
+&=-(2a\Braket{x} + b)\\
+&=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}
 \end{align*}
 \]++
 
-If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedure wouldn't work because in general ++\(\langle x^n\rangle\ne\langle x\rangle^n\)++.
+If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedure wouldn't work because in general ++\(\Braket{x^n}\ne\Braket{x}^n\)++.
 ====
 
 * {q-num} Any dynamical variable can be expressed in terms of position and momentum.
@@ -647,7 +647,7 @@ We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and 
 [{sublist-style}]
 . Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
 . Find ++\(L^2\)++.
-. Calculate ++\(\langle L^2 \rangle\)++ for the spatial component of the wavefunction ++\( \sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++
+. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++
 
 .Solution (placeholder)
 [%collapsible]
@@ -657,7 +657,7 @@ This is the solution
 --
 
 === Demonstrations
-* Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\langle x\rangle_\psi\)++ and ++\(\langle p\rangle_\psi\)++.
+* Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\Braket{x}_\psi\)++ and ++\(\Braket{p}_\psi\)++.
 ** [x] Harmonic oscillator: https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543[the quantum harmonic oscillator^]
 ** [ ] Particle in a box
 ** [ ] others?
@@ -673,9 +673,9 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 === Questions
 * {q-num} For the wavefunction from question {q-num}, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
-. Calculate ++\(\langle p^2\rangle\)++ and ++\(\sigma_p\)++.
+. Calculate ++\(\Braket{p^2}\)++ and ++\(\sigma_p\)++.
 . What is the minimum possible value of ++\(\sigma_x\)++?
-. Calculate ++\(\langle x^2 \rangle\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
+. Calculate ++\(\Braket{x^2}\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
 
 +
 .Solution (placeholder)
@@ -713,9 +713,9 @@ This is the solution
 //a=\frac{m\omega}{\hbar}
 //++++
 
-// . Calculate ++\(\frac{d\langle p \rangle}{dt}\)++
+// . Calculate ++\(\frac{d\Braket{p}}{dt}\)++
 // . Use Schrodinger's equation to find ++\(V(x)\)++.
-// . Calculate ++\(\left\langle -\frac{\partial V}{\partial x} \right\rangle\)++. Does Ehrenfest's theorem hold?
+// . Calculate ++\(\Braket{-\frac{\partial V}{\partial x}}\)++. Does Ehrenfest's theorem hold?
 // . This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
 //What does part (c) tell you about the behavior of the quantum harmonic oscillator?
 //How does this compare to the classical harmonic oscillator?

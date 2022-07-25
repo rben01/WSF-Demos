@@ -754,25 +754,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 Show that the set of square-integrable functions does indeed form a vector space.</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Griffiths 3.2; same caveat as above] A vector space \(S\) is said to have an inner product \(\langle\cdot|\cdot\rangle\) when, for all \(u,v,w\in S\) and \(a,b\in\mathbb C\), the following properties hold:</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Griffiths 3.2; same caveat as above] A vector space \(S\) is said to have an inner product \(\Braket{\cdot|\cdot}\) when, for all \(u,v,w\in S\) and \(a,b\in\mathbb C\), the following properties hold:</p>
 <div class="ulist">
 <ul>
 <li>
-<p>Conjugate symmetry: \(\langle v|u\rangle=\langle u|v\rangle^*\)</p>
+<p>Conjugate symmetry: \(\Braket{v|u}=\Braket{u|v}^*\)</p>
 </li>
 <li>
-<p>Nonnegativity: \(\langle u|u\rangle\ge 0\) (in particular, it&#8217;s real), and \(\langle u|u \rangle=0\) if and only if \(u=\vec 0\) (\(\vec 0\) the vector, not \(0\) the number)</p>
+<p>Nonnegativity: \(\Braket{u|u}\ge 0\) (in particular, it&#8217;s real), and \(\Braket{u|u}=0\) if and only if \(\ket{u}=\ket 0\)</p>
 </li>
 <li>
-<p>Linearity: \(\langle u|(av+bw)\rangle=a\langle u|v\rangle + b\langle u|w\rangle\)</p>
+<p>Linearity: \(\Braket{u|(av+bw)}=a\Braket{u|v} + b\Braket{u|w}\)</p>
 </li>
 </ul>
 </div>
 <div class="paragraph">
-<p>In addition, we define the <em>norm</em> of a vector, corresponding to the length of a vector in \(\mathbb R^n\), to be \(\|v\|=\sqrt{\langle v|v\rangle}\).<br>
+<p>In addition, we define the <em>norm</em> of a vector, corresponding to the length of a vector in \(\mathbb R^n\), to be \(\|v\|=\sqrt{\Braket{v|v}}\) (or \(\|v\|^2=\Braket{v|v}\)).<br>
 Show that the inner product below, defined on the set of square-integrable functions over domain \((a,b)\), satisfies these properties.
 \[\begin{align*}
-\langle f|g\rangle:=\int_a^b f^*(x)g(x)\,dx
+\Braket{f|g}:=\int_a^b f^*(x)g(x)\,dx
 \end{align*}\]</p>
 </div>
 </li>
@@ -838,7 +838,7 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
-<p><a id="Cauchy-Schwarz"></a><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Let&#8217;s prove the Cauchy-Schwarz Inequality: \(|\langle x|y\rangle|^2\le \langle x|x\rangle\,\langle y|y\rangle\), or equivalently \(|\langle x|y\rangle|\le \|x\|\|y\|\) (&#8220;the magnitude of the inner product is at most the product of the norms.&#8221;).
+<p><a id="Cauchy-Schwarz"></a><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Let&#8217;s prove the Cauchy-Schwarz Inequality: \(|\Braket{x|y}|^2\le \Braket{x|x}\,\Braket{y|y}\), or equivalently \(|\Braket{x|y}|\le \|x\|\|y\|\) (&#8220;the magnitude of the inner product is at most the product of the norms.&#8221;).
 This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -847,7 +847,7 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 </li>
 <li>
 <p>Use this to prove the Cauchy-Schwarz Inequality.
-(Hint: let \(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\).)</p>
+(Hint: let \(z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y\).)</p>
 </li>
 <li>
 <p>For which pairs of vectors \(x,y\) is the quantity on the left hand side maximized, i.e., when is the inequality an equality?</p>
@@ -860,52 +860,52 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Since \(x\) and \(y\) are orthogonal, \(\langle x|y\rangle=\langle y|x\rangle=0\). Now we simply apply the linearity of the inner product:
+<p>Since \(x\) and \(y\) are orthogonal, \(\Braket{x|y}=\Braket{y|x}=0\). Now we simply apply the linearity of the inner product:
 \[\begin{align*}
-\|x+y\|^2&amp;=\langle x+y|x+y\rangle\\
-&amp;=\langle x|x\rangle+\langle x|y\rangle +\langle y|x\rangle +\langle y|y\rangle\\
-&amp;=\langle x|x\rangle+\langle y|y\rangle\\
+\|x+y\|^2&amp;=\Braket{x+y|x+y}\\
+&amp;=\Braket{x|x}+\Braket{x|y} +\Braket{y|x} +\Braket{y|y}\\
+&amp;=\Braket{x|x}+\Braket{y|y}\\
 &amp;=\|x\|^2+\|y\|^2
 \end{align*}\]</p>
 </li>
 <li>
-<p>First, if \(y=|0\rangle\), this is trivial; both sides of the inequality are 0.
-So assume \(y\ne| 0\rangle\), from which it follows that \(\langle y|y\rangle\ne 0\).
-As the hint suggests, let \(z=x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y\). This reason for this choice of \(z\) will soon be clear:
+<p>First, if \(y=\ket{0}\), this is trivial; both sides of the inequality are 0.
+So assume \(y\ne\ket{0}\), from which it follows that \(\Braket{y|y}\ne 0\).
+As the hint suggests, let \(z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y\). This reason for this choice of \(z\) will soon be clear:
 \[\begin{align*}
-\left\langle y|z\right\rangle&amp;=\left\langle y\middle| x-\frac{\langle y|x\rangle}{\langle y|y\rangle}y \right\rangle\\
-&amp;=\langle y|x\rangle-\frac{\langle y|x\rangle}{\langle y|y\rangle}\langle y|y\rangle\\
-&amp;=\langle y|x\rangle-\langle y|x\rangle\\
+\Braket{y|z}&amp;=\Braket{y|x-\frac{\Braket{y|x}}{\Braket{y|y}}y}\\
+&amp;=\Braket{y|x}-\frac{\Braket{y|x}}{\Braket{y|y}}\Braket{y|y}\\
+&amp;=\Braket{y|x}-\Braket{y|x}\\
 &amp;=0
 \end{align*}\]
 So \(y\) and \(z\) are orthogonal.
-(In fact, \(\frac{\langle y|x\rangle}{\langle y|y\rangle}y\) is the projection of \(x\) onto \(y\), which when subtracted from \(x\) leaves the portion of \(x\) orthogonal to \(y\).)
-Now, \(x=z+\frac{\langle y|x\rangle}{\langle y|y\rangle}y\), the sum of two orthogonal vectors.
+(In fact, \(\frac{\Braket{y|x}}{\Braket{y|y}}y\) is the projection of \(x\) onto \(y\), which when subtracted from \(x\) leaves the portion of \(x\) orthogonal to \(y\).)
+Now, \(x=z+\frac{\Braket{y|x}}{\Braket{y|y}}y\), the sum of two orthogonal vectors.
 And, of course, \(\|z\|\ge 0\).
 So, applying the Pythagorean Theorem, we have
 \[\begin{align*}
-\|x\|^2&amp;=\|z\|^2+\left\|\frac{\langle y|x\rangle}{\langle y|y\rangle}y\right\|^2\\
-&amp;=\|z\|^2+\left|\frac{\langle y|x\rangle}{\|y\|^2}\right|^2\|y\|^2\\
-&amp;=\|z\|^2+\frac{|\langle y|x\rangle|^2}{\|y\|^2}\\
-&amp;\ge \frac{|\langle y|x\rangle|^2}{\|y\|^2}
+\|x\|^2&amp;=\|z\|^2+\left\|\frac{\Braket{y|x}}{\Braket{y|y}}y\right\|^2\\
+&amp;=\|z\|^2+\left|\frac{\Braket{y|x}}{\|y\|^2}\right|^2\|y\|^2\\
+&amp;=\|z\|^2+\frac{|\Braket{y|x}|^2}{\|y\|^2}\\
+&amp;\ge \frac{|\Braket{y|x}|^2}{\|y\|^2}
 \end{align*}\]
-Multiplying both sides by \(\|y\|^2\) and using the fact that \(|\langle y|x\rangle|=|\langle x|y\rangle|\), we obtain
-\[\|x\|^2\|y\|^2\ge |\langle x|y\rangle|^2\]
+Multiplying both sides by \(\|y\|^2\) and using the fact that \(|\Braket{y|x}|=|\Braket{x|y}|\), we obtain
+\[\|x\|^2\|y\|^2\ge |\Braket{x|y}|^2\]
 as desired.</p>
 <div class="paragraph">
 <p>Let&#8217;s think about what this actually means.
-Consider the statement \(\|x\|\ge \frac{|\langle y|x\rangle|}{\|y\|}\).
+Consider the statement \(\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}\).
 If we define \(y'=\frac{y}{\|y\|}\) to be \(y\) normalized, and define \(P_{y'}=|y'\rangle\langle y'|\) to be the projection operator onto \(y'\), then
 \[\begin{align*}
-\Bigl\|P_{y'}|x\rangle\Bigr\|&amp;=\Bigl\||y'\rangle\langle y'|x\rangle\Bigr\|\\
-&amp;=\frac{|\langle y|x\rangle|}{\|y\|}\Bigl\||y'\rangle\Bigr\|\\
-&amp;=\frac{|\langle y|x\rangle|}{\|y\|}
+\Bigl\|P_{y'}|x\rangle\Bigr\|&amp;=\Bigl\||y'\rangle\Braket{y'|x}\Bigr\|\\
+&amp;=\frac{|\Braket{y|x}|}{\|y\|}\Bigl\||y'\rangle\Bigr\|\\
+&amp;=\frac{|\Braket{y|x}|}{\|y\|}
 \end{align*}\]
 So all the Cuachy-Schwarz Inequality says is that the norm of the projection of a vector \(x\) onto some other vector cannot exceed the norm of \(x\) itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).</p>
 </div>
 </li>
 <li>
-<p>For this inequality to be an equality, we need \(\|z\|^2=0\), which implies \(x=\frac{\langle y|x\rangle}{\langle y|y\rangle}y\). So \(x\) must be a scalar multiple of \(y\) (which, in the finite-dimensional case, would mean they&#8217;re parallel).</p>
+<p>For this inequality to be an equality, we need \(\|z\|^2=0\), which implies \(x=\frac{\Braket{y|x}}{\Braket{y|y}}y\). So \(x\) must be a scalar multiple of \(y\) (which, in the finite-dimensional case, would mean they&#8217;re parallel).</p>
 </li>
 </ol>
 </div>
@@ -929,7 +929,7 @@ So all the Cuachy-Schwarz Inequality says is that the norm of the projection of 
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\langle f|Pf\rangle\ge 0\) for all \(f\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\Braket{f|Pf}\ge 0\) for all \(f\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -937,14 +937,13 @@ So all the Cuachy-Schwarz Inequality says is that the norm of the projection of 
 <p>If \(Q\) is defined on domain \(\mathcal D\), then
 \[
 \begin{align*}
-\langle f|Pf\rangle&amp;=\langle f|Q^\dagger Qf\rangle\\
-&amp;=\langle Qf| Qf\rangle\\
-&amp;=\int_\mathcal{D} |Qf|^2\,dx
+\Braket{f|Pf}&amp;=\Braket{f|Q^\dagger Qf}\\
+&amp;=\Braket{Qf| Qf}\\
+&amp;=\|Qf\|^2\\
+&amp;\ge 0
 \end{align*}
-\]</p>
-</div>
-<div class="paragraph">
-<p>Since \(|Qf|^2\) is nonnegative, so is any integral of it.</p>
+\]
+as desired</p>
 </div>
 </div>
 </details>
@@ -955,14 +954,14 @@ So all the Cuachy-Schwarz Inequality says is that the norm of the projection of 
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>Simply by the definition of the adjoint and the fact that \(\langle g|f\rangle=\langle f|g\rangle^*\), we have, for all \(f\) and \(g\),
+<p>Simply by the definition of the adjoint and the fact that \(\Braket{g|f}=\Braket{f|g}^*\), we have, for all \(f\) and \(g\),
 \[
 \begin{align*}
-\langle Q^{\dagger\dagger} f|g\rangle&amp;=\langle f|Q^\dagger g\rangle\\
-&amp;=\langle Q^\dagger g|f\rangle^*\\
-&amp;=\langle g|Qf\rangle^*\\
-&amp;=\langle Qf|g\rangle^{**}\\
-&amp;=\langle Qf|g\rangle
+\Braket{Q^{\dagger\dagger} f|g}&amp;=\Braket{f|Q^\dagger g}\\
+&amp;=\Braket{Q^\dagger g|f}^*\\
+&amp;=\Braket{g|Qf}^*\\
+&amp;=\Braket{Qf|g}^{**}\\
+&amp;=\Braket{Qf|g}
 \end{align*}
 \]</p>
 </div>
@@ -970,9 +969,9 @@ So all the Cuachy-Schwarz Inequality says is that the norm of the projection of 
 <p>Now, because the inner product is linear,
 \[
 \begin{align*}
-0&amp;=\langle Q^{\dagger\dagger} f|g\rangle-\langle Qf|g\rangle\\
-&amp;=\langle Q^{\dagger\dagger} f-Qf|g\rangle\\
-&amp;=\langle (Q^{\dagger\dagger} -Q)f|g\rangle
+0&amp;=\Braket{Q^{\dagger\dagger} f|g}-\Braket{Qf|g}\\
+&amp;=\Braket{Q^{\dagger\dagger} f-Qf|g}\\
+&amp;=\Braket{(Q^{\dagger\dagger} -Q)f|g}
 \end{align*}
 \]</p>
 </div>
@@ -982,13 +981,13 @@ So all the Cuachy-Schwarz Inequality says is that the norm of the projection of 
 <div class="paragraph">
 <p>\[
 \begin{align*}
-0&amp;=\langle (Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f\rangle\\
-&amp;=|(Q^{\dagger\dagger} -Q)f|^2
+0&amp;=\Braket{(Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f}\\
+&amp;=\|(Q^{\dagger\dagger} -Q)f\|^2
 \end{align*}
 \]</p>
 </div>
 <div class="paragraph">
-<p>Hence \((Q^{\dagger\dagger} -Q)f=\vec 0\) (\(\vec 0\) the vector/function, not \(0\) the number).
+<p>Hence \((Q^{\dagger\dagger} -Q)f=\ket 0\).
 Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, and so \(Q^{\dagger\dagger} =Q\).</p>
 </div>
 </div>
@@ -1050,7 +1049,7 @@ Show that \(f\) is an eigenfunction of the following operators, and find the cor
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>\(((\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f\), so \(f\) is an eigenfunction of \(\alpha Q_1\) with eigenvalue \(\alpha q_1\).</p>
+<p>\((\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f\), so \(f\) is an eigenfunction of \(\alpha Q_1\) with eigenvalue \(\alpha q_1\).</p>
 </li>
 <li>
 <p>\((Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f\), so \(f\) is an eigenfunction of \(Q_1+Q_2\) with eigenvalue \(q_1+q_2\).</p>
@@ -1123,17 +1122,17 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 \Psi&amp;=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
 \Psi&amp;=\int_{\mathcal D} c_z f_z\,dz\quad \textrm{(continuous spectrum)}\\
 \end{align*}\]
-and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by \(c_\alpha =\langle f_\alpha | \Psi\rangle\).
-Show that this is equivalent to &#8220;projecting&#8221; \(\Psi\) onto \(f_\alpha\): if \(P_\alpha=|f_\alpha\rangle\langle f_\alpha|\), then \(P_\alpha|\Psi\rangle=c_\alpha |f_\alpha\rangle\).</p>
+and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by \(c_\alpha =\Braket{f_\alpha | \Psi}\).
+Show that this is equivalent to &#8220;projecting&#8221; \(\Psi\) onto \(f_\alpha\): if \(P_\alpha=\ket{f_\alpha}\bra{f_\alpha}\), then \(P_\alpha\ket\Psi=c_\alpha \ket{f_\alpha}\).</p>
 <details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
 <p>The computation is straightforward:
 \[\begin{align*}
-P_\alpha|\Psi\rangle&amp;=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
-&amp;=|f_\alpha\rangle\ \langle f_\alpha|\Psi\rangle\\
-&amp;=\langle f_\alpha|\Psi\rangle\ |f_\alpha\rangle\\
+P_\alpha\ket{\Psi}&amp;=(\ket{f_\alpha}\bra{f_\alpha})\ket{\Psi}\\
+&amp;=\ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
+&amp;=\Braket{f_\alpha|\Psi}\ |f_\alpha\rangle\\
 &amp;=c_\alpha |f_\alpha\rangle
 \end{align*}\]</p>
 </div>
@@ -1145,8 +1144,8 @@ P_\alpha|\Psi\rangle&amp;=(|f_\alpha\rangle\langle f_\alpha|)|\Psi\rangle\\
 </td>
 <td class="content">
 <div class="paragraph">
-<p>This is exactly why we can say that \(c_\alpha =\langle f_\alpha | \Psi\rangle\) tells you how much of \(f_\alpha\) is in \(\Psi\). Because the inner project with a normalized vector \(u\) is equvalent to a projection onto \(u\), the inner product picks out just the component corresponding to \(u\).
-For a concrete example, consider the vector space \(\mathbb R^n\), where projecting a vector \(v\) onto the \(k\)<sup>th</sup> basis vector \(e_n\), i.e., computing \(\langle v|e_k\rangle\), picks out the \(k\)<sup>th</sup> component of \(v\) — that&#8217;s what the components of a vector in \(\mathbb R^n\) <em>mean</em>.</p>
+<p>This is exactly why we can say that \(c_\alpha =\Braket{f_\alpha | \Psi}\) tells you how much of \(f_\alpha\) is in \(\Psi\). Because the inner project with a normalized vector \(u\) is equvalent to a projection onto \(u\), the inner product picks out just the component corresponding to \(u\).
+For a concrete example, consider the vector space \(\mathbb R^n\), where projecting a vector \(v\) onto the \(k\)<sup>th</sup> basis vector \(e_n\), i.e., computing \(\Braket{v|e_k}\), picks out the \(k\)<sup>th</sup> component of \(v\) — that&#8217;s what the components of a vector in \(\mathbb R^n\) <em>mean</em>.</p>
 </div>
 <div class="paragraph">
 <p>The Fourier transform is nothing more than a projection of a function onto the complex exponentials \(e^{-i\omega x}\).</p>
@@ -1299,10 +1298,10 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 <p>Every projection operator is of the form \(P=|a\rangle\langle a|\) where \(a\) is a unit vector.
 So
 \[\begin{align*}
-P^2&amp;=(|a\rangle\langle a|)(|a\rangle\langle a|)\\
-&amp;=|a\rangle(\langle a|a\rangle)\langle a|\\
-&amp;=|a\rangle(1)\langle a|\\
-&amp;=|a\rangle\langle a|\\
+P^2&amp;=(\ket{a}\bra{a})(\ket{a}\bra{a})\\
+&amp;=\ket{a}(\Braket{a|a})\bra{a}\\
+&amp;=\ket{a}(1)\bra{a}|\\
+&amp;=\ket{a}\bra{a}\\
 &amp;=P
 \end{align*}\]</p>
 </li>
@@ -1315,15 +1314,15 @@ The only values of \(\lambda\) for which this holds for all \(n\) are \(\lambda_
 <li>
 <p>We simply solve for \(|x\rangle\) corresponding to \(\lambda_0\):
 \[
-|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_0|x\rangle=|0\rangle
+|a\rangle\Braket{a|x}=P|x\rangle=\lambda_0|x\rangle=|0\rangle
 \]
-\(|a\rangle\ne|0\rangle\), so \(\langle a|x\rangle=0\).
+\(|a\rangle\ne|0\rangle\), so \(\Braket{a|x}=0\).
 Thus the eigenvectors corresponding to \(\lambda_0=0\) are the vectors orthogonal to \(a\).</p>
 <div class="paragraph">
 <p>Now we solve for \(|x\rangle\) corresponding to \(\lambda_1\): \[
-|a\rangle\langle a|x\rangle=P|x\rangle=\lambda_1|x\rangle=|x\rangle
+|a\rangle\Braket{a|x}=P|x\rangle=\lambda_1|x\rangle=|x\rangle
 \]
-Since \(\langle a|x\rangle\) is just a scalar, the eigenvectors corresponding to \(\lambda_1=1\) are the vectors parallel to \(a\).</p>
+Since \(\Braket{a|x}\) is just a scalar, the eigenvectors corresponding to \(\lambda_1=1\) are the vectors parallel to \(a\).</p>
 </div>
 </li>
 </ol>
@@ -1352,7 +1351,7 @@ The matrix exponential \(e^A\) shares some properties with the ordinary exponent
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1377,11 +1376,11 @@ as desired.</p>
 <li>
 <p>Recall that the inner product is linear. Also, if \(A\) is hermitian, then \((A^n)^\dagger=(A^\dagger)^n=A^n\), so \(A^n\) is also hermitian. Then,
 \[\begin{align*}
-\langle f|e^A g\rangle&amp;=\left\langle f\middle|\sum_{n=0}^\infty \frac{A^n}{n!} g\right\rangle\\
-&amp;=\sum_{n=0}^\infty\langle f|A^n g\rangle\\
-&amp;=\sum_{n=0}^\infty\langle A^n f|g\rangle\\
-&amp;=\left\langle\sum_{n=0}^\infty A^n f\middle|g\right\rangle\\
-&amp;=\langle e^A f|g\rangle
+\Braket{f|e^A g}&amp;=\Braket{f|\sum_{n=0}^\infty \frac{A^n}{n!} g}\\
+&amp;=\sum_{n=0}^\infty\Braket{f|A^n g}\\
+&amp;=\sum_{n=0}^\infty\Braket{A^n f|g}\\
+&amp;=\Braket{\sum_{n=0}^\infty A^n f| g}\\
+&amp;=\Braket{e^A f| g}
 \end{align*}\]
 as desired.</p>
 </li>

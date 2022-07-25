@@ -778,7 +778,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <p>Show that \(|\Psi_E(x,t)|^2 = |\psi_E(x)|^2\).</p>
 </li>
 <li>
-<p>Show that \( \langle p \rangle = 0\) for \(\Psi_E(x,t)\).</p>
+<p>Show that \( \Braket{p} = 0\) for \(\Psi_E(x,t)\).</p>
 </li>
 </ol>
 </div>
@@ -798,12 +798,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p>For a particle in state \(\Psi_E\),
 \[\begin{align*}
-\langle x\rangle&amp;=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
+\Braket{x}&amp;=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
 &amp;=\int_{\mathcal D} x|\psi_E(x)|^2\,dx\\
 &amp;=\textrm{constant w.r.t time}
 \end{align*}\]
-So \(\frac{d\langle x\rangle}{dt}=0\).
-Then, Ehrenfest&#8217;s theorem says that \(\langle p\rangle=m\frac{d\langle x\rangle}{dt}=0\).</p>
+So \(\frac{d\Braket{x}}{dt}=0\).
+Then, Ehrenfest&#8217;s theorem says that \(\Braket{p}=m\frac{d\Braket{x}}{dt}=0\).</p>
 </li>
 </ol>
 </div>
@@ -822,10 +822,10 @@ Substituting this Hamiltonian into the time-independent Schrödinger equation
 yields \(\hat H\psi=E\psi\).</p>
 </li>
 <li>
-<p>Show that \(\langle \hat H \rangle = E\).</p>
+<p>Show that \(\Braket{\hat H} = E\).</p>
 </li>
 <li>
-<p>Show that \(\langle \hat H^2 \rangle = E^2\). (Hint: first show that \(\hat H^2\psi=E^2\psi\))</p>
+<p>Show that \(\Braket{\hat H^2} = E^2\). (Hint: first show that \(\hat H^2\psi=E^2\psi\))</p>
 </li>
 <li>
 <p>Conclude that the variance of \(\hat H\) is 0.</p>
@@ -855,7 +855,7 @@ yields \(\hat H\psi=E\psi\).</p>
 <ul>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\) with \(n\ge 1\).
-Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,\psi_n\rangle\) is 1 when \(m=n\) and 0 otherwise.
+Show that these functions are <em>orthonormal</em>, i.e., that \(\Braket{\psi_m,\psi_n}\) is 1 when \(m=n\) and 0 otherwise.
 (Hint: \(\cos\) is an even function, \(\sin\) is an odd function, and \(\cos(a+b)=\cos a\cos b-\sin a\sin b\).)</p>
 <details>
 <summary class="title">Solution</summary>
@@ -870,7 +870,7 @@ Show that these functions are <em>orthonormal</em>, i.e., that \(\langle \psi_m,
 \end{align*}\]
 Regardless of whether \(m=n\),
 \[\begin{align*}
-\langle \psi_m,\psi_n\rangle&amp;= \int_0^a \psi_m^*\psi_n\,dx\\
+\Braket{\psi_m,\psi_n}&amp;= \int_0^a \psi_m^*\psi_n\,dx\\
 &amp;=\int_0^a \sqrt\frac{2}{a}\sin\left(\frac{m\pi}{a}x\right)\ \sqrt\frac{2}{a}\sin\left(\frac{n\pi}{a}x\right)\,dx\\
 &amp;=\frac{1}{a}\int_0^a \cos\left(\frac{(m-n)\pi}{a}x\right)-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx
 \end{align*}\]
@@ -878,11 +878,11 @@ And for \(k\ne 0\),
 \[\begin{align*}
 \int_0^a \cos\left(\frac{k\pi}{a}x\right)\,dx=\left.\frac{a}{k\pi}\sin\left(\frac{k\pi}{a}x\right)\right|^a_0=0
 \end{align*}\]
-When \(m=n\), \(\langle\psi_m,\psi_n\rangle\) becomes
+When \(m=n\), \(\Braket{\psi_m,\psi_n}\) becomes
 \[\begin{align*}
 \frac{1}{a}\int_0^a \cos 0-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx=\frac{1}{a}\int_0^a dx=1
 \end{align*}\]
-When \(m\ne n\), both of the \(\cos\) terms in the integral are of the form \(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\) and so they both integrate to 0, and then \(\langle \psi_m,\psi_n\rangle=0\).</p>
+When \(m\ne n\), both of the \(\cos\) terms in the integral are of the form \(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\) and so they both integrate to 0, and then \(\Braket{\psi_m,\psi_n}=0\).</p>
 </div>
 </div>
 </details>
