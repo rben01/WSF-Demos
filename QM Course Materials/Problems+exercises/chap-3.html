@@ -1440,10 +1440,25 @@ The matrix exponential \(e^A\) shares some properties with the ordinary exponent
 </li>
 <li>
 <p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{z+w}=e^z e^w\), always.)</p>
+<div class="paragraph">
+<p>You can assume the <strong>binomial theorem</strong>: if \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are arbitrary numbers, then
+\[\begin{align*}
+(x+y)^n=\sum_{k=0}^n\binom{n}{k}x^ky^{n-k}
+\end{align*}\]
+(Hint: under what conditions does the binomial theorem apply when \(x\) and \(y\) are replaced with operators?)</p>
+</div>
+</li>
+<li>
+<p>A <em>unitary</em> matrix is a matrix \(U\) that satisfies \(UU^\dagger =U^\dagger U=I\) — its adjoint is its inverse.
+Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices (matrices of the form \(iQ\) where \(Q\) is hermitian) are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (the product of their eigenvalues has magnitude 1).</p>
+<div class="paragraph">
+<p>Accordingly, show that if \(Q\) is hermitian then \(e^{iQ}\) is unitary.
+(Analog: the exponential of an imaginary number has magnitude 1.)</p>
+</div>
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1490,7 +1505,7 @@ For instance, regardless of whether \(A\) and \(B\) commute,
 &amp;=A^2+ABA+BA^2+B^2A\\
 &amp;\phantom{=}+A^2B+AB^2+BAB+B^3
 \end{align*}\]
-Only if \(A\) and \(B\) commute can this be simplified to \(A^3+3A^2B+3AB^2+3B^3\).</p>
+Only if \(A\) and \(B\) commute can this be simplified to \(A^3+3A^2B+3AB^2+B^3\).</p>
 <div class="paragraph">
 <p>Then,
 \[\begin{align*}
@@ -1502,9 +1517,6 @@ e^{A+B}&amp;=\sum_{n=0}^\infty \frac{(A+B)^n}{n!}\\
 \end{align*}\]
 as desired.</p>
 </div>
-</li>
-</ol>
-</div>
 <div class="sidebarblock">
 <div class="content">
 How did we turn \(\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\) into \(\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\)?
@@ -1512,6 +1524,22 @@ This is just an advanced application of the distributive property.
 Simply write out the second expression by hand, apply the distributive property, and group terms according to the sum of the powers of \(A\) and \(B\) (so that e.g., the \(A^3\), \(A^2B\), \(AB^2\), and \(B^3\) terms are grouped together).
 You&#8217;ll see the first expression appear.
 </div>
+</div>
+</li>
+<li>
+<p>With \(Q\) hermitian, we&#8217;ll show that \(e^{iQ}(e^{iQ})^\dagger=I\).
+First,
+\[\begin{align*}
+e^{iQ}(e^{iQ})^\dagger&amp;=e^{iQ}e^{(iQ)^\dagger}&amp;\textrm{(part (b))}\\
+&amp;=e^{iQ}e^{-iQ}
+\end{align*}\]
+Now, \(iQ\) and \(-iQ\) commute — the \(i\)’s commute with everything and \(Q\) commutes with itself — so by part (d) we have
+\[\begin{align*}
+e^{iQ}e^{-iQ}=e^{iQ + (-iQ)} = e^\bf 0
+\end{align*}\]
+which, by part (a), is the identity operator.</p>
+</li>
+</ol>
 </div>
 </div>
 </details>
