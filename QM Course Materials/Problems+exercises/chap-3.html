@@ -784,7 +784,7 @@ Show that the set of square-integrable functions does indeed form a vector space
 <p>Conjugate symmetry: \(\Braket{v|u}=\Braket{u|v}^*\)</p>
 </li>
 <li>
-<p>Nonnegativity: \(\Braket{u|u}\ge 0\) (in particular, it&#8217;s real), and \(\Braket{u|u}=0\) if and only if \(\ket{u}=\ket 0\)</p>
+<p>Nonnegativity: \(\Braket{u|u}\ge 0\) (in particular, it&#8217;s real), and \(\Braket{u|u}=0\) if and only if \(\Ket{u}=\Ket 0\)</p>
 </li>
 <li>
 <p>Linearity: \(\Braket{u|(av+bw)}=a\Braket{u|v} + b\Braket{u|w}\)</p>
@@ -892,8 +892,8 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 \end{align*}\]</p>
 </li>
 <li>
-<p>First, if \(y=\ket{0}\), this is trivial; both sides of the inequality are 0.
-So assume \(y\ne\ket{0}\), from which it follows that \(\Braket{y|y}\ne 0\).
+<p>First, if \(y=\Ket{0}\), this is trivial; both sides of the inequality are 0.
+So assume \(y\ne\Ket{0}\), from which it follows that \(\Braket{y|y}\ne 0\).
 As the hint suggests, let \(z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y\). This reason for this choice of \(z\) will soon be clear:
 \[\begin{align*}
 \Braket{y|z}&amp;=\Braket{y|x-\frac{\Braket{y|x}}{\Braket{y|y}}y}\\
@@ -912,19 +912,21 @@ So, applying the Pythagorean Theorem, we have
 &amp;=\|z\|^2+\frac{|\Braket{y|x}|^2}{\|y\|^2}\\
 &amp;\ge \frac{|\Braket{y|x}|^2}{\|y\|^2}
 \end{align*}\]
-Multiplying both sides by \(\|y\|^2\) and using the fact that \(|\Braket{y|x}|=|\Braket{x|y}|\), we obtain
-\[\|x\|^2\|y\|^2\ge |\Braket{x|y}|^2\]
+Therefore,
+\[\begin{align*}
+|\Braket{x|y}^2|\le \|x\|^2\|y\|^2=\Braket{x|x}\Braket{y|y}
+\end{align*}\]
 as desired.</p>
 <div class="paragraph">
-<p>Let&#8217;s think about what this actually means.
-Consider the statement \(\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}\).
+<p>Let&#8217;s think about what this actually means, using the following form of the statement: \(\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}\).
 If we define \(y'=\frac{y}{\|y\|}\) to be \(y\) normalized, and define \(P_{y'}=\Ket{y'}\Bra{y'}\) to be the projection operator onto \(y'\), then
 \[\begin{align*}
-\Bigl\|P_{y'}\Ket{x}\Bigr\|&amp;=\Bigl\|\bra{y'}\Braket{y'|x}\Bigr\|\\
-&amp;=\frac{\left|\Braket{y|x}\right|}{\|y\|}\Bigl\|\Ket{y'}\Bigr\|\\
+\Bigl\|P_{y'}\Ket{x}\Bigr\|&amp;=\Bigl\|\Ket{y'}\Braket{y'|x}\Bigr\|\\
+&amp;=\left|\Braket{y'|x}\right|\ \Bigl\|\Ket{y'}\Bigr\|\\
+&amp;=\frac{\left|\Braket{y|x}\right|}{\|y\|}\cdot 1\\
 &amp;=\frac{\left|\Braket{y|x}\right|}{\|y\|}
 \end{align*}\]
-So all the Cuachy-Schwarz Inequality says is that \(\left\|P_{y'}\Ket{x}\right\|\le\left\|x\right\|\), i.e. the norm of the projection of a vector \(x\) onto some other vector cannot exceed the norm of \(x\) itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).</p>
+So all the Cauchy-Schwarz Inequality says is that \(\left\|P_{y'}\Ket{x}\right\|\le\left\|x\right\|\), i.e. the norm of the projection of a vector \(x\) onto some other vector cannot exceed the norm of \(x\) itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).</p>
 </div>
 </li>
 <li>
@@ -1010,7 +1012,7 @@ as desired</p>
 \]</p>
 </div>
 <div class="paragraph">
-<p>Hence \((Q^{\dagger\dagger} -Q)f=\ket 0\).
+<p>Hence \((Q^{\dagger\dagger} -Q)f=\Ket 0\).
 Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, and so \(Q^{\dagger\dagger} =Q\).</p>
 </div>
 </div>
@@ -1146,17 +1148,17 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 \Psi&amp;=\int_{\mathcal D} c_z f_z\,dz\quad \textrm{(continuous spectrum)}\\
 \end{align*}\]
 and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by \(c_\alpha =\Braket{f_\alpha | \Psi}\).
-Show that this is equivalent to &#8220;projecting&#8221; \(\Psi\) onto \(f_\alpha\): if \(P_\alpha=\ket{f_\alpha}\bra{f_\alpha}\), then \(P_\alpha\ket\Psi=c_\alpha \ket{f_\alpha}\).</p>
+Show that this is equivalent to &#8220;projecting&#8221; \(\Psi\) onto \(f_\alpha\): if \(P_\alpha=\Ket{f_\alpha}\Bra{f_\alpha}\), then \(P_\alpha\Ket\Psi=c_\alpha \Ket{f_\alpha}\).</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
 <p>The computation is straightforward:
 \[\begin{align*}
-P_\alpha\ket{\Psi}&amp;=(\ket{f_\alpha}\bra{f_\alpha})\ket{\Psi}\\
-&amp;=\ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
-&amp;=\Braket{f_\alpha|\Psi}\ \ket{f_\alpha}\\
-&amp;=c_\alpha \ket{f_\alpha}
+P_\alpha\Ket{\Psi}&amp;=(\Ket{f_\alpha}\Bra{f_\alpha})\Ket{\Psi}\\
+&amp;=\Ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
+&amp;=\Braket{f_\alpha|\Psi}\ \Ket{f_\alpha}\\
+&amp;=c_\alpha \Ket{f_\alpha}
 \end{align*}\]</p>
 </div>
 <div class="admonitionblock note">
@@ -1235,8 +1237,74 @@ And in the same way that hermitian operators are akin to real numbers (e.g., the
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
-Show that in \(n\) dimensions, in which \(\hat x\ket{f}=\vec x f\) and \(\hat p\ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
+Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
 (Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The so-called <strong>Generalized Ehrenfest Theorem</strong> states that for any observable \(Q(x,p,t)\),
+\[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
+It states that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\frac{d\Braket{Q}}{dt}=0\) (or, in particular, \(\Braket{Q}=0\)).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Using this fact, when is \(\Braket{x}\) conserved?
+Before working it out explicitly, use your physical intuition to make a guess.</p>
+</li>
+<li>
+<p>For which Hamiltonians is \(\Braket{p}\) conserved?
+Before working it out explicitly, use your physical intuition to make a guess.</p>
+</li>
+</ol>
+</div>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\hat x\) doesn&#8217;t depend on time, so we only need to determine when \(\Braket{[\hat H,\hat x]}=0\).
+The general form of the Hamiltonian is \(-\hbar^2\frac{\partial ^2}{\partial x^2}+V(x)\), and so for an arbitrary wavefunction \(\psi\),
+\[\begin{align*}
+(\hat x\hat H)\psi=x\left(-\hbar ^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)
+\end{align*}\]
+whereas
+\[\begin{align*}
+(\hat H\hat x)\psi&amp;=\left(-\hbar ^2\frac{\partial^2}{\partial x^2}+V(x)\right)(x\psi)\\
+&amp;=-\hbar^2\frac{\partial }{\partial x}\left(\psi+x\frac{\partial \psi}{\partial x}\right)+xV(x)\psi\\
+&amp;=-\hbar^2\left(2\frac{\partial \psi}{\partial x}+x\frac{\partial ^2\psi}{\partial x}\right)+xV(x)\psi\\
+&amp;=x\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)-2\hbar^2\frac{\partial \psi}{\partial x}\\
+&amp;=(\hat x\hat H)\psi - 2\hbar^2\frac{\partial \psi}{\partial x}\\
+&amp;=(\hat x\hat H)\psi + 2i\hbar(\hat p\psi)
+\end{align*}\]
+So \([\hat H,\hat x]=2i\hbar \hat p\), and so
+\[\begin{align*}
+\frac{d\Braket{x}}{dt}=\Braket{[\hat H,\hat x]}&amp;=\Braket{2i\hbar \hat p}=2i\hbar\Braket{p}
+\end{align*}\]
+As expected, \(\Braket{x}\) is constant as long as \(\Braket{p}=0\).</p>
+</li>
+<li>
+<p>\(\hat p\) also doesn&#8217;t depend on time so once again we simply need to find the Hamiltonians it commutes with.
+\[\begin{align*}
+(\hat p\hat H)\psi &amp;=-i\hbar\frac{\partial }{\partial x}\left[\left(-\hbar^2\frac{\partial^2 }{\partial^2 x}+V(x)\right)\psi\right]\\
+&amp;=-i\hbar\frac{\partial }{\partial x}\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)\\
+&amp;=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+\frac{\partial V(x)}{\partial x}\psi+V(x)\frac{\partial \psi}{\partial x}\right)
+\end{align*}\]
+whereas
+\[\begin{align*}
+(\hat H\hat p)\psi&amp;=\left(-\hbar^2\frac{\partial^2 }{\partial x^2}+V(x)\right)\left(-i\hbar\frac{\partial \psi}{\partial x}\right)\\
+&amp;=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+V(x)\frac{\partial \psi}{\partial x}\right)\\
+&amp;=(\hat p\hat H)\psi +i\hbar\frac{\partial V(x)}{\partial x}\psi
+\end{align*}\]
+So \([\hat H,\hat p]=i\hbar\frac{\partial V}{\partial x}\), and we want to determine when \(\Braket{[\hat H,\hat p]}=0\).
+\(\frac{\partial V}{\partial x}\) is an extrinsic property of the system — it doesn&#8217;t depend on \(\Psi\) — and so its expectation is just its value: \(\Braket{\frac{\partial V}{\partial x}}=\frac{\partial V}{\partial x}\).
+So, in order for \(\Braket{[\hat H,\hat p]}=0\), we need \(\frac{\partial V}{\partial x}=0\).
+In other words, \(\Braket p\) is conserved whenever the potential is constant over all space.
+We would expect this result; in a flat potential, objects feel no net force, so their momentum won&#8217;t change.</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
 </li>
 </ul>
 </div>
@@ -1257,9 +1325,9 @@ Show that in \(n\) dimensions, in which \(\hat x\ket{f}=\vec x f\) and \(\hat p\
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>We wish to solve \(A\ket{x}=\lambda \ket{x}\) with \(\ket{x}\ne \ket{0}\).
-Subtracting \(\lambda\ket{x}\) from both sides and factoring, we obtain \((A-\lambda I)\ket{x}=\ket{0}\), where \(I\) is the identity matrix (of the correct dimensions; in this case, \(2\times 2\)).
-Since \(\ket{x}\ne \ket{0}\), \(A-\lambda I\) must be singular (non-invertible), which means its determinant is 0.
+<p>We wish to solve \(A\Ket{x}=\lambda \Ket{x}\) with \(\Ket{x}\ne \Ket{0}\).
+Subtracting \(\lambda\Ket{x}\) from both sides and factoring, we obtain \((A-\lambda I)\Ket{x}=\Ket{0}\), where \(I\) is the identity matrix (of the correct dimensions; in this case, \(2\times 2\)).
+Since \(\Ket{x}\ne \Ket{0}\), \(A-\lambda I\) must be singular (non-invertible), which means its determinant is 0.
 So, we have
 \[\begin{align*}
 0&amp;=\det (A-\lambda I)\\&amp;=(4-\lambda)(5-\lambda)-1\cdot 2\\&amp;=\lambda^2-9\lambda+18\\&amp;=(\lambda-3)(\lambda-6)
@@ -1267,8 +1335,8 @@ So, we have
 So the eigenvalues are \(\lambda_1=3\) and \(\lambda_2=6\).</p>
 </div>
 <div class="paragraph">
-<p>Now we must solve \(\lambda_i\ket{x} x=A\ket{x}\) for the concrete eigenvalues \(\lambda_1, \lambda_2\).
-If \(\ket{x}=\begin{bmatrix}x\\y\end{bmatrix}\), then we find the eigenvectors corresponding to \(\lambda_1\) as follows:
+<p>Now we must solve \(\lambda_i\Ket{x} x=A\Ket{x}\) for the concrete eigenvalues \(\lambda_1, \lambda_2\).
+If \(\Ket{x}=\begin{bmatrix}x\\y\end{bmatrix}\), then we find the eigenvectors corresponding to \(\lambda_1\) as follows:
 \[
 \begin{align*}
 3\begin{bmatrix}x\\y\end{bmatrix}&amp;=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}4x+2y\\x+5y\end{bmatrix}
@@ -1297,7 +1365,7 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=\ket{a}\Bra{a}\) for some unit vector \(a\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=\Ket{a}\Bra{a}\) for some unit vector \(a\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -1318,32 +1386,32 @@ So the normalized eigenvalues are these \(v_k\) and the corresponding eigenvalue
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Every projection operator is of the form \(P=\ket{a}\Bra{a}\) where \(a\) is a unit vector.
+<p>Every projection operator is of the form \(P=\Ket{a}\Bra{a}\) where \(a\) is a unit vector.
 So
 \[\begin{align*}
-P^2&amp;=(\ket{a}\bra{a})(\ket{a}\bra{a})\\
-&amp;=\ket{a}(\Braket{a|a})\bra{a}\\
-&amp;=\ket{a}(1)\bra{a}|\\
-&amp;=\ket{a}\bra{a}\\
+P^2&amp;=(\Ket{a}\Bra{a})(\Ket{a}\Bra{a})\\
+&amp;=\Ket{a}(\Braket{a|a})\Bra{a}\\
+&amp;=\Ket{a}(1)\Bra{a}|\\
+&amp;=\Ket{a}\Bra{a}\\
 &amp;=P
 \end{align*}\]</p>
 </li>
 <li>
-<p>We wish to solve \(P\ket{x}=\lambda\ket{x}\) (with \(\ket{x}\ne \ket{0}\)).
-By the corollary to part (a), for every positive integer \(n\), we have \(\lambda^{n+1}\ket{x}=P^{n+1}\ket{x}=P\ket{x}=\lambda x\), and so \((\lambda^{n+1}-\lambda)\ket{x}=\ket{0}\).
-Since \(\ket{x}\ne \ket{0}\), we have \(\lambda^{n+1}=\lambda\).
+<p>We wish to solve \(P\Ket{x}=\lambda\Ket{x}\) (with \(\Ket{x}\ne \Ket{0}\)).
+By the corollary to part (a), for every positive integer \(n\), we have \(\lambda^{n+1}\Ket{x}=P^{n+1}\Ket{x}=P\Ket{x}=\lambda x\), and so \((\lambda^{n+1}-\lambda)\Ket{x}=\Ket{0}\).
+Since \(\Ket{x}\ne \Ket{0}\), we have \(\lambda^{n+1}=\lambda\).
 The only values of \(\lambda\) for which this holds for all \(n\) are \(\lambda_0=0\) and \(\lambda_1=1\), so those are the two eigenvalues.</p>
 </li>
 <li>
-<p>We simply solve for \(\ket{x}\) corresponding to \(\lambda_0\):
+<p>We simply solve for \(\Ket{x}\) corresponding to \(\lambda_0\):
 \[
-\ket{a}\Braket{a|x}=P\ket{x}=\lambda_0\ket{x}=\ket{0}
+\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_0\Ket{x}=\Ket{0}
 \]
-\(\ket{a}\ne\ket{0}\), so \(\Braket{a|x}=0\).
+\(\Ket{a}\ne\Ket{0}\), so \(\Braket{a|x}=0\).
 Thus the eigenvectors corresponding to \(\lambda_0=0\) are the vectors orthogonal to \(a\).</p>
 <div class="paragraph">
-<p>Now we solve for \(\ket{x}\) corresponding to \(\lambda_1\): \[
-\ket{a}\Braket{a|x}=P\ket{x}=\lambda_1\ket{x}=\ket{x}
+<p>Now we solve for \(\Ket{x}\) corresponding to \(\lambda_1\): \[
+\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_1\Ket{x}=\Ket{x}
 \]
 Since \(\Braket{a|x}\) is just a scalar, the eigenvectors corresponding to \(\lambda_1=1\) are the vectors parallel to \(a\).</p>
 </div>
@@ -1449,10 +1517,10 @@ You&#8217;ll see the first expression appear.
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Let \(\hat x\) be the operator corresponding to the \(x\) observable, which is multiplication by \(x\) (in position space).
-Show that \(e^{\hat x}\ket{f}=e^x \ket{f}\), i.e., the operator exponential of \(\hat x\) is multiplication by \(e^x\).</p>
+Show that \(e^{\hat x}\Ket{f}=e^x \Ket{f}\), i.e., the operator exponential of \(\hat x\) is multiplication by \(e^x\).</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\frac{d}{dt}\ket{x(t)}= A\ket{x(t)}\) with initial condition \(\ket{x(0)}=\ket{x_0}\), where \(A\) is a constant nonzero operator, is \(\ket{x(t)}=e^{At}\ket{x_0}\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the solution to the differential equation \(\frac{d}{dt}\Ket{x(t)}= A\Ket{x(t)}\) with initial condition \(\Ket{x(0)}=\Ket{x_0}\), where \(A\) is a constant nonzero operator, is \(\Ket{x(t)}=e^{At}\Ket{x_0}\).</p>
 <div class="admonitionblock note">
 <table>
 <tr>
@@ -1470,10 +1538,10 @@ This exactly mirrors the scalar-valued differential equation \(\frac{d}{dt}y(t)=
 <div class="content">
 <div class="paragraph">
 <p>First we&#8217;ll check the initial condition:
-\[e^{A\cdot 0}\ket{x_0}=I\ket{x_0}=\ket{x_0}\]
+\[e^{A\cdot 0}\Ket{x_0}=I\Ket{x_0}=\Ket{x_0}\]
 Now we&#8217;ll check that the proposed solution satisfies the differential equation.
 \[\begin{align*}
-\frac{d}{dt}\ket{x(t)}&amp;=\frac{d}{dt}\Ket{\left(e^{At}\Ket{x_0}\right)}\\
+\frac{d}{dt}\Ket{x(t)}&amp;=\frac{d}{dt}\Ket{\left(e^{At}\Ket{x_0}\right)}\\
 &amp;=\left(\frac{d}{dt}e^{At}\right)\Ket{x_0}\\
 &amp;=\frac{d}{dt}\left(\sum_{n=0}^\infty \frac{(At)^n}{n!}\right)\Ket{x_0}\\
 &amp;=\left(\sum_{n=1}^\infty \frac{A^n\,nt^{n-1}}{n!}\right)\Ket{x_0}\\
