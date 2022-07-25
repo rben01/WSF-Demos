@@ -71,7 +71,7 @@ This inequality is pivotal in quantum mechanics because it is the basis of the u
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 .. Since ++\(x\)++ and ++\(y\)++ are orthogonal, ++\(\Braket{x|y}=\Braket{y|x}=0\)++. Now we simply apply the linearity of the inner product:
@@ -249,7 +249,7 @@ and then due to the orthogonality of the eigenvectors of a hermitian operator, t
 Show that this is equivalent to "`projecting`" ++\(\Psi\)++ onto ++\(f_\alpha\)++: if ++\(P_\alpha=\ket{f_\alpha}\bra{f_\alpha}\)++, then ++\(P_\alpha\ket\Psi=c_\alpha \ket{f_\alpha}\)++.
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 The computation is straightforward:
 ++\[\begin{align*}
@@ -275,7 +275,7 @@ The Fourier transform is nothing more than a projection of a function onto the c
 * {q-num} Show that the commutator of two hermitian operators is of the form ++\(iQ\)++ where ++\(Q\)++ is hermitian.
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 Let ++\(A\)++ and ++\(B\)++ be two hermitian operators, i.e., ++\(A=A^\dagger\)++ and ++\(B=B^\dagger\)++.
 Then
@@ -399,7 +399,7 @@ The matrix exponential ++\(e^A\)++ shares some properties with the ordinary expo
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . Let ++\(\mathbf 0\)++ denote the zero operator.

@@ -447,7 +447,7 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 You will want to have on hand a big list of trigonometric identities.
 Here are the main ones we'll use:
