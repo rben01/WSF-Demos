@@ -110,7 +110,7 @@ Consider the statement ++\(\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}\)++.
 If we define ++\(y'=\frac{y}{\|y\|}\)++ to be ++\(y\)++ normalized, and define ++\(P_{y'}=\Ket{y'}\Bra{y'}\)++ to be the projection operator onto ++\(y'\)++, then
 ++\[\begin{align*}
 \Bigl\|P_{y'}\Ket{x}\Bigr\|&=\Bigl\|\bra{y'}\Braket{y'|x}\Bigr\|\\
-&=\frac{\left|\Braket{y|x}\right|}{\|y\|}\Bigl\|\Ket{|y'}\Bigr\|\\
+&=\frac{\left|\Braket{y|x}\right|}{\|y\|}\Bigl\|\Ket{y'}\Bigr\|\\
 &=\frac{\left|\Braket{y|x}\right|}{\|y\|}
 \end{align*}\]++
 So all the Cuachy-Schwarz Inequality says is that ++\(\left\|P_{y'}\Ket{x}\right\|\le\left\|x\right\|\)++, i.e. the norm of the projection of a vector ++\(x\)++ onto some other vector cannot exceed the norm of ++\(x\)++ itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).
@@ -388,7 +388,7 @@ Since ++\(\Braket{a|x}\)++ is just a scalar, the eigenvectors corresponding to +
 
 * {q-num} For a matrix ++\(A\)++, the _matrix exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
 ++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
-(By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator — perhaps the summation should be written ++\(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\)++)
+(By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator — perhaps the summation should be written ++\(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\)++.)
 The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers:
 +
 [{sublist-style}]
