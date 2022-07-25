@@ -60,7 +60,7 @@ This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\
 So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
-* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(|\Braket{x|y}|^2\le \Braket{x|x}\,\Braket{y|y}\)++, or equivalently ++\(|\Braket{x|y}|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
+* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}\)++, or equivalently ++\(\left|\Braket{x|y}\right|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
 This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).
 +
 [{sublist-style}]
@@ -398,7 +398,7 @@ Similarly, for ++\(\lambda_2=6\)++, we obtain ++\(6x=4x+2y,6y=x+5y\)++ which has
 ====
 An ++\(n\)++-dimensional matrix can have at most ++\(n\)++ linearly independent eigenvectors, so if we find ++\(n\)++ eigenvectors then we're done.
 If we define ++\(v_k:=\)++ the ++\(k\)++^th^ column of the ++\(n\times n\)++ identity matrix — i.e., ++\(v_k\)++ is the vector whose only nonzero component is component ++\(k\)++, which is 1 — then clearly ++\(Av_k=m_k v_k\)++.
-So the normalized eigenvalues are these ++\(v_k\)++ and the corresponding eigenvalues are ++\(\lambda_k=m_k\)++.
+So the normalized eigenvectors are these ++\(v_k\)++ and the corresponding eigenvalues are ++\(\lambda_k=m_k\)++.
 ====
 
 * {q-num} [This problem is technically in Griffiths but I imagine it's also in every linear algebra book ever written.] Suppose ++\(P\)++ is a projection operator, i.e., that it can be written as ++\(P=\Ket{a}\Bra{a}\)++ for some unit vector ++\(a\)++.

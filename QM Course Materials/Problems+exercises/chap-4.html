@@ -437,18 +437,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <!-- spell-checker: disable -->
 
 <script>
-	MathJax = {
+	var MathJax = {
 		loader: {
-			load: ["output/svg"],
+			load: ["input/tex", "output/svg"],
 		},
 		tex: {
 			inlineMath: [["\\(", "\\)"]],
 			displayMath: [["\\[", "\\]"]],
 			processEnvironments: false,
 		},
-		svg: {
-			fontCache: "global",
-		},
+		svg: { fontCache: "global" },
+		// chtml: { fontCache: "global" },
 	};
 </script>
 
@@ -456,15 +455,17 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <script
 	id="MathJax-script"
 	async
-	src="https://cdn.jsdelivr.net/npm/mathjax@3.0.1/es5/tex-mml-svg.js"
-></script>
-
-<!-- <link
-	rel="stylesheet"
-	href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
-	integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+	src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.min.js"
+	integrity="sha384-lgPn3GAyVy/GCtSzTaxwg3b2ECTLz5o3dQQ1HDZGS3+wGk8FLLQt6fUT56Z3e8Bs"
 	crossorigin="anonymous"
-/> -->
+></script>
+<!-- <script
+	id="MathJax-script"
+	async
+	src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.min.js"
+	integrity="sha384-6YlMnuTfyvaGuIg6kPs4Mn1AEBDzgQrOaIQo/ERmaZtwV3jgyCTCNBb+rPe00nI0"
+	crossorigin="anonymous"
+></script> -->
 
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
 <!-- <script
@@ -488,7 +489,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
 	integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
 	crossorigin="anonymous"
-	onload="renderMathInElement(document.body);"
+	onload="renderMathInElement(document.body, {throwOnError: false});"
 ></script> -->
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
