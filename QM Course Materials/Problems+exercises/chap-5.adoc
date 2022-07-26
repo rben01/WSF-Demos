@@ -4,6 +4,8 @@ include::shared_attributes.adoc[]
 
 == Two-Particle Systems
 
+=== Questions
+
 * {q-num} Show that ...
 
 == Atoms
