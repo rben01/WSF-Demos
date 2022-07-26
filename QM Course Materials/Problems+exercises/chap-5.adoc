@@ -1,0 +1,13 @@
+[.qm-chapter.chap-5]
+= Chapter 5: Identical Particles
+include::shared_attributes.adoc[]
+
+== Two-Particle Systems
+
+* {q-num} Show that ...
+
+== Atoms
+
+== Solids
+
+== Demonstrations
