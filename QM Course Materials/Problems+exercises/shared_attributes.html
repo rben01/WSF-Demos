@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <script>
 	var MathJax = {
 		loader: {
-			load: ["input/tex", "output/svg"],
+			load: ["input/tex", "output/svg", "ui/lazy"],
 		},
 		tex: {
 			inlineMath: [["\\(", "\\)"]],
@@ -447,6 +447,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 			processEnvironments: false,
 		},
 		svg: { fontCache: "global" },
+		options: {
+			lazyMargin: "1000px",
+		},
 		// chtml: { fontCache: "global" },
 	};
 </script>

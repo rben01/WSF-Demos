@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <script>
 	var MathJax = {
 		loader: {
-			load: ["input/tex", "output/svg"],
+			load: ["input/tex", "output/svg", "ui/lazy"],
 		},
 		tex: {
 			inlineMath: [["\\(", "\\)"]],
@@ -447,6 +447,9 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 			processEnvironments: false,
 		},
 		svg: { fontCache: "global" },
+		options: {
+			lazyMargin: "1000px",
+		},
 		// chtml: { fontCache: "global" },
 	};
 </script>
@@ -1244,11 +1247,11 @@ Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The so-called <strong>Generalized Ehrenfest Theorem</strong> states that for any observable \(Q(x,p,t)\),
 \[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
-It states that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\frac{d\Braket{Q}}{dt}=0\) (or, in particular, \(\Braket{Q}=0\)).</p>
+It states that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\). (In particular, if \(Q\) does not depend on \(t\), then \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\) and so all we need to check is that \(\Braket{[\hat H,\hat Q]}\)).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Using this fact, when is \(\Braket{x}\) conserved?
+<p>Using this fact, when is \(\Braket{x}\) constant?
 Before working it out explicitly, use your physical intuition to make a guess.</p>
 </li>
 <li>
@@ -1299,8 +1302,8 @@ whereas
 So \([\hat H,\hat p]=i\hbar\frac{\partial V}{\partial x}\), and we want to determine when \(\Braket{[\hat H,\hat p]}=0\).
 \(\frac{\partial V}{\partial x}\) is an extrinsic property of the system — it doesn&#8217;t depend on \(\Psi\) — and so its expectation is just its value: \(\Braket{\frac{\partial V}{\partial x}}=\frac{\partial V}{\partial x}\).
 So, in order for \(\Braket{[\hat H,\hat p]}=0\), we need \(\frac{\partial V}{\partial x}=0\).
-In other words, \(\Braket p\) is conserved whenever the potential is constant over all space.
-We would expect this result; in a flat potential, objects feel no net force, so their momentum won&#8217;t change.</p>
+In other words, \(\Braket p\) is conserved whenever the potential is uniform over all space.
+We would expect this result; in a flat potential, an object feels no net force, so its momentum won&#8217;t change.</p>
 </li>
 </ol>
 </div>
@@ -1441,16 +1444,17 @@ The matrix exponential \(e^A\) shares some properties with the ordinary exponent
 <li>
 <p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{z+w}=e^z e^w\), always.)</p>
 <div class="paragraph">
-<p>You can assume the <strong>binomial theorem</strong>: if \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are arbitrary numbers, then
+<p>A helpful fact is the <strong>binomial theorem</strong>: if \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are numbers, then
 \[\begin{align*}
 (x+y)^n=\sum_{k=0}^n\binom{n}{k}x^ky^{n-k}
 \end{align*}\]
-(Hint: under what conditions does the binomial theorem apply when \(x\) and \(y\) are replaced with operators?)</p>
+(Hint: under what conditions does the binomial theorem apply when \(x\) and \(y\) are replaced with operators?
+It may help to compute \((A+B)^3\) by hand.)</p>
 </div>
 </li>
 <li>
 <p>A <em>unitary</em> matrix is a matrix \(U\) that satisfies \(UU^\dagger =U^\dagger U=I\) — its adjoint is its inverse.
-Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices (matrices of the form \(iQ\) where \(Q\) is hermitian) are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (the product of their eigenvalues has magnitude 1).</p>
+Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices — matrices of the form \(iQ\) where \(Q\) is hermitian — are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (their eigenvalues all have magnitude 1).</p>
 <div class="paragraph">
 <p>Accordingly, show that if \(Q\) is hermitian then \(e^{iQ}\) is unitary.
 (Analog: the exponential of an imaginary number has magnitude 1.)</p>
@@ -1481,15 +1485,7 @@ e^{A^\dagger}&amp;=\sum_{n=0}^\infty \frac{(A^\dagger)^n}{n!}\\
 as desired.</p>
 </li>
 <li>
-<p>Recall that the inner product is linear. Also, if \(A\) is hermitian, then \((A^n)^\dagger=(A^\dagger)^n=A^n\), so \(A^n\) is also hermitian. Then,
-\[\begin{align*}
-\Braket{f|e^A g}&amp;=\Braket{f|\sum_{n=0}^\infty \frac{A^n}{n!} g}\\
-&amp;=\sum_{n=0}^\infty\Braket{f|A^n g}\\
-&amp;=\sum_{n=0}^\infty\Braket{A^n f|g}\\
-&amp;=\Braket{\sum_{n=0}^\infty A^n f| g}\\
-&amp;=\Braket{e^A f| g}
-\end{align*}\]
-as desired.</p>
+<p>By part (b), if \(Q\) is hermitian, then \((e^{Q})^\dagger=e^{Q^\dagger}=e^Q\), so \(e^Q\) is indeed hermitian.</p>
 </li>
 <li>
 <p>For \(e^{A+B}=e^A e^B\) to hold, \(A\) and \(B\) must commute.
@@ -1521,23 +1517,22 @@ as desired.</p>
 <div class="content">
 How did we turn \(\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\) into \(\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\)?
 This is just an advanced application of the distributive property.
-Simply write out the second expression by hand, apply the distributive property, and group terms according to the sum of the powers of \(A\) and \(B\) (so that e.g., the \(A^3\), \(A^2B\), \(AB^2\), and \(B^3\) terms are grouped together).
-You&#8217;ll see the first expression appear.
+Simply write out the product of the summations by hand, apply the distributive property, and group terms according to the sum of the powers of \(A\) and \(B\) (so that e.g., the \(A^3\), \(A^2B\), \(AB^2\), and \(B^3\) terms are grouped together).
+You&#8217;ll see the nested summations appear.
 </div>
 </div>
 </li>
 <li>
-<p>With \(Q\) hermitian, we&#8217;ll show that \(e^{iQ}(e^{iQ})^\dagger=I\).
-First,
+<p>First, note that \(iQ\) and \(-iQ\) commute — the scalars commute with everything and \(Q\) commutes with itself.
+Then, if \(Q\) is hermitian,
 \[\begin{align*}
 e^{iQ}(e^{iQ})^\dagger&amp;=e^{iQ}e^{(iQ)^\dagger}&amp;\textrm{(part (b))}\\
-&amp;=e^{iQ}e^{-iQ}
+&amp;=e^{iQ}e^{-iQ}\\
+&amp;=e^{iQ + (-iQ)}&amp;\textrm{(part (d))}\\
+&amp;= e^\bf 0\\
+&amp;=I&amp;\textrm{(part (a))}
 \end{align*}\]
-Now, \(iQ\) and \(-iQ\) commute — the scalars commute with everything and \(Q\) commutes with itself — so by part (d) we have
-\[\begin{align*}
-e^{iQ}e^{-iQ}=e^{iQ + (-iQ)} = e^\bf 0
-\end{align*}\]
-which, by part (a), is the identity operator.</p>
+So \(e^{iQ}\) is indeed unitary.</p>
 </li>
 </ol>
 </div>

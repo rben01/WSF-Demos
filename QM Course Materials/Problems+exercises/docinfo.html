@@ -3,7 +3,7 @@
 <script>
 	var MathJax = {
 		loader: {
-			load: ["input/tex", "output/svg"],
+			load: ["input/tex", "output/svg", "ui/lazy"],
 		},
 		tex: {
 			inlineMath: [["\\(", "\\)"]],
@@ -11,6 +11,9 @@
 			processEnvironments: false,
 		},
 		svg: { fontCache: "global" },
+		options: {
+			lazyMargin: "1000px",
+		},
 		// chtml: { fontCache: "global" },
 	};
 </script>
