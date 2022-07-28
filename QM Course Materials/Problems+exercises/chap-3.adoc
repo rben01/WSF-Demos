@@ -317,7 +317,7 @@ Before working it out explicitly, use your physical intuition to make a guess.
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 .. ++\(\hat x\)++ doesn't depend on time, so we only need to determine when ++\(\Braket{[\hat H,\hat x]}=0\)++.
@@ -465,7 +465,7 @@ Accordingly, show that if ++\(Q\)++ is hermitian then ++\(e^{iQ}\)++ is unitary.
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . Let ++\(\mathbf 0\)++ denote the zero operator.
