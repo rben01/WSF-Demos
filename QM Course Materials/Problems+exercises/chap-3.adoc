@@ -98,12 +98,12 @@ So, applying the Pythagorean Theorem, we have
 ++\[\begin{align*}
 \|x\|^2&=\|z\|^2+\left\|\frac{\Braket{y|x}}{\Braket{y|y}}y\right\|^2\\
 &=\|z\|^2+\left|\frac{\Braket{y|x}}{\|y\|^2}\right|^2\|y\|^2\\
-&=\|z\|^2+\frac{|\Braket{y|x}|^2}{\|y\|^2}\\
-&\ge \frac{|\Braket{y|x}|^2}{\|y\|^2}
+&=\|z\|^2+\frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}\\
+&\ge \frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}
 \end{align*}\]++
 Therefore,
 ++\[\begin{align*}
-|\Braket{x|y}^2|\le \|x\|^2\|y\|^2=\Braket{x|x}\Braket{y|y}
+\left|\Braket{x|y}\right|^2\le \|x\|^2\|y\|^2=\Braket{x|x}\Braket{y|y}
 \end{align*}\]++
 as desired.
 +
@@ -257,13 +257,12 @@ The computation is straightforward:
 ++\[\begin{align*}
 P_\alpha\Ket{\Psi}&=(\Ket{f_\alpha}\Bra{f_\alpha})\Ket{\Psi}\\
 &=\Ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
-&=\Braket{f_\alpha|\Psi}\ \Ket{f_\alpha}\\
 &=c_\alpha \Ket{f_\alpha}
 \end{align*}\]++
 
 [NOTE]
 --
-This is exactly why we can say that ++\(c_\alpha =\Braket{f_\alpha | \Psi}\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equvalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
+This is exactly why we can say that ++\(c_\alpha =\Braket{f_\alpha | \Psi}\)++ tells you how much of ++\(f_\alpha\)++ is in ++\(\Psi\)++. Because the inner project with a normalized vector ++\(u\)++ is equivalent to a projection onto ++\(u\)++, the inner product picks out just the component corresponding to ++\(u\)++.
 For a concrete example, consider the vector space ++\(\mathbb R^n\)++, where projecting a vector ++\(v\)++ onto the ++\(k\)++^th^ basis vector ++\(e_n\)++, i.e., computing ++\(\Braket{v|e_k}\)++, picks out the ++\(k\)++^th^ component of ++\(v\)++ — that's what the components of a vector in ++\(\mathbb R^n\)++ _mean_.
 
 The Fourier transform is nothing more than a projection of a function onto the complex exponentials ++\(e^{-i\omega x}\)++.
@@ -308,7 +307,7 @@ Show that in ++\(n\)++ dimensions, in which ++\(\hat x\Ket{f}=\vec x f\)++ and +
 
 * {q-num} The so-called *Generalized Ehrenfest Theorem* states that for any observable ++\(Q(x,p,t)\)++,
 ++\[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]++
-It states that a sufficient condition for ++\(\Braket{Q}\)++ to be constant over time is that ++\(\Braket{[\hat H,\hat Q]}=0\)++ and ++\(\Braket{\frac{\partial \hat Q}{\partial t}}=0\)++. (In particular, if ++\(Q\)++ does not depend on ++\(t\)++, then ++\(\Braket{\frac{\partial \hat Q}{\partial t}}=0\)++ and so all we need to check is that ++\(\Braket{[\hat H,\hat Q]}\)++).
+One thing it states is that a sufficient condition for ++\(\Braket{Q}\)++ to be constant over time is that ++\(\Braket{[\hat H,\hat Q]}=0\)++ and ++\(\Braket{\frac{\partial \hat Q}{\partial t}}=0\)++. (In particular, if ++\(Q\)++ does not depend on ++\(t\)++, then ++\(\Braket{\frac{\partial \hat Q}{\partial t}}=0\)++ and so all we need to check is that ++\(\Braket{[\hat H,\hat Q]}\)++).
 +
 [{sublist-style}]
 .. Using this fact, when is ++\(\Braket{x}\)++ constant?
