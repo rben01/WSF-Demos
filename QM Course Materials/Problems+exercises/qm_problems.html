@@ -3400,17 +3400,26 @@ The matrix exponential \(e^A\) shares some properties with the ordinary exponent
 <li>
 <p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{z+w}=e^z e^w\), always.)</p>
 <div class="paragraph">
-<p>A helpful fact is the <strong>binomial theorem</strong>: if \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are numbers, then
+<p>A helpful fact is the <strong>binomial theorem</strong>: if \(\binom{n}{k}=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are numbers, then
 \[\begin{align*}
 (x+y)^n=\sum_{k=0}^n\binom{n}{k}x^ky^{n-k}
 \end{align*}\]
 (Hint: under what conditions does the binomial theorem apply when \(x\) and \(y\) are replaced with operators?
 It may help to compute \((A+B)^3\) by hand.)</p>
 </div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>The proof of the binomial theorem is simple: in \((x+y)^n\), the coefficient of \(x^ky^{n-k}\) is the number of ways to pick which \(k\) of the \(n\) copies of \(x+y\) will contribute a factor of \(x\); the other \(n-k\) will contribute a factor of \(y\).
+But the number of ways to pick \(k\) things from a set of size \(n\) is, by definition, \(\binom nk\).
+It&#8217;s left as an exercise to the reader to show why \(\binom nk=\frac{n!}{k!(n-k)!}\).</p>
+</div>
+</div>
+</div>
 </li>
 <li>
 <p>A <em>unitary</em> matrix is a matrix \(U\) that satisfies \(UU^\dagger =U^\dagger U=I\) — its adjoint is its inverse.
-Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices — matrices of the form \(iQ\) where \(Q\) is hermitian — are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (their eigenvalues all have magnitude 1).</p>
+Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices — matrices of the form \(iQ\) where \(Q\) is hermitian — are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (their eigenvalues all have magnitude 1, and their multiplicative inverse is equal to their hermitian conjugate).</p>
 <div class="paragraph">
 <p>Accordingly, show that if \(Q\) is hermitian then \(e^{iQ}\) is unitary.
 (Analog: the exponential of an imaginary number has magnitude 1.)</p>
@@ -3449,7 +3458,7 @@ If and only if \(A\) and \(B\) commute, we have
 \[\begin{align*}
 (A+B)^n&amp;=\sum_{k=0}^n \binom{n}{k}A^kB^{n-k}
 \end{align*}\]
-where \(\binom{n}{k}:=\frac{n!}{k!(n-k)!}\) denotes the binomial coefficient.
+where \(\binom{n}{k}=\frac{n!}{k!(n-k)!}\) denotes the binomial coefficient.
 For instance, regardless of whether \(A\) and \(B\) commute,
 \[\begin{align*}
 (A+B)^3&amp;=(A+B)(A+B)(A+B)\\
