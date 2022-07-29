@@ -222,6 +222,18 @@ So ++\(f\)++ is an eigenfunction of ++\(Q_1Q_2\)++ with eigenvalue ++\(q_1q_2\)+
 . The proof proceeds exactly as above. The eigenvalue is again ++\(q_1q_2\)++. So, while operators may not commute, the eigenvalues of the product of two operators does not depend on the order of the product.
 ====
 
+* {q-num} Show that if ++\(A\)++ and ++\(B\)++ commute, then ++\(AB\)++ and ++\(BA\)++ have the same eigenfunctions and eigenvalues.
++
+.Solution
+[%collapsible]
+====
+If ++\(f\)++ is an eigenfunction of ++\(AB\)++ with eigenvalue ++\(\lambda\)++, then
+++\[\begin{align*}
+(BA) f&=(AB)f=\lambda f
+\end{align*}\]++
+as desired.
+====
+
 * {q-num} Find the eigenfunctions and eigenvalues of the operator ++\(\frac{d^n}{dx^n}\)++ for positive integer ++\(n\)++.
 (Don't worry about whether the solutions are square-integrable.)
 +

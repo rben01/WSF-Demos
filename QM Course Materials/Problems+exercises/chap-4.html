@@ -751,10 +751,15 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_the_schrödinger_equation">1. The Schrödinger Equation</a></li>
+<li><a href="#_the_schrödinger_equation">1. The Schrödinger Equation</a>
+<ul class="sectlevel2">
+<li><a href="#_questions">1.1. Questions</a></li>
+<li><a href="#_demonstrations">1.2. Demonstrations</a></li>
+</ul>
+</li>
 <li><a href="#_the_hydrogen_atom">2. The Hydrogen Atom</a>
 <ul class="sectlevel2">
-<li><a href="#_demonstrations">2.1. Demonstrations</a></li>
+<li><a href="#_demonstrations_2">2.1. Demonstrations</a></li>
 </ul>
 </li>
 </ul>
@@ -764,12 +769,95 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="sect1">
 <h2 id="_the_schrödinger_equation"><a class="anchor" href="#_the_schrödinger_equation"></a><a class="link" href="#_the_schrödinger_equation">1. The Schrödinger Equation</a></h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that \(x\) and \(p_y\) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
 </li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the Legendre polynomials, defined by \(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\), are orthgonal over \([-1,1]\).
+(Hint: use integration by parts to compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) for \(m&lt; n\).)</p>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>To compute \(\int_{-1}^1 p(x)P_n(x)\,dx\) using integration by parts, let
+\[\begin{align*}
+u&amp;=P_m(x)&amp;dv&amp;=P_n(x)\,dx\\
+du&amp;=P_m'(x)\,dx&amp;v&amp;=F_{n,1}(x)
+\end{align*}\]
+where \(F_{n,1}(x)\) is the antiderivative of \(P_n\).
+While we can&#8217;t easily compute \(F_{n,1}\), we do know it has to be of the form \(F_{n,1}(x)=f_1(x)\frac{d^{n-1}}{dx^{n-1}}(x^2-1)^{n}\) for some function \(f_1\).
+Since taking fewer than \(n\) derivatives of \((x^2-1)^{n}\) times must leave a factor of \(x^2-1\), we see that \(F_{n,1}(1)=F_n(-1)=0\).
+And so,
+\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)\,dx &amp;=P_m(x)F_{n,1}(x)\Bigr|^1_{-1}-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx\\
+&amp;=-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx
+\end{align*}\]
+We&#8217;ll do a second integration by parts:
+\[\begin{align*}
+u&amp;=P_m'(x)&amp;dv&amp;=F_{n,1}(x)\,dx\\
+du&amp;=P_m''(x)&amp;v&amp;=F_{n,2}(x)
+\end{align*}\]
+where \(F_{n,2}\) is the antiderivative of \(F_{n,1}\).
+Again, we won&#8217;t compute \(F_{n,2}\), but we know it must be of the form \(F_{n,2}(x)=f_2(x)\frac{d^{n-2}}{dx^{n-2}}(x^2-1)^n\), which, for the same reason as above, has a factor of \(x^2-1\).
+Therefore,
+\[\begin{align*}
+\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx&amp;= P_m'(x)F_{n,2}(x)\Bigr|^1_{-1}-\int_{-1}^2 P_m''(x) F_{n,2}(x)\,dx\\
+&amp;=-\int_{-1}^1 P_m''(x) F_{n,2}(x)\,dx
+\end{align*}\]
+Were we to perform \(m\) integrations by parts in total, we&#8217;d see that
+\[\begin{align*}
+\int_{-1}^1P_m(x)P_n(x)\,dx=(-1)^m \int_{-1}^1\frac{d^m P_m(x)}{dx^m} F_{n,m}(x)\,dx
+\end{align*}\]
+where \(F_{n,m}\) is the \(m\)<sup>th</sup> antiderivative of \(P_n\).
+But, since \(P_m\) has degree \(m\), \(\frac{d^m}{dx^m} P_m(x)\) is some constant \(q\), and so this is simply
+\[\begin{align*}
+(-1)^m \int_{-1}^1 q F_{n,m}(x)\,dx&amp;=(-1)^m q F_{n,m+1}\Bigr|^1_{-1}
+\end{align*}\]
+But \(F_{n,m+1}\) has no derivatives of \(x^2-1\) and so it must carry a factor of \(x^2-1\), so this integral is in fact 0!
+And so we see that
+\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)&amp;=0
+\end{align*}\]
+as desired.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Since none of the Legendre polynomials are identically 0, \(\int_{-1}^1P_n(x)P_n(x)\ne 0\).
+Why couldn&#8217;t the above proof be used to show that \(\int_{-1}^1P_m(x)P_n(x)=0\) when \(m=n\)?
+Where would it fall apart?</p>
+</div>
+<div class="paragraph">
+<p>Answer: the highest antiderivative we had to take was \(F_{n,m+1}\), and since \(m&lt; n \) this looked like \(f_m(x)(x^2-1)^n\).
+But if you take one more antiderivative you no longer have a factor of \(x^2-1\) (for instance, \(\int x^2-1\,dx=\frac{x^3}{3}-x+C\)).</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert\).</p>
+</li>
 </ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.2. Demonstrations</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A Legendre polynomial demo similar to the Hermite polynomial demo (nothing fancy, just showing the polynomials)</p>
+</li>
+<li>
+<p>Demonstration of spherical harmonics? (Not sure how it would look in practice, since there isn&#8217;t really a good way to show all of a 3D surface&#8230;&#8203; I&#8217;d have to think about it.)</p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
@@ -777,11 +865,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_the_hydrogen_atom"><a class="anchor" href="#_the_hydrogen_atom"></a><a class="link" href="#_the_hydrogen_atom">2. The Hydrogen Atom</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">2.1. Demonstrations</a></h3>
+<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">2.1. Demonstrations</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p>A demo showing the orbitals?</p>
+<p>A demo showing the orbitals?
+Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.</p>
 </li>
 </ul>
 </div>
