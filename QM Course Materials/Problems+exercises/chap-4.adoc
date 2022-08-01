@@ -78,3 +78,25 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 * A demo showing the orbitals?
 Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.
+
+== Angular Momentum
+=== Questions
+
+== Spin
+=== Questions
+
+* {q-num} Show that ++\(S_x\)++, ++\(S_y\)++, ++\(S_z\)++, and ++\(S^2\)++ are pairwise compatible observables.
+
+* {q-num} Compute ++\(e^{\sigma_r}\)++ for ++\(r=x,y,z\)++.
+
+* {q-num} Suppose a spin-++\(\frac{1}{2}\)++ particle is in the state ++\(A\begin{pmatrix}3+4i\\12\end{pmatrix}\)++.
++
+[{sublist-style}]
+.. Compute ++\(A\)++ so that the state is normalized.
+.. For each spin observable ++\(S=S_x,S_y,S_z\)++:
+... What are the probabilities of getting ++\(\pm\frac{\hbar}{2}\)++ if you measure ++\(S\)++?
+... Compute ++\(\Braket{S}\)++.
+
+
+== Electromagnetic Interactions
+=== Questions

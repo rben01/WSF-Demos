@@ -869,13 +869,28 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_demonstrations_11">Demonstrations</a></li>
 </ul>
 </li>
+<li><a href="#_angular_momentum">4.3. Angular Momentum</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_18">Questions</a></li>
+</ul>
+</li>
+<li><a href="#_spin">4.4. Spin</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_19">Questions</a></li>
+</ul>
+</li>
+<li><a href="#_electromagnetic_interactions">4.5. Electromagnetic Interactions</a>
+<ul class="sectlevel3">
+<li><a href="#_questions_20">Questions</a></li>
+</ul>
+</li>
 </ul>
 </li>
 <li><a href="#_chapter_5_identical_particles">5. Chapter 5: Identical Particles</a>
 <ul class="sectlevel2">
 <li><a href="#_two_particle_systems">5.1. Two-Particle Systems</a>
 <ul class="sectlevel3">
-<li><a href="#_questions_18">Questions</a></li>
+<li><a href="#_questions_21">Questions</a></li>
 </ul>
 </li>
 <li><a href="#_atoms">5.2. Atoms</a></li>
@@ -3003,7 +3018,86 @@ Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, 
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose \(f\) is an eigenfunction of \(A\) with eigenvalue \(\lambda\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Must \(f\) also be an eigenfunction of \(A^\dagger\)?
+Either show that this is the case or find a counterexample.</p>
+</li>
+<li>
+<p>When is \(\lambda^*\) an eigenvalue of \(A^\dagger\)?</p>
+</li>
+</ol>
+</div>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>No, \(f\) need not be an eigenfunction of \(A^\dagger\).
+For instance, if \(\displaystyle A=\begin{pmatrix}3&amp;2\\0&amp;1\end{pmatrix}\), then
+\[\begin{align*}
+A\begin{bmatrix}1\\0\end{bmatrix}=\begin{pmatrix}3&amp;2\\0&amp;1\end{pmatrix}\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\0\end{bmatrix}=3\begin{bmatrix}1\\0\end{bmatrix}
+\end{align*}\]
+yet
+\[\begin{align*}
+A^\dagger=\begin{pmatrix}3&amp;0\\2&amp;1\end{pmatrix}\\
+A^\dagger\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\2\end{bmatrix}
+\end{align*}\]
+so while \(\begin{bmatrix}1\\0\end{bmatrix}\) is an eigenvector of \(A\), it is not an eigenvector of \(A^\dagger\).</p>
+</li>
+<li>
+<p>\(\lambda^*\) is an eigenvalue of \(A^\dagger\) as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is <em>not</em> finite-dimensional).
+Supposing \(\kappa^*\) is <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\kappa^* I)f=0\), from which we may conclude that \(A^\dagger-\kappa^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\kappa^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\kappa^* I)^\dagger = B^\dagger (A -\kappa I)\).
+So \(A-\kappa I\) is also invertible, which means \(\kappa\) is not an eigenvalue of \(A\).
+By the contrapositive, if \(\lambda\) is an eigenvalue of \(A\), then \(\lambda^*\) is an eigenvalue of \(A^\dagger\).</p>
+<div class="paragraph">
+<p>But if the underlying vector space is infinite dimensional, then consider \(T\) defined on the Hilbert space of square-integrable functions over \([0,\infty)\) by \(Tf(x):=f(x+1)\).
+(Showing that \(T\) is linear is left as an exercise to the reader.) Then
+\[\begin{align*}
+\Braket{g,Tf}&amp;=\int_{0}^\infty g^*(x)Tf(x)\,dx\\
+&amp;=\int_{0}^\infty g^*(x)f(x+1)\,dx\\
+&amp;=\int_{1}^\infty g^*(x-1)f(x)\,dx\\
+\end{align*}\]
+So, evidently,
+\[\begin{align*}
+T^\dagger g(x)=\begin{cases}0&amp;0\le x&lt;1\\g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+If \(f(x):=\lambda^x\) (with \(0&lt;\lambda&lt; 1\) for square integrability), then \(Tf=\lambda^{x+1}=\lambda\lambda^x=\lambda f\), so \(f\) is an eigenvalue of \(T\) with eigenvalue \(\lambda\).
+Yet, if \(g\) were an eigenvalue of \(T^\dagger\) with eigenvalue \(\kappa\), then we&#8217;d have
+\[\begin{align*}
+\kappa g(x)&amp;=\begin{cases}0&amp;0\le x&lt;1\\g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+If \(\kappa=0\), then \(g(x-1)=0\) for all \(x\ge 1\), which is to say \(g(x)=0\) for all \(x\).
+But \(0\) is not a permissible eigenfunction, so we must have \(\kappa\ne0\), from which we conclude that
+\[\begin{align*}
+g(x)&amp;=\begin{cases}0&amp;0\le x&lt;1\\\frac{1}{\kappa}g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+Since \(g(x)=0\) for \(0\le x&lt; 1\), we must also have \(g(x)=0\) for \(1\le x&lt; 2\), then for \(2\le x&lt; 3\), and indeed for all of \([0,\infty)\) — \(g\) is again identically 0!
+So, in fact, \(T^\dagger\) has <em>no</em> eigenvalues whatsoever (and certainly not \(\lambda^*\)).</p>
+</div>
+</li>
+</ol>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>In the first part of part (b), where exactly did we use the finite dimensionality of the underlying vector space?</p>
+</div>
+<div class="paragraph">
+<p>Answer: it was in stating if there is no nonzero \(f\) for which \((A^\dagger - \kappa^* I)f=0\), then \(A^\dagger - \kappa^* I\) has an inverse: an operator \(B\) such that \((A^\dagger - \kappa^* I)B=I\).
+In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
+Indeed, \(T\) as defined above has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
+</div>
+</div>
+</div>
+</div>
+</details>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
@@ -3680,6 +3774,59 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 </div>
 </div>
 </div>
+<div class="sect2">
+<h3 id="_angular_momentum"><a class="anchor" href="#_angular_momentum"></a><a class="link" href="#_angular_momentum">4.3. Angular Momentum</a></h3>
+<div class="sect3">
+<h4 id="_questions_18"><a class="anchor" href="#_questions_18"></a><a class="link" href="#_questions_18">Questions</a></h4>
+
+</div>
+</div>
+<div class="sect2">
+<h3 id="_spin"><a class="anchor" href="#_spin"></a><a class="link" href="#_spin">4.4. Spin</a></h3>
+<div class="sect3">
+<h4 id="_questions_19"><a class="anchor" href="#_questions_19"></a><a class="link" href="#_questions_19">Questions</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(S_x\), \(S_y\), \(S_z\), and \(S^2\) are pairwise compatible observables.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \(e^{\sigma_r}\) for \(r=x,y,z\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a spin-\(\frac{1}{2}\) particle is in the state \(A\begin{pmatrix}3+4i\\12\end{pmatrix}\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Compute \(A\) so that the state is normalized.</p>
+</li>
+<li>
+<p>For each spin observable \(S=S_x,S_y,S_z\):</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>What are the probabilities of getting \(\pm\frac{\hbar}{2}\) if you measure \(S\)?</p>
+</li>
+<li>
+<p>Compute \(\Braket{S}\).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_electromagnetic_interactions"><a class="anchor" href="#_electromagnetic_interactions"></a><a class="link" href="#_electromagnetic_interactions">4.5. Electromagnetic Interactions</a></h3>
+<div class="sect3">
+<h4 id="_questions_20"><a class="anchor" href="#_questions_20"></a><a class="link" href="#_questions_20">Questions</a></h4>
+
+</div>
+</div>
 </div>
 </div>
 <div class="sect1 qm-chapter chap-5">
@@ -3688,7 +3835,7 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <div class="sect2">
 <h3 id="_two_particle_systems"><a class="anchor" href="#_two_particle_systems"></a><a class="link" href="#_two_particle_systems">5.1. Two-Particle Systems</a></h3>
 <div class="sect3">
-<h4 id="_questions_18"><a class="anchor" href="#_questions_18"></a><a class="link" href="#_questions_18">Questions</a></h4>
+<h4 id="_questions_21"><a class="anchor" href="#_questions_21"></a><a class="link" href="#_questions_21">Questions</a></h4>
 <div class="ulist">
 <ul>
 <li>
