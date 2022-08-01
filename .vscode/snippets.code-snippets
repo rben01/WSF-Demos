@@ -65,5 +65,11 @@
 		"body": "\\langle $1|$2\\rangle$0",
 		"description": "Insert an inner product",
 		"scope": "asciidoc"
+	},
+	"begin/end environment": {
+		"prefix": "\\begin",
+		"body": "\\begin{${1:env}}$2\\end{${1:env}}$0",
+		"description": "Insert an environment",
+		"scope": "asciidoc"
 	}
 }
