@@ -3033,7 +3033,7 @@ Either show that this is the case or find a counterexample.</p>
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -3053,8 +3053,8 @@ so while \(\begin{bmatrix}1\\0\end{bmatrix}\) is an eigenvector of \(A\), it is 
 </li>
 <li>
 <p>\(\lambda^*\) is an eigenvalue of \(A^\dagger\) as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is <em>not</em> finite-dimensional).
-Supposing \(\kappa^*\) is <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\kappa^* I)f=0\), from which we may conclude that \(A^\dagger-\kappa^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\kappa^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\kappa^* I)^\dagger = B^\dagger (A -\kappa I)\).
-So \(A-\kappa I\) is also invertible, which means \(\kappa\) is not an eigenvalue of \(A\).
+Supposing \(\lambda^*\) were <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\lambda^* I)f=0\), from which we may conclude that \(A^\dagger-\lambda^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\lambda^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\lambda^* I)^\dagger = B^\dagger (A -\lambda I)\).
+So \(A-\lambda I\) is also invertible, which means \(\lambda\) is not an eigenvalue of \(A\).
 By the contrapositive, if \(\lambda\) is an eigenvalue of \(A\), then \(\lambda^*\) is an eigenvalue of \(A^\dagger\).</p>
 <div class="paragraph">
 <p>But if the underlying vector space is infinite dimensional, then consider \(T\) defined on the Hilbert space of square-integrable functions over \([0,\infty)\) by \(Tf(x):=f(x+1)\).
@@ -3092,7 +3092,7 @@ So, in fact, \(T^\dagger\) has <em>no</em> eigenvalues whatsoever (and certainly
 <div class="paragraph">
 <p>Answer: it was in stating if there is no nonzero \(f\) for which \((A^\dagger - \kappa^* I)f=0\), then \(A^\dagger - \kappa^* I\) has an inverse: an operator \(B\) such that \((A^\dagger - \kappa^* I)B=I\).
 In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
-Indeed, \(T\) as defined above has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
+Indeed, \(T\) as defined above sends to zero all (not-identically-zero) functions that are zero for \(x\ge 1\), and yet \(T\) has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
 </div>
 </div>
 </div>
@@ -3312,11 +3312,6 @@ And in the same way that hermitian operators are akin to real numbers (e.g., the
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
-Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
-(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
-</li>
-<li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The so-called <strong>Generalized Ehrenfest Theorem</strong> states that for any observable \(Q(x,p,t)\),
 \[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
 One thing it states is that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\). (In particular, if \(Q\) does not depend on \(t\), then \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\) and so all we need to check is that \(\Braket{[\hat H,\hat Q]}\)).</p>
@@ -3499,7 +3494,7 @@ Since \(\Braket{a|x}\) is just a scalar, the eigenvectors corresponding to \(\la
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a matrix \(A\), the <em>matrix exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
 \[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
 (By analogy with numbers, \(A^0\) is defined to be the identity operator — perhaps the summation should be written \(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\).)
-The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers:</p>
+The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers (or, conversely, with respect to the exponential, matrices themselves share several properties with complex numbers):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
@@ -3674,7 +3669,12 @@ as desired.</p>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that \(x\) and \(p_y\) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators along different axes are compatible, e.g., that \(\sigma_x\) and \(\sigma_{p_y}\) (but also \(\sigma_x\) and \(\sigma_{p_z}\), \(\sigma_{y}\) and \(\sigma_{p_x}\), \(\sigma_y\) and \(\sigma_{p_z}\), etc.) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
+Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
+(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the Legendre polynomials, defined by \(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\), are orthgonal over \([-1,1]\).
@@ -3683,7 +3683,7 @@ as desired.</p>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>To compute \(\int_{-1}^1 p(x)P_n(x)\,dx\) using integration by parts, let
+<p>To compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) using integration by parts, let
 \[\begin{align*}
 u&amp;=P_m(x)&amp;dv&amp;=P_n(x)\,dx\\
 du&amp;=P_m'(x)\,dx&amp;v&amp;=F_{n,1}(x)
@@ -3741,7 +3741,7 @@ But if you take one more antiderivative you no longer have a factor of \(x^2-1\)
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert^2\).</p>
 </li>
 </ul>
 </div>
@@ -3851,7 +3851,9 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 </div>
 <div class="sect2">
 <h3 id="_solids"><a class="anchor" href="#_solids"></a><a class="link" href="#_solids">5.3. Solids</a></h3>
-
+<div class="paragraph">
+<p>hello robert</p>
+</div>
 </div>
 <div class="sect2">
 <h3 id="_demonstrations_12"><a class="anchor" href="#_demonstrations_12"></a><a class="link" href="#_demonstrations_12">5.4. Demonstrations</a></h3>

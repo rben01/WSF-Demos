@@ -789,7 +789,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the uncertainty principle does not apply to position and momentum components along different axes, e.g., that \(x\) and \(p_y\) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators along different axes are compatible, e.g., that \(\sigma_x\) and \(\sigma_{p_y}\) (but also \(\sigma_x\) and \(\sigma_{p_z}\), \(\sigma_{y}\) and \(\sigma_{p_x}\), \(\sigma_y\) and \(\sigma_{p_z}\), etc.) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
+Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
+(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the Legendre polynomials, defined by \(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\), are orthgonal over \([-1,1]\).
@@ -798,7 +803,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>To compute \(\int_{-1}^1 p(x)P_n(x)\,dx\) using integration by parts, let
+<p>To compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) using integration by parts, let
 \[\begin{align*}
 u&amp;=P_m(x)&amp;dv&amp;=P_n(x)\,dx\\
 du&amp;=P_m'(x)\,dx&amp;v&amp;=F_{n,1}(x)
@@ -856,7 +861,7 @@ But if you take one more antiderivative you no longer have a factor of \(x^2-1\)
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert^2\).</p>
 </li>
 </ul>
 </div>
