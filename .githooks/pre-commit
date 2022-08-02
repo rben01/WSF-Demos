@@ -3,7 +3,7 @@ set -euxo pipefail
 
 cd "QM Course Materials/Problems+exercises"
 
-if git diff-index --name-only --diff-filter=d HEAD | grep --quiet '.*\.adoc$'; then
+if git diff-index --name-only --cached --diff-filter=d HEAD | grep --quiet '.*\.adoc$'; then
 	asciidoctor ./*.adoc
 	git add ./*.html
 fi
