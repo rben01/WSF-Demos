@@ -194,7 +194,7 @@ Either show that this is the case or find a counterexample.
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 .. No, ++\(f\)++ need not be an eigenfunction of ++\(A^\dagger\)++.
@@ -209,8 +209,8 @@ A^\dagger\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\2\end{bmatrix}
 \end{align*}\]++
 so while ++\(\begin{bmatrix}1\\0\end{bmatrix}\)++ is an eigenvector of ++\(A\)++, it is not an eigenvector of ++\(A^\dagger\)++.
 .. ++\(\lambda^*\)++ is an eigenvalue of ++\(A^\dagger\)++ as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is _not_ finite-dimensional).
-Supposing ++\(\kappa^*\)++ is _not_ an eigenvalue of ++\(A^\dagger\)++, then there would be no nonzero ++\(f\)++ for which ++\((A^\dagger-\kappa^* I)f=0\)++, from which we may conclude that ++\(A^\dagger-\kappa^* I\)++ is invertible; call its inverse ++\(B\)++. Then ++\((A^\dagger-\kappa^* I)B=I\)++, and so ++\(I=I^\dagger=B^\dagger(A^\dagger-\kappa^* I)^\dagger = B^\dagger (A -\kappa I)\)++.
-So ++\(A-\kappa I\)++ is also invertible, which means ++\(\kappa\)++ is not an eigenvalue of ++\(A\)++.
+Supposing ++\(\lambda^*\)++ were _not_ an eigenvalue of ++\(A^\dagger\)++, then there would be no nonzero ++\(f\)++ for which ++\((A^\dagger-\lambda^* I)f=0\)++, from which we may conclude that ++\(A^\dagger-\lambda^* I\)++ is invertible; call its inverse ++\(B\)++. Then ++\((A^\dagger-\lambda^* I)B=I\)++, and so ++\(I=I^\dagger=B^\dagger(A^\dagger-\lambda^* I)^\dagger = B^\dagger (A -\lambda I)\)++.
+So ++\(A-\lambda I\)++ is also invertible, which means ++\(\lambda\)++ is not an eigenvalue of ++\(A\)++.
 By the contrapositive, if ++\(\lambda\)++ is an eigenvalue of ++\(A\)++, then ++\(\lambda^*\)++ is an eigenvalue of ++\(A^\dagger\)++.
 +
 But if the underlying vector space is infinite dimensional, then consider ++\(T\)++ defined on the Hilbert space of square-integrable functions over ++\([0,\infty)\)++ by ++\(Tf(x):=f(x+1)\)++.
@@ -243,9 +243,10 @@ In the first part of part (b), where exactly did we use the finite dimensionalit
 
 Answer: it was in stating if there is no nonzero ++\(f\)++ for which ++\((A^\dagger - \kappa^* I)f=0\)++, then ++\(A^\dagger - \kappa^* I\)++ has an inverse: an operator ++\(B\)++ such that ++\((A^\dagger - \kappa^* I)B=I\)++.
 In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
-Indeed, ++\(T\)++ as defined above has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on ++\([0,1)\)++; it's just lost.
+Indeed, ++\(T\)++ as defined above sends to zero all (not-identically-zero) functions that are zero for ++\(x\ge 1\)++, and yet ++\(T\)++ has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on ++\([0,1)\)++; it's just lost.
 --
 ====
+
 
 * {q-num} Suppose that ++\(f\)++ is an eigenfunction of operators ++\(Q_1\)++ and ++\(Q_2\)++ with eigenvalues ++\(q_1\)++ and ++\(q_2\)++, respectively.
 Show that ++\(f\)++ is an eigenfunction of the following operators, and find the corresponding eigenvalues.
@@ -375,9 +376,6 @@ As we saw above, just as an imaginary number is ++\(i\)++ times a real number, a
 And in the same way that hermitian operators are akin to real numbers (e.g., their eigenvalues are all real), anti-hermitian operators are akin to imaginary numbers (e.g., their eigenvalues are all imaginary).
 ====
 
-* {q-num} The uncertainty principle ++\(\sigma_x \sigma_p\ge \frac{\hbar}{2}\)++ only holds in one dimension.
-Show that in ++\(n\)++ dimensions, in which ++\(\hat x\Ket{f}=\vec x f\)++ and ++\(\hat p\Ket{f}=i\hbar \nabla f\)++, the uncertainty principle becomes ++\(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)++.
-(Hint: what's ++\([x,p]\)++ with these new definitions of ++\(\hat x\)++ and ++\(\hat p\)++?)
 
 * {q-num} The so-called *Generalized Ehrenfest Theorem* states that for any observable ++\(Q(x,p,t)\)++,
 ++\[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]++
@@ -517,7 +515,7 @@ Since ++\(\Braket{a|x}\)++ is just a scalar, the eigenvectors corresponding to +
 * {q-num} For a matrix ++\(A\)++, the _matrix exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
 ++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
 (By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator — perhaps the summation should be written ++\(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\)++.)
-The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers:
+The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers (or, conversely, with respect to the exponential, matrices themselves share several properties with complex numbers):
 +
 [{sublist-style}]
 .. Show that the matrix exponential of the zero operator is the identity operator. (Analog: ++\(e^0=1\)++.)

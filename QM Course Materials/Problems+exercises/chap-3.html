@@ -436,7 +436,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </style>
 <!-- spell-checker: disable -->
 
-<script>
+<!-- <script>
 	var MathJax = {
 		loader: {
 			load: ["input/tex", "output/svg", "ui/lazy"],
@@ -461,7 +461,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.min.js"
 	integrity="sha384-lgPn3GAyVy/GCtSzTaxwg3b2ECTLz5o3dQQ1HDZGS3+wGk8FLLQt6fUT56Z3e8Bs"
 	crossorigin="anonymous"
-></script>
+></script> -->
 <!-- <script
 	id="MathJax-script"
 	async
@@ -470,30 +470,53 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	crossorigin="anonymous"
 ></script> -->
 
+<link
+	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css"
+	integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC"
+	crossorigin="anonymous"
+/>
+
 <!-- The loading of KaTeX is deferred to speed up page rendering -->
-<!-- <script
+<script
 	defer
 	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js"
 	integrity="sha384-X/XCfMm41VSsqRNQgDerQczD69XqmjOOOwYQvr/uuC+j4OPoNhVgjdGFwhvN02Ja"
 	crossorigin="anonymous"
-></script> -->
+></script>
 
 <!-- mhchem, for chemical equations -->
-<!-- <script
+<script
 	defer
 	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/mhchem.min.js"
 	integrity="sha384-RTN08a0AXIioPBcVosEqPUfKK+rPp+h1x/izR7xMkdMyuwkcZCWdxO+RSwIFtJXN"
 	crossorigin="anonymous"
-></script> -->
+></script>
+
+<!-- copy-tex -->
+<script
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/copy-tex.min.js"
+	integrity="sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A"
+	crossorigin="anonymous"
+></script>
 
 <!-- To automatically render math in text elements, include the auto-render extension: -->
-<!-- <script
+<script
 	defer
 	src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js"
 	integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQ7rmHTXpd7WvJum6fIACpNNfIR"
 	crossorigin="anonymous"
-	onload="renderMathInElement(document.body, {throwOnError: false});"
-></script> -->
+	onload="renderMathInElement(
+		document.body,
+		{
+			throwOnError: false,
+			delimiters: [
+				{left: '\\(', right: '\\)', display: false},
+				{left: '\\[', right: '\\]', display: true}
+		  ]
+		}
+	);"
+></script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -631,10 +654,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		}
 	}
 
-	mjx-container {
+	/* mjx-container {
 		overflow-x: scroll;
 		overflow-y: hidden;
-	}
+	} */
 
 	dt {
 		font-family: var(--sans-font);
@@ -664,11 +687,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	}
 
 	.katex {
-		font-size: 1.13em;
+		font-size: 1.1em;
 	}
 
-	.katex-display > .katex {
-		font-size: 1.21em;
+	.katex-display {
+		overflow: auto hidden;
 	}
 
 	.admonitionblock td.content > .title,
@@ -1067,7 +1090,7 @@ Either show that this is the case or find a counterexample.</p>
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -1087,8 +1110,8 @@ so while \(\begin{bmatrix}1\\0\end{bmatrix}\) is an eigenvector of \(A\), it is 
 </li>
 <li>
 <p>\(\lambda^*\) is an eigenvalue of \(A^\dagger\) as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is <em>not</em> finite-dimensional).
-Supposing \(\kappa^*\) is <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\kappa^* I)f=0\), from which we may conclude that \(A^\dagger-\kappa^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\kappa^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\kappa^* I)^\dagger = B^\dagger (A -\kappa I)\).
-So \(A-\kappa I\) is also invertible, which means \(\kappa\) is not an eigenvalue of \(A\).
+Supposing \(\lambda^*\) were <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\lambda^* I)f=0\), from which we may conclude that \(A^\dagger-\lambda^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\lambda^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\lambda^* I)^\dagger = B^\dagger (A -\lambda I)\).
+So \(A-\lambda I\) is also invertible, which means \(\lambda\) is not an eigenvalue of \(A\).
 By the contrapositive, if \(\lambda\) is an eigenvalue of \(A\), then \(\lambda^*\) is an eigenvalue of \(A^\dagger\).</p>
 <div class="paragraph">
 <p>But if the underlying vector space is infinite dimensional, then consider \(T\) defined on the Hilbert space of square-integrable functions over \([0,\infty)\) by \(Tf(x):=f(x+1)\).
@@ -1126,7 +1149,7 @@ So, in fact, \(T^\dagger\) has <em>no</em> eigenvalues whatsoever (and certainly
 <div class="paragraph">
 <p>Answer: it was in stating if there is no nonzero \(f\) for which \((A^\dagger - \kappa^* I)f=0\), then \(A^\dagger - \kappa^* I\) has an inverse: an operator \(B\) such that \((A^\dagger - \kappa^* I)B=I\).
 In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
-Indeed, \(T\) as defined above has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
+Indeed, \(T\) as defined above sends to zero all (not-identically-zero) functions that are zero for \(x\ge 1\), and yet \(T\) has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
 </div>
 </div>
 </div>
@@ -1350,11 +1373,6 @@ And in the same way that hermitian operators are akin to real numbers (e.g., the
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
-Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
-(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
-</li>
-<li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The so-called <strong>Generalized Ehrenfest Theorem</strong> states that for any observable \(Q(x,p,t)\),
 \[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
 One thing it states is that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\). (In particular, if \(Q\) does not depend on \(t\), then \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\) and so all we need to check is that \(\Braket{[\hat H,\hat Q]}\)).</p>
@@ -1539,7 +1557,7 @@ Since \(\Braket{a|x}\) is just a scalar, the eigenvectors corresponding to \(\la
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a matrix \(A\), the <em>matrix exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):
 \[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
 (By analogy with numbers, \(A^0\) is defined to be the identity operator — perhaps the summation should be written \(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\).)
-The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers:</p>
+The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers (or, conversely, with respect to the exponential, matrices themselves share several properties with complex numbers):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
