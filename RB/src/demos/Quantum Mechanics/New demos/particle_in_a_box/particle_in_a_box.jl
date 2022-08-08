@@ -1,124 +1,316 @@
 # %%
-module M
 
-using Printf
 using Plots
-using ColorSchemes
-using Colors
-using JSON
+using Printf
+using QuadGK
+using SymPy
+using FunctionWrappers: FunctionWrapper
 
-const fps = 60
-const speed = 0.5
-const dx = 1e-4
-const dpi = 200
-const tmax_sec = 40
+struct Parameters{T<:Real}
+    L::T
+    μ::T
+    p₀::T
+    σ::T
+end
 
-function inner_product(f::Function, g::Function, xmin::Real, xmax::Real, npoints::Integer)
-    dx::Float64 = (xmax - xmin) / npoints
-    xs = (xmin+dx/2):dx:(xmax-dx/2)
+Parameters(L::T, μ::T, p₀::T, σ::T) where {T<:Real} = Parameters{T}(L, μ, p₀, σ)
+Parameters(L, μ, p₀, σ) = Parameters(promote(L, μ, p₀, σ)...)
+Parameters(; L, μ, p₀, σ) = Parameters(L, μ, p₀, σ)
 
-    return sum(f.(xs) .* conj.(g.(xs))) * dx
+inner_product(f::Function, g::Function, x_min::Real, x_max::Real) =
+    quadgk(x -> conj(f(x)) * g(x), x_min, x_max; atol=1e-6)[1]
+
+function psi(n, L, x)
+    coef = sqrt(2 / L)
+    return coef * sin(n * pi * x / L)
 end
 
 function psi(n, L)
-    coef = sqrt(2 / L)
-    return x -> coef * sin(n * pi * x / L)
+    return x -> psi(n, L, x)
 end
 
-function get_cn(n, L, θ, μ, Σ)
-    f = psi(n, L)
-    g = x -> exp(im * θ * (x - μ) - 0.5 * ((x - μ) / Σ)^2)
-    # gaussian_norm_factor = abs(inner_product(g, g, 0, L, 2000))
-    # coef = sqrt(2 / L) / gaussian_norm_factor #/ (pi^0.25 * Σ^0.5)
-    return inner_product(f, g, 0, L, 2000)
+cn(psi::Function, initial_wf::Function; L::Real) = inner_product(psi, initial_wf, 0, L)
+
+# """
+# get `length(xs) × length(ts)` array containing all the points `(x, t, Ψ(x,t))` of the
+# wavefunction
+# """
+# function get_wf_mat(
+#     params::Parameters, xs::AbstractVector{<:Real}, ts::AbstractVector{<:Real}; n_max
+# )
+#     (; L, μ, p₀, σ) = params
+
+#     n_range = reverse(1:n_max) # Large n (small numbers) at the front for slightly more accurate summation
+
+#     initial_wavefunction_unnormed(x) = exp(im * p₀ * (x - μ) - 0.5 * ((x - μ) / σ)^2)
+#     sq_norm = abs(
+#         inner_product(initial_wavefunction_unnormed, initial_wavefunction_unnormed, 0, L)
+#     )
+#     initial_wavefunction(x) = initial_wavefunction_unnormed(x) / sqrt(sq_norm)
+
+#     cns = inner_product.(psi.(n_range, L), initial_wavefunction, 0, L)
+#     @info "approximation goodness" sum(abs2.(cns))
+#     cns ./= sqrt(sum(abs2.(cns))) # force their sq magnitudes to sum to 1
+
+#     @assert sum(abs2.(cns)) ≈ 1
+
+#     wf_mat = zeros(Complex{Float64}, length(xs), length(ts))
+
+#     for (ti, t) in enumerate(ts)
+#         for (n, cn) in zip(n_range, cns)
+#             energy = (pi * n)^2 / (2 * L^2)
+#             wf_mat[:, ti] .+= cn * exp(-im * energy * t) .* psi.(n, L, xs)
+#         end
+#     end
+
+#     return wf_mat
+# end
+
+"""
+
+See further: https://docs.juliahub.com/SymPy/KzewI/1.1.6/Tutorial/basic_operations/#lambdify-1
+"""
+function sympy_expr_to_fn(ex, syms)
+    # return lambdify(ex, syms; invoke_latest=true)
+    body = convert(Expr, ex)
+    fn = Expr(:function, Expr(:tuple, syms...), body)
+    return eval(fn)
 end
 
-function wavefunction_generator(nmax, L, θ, μ, Σ)
-    nrange = reverse(1:nmax) # Large n (small numbers) at the front for slightly more accurate summation
+sympy_expr_to_fn(ex, sym::Symbol) = sympy_expr_to_fn(ex, (sym,))
+sympy_expr_to_fn(ex) = sympy_expr_to_fn(ex, Symbol.(free_symbols(ex)))
 
-    cns = [get_cn(n, L, θ, μ, Σ) for n in nrange]
-    cns ./= sqrt(sum(abs2.(cns))) # force their sq magnitudes to sum to 1
+# macro sympy_expr_to_fn(ex, syms...)
+#     return Expr(:function, Expr(:tuple, syms...), convert(Expr, eval(ex)))
+# end
 
-    energies = (pi * nrange) .^ 2 / (2 * L^2)
-    psis = [psi(n, L) for n in nrange]
+function get_wf_mat(
+    params::Parameters,
+    xs::AbstractVector{<:Real},
+    ts::AbstractVector{<:Real},
+    save_locs::AbstractVector{Bool},
+)
+    (; L, μ, p₀, σ) = params
+    x = symbols(:x; real=true)
+    ħ = 1
 
-    return t -> begin
-        scalars = cns .* exp.(-im * energies * t)
-        ψ = x -> sum(scalars .* [psi(x) for psi in psis])
-        return ψ
+    initial_wavefunction_unnormed(x) = sympy.exp(im * p₀ * (x - μ) - 0.5 * ((x - μ) / σ)^2)
+    sq_norm = integrate(
+        simplify(initial_wavefunction_unnormed(x) * conj(initial_wavefunction_unnormed(x))),
+        (x, 0, L),
+    )
+    initial_wavefunction(x) = initial_wavefunction_unnormed(x) / sqrt(sq_norm)
+
+    local fn, wf_num, wf_sym
+    fn = sympy_expr_to_fn(initial_wavefunction(x), :x)
+    wf_num = fn |> FunctionWrapper{ComplexF64,Tuple{ComplexF64}}
+    wf_sym = fn |> FunctionWrapper{Any,Tuple{Any}}
+
+    # stepped(f_ex, dt) = simplify(f_ex + dt / (im * ħ) * diff(f_ex, (x, 2)))
+    stepped(f_ex, dt) = sympy.nsimplify(
+        f_ex + dt / (im * ħ) * diff(f_ex, (x, 2)); tolerance=1e-25, rational=false
+    )
+
+    wf_mat = zeros(Complex{Float64}, length(xs), sum(save_locs))
+
+    @info "evolving" length(ts) size(wf_mat)
+
+    wf_mat[:, 1] .= wf_num.(xs)
+    dts = vcat(diff(ts), 0)
+
+    n = length(ts)
+    ti = 1
+    for (i, (dt, should_save)) in enumerate(zip(dts, save_locs))
+        if should_save
+            wf_mat[:, ti] .= wf_num.(xs)
+            ti += 1
+        end
+
+        fn = sympy_expr_to_fn(stepped(wf_sym(x), dt), :x)
+        wf_num = fn |> FunctionWrapper{ComplexF64,Tuple{ComplexF64}}
+        wf_sym = fn |> FunctionWrapper{Any,Tuple{Any}}
+        @info "progress" "$i/$n" string(stepped(wf_sym(x), dt))
+    end
+
+    return wf_mat
+end
+
+# function plot_frame(
+#     anim::Animation,
+#     wf_arr::AbstractMatrix,
+#     ti::Integer;
+#     L_max::Real,
+#     y_max::Real,
+#     xs::AbstractVector,
+#     ts::AbstractVector,
+#     dpi::Real,
+# )
+#     wf_points = @view wf_arr[:, ti]
+#     p = plot(
+#         xs,
+#         abs2.(wf_points);
+#         xlim=(0, L_max),
+#         ylim=(0, y_max),
+#         lw=2,
+#         legend=false,
+#         xlabel=raw"$x$",
+#         ylabel=raw"$|\psi(x)|^2$",
+#         plot_title="Particle in an infinite well",
+#         dpi,
+#     )
+#     timestamp_str = @sprintf "%.2f" ts[ti]
+#     annotate!((0.15, 0.75), text("t=$timestamp_str", :left, :black))
+
+#     frame(anim, p)
+
+#     return p
+# end
+
+function get_save_path(params::Parameters, extn::AbstractString)
+    (; L, μ, p₀, σ) = params
+
+    plots_dir = mkpath(joinpath(@__DIR__, "plots"))
+    outfile_basename = @sprintf "anim_L=%.4f_mu=%.4f_p0=%.4f_sigma=%.4f.%s" L μ p₀ σ extn
+    dst = joinpath(plots_dir, outfile_basename)
+
+    return dst
+end
+
+# function save_anim(anim::Animation, params::Parameters; fps)
+#     dst = get_save_path(params, "mp4")
+
+#     @info "saving plot" dst
+#     return mp4(anim, dst; fps)
+# end
+
+# function plot_particle_old(
+#     params::Parameters;
+#     L_max::Real,
+#     n_max=250,
+#     fps=24,
+#     speed=1,
+#     tmax_sec=60,
+#     dx=5e-2,
+#     dpi=144,
+# )::Animation
+#     L = params.L
+
+#     anim = Animation()
+#     n_points = round(Int, L / dx)
+#     xs = range(0, L; length=n_points)
+#     ts = 0:(speed / fps):tmax_sec
+
+#     wf_mat = get_wf_mat(params, xs, ts; n_max)
+#     y_max = maximum(abs2, wf_mat) + 0.5
+
+#     plot_kwargs = (; L_max, y_max, xs, ts, dpi)
+
+#     local last_frame
+#     for ti in 1:length(ts)
+#         last_frame = plot_frame(anim, wf_mat, ti; plot_kwargs...)
+#     end
+
+#     end_pause_sec = 2
+#     n_ending_frames = round(Int, end_pause_sec * fps)
+#     for _ in 1:n_ending_frames
+#         frame(anim, last_frame)
+#     end
+
+#     save_anim(anim, params; fps)
+
+#     return anim
+# end
+
+function default_t_save_locs(ts)
+    chunked = div.(ts, 1e-1)
+    prev_val = minimum(ts) - 1
+    mask = falses(size(ts))
+
+    for (i, val) in pairs(chunked)
+        if val != prev_val
+            mask[i] = true
+            prev_val = val
+        end
+    end
+    return mask
+end
+
+function plot_particle(params::Parameters; dx=0.5, dt=1e-2, n_timesteps=100, dpi=288)
+    L = params.L
+
+    n_x_points = 1 + round(Int, L / dx)
+    xs = range(0, L; length=n_x_points)
+    ts = range(0; step=dt, length=n_timesteps)
+    save_locs = default_t_save_locs(ts)
+    @info "axes" xs
+
+    wf_mat = get_wf_mat(params, xs, ts, save_locs)
+
+    @info "plotting" params size(wf_mat) length(wf_mat)
+
+    p = heatmap(
+        xs,
+        ts,
+        abs2.(wf_mat)';
+        dpi,
+        xlabel="𝑥",
+        ylabel="𝑡",
+        xticks=0:2:L,
+        title="Probability Density over Space and Time",
+        fontfamily="Helvetica",
+    )
+    dst = get_save_path(params, "png")
+    png(p, dst)
+
+    return p
+end
+
+# function vlplot_particle(params; n_max=250, dx=1)
+#     L = params.L
+
+#     n_points = round(Int, L / dx)
+#     xs = range(0, L; length=n_points)
+#     ts = 0:1:100
+
+#     wf_mat = get_wf_mat(params, xs, ts; n_max)
+
+#     x_col = vec(xs' .* ones(length(ts)))
+#     t_col = vec((ts' .* ones(length(xs)))')
+#     p_col = vec(abs2.(wf_mat))
+
+#     df = DataFrame(:x => x_col, :t => t_col, :p => p_col)
+#     show(df)
+#     p = df |> @vlplot(:rect, x = :t, y = :x, color = {field = :p, aggregate = :mean})
+#     VegaLite.savefig(get_save_path(params, "svg"), p)
+
+#     return p
+# end
+
+function plot_all()
+    params_vec = Parameters[]
+    for (L, p₀) in Iterators.product([20], [10])
+        μ = L / 2
+        σ = L / 2
+        push!(params_vec, Parameters(; L, μ, p₀, σ))
+    end
+
+    @info "plotting for parameter combinations" length(params_vec)
+    for params in params_vec
+        plot_particle(params)
     end
 end
 
+@info "#== beginning plotting"
+plot_all()
+@info "==# all finished"
 
-const ts = 0:(speed/fps):tmax_sec
-
-
-const plotdir = joinpath(dirname(@__FILE__), "plots")
-mkpath(plotdir)
-
-const L_max = 6
-const y_max = 2.5
-
-const fontfamily = "Helvetica"
-const dark_theme = [
-    :linecolor => colorant"#5df",
-    :background => colorant"black",
-    :foreground_color => colorant"white",
-    :dpi => dpi,
-    :tickfontsize => 12,
-    :tickfontfamily => fontfamily,
-    :guidefontsize => 15,
-]
-
-
-for (L, θ, Σ) in Iterators.product(2:L_max, -3:3, 0.5:0.25:1.5)
-    xs = 0:dx:L
-    @show size(Iterators.product(xs, ts))
-    for μ = 1:0.5:L-1
-        wf_generator = wavefunction_generator(700, L, θ, μ, Σ)
-
-        function plot_frame(anim, i)
-            wavefunction = wf_generator(ts[i])
-            wf_points = wavefunction.(xs)
-            plot(
-                xs,
-                abs2.(wf_points),
-                xlim = (0, L_max),
-                ylim = (0, y_max),
-                lw = 2,
-                legend = false,
-                xlabel = raw"$x$",
-                ylabel = raw"$|\psi(x)|^2$",
-                plot_title = "Particle in an infinite well";
-                dark_theme...,
-            )
-            timestamp_str = @sprintf "%.2f" ts[i]
-            annotate!(
-                0.25,
-                y_max - 0.3,
-                text("t=$timestamp_str", :left, :white, fontfamily),
-            )
-            frame(anim)
-        end
-
-        anim = Animation()
-
-        for i = 1:length(ts)
-            plot_frame(anim, i)
-        end
-
-        end_pause_sec = 2
-        t_step = step(ts)
-        n_ending_frames = round(Int, end_pause_sec * fps)
-        for _ = 1:n_ending_frames
-            plot_frame(anim, length(ts))
-        end
-
-        outfile_basename = @sprintf "anim_L=%.4f_theta=%.4f_mu=%.4f_sigma=%.4f.mp4" L θ μ Σ
-        outfile_path = joinpath(plotdir, outfile_basename)
-        mp4(anim, outfile_path, fps = fps)
-    end
-end
-
-
-end
+# const fontfamily = "Helvetica"
+# const dark_theme = [
+#     :linecolor => colorant"#5df",
+#     :background => colorant"black",
+#     :foreground_color => colorant"white",
+#     :dpi => dpi,
+#     :tickfontsize => 12,
+#     :tickfontfamily => fontfamily,
+#     :guidefontsize => 15,
+# ]
