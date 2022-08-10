@@ -11,7 +11,5 @@ include::shared_attributes.adoc[]
 == Atoms
 
 == Solids
-hello robert
-hello robin
 
 == Demonstrations

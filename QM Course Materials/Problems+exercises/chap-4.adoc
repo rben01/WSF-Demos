@@ -81,8 +81,15 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 .. Explain why ++\(m\le l\)++ using the Legendre function ++\(P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)\)++
 
 * {q-num}
++
+[{sublist-style}]
+.. Calculate the Legendre functions, ++\(P_l^m(x)\)++, for ++\(l=2\)++ and ++\(m = 0, \pm1, \pm2\)++.
+.. Show that if ++\(m>l\)++ then ++\(P_2^m(x) = 0\)++ (and therefore ++\(\Theta\)++ is 0 as well).
+.. Show that ++\(\Theta(\theta) = A P_2^2 (\cos\theta)\)++ is a solution to the angular differential equation ++\[\sin\theta \frac{d}{d\theta} \left( \sin\theta \frac{d\Theta}{d\theta}\right)+ \left[ l(l+1) \sin^2\theta -m^2\right]\Theta = 0 \]++
+.. Show that ++\(Y_2^2\)++ is normalized.
+.. Show that ++\(Y_2^2\)++ and ++\(Y_2^{-2}\)++ are orthogonal.
 
-* {q-num} For a particle in the infinite spherical well, determine if ++\(\psi_{320}\)++ and ++\(\psi_{400}\)++ are closer in energy or if ++\(\psi_{400}\)++ and ++\(\psi_{530}\)++ are closer in energy.
+* {q-num} For a particle in the infinite spherical well, determine whether ++\(\psi_{320}\)++ and ++\(\psi_{400}\)++ are closer in energy or if ++\(\psi_{400}\)++ and ++\(\psi_{530}\)++ are closer in energy.
 
 === Demonstrations
 
