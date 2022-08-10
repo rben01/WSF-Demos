@@ -71,7 +71,7 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 * {q-num} [I have not worked out this equation yet] Solve the spherical harmonic oscillator, ++\(V(r)=-k\lVert\mathbf r\rVert^2\)++.
 
-* {q-num} [Optional] Convert the Laplacian from cartesian coordinates to spherical coordinates.
+* {q-num} (Optional) Convert the Laplacian from cartesian coordinates to spherical coordinates.
 
 * {q-num} In this question you will examine some of the constraints on the separation constants ++\(l(l+1)\)++ and ++\(m^2\)++.
 +
@@ -82,7 +82,7 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 * {q-num}
 
-* {q-num}
+* {q-num} For a particle in the infinite spherical well, determine if ++\(\psi_{320}\)++ and ++\(\psi_{400}\)++ are closer in energy or if ++\(\psi_{400}\)++ and ++\(\psi_{530}\)++ are closer in energy.
 
 === Demonstrations
 
