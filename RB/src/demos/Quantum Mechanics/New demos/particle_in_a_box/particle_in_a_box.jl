@@ -1,10 +1,13 @@
 # %%
 
-using Plots
 using Printf
 using QuadGK
-using SymPy
-using FunctionWrappers: FunctionWrapper
+using SpecialFunctions
+using Debugger
+using Infiltrator
+using Plots
+
+gr()
 
 struct Parameters{T<:Real}
     L::T
@@ -20,209 +23,129 @@ Parameters(; L, μ, p₀, σ) = Parameters(L, μ, p₀, σ)
 inner_product(f::Function, g::Function, x_min::Real, x_max::Real) =
     quadgk(x -> conj(f(x)) * g(x), x_min, x_max; atol=1e-6)[1]
 
-function psi(n, L, x)
-    coef = sqrt(2 / L)
-    return coef * sin(n * pi * x / L)
+norm(f::Function, x_min::Real, x_max::Real) = sqrt(inner_product(f, f, x_min, x_max))
+function norm(zs::AbstractVector{T}, dx::Real) where {T<:Number}
+    acc = zero(T)
+
+    n = length(zs)
+
+    for i in 1:(n - 1)
+        z1 = zs[i]
+        z2 = zs[i + 1]
+
+        z = (z1 + z2) / 2
+
+        acc += abs2(z)
+    end
+
+    return sqrt(acc * dx)
 end
 
-function psi(n, L)
-    return x -> psi(n, L, x)
+fact(n) = gamma(n + 1)
+binom(n, k) =
+    if -1 <= k <= n + 1
+        fact(n) / (fact(k) * fact(n - k))
+    else
+        0
+    end
+
+function middle(v::AbstractVector; k=3)
+    i = length(v) ÷ 2
+    return v[(i - k):(i + k)]
 end
 
-cn(psi::Function, initial_wf::Function; L::Real) = inner_product(psi, initial_wf, 0, L)
+function step_wf!(Ψ, dx, dt; m, xs)
+    ħ = 1
+    # xdiff1 = diff(xs)
+    # ∇Ψ = diff(Ψ) ./ dx
 
-# """
-# get `length(xs) × length(ts)` array containing all the points `(x, t, Ψ(x,t))` of the
-# wavefunction
-# """
-# function get_wf_mat(
-#     params::Parameters, xs::AbstractVector{<:Real}, ts::AbstractVector{<:Real}; n_max
-# )
-#     (; L, μ, p₀, σ) = params
+    # if isdefined(Main, :Infiltrator)
+    #     Main.infiltrate(@__MODULE__, Base.@locals, @__FILE__, @__LINE__)
+    # end
 
-#     n_range = reverse(1:n_max) # Large n (small numbers) at the front for slightly more accurate summation
+    # xs1 = @view(xs[begin:(end - 1)]) .+ xdiff1 ./ 2
+    # xdiff2 = diff(xs1)
+    ∇²Ψ = diff(diff(Ψ)) ./ dx^2
+    ∇²Ψ = vcat(first(∇²Ψ), ∇²Ψ, last(∇²Ψ))
 
-#     initial_wavefunction_unnormed(x) = exp(im * p₀ * (x - μ) - 0.5 * ((x - μ) / σ)^2)
-#     sq_norm = abs(
-#         inner_product(initial_wavefunction_unnormed, initial_wavefunction_unnormed, 0, L)
-#     )
-#     initial_wavefunction(x) = initial_wavefunction_unnormed(x) / sqrt(sq_norm)
+    # fixes the issue of the first nonzero value being massive compared to subsequent ones
+    # (so that the curvature, which should be roughly continuous, is not)
+    # for find_fn in [findfirst, findlast]
+    #     idx = find_fn(!=(0), ∇²Ψ)
+    #     ∇²Ψ[idx] = 0
+    # end
 
-#     cns = inner_product.(psi.(n_range, L), initial_wavefunction, 0, L)
-#     @info "approximation goodness" sum(abs2.(cns))
-#     cns ./= sqrt(sum(abs2.(cns))) # force their sq magnitudes to sum to 1
-
-#     @assert sum(abs2.(cns)) ≈ 1
-
-#     wf_mat = zeros(Complex{Float64}, length(xs), length(ts))
-
-#     for (ti, t) in enumerate(ts)
-#         for (n, cn) in zip(n_range, cns)
-#             energy = (pi * n)^2 / (2 * L^2)
-#             wf_mat[:, ti] .+= cn * exp(-im * energy * t) .* psi.(n, L, xs)
-#         end
-#     end
-
-#     return wf_mat
-# end
-
-"""
-
-See further: https://docs.juliahub.com/SymPy/KzewI/1.1.6/Tutorial/basic_operations/#lambdify-1
-"""
-function sympy_expr_to_fn(ex, syms)
-    # return lambdify(ex, syms; invoke_latest=true)
-    body = convert(Expr, ex)
-    fn = Expr(:function, Expr(:tuple, syms...), body)
-    return eval(fn)
+    Ψ .+= (im * ħ / (2 * m)) * dt * ∇²Ψ
+    Ψ ./= norm(Ψ, dx)
+    # lines(xs, real(Ψ), imag(Ψ))
+    return nothing
 end
-
-sympy_expr_to_fn(ex, sym::Symbol) = sympy_expr_to_fn(ex, (sym,))
-sympy_expr_to_fn(ex) = sympy_expr_to_fn(ex, Symbol.(free_symbols(ex)))
-
-# macro sympy_expr_to_fn(ex, syms...)
-#     return Expr(:function, Expr(:tuple, syms...), convert(Expr, eval(ex)))
-# end
+# step_wf!(zs, xs, dt; m=1);
+# display(zs[begin:(begin + 6)])
+# plot(xs, zs)
 
 function get_wf_mat(
     params::Parameters,
-    xs::AbstractVector{<:Real},
-    ts::AbstractVector{<:Real},
+    xs::AbstractRange{<:Real},
+    ts::AbstractRange{<:Real},
     save_locs::AbstractVector{Bool},
 )
+    plotlyjs()
+
     (; L, μ, p₀, σ) = params
-    x = symbols(:x; real=true)
-    ħ = 1
 
-    initial_wavefunction_unnormed(x) = sympy.exp(im * p₀ * (x - μ) - 0.5 * ((x - μ) / σ)^2)
-    sq_norm = integrate(
-        simplify(initial_wavefunction_unnormed(x) * conj(initial_wavefunction_unnormed(x))),
-        (x, 0, L),
-    )
-    initial_wavefunction(x) = initial_wavefunction_unnormed(x) / sqrt(sq_norm)
+    # initial_wavefunction_unnormed(x) =
+    #     exp(im * p₀ * (x - μ)) * binom(L, L / 2 + (x - μ) / σ)
+    initial_wavefunction_unnormed(x) = exp(im * p₀ * (x - μ) - (x - μ)^2 / (2 * σ))
 
-    local fn, wf_num, wf_sym
-    fn = sympy_expr_to_fn(initial_wavefunction(x), :x)
-    wf_num = fn |> FunctionWrapper{ComplexF64,Tuple{ComplexF64}}
-    wf_sym = fn |> FunctionWrapper{Any,Tuple{Any}}
+    Ψ = initial_wavefunction_unnormed.(xs) ./ norm(initial_wavefunction_unnormed, 0, L)
 
-    # stepped(f_ex, dt) = simplify(f_ex + dt / (im * ħ) * diff(f_ex, (x, 2)))
-    stepped(f_ex, dt) = sympy.nsimplify(
-        f_ex + dt / (im * ħ) * diff(f_ex, (x, 2)); tolerance=1e-25, rational=false
-    )
+    # first_nonzero_idx = findfirst(!=(0), Ψ)
+    # front = @view Ψ[begin:first_nonzero_idx]
+    # front .= range(0, Ψ[first_nonzero_idx]; length=length(front))
 
-    wf_mat = zeros(Complex{Float64}, length(xs), sum(save_locs))
+    # last_nonzero_idx = findfirst(!=(0), Ψ)
+    # back = @view Ψ[last_nonzero_idx:end]
+    # back .= range(Ψ[last_nonzero_idx], 0; length=length(back))
 
-    @info "evolving" length(ts) size(wf_mat)
+    # display(zs)
+    # display(plot(xs, abs2.(zs)))
 
-    wf_mat[:, 1] .= wf_num.(xs)
-    dts = vcat(diff(ts), 0)
+    n_save_points = sum(save_locs)
+    wf_mat = Array{ComplexF64}(undef, length(xs), n_save_points)
 
-    n = length(ts)
+    dx = step(xs)
+    dt = step(ts)
+
     ti = 1
-    for (i, (dt, should_save)) in enumerate(zip(dts, save_locs))
+    for should_save in save_locs
         if should_save
-            wf_mat[:, ti] .= wf_num.(xs)
+            wf_mat[:, ti] .= Ψ
+            _z = Ψ[length(Ψ) ÷ 2]
+            @info "saved" ti n_save_points (abs(_z), angle(_z))
             ti += 1
         end
 
-        fn = sympy_expr_to_fn(stepped(wf_sym(x), dt), :x)
-        wf_num = fn |> FunctionWrapper{ComplexF64,Tuple{ComplexF64}}
-        wf_sym = fn |> FunctionWrapper{Any,Tuple{Any}}
-        @info "progress" "$i/$n" string(stepped(wf_sym(x), dt))
+        step_wf!(Ψ, dx, dt; m=1, xs)
     end
+
+    gr()
 
     return wf_mat
 end
-
-# function plot_frame(
-#     anim::Animation,
-#     wf_arr::AbstractMatrix,
-#     ti::Integer;
-#     L_max::Real,
-#     y_max::Real,
-#     xs::AbstractVector,
-#     ts::AbstractVector,
-#     dpi::Real,
-# )
-#     wf_points = @view wf_arr[:, ti]
-#     p = plot(
-#         xs,
-#         abs2.(wf_points);
-#         xlim=(0, L_max),
-#         ylim=(0, y_max),
-#         lw=2,
-#         legend=false,
-#         xlabel=raw"$x$",
-#         ylabel=raw"$|\psi(x)|^2$",
-#         plot_title="Particle in an infinite well",
-#         dpi,
-#     )
-#     timestamp_str = @sprintf "%.2f" ts[ti]
-#     annotate!((0.15, 0.75), text("t=$timestamp_str", :left, :black))
-
-#     frame(anim, p)
-
-#     return p
-# end
 
 function get_save_path(params::Parameters, extn::AbstractString)
     (; L, μ, p₀, σ) = params
 
     plots_dir = mkpath(joinpath(@__DIR__, "plots"))
-    outfile_basename = @sprintf "anim_L=%.4f_mu=%.4f_p0=%.4f_sigma=%.4f.%s" L μ p₀ σ extn
+    outfile_basename = @sprintf "anim_L=%.2f_mu=%.2f_p0=%.2f_sigma=%.2f.%s" L μ p₀ σ extn
     dst = joinpath(plots_dir, outfile_basename)
 
     return dst
 end
 
-# function save_anim(anim::Animation, params::Parameters; fps)
-#     dst = get_save_path(params, "mp4")
-
-#     @info "saving plot" dst
-#     return mp4(anim, dst; fps)
-# end
-
-# function plot_particle_old(
-#     params::Parameters;
-#     L_max::Real,
-#     n_max=250,
-#     fps=24,
-#     speed=1,
-#     tmax_sec=60,
-#     dx=5e-2,
-#     dpi=144,
-# )::Animation
-#     L = params.L
-
-#     anim = Animation()
-#     n_points = round(Int, L / dx)
-#     xs = range(0, L; length=n_points)
-#     ts = 0:(speed / fps):tmax_sec
-
-#     wf_mat = get_wf_mat(params, xs, ts; n_max)
-#     y_max = maximum(abs2, wf_mat) + 0.5
-
-#     plot_kwargs = (; L_max, y_max, xs, ts, dpi)
-
-#     local last_frame
-#     for ti in 1:length(ts)
-#         last_frame = plot_frame(anim, wf_mat, ti; plot_kwargs...)
-#     end
-
-#     end_pause_sec = 2
-#     n_ending_frames = round(Int, end_pause_sec * fps)
-#     for _ in 1:n_ending_frames
-#         frame(anim, last_frame)
-#     end
-
-#     save_anim(anim, params; fps)
-
-#     return anim
-# end
-
-function default_t_save_locs(ts)
-    chunked = div.(ts, 1e-1)
+function get_t_save_locs(ts::AbstractVector{<:Real}; t_spacing=1e-7)
+    chunked = div.(ts, t_spacing)
     prev_val = minimum(ts) - 1
     mask = falses(size(ts))
 
@@ -235,62 +158,83 @@ function default_t_save_locs(ts)
     return mask
 end
 
-function plot_particle(params::Parameters; dx=0.5, dt=1e-2, n_timesteps=100, dpi=288)
+function get_wf_mat_dimensions(params::Parameters; dx, dt, t_max)
     L = params.L
 
     n_x_points = 1 + round(Int, L / dx)
     xs = range(0, L; length=n_x_points)
-    ts = range(0; step=dt, length=n_timesteps)
-    save_locs = default_t_save_locs(ts)
-    @info "axes" xs
+    ts = range(0, t_max; step=dt)
+    save_locs = get_t_save_locs(ts)
 
+    return (; xs, ts, save_locs)
+end
+
+function get_wf_mat(params::Parameters; dx, dt, t_max)
+    (; xs, ts, save_locs) = get_wf_mat_dimensions(params; dx, dt, t_max)
     wf_mat = get_wf_mat(params, xs, ts, save_locs)
+    return (; wf_mat, xs, ts, save_locs)
+end
 
-    @info "plotting" params size(wf_mat) length(wf_mat)
+function plot_particle(
+    wf_mat::AbstractMatrix{<:Number},
+    xs::AbstractVector{<:Real},
+    ts::AbstractVector{<:Real},
+    save_locs::AbstractVector{<:Bool};
+    params::Parameters,
+)
+    L = params.L
 
-    p = heatmap(
+    p = Plots.heatmap(
         xs,
-        ts,
+        ts[save_locs],
         abs2.(wf_mat)';
-        dpi,
+        title="Probability Density over Space and Time",
         xlabel="𝑥",
         ylabel="𝑡",
-        xticks=0:2:L,
-        title="Probability Density over Space and Time",
-        fontfamily="Helvetica",
+        xticks=[0, L / 2, L],
+        fontfamily="Computer Modern",
     )
-    dst = get_save_path(params, "png")
-    png(p, dst)
 
     return p
 end
 
-# function vlplot_particle(params; n_max=250, dx=1)
-#     L = params.L
+# %%
+params = Parameters(; L=10, μ=5, p₀=5, σ=0.5)
 
-#     n_points = round(Int, L / dx)
-#     xs = range(0, L; length=n_points)
-#     ts = 0:1:100
+(; xs, ts, save_locs) = get_wf_mat_dimensions(params; dx=1e-5, dt=1e-8, t_max=5e-7)
+@info "axes" length(xs) length(ts) length(ts[save_locs])
 
-#     wf_mat = get_wf_mat(params, xs, ts; n_max)
+wf_mat = get_wf_mat(params, xs, ts, save_locs)
 
-#     x_col = vec(xs' .* ones(length(ts)))
-#     t_col = vec((ts' .* ones(length(xs)))')
-#     p_col = vec(abs2.(wf_mat))
+@info "plotting" params wf_mat size(wf_mat) length(wf_mat)
 
-#     df = DataFrame(:x => x_col, :t => t_col, :p => p_col)
-#     show(df)
-#     p = df |> @vlplot(:rect, x = :t, y = :x, color = {field = :p, aggregate = :mean})
-#     VegaLite.savefig(get_save_path(params, "svg"), p)
+fig = plot_particle(wf_mat, xs, ts, save_locs; params)
+dst = get_save_path(params, "png")
+savefig(fig, dst)
 
-#     return p
-# end
+fig
+
+# %%
+
+function plot_particle(params::Parameters; dx, dt, t_max, dpi)
+    (; xs, ts, save_locs) = get_wf_mat_dimensions(params; dx, dt, t_max)
+    @info "axes" length(xs) length(ts) length(ts[save_locs])
+
+    wf_mat = get_wf_mat(params, xs, ts, save_locs)
+
+    @info "plotting" params wf_mat size(wf_mat) length(wf_mat)
+
+    fig = plot_particle(wf_mat, xs, ts, save_locs)
+    dst = get_save_path(params, "png")
+    save(dst, fig)
+    return fig
+end
 
 function plot_all()
     params_vec = Parameters[]
-    for (L, p₀) in Iterators.product([20], [10])
+    for (L, p₀) in Iterators.product([20], [5])
         μ = L / 2
-        σ = L / 2
+        σ = 0.5
         push!(params_vec, Parameters(; L, μ, p₀, σ))
     end
 

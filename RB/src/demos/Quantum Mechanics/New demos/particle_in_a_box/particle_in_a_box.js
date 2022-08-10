@@ -333,7 +333,7 @@ function computeWavefunctionPoints() {
 
 	const dx = L / (N_WAVEFUNCTION_POINTS - 1);
 
-	const baseEnergyTerm = (t * (Math.PI / L) ** 2) / (2 * H_BAR * m);
+	const baseEnergyTerm = (t * (Math.PI / L) ** 2) / (2 * m * H_BAR ** 2);
 
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
 		const zs = [];
