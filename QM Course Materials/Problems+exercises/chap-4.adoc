@@ -74,8 +74,11 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 * {q-num} [Optional] Convert the Laplacian from cartesian coordinates to spherical coordinates.
 
 * {q-num} In this question you will examine some of the constraints on the separation constants ++\(l(l+1)\)++ and ++\(m^2\)++.
-
-* {q-num}
++
+[{sublist-style}]
+.. The solution to the azimuthal differential equation ++\[\frac{d^2\Phi}{d\phi^2} = -m^2 \Phi \]++ is ++\(\Phi(\phi) = e^{im\phi}\)++. Show that ++\(m\)++ must be an integer.
+.. Given the ++\(l\)++th Legendre polynomial, ++\(\displaystyle P_l(x)=\frac{1}{2^l l!}\left(\frac{d}{dx}\right)^l(x^2-1)^l\)++, why must ++\(l\)++ be a non-negative integer?
+.. Explain why ++\(m\le l\)++ using the Legendre function ++\(P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)\)++
 
 * {q-num}
 
