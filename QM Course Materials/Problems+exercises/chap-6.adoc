@@ -1,0 +1,22 @@
+[.qm-chapter.chap-6]
+= Chapter 6: Symmetries and Conservation Laws
+include::shared_attributes.adoc[]
+
+== Introduction
+
+=== Questions
+
+* {q-num} Show that ++\(\hat T(a)\hat\Pi=\hat\Pi\hat T(-a)\)++
++
+.Solution
+[%collapsible]
+====
+We simply compute, using the test function ++\(f\)++:
+++\[\begin{align*}
+\hat T(a)\hat\Pi f(x)&=\hat T(a) f(-x)\\
+&=f(-x-a)\\
+&=\hat\Pi f(x+a)\\
+&=\hat\Pi \hat T(-a)f(x)
+\end{align*}\]++
+as desired.
+====

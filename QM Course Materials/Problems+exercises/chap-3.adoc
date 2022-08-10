@@ -60,7 +60,24 @@ This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\
 So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
 ====
 
-* [[Cauchy-Schwarz,3.1.4]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}\)++, or equivalently ++\(\left|\Braket{x|y}\right|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
+* {q-num} Show that the commutator is linear in its first argument: ++\([aA+bB,C]=a[A,C]+b[B,C]\)++.
+(It is also linear in its second argument; the proof is practically identical.)
++
+.Solution
+[%collapsible]
+====
+Operators don't necessarily commute, but scalars do.
+So,
+++\[\begin{align*}
+[aA+bB,C]&=(aA+bB)C - C(aA+bB)\\
+&=aAC-aCA+bBC-bCB\\
+&=a(AC-CA)+b(BC-CB)\\
+&=a[A,C]+b[B,C]
+\end{align*}\]++
+as desired.
+====
+
+* [[Cauchy-Schwarz,3.1.5]]{q-num} Let's prove the Cauchy-Schwarz Inequality: ++\(\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}\)++, or equivalently ++\(\left|\Braket{x|y}\right|\le \|x\|\|y\|\)++ ("`the magnitude of the inner product is at most the product of the norms.`").
 This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).
 +
 [{sublist-style}]
@@ -311,6 +328,22 @@ Evidently, every nonzero complex number is an eigenvalue.
 If ++\(q=0\)++, then the solutions to ++\(\frac{d^n}{dx^n}f(x)=0\)++ are simply the polynomials of degree at most ++\(n-1\)++.
 
 NOTE: This problem highlights the fact that the eigenfunctions of an operator depend on the _precise_ operator in question; ++\(\frac{d^n}{dx^n}-q\)++ is quite different from ++\(\frac{d^n}{dx^n}\)++ when ++\(q\ne0\)++.
+====
+
+* {q-num} Show that if two (not necessarily hermitian) operators ++\(A\)++ and ++\(B\)++ commute, then, given an eigenfunction ++\(f\)++ of ++\(A\)++ with eigenvalue ++\(\lambda\)++, either ++\(f\)++ is an eigenfunction of ++\(B\)++ or ++\(\lambda\)++ is a degenerate eigenvalue of ++\(A\)++ (i.e., there are at least two linearly independent eigenfunctions of ++\(A\)++ corresponding to ++\(\lambda\)++).
++
+.Solution
+[%collapsible]
+====
+We have:
+++\[\begin{align*}
+A(Bf)&=BAf\\
+&=B(\lambda f)\\
+&=\lambda (Bf)
+\end{align*}\]++
+If ++\(Bf\)++ is a scalar multiple of ++\(f\)++, then by definition ++\(f\)++ is an eigenfunction of ++\(B\)++.
+(We don't know the eigenvalue, but no matter.)
+Otherwise, ++\(Bf\)++ and ++\(f\)++ are linearly independent, and both are eigenfunctions of ++\(A\)++ corresponding to ++\(\lambda\)++, so indeed ++\(\lambda\)++ is degenerate.
 ====
 
 == Generalized Statistical Interpretation

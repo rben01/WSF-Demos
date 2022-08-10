@@ -909,6 +909,26 @@ So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
 </details>
 </li>
 <li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the commutator is linear in its first argument: \([aA+bB,C]=a[A,C]+b[B,C]\).
+(It is also linear in its second argument; the proof is practically identical.)</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Operators don&#8217;t necessarily commute, but scalars do.
+So,
+\[\begin{align*}
+[aA+bB,C]&amp;=(aA+bB)C - C(aA+bB)\\
+&amp;=aAC-aCA+bBC-bCB\\
+&amp;=a(AC-CA)+b(BC-CB)\\
+&amp;=a[A,C]+b[B,C]
+\end{align*}\]
+as desired.</p>
+</div>
+</div>
+</details>
+</li>
+<li>
 <p><a id="Cauchy-Schwarz"></a><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Let&#8217;s prove the Cauchy-Schwarz Inequality: \(\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}\), or equivalently \(\left|\Braket{x|y}\right|\le \|x\|\|y\|\) (&#8220;the magnitude of the inner product is at most the product of the norms.&#8221;).
 This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).</p>
 <div class="olist loweralpha">
@@ -1267,6 +1287,25 @@ This problem highlights the fact that the eigenfunctions of an operator depend o
 </td>
 </tr>
 </table>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that if two (not necessarily hermitian) operators \(A\) and \(B\) commute, then, given an eigenfunction \(f\) of \(A\) with eigenvalue \(\lambda\), either \(f\) is an eigenfunction of \(B\) or \(\lambda\) is a degenerate eigenvalue of \(A\) (i.e., there are at least two linearly independent eigenfunctions of \(A\) corresponding to \(\lambda\)).</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>We have:
+\[\begin{align*}
+A(Bf)&amp;=BAf\\
+&amp;=B(\lambda f)\\
+&amp;=\lambda (Bf)
+\end{align*}\]
+If \(Bf\) is a scalar multiple of \(f\), then by definition \(f\) is an eigenfunction of \(B\).
+(We don&#8217;t know the eigenvalue, but no matter.)
+Otherwise, \(Bf\) and \(f\) are linearly independent, and both are eigenfunctions of \(A\) corresponding to \(\lambda\), so indeed \(\lambda\) is degenerate.</p>
 </div>
 </div>
 </details>
