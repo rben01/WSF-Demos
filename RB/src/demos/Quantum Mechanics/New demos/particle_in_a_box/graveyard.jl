@@ -117,6 +117,23 @@ end
 # display(zs[begin:(begin + 6)])
 # plot(xs, zs)
 
+function norm(zs::AbstractVector{T}, dx::Real) where {T<:Number}
+    acc = zero(T)
+
+    n = length(zs)
+
+    for i in 1:(n - 1)
+        z1 = zs[i]
+        z2 = zs[i + 1]
+
+        z = (z1 + z2) / 2
+
+        acc += abs2(z)
+    end
+
+    return sqrt(acc * dx)
+end
+
 function __get_wf_mat_old(
     params::Parameters,
     xs::AbstractRange{<:Real},
