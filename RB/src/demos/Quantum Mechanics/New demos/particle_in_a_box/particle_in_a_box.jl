@@ -10,7 +10,6 @@ using CairoMakie
 using LaTeXStrings
 
 CairoMakie.activate!(; type="svg")
-
 Infiltrator.toggle_async_check(false)
 
 Base.@kwdef struct Parameters{T<:Real}
@@ -99,7 +98,7 @@ function get_Ψ_mat(params::Parameters, xs::AbstractRange{<:Real}, ts::AbstractR
         # once, and only merge them when they're of similar magnitudes. But that sounds
         # really really really hard and almost certainly not worth it.) \
         #  Again, this depends on cₙs being roughly monotonically decreasing
-        cₙs_sum = sum(Iterators.map(abs2, Iterators.reverse(cₙs)))
+        cₙs_sum = sum(abs2, @view(cₙs[end:-1:begin]))
 
         @info "" cₙs_sum n
         if cₙs_sum > 1 || isapprox(cₙs_sum, 1; atol=1e-5)
@@ -177,45 +176,50 @@ function plot_particle(
 )
     (; L, μ, p₀, σ) = params
 
-    fig_width = 800
-    fig_height = round(
-        Int, 45 + fig_width * (maximum(ts) - minimum(ts)) / (maximum(xs) - minimum(xs))
+    params_title = L"$L = %$L$; $x_0 = %$μ$; $\sigma_0 = %$σ$; $p_0 = %$p₀$"
+
+    fig = Figure(; resolution=(600, 900))
+    ax = Axis(
+        fig[1, :];
+        xlabel=L"x",
+        xaxisposition=:top,
+        xlabelsize=20,
+        ylabel=L"t",
+        ylabelsize=20,
+        yreversed=true,
+        aspect=DataAspect(),
+        title=params_title,
+        titlegap=16,
+        titlesize=20,
     )
 
-    plot_title = L"""
-        Probability Density over Space and Time
-        $L = %$L$; $x_0 = μ$; \$\\sigma_0 = %g\$; \$p_0 = %g\$
-        """
-
-    (fig, ax, p) = Makie.heatmap(
+    Makie.heatmap!(
+        ax,
         @view(xs[begin:x_spacing:end]),
         @view(ts[begin:t_spacing:end]),
         abs2.(@view(wf_mat[begin:x_spacing:end, begin:t_spacing:end]));
-        figure=(; title=plot_title),
-        axis=(; xlabel="𝑥", ylabel="𝑡", aspect=DataAspect(), title=plot_title),
         colormap=:inferno,
+    )
 
-        # size=(fig_width, fig_height),
-        # title=plot_title,
-        # aspect_ratio=:equal,
-        # legend=false,
-        # xaxis=("𝑥", [0, L / 2, L]),
-        # yaxis=("𝑡", :flip),
-        # xmirror=true,
-        # fontfamily="Helvetica",
+    hidedecorations!(ax; label=false, ticklabels=false)
+
+    Label(
+        fig[0, :], "Probability Density Over Space and Time"; textsize=20, tellwidth=false
     )
 
     return fig
 end
 
-(p, m) = collect(saved_mats)[8]
-plot_particle(m, xs, ts; params=p)
-
 # %%
 
-for (μ, p₀, σ) in Iterators.product([10, 20, 30], [0, 2, 5, 10], [1, 2, 5, 10])
+for (μ, p₀, σ) in Iterators.product([10, 20, 30], [0, 2, 5, 10], [1, 2, 5, 10, 15, 20])
     L = 40
     params = Parameters(; L, μ, p₀, σ)
+    dst = get_save_path(params, "pdf")
+
+    if haskey(saved_mats, params) || ispath(dst)
+        continue
+    end
 
     (; xs, ts) = get_wf_mat_dimensions(params; dx=0.05, dt=0.05, t_max=60)
     @info "axes" params length(xs) length(ts)
@@ -224,8 +228,11 @@ for (μ, p₀, σ) in Iterators.product([10, 20, 30], [0, 2, 5, 10], [1, 2, 5, 1
     try
         Ψ_mat = get_Ψ_mat(params, xs, ts)
     catch e
-        @error "Could not get a suitable cₙs_sum quickly enough; skipping" e
-        continue
+        if e isa ConvergenceError
+            @error "Could not get a suitable cₙs_sum quickly enough; skipping" e
+            continue
+        end
+        rethrow()
     end
     saved_mats[params] = Ψ_mat
 
@@ -233,73 +240,8 @@ for (μ, p₀, σ) in Iterators.product([10, 20, 30], [0, 2, 5, 10], [1, 2, 5, 1
 
     fig = plot_particle(Ψ_mat, xs, ts; params)
 
-    dst = get_save_path(params, "svg")
-    savefig(fig, dst)
+    Makie.save(dst, fig)
+    display(fig)
 
-    @info "plotted" params
+    @info "plotted" filename = basename(dst)
 end
-
-# %%
-
-params = Parameters(; L=40, μ=20, p₀=10, σ=10)
-
-(; xs, ts) = get_wf_mat_dimensions(params; dx=0.01, dt=0.01, t_max=60)
-@info "axes" length(xs) length(ts)
-
-Ψ_mat = get_Ψ_mat(params, xs, ts)
-saved_mats[params] = Ψ_mat
-
-@info "plotting" params size(Ψ_mat) length(Ψ_mat)
-
-fig = plot_particle(Ψ_mat, xs, ts; params)
-
-dst = get_save_path(params, "png")
-savefig(fig, dst)
-@info "plotted"
-
-fig
-
-# %%
-
-# function plot_particle(params::Parameters; dx, dt, t_max, dpi)
-#     (; xs, ts, save_locs) = get_wf_mat_dimensions(params; dx, dt, t_max)
-#     @info "axes" length(xs) length(ts) length(ts[save_locs])
-
-#     wf_mat = get_wf_mat(params, xs, ts, save_locs)
-
-#     @info "plotting" params wf_mat size(wf_mat) length(wf_mat)
-
-#     fig = plot_particle(wf_mat, xs, ts, save_locs)
-#     dst = get_save_path(params, "png")
-#     save(dst, fig)
-#     return fig
-# end
-
-# function plot_all()
-#     params_vec = Parameters[]
-#     for (L, p₀) in Iterators.product([20], [5])
-#         μ = L / 2
-#         σ = 0.5
-#         push!(params_vec, Parameters(; L, μ, p₀, σ))
-#     end
-
-#     @info "plotting for parameter combinations" length(params_vec)
-#     for params in params_vec
-#         plot_particle(params)
-#     end
-# end
-
-# @info "#== beginning plotting"
-# plot_all()
-# @info "==# all finished"
-
-# const fontfamily = "Helvetica"
-# const dark_theme = [
-#     :linecolor => colorant"#5df",
-#     :background => colorant"black",
-#     :foreground_color => colorant"white",
-#     :dpi => dpi,
-#     :tickfontsize => 12,
-#     :tickfontfamily => fontfamily,
-#     :guidefontsize => 15,
-# ]
