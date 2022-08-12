@@ -136,7 +136,7 @@ function get_Ψ_mat(params::Parameters, xs::AbstractRange{<:Real}, ts::AbstractR
     n_range = 1:n
 
     ω_coef = (pi^2 * ħ^2) / (2 * m * L^2)
-    ω(n) = n -> n^2 * ω_coef
+    ω(n) = n^2 * ω_coef
 
     wf_mat = zeros(ComplexF64, length(xs), length(ts))
 
