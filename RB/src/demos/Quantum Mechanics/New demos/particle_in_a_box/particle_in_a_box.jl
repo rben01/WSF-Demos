@@ -7,6 +7,8 @@ using CairoMakie
 using LaTeXStrings
 using GLM
 using Logging
+using Colors
+using HDF5
 
 CairoMakie.activate!(; type="svg", px_per_unit=2)
 # Infiltrator.toggle_async_check(false)
@@ -20,9 +22,12 @@ Base.@kwdef struct Parameters
     ħ::Float64 = 1
 end
 
-function get_title(params::Parameters)
+function params_title_latex(params::Parameters)
     (; L, μ, p₀, σ, m) = params
-    return L"$L = %$L$; $x_0 = %$μ$; $\sigma_0 = %$σ$; $p_0 = %$p₀$; $m=%$m$"
+    fmt = Printf.Format(
+        raw"$L = %.3g$; $x_0 = %.3g$; $\sigma_0 = %.3g$; $p_0 = %.3g$; $m=%.3g$"
+    )
+    return latexstring(Printf.format(fmt, L, μ, σ, p₀, m))
 end
 
 struct EigenPair
@@ -37,6 +42,24 @@ end
 Base.size(e::EigenfunctionExpansion) = size(e.eigens)
 Base.IndexStyle(::Type{<:EigenfunctionExpansion}) = IndexStyle(Vector{EigenPair})
 Base.getindex(e::EigenfunctionExpansion, i) = getindex(e.eigens, i)
+
+to_coefs_list(e::EigenfunctionExpansion) = [pair.cₙ for pair in e.eigens]
+function from_coefs_list(::Type{<:EigenfunctionExpansion}, cₙs, params::Parameters)
+    L = params.L
+    eigens = EigenPair[]
+    for (n, cₙ) in enumerate(cₙs)
+        ψₙ = let L = L, n = n
+            x -> sqrt(2 / L) * sin((n * pi / L) * x)
+        end
+        push!(eigens, EigenPair(cₙ, ψₙ))
+    end
+
+    return EigenfunctionExpansion(eigens)
+end
+
+Base.@kwdef struct EigenfunctionExpansionKwargs
+    tol::Float64 = 5e-6
+end
 
 # saved_mats = Dict{Parameters,Matrix{ComplexF64}}()
 
@@ -63,8 +86,6 @@ function get_ψₙ_cache(
     return ψₙCache(mat)
 end
 
-# %%
-
 struct ConvergenceError{T<:Number} <: Exception
     n::Int
     cₙs_sum::T
@@ -77,7 +98,115 @@ inner_product(f::Function, g::Function, x_min::Real, x_max::Real; atol=1e-7) =
 
 norm(f::Function, x_min::Real, x_max::Real) = sqrt(inner_product(f, f, x_min, x_max))
 
-function get_eigenfunction_expansion(params::Parameters; tol=5e-6)
+dataset_name(
+    params::Parameters, eigenfunction_expansion_kwargs::EigenfunctionExpansionKwargs
+) = "$(params)$(eigenfunction_expansion_kwargs)"
+
+function save_eigens(
+    path::AbstractString,
+    eigenfunction_expansion::EigenfunctionExpansion,
+    params::Parameters,
+    eigenfunction_expansion_kwargs::EigenfunctionExpansionKwargs,
+)
+    h5open(path, "cw") do h5io
+        save_eigens(h5io, eigenfunction_expansion, params, eigenfunction_expansion_kwargs)
+    end
+end
+
+function save_eigens(
+    h5io,
+    eigenfunction_expansion::EigenfunctionExpansion,
+    params::Parameters,
+    eigenfunction_expansion_kwargs::EigenfunctionExpansionKwargs,
+)
+    group_name = "eigen_coefs"
+    if !haskey(h5io, group_name)
+        create_group(h5io, group_name)
+    end
+    g = h5io[group_name]
+
+    ds_name = dataset_name(params, eigenfunction_expansion_kwargs)
+    if haskey(g, ds_name)
+        delete_object(g, ds_name)
+    end
+    g[ds_name] = to_coefs_list(eigenfunction_expansion)
+    ds = g[ds_name]
+
+    for (; obj, obj_name) in (
+        (; obj=params, obj_name="params"),
+        (; obj=eigenfunction_expansion_kwargs, obj_name="kwargs"),
+    )
+        for prop_name in propertynames(obj)
+            HDF5.attrs(ds)["$(obj_name).$(prop_name)"] = getproperty(obj, prop_name)
+        end
+    end
+
+    return nothing
+end
+
+function load_eigens(
+    path::AbstractString,
+    params::Parameters,
+    eigenfunction_expansion_kwargs::EigenfunctionExpansionKwargs,
+)
+    h5open(path, "cw") do h5io
+        load_eigens(h5io, params, eigenfunction_expansion_kwargs)
+    end
+end
+
+function load_eigens(
+    h5io, params::Parameters, eigenfunction_expansion_kwargs::EigenfunctionExpansionKwargs
+)
+    local ds
+    try
+        ds_name = dataset_name(params, eigenfunction_expansion_kwargs)
+        ds = h5io["eigen_coefs/$(ds_name)"]
+    catch
+        return nothing
+    end
+
+    for (; obj, obj_name) in (
+        (; obj=params, obj_name="params"),
+        (; obj=eigenfunction_expansion_kwargs, obj_name="kwargs"),
+    )
+        for prop_name in propertynames(obj)
+            existing_value = HDF5.attrs(ds)["$(obj_name).$(prop_name)"]
+            expected_value = getproperty(obj, prop_name)
+            if existing_value != expected_value
+                @warn(
+                    "The dataset corresponding to the provided parameters exists, but its attributes did not match the provided attributes. The existing dataset will be treated as nonexistent.",
+                    attr = "$(obj_name).$(prop_name)",
+                    existing_value,
+                    expected_value
+                )
+                return nothing
+            end
+        end
+    end
+
+    return from_coefs_list(EigenfunctionExpansion, read(ds), params)
+end
+
+function get_eigenfunction_expansion(
+    params::Parameters;
+    cache_file=joinpath(@__DIR__, "eigenfunction_coefficients.h5"),
+    tol=5e-6,
+)
+    kwargs = EigenfunctionExpansionKwargs(; tol)
+    if cache_file !== nothing
+        cached_eigens = load_eigens(cache_file, params, kwargs)
+        if cached_eigens !== nothing
+            return cached_eigens
+        end
+
+        @info(
+            "No cached eigenstuff found in the provided cache_file. Computing from scratch...",
+            cache_file,
+            params,
+            kwargs
+        )
+    end
+
     # Throughout this function, we place closures in blocks `let n = n ... (closure) ...
     # end` for eager evaluation of n in function body; otherwise `n` refers to the variable
     # itself, which both hurts performance and refers to the value of `n` at the time the
@@ -177,7 +306,12 @@ function get_eigenfunction_expansion(params::Parameters; tol=5e-6)
         end
     end
 
-    return EigenfunctionExpansion(eigens)
+    eigenfunction_expansion = EigenfunctionExpansion(eigens)
+    if cache_file !== nothing
+        save_eigens(cache_file, eigenfunction_expansion, params, kwargs)
+    end
+
+    return eigenfunction_expansion
 end
 
 function Ψₜ!(
@@ -193,7 +327,7 @@ function Ψₜ!(
 
     fill!(Ψ, 0)
 
-    for (n, (; cₙ, ψₙ)) in Iterators.reverse(enumerate(eigenfunction_expansion))
+    for (n, (; cₙ)) in Iterators.reverse(enumerate(eigenfunction_expansion))
         ωₙ = n^2 * ω_coef
         Ψ .+= cₙ .* ψₙ_cache[:, n] .* exp(-im * ωₙ * t)
     end
@@ -217,34 +351,59 @@ end
 function get_data_for_plot(
     params::Parameters,
     eigenfunction_expansion::EigenfunctionExpansion;
-    x_step::Real,
+    dx::Real,
     t_max::Real,
     dt::Real,
 )
-    xs = range(0, params.L; step=x_step)
-    Ψ = similar(xs, ComplexF64)
+    xs = range(0, params.L; step=dx)
     ψₙ_cache = get_ψₙ_cache(eigenfunction_expansion, xs)
 
     ts = range(0, t_max; step=dt)
 
-    return (; xs, Ψ, ψₙ_cache, ts)
+    return (; ψₙ_cache, xs, ts)
+end
+
+function get_Ψ_mat(
+    params::Parameters,
+    eigenfunction_expansion::EigenfunctionExpansion,
+    ψₙ_cache::ψₙCache,
+    xs::AbstractVector{<:Real},
+    ts::AbstractVector{<:Real},
+)
+    Ψ_mat = zeros(ComplexF64, length(xs), length(ts))
+    for (ti, t) in enumerate(ts)
+        Ψₜ!(@view(Ψ_mat[:, ti]), params, eigenfunction_expansion, ψₙ_cache, t)
+    end
+
+    return Ψ_mat
 end
 
 function plot_particle_static(
     params::Parameters,
-    eigenfunction_expansion::EigenfunctionExpansion;
-    x_step::Real,
-    t_max::Real,
-    dst=get_save_path(params, "mp4"),
-    dt=0.05,
+    xs::AbstractVector{<:Real},
+    ts::AbstractVector{<:Real},
+    Ψ_mat::Matrix{ComplexF64};
+    dst=nothing,
 )
-    (; xs, Ψ, ψₙ_cache, ts) = get_data_for_plot(
-        params, eigenfunction_expansion; x_step, t_max, dt
+    dst = @something dst get_save_path(params, "pdf")
+
+    width = 600
+    height = round(
+        Int, (width - 100) * ((maximum(ts) - minimum(ts)) / (maximum(xs) - minimum(xs)))
     )
 
-    fig = Figure(; resolution=(600, 900))
+    fig = Figure(; resolution=(width, height))
+
+    Label(
+        fig[1, :],
+        "Probability Density Over Space and Time";
+        textsize=20,
+        tellwidth=false,
+        tellheight=true,
+    )
+
     ax = Axis(
-        fig[1, :];
+        fig[2, :];
         xlabel=L"x",
         xaxisposition=:top,
         xlabelsize=20,
@@ -252,98 +411,215 @@ function plot_particle_static(
         ylabelsize=20,
         yreversed=true,
         aspect=DataAspect(),
-        title=get_title(params),
+        title=params_title_latex(params),
         titlegap=16,
         titlesize=20,
     )
 
-    Makie.heatmap!(
-        ax,
-        xs,
-        ts,
-        abs2.(@view(wf_mat[begin:x_spacing:end, begin:t_spacing:end]));
-        colormap=:inferno,
-    )
-
+    Makie.heatmap!(ax, xs, ts, abs2.(Ψ_mat); colormap=:inferno)
     hidedecorations!(ax; label=false, ticklabels=false)
 
-    Label(
-        fig[0, :], "Probability Density Over Space and Time"; textsize=20, tellwidth=false
-    )
+    if dst != false
+        Makie.save(dst, fig)
+    end
 
     return fig
 end
 
-function plot_particle_video(params::Parameters; x_step::Real, t_max::Real, kwargs...)
-    return plot_particle_video(
-        params, get_eigenfunction_expansion(params); x_step, t_max, kwargs...
+function plot_particle_static(
+    params::Parameters,
+    eigenfunction_expansion::EigenfunctionExpansion;
+    dx::Real,
+    t_max::Real,
+    dst=nothing,
+    dt=0.05,
+)
+    (; ψₙ_cache, xs, ts) = get_data_for_plot(params, eigenfunction_expansion; dx, t_max, dt)
+
+    Ψ_mat = get_Ψ_mat(params, eigenfunction_expansion, ψₙ_cache, xs, ts)
+
+    return plot_particle_static(params, xs, ts, Ψ_mat; dst)
+end
+
+function plot_particle_video(
+    params::Parameters,
+    xs::AbstractVector{<:Real},
+    ts::AbstractVector{<:Real},
+    Ψ_mat::Matrix{ComplexF64};
+    dst=nothing,
+    framerate=60,
+    y_lim=0.4,
+)
+    dst = @something dst get_save_path(params, "mp4")
+
+    L = params.L
+
+    zero_vec = zeros(Float64, size(xs))
+    one_vec = ones(Float64, size(xs))
+
+    ti = Observable(1)
+    time = @lift ts[$ti]
+
+    fig = Figure(; resolution=(800, 1400))
+
+    Label(fig[1, :], params_title_latex(params); tellwidth=false, textsize=32)
+
+    Label(
+        fig[2, :], @lift(latexstring(@sprintf "t=%.2f" $time)); tellwidth=false, textsize=24
     )
+
+    axis_label_fontsize = 30
+
+    ax2D = Axis(
+        fig[4, :];
+        xlabel=L"x",
+        xaxisposition=:bottom,
+        xlabelsize=axis_label_fontsize,
+        xgridvisible=true,
+        ylabel=L"|\Psi|^2",
+        ylabelsize=axis_label_fontsize,
+        ygridvisible=false,
+        limits=((0, L), (0, 0.31)),
+    )
+
+    hidexdecorations!(ax2D; label=false)
+    hideydecorations!(ax2D; label=false)
+
+    band_objs2D = band!(ax2D, xs, zero_vec, zero_vec; color="#007AC511")
+    line_objs2D = lines!(ax2D, xs, zero_vec)
+
+    Ψ_max_extent_3D = 0.5
+    ax3 = Axis3(
+        fig[3, :];
+        aspect=(2, 1, 1),
+        elevation=0.15 * pi,
+        azimuth=-0.4 * pi,
+        viewmode=:fitzoom,
+        perspectiveness=0.2,
+        xlabel=L"x",
+        xlabelsize=axis_label_fontsize,
+        ylabel=L"Re$(\Psi)$",
+        ylabelsize=axis_label_fontsize,
+        zlabel=L"Im$(\Psi)$",
+        zlabelsize=axis_label_fontsize,
+        protrusions=(0, 100, 0, 0), # (l,r,b,t) right protrusion for the z-axis label
+        backgroundcolor=colorant"black",
+        limits=((0, L), Ψ_max_extent_3D .* (-1, 1), Ψ_max_extent_3D .* (-1, 1)),
+    )
+
+    hidedecorations!(ax3; grid=false, label=false)
+
+    blue = RGBf(0.0, 0.447059, 0.698039)
+    light_blue = Colors.weighted_color_mean(0.3, blue, colorant"white")
+
+    Ψ_3D_wf_ = lines!(ax3, xs, zero_vec, zero_vec; color=blue)
+    Ψ_3D_re_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
+    Ψ_3D_im_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
+    Ψ_3D_angle_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
+
+    # band_objs[2] is the band's upper line, line_objs[1] is the (sole) line
+    paths_2D = (band_objs2D[2], line_objs2D[1])
+    (Ψ_3D_wf, Ψ_3D_re, Ψ_3D_im, Ψ_3D_angle) = (
+        ls[1] for ls in (Ψ_3D_wf_, Ψ_3D_re_, Ψ_3D_im_, Ψ_3D_angle_)
+    )
+
+    on(ti) do i
+        Ψ = @view Ψ_mat[:, i]
+
+        for path in paths_2D
+            path[] .= eltype(path[]).(xs, abs2.(Ψ))
+        end
+
+        Ψ_re = real.(Ψ)
+        Ψ_im = imag.(Ψ)
+
+        Ψ_3D_wf[] .= eltype(Ψ_3D_wf[]).(xs, Ψ_re, Ψ_im)
+        Ψ_3D_re[] .= eltype(Ψ_3D_re[]).(xs, Ψ_re, one_vec .* -Ψ_max_extent_3D)
+        Ψ_3D_im[] .= eltype(Ψ_3D_im[]).(xs, one_vec .* Ψ_max_extent_3D, Ψ_im)
+        Ψ_3D_angle[] .= eltype(Ψ_3D_angle[]).(zero_vec, Ψ_re, Ψ_im)
+    end
+
+    rowsize!(fig.layout, 1, Auto())
+    rowsize!(fig.layout, 2, Auto())
+    rowsize!(fig.layout, 3, Auto(1.5))
+    rowsize!(fig.layout, 4, Auto())
+
+    trim!(fig.layout)
+
+    record(fig, dst, 1:length(ts); framerate) do i
+        ti[] = i
+    end
+
+    return fig
 end
 
 function plot_particle_video(
     params::Parameters,
     eigenfunction_expansion::EigenfunctionExpansion;
-    x_step::Real,
+    dx::Real,
     t_max::Real,
-    dst=get_save_path(params, "mp4"),
     framerate=60,
     speed=1,
+    kwargs...,
 )
-    framerate = @something framerate 60
+    dt = speed / framerate
 
-    L = params.L
-    time = Observable(0.0)
+    (; ψₙ_cache, xs, ts) = get_data_for_plot(params, eigenfunction_expansion; dx, t_max, dt)
 
-    fig = Figure(; resolution=(900, 600))
-    ax = Axis(
-        fig[1, :];
-        xlabel=L"x",
-        xaxisposition=:bottom,
-        xlabelsize=20,
-        xgridvisible=false,
-        ylabel=L"|\Psi|^2",
-        ylabelsize=20,
-        ygridvisible=false,
-        titlegap=16,
-        titlesize=24,
-        title=get_title(params),
-        subtitle=@lift(latexstring(@sprintf "t=%.2f" $time)),
-        subtitlesize=18,
-    )
-    xlims!(ax, (0, params.L))
-    ylims!(ax, (0, 0.4))
+    Ψ_mat = get_Ψ_mat(params, eigenfunction_expansion, ψₙ_cache, xs, ts)
 
-    hidexdecorations!(ax; label=false)
-    hideydecorations!(ax; label=false)
-
-    ts = range(0, t_max; step=speed / framerate)
-
-    zero_vec = zeros(Float64, size(xs))
-
-    band_objs = band!(ax, xs, zero_vec, zero_vec; color="#007AC511")
-    line_objs = lines!(ax, xs, zero_vec)
-
-    # band_objs[2] is the band's upper line, line_objs[1] is the (sole) line
-    paths = (band_objs[2], line_objs[1])
-    on(time) do t
-        Ψₜ!(Ψ, params, eigenfunction_expansion, ψₙ_cache, t)
-        for path in paths
-            path[] .= eltype(path[]).(xs, abs2.(Ψ))
-        end
-    end
-
-    record(fig, dst, ts; framerate) do t
-        time[] = t
-    end
-
-    return fig
+    return plot_particle_video(params::Parameters, xs, ts, Ψ_mat; framerate, kwargs...)
 end
 
 # %%
 
-params = Parameters(; L=40, μ=20, σ=5, p₀=5, m=2)
-eigens = get_eigenfunction_expansion(params)
+params = Parameters(; L=80, μ=40, σ=15, p₀=4, m=0.5)
+eigens = get_eigenfunction_expansion(params; tol=1e-6)
+
+# %%
+plot_particle_static(params, eigens; dx=1, t_max=400, dst=false, dt=1)
+
+# %%
+plot_particle_video(params, eigens; dx=0.01, t_max=400, speed=6, framerate=60)
+
+# %%
+# L = 40
+# xs = range(0, L; step=0.1)
+# ts = range(0, 100; step=0.1)
+# ψₙ_cache = get_ψₙ_cache(eigens, xs)
+# Ψ_mat = get_Ψ_mat(params, eigens, ψₙ_cache, xs, ts)
 
 # %%
 
-plot_particle_video(params, eigens; x_step=0.005, t_max=500, speed=3, framerate=60)
+function get_eigens(h5io, params)
+    group_name = "eigen_coefs"
+    if !haskey(h5io, group_name)
+        create_group(h5io, group_name)
+    end
+end
+
+h5open(joinpath(@__DIR__, "eigenfunction_coefficients.h5"), "cw") do h5io
+    group_name = "eigen_coefs"
+    if !haskey(h5io, group_name)
+        create_group(h5io, group_name)
+    end
+
+    g = h5io["eigen_coefs"]
+
+    ds_name = string(params)
+    if haskey(g, ds_name)
+        delete_object(g, ds_name)
+    end
+    g[ds_name] = to_coefs_list(eigens)
+    ds = g[ds_name]
+
+    for prop_name in propertynames(params)
+        # write_attribute(ds, string(prop_name),)
+        HDF5.attrs(ds)[string(prop_name)] = getproperty(params, prop_name)
+    end
+end
+
+# %%
+h5open(joinpath(@__DIR__, "eigenfunction_coefficients.h5"), "cw") do h5io
+    load_eigens(h5io, params)
+end
