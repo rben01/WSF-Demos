@@ -10,7 +10,7 @@ using Logging
 using Colors
 using HDF5
 
-CairoMakie.activate!(; type="svg", px_per_unit=2)
+CairoMakie.activate!(; type="png", px_per_unit=2)
 # Infiltrator.toggle_async_check(false)
 
 Base.@kwdef struct Parameters
@@ -329,7 +329,7 @@ function Ψₜ!(
 
     for (n, (; cₙ)) in Iterators.reverse(enumerate(eigenfunction_expansion))
         ωₙ = n^2 * ω_coef
-        Ψ .+= cₙ .* ψₙ_cache[:, n] .* exp(-im * ωₙ * t)
+        Ψ .+= cₙ .* @view(ψₙ_cache[:, n]) .* exp(-im * ωₙ * t)
     end
 
     return nothing
@@ -449,8 +449,9 @@ function plot_particle_video(
     dst=nothing,
     framerate=60,
     y_lim=0.4,
+    format="mp4",
 )
-    dst = @something dst get_save_path(params, "mp4")
+    dst = @something dst get_save_path(params, format)
 
     L = params.L
 
@@ -459,6 +460,10 @@ function plot_particle_video(
 
     ti = Observable(1)
     time = @lift ts[$ti]
+    Ψ = @lift @view(Ψ_mat[:, $ti])
+    Ψ² = @lift abs2.($Ψ)
+    Ψ_re = @lift real.($Ψ)
+    Ψ_im = @lift imag.($Ψ)
 
     fig = Figure(; resolution=(800, 1400))
 
@@ -479,14 +484,16 @@ function plot_particle_video(
         ylabel=L"|\Psi|^2",
         ylabelsize=axis_label_fontsize,
         ygridvisible=false,
-        limits=((0, L), (0, 0.31)),
+        limits=((0, L), (0, y_lim)),
     )
 
     hidexdecorations!(ax2D; label=false)
     hideydecorations!(ax2D; label=false)
 
-    band_objs2D = band!(ax2D, xs, zero_vec, zero_vec; color="#007AC511")
-    line_objs2D = lines!(ax2D, xs, zero_vec)
+    # filled 2D area under wavefunction
+    band!(ax2D, xs, Ψ², zero_vec; color="#007AC511")
+    # 1D wavefunction curve itself
+    lines!(ax2D, xs, Ψ²)
 
     Ψ_max_extent_3D = 0.5
     ax3 = Axis3(
@@ -504,7 +511,9 @@ function plot_particle_video(
         zlabelsize=axis_label_fontsize,
         protrusions=(0, 100, 0, 0), # (l,r,b,t) right protrusion for the z-axis label
         backgroundcolor=colorant"black",
-        limits=((0, L), Ψ_max_extent_3D .* (-1, 1), Ψ_max_extent_3D .* (-1, 1)),
+        limits=let xlim = (0, L), yzlim = Ψ_max_extent_3D .* (-1, 1)
+            (xlim, yzlim, yzlim)
+        end,
     )
 
     hidedecorations!(ax3; grid=false, label=false)
@@ -512,32 +521,16 @@ function plot_particle_video(
     blue = RGBf(0.0, 0.447059, 0.698039)
     light_blue = Colors.weighted_color_mean(0.3, blue, colorant"white")
 
-    Ψ_3D_wf_ = lines!(ax3, xs, zero_vec, zero_vec; color=blue)
-    Ψ_3D_re_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
-    Ψ_3D_im_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
-    Ψ_3D_angle_ = lines!(ax3, xs, zero_vec, zero_vec; color=light_blue)
+    # Draw the three "shadows" on the xy, xz, and yz planes
+    # angular shadow (on yz plane)
+    lines!(ax3, zero_vec, Ψ_re, Ψ_im; color=light_blue)
+    # real part shadow (on xy plane)
+    lines!(ax3, xs, Ψ_re, one_vec .* -Ψ_max_extent_3D; color=light_blue)
+    # imag part shadow (on xz plane)
+    lines!(ax3, xs, one_vec .* Ψ_max_extent_3D, Ψ_im, ; color=light_blue)
 
-    # band_objs[2] is the band's upper line, line_objs[1] is the (sole) line
-    paths_2D = (band_objs2D[2], line_objs2D[1])
-    (Ψ_3D_wf, Ψ_3D_re, Ψ_3D_im, Ψ_3D_angle) = (
-        ls[1] for ls in (Ψ_3D_wf_, Ψ_3D_re_, Ψ_3D_im_, Ψ_3D_angle_)
-    )
-
-    on(ti) do i
-        Ψ = @view Ψ_mat[:, i]
-
-        for path in paths_2D
-            path[] .= eltype(path[]).(xs, abs2.(Ψ))
-        end
-
-        Ψ_re = real.(Ψ)
-        Ψ_im = imag.(Ψ)
-
-        Ψ_3D_wf[] .= eltype(Ψ_3D_wf[]).(xs, Ψ_re, Ψ_im)
-        Ψ_3D_re[] .= eltype(Ψ_3D_re[]).(xs, Ψ_re, one_vec .* -Ψ_max_extent_3D)
-        Ψ_3D_im[] .= eltype(Ψ_3D_im[]).(xs, one_vec .* Ψ_max_extent_3D, Ψ_im)
-        Ψ_3D_angle[] .= eltype(Ψ_3D_angle[]).(zero_vec, Ψ_re, Ψ_im)
-    end
+    # wf itself goes last so that it has the highest z-index (closest to viewer)
+    lines!(ax3, xs, Ψ_re, Ψ_im; color=blue)
 
     rowsize!(fig.layout, 1, Auto())
     rowsize!(fig.layout, 2, Auto())
@@ -573,14 +566,25 @@ end
 
 # %%
 
-params = Parameters(; L=80, μ=40, σ=15, p₀=4, m=0.5)
+params = Parameters(; L=80, μ=40, σ=8, p₀=3, m=5)
 eigens = get_eigenfunction_expansion(params; tol=1e-6)
 
 # %%
-plot_particle_static(params, eigens; dx=1, t_max=400, dst=false, dt=1)
+plot_particle_static(params, eigens; dx=0.1, t_max=1000, dst=false, dt=0.1)
 
 # %%
-plot_particle_video(params, eigens; dx=0.01, t_max=400, speed=6, framerate=60)
+plot_particle_video(
+    params, eigens; dx=0.1, t_max=3000, speed=30, framerate=24, format="mp4"
+)
+
+# %%
+plot_particle_video(
+    params, eigens; dx=0.05, t_max=500, speed=15, framerate=60, format="mp4"
+)
+
+# %%
+
+Makie.record
 
 # %%
 # L = 40
@@ -588,38 +592,3 @@ plot_particle_video(params, eigens; dx=0.01, t_max=400, speed=6, framerate=60)
 # ts = range(0, 100; step=0.1)
 # ψₙ_cache = get_ψₙ_cache(eigens, xs)
 # Ψ_mat = get_Ψ_mat(params, eigens, ψₙ_cache, xs, ts)
-
-# %%
-
-function get_eigens(h5io, params)
-    group_name = "eigen_coefs"
-    if !haskey(h5io, group_name)
-        create_group(h5io, group_name)
-    end
-end
-
-h5open(joinpath(@__DIR__, "eigenfunction_coefficients.h5"), "cw") do h5io
-    group_name = "eigen_coefs"
-    if !haskey(h5io, group_name)
-        create_group(h5io, group_name)
-    end
-
-    g = h5io["eigen_coefs"]
-
-    ds_name = string(params)
-    if haskey(g, ds_name)
-        delete_object(g, ds_name)
-    end
-    g[ds_name] = to_coefs_list(eigens)
-    ds = g[ds_name]
-
-    for prop_name in propertynames(params)
-        # write_attribute(ds, string(prop_name),)
-        HDF5.attrs(ds)[string(prop_name)] = getproperty(params, prop_name)
-    end
-end
-
-# %%
-h5open(joinpath(@__DIR__, "eigenfunction_coefficients.h5"), "cw") do h5io
-    load_eigens(h5io, params)
-end
