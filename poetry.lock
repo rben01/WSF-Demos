@@ -206,10 +206,10 @@ six = ">=1.9"
 webencodings = "*"
 
 [package.extras]
-all = ["genshi", "chardet (>=2.2)", "lxml"]
-chardet = ["chardet (>=2.2)"]
-genshi = ["genshi"]
 lxml = ["lxml"]
+genshi = ["genshi"]
+chardet = ["chardet (>=2.2)"]
+all = ["lxml", "chardet (>=2.2)", "genshi"]
 
 [[package]]
 name = "idna"
@@ -521,8 +521,8 @@ optional = false
 python-versions = "*"
 
 [package.extras]
-develop = ["pytest (>=4.6)", "pycodestyle", "pytest-cov", "codecov", "wheel"]
 tests = ["pytest (>=4.6)"]
+develop = ["wheel", "codecov", "pytest-cov", "pycodestyle", "pytest (>=4.6)"]
 
 [[package]]
 name = "mypy"
@@ -568,7 +568,7 @@ test = ["black", "check-manifest", "flake8", "ipykernel", "ipython (<8.0.0)", "i
 
 [[package]]
 name = "nbconvert"
-version = "6.5.0"
+version = "6.5.1"
 description = "Converting Jupyter Notebooks"
 category = "dev"
 optional = false
@@ -582,6 +582,7 @@ entrypoints = ">=0.2.2"
 jinja2 = ">=3.0"
 jupyter-core = ">=4.7"
 jupyterlab-pygments = "*"
+lxml = "*"
 MarkupSafe = ">=2.0"
 mistune = ">=0.8.1,<2"
 nbclient = ">=0.5.0"
@@ -915,7 +916,7 @@ python-versions = ">=3.7"
 packaging = "*"
 
 [package.extras]
-test = ["pytest (>=6,!=7.0.0,!=7.0.1)", "pytest-cov (>=3.0.0)", "pytest-qt"]
+test = ["pytest-qt", "pytest-cov (>=3.0.0)", "pytest (>=6,!=7.0.0,!=7.0.1)"]
 
 [[package]]
 name = "requests"
@@ -1031,8 +1032,8 @@ python-versions = ">=3.6"
 webencodings = ">=0.4"
 
 [package.extras]
-doc = ["sphinx", "sphinx-rtd-theme"]
-test = ["pytest", "pytest-cov", "pytest-flake8", "pytest-isort", "coverage"]
+test = ["coverage", "pytest-isort", "pytest-flake8", "pytest-cov", "pytest"]
+doc = ["sphinx-rtd-theme", "sphinx"]
 
 [[package]]
 name = "tomli"
@@ -1402,7 +1403,6 @@ lxml = [
     {file = "lxml-4.9.1-cp27-cp27m-win_amd64.whl", hash = "sha256:4cfbe42c686f33944e12f45a27d25a492cc0e43e1dc1da5d6a87cbcaf2e95627"},
     {file = "lxml-4.9.1-cp27-cp27mu-manylinux_2_5_i686.manylinux1_i686.whl", hash = "sha256:dad7b164905d3e534883281c050180afcf1e230c3d4a54e8038aa5cfcf312b84"},
     {file = "lxml-4.9.1-cp27-cp27mu-manylinux_2_5_x86_64.manylinux1_x86_64.whl", hash = "sha256:a614e4afed58c14254e67862456d212c4dcceebab2eaa44d627c2ca04bf86837"},
-    {file = "lxml-4.9.1-cp310-cp310-macosx_10_15_universal2.whl", hash = "sha256:49a866923e69bc7da45a0565636243707c22752fc38f6b9d5c8428a86121022c"},
     {file = "lxml-4.9.1-cp310-cp310-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_24_i686.whl", hash = "sha256:f9ced82717c7ec65a67667bb05865ffe38af0e835cdd78728f1209c8fffe0cad"},
     {file = "lxml-4.9.1-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.manylinux_2_24_aarch64.whl", hash = "sha256:d9fc0bf3ff86c17348dfc5d322f627d78273eba545db865c3cd14b3f19e57fa5"},
     {file = "lxml-4.9.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.manylinux_2_24_x86_64.whl", hash = "sha256:e5f66bdf0976ec667fc4594d2812a00b07ed14d1b44259d19a41ae3fff99f2b8"},
@@ -1591,8 +1591,8 @@ nbclient = [
     {file = "nbclient-0.6.6.tar.gz", hash = "sha256:0df76a7961d99a681b4796c74a1f2553b9f998851acc01896dce064ad19a9027"},
 ]
 nbconvert = [
-    {file = "nbconvert-6.5.0-py3-none-any.whl", hash = "sha256:c56dd0b8978a1811a5654f74c727ff16ca87dd5a43abd435a1c49b840fcd8360"},
-    {file = "nbconvert-6.5.0.tar.gz", hash = "sha256:223e46e27abe8596b8aed54301fadbba433b7ffea8196a68fd7b1ff509eee99d"},
+    {file = "nbconvert-6.5.1-py3-none-any.whl", hash = "sha256:0a3e224ee753ac4dceeb0257c4a315c069dcc6f9f4ae0ad15c5ea84713d15e28"},
+    {file = "nbconvert-6.5.1.tar.gz", hash = "sha256:2c01f3f518fee736c3d3f999dd20e0a16febba17a0d60a3b0fd28fbdec14115d"},
 ]
 nbformat = [
     {file = "nbformat-5.4.0-py3-none-any.whl", hash = "sha256:0d6072aaec95dddc39735c144ee8bbc6589c383fb462e4058abc855348152dad"},
