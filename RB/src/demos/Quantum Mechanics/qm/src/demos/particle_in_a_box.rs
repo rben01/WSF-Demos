@@ -2,12 +2,12 @@
 
 use crate::constants::{HBAR, PI};
 use ndarray::prelude::*;
-use num::{complex::ComplexFloat, NumCast};
+use num::{complex::ComplexFloat, NumCast, Zero};
 use peroxide::numerical::integral::{integrate, Integral};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
 
-const QUAD_METHOD: Integral = Integral::G20K41(1e-6);
+const QUAD_METHOD: Integral = Integral::G30K61(1e-12);
 
 type Real = f64;
 type Complex = num::Complex<Real>;
@@ -35,14 +35,14 @@ impl Parameters {
 	}
 }
 
-fn ψ_n(x: Real, n: usize, L: Real) -> Real {
+fn get_ψ_n(x: Real, n: usize, L: Real) -> Real {
 	let n = <Real as NumCast>::from(n)
 		.unwrap_or_else(|| panic!("could not convert usize {:?} to a f64", n));
 
-	(2.0 / L).sqrt() * (n * PI * x / L)
+	(2.0 / L).sqrt() * (n * PI * x / L).sin()
 }
 
-fn inner_product<S, T, F, G>(f: F, g: G, (a, b): (Real, Real)) -> Complex
+fn inner_product<S, T, F, G>(f: F, g: G, interval: (Real, Real)) -> Complex
 where
 	S: Into<Complex>,
 	T: Into<Complex>,
@@ -50,8 +50,8 @@ where
 	G: Fn(Real) -> T,
 {
 	let integrand = |x| -> Complex { f(x).into().conj() * g(x).into() };
-	let integral_re = integrate(|x| integrand(x).re, (a, b), QUAD_METHOD);
-	let integral_im = integrate(|x| integrand(x).im, (a, b), QUAD_METHOD);
+	let integral_re = integrate(|x| integrand(x).re, interval, QUAD_METHOD);
+	let integral_im = integrate(|x| integrand(x).im, interval, QUAD_METHOD);
 
 	Complex::new(integral_re, integral_im)
 }
@@ -87,31 +87,35 @@ impl EigenfunctionCoefficients {
 			σ_0,
 			m: _,
 		} = params;
+		let L = *L;
 
-		let interval = (0.0, *L);
+		let interval = (0.0, L);
 
+		let ψ_norm_factor = (σ_0 * (2.0 * PI).sqrt()).sqrt();
 		let ψ_unnormed = |x: Real| {
-			let norm_factor = (σ_0 * (2.0 * PI).sqrt()).sqrt();
 			Complex::new(-0.25 * ((x - μ_0) / σ_0).powi(2), p_0 * (x - μ_0) / HBAR).exp()
-				/ norm_factor
+				/ ψ_norm_factor
 		};
 
 		let initial_norm = norm(ψ_unnormed, interval);
 		let ψ = |x| ψ_unnormed(x) / initial_norm;
 
-		if (norm(ψ, interval) - 1.0).abs() >= 1e-6 {
-			panic!(
-				"\\Psi did not have a norm near 1; its norm was {:?}",
-				norm(ψ, interval)
-			)
+		{
+			let ψ_norm = norm(ψ, interval);
+			if (ψ_norm - 1.0).abs() >= 1e-6 {
+				panic!(
+					"\\Psi did not have a norm near 1; its norm was {:?}",
+					ψ_norm
+				)
+			}
 		}
 
 		let mut eigen_coefs = Vec::new();
 
-		let max_n_allowed = 1000_usize;
+		let max_n_allowed = 2000_usize;
 
 		for n in 1..=max_n_allowed {
-			let ψ_n = |x| ψ_n(x, n, *L);
+			let ψ_n = |x| get_ψ_n(x, n, L);
 			let cn = inner_product(ψ_n, ψ, interval);
 			eigen_coefs.push(cn)
 		}
@@ -126,6 +130,9 @@ impl EigenfunctionCoefficients {
 pub struct WavefunctionInitialConditions {
 	params: Parameters,
 	eigen_coefs: EigenfunctionCoefficients,
+	/// A matrix with `n_max` rows and `xs.len()` columns. Row `n-1` is the result of
+	/// `psi_n` on `xs` (since rows go from 0 to n_max-1 but n goes from 1 to n_max).
+	/// Column `c` is the result of all psi_n's on `xs[c]`.
 	ψ_n_cache: Array2<Real>,
 }
 
@@ -137,14 +144,12 @@ impl WavefunctionInitialConditions {
 		let n_max = eigen_coefs.len();
 		let mut ψ_n_cache = Array2::zeros((n_max, xs.len()));
 
-		// Fill ψ_n_cache; `n_max` rows and `xs.len()` columns. Row `n-1` is the result of
-		// `psi_n` on `xs` (since rows go from 0 to n_max-1 but n goes from 1 to n_max).
-		// Column `c` is the result of all psi_n's on `xs[c]`.
+		// Fill ψ_n_cache
 		for i in 0..n_max {
 			let n = i + 1;
 			let mut row_n = ψ_n_cache.index_axis_mut(Axis(0), i);
 			row_n.zip_mut_with(&ArrayView1::from(xs), |elem, &x| {
-				*elem = ψ_n(x, n, params.L)
+				*elem = get_ψ_n(x, n, params.L)
 			});
 		}
 
@@ -195,6 +200,7 @@ impl Wavefunction {
 		let EigenfunctionCoefficients { eigen_coefs } = &eigen_coefs;
 
 		let Ψ_t = &mut self.Ψ_t;
+		Ψ_t.fill(Complex::zero());
 
 		let Parameters { L, m, .. } = params;
 		let ω_coef = (PI * HBAR / L).powi(2) / (2.0 * m);
@@ -204,11 +210,16 @@ impl Wavefunction {
 			let n_sq = <Real as NumCast>::from(n.pow(2))
 				.unwrap_or_else(|| panic!("could not convert {:?} to f64", n.pow(2)));
 			let ω_n = n_sq * ω_coef;
+			let coef = c_n * (-Complex::i() * ω_n * t).exp();
 
 			Ψ_t.zip_mut_with(&ψ_n_cache.index_axis(Axis(0), i), |elem, &ψ_n_val| {
-				*elem += c_n * ψ_n_val * (-Complex::i() * ω_n * t).exp();
+				*elem += coef * ψ_n_val;
 			})
 		}
+	}
+
+	pub fn tick(&mut self, dt: Real) {
+		self.set_t(self.t + dt)
 	}
 
 	pub fn curr_t(&self) -> Real {
