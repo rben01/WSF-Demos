@@ -130,33 +130,20 @@ impl EigenfunctionCoefficients {
 pub struct WavefunctionInitialConditions {
 	params: Parameters,
 	eigen_coefs: EigenfunctionCoefficients,
-	/// A matrix with `n_max` rows and `xs.len()` columns. Row `n-1` is the result of
-	/// `psi_n` on `xs` (since rows go from 0 to n_max-1 but n goes from 1 to n_max).
-	/// Column `c` is the result of all psi_n's on `xs[c]`.
-	ψ_n_cache: Array2<Real>,
+	xs: Array1<Real>,
 }
 
 #[wasm_bindgen]
 impl WavefunctionInitialConditions {
-	pub fn new(params: &Parameters, xs: &[Real]) -> Self {
+	pub fn new(params: &Parameters, xs: Vec<Real>) -> Self {
 		let params = params.clone();
 		let eigen_coefs = EigenfunctionCoefficients::new(&params, 1e-6);
-		let n_max = eigen_coefs.len();
-		let mut ψ_n_cache = Array2::zeros((n_max, xs.len()));
-
-		// Fill ψ_n_cache
-		for i in 0..n_max {
-			let n = i + 1;
-			let mut row_n = ψ_n_cache.index_axis_mut(Axis(0), i);
-			row_n.zip_mut_with(&ArrayView1::from(xs), |elem, &x| {
-				*elem = get_ψ_n(x, n, params.L)
-			});
-		}
+		let xs = Array1::from(xs);
 
 		Self {
 			params,
 			eigen_coefs,
-			ψ_n_cache,
+			xs,
 		}
 	}
 
@@ -168,19 +155,30 @@ impl WavefunctionInitialConditions {
 #[wasm_bindgen]
 pub struct Wavefunction {
 	init_conds: WavefunctionInitialConditions,
-	Ψ_t: Array1<Complex>,
+	angle_cache: Array1<Complex>,
+	ω_coef: Real,
 	t: Real,
+	Ψ_t: Array1<Complex>,
 }
 
 #[wasm_bindgen]
 impl Wavefunction {
-	pub fn new(params: &Parameters, xs: &[Real]) -> Self {
+	pub fn new(params: &Parameters, xs: Vec<Real>) -> Self {
 		let Ψ_t = Array1::zeros((xs.len(),));
 		let init_conds = WavefunctionInitialConditions::new(params, xs);
+		let angle_cache = Array1::zeros((init_conds.eigen_coefs.len(),));
+
+		let ω_coef = {
+			let Parameters { L, m, .. } = params;
+			(PI * HBAR / L).powi(2) / (2.0 * m)
+		};
+
 		let mut wf = Self {
 			init_conds,
-			Ψ_t,
+			angle_cache,
+			ω_coef,
 			t: 0.0,
+			Ψ_t,
 		};
 
 		wf.set_t(0.0);
@@ -191,31 +189,48 @@ impl Wavefunction {
 	pub fn set_t(&mut self, t: Real) {
 		self.t = t;
 
-		let WavefunctionInitialConditions {
-			params,
-			eigen_coefs,
-			ψ_n_cache,
-			..
-		} = &self.init_conds;
-		let EigenfunctionCoefficients { eigen_coefs } = &eigen_coefs;
+		let Self {
+			init_conds,
+			angle_cache,
+			ω_coef,
+			Ψ_t,
+			t: _,
+		} = self;
 
-		let Ψ_t = &mut self.Ψ_t;
+		let init_conds = &*init_conds;
+		let ω_coef = *ω_coef;
+		let n_max = init_conds.n_max();
+
+		let WavefunctionInitialConditions {
+			params: Parameters { L, .. },
+			eigen_coefs: EigenfunctionCoefficients { eigen_coefs },
+			xs,
+			..
+		} = init_conds;
+
+		let L = *L;
+
 		Ψ_t.fill(Complex::zero());
 
-		let Parameters { L, m, .. } = params;
-		let ω_coef = (PI * HBAR / L).powi(2) / (2.0 * m);
-
-		for (i, c_n) in (0..self.init_conds.n_max()).zip(eigen_coefs.iter()).rev() {
+		for i in 0..n_max {
 			let n = i + 1;
+			let c_n = eigen_coefs[i];
 			let n_sq = <Real as NumCast>::from(n.pow(2))
 				.unwrap_or_else(|| panic!("could not convert {:?} to f64", n.pow(2)));
 			let ω_n = n_sq * ω_coef;
-			let coef = c_n * (-Complex::i() * ω_n * t).exp();
 
-			Ψ_t.zip_mut_with(&ψ_n_cache.index_axis(Axis(0), i), |elem, &ψ_n_val| {
-				*elem += coef * ψ_n_val;
-			})
+			angle_cache[i] = c_n * (-Complex::i() * ω_n * t).exp();
 		}
+
+		Ψ_t.zip_mut_with(xs, |Ψ_xt, &x| {
+			for i in 0..n_max {
+				let n = i + 1;
+				let angle = self.angle_cache[i];
+				let z = angle * get_ψ_n(x, n, L);
+
+				*Ψ_xt += z;
+			}
+		});
 	}
 
 	pub fn tick(&mut self, dt: Real) {

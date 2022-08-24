@@ -3,6 +3,8 @@ import * as wasm from "qm";
 import * as d3 from "d3";
 import { range } from "d3-array";
 
+wasm.set_panic_hook();
+
 const L = 80;
 const params = wasm.Parameters.new(80, 40, 4, 5, 5);
 const nx = 750;
