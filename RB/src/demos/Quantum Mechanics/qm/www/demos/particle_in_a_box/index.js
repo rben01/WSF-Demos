@@ -12,7 +12,7 @@ const wf = wasm.Wavefunction.new(params, xs);
 const psi_t = new Float64Array(memory.buffer, wf.psi_t_ptr(), wf.buffer_len());
 console.log(psi_t);
 
-const WIDTH = 600;
+const WIDTH = 700;
 const HEIGHT = 400;
 const MARGIN = 5;
 const plot = d3

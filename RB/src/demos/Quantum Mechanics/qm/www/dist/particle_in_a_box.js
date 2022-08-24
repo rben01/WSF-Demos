@@ -9,13 +9,13 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "./bootstrap.js":
-/*!**********************!*\
-  !*** ./bootstrap.js ***!
-  \**********************/
+/***/ "./demos/particle_in_a_box/bootstrap.js":
+/*!**********************************************!*\
+  !*** ./demos/particle_in_a_box/bootstrap.js ***!
+  \**********************************************/
 /***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
 
-eval("// A dependency graph that contains any wasm must all be imported\n// asynchronously. This `bootstrap.js` file does the single async import, so\n// that no one else needs to worry about it again.\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_d3_src_index_js\"), __webpack_require__.e(\"index_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./index.js */ \"./index.js\"))\n  .catch(e => console.error(\"Error importing `index.js`:\", e));\n\n\n//# sourceURL=webpack://create-wasm-app/./bootstrap.js?");
+eval("// A dependency graph that contains any wasm must all be imported\n// asynchronously. This `bootstrap.js` file does the single async import, so\n// that no one else needs to worry about it again.\nPromise.all(/*! import() */[__webpack_require__.e(\"vendors-node_modules_d3_src_index_js\"), __webpack_require__.e(\"demos_particle_in_a_box_index_js\")]).then(__webpack_require__.bind(__webpack_require__, /*! ./index.js */ \"./demos/particle_in_a_box/index.js\"))\n  .catch(e => console.error(\"Error importing `index.js`:\", e));\n\n\n//# sourceURL=webpack://create-wasm-app/./demos/particle_in_a_box/bootstrap.js?");
 
 /***/ })
 
@@ -151,7 +151,7 @@ eval("// A dependency graph that contains any wasm must all be imported\n// asyn
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = (chunkId) => {
 /******/ 			// return url for filenames based on template
-/******/ 			return "" + chunkId + ".bootstrap.js";
+/******/ 			return "" + chunkId + ".js";
 /******/ 		};
 /******/ 	})();
 /******/ 	
@@ -287,7 +287,7 @@ eval("// A dependency graph that contains any wasm must all be imported\n// asyn
 /******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
 /******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
 /******/ 		var installedChunks = {
-/******/ 			"main": 0
+/******/ 			"particle_in_a_box": 0
 /******/ 		};
 /******/ 		
 /******/ 		__webpack_require__.f.j = (chunkId, promises) => {
@@ -374,7 +374,7 @@ eval("// A dependency graph that contains any wasm must all be imported\n// asyn
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module can't be inlined because the eval devtool is used.
-/******/ 	var __webpack_exports__ = __webpack_require__("./bootstrap.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./demos/particle_in_a_box/bootstrap.js");
 /******/ 	
 /******/ })()
 ;

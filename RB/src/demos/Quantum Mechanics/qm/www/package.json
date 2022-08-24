@@ -7,7 +7,7 @@
 		"create-wasm-app": ".bin/create-wasm-app.js"
 	},
 	"scripts": {
-		"clean-dist": "rm -rf ./dist",
+		"clean-dist": "rm -rf ./dist/*",
 		"build": "npm run clean-dist && webpack --config webpack.config.js",
 		"start": "webpack-dev-server",
 		"all": "wasm-pack build --target bundler && npm run build && npm run start"
@@ -38,6 +38,7 @@
 		"webpack": "^5.1.0",
 		"webpack-cli": "^4.10.0",
 		"webpack-dev-server": "^4.10.0",
+		"glob": "^7.2.3",
 		"html-webpack-plugin": "^5.5.0",
 		"copy-webpack-plugin": "^11.0.0"
 	}
