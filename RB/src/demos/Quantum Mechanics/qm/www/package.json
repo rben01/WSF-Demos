@@ -9,7 +9,7 @@
 	"scripts": {
 		"clean-dist": "rm -rf ./dist/*",
 		"build": "npm run clean-dist && webpack --config webpack.config.js",
-		"start": "webpack-dev-server",
+		"start": "webpack-dev-server --open",
 		"all": "wasm-pack build --target bundler && npm run build && npm run start"
 	},
 	"repository": {
