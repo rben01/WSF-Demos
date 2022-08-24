@@ -148,7 +148,9 @@ version = "1.0.5"
 
 [[deps.CairoMakie]]
 deps = ["Base64", "Cairo", "Colors", "FFTW", "FileIO", "FreeType", "GeometryBasics", "LinearAlgebra", "Makie", "SHA", "SnoopPrecompile"]
-path = "/Users/robert/Offline Documents/Repos/Makie.jl/CairoMakie"
+git-tree-sha1 = "638c0c19c77577d16bb15615ad681ec72554be7f"
+repo-rev = "video-no-transcode:CairoMakie"
+repo-url = "https://github.com/rben01/Makie.jl"
 uuid = "13f3f980-e62b-5c42-98c6-ff1f3baf88f0"
 version = "0.8.13"
 
@@ -986,7 +988,9 @@ version = "0.5.9"
 
 [[deps.Makie]]
 deps = ["Animations", "Base64", "ColorBrewer", "ColorSchemes", "ColorTypes", "Colors", "Contour", "Distributions", "DocStringExtensions", "FFMPEG", "FileIO", "FixedPointNumbers", "Formatting", "FreeType", "FreeTypeAbstraction", "GeometryBasics", "GridLayoutBase", "ImageIO", "IntervalSets", "Isoband", "KernelDensity", "LaTeXStrings", "LinearAlgebra", "MakieCore", "Markdown", "Match", "MathTeXEngine", "Observables", "OffsetArrays", "Packing", "PlotUtils", "PolygonOps", "Printf", "Random", "RelocatableFolders", "Serialization", "Showoff", "SignedDistanceFields", "SnoopPrecompile", "SparseArrays", "Statistics", "StatsBase", "StatsFuns", "StructArrays", "UnicodeFun"]
-path = "/Users/robert/Offline Documents/Repos/Makie.jl"
+git-tree-sha1 = "114f44654ebac050522ee954d64339872430c675"
+repo-rev = "video-no-transcode"
+repo-url = "https://github.com/rben01/Makie.jl"
 uuid = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
 version = "0.17.13"
 
