@@ -33,6 +33,26 @@ impl Parameters {
 			m,
 		}
 	}
+
+	pub fn get_L(&self) -> Real {
+		self.L
+	}
+
+	pub fn get_mu_0(&self) -> Real {
+		self.μ_0
+	}
+
+	pub fn get_p_0(&self) -> Real {
+		self.p_0
+	}
+
+	pub fn get_sigma_0(&self) -> Real {
+		self.σ_0
+	}
+
+	pub fn get_m(&self) -> Real {
+		self.m
+	}
 }
 
 fn get_ψ_n(x: Real, n: usize, L: Real) -> Real {
