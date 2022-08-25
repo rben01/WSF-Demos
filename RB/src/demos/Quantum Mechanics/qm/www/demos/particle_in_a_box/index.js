@@ -1,7 +1,7 @@
 /* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex makeRenderer innerProduct */
 
-import { memory } from "qm/qm_bg.wasm";
-import * as wasm from "qm";
+import { memory } from "particle_in_a_box/demo_bg.wasm";
+import * as wasm from "particle_in_a_box";
 import * as d3 from "d3";
 import { range } from "d3-array";
 import * as THREE from "three";

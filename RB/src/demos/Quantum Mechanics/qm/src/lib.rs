@@ -2,6 +2,8 @@ mod demos;
 mod utils;
 
 pub use demos::constants;
+
+#[cfg(feature = "particle_in_a_box")]
 pub use demos::particle_in_a_box::{
 	EigenfunctionCoefficients, Parameters, Wavefunction, WavefunctionInitialConditions,
 };

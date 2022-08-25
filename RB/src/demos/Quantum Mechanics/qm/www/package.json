@@ -7,11 +7,14 @@
 		"create-wasm-app": ".bin/create-wasm-app.js"
 	},
 	"scripts": {
+		"wasm-pack": "run(){ wasm-pack build --target bundler --out-dir \"pkg/$1\" --out-name demo --features \"$1\"; }; run",
 		"clean-dist": "rm -rf ./dist/*",
 		"clean-dist-dev": "rm -rf ./dist-dev/*",
-		"build": "npm run clean-dist && webpack --config webpack.config.js",
-		"build-dev": "npm run clean-dist-dev && webpack --config webpack.config.dev.js",
-		"start": "webpack-dev-server--output-path dist --open",
+		"prebuild": "npm run clean-dist",
+		"prebuild-dev": "npm run clean-dist-dev",
+		"build": "webpack --config webpack.config.js",
+		"build-dev": "webpack --config webpack.config.dev.js",
+		"start": "webpack-dev-server --output-path dist --open",
 		"start-dev": "webpack-dev-server --output-path dist-dev --open",
 		"all": "wasm-pack build --target bundler && npm run build && npm run start",
 		"all-dev": "wasm-pack build --target bundler && npm run build-dev && npm run start-dev"
@@ -36,15 +39,14 @@
 		"d3": "^7.6.1",
 		"d3-array": "^3.2.0",
 		"katex": "^0.16.0",
-		"qm": "file:../pkg",
-		"three": "^0.123.0"
+		"three": "^0.123.0",
+		"particle_in_a_box": "file:../pkg/particle_in_a_box"
 	},
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",
 		"css-loader": "^6.7.1",
 		"glob": "^7.2.3",
 		"html-webpack-plugin": "^5.5.0",
-		"qm": "^0.1.0",
 		"style-loader": "^3.3.1",
 		"webpack": "^5.1.0",
 		"webpack-cli": "^4.10.0",
