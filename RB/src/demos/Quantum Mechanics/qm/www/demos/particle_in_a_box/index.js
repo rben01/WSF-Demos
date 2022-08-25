@@ -1,11 +1,8 @@
-/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex makeRenderer innerProduct */
-
 import { memory } from "particle_in_a_box/demo_bg.wasm";
 import * as wasm from "particle_in_a_box";
 import * as d3 from "d3";
 import { range } from "d3-array";
 import * as THREE from "three";
-import * as katex from "katex";
 import * as utils from "./utils";
 import * as three_utils from "./three_utils";
 
@@ -42,14 +39,14 @@ let xs;
 let wf;
 let Psi_t;
 
-const floatFormatter = d3
-	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
-	.format(".2f");
-const textSpans = {
-	m: document.getElementById("text-m"),
-	sigma: document.getElementById("text-sigma"),
-	p: document.getElementById("text-p"),
-};
+// const floatFormatter = d3
+// 	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
+// 	.format(".2f");
+// const textSpans = {
+// 	m: document.getElementById("text-m"),
+// 	sigma: document.getElementById("text-sigma"),
+// 	p: document.getElementById("text-p"),
+// };
 
 const canvas = document.getElementById("plot-3D");
 d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
@@ -164,10 +161,11 @@ function getParams() {
 
 // eslint-disable-next-line no-use-before-define
 d3.selectAll(".slider").on("input", () => {
+	// eslint-disable-next-line no-use-before-define
 	update(0, true);
 });
 
-function getAxisData({ L } = {}) {
+function getAxisData() {
 	const tickLength = 7;
 
 	const xAxisTicks = xScale2D.ticks(20).filter(x => x !== X_0);
@@ -473,7 +471,6 @@ function getData2D() {
 	return data;
 }
 
-let isFirstRun = true;
 function update(dtMS, initialize = false) {
 	dtMS = dtMS ?? 0;
 
