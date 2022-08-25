@@ -1,10 +1,12 @@
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 // const CopyWebpackPlugin = require("copy-webpack-plugin");
+const { WebpackDeduplicationPlugin } = require("webpack-deduplication-plugin");
 const glob = require("glob");
+const fs = require("fs");
 
 const path = require("path");
 
-const demoDirs = glob.sync("./demos/*");
+const demoDirs = glob.sync("./demos/*").filter(item => fs.statSync(item).isDirectory());
 const entries = Object.fromEntries(
 	demoDirs.map(dir => {
 		const name = path.basename(dir);
@@ -30,7 +32,7 @@ module.exports = {
 		},
 	},
 	mode: "development",
-	plugins: [...htmlWebpackPlugins],
+	plugins: [...htmlWebpackPlugins, new WebpackDeduplicationPlugin({})],
 	experiments: { asyncWebAssembly: true },
 	module: {
 		rules: [
@@ -39,7 +41,7 @@ module.exports = {
 				use: [
 					{
 						loader: "style-loader",
-						options: { insert: "head", injectType: "singletonStyleTag" },
+						options: { insert: "head" },
 					},
 					"css-loader",
 				],

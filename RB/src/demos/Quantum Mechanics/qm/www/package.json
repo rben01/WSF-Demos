@@ -7,17 +7,18 @@
 		"create-wasm-app": ".bin/create-wasm-app.js"
 	},
 	"scripts": {
-		"wasm-pack": "run(){ wasm-pack build --target bundler --out-dir \"pkg/$1\" --out-name demo --features \"$1\"; }; run",
+		"wasm-pack": "run(){ wasm-pack build --release --target bundler --out-dir \"pkg/$1\" --out-name demo --no-default-features --features \"$1\"; }; run",
+		"wasm-pack-dev": "run(){ wasm-pack build --target bundler --out-dir \"pkg/$1\" --out-name demo --features \"$1\"; }; run",
 		"clean-dist": "rm -rf ./dist/*",
 		"clean-dist-dev": "rm -rf ./dist-dev/*",
 		"prebuild": "npm run clean-dist",
 		"prebuild-dev": "npm run clean-dist-dev",
 		"build": "webpack --config webpack.config.js",
 		"build-dev": "webpack --config webpack.config.dev.js",
-		"start": "webpack-dev-server --output-path dist --open",
-		"start-dev": "webpack-dev-server --output-path dist-dev --open",
-		"all": "wasm-pack build --target bundler && npm run build && npm run start",
-		"all-dev": "wasm-pack build --target bundler && npm run build-dev && npm run start-dev"
+		"serve": "webpack-dev-server --output-path dist --open",
+		"serve-dev": "webpack-dev-server --config webpack.config.dev.js --output-path dist-dev --open",
+		"start": "npm run build && npm run serve",
+		"start-dev": "npm run build-dev && npm run serve-dev"
 	},
 	"repository": {
 		"type": "git",
@@ -39,8 +40,10 @@
 		"d3": "^7.6.1",
 		"d3-array": "^3.2.0",
 		"katex": "^0.16.0",
-		"particle_in_a_box": "file:../pkg/particle_in_a_box",
-		"three": "^0.123.0"
+		"three": "^0.123.0",
+		"webpack-deduplication-plugin": "^0.0.8",
+		"common": "file:./demos",
+		"particle_in_a_box": "file:../pkg/particle_in_a_box"
 	},
 	"devDependencies": {
 		"copy-webpack-plugin": "^11.0.0",

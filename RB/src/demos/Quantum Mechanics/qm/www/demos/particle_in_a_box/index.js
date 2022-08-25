@@ -1,12 +1,17 @@
 import { memory } from "particle_in_a_box/demo_bg.wasm";
 import * as wasm from "particle_in_a_box";
+import * as utils from "common/utils";
+import * as three_utils from "common/three_utils";
+
 import * as d3 from "d3";
 import { range } from "d3-array";
 import * as THREE from "three";
-import * as utils from "./utils";
-import * as three_utils from "./three_utils";
 
-import "./qm_demo.css";
+import * as katex from "katex";
+import renderMathInElement from "katex/contrib/auto-render";
+
+import "common/qm_demo.css";
+import "./style.css";
 
 const WIDTH = 800;
 const HEIGHT = 325;
@@ -547,3 +552,5 @@ for (const [name, func] of [
 ]) {
 	d3.select(document.getElementById(`btn-${name}`)).on("click", func);
 }
+
+renderMathInElement(document.body);
