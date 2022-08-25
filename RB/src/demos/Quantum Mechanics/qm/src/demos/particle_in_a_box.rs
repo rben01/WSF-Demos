@@ -56,9 +56,7 @@ impl Parameters {
 }
 
 fn get_ψ_n(x: Real, n: usize, L: Real) -> Real {
-	let n = <Real as NumCast>::from(n)
-		.unwrap_or_else(|| panic!("could not convert usize {:?} to a f64", n));
-
+	let n = n as Real;
 	(2.0 / L).sqrt() * (n * PI * x / L).sin()
 }
 
@@ -76,8 +74,8 @@ where
 	Complex::new(integral_re, integral_im)
 }
 
-fn norm(f: impl Fn(Real) -> Complex, (a, b): (Real, Real)) -> Real {
-	integrate(|x| f(x).norm_sqr(), (a, b), QUAD_METHOD).sqrt()
+fn norm(f: impl Fn(Real) -> Complex, interval: (Real, Real)) -> Real {
+	integrate(|x| f(x).norm_sqr(), interval, QUAD_METHOD).sqrt()
 }
 
 #[wasm_bindgen]
@@ -120,6 +118,7 @@ impl EigenfunctionCoefficients {
 		let initial_norm = norm(ψ_unnormed, interval);
 		let ψ = |x| ψ_unnormed(x) / initial_norm;
 
+		#[cfg(debug_assertions)]
 		{
 			let ψ_norm = norm(ψ, interval);
 			if (ψ_norm - 1.0).abs() >= 1e-6 {
@@ -130,9 +129,9 @@ impl EigenfunctionCoefficients {
 			}
 		}
 
-		let mut eigen_coefs = Vec::new();
-
 		let max_n_allowed = 2000_usize;
+		let mut eigen_coefs = Vec::new();
+		eigen_coefs.reserve(max_n_allowed);
 
 		for n in 1..=max_n_allowed {
 			let ψ_n = |x| get_ψ_n(x, n, L);
@@ -155,8 +154,7 @@ pub struct WavefunctionInitialConditions {
 
 #[wasm_bindgen]
 impl WavefunctionInitialConditions {
-	pub fn new(params: &Parameters, xs: Vec<Real>) -> Self {
-		let params = params.clone();
+	pub fn new(params: Parameters, xs: Vec<Real>) -> Self {
 		let eigen_coefs = EigenfunctionCoefficients::new(&params, 1e-6);
 		let xs = Array1::from(xs);
 
@@ -175,28 +173,28 @@ impl WavefunctionInitialConditions {
 #[wasm_bindgen]
 pub struct Wavefunction {
 	init_conds: WavefunctionInitialConditions,
-	angle_cache: Array1<Complex>,
 	ω_coef: Real,
+	n_max: usize,
 	t: Real,
 	Ψ_t: Array1<Complex>,
 }
 
 #[wasm_bindgen]
 impl Wavefunction {
-	pub fn new(params: &Parameters, xs: Vec<Real>) -> Self {
-		let Ψ_t = Array1::zeros((xs.len(),));
-		let init_conds = WavefunctionInitialConditions::new(params, xs);
-		let angle_cache = Array1::zeros((init_conds.eigen_coefs.len(),));
-
+	pub fn new(params: Parameters, xs: Vec<Real>) -> Self {
 		let ω_coef = {
-			let Parameters { L, m, .. } = params;
+			let Parameters { L, m, .. } = &params;
 			(PI * HBAR / L).powi(2) / (2.0 * m)
 		};
 
+		let Ψ_t = Array1::zeros((xs.len(),));
+		let init_conds = WavefunctionInitialConditions::new(params, xs);
+		let n_max = init_conds.n_max();
+
 		let mut wf = Self {
 			init_conds,
-			angle_cache,
 			ω_coef,
+			n_max,
 			t: 0.0,
 			Ψ_t,
 		};
@@ -211,15 +209,15 @@ impl Wavefunction {
 
 		let Self {
 			init_conds,
-			angle_cache,
 			ω_coef,
+			n_max,
 			Ψ_t,
 			t: _,
 		} = self;
 
 		let init_conds = &*init_conds;
 		let ω_coef = *ω_coef;
-		let n_max = init_conds.n_max();
+		let n_max = *n_max;
 
 		let WavefunctionInitialConditions {
 			params: Parameters { L, .. },
@@ -232,20 +230,15 @@ impl Wavefunction {
 
 		Ψ_t.fill(Complex::zero());
 
-		for i in 0..n_max {
-			let n = i + 1;
-			let c_n = eigen_coefs[i];
-			let n_sq = <Real as NumCast>::from(n.pow(2))
-				.unwrap_or_else(|| panic!("could not convert {:?} to f64", n.pow(2)));
-			let ω_n = n_sq * ω_coef;
-
-			angle_cache[i] = c_n * (-Complex::i() * ω_n * t).exp();
-		}
-
 		Ψ_t.zip_mut_with(xs, |Ψ_xt, &x| {
 			for i in 0..n_max {
 				let n = i + 1;
-				let angle = self.angle_cache[i];
+				let n_sq = n.pow(2) as Real;
+				let ω_n = n_sq * ω_coef;
+
+				let c_n = eigen_coefs[i];
+				let angle = c_n * (-Complex::i() * ω_n * t).exp();
+
 				let z = angle * get_ψ_n(x, n, L);
 
 				*Ψ_xt += z;
