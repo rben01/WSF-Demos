@@ -100,19 +100,29 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 === Questions
 
-* {q-num} Why is ++\(n>l\)++? Why isn't ++\(n\ge l\)++?
-
 * {q-num} Write out the radial wavefunctions ++\(R_{nl}(r)\)++, and corresponding energies ++\(E_n\)++, for the ground state and first two excited states of hydrogen (++\(n=1,2,3\)++). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.
 
-* {q-num} find v? or full WF? using recursion relations and defintions of associated laguerre polynomials - specific nlm?
+* {q-num} For ----- with the quantum numbers ++\(n=4\)++, ++\(l=1\)++, ++\(m=0\)++
++
+[{sublist-style}]
+.. Use the recursion relation to find v
+.. Use the formula for associated laguerre polynomials to find v
+.. Normalize R
+.. Show that R is a solution to the radial wave eqn
 
-* {q-num} normalization question
+* {q-num} For the hydrogen atom, why is ++\(n>l\)++? Why isn't ++\(n\ge l\)++?
 
 * {q-num} Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.
 
-* {q-num} Determine the corresponding quantum numbers for the following density plot of a hydrogenic wave function, and write out the full, normalized wavefunction. [insert density plot of ++\(\psi_{410}\)++]
+* {q-num} Determine the corresponding quantum numbers for the following density plot of a hydrogen wave function based on its nodes. Write out the full, normalized wavefunction. [insert density plot of ++\(\psi_{410}\)++]
 
-* {q-num} [Question 4.20 from Griffiths - copied exactly - can we use it and cite it?]
+* {q-num} [*question 4.20 from Griffiths* - give credit or change. I really like this question and think it would be worth using and crediting] Consider the earth-sun system as a gravitational analog to the hydrogen atom.
++
+[{sublist-style}]
+.. What is the potential energy function? (Let ++\(m_E\)++ be the mass of the earth, and ++\(M\)++ the mass of the sun.)
+.. What is the "Bohr radius," ++\(a_g\)++, for this system? Work out the actual number.
+.. Write down the gravitational "Bohr formula," and, by equating ++\(E_n\)++ to the classical energy of a planet in a circular orbit of radius ++\(r_0\)++, show that ++\(n=\sqrt{r_0/a_g}\)++. From this, estimate the quantum number ++\(n\)++ of the earth.
+.. Suppose the earth made a transition to the next lower level (++\(n-1\)++). How much energy (in Joules) would be released? What would the wavelength of the emitted photon (or, more likely, graviton) be? (Express your answer in light years -- is the remarkable answer a coincidence?)
 
 === Demonstrations
 
