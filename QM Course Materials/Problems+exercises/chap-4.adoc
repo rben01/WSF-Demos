@@ -98,6 +98,22 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 == The Hydrogen Atom
 
+=== Questions
+
+* {q-num} Why is ++\(n>l\)++? Why isn't ++\(n\ge l\)++?
+
+* {q-num} Write out the radial wavefunctions ++\(R_{nl}(r)\)++, and corresponding energies ++\(E_n\)++, for the ground state and first two excited states of hydrogen (++\(n=1,2,3\)++). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.
+
+* {q-num} find v? or full WF? using recursion relations and defintions of associated laguerre polynomials - specific nlm?
+
+* {q-num} normalization question
+
+* {q-num} Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.
+
+* {q-num} Determine the corresponding quantum numbers for the following density plot of a hydrogenic wave function, and write out the full, normalized wavefunction. [insert density plot of ++\(\psi_{410}\)++]
+
+* {q-num} [Question 4.20 from Griffiths - copied exactly - can we use it and cite it?]
+
 === Demonstrations
 
 * A demo showing the orbitals?
