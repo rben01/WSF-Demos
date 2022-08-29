@@ -5,7 +5,7 @@ pub use demos::constants;
 
 #[cfg(feature = "particle_in_a_box")]
 pub use demos::particle_in_a_box::{
-	EigenfunctionCoefficients, Parameters, Wavefunction, WavefunctionInitialConditions,
+	Parameters, Wavefunction, WavefunctionInitialConditions, WavefunctionInitialConditionsComputer,
 };
 
 // When the `console_error_panic_hook` feature is enabled, we can call the

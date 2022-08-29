@@ -7,11 +7,14 @@ import * as d3 from "d3";
 import { range } from "d3-array";
 import * as THREE from "three";
 
-import * as katex from "katex";
+import katex from "katex";
 import renderMathInElement from "katex/contrib/auto-render";
 
 import "common/qm_demo.css";
 import "./style.css";
+
+export * as wasm from "particle_in_a_box";
+window.wasm = wasm;
 
 const WIDTH = 800;
 const HEIGHT = 325;
@@ -39,10 +42,7 @@ const Z_MIN = -Z_MAX;
 
 const zScale3D = yScale3D;
 
-const N_WAVEFUNCTION_POINTS = 750;
-let xs;
-let wf;
-let Psi_t;
+const N_WAVEFUNCTION_POINTS = 250;
 
 // const floatFormatter = d3
 // 	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
@@ -163,10 +163,12 @@ function getParams() {
 	const [L, m, sigma, p0] = ["L", "m", "sigma", "p0"].map(k => +sliders[k].value);
 	return wasm.Parameters.new(L, L / 2, p0, sigma, m);
 }
+window.getParams = getParams;
 
 // eslint-disable-next-line no-use-before-define
 d3.selectAll(".slider").on("input", () => {
 	// eslint-disable-next-line no-use-before-define
+	initialize();
 	update(0, true);
 });
 
@@ -476,18 +478,70 @@ function getData2D() {
 	return data;
 }
 
-function update(dtMS, initialize = false) {
+export function initialize() {
+	const params = getParams();
+	const L = params.get_L();
+	window.eigen_computer = wasm.WavefunctionInitialConditionsComputer.new(params);
+	window.xs = range(N_WAVEFUNCTION_POINTS).map(
+		i => (i * L) / (N_WAVEFUNCTION_POINTS - 1),
+	);
+
+	document.getElementById("btn-more-coefs").innerText =
+		"Compute 1,000 more coefficients";
+
+	katex.render(String.raw`n=0`, document.getElementById("n-max"));
+	katex.render(
+		String.raw`\sum_{i=1}^n |c_i|^2=0`,
+		document.getElementById("cn-sq-sum"),
+	);
+}
+window.initialize = initialize;
+
+const formatter = d3.format(".2~e");
+function getEigenSqSumLatex() {
+	const eigenSum = eigen_computer.eigen_coef_sq_sum();
+
+	if (eigenSum >= 1) {
+		return String.raw`\sum_{i=1}^n |c_i|^2\approx 1`;
+	}
+
+	const oneMinusSqSumCnStrD3 = formatter(1 - eigenSum);
+	console.log(oneMinusSqSumCnStrD3);
+	const [_match, sig, _expUnicode] = oneMinusSqSumCnStrD3.match(/^([\d.]+)e(.*)$/i);
+	const exp = _expUnicode.replace("−", "-"); // minus sign to hyphen
+
+	const subtract = `${sig}\\times 10^{${exp}}`;
+
+	return String.raw`\sum_{i=1}^n |c_i|^2= 1-${subtract}`;
+}
+
+export function step_compute(n = 1000) {
+	const button = document.getElementById("btn-more-coefs");
+	button.disabled = true;
+	button.innerText = "Computing 1,000 more coefficients...";
+
+	setTimeout(() => {
+		eigen_computer.step_compute(n);
+
+		update(0, true);
+
+		const n_max = eigen_computer.n_max();
+		katex.render(`n=${n_max}`, document.getElementById("n-max"));
+
+		katex.render(getEigenSqSumLatex(), document.getElementById("cn-sq-sum"));
+
+		button.innerText = "Compute 1,000 more coefficients";
+		button.disabled = false;
+	}, 200);
+}
+window.step_compute = step_compute;
+
+export function update(dtMS, should_initialize = false) {
 	dtMS = dtMS ?? 0;
 
-	if (initialize) {
-		const params = getParams();
-		const L = params.get_L();
-
-		xs = range(N_WAVEFUNCTION_POINTS).map(
-			i => (i * L) / (N_WAVEFUNCTION_POINTS - 1),
-		);
-		wf = wasm.Wavefunction.new(getParams(), xs);
-		Psi_t = new Float64Array(memory.buffer, wf.psi_t_ptr(), wf.buffer_len());
+	if (should_initialize) {
+		window.wf = wasm.Wavefunction.new(eigen_computer.clone_(), xs);
+		window.Psi_t = new Float64Array(memory.buffer, wf.psi_t_ptr(), wf.buffer_len());
 	} else {
 		wf.tick((20 * dtMS) / 1000);
 	}
@@ -497,13 +551,8 @@ function update(dtMS, initialize = false) {
 
 	utils.applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
 	update3D();
-
-	// if (typeof katex !== "undefined") {
-	// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
-	// 	katex.render(`\\sigma=${floatFormatter(sigma)}`, textSpans.sigma);
-	// 	katex.render(`p=${floatFormatter(p)}`, textSpans.p);
-	// }
 }
+window.update = update;
 
 let animationFrame;
 // eslint-disable-next-line no-unused-vars
@@ -543,7 +592,7 @@ function reset() {
 	update(0, false);
 }
 
-update(0, true);
+initialize();
 
 for (const [name, func] of [
 	["play", play],

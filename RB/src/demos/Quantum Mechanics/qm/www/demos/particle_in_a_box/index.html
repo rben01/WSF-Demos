@@ -33,6 +33,17 @@
 						<span id="text-p0">\(p_0\)</span></span
 					>
 					<span><input type="range" class="slider" id="slider-p0" /></span>
+					<div id="coefs-btn-container">
+						<button
+							id="btn-more-coefs"
+							class="button"
+							onclick="step_compute(1000)"
+						></button>
+					</div>
+					<div id="coefs-text-container">
+						<span><span id="n-max"></span></span><br />
+						<span><span id="cn-sq-sum"></span></span>
+					</div>
 					<span class="radio-button-container horizontal">
 						<button class="button" id="btn-play">Play</button
 						><button class="button" id="btn-pause" data-button-checked>

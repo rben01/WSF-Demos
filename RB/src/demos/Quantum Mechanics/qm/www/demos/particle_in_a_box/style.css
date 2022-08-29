@@ -46,3 +46,9 @@
 #plots {
 	margin-top: 10px;
 }
+#btn-more-coefs {
+	width: 100%;
+}
+#coefs-text-container {
+	padding-left: 10px;
+}
