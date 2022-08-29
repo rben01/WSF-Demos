@@ -102,13 +102,13 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 * {q-num} Write out the radial wavefunctions ++\(R_{nl}(r)\)++, and corresponding energies ++\(E_n\)++, for the ground state and first two excited states of hydrogen (++\(n=1,2,3\)++). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.
 
-* {q-num} For ----- with the quantum numbers ++\(n=4\)++, ++\(l=1\)++, ++\(m=0\)++
+* {q-num} For a hydrogen atom with quantum numbers ++\(n=4\)++ and ++\(l=1\)++:
 +
 [{sublist-style}]
-.. Use the recursion relation to find v
-.. Use the formula for associated laguerre polynomials to find v
-.. Normalize R
-.. Show that R is a solution to the radial wave eqn
+.. Use the recursion relation ++\(c_{j+1} = \frac{2(j+l+1-n)}{(j+1)(j+2l+2)} c_j \)++ to find ++\(v(\rho)\)++.
+.. Use the formula for associated Laguerre polynomials ++\(L_q^p(x) = \frac{e^x x^{-p}}{q!}\frac{d^q}{dx^q}(e^{-x}x^{p+q})\)++ to find ++\(v(\rho)\)++.
+.. Write the normalized expression for ++\(R_{41}(r)\)++.
+.. Show that ++\(R_{41}(r)\)++ is a solution to the radial equation.
 
 * {q-num} For the hydrogen atom, why is ++\(n>l\)++? Why isn't ++\(n\ge l\)++?
 
