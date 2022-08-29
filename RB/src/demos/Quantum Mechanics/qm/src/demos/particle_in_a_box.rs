@@ -2,7 +2,7 @@
 
 use crate::constants::{HBAR, PI};
 use ndarray::prelude::*;
-use num::{complex::ComplexFloat, NumCast, Zero};
+use num::{complex::ComplexFloat, Zero};
 use peroxide::numerical::integral::{integrate, Integral};
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::wasm_bindgen;
@@ -79,32 +79,46 @@ fn norm(f: impl Fn(Real) -> Complex, interval: (Real, Real)) -> Real {
 }
 
 #[wasm_bindgen]
-pub struct EigenfunctionCoefficients {
-	eigen_coefs: Array1<Complex>,
+pub struct WavefunctionInitialConditionsComputer {
+	params: Parameters,
+	eigen_coefs: Vec<Complex>,
 }
 
 #[wasm_bindgen]
-impl EigenfunctionCoefficients {
-	pub fn len(&self) -> usize {
+impl WavefunctionInitialConditionsComputer {
+	pub fn clone_(&self) -> Self {
+		let Self {
+			params,
+			eigen_coefs,
+		} = self;
+		Self {
+			params: params.clone(),
+			eigen_coefs: eigen_coefs.clone(),
+		}
+	}
+}
+
+#[wasm_bindgen]
+impl WavefunctionInitialConditionsComputer {
+	pub fn new(params: Parameters) -> Self {
+		Self {
+			params,
+			eigen_coefs: Vec::new(),
+		}
+	}
+
+	pub fn n_max(&self) -> usize {
 		self.eigen_coefs.len()
 	}
 
-	pub fn is_empty(&self) -> bool {
-		self.len() == 0
-	}
-
-	pub fn coefs_js(&self) -> *const Complex {
-		self.eigen_coefs.as_ptr()
-	}
-
-	pub fn new(params: &Parameters, tol: Real) -> Self {
+	pub fn step_compute(&mut self, n_adtl_coefs: usize) {
 		let Parameters {
 			L,
 			μ_0,
 			p_0,
 			σ_0,
 			m: _,
-		} = params;
+		} = &self.params;
 		let L = *L;
 
 		let interval = (0.0, L);
@@ -129,72 +143,83 @@ impl EigenfunctionCoefficients {
 			}
 		}
 
-		let max_n_allowed = 2000_usize;
-		let mut eigen_coefs = Vec::new();
-		eigen_coefs.reserve(max_n_allowed);
-
-		for n in 1..=max_n_allowed {
+		let prev_n_max = self.n_max();
+		for dn in 1..=n_adtl_coefs {
+			let n = prev_n_max + dn;
 			let ψ_n = |x| get_ψ_n(x, n, L);
 			let cn = inner_product(ψ_n, ψ, interval);
-			eigen_coefs.push(cn)
+			self.eigen_coefs.push(cn)
 		}
+	}
 
-		Self {
-			eigen_coefs: eigen_coefs.into(),
-		}
+	pub fn eigen_coef_sq_sum(&self) -> Real {
+		self.eigen_coefs
+			.iter()
+			.fold(0.0, |acc, x| acc + x.norm_sqr())
+	}
+
+	pub fn reinit(&mut self, params: Parameters) {
+		self.params = params;
+		self.eigen_coefs.clear();
 	}
 }
 
 #[wasm_bindgen]
 pub struct WavefunctionInitialConditions {
 	params: Parameters,
-	eigen_coefs: EigenfunctionCoefficients,
-	xs: Array1<Real>,
+	eigen_coefs: Array1<Complex>,
+	ω_coef: Real,
+	n_max: usize,
 }
 
 #[wasm_bindgen]
 impl WavefunctionInitialConditions {
-	pub fn new(params: Parameters, xs: Vec<Real>) -> Self {
-		let eigen_coefs = EigenfunctionCoefficients::new(&params, 1e-6);
-		let xs = Array1::from(xs);
+	fn from(wf_ic_computer: WavefunctionInitialConditionsComputer) -> Self {
+		let n_max = wf_ic_computer.n_max();
+		let WavefunctionInitialConditionsComputer {
+			params,
+			eigen_coefs,
+		} = wf_ic_computer;
+
+		let ω_coef = {
+			let Parameters { L, m, .. } = &params;
+			(PI * HBAR / L).powi(2) / (2.0 * m)
+		};
+
+		let eigen_coefs = eigen_coefs.into();
 
 		Self {
 			params,
 			eigen_coefs,
-			xs,
+			ω_coef,
+			n_max,
 		}
 	}
 
 	pub fn n_max(&self) -> usize {
-		self.eigen_coefs.len()
+		self.n_max
 	}
 }
 
 #[wasm_bindgen]
 pub struct Wavefunction {
 	init_conds: WavefunctionInitialConditions,
-	ω_coef: Real,
-	n_max: usize,
+	xs: Array1<Real>,
 	t: Real,
 	Ψ_t: Array1<Complex>,
 }
 
 #[wasm_bindgen]
 impl Wavefunction {
-	pub fn new(params: Parameters, xs: Vec<Real>) -> Self {
-		let ω_coef = {
-			let Parameters { L, m, .. } = &params;
-			(PI * HBAR / L).powi(2) / (2.0 * m)
-		};
+	pub fn new(wf_ic_computer: WavefunctionInitialConditionsComputer, xs: Vec<Real>) -> Self {
+		let init_conds = WavefunctionInitialConditions::from(wf_ic_computer);
 
 		let Ψ_t = Array1::zeros((xs.len(),));
-		let init_conds = WavefunctionInitialConditions::new(params, xs);
-		let n_max = init_conds.n_max();
+		let xs = xs.into();
 
 		let mut wf = Self {
 			init_conds,
-			ω_coef,
-			n_max,
+			xs,
 			t: 0.0,
 			Ψ_t,
 		};
@@ -209,24 +234,21 @@ impl Wavefunction {
 
 		let Self {
 			init_conds,
-			ω_coef,
-			n_max,
+			xs,
 			Ψ_t,
 			t: _,
 		} = self;
 
-		let init_conds = &*init_conds;
-		let ω_coef = *ω_coef;
-		let n_max = *n_max;
-
 		let WavefunctionInitialConditions {
 			params: Parameters { L, .. },
-			eigen_coefs: EigenfunctionCoefficients { eigen_coefs },
-			xs,
-			..
-		} = init_conds;
+			eigen_coefs,
+			ω_coef,
+			n_max,
+		} = &*init_conds;
 
 		let L = *L;
+		let ω_coef = *ω_coef;
+		let n_max = *n_max;
 
 		Ψ_t.fill(Complex::zero());
 

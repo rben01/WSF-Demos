@@ -1,5 +1,6 @@
 #![allow(non_upper_case_globals)]
 
+#[allow(unused_imports)]
 use wasm_bindgen::prelude::wasm_bindgen;
 
 #[wasm_bindgen]
