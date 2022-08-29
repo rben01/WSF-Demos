@@ -15,7 +15,7 @@ include::shared_attributes.adoc[]
 .Solution
 [%collapsible]
 ====
-Only (a) is true.
+Only (a) is true. NEED TO EDIT! Check other answers in 2
 ====
 
 * {q-num} Why is ++\(\Psi_E(x,t)= \psi_E(x)e^{-iEt/\hbar}\)++ called a stationary state if it is time-dependent?
