@@ -42,7 +42,7 @@
 		"d3-array": "^3.2.0",
 		"katex": "^0.16.0",
 		"particle_in_a_box": "file:../pkg/particle_in_a_box",
-		"three": "^0.123.0",
+		"three": "^0.125.0",
 		"webpack-deduplication-plugin": "^0.0.8"
 	},
 	"devDependencies": {
