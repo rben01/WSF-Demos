@@ -570,6 +570,9 @@ params = Parameters(; L=80, μ=40, σ=8, p₀=3, m=5)
 eigens = get_eigenfunction_expansion(params; tol=1e-6)
 
 # %%
+[ep.cₙ for ep in eigens.eigens]
+
+# %%
 plot_particle_static(params, eigens; dx=0.1, t_max=1000, dst=false, dt=0.1)
 
 # %%

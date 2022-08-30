@@ -6,6 +6,12 @@ include::shared_attributes.adoc[]
 
 === Questions
 
+* {q-num} Given a regular ++\(n\)++-sided polygon ++\(P_n\)++, a symmetry of ++\(P_n\)++ is any mapping ++\(f\)++ from the vertices to the vertices that preserves adjacency: if and only if vertices ++\(v_i\)++ and ++\(v_j\)++ are adjacent in ++\(P_n\)++, then ++\(f(v_i)\)++ and ++\(f(v_j)\)++ are adjacent in ++\(f(P_n)\)++.
+.. Explicitly compute the symmetries of the equilateral triangle.
+How many are there?
+.. Do the same for the square.
+.. In words, describe the symmetries of ++\(P_n\)++.
+
 * {q-num} Show that ++\(\hat T(a)\hat\Pi=\hat\Pi\hat T(-a)\)++
 +
 .Solution

@@ -17,6 +17,8 @@
 	},
 	"homepage": "https://github.com/dts333/WSF-Demos#readme",
 	"devDependencies": {
+		"@typescript-eslint/eslint-plugin": "^5.35.1",
+		"@typescript-eslint/parser": "^5.35.1",
 		"eslint": "^7.0.0"
 	}
 }

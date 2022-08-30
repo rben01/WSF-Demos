@@ -11,6 +11,9 @@
 	grid-template-columns: max-content 1fr;
 	column-gap: 50px;
 }
+.controls-container {
+	width: 17em;
+}
 .curve {
 	fill: none;
 	stroke-linejoin: round;

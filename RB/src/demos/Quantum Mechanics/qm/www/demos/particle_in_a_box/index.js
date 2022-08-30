@@ -44,24 +44,9 @@ const zScale3D = yScale3D;
 
 const N_WAVEFUNCTION_POINTS = 250;
 
-// const floatFormatter = d3
-// 	.formatLocale({ minus: "-", decimal: ".", thousands: "," })
-// 	.format(".2f");
-// const textSpans = {
-// 	m: document.getElementById("text-m"),
-// 	sigma: document.getElementById("text-sigma"),
-// 	p: document.getElementById("text-p"),
-// };
-
 const canvas = document.getElementById("plot-3D");
 d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
 const scene = new THREE.Scene();
-// const camera = new THREE.PerspectiveCamera(
-// 	150,
-// 	canvas.clientWidth / canvas.clientHeight,
-// 	0.1,
-// 	2000,
-// );
 const camera = new THREE.OrthographicCamera(
 	-CAMERA_EXTENT,
 	CAMERA_EXTENT,
@@ -113,9 +98,9 @@ camera.lookAt(CAMERA_POINT_OF_FOCUS);
 
 const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
 
-const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
+const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH - 10]);
 const y2dMax = 0.25;
-const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
+const yScale2D = d3.scaleLinear([-0.04, y2dMax], [HEIGHT - 25, 0]);
 
 let currentLength = 6;
 let isAnimating = false;
@@ -123,36 +108,36 @@ let isAnimating = false;
 const sliders = {
 	L: (() => {
 		const slider = document.getElementById("slider-L");
+		slider.step = 0.01;
 		slider.min = 20;
 		slider.max = X_MAX - 1;
-		slider.step = 0.01;
-		slider.value = currentLength;
+		slider.value = (+slider.min + +slider.max) / 2;
 
 		return slider;
 	})(),
 	m: (() => {
 		const slider = document.getElementById("slider-m");
+		slider.step = 0.01;
 		slider.min = 1;
 		slider.max = 5;
-		slider.step = 0.01;
 		slider.value = 3;
 
 		return slider;
 	})(),
 	sigma: (() => {
 		const slider = document.getElementById("slider-sigma");
-		slider.min = 1;
-		slider.max = 5;
-		slider.step = 0.01;
-		slider.value = (slider.min + slider.max) / 2;
+		slider.step = 0.001;
+		slider.min = 0.05;
+		slider.max = 0.1;
+		slider.value = (+slider.min + +slider.max) / 2;
 
 		return slider;
 	})(),
 	p0: (() => {
 		const slider = document.getElementById("slider-p0");
+		slider.step = 0.01;
 		slider.min = -3;
 		slider.max = 3;
-		slider.step = 0.01;
 		slider.value = 0;
 
 		return slider;
@@ -161,7 +146,7 @@ const sliders = {
 
 function getParams() {
 	const [L, m, sigma, p0] = ["L", "m", "sigma", "p0"].map(k => +sliders[k].value);
-	return wasm.Parameters.new(L, L / 2, p0, sigma, m);
+	return wasm.Parameters.new(L, L / 2, p0, sigma * L, m);
 }
 window.getParams = getParams;
 
@@ -593,6 +578,7 @@ function reset() {
 }
 
 initialize();
+update(0, true);
 
 for (const [name, func] of [
 	["play", play],
