@@ -2,6 +2,16 @@
 
 import * as d3 from "d3";
 
+type Datum = {
+	shape: string;
+	attrs?: { [key: string]: any };
+	styles?: { [key: string]: string };
+	text?: string;
+	class?: string;
+	classes?: string[];
+	children: Datum[];
+};
+
 // eslint-disable-next-line no-unused-vars
 export const C = 299792458;
 // eslint-disable-next-line no-unused-vars
@@ -25,7 +35,10 @@ export function isIterable(obj) {
 	return typeof obj[Symbol.iterator] === "function";
 }
 
-export function applyDatum(datum, { transition } = {}) {
+export function applyDatum(
+	datum: Datum,
+	{ transition }: { transition?: d3.Transition<any, Datum, any, any> } = {},
+) {
 	const d3Obj = d3.select(this);
 	d3Obj.datum(datum);
 
@@ -45,7 +58,7 @@ export function applyDatum(datum, { transition } = {}) {
 		}
 	}
 
-	const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+	const t = transition === undefined ? d3Obj : d3Obj.transition(transition);
 	if (datum.attrs !== undefined) {
 		Object.entries(datum.attrs).forEach(([key, val]) => {
 			t.attr(key, val);
@@ -74,20 +87,20 @@ export function applyDatum(datum, { transition } = {}) {
 }
 
 // eslint-disable-next-line no-unused-vars
-function _addGraphicalObjs(sel, dataFunc) {
-	return sel
-		.selectAll()
-		.data(dataFunc)
-		.enter()
-		.append(d => d3.create(`svg:${d.shape}`).node())
-		.each(applyDatum);
-}
-
-// eslint-disable-next-line no-unused-vars
 export function applyGraphicalObjs(
 	sel,
 	data,
-	{ key, selector, cssClass, transition } = {},
+	{
+		key,
+		selector,
+		cssClass,
+		transition,
+	}: {
+		key?: string;
+		selector?: string | (() => void);
+		cssClass?: string;
+		transition?: d3.Transition<any, Datum, any, any>;
+	} = {},
 ) {
 	const s = sel
 		.selectAll(selector)
@@ -206,12 +219,16 @@ export function defineArrowhead(defs, { id, length, width, color, attrs, flip })
 	};
 
 	const path = flip
-		? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
-				(2 * length) / 3
-		  } ${width / 2} z`
-		: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
-				width / 2
-		  } z`;
+		? `M ${length - 1} 1
+		   L 1 ${width / 2}
+			L ${length - 1} ${width - 1}
+			L ${(2 * length) / 3} ${width / 2}
+			z`
+		: `M 1 1
+		   L ${length - 1} ${width / 2}
+			L 1 ${width - 1}
+			L ${length / 3} ${width / 2}
+			z`;
 
 	const arrowheadAttrs = {
 		attrs: {
@@ -366,6 +383,7 @@ export function _initializeRadioButtons() {
 	const radioButtonContainers = document.getElementsByClassName(
 		"radio-button-container",
 	);
+	const thisElem = this as HTMLInputElement;
 
 	for (let i = 0; i < radioButtonContainers.length; ++i) {
 		const rbc = radioButtonContainers[i];
@@ -379,11 +397,13 @@ export function _initializeRadioButtons() {
 
 		if (!rbc.classList.contains("manual-radio-buttons")) {
 			sel.on("click._default", function () {
-				this.setAttribute("data-button-checked", "");
-				this.disabled = true;
-				const siblings = this.closest(
-					".radio-button-container",
-				).querySelectorAll("button");
+				thisElem.setAttribute("data-button-checked", "");
+				thisElem.disabled = true;
+				const siblings = Array.from(
+					thisElem
+						.closest(".radio-button-container")
+						.querySelectorAll("button"),
+				);
 				for (const sibling of siblings) {
 					if (this === sibling) {
 						continue;
@@ -411,7 +431,7 @@ export function _initializeHideableControlsContainer() {
 		const nHidableElems = hidableElems.length;
 
 		for (let i = 0; i < nHidableElems; ++i) {
-			const elem = hidableElems[i];
+			const elem = hidableElems[i] as HTMLElement;
 			const { left, right, top, bottom } = elem.getBoundingClientRect();
 			const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
 			const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
@@ -419,7 +439,7 @@ export function _initializeHideableControlsContainer() {
 
 			const opacity = opacityScale(dist);
 
-			elem.style.opacity = opacity;
+			elem.style.opacity = opacity.toString();
 		}
 
 		if (hidableElems.length === 0) {

@@ -1,9 +1,18 @@
 import * as THREE from "three";
 import * as d3 from "d3";
 
-// https://stackoverflow.com/a/27348780
+type Color = { r: number; g: number; b: number; a?: number };
+type ThreeCamera = THREE.OrthographicCamera | THREE.PerspectiveCamera;
 
-export function roundRect(ctx, x, y, w, h, r) {
+// https://stackoverflow.com/a/27348780
+export function roundRect(
+	ctx: CanvasRenderingContext2D,
+	x: number,
+	y: number,
+	w: number,
+	h: number,
+	r: number,
+) {
 	ctx.beginPath();
 	ctx.moveTo(x + r, y);
 	ctx.lineTo(x + w - r, y);
@@ -34,6 +43,16 @@ export function makeTextSprite(
 		textColor,
 		aspectRatio,
 		depthWrite,
+	}: {
+		fontface?: string;
+		fontsize?: number;
+		fontweight?: string;
+		borderThickness?: number;
+		borderColor?: Color;
+		backgroundColor?: Color;
+		textColor?: Color;
+		aspectRatio?: number;
+		depthWrite?: boolean;
 	} = {},
 ) {
 	// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
@@ -104,6 +123,13 @@ export function getNewPositionForDrag({
 	oldPosition,
 	pointOfFocus,
 	dragSpeed,
+}: {
+	dx: number;
+	dy: number;
+	up: THREE.Vector3;
+	oldPosition: THREE.Vector3;
+	pointOfFocus: THREE.Vector3;
+	dragSpeed?: number;
 }) {
 	const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
 	if (rotAxisHypotenuse < 1e-12) {
@@ -172,7 +198,7 @@ export function getNewPositionForDrag({
 		const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
 		const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
 		const m = (y2_2 - y2_1) / (x2_2 - x2_1);
-		return { x2_1, x2_2, y2_1, y2_2, m };
+		return { x2_1, x2_2, y2_1, m };
 	})();
 	const a2 = m;
 	const b2 = -1;
@@ -204,6 +230,14 @@ export function makeThreeCameraDrag({
 	up, // Must be normalized
 	dragSpeed,
 	callback,
+}: {
+	camera: ThreeCamera;
+	scene: THREE.Scene;
+	renderer: THREE.Renderer;
+	pointOfFocus: THREE.Vector3;
+	up: THREE.Vector3;
+	dragSpeed?: number;
+	callback?: () => void;
 }) {
 	dragSpeed = dragSpeed ?? 0.006;
 	up = up ?? _three_utils_upZ;
@@ -243,6 +277,15 @@ export function enableDragToRotateCamera({
 	up, // Must be normalized
 	dragSpeed,
 	callback,
+}: {
+	canvas: HTMLCanvasElement;
+	camera: ThreeCamera;
+	scene: THREE.Scene;
+	renderer: THREE.Renderer;
+	pointOfFocus: THREE.Vector3;
+	up: THREE.Vector3;
+	dragSpeed?: number;
+	callback?: () => void;
 }) {
 	d3.select(canvas).call(
 		makeThreeCameraDrag({

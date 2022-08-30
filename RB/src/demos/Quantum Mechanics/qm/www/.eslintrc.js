@@ -17,7 +17,18 @@ module.exports = {
 		"linebreak-style": ["error", "unix"],
 		quotes: ["error", "double"],
 		semi: ["error", "always"],
-		"@typescript-eslint/no-var-requires": false,
+		"@typescript-eslint/no-var-requires": 0,
+		"@typescript-eslint/no-non-null-assertion": 0,
+		"@typescript-eslint/no-explicit-any": 0,
+		"no-mixed-spaces-and-tabs": 0,
+		"@typescript-eslint/no-unused-vars": [
+			"error",
+			{
+				varsIgnorePattern: "^_",
+				argsIgnorePattern: "^_",
+				destructuredArrayIgnorePattern: "^_",
+			},
+		],
 	},
 	// eslintIgnore: [
 	// 	".eslintrc.js",

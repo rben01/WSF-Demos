@@ -13,9 +13,6 @@ import renderMathInElement from "katex/contrib/auto-render";
 import "common/qm_demo.css";
 import "./style.css";
 
-export * as wasm from "particle_in_a_box";
-window.wasm = wasm;
-
 const WIDTH = 800;
 const HEIGHT = 325;
 const HEIGHT_3D = 325;
@@ -43,8 +40,12 @@ const Z_MIN = -Z_MAX;
 const zScale3D = yScale3D;
 
 const N_WAVEFUNCTION_POINTS = 250;
+let eigen_computer;
+let xs;
+let wf;
+let Psi_t;
 
-const canvas = document.getElementById("plot-3D");
+const canvas = document.getElementById("plot-3D") as HTMLCanvasElement;
 d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
 const scene = new THREE.Scene();
 const camera = new THREE.OrthographicCamera(
@@ -102,58 +103,55 @@ const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH - 10]);
 const y2dMax = 0.25;
 const yScale2D = d3.scaleLinear([-0.04, y2dMax], [HEIGHT - 25, 0]);
 
-let currentLength = 6;
 let isAnimating = false;
 
+const buttons = Object.fromEntries(
+	["play", "pause", "reset", "more-coefs"].map(name => [
+		name,
+		document.getElementById(`btn-${name}`),
+	]),
+) as {
+	play: HTMLInputElement;
+	pause: HTMLInputElement;
+	reset: HTMLInputElement;
+	"more-coefs": HTMLInputElement;
+};
+
+function makeSlider(
+	id: string,
+	min: number,
+	max: number,
+	step?: number,
+	value?: number,
+): HTMLInputElement {
+	step ??= 0.01;
+	value ??= (min + max) / 2;
+
+	const slider = document.getElementById(id) as HTMLInputElement;
+	slider.step = step.toString();
+	slider.min = min.toString();
+	slider.max = max.toString();
+	slider.value = value.toString();
+	return slider;
+}
+
 const sliders = {
-	L: (() => {
-		const slider = document.getElementById("slider-L");
-		slider.step = 0.01;
-		slider.min = 20;
-		slider.max = X_MAX - 1;
-		slider.value = (+slider.min + +slider.max) / 2;
-
-		return slider;
-	})(),
-	m: (() => {
-		const slider = document.getElementById("slider-m");
-		slider.step = 0.01;
-		slider.min = 1;
-		slider.max = 5;
-		slider.value = 3;
-
-		return slider;
-	})(),
-	sigma: (() => {
-		const slider = document.getElementById("slider-sigma");
-		slider.step = 0.001;
-		slider.min = 0.05;
-		slider.max = 0.1;
-		slider.value = (+slider.min + +slider.max) / 2;
-
-		return slider;
-	})(),
-	p0: (() => {
-		const slider = document.getElementById("slider-p0");
-		slider.step = 0.01;
-		slider.min = -3;
-		slider.max = 3;
-		slider.value = 0;
-
-		return slider;
-	})(),
+	L: makeSlider("slider-L", 20, X_MAX - 1),
+	m: makeSlider("slider-m", 1, 5),
+	sigma: makeSlider("slider-sigma", 0.05, 0.1, 0.001),
+	p0: makeSlider("slider-p0", -3, 3),
 };
 
 function getParams() {
 	const [L, m, sigma, p0] = ["L", "m", "sigma", "p0"].map(k => +sliders[k].value);
 	return wasm.Parameters.new(L, L / 2, p0, sigma * L, m);
 }
-window.getParams = getParams;
 
 // eslint-disable-next-line no-use-before-define
 d3.selectAll(".slider").on("input", () => {
 	// eslint-disable-next-line no-use-before-define
 	initialize();
+	// eslint-disable-next-line no-use-before-define
 	update(0, true);
 });
 
@@ -301,7 +299,7 @@ const zMin = zScale3D(Z_MIN);
 const zs0 = zScale3D(Z_0);
 const zMax = zScale3D(Z_MAX);
 
-const objs3d = { empty: true };
+const objs3d: { empty: boolean; wave?: { wave: THREE.Mesh } } = { empty: true };
 
 function update3D() {
 	const arrowheadRadius = 0.25;
@@ -405,8 +403,6 @@ function update3D() {
 		})();
 	}
 
-	// console.log(m, sigma, p, currentTime);
-
 	const { wave } = objs3d.wave;
 	wave.geometry.dispose();
 	wave.geometry = new THREE.TubeBufferGeometry(
@@ -432,7 +428,7 @@ function getData2D() {
 		points.push([xScale2D(x), yScale2D(abs2)]);
 	}
 
-	const barrierX = xScale2D(currentLength);
+	const barrierX = xScale2D(+sliders.L.value);
 
 	const data = [
 		{
@@ -463,13 +459,11 @@ function getData2D() {
 	return data;
 }
 
-export function initialize() {
+function initialize() {
 	const params = getParams();
 	const L = params.get_L();
-	window.eigen_computer = wasm.WavefunctionInitialConditionsComputer.new(params);
-	window.xs = range(N_WAVEFUNCTION_POINTS).map(
-		i => (i * L) / (N_WAVEFUNCTION_POINTS - 1),
-	);
+	eigen_computer = wasm.WavefunctionInitialConditionsComputer.new(params);
+	xs = range(N_WAVEFUNCTION_POINTS).map(i => (i * L) / (N_WAVEFUNCTION_POINTS - 1));
 
 	document.getElementById("btn-more-coefs").innerText =
 		"Compute 1,000 more coefficients";
@@ -479,8 +473,9 @@ export function initialize() {
 		String.raw`\sum_{i=1}^n |c_i|^2=0`,
 		document.getElementById("cn-sq-sum"),
 	);
+
+	buttons.play.disabled = true;
 }
-window.initialize = initialize;
 
 const formatter = d3.format(".2~e");
 function getEigenSqSumLatex() {
@@ -491,7 +486,6 @@ function getEigenSqSumLatex() {
 	}
 
 	const oneMinusSqSumCnStrD3 = formatter(1 - eigenSum);
-	console.log(oneMinusSqSumCnStrD3);
 	const [_match, sig, _expUnicode] = oneMinusSqSumCnStrD3.match(/^([\d.]+)e(.*)$/i);
 	const exp = _expUnicode.replace("−", "-"); // minus sign to hyphen
 
@@ -500,14 +494,16 @@ function getEigenSqSumLatex() {
 	return String.raw`\sum_{i=1}^n |c_i|^2= 1-${subtract}`;
 }
 
-export function step_compute(n = 1000) {
-	const button = document.getElementById("btn-more-coefs");
-	button.disabled = true;
-	button.innerText = "Computing 1,000 more coefficients...";
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function step_compute(n = 1000) {
+	const moreCoefsButton = buttons["more-coefs"];
+	moreCoefsButton.disabled = true;
+	moreCoefsButton.innerText = "Computing 1,000 more coefficients...";
 
 	setTimeout(() => {
 		eigen_computer.step_compute(n);
 
+		// eslint-disable-next-line no-use-before-define
 		update(0, true);
 
 		const n_max = eigen_computer.n_max();
@@ -515,29 +511,26 @@ export function step_compute(n = 1000) {
 
 		katex.render(getEigenSqSumLatex(), document.getElementById("cn-sq-sum"));
 
-		button.innerText = "Compute 1,000 more coefficients";
-		button.disabled = false;
+		moreCoefsButton.innerText = "Compute 1,000 more coefficients";
+		moreCoefsButton.disabled = false;
+
+		buttons.play.disabled = false;
 	}, 200);
 }
-window.step_compute = step_compute;
 
-export function update(dtMS, should_initialize = false) {
+function update(dtMS?: number, should_initialize = false) {
 	dtMS = dtMS ?? 0;
 
 	if (should_initialize) {
-		window.wf = wasm.Wavefunction.new(eigen_computer.clone_(), xs);
-		window.Psi_t = new Float64Array(memory.buffer, wf.psi_t_ptr(), wf.buffer_len());
+		wf = wasm.Wavefunction.new(eigen_computer.clone_(), xs);
+		Psi_t = new Float64Array(memory.buffer, wf.psi_t_ptr(), wf.buffer_len());
 	} else {
 		wf.tick((20 * dtMS) / 1000);
 	}
 
-	const L = +sliders.L.value;
-	currentLength = L;
-
 	utils.applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
 	update3D();
 }
-window.update = update;
 
 let animationFrame;
 // eslint-disable-next-line no-unused-vars
@@ -545,6 +538,11 @@ function play() {
 	isAnimating = true;
 
 	d3.selectAll(".slider").property("disabled", true);
+
+	buttons.play.disabled = true;
+	buttons.pause.disabled = false;
+	buttons.reset.disabled = false;
+	buttons["more-coefs"].disabled = true;
 
 	let prevTimestampMS;
 	function step(timestampMS) {
@@ -567,6 +565,9 @@ function play() {
 function pause() {
 	window.cancelAnimationFrame(animationFrame);
 	isAnimating = false;
+	buttons.play.disabled = false;
+	buttons.pause.disabled = true;
+	buttons.reset.disabled = false;
 }
 
 // eslint-disable-next-line no-unused-vars
@@ -575,17 +576,43 @@ function reset() {
 	d3.selectAll(".slider").property("disabled", false);
 	wf.set_t(0);
 	update(0, false);
+
+	buttons.play.disabled = false;
+	buttons.pause.disabled = true;
+	buttons.reset.disabled = true;
+	buttons["more-coefs"].disabled = false;
 }
 
 initialize();
 update(0, true);
 
-for (const [name, func] of [
+for (const pair of [
 	["play", play],
 	["pause", pause],
 	["reset", reset],
+	["more-coefs", step_compute],
 ]) {
-	d3.select(document.getElementById(`btn-${name}`)).on("click", func);
+	const [name, func] = pair as [string, () => void];
+	d3.select(buttons[name]).on("click", func);
 }
 
 renderMathInElement(document.body);
+
+export const EXPORTS = {
+	update,
+	initialize,
+	step_compute,
+	play,
+	pause,
+	reset,
+	get_wf() {
+		return wf;
+	},
+	get_Psi_t() {
+		return Psi_t;
+	},
+};
+
+for (const [key, val] of Object.entries(EXPORTS)) {
+	window[key] = val;
+}

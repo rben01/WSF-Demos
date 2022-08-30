@@ -37,17 +37,22 @@
 	},
 	"homepage": "https://github.com/rustwasm/create-wasm-app#readme",
 	"dependencies": {
+		"common": "file:./demos",
 		"d3": "^7.6.1",
 		"d3-array": "^3.2.0",
 		"katex": "^0.16.0",
+		"particle_in_a_box": "file:../pkg/particle_in_a_box",
 		"three": "^0.123.0",
-		"webpack-deduplication-plugin": "^0.0.8",
-		"common": "file:./demos",
-		"particle_in_a_box": "file:../pkg/particle_in_a_box"
+		"webpack-deduplication-plugin": "^0.0.8"
 	},
 	"devDependencies": {
+		"@types/d3": "^7.4.0",
+		"@types/d3-array": "^3.0.3",
+		"@types/katex": "^0.14.0",
+		"@typescript-eslint/eslint-plugin": "^5.36.0",
 		"copy-webpack-plugin": "^11.0.0",
 		"css-loader": "^6.7.1",
+		"eslint": "^8.23.0",
 		"glob": "^7.2.3",
 		"html-webpack-plugin": "^5.5.0",
 		"style-loader": "^3.3.1",

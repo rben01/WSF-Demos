@@ -18,12 +18,11 @@ module.exports = function (env, argv) {
 	return demoDirs.map(dir => {
 		const name = path.basename(dir);
 
-		const entryPath = path.resolve(dir, "bootstrap.js");
+		const entryPath = path.resolve(dir, "bootstrap.ts");
 		const entry = { [name]: entryPath };
 
 		const output = {
 			path: path.resolve(__dirname, distDir, name),
-			library: "EntryPoint",
 		};
 
 		const plugins = [
@@ -40,6 +39,26 @@ module.exports = function (env, argv) {
 			? { minimize: true, minimizer: [new TerserPlugin()] }
 			: {};
 
+		const module = {
+			rules: [
+				{
+					test: /\.css$/i,
+					use: [
+						{
+							loader: "style-loader",
+							options: { insert: "head" },
+						},
+						"css-loader",
+					],
+				},
+				{
+					test: /\.tsx?$/,
+					use: "ts-loader",
+					exclude: /node_modules/,
+				},
+			],
+		};
+
 		return {
 			name,
 			entry,
@@ -47,67 +66,11 @@ module.exports = function (env, argv) {
 			plugins,
 			mode,
 			optimization,
-			experiments: { asyncWebAssembly: true },
-			module: {
-				rules: [
-					{
-						test: /\.css$/i,
-						use: [
-							{
-								loader: "style-loader",
-								options: { insert: "head" },
-							},
-							"css-loader",
-						],
-					},
-				],
+			module,
+			resolve: {
+				extensions: [".tsx", ".ts", ".js"],
 			},
+			experiments: { asyncWebAssembly: true },
 		};
 	});
 };
-
-console.log(module.exports({}, {}));
-
-// const entries = Object.fromEntries(
-// 	demoDirs.map(dir => {
-// 		const name = path.basename(dir);
-// 		return [name, path.resolve(dir, "bootstrap.js")];
-// 	}),
-// );
-// const htmlWebpackPlugins = demoDirs.map(dir => {
-// 	const name = path.basename(dir);
-// 	return new HtmlWebpackPlugin({
-// 		template: `./demos/${name}/index.html`,
-// 		filename: `${name}.html`,
-// 		inject: true,
-// 		chunks: [name],
-// 	});
-// });
-
-// module.exports = {
-// 	entry: entries,
-// 	output: {
-// 		path: path.resolve(__dirname, "dist-dev"),
-// 		filename(options) {
-// 			return `[name].js`;
-// 		},
-// 		chunkFilename: "[name].[chunkhash].[fullhash].js",
-// 	},
-// 	mode: "development",
-// 	plugins: [...htmlWebpackPlugins, new WebpackDeduplicationPlugin({})],
-// 	experiments: { asyncWebAssembly: true },
-// 	module: {
-// 		rules: [
-// 			{
-// 				test: /\.css$/i,
-// 				use: [
-// 					{
-// 						loader: "style-loader",
-// 						options: { insert: "head" },
-// 					},
-// 					"css-loader",
-// 				],
-// 			},
-// 		],
-// 	},
-// };
