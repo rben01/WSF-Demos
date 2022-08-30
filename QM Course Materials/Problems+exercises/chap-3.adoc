@@ -548,7 +548,7 @@ Since ++\(\Braket{a|x}\)++ is just a scalar, the eigenvectors corresponding to +
 * {q-num} For a matrix ++\(A\)++, the _matrix exponential_ is defined by replacing ++\(x\)++ in the power series for ++\(e^x\)++ with ++\(A\)++:
 ++\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]++
 (By analogy with numbers, ++\(A^0\)++ is defined to be the identity operator — perhaps the summation should be written ++\(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\)++.)
-The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers (or, conversely, with respect to the exponential, matrices themselves share several properties with complex numbers):
+The matrix exponential ++\(e^A\)++ shares some properties with the ordinary exponential ++\(e^z\)++ over complex numbers (or, with respect to the exponential, matrices themselves share several properties with complex numbers):
 +
 [{sublist-style}]
 .. Show that the matrix exponential of the zero operator is the identity operator. (Analog: ++\(e^0=1\)++.)
