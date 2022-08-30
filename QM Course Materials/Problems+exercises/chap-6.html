@@ -788,6 +788,22 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_questions_2">2.1. Questions</a></li>
 </ul>
 </li>
+<li><a href="#_conservation_laws">3. Conservation Laws</a></li>
+<li><a href="#_parity">4. Parity</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_3">4.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_rotational_symmetry">5. Rotational Symmetry</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_4">5.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_degeneracy">6. Degeneracy</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_5">6.1. Questions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
@@ -851,6 +867,140 @@ as desired.</p>
 </li>
 </ul>
 </div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_conservation_laws"><a class="anchor" href="#_conservation_laws"></a><a class="link" href="#_conservation_laws">3. Conservation Laws</a></h2>
+<div class="sectionbody">
+
+</div>
+</div>
+<div class="sect1">
+<h2 id="_parity"><a class="anchor" href="#_parity"></a><a class="link" href="#_parity">4. Parity</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">4.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators are &#8220;odd under parity&#8221;: if \(\hat\Pi\) is the parity operator, then</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\)</p>
+</li>
+<li>
+<p>\(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\)</p>
+</li>
+</ol>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>You may assume that \(\hat \Pi\) is hermitian.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Using the test function \(f\), we have
+\[\begin{align*}
+\hat\Pi^\dagger \,\hat x\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat x f(-x)\\
+&amp;=(-\hat x)f(x)
+\end{align*}\]
+So indeed \(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\).</p>
+</li>
+<li>
+<p>Similarly,
+\[\begin{align*}
+\hat\Pi^\dagger \,\hat p\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat p f(-x)\\
+&amp;=\hat\Pi^\dagger \left(-ih\frac{d}{dx}\right)f(-x)\\
+&amp;=-ih\frac{d}{d(-x)}f(x)\\
+&amp;=ih\frac{d}{dx}f(x)\\
+&amp;=-\hat pf(x)
+\end{align*}\]
+So indeed \(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\).</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute the following two operator exponentials in terms of \(\hat\Pi\), \(I\) (the identity operator), \(\cos\), \(\sin\), \(\cosh\) (the hyperbolic cosine), and \(\sinh\) (the hyperbolic sine):</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\exp(\hat\Pi)\)</p>
+</li>
+<li>
+<p>\(\exp(i\hat\Pi)\)</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>As \(\hat\Pi\) is its own inverse,
+\[\begin{align*}
+\hat\Pi^n &amp;=\begin{cases}
+\hat\Pi&amp;n\ \textrm{odd}\\
+I&amp;n\ \textrm{even}
+\end{cases}
+\end{align*}\]</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Then,
+\[\begin{align*}
+\exp(\hat\Pi)&amp;=\sum_{n=0}^\infty \frac{\hat\Pi^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{\hat\Pi^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi}{n!}\\
+&amp;=I\left(\frac{e+e^{-1}}{2}\right)+\hat\Pi\left(\frac{e-e^{-1}}{2}\right)\\
+&amp;=I\cosh(1)+\hat\Pi\sinh(1)
+\end{align*}\]</p>
+</li>
+<li>
+<p>Similarly,
+\[\begin{align*}
+\exp(i\hat\Pi)&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{(i\hat\Pi)^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{(i\hat\Pi)^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I(-1)^{n/2}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi(-1)^{n/2}}{n!}\\
+&amp;=I\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n)!}+i\hat\Pi\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n+1)!}\\
+&amp;=I\cos(1)+\hat\Pi i\sin(1)
+\end{align*}\]</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_rotational_symmetry"><a class="anchor" href="#_rotational_symmetry"></a><a class="link" href="#_rotational_symmetry">5. Rotational Symmetry</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">5.1. Questions</a></h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_degeneracy"><a class="anchor" href="#_degeneracy"></a><a class="link" href="#_degeneracy">6. Degeneracy</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">6.1. Questions</a></h3>
+
 </div>
 </div>
 </div>
