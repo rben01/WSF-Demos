@@ -1,12 +1,11 @@
-const HtmlWebpackPlugin = require("html-webpack-plugin");
-// const CopyWebpackPlugin = require("copy-webpack-plugin");
-const { WebpackDeduplicationPlugin } = require("webpack-deduplication-plugin");
-const TerserPlugin = require("terser-webpack-plugin");
-const glob = require("glob");
-const fs = require("fs");
-const path = require("path");
+import HtmlWebpackPlugin from "html-webpack-plugin";
+import { WebpackDeduplicationPlugin } from "webpack-deduplication-plugin";
+import TerserPlugin from "terser-webpack-plugin";
+import glob from "glob";
+import fs from "fs";
+import path from "path";
 
-module.exports = function (env, argv) {
+export default function (env, argv) {
 	const modeIsProduction = argv.mode === "production";
 	const mode = modeIsProduction ? "production" : "development";
 	const distDir = modeIsProduction ? "dist" : "dist-dev";
@@ -22,7 +21,8 @@ module.exports = function (env, argv) {
 		const entry = { [name]: entryPath };
 
 		const output = {
-			path: path.resolve(__dirname, distDir, name),
+			path: path.resolve("./", distDir, name),
+			module: true,
 		};
 
 		const plugins = [
@@ -36,7 +36,20 @@ module.exports = function (env, argv) {
 		];
 
 		const optimization = modeIsProduction
-			? { minimize: true, minimizer: [new TerserPlugin()] }
+			? {
+					minimize: true,
+					minimizer: [
+						new TerserPlugin({
+							extractComments: false,
+							terserOptions: {
+								ecma: 2020,
+								compress: true,
+								mangle: true,
+								module: true,
+							},
+						}),
+					],
+			  }
 			: {};
 
 		const module = {
@@ -70,7 +83,11 @@ module.exports = function (env, argv) {
 			resolve: {
 				extensions: [".tsx", ".ts", ".js"],
 			},
-			experiments: { asyncWebAssembly: true },
+			experiments: {
+				asyncWebAssembly: true,
+				outputModule: true,
+				topLevelAwait: true,
+			},
 		};
 	});
-};
+}

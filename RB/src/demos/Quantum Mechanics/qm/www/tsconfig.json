@@ -2,7 +2,7 @@
 	"compileOnSave": true,
 	"compilerOptions": {
 		"allowJs": true,
-		"target": "ES6",
+		"target": "ESNext",
 		"module": "ESNext",
 		"moduleResolution": "Node"
 	},

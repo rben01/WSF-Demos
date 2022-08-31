@@ -6,6 +6,7 @@
 	"bin": {
 		"create-wasm-app": ".bin/create-wasm-app.js"
 	},
+	"type": "module",
 	"scripts": {
 		"wasm-pack": "run(){ wasm-pack build --release --target bundler --out-dir \"pkg/$1\" --out-name demo --no-default-features --features \"$1\"; }; run",
 		"wasm-pack-dev": "run(){ wasm-pack build --target bundler --out-dir \"pkg/$1\" --out-name demo --features \"$1\"; }; run",
@@ -39,16 +40,15 @@
 	"dependencies": {
 		"common": "file:./demos",
 		"d3": "^7.6.1",
-		"d3-array": "^3.2.0",
 		"katex": "^0.16.0",
 		"particle_in_a_box": "file:../pkg/particle_in_a_box",
-		"three": "^0.123.0",
+		"three": "^0.143.0",
 		"webpack-deduplication-plugin": "^0.0.8"
 	},
 	"devDependencies": {
 		"@types/d3": "^7.4.0",
-		"@types/d3-array": "^3.0.3",
 		"@types/katex": "^0.14.0",
+		"@types/three": "^0.143.2",
 		"@typescript-eslint/eslint-plugin": "^5.36.0",
 		"copy-webpack-plugin": "^11.0.0",
 		"css-loader": "^6.7.1",

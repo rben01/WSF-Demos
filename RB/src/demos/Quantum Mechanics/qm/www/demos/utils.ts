@@ -9,7 +9,7 @@ type Datum = {
 	text?: string;
 	class?: string;
 	classes?: string[];
-	children: Datum[];
+	children?: Datum[];
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -89,7 +89,7 @@ export function applyDatum(
 // eslint-disable-next-line no-unused-vars
 export function applyGraphicalObjs(
 	sel,
-	data,
+	data: Datum[] | (() => Datum[]),
 	{
 		key,
 		selector,
