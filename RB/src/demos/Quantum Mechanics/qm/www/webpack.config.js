@@ -29,8 +29,10 @@ export default function (env, argv) {
 			new HtmlWebpackPlugin({
 				template: `./demos/${name}/index.html`,
 				filename: "index.html",
-				inject: true,
 				chunks: [name],
+				inject: true,
+				minify: true,
+				scriptLoading: "module",
 			}),
 			new WebpackDeduplicationPlugin({}),
 		];
