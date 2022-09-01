@@ -88,7 +88,12 @@ const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
 	transparent: false,
 });
 const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
-	color: 0x2277ff,
+	color: 0x3366ff,
+	side: THREE.DoubleSide,
+	transparent: false,
+});
+const SHADOW_MATERIAL = new THREE.MeshLambertMaterial({
+	color: 0x5599ff,
 	side: THREE.DoubleSide,
 	transparent: false,
 });
@@ -156,18 +161,6 @@ d3.selectAll(".slider").on("input", () => {
 });
 
 function getAxisData() {
-	const tickLength = 7;
-
-	const xAxisTicks = xScale2D.ticks(20).filter(x => x !== X_0);
-	const nXAxisLabels = 5;
-	const xAxisLabelTicks = xScale2D.ticks(nXAxisLabels).filter(x => x !== X_0);
-	const xAxisFormatter = xScale2D.tickFormat(nXAxisLabels);
-
-	const yAxisTicks = yScale2D.ticks(5).filter(y => y !== Y_0);
-	const nYAxisLabels = 5;
-	const yAxisLabelTicks = yScale2D.ticks(nYAxisLabels).filter(y => y !== Y_0);
-	const yAxisFormatter = yScale2D.tickFormat(nYAxisLabels, "~g");
-
 	const xs0 = xScale2D(X_0);
 	const ys0 = yScale2D(Y_0);
 
@@ -195,56 +188,6 @@ function getAxisData() {
 				y2: yMax,
 			},
 		},
-		...xAxisTicks.map(x => {
-			const xs = xScale2D(x);
-			return {
-				shape: "line",
-				class: "axis axis-tick x-axis-tick",
-				attrs: {
-					x1: xs,
-					x2: xs,
-					y1: ys0,
-					y2: ys0 + tickLength,
-				},
-			};
-		}),
-		...xAxisLabelTicks.map(x => {
-			const xs = xScale2D(x);
-			return {
-				shape: "text",
-				class: "axis axis-label x-axis-label",
-				text: xAxisFormatter(x),
-				attrs: {
-					x: xs,
-					y: ys0 + 12,
-				},
-			};
-		}),
-		...yAxisTicks.map(y => {
-			const ys = yScale2D(y);
-			return {
-				shape: "line",
-				class: "axis axis-tick y-axis-tick",
-				attrs: {
-					x1: xs0,
-					x2: xs0 - tickLength,
-					y1: ys,
-					y2: ys,
-				},
-			};
-		}),
-		...yAxisLabelTicks.map(y => {
-			const ys = yScale2D(y);
-			return {
-				shape: "text",
-				class: "axis axis-label y-axis-label",
-				text: yAxisFormatter(y),
-				attrs: {
-					x: xs0 - 10,
-					y: ys,
-				},
-			};
-		}),
 		{
 			shape: "text",
 			class: "axis axis-label x-axis-label axis-name x-axis-name",
@@ -272,15 +215,15 @@ function getAxisData() {
 utils.applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
 
 function getWavefunctionPath3D() {
-	const pathPoints = [];
+	const pathPoints: THREE.Vector3[] = [];
 	for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
 		const x = xs[i];
 		const re = Psi_t[2 * i];
 		const im = Psi_t[2 * i + 1];
+
 		pathPoints.push(new THREE.Vector3(xScale3D(x), yScale3D(-im), zScale3D(re)));
 	}
-	const path = new THREE.CatmullRomCurve3(pathPoints);
-	return path;
+	return pathPoints;
 }
 
 function makeAxisLabel(text) {
@@ -299,15 +242,22 @@ const zMin = zScale3D(Z_MIN);
 const zs0 = zScale3D(Z_0);
 const zMax = zScale3D(Z_MAX);
 
-const objs3d: { empty: boolean; wave?: { wave: THREE.Mesh } } = { empty: true };
+const objs3d: {
+	empty: boolean;
+	wave?: {
+		wave: THREE.Mesh;
+		yzShadow: THREE.Mesh;
+		xzShadow: THREE.Mesh;
+		xyShadow: THREE.Mesh;
+	};
+} = {
+	empty: true,
+};
 
 function update3D() {
 	const arrowheadRadius = 0.25;
 	const arrowheadHeight = 0.7;
-	const arrowheadGeometry = new THREE.ConeBufferGeometry(
-		arrowheadRadius,
-		arrowheadHeight,
-	);
+	const arrowheadGeometry = new THREE.ConeGeometry(arrowheadRadius, arrowheadHeight);
 
 	if (objs3d.empty) {
 		objs3d.empty = false;
@@ -315,7 +265,7 @@ function update3D() {
 
 		// x axis
 		(() => {
-			const xAxixGeometry = new THREE.TubeBufferGeometry(
+			const xAxixGeometry = new THREE.TubeGeometry(
 				new THREE.LineCurve3(
 					new THREE.Vector3(xMin, ys0, zs0),
 					new THREE.Vector3(xMax, ys0, zs0),
@@ -336,7 +286,7 @@ function update3D() {
 
 		// y axis
 		(() => {
-			const yAxixGeometry = new THREE.TubeBufferGeometry(
+			const yAxixGeometry = new THREE.TubeGeometry(
 				new THREE.LineCurve3(
 					new THREE.Vector3(xs0, yMin, zs0),
 					new THREE.Vector3(xs0, yMax, zs0),
@@ -356,7 +306,7 @@ function update3D() {
 
 		// z axis
 		(() => {
-			const zAxixGeometry = new THREE.TubeBufferGeometry(
+			const zAxixGeometry = new THREE.TubeGeometry(
 				new THREE.LineCurve3(
 					new THREE.Vector3(xs0, ys0, zMin),
 					new THREE.Vector3(xs0, ys0, zMax),
@@ -398,19 +348,69 @@ function update3D() {
 		// wave template geometry
 		(() => {
 			const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
-			scene.add(wave);
-			objs3d.wave = { wave };
+			const [yzShadow, xzShadow, xyShadow] = d3.range(3).map(() => {
+				const mesh = new THREE.Mesh(
+					new THREE.BufferGeometry(),
+					SHADOW_MATERIAL,
+				);
+				mesh.visible = false;
+				return mesh;
+			});
+
+			scene.add(wave, yzShadow, xzShadow, xyShadow);
+
+			objs3d.wave = { wave, yzShadow, xzShadow, xyShadow };
 		})();
 	}
 
-	const { wave } = objs3d.wave;
-	wave.geometry.dispose();
-	wave.geometry = new THREE.TubeBufferGeometry(
-		getWavefunctionPath3D(),
-		1000,
-		0.11,
-		8,
+	const { wave, yzShadow, xzShadow, xyShadow } = objs3d.wave;
+
+	const wfPathPoints = getWavefunctionPath3D();
+
+	const wavePath = new THREE.CatmullRomCurve3(wfPathPoints);
+	const shadowDistance = 0.9;
+	const yzShadowPath = new THREE.CatmullRomCurve3(
+		wfPathPoints.map(vec => new THREE.Vector3(xScale3D(X_0), vec.y, vec.z)),
 	);
+	const xzShadowPath = new THREE.CatmullRomCurve3(
+		wfPathPoints.map(
+			vec => new THREE.Vector3(vec.x, yScale3D(shadowDistance), vec.z),
+		),
+	);
+	const xyShadowPath = new THREE.CatmullRomCurve3(
+		wfPathPoints.map(
+			vec => new THREE.Vector3(vec.x, vec.y, yScale3D(-shadowDistance)),
+		),
+	);
+
+	const shadowRadius = 0.025;
+	const shadowRadiusSegments = 4;
+	const objPaths = [
+		{ obj: wave, path: wavePath, radius: 0.1, radiusSegments: 8 },
+		{
+			obj: yzShadow,
+			path: yzShadowPath,
+			radius: shadowRadius,
+			radiusSegments: shadowRadiusSegments,
+		},
+		{
+			obj: xzShadow,
+			path: xzShadowPath,
+			radius: shadowRadius,
+			radiusSegments: shadowRadiusSegments,
+		},
+		{
+			obj: xyShadow,
+			path: xyShadowPath,
+			radius: shadowRadius,
+			radiusSegments: shadowRadiusSegments,
+		},
+	];
+
+	for (const { obj, path, radius, radiusSegments } of objPaths) {
+		obj.geometry.dispose();
+		obj.geometry = new THREE.TubeGeometry(path, 500, radius, radiusSegments);
+	}
 
 	renderer.render(scene, camera);
 }
@@ -459,14 +459,32 @@ function getData2D() {
 	return data;
 }
 
+function setShadowVisibility(visible: boolean) {
+	console.log(objs3d);
+
+	if (objs3d.wave === undefined) {
+		return;
+	}
+
+	const { yzShadow, xzShadow, xyShadow } = objs3d.wave;
+	for (const shadow of [yzShadow, xzShadow, xyShadow]) {
+		if (shadow) {
+			shadow.visible = visible;
+		}
+	}
+
+	renderer.render(scene, camera);
+}
+
 function initialize() {
 	const params = getParams();
 	const L = params.get_L();
 	eigen_computer = wasm.WavefunctionInitialConditionsComputer.new(params);
 	xs = range(N_WAVEFUNCTION_POINTS).map(i => (i * L) / (N_WAVEFUNCTION_POINTS - 1));
 
-	document.getElementById("btn-more-coefs").innerText =
-		"Compute 1,000 more coefficients";
+	document.getElementById(
+		"btn-more-coefs",
+	).innerText = `Compute ${nCoefficientsPerStepStr}  more coefficients`;
 
 	katex.render(String.raw`n=0`, document.getElementById("n-max"));
 	katex.render(
@@ -475,6 +493,8 @@ function initialize() {
 	);
 
 	buttons.play.disabled = true;
+
+	setShadowVisibility(false);
 }
 
 const formatter = d3.format(".2~e");
@@ -494,14 +514,16 @@ function getEigenSqSumLatex() {
 	return String.raw`\sum_{i=1}^n |c_i|^2= 1-${subtract}`;
 }
 
+const nCoefficientsPerStep = 250;
+const nCoefficientsPerStepStr = d3.format(",~d")(nCoefficientsPerStep);
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function step_compute(n = 1000) {
+function step_compute() {
 	const moreCoefsButton = buttons["more-coefs"];
 	moreCoefsButton.disabled = true;
-	moreCoefsButton.innerText = "Computing 1,000 more coefficients...";
+	moreCoefsButton.innerText = `Computing ${nCoefficientsPerStepStr} more coefficients...`;
 
 	setTimeout(() => {
-		eigen_computer.step_compute(n);
+		eigen_computer.step_compute(nCoefficientsPerStep);
 
 		// eslint-disable-next-line no-use-before-define
 		update(0, true);
@@ -511,11 +533,12 @@ function step_compute(n = 1000) {
 
 		katex.render(getEigenSqSumLatex(), document.getElementById("cn-sq-sum"));
 
-		moreCoefsButton.innerText = "Compute 1,000 more coefficients";
+		moreCoefsButton.innerText = `Compute ${nCoefficientsPerStepStr} more coefficients`;
 		moreCoefsButton.disabled = false;
 
 		buttons.play.disabled = false;
-	}, 200);
+		setShadowVisibility(true);
+	}, 100);
 }
 
 function update(dtMS?: number, should_initialize = false) {
