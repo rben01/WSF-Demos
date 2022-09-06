@@ -134,7 +134,9 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} raising and lowering operators
 
-* {q-num} write L^2 in spherical coordinates
+showing L_? is hermitian?
+
+* {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
 * {q-num} applying operators to Ylm, inc. L^2, L+/-, Lx, Ly, Lz
 
