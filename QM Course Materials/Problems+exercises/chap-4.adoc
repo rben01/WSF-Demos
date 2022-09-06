@@ -140,7 +140,7 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} For ____ in state ____ find <exp val> and uncertainty.
 
-* {q-num}
+* {q-num} rigid rotator example?
 
 
 
