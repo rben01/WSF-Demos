@@ -3946,7 +3946,25 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <h3 id="_angular_momentum"><a class="anchor" href="#_angular_momentum"></a><a class="link" href="#_angular_momentum">4.3. Angular Momentum</a></h3>
 <div class="sect3">
 <h4 id="_questions_19"><a class="anchor" href="#_questions_19"></a><a class="link" href="#_questions_19">Questions</a></h4>
-
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="sect2">
@@ -3956,7 +3974,7 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(S_x\), \(S_y\), \(S_z\), and \(S^2\) are pairwise compatible observables.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Given \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\), show that \(S_x\), \(S_y\), \(S_z\), and \(S^2\) are pairwise compatible observables.</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> This problem will walk you through the steps to algebraically determine the eigenvalues of \(S^2\) and \(S_z\).</p>
@@ -3972,19 +3990,29 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <p>Show that \(S^2(S_{\pm}^n \ket{a, b}) = a(S_{\pm}^n \ket{a, b})\) and \(S_z(S_{\pm}^n \ket{a, b}) = (b\pm n\hbar)(S_{\pm}^n \ket{a, b})\).</p>
 </li>
 <li>
-<p>Since \(S^2 = S_x^2 + S_y^2 + S_z^2\), then \(a^2 \ge (b+n\hbar)^2\), which means there must be a maximum value of \(n\), which we will call \(N\), such that \(S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}\)  and \(S_z (S_+)^{N+1}\ket{a,b} = 0\). Use the operator \(S_{-}S_{+}\) and eigenstate \(\ket{a, b+N\hbar}\) to show that \( a = stuff \). Repeat this argument with MIN.</p>
+<p>Since \(S^2 = S_x^2 + S_y^2 + S_z^2\), then \(a^2 \ge (b+n\hbar)^2\). There must be a maximum value of \(n\), which we will call \(N\), such that \(S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}\)  and \(S_z (S_+)^{N+1}\ket{a,b} = 0\). Use the operator \(S_{-}S_{+}\) and eigenstate \(\ket{a, b+N\hbar}\) to show that \( a = (b+N\hbar)(b+N\hbar + \hbar) \).</p>
 </li>
 <li>
-<p>For the sake of convention, let \(b=m\) and \(b+N\hbar = s\).</p>
+<p>Let \(b=\hbar m\) and \(b+N\hbar = \hbar s\). Write out the full eigenvalue equations for \(S^2\) and \(S_z\).</p>
 </li>
 </ol>
 </div>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> (a) Show that pauli matrices satisfy commutation relations given in 4.4.2. (b) find eigenvalues for pauli matrices. (c) find eigenvectors of pauli matrices</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a spin-\(\frac{1}{2}\) particle use the Pauli matrices, \(\sigma_{x} = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}\), \(\sigma_{y} =  \begin{pmatrix} 0 &amp; -i \\ i &amp; 0 \end{pmatrix}\), and \(\sigma_{z} =  \begin{pmatrix}1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix} \) to</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that  \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\) .</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \(e^{\sigma_r}\) for \(r=x,y,z\).</p>
+<p>Find the eigenvalues for \(S_x\), \(S_y\), and \(S_z\).</p>
+</li>
+<li>
+<p>Find the eigenvectors for \(S_x\), \(S_y\), and \(S_z\).</p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a spin-\(\frac{1}{2}\) particle is in the state \(A\begin{pmatrix}3+4i\\12\end{pmatrix}\).</p>
@@ -3994,12 +4022,12 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <p>Compute \(A\) so that the state is normalized.</p>
 </li>
 <li>
-<p>Rewrite STATE as a linear combinations of chix, chiy, chiz</p>
-</li>
-<li>
 <p>For each spin observable \(S=S_x,S_y,S_z\):</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
+<li>
+<p>Rewrite the state as a linear combinations of the eigenvectors of \(S\).</p>
+</li>
 <li>
 <p>What are the probabilities of getting \(\pm\frac{\hbar}{2}\) if you measure \(S\)?</p>
 </li>
@@ -4013,10 +4041,13 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 </div>
 </li>
 <li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \(e^{\sigma_r}\) for \(r=x,y,z\).</p>
+</li>
+<li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span>  Stern gerlach question (1)</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Addition of angular momentum (1)</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> **Add in a question about addition of angular momentum</p>
 </li>
 </ul>
 </div>
@@ -4026,7 +4057,19 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 <h3 id="_electromagnetic_interactions"><a class="anchor" href="#_electromagnetic_interactions"></a><a class="link" href="#_electromagnetic_interactions">4.5. Electromagnetic Interactions</a></h3>
 <div class="sect3">
 <h4 id="_questions_21"><a class="anchor" href="#_questions_21"></a><a class="link" href="#_questions_21">Questions</a></h4>
-
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+</ul>
+</div>
 </div>
 </div>
 </div>
