@@ -132,13 +132,13 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 == Angular Momentum
 === Questions
 
-* {q-num}
+* {q-num} raising and lowering operators
 
-* {q-num}
+* {q-num} write L^2 in spherical coordinates
 
-* {q-num}
+* {q-num} applying operators to Ylm, inc. L^2, L+/-, Lx, Ly, Lz
 
-* {q-num}
+* {q-num} For ____ in state ____ find <exp val> and uncertainty.
 
 * {q-num}
 
