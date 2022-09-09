@@ -7,6 +7,31 @@
 			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
 			crossorigin="anonymous"
 		></script>
+
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+			integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"
+			integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz"
+			crossorigin="anonymous"
+			onload="update()"
+		></script>
+
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"
+			integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+			crossorigin="anonymous"
+			onload="renderMathInElement(document.body);"
+		></script>
 		<link rel="stylesheet" href="../../qm_demo.css" />
 		<style>
 			body {
@@ -104,26 +129,19 @@
 		<div class="grid-left-right">
 			<div class="controls-container">
 				<div class="slider-container">
-					<span>Shape of probability distribution</span>
-					<span
-						id="wavefunction-shape-buttons"
-						class="radio-button-container horizontal"
-					>
-						<button
-							class="button shape-button"
-							shape="gaussian"
-							data-button-checked
-						>
-							Gaussian</button
-						><button class="button shape-button" shape="triangle">
-							Triangle</button
-						><button class="button shape-button" shape="square">
-							Square</button
-						><button class="button shape-button" shape="smallSquare">
-							Narrower square
-						</button>
+					<span>Eigenfunction: <span id="text-n"></span></span>
+					<span>
+						<label
+							><input type="range" name="eigen-n" id="eigen-n-slider"
+						/></label>
 					</span>
-					<span>or drag the plot below to set manually</span>
+					<span>Well width</span>
+					<span>
+						<label
+							><input type="range" name="length" id="L-slider"
+						/></label>
+					</span>
+					<span></span>
 					<svg id="wavefunction-plot" class="plot"></svg>
 					<span>Measurement speed: <span id="experiment-speed"></span></span>
 					<span>
@@ -174,6 +192,6 @@
 		</div>
 		<div></div>
 		<script src="../../../utils.js"></script>
-		<script src="./wavefunctions_and_probability_sampling_experiment.js"></script>
+		<script src="./particle_in_a_box_eigenfunction_sampling.js"></script>
 	</body>
 </html>
