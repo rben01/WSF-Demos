@@ -31,6 +31,8 @@ as desired.
 
 === Questions
 
+* {q-num} Compute ++\([T(a), \hat x]\)++, the commutator of the translation and position operators.
+
 * {q-num} Show that _all_ observables invariant under translation (observables ++\(Q\)++ for which ++\(\hat T^\dagger QT=Q\)++) are of the form ++\(Q(x,p)=\sum_{n=0}^\infty a_n p^n\)++, where the ++\(a_n\)++ are constants.
 
 == Conservation Laws
@@ -62,9 +64,9 @@ So indeed ++\(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\)++.
 .. Similarly,
 ++\[\begin{align*}
 \hat\Pi^\dagger \,\hat p\,\hat\Pi f(x)&=\hat\Pi^\dagger \,\hat p f(-x)\\
-&=\hat\Pi^\dagger \left(-ih\frac{d}{dx}\right)f(-x)\\
-&=-ih\frac{d}{d(-x)}f(x)\\
-&=ih\frac{d}{dx}f(x)\\
+&=\hat\Pi^\dagger \left(-i\hbar\frac{d}{dx}\right)f(-x)\\
+&=-i\hbar\frac{d}{d(-x)}f(x)\\
+&=i\hbar\frac{d}{dx}f(x)\\
 &=-\hat pf(x)
 \end{align*}\]++
 So indeed ++\(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\)++.
@@ -111,6 +113,15 @@ I&n\ \textrm{even}
 
 === Questions
 
+
 == Degeneracy
+
+=== Questions
+
+== Rotational Selection Rules
+
+=== Questions
+
+== Translations in Time
 
 === Questions
