@@ -192,8 +192,13 @@ showing L_? is hermitian?
 
 * {q-num} [I remember especially liking the following question *(1.1) from Townsend* as an undergraduate] Determine the field gradient of a 50-cm-long Stern-Gerlach magnet that would produce a 1-mm separation at the detector between spin-up and spin-down silver atoms that are emitted from an over at ++\(T=1500 \)++K. Assume the detector (see Fig 1.1) is located 50 cm from the magnet. _Note_: While the atoms in the oven have average kinetic energy ++\(3k_BT/2\)++, the more energetic atoms strike the hold in hte oven more frequently. Thus the _emitted_ atoms have average kinetic energy ++\(2k_BT\)++, where ++\(k_B\)++ is the Boltzmann constant. The magnetic dipole moment of the silver atom is due to the intrinsic spin of the single electron. Appendix F gives the numerical value of the Bohr magneton, ++\(e\hbar /2m_ec\)++, in a convenient form.
 
-* {q-num} **Add in a question about addition of angular momentum
+* {q-num} What are ++\(s\)++ and ++\(m\)++ for two particles in the state ++\[\Ket{s \, m} = \frac{\sqrt{3}}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-1}{2} \, \frac{-1}{2}} + \frac{1}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-3}{2} \, \frac{1}{2}} \]++
 
+* {q-num} You have a spin-++\(2\)++ and spin-++\(\frac{1}{2}\)++ particle in a combined state with ++\(s=\frac{3}{2}\)++ and ++\(m=-\frac{3}{2}\)++. You may use a table of Clebsch-Gordan coefficients to help you.
++
+[{sublist-style}]
+.. What are the possible spin states that each of the particles could be in?
+.. What are the probabilities of each particle being in the spin states from part (a)?
 
 
 == Electromagnetic Interactions
