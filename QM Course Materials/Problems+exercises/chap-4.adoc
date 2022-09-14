@@ -132,9 +132,7 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 == Angular Momentum
 === Questions
 
-* {q-num} raising and lowering operators
-
-showing L_? is hermitian?
+* {q-num} Do ++\(L_+\)++ and ++\(L_-\)++ commute? Why is this significant?
 
 * {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
