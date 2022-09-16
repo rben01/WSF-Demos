@@ -134,13 +134,16 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} Do ++\(L_+\)++ and ++\(L_-\)++ commute? Why is this significant?
 
+* {q-num} Suppose you have a hydrogen atom in the orbital angular momentum state ++\(Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1} \)++.
++
+[{sublist-style}]
+.. Find ++\(\braket{L^2}\)++, ++\(\braket{L_z}\)++, ++\(\braket{L_+}\)++, and ++\(\braket{L_-}\)++.
+
 * {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
-* {q-num} applying operators to Ylm, inc. L^2, L+/-, Lx, Ly, Lz
+* {q-num} For the spherical harmonic ------   in state  find <exp val> and uncertainty.
 
-* {q-num} For ____ in state ____ find <exp val> and uncertainty.
-
-* {q-num} rigid rotator example?
+* {q-num} ADDITIONAL EXAMPLE???
 
 
 
@@ -201,8 +204,6 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 == Electromagnetic Interactions
 === Questions
-* {q-num}
-
 * {q-num}
 
 * {q-num}
