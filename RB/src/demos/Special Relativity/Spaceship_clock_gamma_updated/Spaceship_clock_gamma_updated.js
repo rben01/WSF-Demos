@@ -138,16 +138,16 @@ $("#start").click(function () {
     if (interval) {
         clearInterval(interval);
         interval = false;
-        button.value = "Start";
+        button.innerHTML = "Start";
     } else {
         interval = setInterval(go, 50);
-        button.value = "Pause";
+        button.innerHTML = "Pause";
     }
 });
 
 $("#reset").click(function () {
     button = document.getElementById("start");
-    button.value = "Start";
+    button.innerHTML = "Start";
     t = 0;
     clearInterval(interval);
     interval = false;
