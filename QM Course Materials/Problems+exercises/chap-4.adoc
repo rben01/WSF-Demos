@@ -71,8 +71,6 @@ But if you take one more antiderivative you no longer have a factor of ++\(x^2-1
 
 * {q-num} [I have not worked out this equation yet] Solve the spherical harmonic oscillator, ++\(V(r)=-k\lVert\mathbf r\rVert^2\)++.
 
-* {q-num} (Optional) Convert the Laplacian from cartesian coordinates to spherical coordinates.
-
 * {q-num} In this question you will examine some of the constraints on the separation constants ++\(l(l+1)\)++ and ++\(m^2\)++.
 +
 [{sublist-style}]
@@ -134,13 +132,21 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} Do ++\(L_+\)++ and ++\(L_-\)++ commute? Why is this significant?
 
+* {q-num} Suppose you have a hydrogen atom in the orbital angular momentum state ++\[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]++ Determine ++\(\braket{L^2}\)++, ++\(\braket{L_z}\)++,  ++\(\braket{L_x}\)++, and ++\(\braket{L_y}\)++.
+
 * {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
-* {q-num} applying operators to Ylm, inc. L^2, L+/-, Lx, Ly, Lz
+* {q-num} For the spherical harmonic ------   in
++
+[{sublist-style}]
+.. apply raising and lowering ops to find
+.. verify 4.3.2 exp vals?
+.. different wf
+.. uncertainty
+.. show l2 (l+ ) Y is eingenstate w same eigenval
+.. satisfies ang eqn
 
-* {q-num} For ____ in state ____ find <exp val> and uncertainty.
-
-* {q-num} rigid rotator example?
+* {q-num}
 
 
 
