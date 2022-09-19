@@ -201,8 +201,10 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 == Electromagnetic Interactions
 === Questions
-* {q-num}
+* {q-num} Generalize the method to derive 4.213 to time-dependent vector potentials ++\(\mathbf A\)++ resulting in zero magnetic field (++\(\mathbf{B}=\nabla\times \mathbf{A}=0\)++).
 
-* {q-num}
-
-* {q-num}
+* {q-num} The total magnetic flux through a solenoid made of a wire of length ++\(l\)++ coiled ++\(N\)++ times, whose cross section has area ++\(A\)++, and with a current ++\(I\)++, is ++\(\Phi=\mu_0\frac{NIA}{l}\)++ where ++\(\mu_0\)++ is the permeability of free space.
+(Assume that the solenoid is long enough that end effects do not need to be taken into account.)
+.. In the Aharonov–Bohm Effect, what values of ++\(l\)++, ++\(N\)++, ++\(I\)++, and ++\(A\)++ lead to maximum constructive interference of the two electron beams. How about for maximum destructive interference?
+.. Suppose the center of the solenoid is now filled not with air, but with iron, which has a permeability of approximately++\(2\times 10^6\mu_0\)++.
+Repeat part (a).
