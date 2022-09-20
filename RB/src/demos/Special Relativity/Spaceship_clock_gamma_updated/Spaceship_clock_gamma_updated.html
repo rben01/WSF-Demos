@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+	<title>Spaceship Clock</title>
+	<meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato" />
+	<link
+		rel="stylesheet"
+		href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+	/>
+	<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+	<style>
+		body{
+			background-image: url('https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/space.jpeg');
+			background-repeat: no-repeat;
+			background-size: cover;
+		}
+	</style>
+
+	<body>
+		<div id="formContainer" class="w3-content w3-container">
+			<div>
+				<label for="speed" style="font-size: 20px"
+					><span class="slider-label">Speed of Rocket (<i>mph</i>):</span>
+					<input
+						type="number"
+						inputmode="numeric"
+						id="speed"
+						name="speed"
+						min="0"
+						max="671000000"
+						step="1"
+						value="1"
+						oninput="speedID.innerHTML = this.value; gammaID.innerHTML = 1 / Math.sqrt(1 - ((parseInt(this.value) / 671000000) ** 2))"
+				/></label>
+				<br />
+				<text style="font-size: 20px"
+					><i>v</i> = <span class="highlighted-text" id="speedID"></span>
+					<i>mph</i></text
+				>
+				<br />
+				<text style="font-size: 20px"
+					><i>γ</i> = <span class="highlighted-text" id="gammaID"></span
+				></text>
+				<br />
+				<button class="play-button" id="start" style="align-items:center;">Start</button>
+				<button class="play-button" id="reset" style="align-items:center">Reset</button>
+			</div>
+			<br />
+		</div>
+
+		<div id="animate" class="w3-content w3-container">
+			<canvas id="canvas" width="900" height="400"></canvas>
+		</div>
+
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
+			integrity="sha256-CIc5A981wu9+q+hmFYYySmOvsA3IsoX+apaYlL0j6fg="
+			crossorigin="anonymous"
+		></script>
+		<script
+			type="text/javascript"
+			src="https://code.jquery.com/jquery-2.2.0.min.js"
+		></script>
+
+		<script type="text/javascript" src="./Spaceship_clock_gamma_updated.js"></script>
+	</body>
+</html>

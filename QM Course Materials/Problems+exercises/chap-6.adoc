@@ -6,7 +6,7 @@ include::shared_attributes.adoc[]
 
 === Questions
 
-* {q-num} Given a regular ++\(n\)++-sided polygon ++\(P_n\)++, a symmetry of ++\(P_n\)++ is any mapping ++\(f\)++ from the vertices to the vertices that preserves adjacency: if and only if vertices ++\(v_i\)++ and ++\(v_j\)++ are adjacent in ++\(P_n\)++, then ++\(f(v_i)\)++ and ++\(f(v_j)\)++ are adjacent in ++\(f(P_n)\)++.
+* {q-num} Given a regular ++\(n\)++-sided polygon ++\(P_n\)++, a symmetry of ++\(P_n\)++ is any mapping ++\(f\)++ between the vertices that preserves adjacency: if and only if vertices ++\(v_i\)++ and ++\(v_j\)++ are adjacent in ++\(P_n\)++ are ++\(f(v_i)\)++ and ++\(f(v_j)\)++ adjacent in ++\(f(P_n)\)++.
 .. Explicitly compute the symmetries of the equilateral triangle.
 How many are there?
 .. Do the same for the square.
@@ -33,9 +33,11 @@ as desired.
 
 * {q-num} Compute ++\([T(a), \hat x]\)++, the commutator of the translation and position operators.
 
-* {q-num} Show that _all_ observables invariant under translation (observables ++\(Q\)++ for which ++\(\hat T^\dagger QT=Q\)++) are of the form ++\(Q(x,p)=\sum_{n=0}^\infty a_n p^n\)++, where the ++\(a_n\)++ are constants.
+* {q-num} Show that _all_ observables invariant under translation (observables ++\(Q\)++ for which ++\(\hat T^\dagger Q\hat T=Q\)++) are of the form ++\(Q(x,p)=\sum_{n=0}^\infty a_n p^n\)++, where the ++\(a_n\)++ are constants.
 
 == Conservation Laws
+
+=== Questions
 
 == Parity
 
@@ -73,7 +75,7 @@ So indeed ++\(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\)++.
 ====
 --
 
-* {q-num} Compute the following two operator exponentials in terms of ++\(\hat\Pi\)++, ++\(I\)++ (the identity operator), ++\(\cos\)++, ++\(\sin\)++, ++\(\cosh\)++ (the hyperbolic cosine), and ++\(\sinh\)++ (the hyperbolic sine):
+* {q-num} Compute the following two operator exponentials in terms of ++\(\hat\Pi\)++, ++\(I\)++ (the identity operator), and ++\(e\)++:
 +
 [{sublist-style}]
 .. ++\(\exp(\hat\Pi)\)++
@@ -103,9 +105,10 @@ I&n\ \textrm{even}
 . Similarly,
 ++\[\begin{align*}
 \exp(i\hat\Pi)&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{(i\hat\Pi)^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{(i\hat\Pi)^n}{n!}\\
-&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I(-1)^{n/2}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi(-1)^{n/2}}{n!}\\
+&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{Ii^{n}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi i^{n}}{n!}\\
+&=I\sum_{n=0}^\infty \frac{i^{2n}}{(2n)!}+\hat\Pi\sum_{n=0}^\infty \frac{i^{2n+1}}{(2n+1)!}\\
 &=I\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n)!}+i\hat\Pi\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n+1)!}\\
-&=I\cos(1)+\hat\Pi i\sin(1)
+&=I\cos(1)+\hat\Pi\ i\sin(1)
 \end{align*}\]++
 ====
 
@@ -125,3 +128,14 @@ I&n\ \textrm{even}
 == Translations in Time
 
 === Questions
+
+* {q-num} The Generalized Ehrenfest Theorem states that
+++\[\frac{d}{dt}\braket{\hat Q}=\frac{1}{i\hbar}\Braket{[\hat H, \hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]++
+In particular, if ++\(\hat Q\)++ commutes with the Hamiltonian, then the time-derivative of the expectation of ++\(\hat Q\)++ is the expectation of the time-derivative of ++\(\hat Q\)++.
++
+But, in the {sch} picture, operators remain constant, while in the Heisenberg picture they change over time.
+So in the {sch} picture, the RHS of this equation is zero, while in the Heisenberg picture it's nonzero.
+But in both cases the LHS of the equation is the same (and it's an observable quantity, so it had better not depend on the formulation of QM used).
++
+Reconcile this with the Generalized Ehrenfest Theorem.
+Where in particular in the proof of the Theorem does the issue lie?
