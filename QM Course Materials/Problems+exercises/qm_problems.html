@@ -566,6 +566,10 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		margin-top: 0.2em;
 	}
 
+	.no-break {
+		white-space: nowrap;
+	}
+
 	/* BEGIN question numbering */
 	/* create counters in all documents */
 	body {
@@ -2143,10 +2147,10 @@ Substituting this Hamiltonian into the time-independent Schrödinger equation
 yields \(\hat H\psi=E\psi\).</p>
 </li>
 <li>
-<p>Show that \(\Braket{\hat H} = E\).</p>
+<p>Show that \(\braket{\hat H} = E\).</p>
 </li>
 <li>
-<p>Show that \(\Braket{\hat H^2} = E^2\). (Hint: first show that \(\hat H^2\psi=E^2\psi\))</p>
+<p>Show that \(\braket{\hat H^2} = E^2\). (Hint: first show that \(\hat H^2\psi=E^2\psi\))</p>
 </li>
 <li>
 <p>Conclude that the variance of \(\hat H\) is 0.</p>
@@ -2159,6 +2163,16 @@ yields \(\hat H\psi=E\psi\).</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>When a wavefunction is written as \(\Psi(x,t)=\sum_n c_n\Psi_n(x)=\sum_n c_n\psi_n(x) e^{-iE_n t/\hbar}\), the probability that a measurement of the energy yields \(E_n\) is \(|c_n|^2\).
+The probability that energy is \(E_2\), then, is \(\left|c_2\right|^2=\left|-\frac{3i}{5}\right|^2=\frac{9}{25}\).
+(As there are only two eigenstates in this example, the probability of measuring an energy of \(E_1\) must be one minus this, or \(\frac{16}{25}\).)</p>
+</div>
+</div>
+</details>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
@@ -2324,30 +2338,116 @@ encounter.</p>
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A particle in the infinite square well has an initial wave function with an even combination of the first three stationary states: \(\Psi(x,0)=A(\psi_1(x) + \psi_2(x) + \psi_3(x))\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A particle in the infinite square well of width \(a\) has an initial wave function with an equal combination of the first and fourth stationary states: \(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
 <p>Normalize to find A.</p>
 </li>
 <li>
-<p>Find \(c_n\) and \(\psi(x,t)\). (Hint: let \(\omega=\pi^2\hbar/2ma^2\).)</p>
+<p>Find the constants \(c_n\) in the expression \(\Psi(x,0)=\sum_n c_n\psi_n(x)\).</p>
 </li>
 <li>
-<p>Find \(|\Psi(x,t)|^2\).</p>
+<p>Compute \(\left|\Psi(x,t)\right|^2\) (this isn&#8217;t very useful on its own, but you&#8217;ll need it for part (d)).</p>
 </li>
 <li>
-<p>Find \(\langle x\rangle\).
+<p>Compute \(\langle x\rangle\) as a function of \(t\).
 What is the frequency of oscillations?
 What is the amplitude?</p>
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>To normalize, we set \(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=0\) and simply compute, using the fact that the \(\psi_n\) are orthonormal over \([0,a]\).
+(In the integrals below, for brevity, we omit the \(x\) as an argument of the <span class="no-break">\(\psi_n\).</span>)
+\[\begin{align*}
+1&amp;=\int_0^a\left|\Psi(x,0)\right|\\
+&amp;=\int_0^a\left|A(\psi_1+\psi_4)\right|^2\,dx\\
+&amp;=\int_0^a\left|A\right|^2(\psi_1^2+2\psi_1\psi_4+\psi_4^2)\,dx\\
+&amp;=\left|A\right|^2(1+2\cdot 0+1)\\
+&amp;=2\left|A\right|^2
+\end{align*}\]
+So \(A=\frac{1}{\sqrt{2}}\) (or any complex number with that magnitude, but we can always take the normalization constant to be real, so we might as well do so.)</p>
+</li>
+<li>
+<p>Simply referring to the expression for \(\Psi\) in the problem statement, we have
+\[\Psi(x,0)=A(\psi_1(x)+\psi_4(x))=\frac{1}{\sqrt{2}}\psi_1(x)+\frac{1}{\sqrt{2}}\psi_4(x)\]
+so \(c_1=c_4=\frac{1}{\sqrt{2}}\) and the other \(c_n\) are zero.</p>
+</li>
+<li>
+<p>In general, if \(\Psi(x,0)=\sum_n c_n\psi_n(x)\), then \(\Psi(x,t)=\sum_n c_n\psi_n(x) e^{-iE_nt/\hbar}=\sum_n c_n\psi_n(x)\varphi_n(t) \) where <span class="no-break">\(\varphi_n(t):=e^{-iE_nt/\hbar}\)</span>.
+And if we write <span class="no-break">\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\),</span> then <span class="no-break">\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\),</span> and so
+\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) &amp;= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
+\end{align*}\]
+which means
+\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) + \varphi_1^*(t)\varphi_4(t)&amp;=\varphi_1(t)\varphi_4^* (t) + (\varphi_1(t)\varphi_4^*(t))^*\\
+&amp;=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
+&amp;=2\cos(15E_1t/\hbar)
+\end{align*}\]
+(we&#8217;ll need this soon).</p>
 <div class="paragraph">
-<p>Unsure if this is possible, I may have to re-write with two stationary states w/ coefficients.</p>
+<p>We will first compute \(\left|\Psi(x,t)\right|^2\).
+Below, for brevity, we&#8217;ll write \(\varphi_n\) instead of \(\varphi_n(t)\) and \(\psi_n\) instead of \(\psi_n(x)\), and use the fact that \(c_n\) and \(\psi_n\) are real.
+\[\begin{align*}
+\left|\Psi(x,t)\right|^2&amp;=\Psi(x,t)^*\Psi(x,t)\\
+&amp;=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
+&amp;=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
+&amp;\quad+2((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&amp;=c_1^2\psi_1^2+c_4^2\psi_4^2+2c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&amp;=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4
+\end{align*}\]</p>
+</div>
+</li>
+<li>
+<p>We wish to compute \(\braket x\) (as a function of \(t\)), which is just the following expression:
+\[\begin{align*}
+\braket x&amp;=\int_0^a x\left|\Psi(x,t)\right|^2\,dx
+\end{align*}\]
+Before proceeding we&#8217;ll want the following facts (which you can feel free to derive on your own).
+If \(m\) and \(n\) are integers, then if \(m\ne n\), then
+\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx&amp;=\frac{2mna^2((-1)^{m+n}-1)}{(m^2-n^2)^2\pi^2}
+\end{align*}\]
+and if \(m=n\) then
+\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx=\int_0^a x\sin^2\left(\frac{n\pi}{a}x\right)\,dx=\frac{a^2}{4}
+\end{align*}\]
+(Note that this does not actually depend on \(n\).)
+So,
+\[\begin{align*}
+\int_0^a x\,\psi_1^2\,dx&amp;=\int_0^a x\left[\sqrt{2/a}\sin\left(\frac{\pi}{a} x\right)\right]^2\,dx\\
+&amp;=\frac{2}{a}\int_0^ax\sin^2\left(\frac{\pi}{a} x\right)\,dx\\
+&amp;=\frac{2}{a}\cdot\frac{a^2}{4}\\
+&amp;=\frac{a}{2}\\\\
+\int_0^a x\,\psi_4^2\,dx&amp;=\frac{a}{2}\\\\
+\int_0^a x\,\psi_1\psi_4 \,dx&amp;=\int_0^ax\left[\sqrt{2/a}\sin\left(\frac{\pi}{a}x\right)\right]\left[\sqrt{2/a}\sin\left(\frac{4\pi}{a}x\right)\right]\,dx\\
+&amp;=\frac{2}{a}\cdot\frac{2\cdot1\cdot4a^2(-2)}{(1^2-4^2)^2\pi^2}\\
+&amp;=-\frac{32a}{225\pi^2}
+\end{align*}\]</p>
+<div class="paragraph">
+<p>So, we may finally compute our answer:
+\[\begin{align*}
+\braket x&amp;=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
+&amp;=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&amp;=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+2\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&amp;=\frac{a}{2}-\frac{64a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&amp;=a\left(\frac{1}{2}-\frac{64}{225\pi^2}\cos(15E_1t/\hbar)\right)
+\end{align*}\]
+The frequency of oscillation is \(15E_1/\hbar=\frac{15\pi^2\hbar}{2ma^2}\).
+The particle oscillates between \(a\left(\frac{1}{2}\pm\frac{64}{225\pi^2}\right)\) and so its amplitude is \(\frac{128a}{225\pi^2}\).</p>
+</div>
+<div class="paragraph">
+<p>Notably, unlike a classical particle, its amplitude is <em>not</em> \(\frac{a}{2}\) (note that <span class="no-break">\(\frac{128}{225\pi^2}\approx0.0576\ll 0.5\)).</span> \(\braket x\) of a quantum mechanical particle does get arbitrarily close to the walls of the well — why not?</p>
+</div>
+</li>
+</ol>
 </div>
 </div>
 </details>
