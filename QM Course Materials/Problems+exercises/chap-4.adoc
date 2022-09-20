@@ -136,18 +136,16 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
-* {q-num} For the spherical harmonic 30   in
+* {q-num} For the spherical harmonic ++\(Y_3^2 = \left (\frac{105}{32\pi}\right )^{\frac{1}{2}} \sin^2\theta\cos\theta e^{2i\phi}\)++
 +
 [{sublist-style}]
-.. apply raising and lowering ops to find
-.. verify 4.3.2 exp vals?
-.. different wf
-.. uncertainty
-.. show l2 (l+ ) Y is eingenstate w same eigenval
-.. satisfies ang eqn
+.. Apply the raising and lowering operators, ++\(L_+ = \hbar e^{i\phi}(\frac{\delta}{\delta \theta} + i\cot\theta \frac{\delta}{\delta \phi})\)++ and  ++\(L_- = -\hbar e^{-i\phi}(\frac{\delta}{\delta \theta} - i\cot\theta \frac{\delta}{\delta \phi})\)++, to find  ++\(Y_3^3\)++ and ++\(Y_3^1\)++.
+.. Using your results from part (a), verify that ++\(L_+Y_3^2\)++ is an eigenfunction of ++\(L^2\)++ with the same eigenvalue as the eigenfunction ++\(Y_3^2\)++ (i.e. show that ++\(L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) \)++ and ++\(L^2 Y_3^2 = \lambda Y_3^2\)++ where ++\(\lambda\)++ is a constant).
+.. Show that uncertainty
+.. expectation value of n?
 
 
-* {q-num}
+* {q-num} show max accuracy when m=1
 
 
 
