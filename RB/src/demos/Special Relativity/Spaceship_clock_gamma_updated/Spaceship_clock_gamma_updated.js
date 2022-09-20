@@ -54,13 +54,16 @@ function render() {
     var ctx = document.getElementById("canvas");
     ctx = ctx.getContext("2d");
     ctx.clearRect(0, 0, 900, 400);
-    ctx.strokeStyle = "white";
+    ctx.strokeStyle = "black";
     ctx.fillStyle = "white";
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 3;
     ctx.beginPath();
-    ctx.arc(150, 200, 150, 0, 2 * Math.PI);
+    ctx.arc(155, 200, 150, 0, 2 * Math.PI);
+    ctx.fill();
     ctx.moveTo(750, 200);
     ctx.arc(600, 200, 150, 0, 2 * Math.PI);
+    ctx.fill();
+    ctx.fillStyle = "black";
     ctx.stroke();
     ctx.beginPath();
     ctx.arc(150, 200, 2, 0, 2 * Math.PI);
@@ -92,9 +95,10 @@ function render() {
         ctx.fillText(i + 1, numerals[i][0] + 450, numerals[i][1]);
     }
     ctx.fill();
+    ctx.fillStyle = "white";
     ctx.font = "27px Helvetica";
     ctx.beginPath();
-    ctx.fillText("Earth", 118, 35);
+    ctx.fillText("Earth", 123, 35);
     ctx.fillText("Rocket", 555, 35);
     ctx.fill();
     ctx.beginPath();
