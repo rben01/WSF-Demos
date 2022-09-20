@@ -207,4 +207,4 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 == Electromagnetic Interactions
 === Questions
-* {q-num}
+* {q-num} What would the strength of the solenoid have to be for there to be maximum constructive interference of the electron beams. Destructive?
