@@ -1,29 +1,29 @@
 [tool.poetry]
-name = "wsf-demos"
-version = "0.1.0"
-description = ""
-authors = ["Robert Bennett <rltbennett@icloud.com>"]
+	authors = ["Robert Bennett <rltbennett@icloud.com>"]
+	description = ""
+	name = "wsf-demos"
+	version = "0.1.0"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-pandas = "^1.2.2"
-numpy = "^1.20.1"
-scipy = "^1.6.1"
-beautifulsoup4 = "^4.9.3"
-html5lib = "^1.1"
-lxml = "^4.6.2"
-sympy = "^1.7.1"
-matplotlib = "^3.3.4"
-opencv-python = "^4.5.1"
-requests = "^2.25.1"
-typed-ast = "^1.5.0"
+	[tool.poetry.dependencies]
+		beautifulsoup4 = "^4.9.3"
+		html5lib = "^1.1"
+		lxml = "^4.6.2"
+		matplotlib = "^3.3.4"
+		numpy = "^1.20.1"
+		opencv-python = "^4.5.1"
+		pandas = "^1.2.2"
+		python = "^3.8"
+		requests = "^2.25.1"
+		scipy = "^1.6.1"
+		sympy = "^1.7.1"
+		typed-ast = "^1.5.0"
 
-[tool.poetry.dev-dependencies]
-ipython = "^7.21.0"
-ipykernel = "^5.5.0"
-jupyter = "^1.0.0"
-mypy = "^0.971"
+	[tool.poetry.dev-dependencies]
+		ipykernel = "^5.5.0"
+		ipython = "^7.21.0"
+		jupyter = "^1.0.0"
+		mypy = "^0.971"
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+	build-backend = "poetry.core.masonry.api"
+	requires = ["poetry-core>=1.0.0"]

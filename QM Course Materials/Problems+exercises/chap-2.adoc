@@ -55,8 +55,8 @@ The classical Hamiltonian, the total energy in a system, is given by ++\(H(x,p)=
 Substituting this Hamiltonian into the time-independent {sch} equation
 ++\[-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V\psi = E\psi\]++
 yields ++\(\hat H\psi=E\psi\)++.
-** Show that ++\(\Braket{\hat H} = E\)++.
-** Show that ++\(\Braket{\hat H^2} = E^2\)++. (Hint: first show that ++\(\hat H^2\psi=E^2\psi\)++)
+** Show that ++\(\braket{\hat H} = E\)++.
+** Show that ++\(\braket{\hat H^2} = E^2\)++. (Hint: first show that ++\(\hat H^2\psi=E^2\psi\)++)
 ** Conclude that the variance of ++\(\hat H\)++ is 0.
 
 +
@@ -65,6 +65,14 @@ In other words, every measurement of the total energy of a solution to the time-
 
 
 * {q-num} If you were to measure the energy of a particle with the wavefunction ++\(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\)++, what is the probability that you’d measure the energy to be ++\(E_2\)++?
++
+.Solution
+[%collapsible]
+====
+When a wavefunction is written as ++\(\Psi(x,t)=\sum_n c_n\Psi_n(x)=\sum_n c_n\psi_n(x) e^{-iE_n t/\hbar}\)++, the probability that a measurement of the energy yields ++\(E_n\)++ is ++\(|c_n|^2\)++.
+The probability that energy is ++\(E_2\)++, then, is ++\(\left|c_2\right|^2=\left|-\frac{3i}{5}\right|^2=\frac{9}{25}\)++.
+(As there are only two eigenstates in this example, the probability of measuring an energy of ++\(E_1\)++ must be one minus this, or ++\(\frac{16}{25}\)++.)
+====
 
 * {q-num} Griffiths's questions 2.1 and 2.2 are very good. Check to see how those can be modified.
 
@@ -182,21 +190,95 @@ encounter.
 These properties are so important because they hold true for almost all potentials, which means we can apply these four properties to help solve many different types of problems.
 ====
 
-* {q-num} A particle in the infinite square well has an initial wave function with an even combination of the first three stationary states: ++\(\Psi(x,0)=A(\psi_1(x) + \psi_2(x) + \psi_3(x))\)++.
+* {q-num} A particle in the infinite square well of width ++\(a\)++ has an initial wave function with an equal combination of the first and fourth stationary states: ++\(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\)++.
 +
 [{sublist-style}]
 .. Normalize to find A.
-.. Find ++\(c_n\)++ and ++\(\psi(x,t)\)++. (Hint: let ++\(\omega=\pi^2\hbar/2ma^2\)++.)
-.. Find ++\(|\Psi(x,t)|^2\)++.
-.. Find {expect-x}.
+.. Find the constants ++\(c_n\)++ in the expression ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++.
+.. Compute ++\(\left|\Psi(x,t)\right|^2\)++ (this isn't very useful on its own, but you'll need it for part (d)).
+.. Compute {expect-x} as a function of ++\(t\)++.
 What is the frequency of oscillations?
 What is the amplitude?
 
 +
 .Solution
-[%collapsible]
+[%collapsible%open]
 ====
-Unsure if this is possible, I may have to re-write with two stationary states w/ coefficients.
+[{sublist-style}]
+. To normalize, we set ++\(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=0\)++ and simply compute, using the fact that the ++\(\psi_n\)++ are orthonormal over ++\([0,a]\)++.
+(In the integrals below, for brevity, we omit the ++\(x\)++ as an argument of the [.no-break]#++\(\psi_n\)++.#)
+++\[\begin{align*}
+1&=\int_0^a\left|\Psi(x,0)\right|\\
+&=\int_0^a\left|A(\psi_1+\psi_4)\right|^2\,dx\\
+&=\int_0^a\left|A\right|^2(\psi_1^2+2\psi_1\psi_4+\psi_4^2)\,dx\\
+&=\left|A\right|^2(1+2\cdot 0+1)\\
+&=2\left|A\right|^2
+\end{align*}\]++
+So ++\(A=\frac{1}{\sqrt{2}}\)++ (or any complex number with that magnitude, but we can always take the normalization constant to be real, so we might as well do so.)
+. Simply referring to the expression for ++\(\Psi\)++ in the problem statement, we have
+++\[\Psi(x,0)=A(\psi_1(x)+\psi_4(x))=\frac{1}{\sqrt{2}}\psi_1(x)+\frac{1}{\sqrt{2}}\psi_4(x)\]++
+so ++\(c_1=c_4=\frac{1}{\sqrt{2}}\)++ and the other ++\(c_n\)++ are zero.
+. In general, if ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++, then ++\(\Psi(x,t)=\sum_n c_n\psi_n(x) e^{-iE_nt/\hbar}=\sum_n c_n\psi_n(x)\varphi_n(t) \)++ where [.no-break]#++\(\varphi_n(t):=e^{-iE_nt/\hbar}\)++#.
+And if we write [.no-break]#++\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\)++,# then [.no-break]#++\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\)++,# and so
+++\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) &= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
+\end{align*}\]++
+which means
+++\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) + \varphi_1^*(t)\varphi_4(t)&=\varphi_1(t)\varphi_4^* (t) + (\varphi_1(t)\varphi_4^*(t))^*\\
+&=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
+&=2\cos(15E_1t/\hbar)
+\end{align*}\]++
+(we'll need this soon).
++
+We will first compute ++\(\left|\Psi(x,t)\right|^2\)++.
+Below, for brevity, we'll write ++\(\varphi_n\)++ instead of ++\(\varphi_n(t)\)++ and ++\(\psi_n\)++ instead of ++\(\psi_n(x)\)++, and use the fact that ++\(c_n\)++ and ++\(\psi_n\)++ are real.
+++\[\begin{align*}
+\left|\Psi(x,t)\right|^2&=\Psi(x,t)^*\Psi(x,t)\\
+&=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
+&=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
+&\quad+2((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&=c_1^2\psi_1^2+c_4^2\psi_4^2+2c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4
+\end{align*}\]++
+. We wish to compute ++\(\braket x\)++ (as a function of ++\(t\)++), which is just the following expression:
+++\[\begin{align*}
+\braket x&=\int_0^a x\left|\Psi(x,t)\right|^2\,dx
+\end{align*}\]++
+Before proceeding we'll want the following facts (which you can feel free to derive on your own).
+If ++\(m\)++ and ++\(n\)++ are integers, then if ++\(m\ne n\)++, then
+++\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx&=\frac{2mna^2((-1)^{m+n}-1)}{(m^2-n^2)^2\pi^2}
+\end{align*}\]++
+and if ++\(m=n\)++ then
+++\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx=\int_0^a x\sin^2\left(\frac{n\pi}{a}x\right)\,dx=\frac{a^2}{4}
+\end{align*}\]++
+(Note that this does not actually depend on ++\(n\)++.)
+So,
+++\[\begin{align*}
+\int_0^a x\,\psi_1^2\,dx&=\int_0^a x\left[\sqrt{2/a}\sin\left(\frac{\pi}{a} x\right)\right]^2\,dx\\
+&=\frac{2}{a}\int_0^ax\sin^2\left(\frac{\pi}{a} x\right)\,dx\\
+&=\frac{2}{a}\cdot\frac{a^2}{4}\\
+&=\frac{a}{2}\\\\
+\int_0^a x\,\psi_4^2\,dx&=\frac{a}{2}\\\\
+\int_0^a x\,\psi_1\psi_4 \,dx&=\int_0^ax\left[\sqrt{2/a}\sin\left(\frac{\pi}{a}x\right)\right]\left[\sqrt{2/a}\sin\left(\frac{4\pi}{a}x\right)\right]\,dx\\
+&=\frac{2}{a}\cdot\frac{2\cdot1\cdot4a^2(-2)}{(1^2-4^2)^2\pi^2}\\
+&=-\frac{32a}{225\pi^2}
+\end{align*}\]++
++
+So, we may finally compute our answer:
+++\[\begin{align*}
+\braket x&=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
+&=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+2\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&=\frac{a}{2}-\frac{64a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&=a\left(\frac{1}{2}-\frac{64}{225\pi^2}\cos(15E_1t/\hbar)\right)
+\end{align*}\]++
+The frequency of oscillation is ++\(15E_1/\hbar=\frac{15\pi^2\hbar}{2ma^2}\)++.
+The particle oscillates between ++\(a\left(\frac{1}{2}\pm\frac{64}{225\pi^2}\right)\)++ and so its amplitude is ++\(\frac{128a}{225\pi^2}\)++.
++
+Notably, unlike a classical particle, its amplitude is _not_ ++\(\frac{a}{2}\)++ (note that [.no-break]#++\(\frac{128}{225\pi^2}\approx0.0576\ll 0.5\)++).# ++\(\braket x\)++ of a quantum mechanical particle does get arbitrarily close to the walls of the well — why not?
 ====
 
 
