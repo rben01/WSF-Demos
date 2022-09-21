@@ -132,7 +132,12 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 
 * {q-num} Do ++\(L_+\)++ and ++\(L_-\)++ commute? Why is this significant?
 
-* {q-num} Suppose you have a hydrogen atom in the orbital angular momentum state ++\[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]++ Determine ++\(\braket{L^2}\)++, ++\(\braket{L_z}\)++,  ++\(\braket{L_x}\)++, and ++\(\braket{L_y}\)++.
+* {q-num} Suppose you have a hydrogen atom in the orbital angular momentum state ++\[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]++
++
+[{sublist-style}]
+.. Determine ++\(\braket{L^2}\)++ and ++\(\braket{L_z}\)++.
+.. Find ++\(\braket{L_x}\)++ and ++\(\braket{L_y}\)++ (hint: use the raising and lowering operators).
+.. Find the expectation value of the angular momentum in the ++\(\hat{n}\)++ direction, where ++\(\hat{n} = \sin{\theta}\cos{\phi} \hat{x} + \sin{\theta}\sin{\phi} \hat{y} + \cos{\theta}\hat{z}\)++ and ++\(\theta\)++ is the angle incident to the z-axis. In other words, find ++\(\braket{L_n} \)++ with ++\(L_n = \vec{L} \cdot \hat{n}\)++.
 
 * {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
 
@@ -142,10 +147,10 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 .. Apply the raising and lowering operators, ++\(L_+ = \hbar e^{i\phi}(\frac{\delta}{\delta \theta} + i\cot\theta \frac{\delta}{\delta \phi})\)++ and  ++\(L_- = -\hbar e^{-i\phi}(\frac{\delta}{\delta \theta} - i\cot\theta \frac{\delta}{\delta \phi})\)++, to find  ++\(Y_3^3\)++ and ++\(Y_3^1\)++.
 .. Using your results from part (a), verify that ++\(L_+Y_3^2\)++ is an eigenfunction of ++\(L^2\)++ with the same eigenvalue as the eigenfunction ++\(Y_3^2\)++ (i.e. show that ++\(L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) \)++ and ++\(L^2 Y_3^2 = \lambda Y_3^2\)++ where ++\(\lambda\)++ is a constant).
 .. Show that uncertainty
-.. expectation value of n?
 
 
-* {q-num} show max accuracy when m=1
+* {q-num} [From *Angelini* "Solved Problems in Quantum Mechanics" *3.4(d)*]
+Prove that, in an eigenstate of ++\(J^2\)++ and ++\(J_z\)++ corresponding to the quantum numbers ++\(j\)++ and ++\(m\)++, the maximum accuracy of the simultaneous measurement of ++\(J_x\)++ and ++\(J_y\)++ is obtained when ++\(|m| = j\)++.
 
 
 
