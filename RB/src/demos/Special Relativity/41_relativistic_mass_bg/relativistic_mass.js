@@ -14,6 +14,12 @@ const AX_BOUNDS = {
 	yMax: CANVAS_HEIGHT * AXIS_MARGINS.top,
 };
 
+const curve = d3
+			.line()
+			.x(xy => xScale(xy[0]))
+			.y(xy => yScale(xy[1]))
+			.curve(d3.curveCardinal);
+
 const canvas = d3
 	.selectAll(".viz-canvas")
 	.attr("width", CANVAS_WIDTH)
@@ -69,9 +75,9 @@ const yScale = d3
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
 const graphObjs = {};
+const data = [[0, 5]];
 
 function drawGraph() {
-	const data = [[0, 5]];
 
 	const base = 10;
 	const startPrecision = 2;
@@ -99,18 +105,6 @@ function drawGraph() {
 
 	subcanvases.each(function () {
 		const subcanvas = d3.select(this);
-		const curve = d3
-			.line()
-			.x(xy => xScale(xy[0]))
-			.y(xy => yScale(xy[1]))
-			.curve(d3.curveCardinal);
-
-		// Add main curve showing gamma
-		subcanvas
-			.append("svg:path")
-			.attr("d", curve(data))
-			.attr("stroke", "#fffd")
-			.attr("stroke-width", 4);
 
 		// Add axes
 		const commonAxesAttrs = {
@@ -311,6 +305,14 @@ function getGridlinesData({ fracOfC }) {
 				cy: y,
 				r: 4,
 				fill: "white",
+			},
+		},
+		{
+			shape: "path",
+			attrs: {
+				d: curve(data.slice(0, 1+100 * fracOfC)),
+				stroke: "#fffd",
+				"stroke-width": 4,
 			},
 		},
 	];
