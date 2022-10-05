@@ -513,7 +513,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 			delimiters: [
 				{left: '\\(', right: '\\)', display: false},
 				{left: '\\[', right: '\\]', display: true}
-		  ]
+		  ],
+			macros: {'\\v': '\\mathbf{#1}'}
 		}
 	);"
 ></script>
@@ -2338,11 +2339,12 @@ encounter.</p>
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A particle in the infinite square well of width \(a\) has an initial wave function with an equal combination of the first and fourth stationary states: \(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A particle in the infinite square well of width \(a\) has the following initial wave function: \(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\).</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Normalize to find A.</p>
+<p>Normalize to find \(A\).
+(You can assume \(A\) is real.)</p>
 </li>
 <li>
 <p>Find the constants \(c_n\) in the expression \(\Psi(x,0)=\sum_n c_n\psi_n(x)\).</p>
@@ -2363,7 +2365,7 @@ What is the amplitude?</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>To normalize, we set \(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=0\) and simply compute, using the fact that the \(\psi_n\) are orthonormal over \([0,a]\).
+<p>To normalize, we set \(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=1\) and simply compute, using the fact that the \(\psi_n\) are orthonormal over \([0,a]\).
 (In the integrals below, for brevity, we omit the \(x\) as an argument of the <span class="no-break">\(\psi_n\).</span>)
 \[\begin{align*}
 1&amp;=\int_0^a\left|\Psi(x,0)\right|\\
@@ -2380,8 +2382,8 @@ So \(A=\frac{1}{\sqrt{2}}\) (or any complex number with that magnitude, but we c
 so \(c_1=c_4=\frac{1}{\sqrt{2}}\) and the other \(c_n\) are zero.</p>
 </li>
 <li>
-<p>In general, if \(\Psi(x,0)=\sum_n c_n\psi_n(x)\), then \(\Psi(x,t)=\sum_n c_n\psi_n(x) e^{-iE_nt/\hbar}=\sum_n c_n\psi_n(x)\varphi_n(t) \) where <span class="no-break">\(\varphi_n(t):=e^{-iE_nt/\hbar}\)</span>.
-And if we write <span class="no-break">\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\),</span> then <span class="no-break">\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\),</span> and so
+<p>In general, if \(\Psi(x,0)=\sum_n c_n\psi_n(x)\), then \(\Psi(x,t)=\sum_n c_n\psi_n(x)\varphi_n(t) \) where <span class="no-break">\(\varphi_n(t):=e^{-iE_nt/\hbar}\)</span>.
+And if we write <span class="no-break">\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\),</span> then <span class="no-break">\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\),</span> and so we can compute something that we&#8217;ll need very soon:
 \[\begin{align*}
 \varphi_1(t)\varphi_4^* (t) &amp;= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
 \end{align*}\]
@@ -2390,18 +2392,17 @@ which means
 \varphi_1(t)\varphi_4^* (t) + \varphi_1^*(t)\varphi_4(t)&amp;=\varphi_1(t)\varphi_4^* (t) + (\varphi_1(t)\varphi_4^*(t))^*\\
 &amp;=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
 &amp;=2\cos(15E_1t/\hbar)
-\end{align*}\]
-(we&#8217;ll need this soon).</p>
+\end{align*}\]</p>
 <div class="paragraph">
-<p>We will first compute \(\left|\Psi(x,t)\right|^2\).
+<p>Now to compute \(\left|\Psi(x,t)\right|^2\).
 Below, for brevity, we&#8217;ll write \(\varphi_n\) instead of \(\varphi_n(t)\) and \(\psi_n\) instead of \(\psi_n(x)\), and use the fact that \(c_n\) and \(\psi_n\) are real.
 \[\begin{align*}
 \left|\Psi(x,t)\right|^2&amp;=\Psi(x,t)^*\Psi(x,t)\\
 &amp;=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
 &amp;=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
-&amp;\quad+2((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
-&amp;=c_1^2\psi_1^2+c_4^2\psi_4^2+2c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
-&amp;=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4
+&amp;\quad+((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&amp;=c_1^2\psi_1^2+c_4^2\psi_4^2+c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&amp;=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4
 \end{align*}\]</p>
 </div>
 </li>
@@ -2435,16 +2436,17 @@ So,
 <p>So, we may finally compute our answer:
 \[\begin{align*}
 \braket x&amp;=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
-&amp;=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
-&amp;=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+2\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
-&amp;=\frac{a}{2}-\frac{64a\cos(15E_1t/\hbar)}{225\pi^2}\\
-&amp;=a\left(\frac{1}{2}-\frac{64}{225\pi^2}\cos(15E_1t/\hbar)\right)
+&amp;=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&amp;=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&amp;=\frac{a}{2}-\frac{32a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&amp;=a\left(\frac{1}{2}-\frac{32}{225\pi^2}\cos(15E_1t/\hbar)\right)
 \end{align*}\]
-The frequency of oscillation is \(15E_1/\hbar=\frac{15\pi^2\hbar}{2ma^2}\).
-The particle oscillates between \(a\left(\frac{1}{2}\pm\frac{64}{225\pi^2}\right)\) and so its amplitude is \(\frac{128a}{225\pi^2}\).</p>
+The frequency of oscillation is \(\frac{15E_1}{2\pi\hbar}=\frac{15\pi\hbar}{4ma^2}\).
+The particle oscillates between \(a\left(\frac{1}{2}\pm\frac{32}{225\pi^2}\right)\) and so its amplitude is \(\frac{64a}{225\pi^2}\).</p>
 </div>
 <div class="paragraph">
-<p>Notably, unlike a classical particle, its amplitude is <em>not</em> \(\frac{a}{2}\) (note that <span class="no-break">\(\frac{128}{225\pi^2}\approx0.0576\ll 0.5\)).</span> \(\braket x\) of a quantum mechanical particle does get arbitrarily close to the walls of the well — why not?</p>
+<p>Notably, unlike a classical particle, its amplitude is <em>not</em> \(\frac{a}{2}\) <span class="no-break">(\(\frac{64}{225\pi^2}\approx0.0288\ll 0.5\)).</span>
+The expected position of a quantum mechanical particle <em>cannot</em> get arbitrarily close to the walls of the well — why not?</p>
 </div>
 </li>
 </ol>
@@ -2463,24 +2465,28 @@ The particle oscillates between \(a\left(\frac{1}{2}\pm\frac{64}{225\pi^2}\right
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\), there is some \(n\) for which \(\psi_a=\hat a_{\pm}^n\psi_b\).</p>
-<div class="admonitionblock note">
-<table>
-<tr>
-<td class="icon">
-<div class="title">Note</div>
-</td>
-<td class="content">
-I actually don&#8217;t know if this is possible with the ladder operators alone, or if you have to actually solve the Schrödinger equation in its entirety to deduce that the ladder operators give <em>all</em> the solutions.
-</td>
-</tr>
-</table>
-</div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;: for every pair of solutions \(\psi_a,\psi_b\) with \(a &gt;b\), there is some \(m\) for which \(\psi_a=k\hat a_{+}^m\psi_b\) (for some normalization constant \(k\)).</p>
+<details open>
+<summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p></p>
+<p>Suppose \(\psi_a\) lies on ladder \(A\) and \(\psi_b\) on ladder \(B\).
+By successively applying the lowering operator to \(\psi_a\) and \(\psi_b\), we obtain the bottommost rungs on the two ladders, which we&#8217;ll denote \(\psi_{A,0}\) and \(\psi_{B,0}\).
+By virtue of being the bottommost rungs, they must satisfy \(\hat a_-\psi_{A,0}=\hat a_-\psi_{B,0}=0\).
+Substituting \(\hat a_-=\frac{1}{\sqrt{2\hbar m\omega}}(i\hat p+m\omega x)\), we obtain the differential equation \(\frac{d\psi_{L,0}}{dx}=-\frac{m\omega}{\hbar}x\psi_{L,0}\) for \(L=A,B\).
+In both cases this leads to the same solution:
+\[
+\psi_{A,0}(x)=\psi_{B,0}(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{\frac{1}{4}}e^{-\frac{m\omega}{2\hbar}x^2}
+\]
+So the ladders share their bottom rung, which we may now write as just \(\psi_0(x)\).
+Every subsequent rung — on either ladder — is given by successive applications of the raising operator: \(\psi_{A,n}=\psi_{B,n}=k(\hat a_+)^n\psi_{0}\).
+So,
+\[\begin{align*}
+\psi_a&amp;=k(\hat a_+)^{a}\psi_0\\
+&amp;=k(\hat a_+)^{a-b}(\hat a_+)^b\psi_0\\
+&amp;=k(\hat a_+)^{n-b}\psi_b
+\end{align*}\]
+as desired.</p>
 </div>
 </div>
 </details>
@@ -2498,10 +2504,28 @@ What is an example of a potential field \(V(x)\) for which the harmonic oscillat
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Thaller] Show that any solution \(\Psi\) of the harmonic oscillator satisfies \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\). (Corollary: \(\Psi(x,t+2\pi)=-\Psi(-x,t)\).)</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <strong>Coherent States</strong> A <em>coherent state</em> of the harmonic oscillator is a &#8220;minimum uncertainty wavepacket&#8221;: a Gaussian wavefunction \(\Psi\) for which \(\sigma_x^2+\sigma_p^2\) at \(t=0\) is minimized.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(\sigma_x\) and \(\sigma_p\) at \(t=0\).</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that in the harmonic oscillator, \(\dot p=-kx\).</p>
+<p>Show that \(\sigma_x\) and \(\sigma_p\) are, in fact, constant over time (hence the name <em>coherent</em> state — the probability distribution does not change shape over time).</p>
+</li>
+<li>
+<p>Show that \(\Psi\) is an eigenfunction of the lowering operator \(\hat a_-\) (or the raising operator, as they have the same eigenvectors).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Thaller] Show that solutions \(\Psi(x,t)\) of the harmonic oscillator satisfy \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\).
+(Corollary: \(\Psi(x,t+2\pi)=-\Psi(x,t)\).)
+So, while the probability distribution has period \(2\pi\), matching the situation in classical physics, the wavefunction itself only has period \(4\pi\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that in the harmonic oscillator, \( \frac{d\braket p}{dt}=-k\braket x\).</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Adapted from Griffiths 2.16]
@@ -2542,7 +2566,7 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a free particle has the initial wavefunction \(\psi(x) = \frac{\sin(x)}{\pi x}\).
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a free particle has the initial wavefunction <span class="no-break">\(\psi(x) = \frac{\sin(x)}{\pi x}\).</span>
 (Take our word for it that this wavefunction is already normalized.)</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -2555,7 +2579,8 @@ You may use computational software to help you calculate the integral.
 <p>Verify that your result satisfies \(\Psi(x,0)=\frac{\sin(x)}{\pi x}\).</p>
 </li>
 <li>
-<p>Find \(\Psi(x,t)\).</p>
+<p>If you&#8217;re feeling particularly ambitious, find \(\Psi(x,t)\).
+Note that the integral involves the so-called special function the <em>error function</em>, \(\textrm{erf}(x)=\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\), which has no elementary form.</p>
 </li>
 </ol>
 </div>
@@ -2593,32 +2618,9 @@ When \(t=0\),
 &amp;=\frac{2i\sin(x)}{2\pi ix}\\
 &amp;=\frac{\sin(x)}{\pi x}
 \end{align*}\]
-as desired.
-Now we&#8217;ll find \(\Psi(x,t)\) for \(t\ne 0\).
-Defining the special <em>error function</em> \(\textrm{erf} (z):=\frac{2}{\sqrt \pi}\int_0^z e^{-t^2/2}\,dt\),
-\[\begin{align*}
-\Psi(x,t)&amp;=\frac{1}{2\pi}\int_{-1}^1 e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk\\
-&amp;=\textrm{(... computational software ...)}\\
-&amp;=
-\end{align*}\]
-a)</p>
+as desired.</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>\(\int_{-\infty}^{\infty} |\Psi(x,0)|^2 dx\) = 1 =
-\(|A|^2 \int_{-\infty}^\infty sin^2x/x^2 dx\) =
-\(|A|^2\pi\) |A|\(^2 = 1/\pi\)
-A=1/\(\sqrt{\pi}\)</p>
-</div>
-<div class="paragraph">
-<p>b)
-\(\phi(k) = (1/\sqrt{2\pi}) (1/\sqrt{\pi}) \int_{-\infty}^{\infty} (sinx/x) e^{ikx} dx =\)</p>
-</div>
-<div class="paragraph">
-<p>c)
-\(\Psi(x,t) = 1/\sqrt{2\pi}\int_{-\infty}^{\infty} \phi(k)e^{i(kx-(\hbar k^2t/2m))} dk\)
-(as far as I made it on 2.4.1&#8230;&#8203;)</p>
 </div>
 </div>
 </details>
@@ -4270,8 +4272,71 @@ The only solutions to this equation are \(\lambda=\pm 1\).
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
-In terms of the original wavefunction, what is the new wavefunction? UPDATE THIS ONE AS DISCUSSED AT ASRC</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <em>Slater Determinants</em> are a methodological approach to computing the joint wavefunctions of identical fermions.
+In this problem we&#8217;ll build them up from scratch.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>We know that the wavefunction for two identical, non-interacting fermions is \[\psi_-(\v r_1, \v r_2)=A[\psi_a(\v r_1)\psi_b(\v r_2)-\psi_b(\v r_1)\psi_a(\v r_2)]\]
+where \(A\) is the normalization factor.
+Using the fact that <span class="no-break">\(\|\psi_a\psi_b\|=1\),</span> compute \(A\).</p>
+</li>
+<li>
+<p>Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\psi_a\), \(\psi_b\), and <span class="no-break">\(\psi_c\).</span>
+This wavefunction should be the sum of \(3!=6\) different terms and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
+And, of course, it must be normalized.</p>
+</li>
+<li>
+<p>Suppose that three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
+In terms of the original wavefunction, what is the new wavefunction?</p>
+</li>
+<li>
+<p>Without using the explicitly constructed wavefunction from part (a), repeat part (b).
+That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
+(Hint: The wavefunction&#8217;s sign flips every time you swap two fermions. Can you write the relabeling as the composition of multiple two-fermion swaps?)</p>
+</li>
+<li>
+<p>Using the principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>\((1,2,3,4) \to (2,1,4,3)\)</p>
+</li>
+<li>
+<p>\((1,2,3,4) \to (4,3,2,1)\)</p>
+</li>
+<li>
+<p>\((1,2,3,4) \to (4,1,2,3)\)</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> or <em>parity</em> of the permutation is the parity number of swaps: \(1\) if there are an even number of swaps and \(-1\) if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system.</p>
+<div class="paragraph">
+<p>Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of pairwise swaps, the number of pairwise swaps will either always be even or always be odd.</p>
+</div>
+</li>
+<li>
+<p>Thankfully, you did not have to write out the wavefunction for the four-particle system in part (e).
+However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any \(N\)-fermion system.</p>
+<div class="paragraph">
+<p>Show that the <em>Slater determinant</em> shown below satisfies the properties of the wavefunction of a \(N\)-fermion system: it is antisymmetric under exchange of any two of the \(N\) fermions, and it is normalized.
+\[\begin{align*}
+\psi(\v r_1, \ldots, \v r_n):=\frac{1}{\sqrt N}\begin{vmatrix}
+\psi_{1}(\v r_1)&amp;\psi_{2}(\v r_1)&amp;\cdots&amp; \psi_{N}(\v r_1)\\
+\psi_{1}(\v r_2)&amp;\psi_{2}(\v r_2)&amp;\cdots&amp; \psi_{N}(\v r_2)\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+\psi_{1}(\v r_N)&amp;\psi_{2}(\v r_N)&amp;\cdots&amp; \psi_{N}(\v r_N)\\
+\end{vmatrix}
+\end{align*}\]
+Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.</p>
+</div>
+</li>
+<li>
+<p>The <em>permanent</em> of a matrix is computed similarly to the determinant, except that there are no powers of \(-1\) in its cofactor expansion; you only ever <em>add</em> the submatrices (so, for instance, the permanent of \(\displaystyle\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\) is \(ad+bc\)).
+Show that the <em>Slater permanent</em> gives the wavefunction of an \(N\)-<em>boson</em> system.</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -4281,6 +4346,9 @@ Since both two-particle swaps multiply the wavefunction by \(-1\) (because the p
 </div>
 </div>
 </details>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Two non-interacting particles in states \(\Psi_a(\vec{r_1})\) and  \(

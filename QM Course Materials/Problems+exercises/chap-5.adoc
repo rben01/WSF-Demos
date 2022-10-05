@@ -27,8 +27,43 @@ The only solutions to this equation are ++\(\lambda=\pm 1\)++.
 ++\(\pm1\)++ are simply the only _permissible_ eigenvalues.)
 ====
 
-* {q-num} Suppose three fermions labeled ++\((1,2,3)\)++ are exchanged so that they are now labeled ++\((3,1,2)\)++.
-In terms of the original wavefunction, what is the new wavefunction? UPDATE THIS ONE AS DISCUSSED AT ASRC
+* {q-num} _Slater Determinants_ are a methodological approach to computing the joint wavefunctions of identical fermions.
+In this problem we'll build them up from scratch.
+[{sublist-style}]
+.. We know that the wavefunction for two identical, non-interacting fermions is ++\[\psi_-(\v r_1, \v r_2)=A[\psi_a(\v r_1)\psi_b(\v r_2)-\psi_b(\v r_1)\psi_a(\v r_2)]\]++
+where ++\(A\)++ is the normalization factor.
+Using the fact that [.no-break]#++\(\|\psi_a\psi_b\|=1\)++,# compute ++\(A\)++.
+.. Write the wavefunction for _three_ identical, non-interacting fermions labeled ++\((1,2,3)\)++ whose individual states are ++\(\psi_a\)++, ++\(\psi_b\)++, and [.no-break]#++\(\psi_c\)++.#
+This wavefunction should be the sum of ++\(3!=6\)++ different terms and should have the property that swapping any two particles — any two indices ++\(m,n\in\{1,2,3\}\)++ — should negate the resulting wavefunction.
+And, of course, it must be normalized.
+.. Suppose that three fermions labeled ++\((1,2,3)\)++ are exchanged so that they are now labeled ++\((3,1,2)\)++.
+In terms of the original wavefunction, what is the new wavefunction?
+.. Without using the explicitly constructed wavefunction from part (a), repeat part (b).
+That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
+(Hint: The wavefunction's sign flips every time you swap two fermions. Can you write the relabeling as the composition of multiple two-fermion swaps?)
+.. Using the principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?
+... ++\((1,2,3,4) \to (2,1,4,3)\)++
+... ++\((1,2,3,4) \to (4,3,2,1)\)++
+... ++\((1,2,3,4) \to (4,1,2,3)\)++
+.. If you write a permutation as the composition of pairwise swaps, the _sign_ or _parity_ of the permutation is the parity number of swaps: ++\(1\)++ if there are an even number of swaps and ++\(-1\)++ if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system.
++
+Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of pairwise swaps, the number of pairwise swaps will either always be even or always be odd.
+.. Thankfully, you did not have to write out the wavefunction for the four-particle system in part (e).
+However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any ++\(N\)++-fermion system.
++
+Show that the _Slater determinant_ shown below satisfies the properties of the wavefunction of a ++\(N\)++-fermion system: it is antisymmetric under exchange of any two of the ++\(N\)++ fermions, and it is normalized.
+++\[\begin{align*}
+\psi(\v r_1, \ldots, \v r_n):=\frac{1}{\sqrt N}\begin{vmatrix}
+\psi_{1}(\v r_1)&\psi_{2}(\v r_1)&\cdots& \psi_{N}(\v r_1)\\
+\psi_{1}(\v r_2)&\psi_{2}(\v r_2)&\cdots& \psi_{N}(\v r_2)\\
+\vdots&\vdots&\ddots&\vdots\\
+\psi_{1}(\v r_N)&\psi_{2}(\v r_N)&\cdots& \psi_{N}(\v r_N)\\
+\end{vmatrix}
+\end{align*}\]++
+Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.
+.. The _permanent_ of a matrix is computed similarly to the determinant, except that there are no powers of ++\(-1\)++ in its cofactor expansion; you only ever _add_ the submatrices (so, for instance, the permanent of ++\(\displaystyle\begin{pmatrix}a&b\\c&d\end{pmatrix}\)++ is ++\(ad+bc\)++).
+Show that the _Slater permanent_ gives the wavefunction of an ++\(N\)++-_boson_ system.
 +
 .Solution
 [%collapsible]

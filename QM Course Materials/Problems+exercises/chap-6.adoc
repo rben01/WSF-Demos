@@ -139,3 +139,6 @@ But in both cases the LHS of the equation is the same (and it's an observable qu
 +
 Reconcile this with the Generalized Ehrenfest Theorem.
 Where in particular in the proof of the Theorem does the issue lie?
+
+* {q-num} In the quantum harmonic oscillator, where [.no-break]#++\(\hat H=\frac{1}{2m}\hat p^2+\frac{1}{2}m\omega^2\hat x^2\)++#, let ++\(\hat x_H(t)\)++ and ++\(\hat p_H(t)\)++ be the Heisenberg picture position and momentum operators.
+Show that ++\(\frac{d}{dt}\hat x_H(t)=\frac{1}{m\omega^2}\hat p_H(t)\)++ and ++\(\frac{d}{dt}\hat p_H(t)=-m\omega^2\hat x_H(t)\)++ — just as is the case in the classical situation.
