@@ -190,10 +190,11 @@ encounter.
 These properties are so important because they hold true for almost all potentials, which means we can apply these four properties to help solve many different types of problems.
 ====
 
-* {q-num} A particle in the infinite square well of width ++\(a\)++ has an initial wave function with an equal combination of the first and fourth stationary states: ++\(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\)++.
+* {q-num} A particle in the infinite square well of width ++\(a\)++ has the following initial wave function: ++\(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\)++.
 +
 [{sublist-style}]
-.. Normalize to find A.
+.. Normalize to find ++\(A\)++.
+(You can assume ++\(A\)++ is real.)
 .. Find the constants ++\(c_n\)++ in the expression ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++.
 .. Compute ++\(\left|\Psi(x,t)\right|^2\)++ (this isn't very useful on its own, but you'll need it for part (d)).
 .. Compute {expect-x} as a function of ++\(t\)++.
@@ -205,7 +206,7 @@ What is the amplitude?
 [%collapsible%open]
 ====
 [{sublist-style}]
-. To normalize, we set ++\(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=0\)++ and simply compute, using the fact that the ++\(\psi_n\)++ are orthonormal over ++\([0,a]\)++.
+. To normalize, we set ++\(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=1\)++ and simply compute, using the fact that the ++\(\psi_n\)++ are orthonormal over ++\([0,a]\)++.
 (In the integrals below, for brevity, we omit the ++\(x\)++ as an argument of the [.no-break]#++\(\psi_n\)++.#)
 ++\[\begin{align*}
 1&=\int_0^a\left|\Psi(x,0)\right|\\
@@ -218,8 +219,8 @@ So ++\(A=\frac{1}{\sqrt{2}}\)++ (or any complex number with that magnitude, but 
 . Simply referring to the expression for ++\(\Psi\)++ in the problem statement, we have
 ++\[\Psi(x,0)=A(\psi_1(x)+\psi_4(x))=\frac{1}{\sqrt{2}}\psi_1(x)+\frac{1}{\sqrt{2}}\psi_4(x)\]++
 so ++\(c_1=c_4=\frac{1}{\sqrt{2}}\)++ and the other ++\(c_n\)++ are zero.
-. In general, if ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++, then ++\(\Psi(x,t)=\sum_n c_n\psi_n(x) e^{-iE_nt/\hbar}=\sum_n c_n\psi_n(x)\varphi_n(t) \)++ where [.no-break]#++\(\varphi_n(t):=e^{-iE_nt/\hbar}\)++#.
-And if we write [.no-break]#++\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\)++,# then [.no-break]#++\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\)++,# and so
+. In general, if ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++, then ++\(\Psi(x,t)=\sum_n c_n\psi_n(x)\varphi_n(t) \)++ where [.no-break]#++\(\varphi_n(t):=e^{-iE_nt/\hbar}\)++#.
+And if we write [.no-break]#++\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\)++,# then [.no-break]#++\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\)++,# and so we can compute something that we'll need very soon:
 ++\[\begin{align*}
 \varphi_1(t)\varphi_4^* (t) &= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
 \end{align*}\]++
@@ -229,17 +230,16 @@ which means
 &=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
 &=2\cos(15E_1t/\hbar)
 \end{align*}\]++
-(we'll need this soon).
 +
-We will first compute ++\(\left|\Psi(x,t)\right|^2\)++.
+Now to compute ++\(\left|\Psi(x,t)\right|^2\)++.
 Below, for brevity, we'll write ++\(\varphi_n\)++ instead of ++\(\varphi_n(t)\)++ and ++\(\psi_n\)++ instead of ++\(\psi_n(x)\)++, and use the fact that ++\(c_n\)++ and ++\(\psi_n\)++ are real.
 ++\[\begin{align*}
 \left|\Psi(x,t)\right|^2&=\Psi(x,t)^*\Psi(x,t)\\
 &=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
 &=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
-&\quad+2((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
-&=c_1^2\psi_1^2+c_4^2\psi_4^2+2c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
-&=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4
+&\quad+((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&=c_1^2\psi_1^2+c_4^2\psi_4^2+c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4
 \end{align*}\]++
 . We wish to compute ++\(\braket x\)++ (as a function of ++\(t\)++), which is just the following expression:
 ++\[\begin{align*}
@@ -270,15 +270,17 @@ So,
 So, we may finally compute our answer:
 ++\[\begin{align*}
 \braket x&=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
-&=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+2\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
-&=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+2\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
-&=\frac{a}{2}-\frac{64a\cos(15E_1t/\hbar)}{225\pi^2}\\
-&=a\left(\frac{1}{2}-\frac{64}{225\pi^2}\cos(15E_1t/\hbar)\right)
+&=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&=\frac{a}{2}-\frac{32a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&=a\left(\frac{1}{2}-\frac{32}{225\pi^2}\cos(15E_1t/\hbar)\right)
 \end{align*}\]++
-The frequency of oscillation is ++\(15E_1/\hbar=\frac{15\pi^2\hbar}{2ma^2}\)++.
-The particle oscillates between ++\(a\left(\frac{1}{2}\pm\frac{64}{225\pi^2}\right)\)++ and so its amplitude is ++\(\frac{128a}{225\pi^2}\)++.
+The frequency of oscillation is ++\(\frac{15E_1}{2\pi\hbar}=\frac{15\pi\hbar}{4ma^2}\)++.
+The particle oscillates between ++\(a\left(\frac{1}{2}\pm\frac{32}{225\pi^2}\right)\)++ and so its amplitude is ++\(\frac{64a}{225\pi^2}\)++.
 +
-Notably, unlike a classical particle, its amplitude is _not_ ++\(\frac{a}{2}\)++ (note that [.no-break]#++\(\frac{128}{225\pi^2}\approx0.0576\ll 0.5\)++).# ++\(\braket x\)++ of a quantum mechanical particle does get arbitrarily close to the walls of the well — why not?
+Notably, unlike a classical particle, its amplitude is _not_ ++\(\frac{a}{2}\)++ [.no-break]#(++\(\frac{64}{225\pi^2}\approx0.0288\ll 0.5\)++).#
+The expected position of a quantum mechanical particle _cannot_ get arbitrarily close to the walls of the well — why not?
+
 ====
 
 
@@ -286,14 +288,28 @@ Notably, unlike a classical particle, its amplitude is _not_ ++\(\frac{a}{2}\)++
 
 === Questions
 
-* {q-num} Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++, there is some \(n\) for which ++\(\psi_a=\hat a_{\pm}^n\psi_b\)++.
+* {q-num} Show that every solution of the time-independent harmonic oscillator {sch} equation ++\(\hat H\psi = E\psi\)++ lies on the same "`ladder`": for every pair of solutions ++\(\psi_a,\psi_b\)++ with ++\(a >b\)++, there is some ++\(m\)++ for which ++\(\psi_a=k\hat a_{+}^m\psi_b\)++ (for some normalization constant ++\(k\)++).
 +
-NOTE: I actually don't know if this is possible with the ladder operators alone, or if you have to actually solve the {sch} equation in its entirety to deduce that the ladder operators give _all_ the solutions.
-+
-.Solution (placeholder)
-[%collapsible]
+.Solution
+[%collapsible%open]
 ====
-{blank}
+Suppose ++\(\psi_a\)++ lies on ladder ++\(A\)++ and ++\(\psi_b\)++ on ladder ++\(B\)++.
+By successively applying the lowering operator to ++\(\psi_a\)++ and ++\(\psi_b\)++, we obtain the bottommost rungs on the two ladders, which we'll denote ++\(\psi_{A,0}\)++ and ++\(\psi_{B,0}\)++.
+By virtue of being the bottommost rungs, they must satisfy ++\(\hat a_-\psi_{A,0}=\hat a_-\psi_{B,0}=0\)++.
+Substituting ++\(\hat a_-=\frac{1}{\sqrt{2\hbar m\omega}}(i\hat p+m\omega x)\)++, we obtain the differential equation ++\(\frac{d\psi_{L,0}}{dx}=-\frac{m\omega}{\hbar}x\psi_{L,0}\)++ for ++\(L=A,B\)++.
+In both cases this leads to the same solution:
+++\[
+\psi_{A,0}(x)=\psi_{B,0}(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{\frac{1}{4}}e^{-\frac{m\omega}{2\hbar}x^2}
+\]++
+So the ladders share their bottom rung, which we may now write as just ++\(\psi_0(x)\)++.
+Every subsequent rung — on either ladder — is given by successive applications of the raising operator: ++\(\psi_{A,n}=\psi_{B,n}=k(\hat a_+)^n\psi_{0}\)++.
+So,
+++\[\begin{align*}
+\psi_a&=k(\hat a_+)^{a}\psi_0\\
+&=k(\hat a_+)^{a-b}(\hat a_+)^b\psi_0\\
+&=k(\hat a_+)^{n-b}\psi_b
+\end{align*}\]++
+as desired.
 ====
 
 * {q-num} For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
@@ -305,9 +321,16 @@ What is an example of a potential field ++\(V(x)\)++ for which the harmonic osci
 ++\(V(x)=x^4\)++ is one such potential, as it has no quadratic terms.
 ====
 
-* {q-num} [Thaller] Show that any solution ++\(\Psi\)++ of the harmonic oscillator satisfies ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++. (Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(-x,t)\)++.)
+* {q-num} *Coherent States* A _coherent state_ of the harmonic oscillator is a "`minimum uncertainty wavepacket`": a Gaussian wavefunction ++\(\Psi\)++ for which ++\(\sigma_x^2+\sigma_p^2\)++ at ++\(t=0\)++ is minimized.
+.. Find ++\(\sigma_x\)++ and ++\(\sigma_p\)++ at ++\(t=0\)++.
+.. Show that ++\(\sigma_x\)++ and ++\(\sigma_p\)++ are, in fact, constant over time (hence the name _coherent_ state — the probability distribution does not change shape over time).
+.. Show that ++\(\Psi\)++ is an eigenfunction of the lowering operator ++\(\hat a_-\)++ (or the raising operator, as they have the same eigenvectors).
 
-* {q-num} Show that in the harmonic oscillator, ++\(\dot p=-kx\)++.
+* {q-num} [Thaller] Show that solutions ++\(\Psi(x,t)\)++ of the harmonic oscillator satisfy ++\(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\)++.
+(Corollary: ++\(\Psi(x,t+2\pi)=-\Psi(x,t)\)++.)
+So, while the probability distribution has period ++\(2\pi\)++, matching the situation in classical physics, the wavefunction itself only has period ++\(4\pi\)++.
+
+* {q-num} Show that in the harmonic oscillator, ++\( \frac{d\braket p}{dt}=-k\braket x\)++.
 
 * {q-num} [Adapted from Griffiths 2.16]
 The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\)++.
@@ -325,14 +348,15 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 == The Free Particle
 
-* {q-num} Suppose a free particle has the initial wavefunction ++\(\psi(x) = \frac{\sin(x)}{\pi x}\)++.
+* {q-num} Suppose a free particle has the initial wavefunction [.no-break]#++\(\psi(x) = \frac{\sin(x)}{\pi x}\)++.#
 (Take our word for it that this wavefunction is already normalized.)
 [{sublist-style}]
 . Find ++\(F(k):=\mathcal{F}[\psi](k)\)++.
 You may use computational software to help you calculate the integral.
 (But don't just type in "`Fourier transform of ++\(\frac{\sin(x)}{\pi x}\)++`"!)
 . Verify that your result satisfies ++\(\Psi(x,0)=\frac{\sin(x)}{\pi x}\)++.
-. Find ++\(\Psi(x,t)\)++.
+. If you're feeling particularly ambitious, find ++\(\Psi(x,t)\)++.
+Note that the integral involves the so-called special function the _error function_, ++\(\textrm{erf}(x)=\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\)++, which has no elementary form.
 
 +
 .Solution
@@ -367,27 +391,6 @@ When ++\(t=0\)++,
 &=\frac{\sin(x)}{\pi x}
 \end{align*}\]++
 as desired.
-Now we'll find ++\(\Psi(x,t)\)++ for ++\(t\ne 0\)++.
-Defining the special _error function_ ++\(\textrm{erf} (z):=\frac{2}{\sqrt \pi}\int_0^z e^{-t^2/2}\,dt\)++,
-++\[\begin{align*}
-\Psi(x,t)&=\frac{1}{2\pi}\int_{-1}^1 e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk\\
-&=\textrm{(... computational software ...)}\\
-&=
-\end{align*}\]++
-a)
-
-++\(\int_{-\infty}^{\infty} |\Psi(x,0)|^2 dx\)++ = 1 =
-++\(|A|^2 \int_{-\infty}^\infty sin^2x/x^2 dx\)++ =
-++\(|A|^2\pi\)++ |A|++\(^2 = 1/\pi\)++
-A=1/++\(\sqrt{\pi}\)++
-
-{empty}b)
-++\(\phi(k) = (1/\sqrt{2\pi}) (1/\sqrt{\pi}) \int_{-\infty}^{\infty} (sinx/x) e^{ikx} dx =\)++
-
-{empty}c)
-++\(\Psi(x,t) = 1/\sqrt{2\pi}\int_{-\infty}^{\infty} \phi(k)e^{i(kx-(\hbar k^2t/2m))} dk\)++
-(as far as I made it on 2.4.1...)
-
 ====
 
 * {q-num} Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.

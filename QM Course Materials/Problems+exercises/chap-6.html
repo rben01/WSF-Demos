@@ -513,7 +513,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 			delimiters: [
 				{left: '\\(', right: '\\)', display: false},
 				{left: '\\[', right: '\\]', display: true}
-		  ]
+		  ],
+			macros: {'\\v': '\\mathbf{#1}'}
 		}
 	);"
 ></script>
@@ -1058,6 +1059,10 @@ But in both cases the LHS of the equation is the same (and it&#8217;s an observa
 <p>Reconcile this with the Generalized Ehrenfest Theorem.
 Where in particular in the proof of the Theorem does the issue lie?</p>
 </div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In the quantum harmonic oscillator, where <span class="no-break">\(\hat H=\frac{1}{2m}\hat p^2+\frac{1}{2}m\omega^2\hat x^2\)</span>, let \(\hat x_H(t)\) and \(\hat p_H(t)\) be the Heisenberg picture position and momentum operators.
+Show that \(\frac{d}{dt}\hat x_H(t)=\frac{1}{m\omega^2}\hat p_H(t)\) and \(\frac{d}{dt}\hat p_H(t)=-m\omega^2\hat x_H(t)\) — just as is the case in the classical situation.</p>
 </li>
 </ul>
 </div>
