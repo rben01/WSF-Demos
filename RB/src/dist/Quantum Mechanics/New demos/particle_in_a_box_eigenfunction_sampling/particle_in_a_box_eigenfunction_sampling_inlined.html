@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html>
+<head><title>particle_in_a_box_eigenfunction_sampling.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css" integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz" onload="update()" src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script crossorigin="anonymous" defer="" integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style>
+body {
+user-select: none !important;
+}
+.grid-left-right {
+grid-template-columns: auto 1fr;
+column-gap: 50px;
+}
+.vertical-container {
+height: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: center;
+}
+.radio-button-container.horizontal button {
+flex: 1 1 auto;
+}
+#wavefunction-plot {
+margin-top: 20px;
+}
+.axis-axis {
+stroke: #ccc;
+stroke-width: 2px;
+fill-opacity: 0;
+}
+.axis-curve {
+fill: none;
+stroke-linecap: round;
+stroke-linejoin: round;
+}
+.axis-curve.curve-background {
+stroke-width: 8px;
+stroke: black;
+}
+.axis-curve.curve-foreground {
+stroke-width: 4px;
+stroke: white;
+pointer-events: none;
+}
+.axis-curve.axis-curve.curve-grab-handle {
+fill: none;
+stroke-opacity: 0;
+stroke-width: 20px;
+}
+.wavef-grab-v-line {
+stroke: #ccc;
+stroke-width: 3;
+stroke-dasharray: 5 5;
+pointer-events: none;
+}
+.temp-path {
+opacity: 0;
+}
+/* .axis-curve.axis-curve.curve-grab-handle:hover {
+cursor: grab;
+} */
+/* .axis-curve.axis-curve.curve-grab-handle:active {
+cursor: grabbing !important;
+} */
+.wavef-grab-indicator {
+fill: #5df;
+stroke: #fff;
+stroke-width: 4px;
+pointer-events: none;
+}
+.axis-label {
+fill: white;
+stroke-opacity: 0;
+font-size: 24px;
+font-weight: lighter;
+}
+.plot {
+align-self: end;
+vertical-align: bottom;
+}
+.experiment-bucket {
+fill: #5df;
+stroke: black;
+}
+.experiment-selected-bucket {
+fill: #aef;
+}
+.measurement-marker {
+fill: greenyellow;
+}
+.experiment-measurement-counter {
+fill: white;
+font-size: 20px;
+}
+</style>
+</head>
+<body>
+<div class="grid-left-right">
+<div class="controls-container">
+<div class="slider-container">
+<span>Eigenfunction: <span id="text-n"></span></span>
+<span>
+<label><input id="eigen-n-slider" name="eigen-n" type="range"/></label>
+</span>
+<span>Well width</span>
+<span>
+<label><input id="L-slider" name="length" type="range"/></label>
+</span>
+<span></span>
+<svg class="plot" id="wavefunction-plot"></svg>
+<span>Measurement speed: <span id="experiment-speed"></span></span>
+<span>
+<label><input id="experiment-speed-slider" name="experiment-speed" type="range"/></label>
+</span>
+<span>Number of measurements: <span id="num-measurements-text"></span></span>
+<span>
+<label><input id="number-of-measurements-slider" name="num-measurements" type="range"/></label>
+</span>
+<span></span>
+<span class="radio-button-container horizontal" id="measurement-buttons">
+<button class="button" id="btn-run" onclick="runExperiment()">
+Run experiment</button><button class="button" data-button-checked="" id="btn-stop" onclick="stopExperiment()">
+Stop experiment</button><button class="button" data-button-checked="" id="btn-clear-experiment" onclick="clearExperiment()">
+Clear
+</button>
+</span>
+</div>
+</div>
+<svg class="plot" id="experiment-plot"></svg>
+</div>
+<div></div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global applyGraphicalObjs katex */
+const X_MIN = 0;
+const X_MAX = 10;
+const X_0 = 0;
+const WAVEF_Y_MIN = -1;
+const Y_MAX = 1;
+const Y_0 = 0;
+// eslint-disable-next-line no-unused-vars
+const Y_WIDTH = Y_MAX - WAVEF_Y_MIN;
+const _SMALL_WIDTH = 400;
+const _SMALL_HEIGHT = 200;
+const WAVEF_WIDTH = _SMALL_WIDTH;
+const WAVEF_HEIGHT = _SMALL_HEIGHT;
+const _BIG_WIDTH = 900;
+const _BIG_HEIGHT = 750;
+const PROBA_WIDTH = _BIG_WIDTH;
+const PROBA_HEIGHT = _BIG_HEIGHT;
+const _margin = 5;
+const wavefXScale = d3.scaleLinear([X_MIN, X_MAX], [_margin, WAVEF_WIDTH - _margin]);
+const wavefYScale = d3.scaleLinear(
+[WAVEF_Y_MIN, Y_MAX],
+[WAVEF_HEIGHT - _margin, _margin],
+);
+const _wavefXAxisY = wavefYScale(Y_0);
+const probaXScale = d3.scaleLinear([X_MIN, X_MAX], [_margin, PROBA_WIDTH - _margin]);
+const probaYScale = d3.scaleLinear(
+[Y_0, Y_MAX * 1.4],
+[_wavefXAxisY + PROBA_HEIGHT - WAVEF_HEIGHT - 30, _margin],
+);
+const PROBA_Y_MIN = probaYScale.invert(PROBA_HEIGHT - _margin);
+const WAVEFUNCTION = "wavefunction";
+const PROBABILITY = "probability";
+const wavefPlot = d3
+.select("#wavefunction-plot")
+.datum({ name: WAVEFUNCTION })
+.attr("width", WAVEF_WIDTH)
+.attr("height", WAVEF_HEIGHT);
+const probaPlot = d3
+.select("#experiment-plot")
+.datum({ name: PROBABILITY })
+.attr("width", PROBA_WIDTH)
+.attr("height", PROBA_HEIGHT);
+const sliders = {
+n: (() => {
+const slider = document.getElementById("eigen-n-slider");
+slider.step = 1;
+slider.min = 1;
+slider.max = 5;
+return slider;
+})(),
+L: (() => {
+const slider = document.getElementById("L-slider");
+slider.step = 0.01;
+slider.min = 2;
+slider.max = X_MAX;
+return slider;
+})(),
+};
+for (const slider of [sliders.n, sliders.L]) {
+// eslint-disable-next-line no-use-before-define
+d3.select(slider).on("input", update);
+}
+const MIN_EXPERIMENT_SPEED = 1;
+const MAX_EXPERIMENT_SPEED = 100;
+let experimentSpeed = MIN_EXPERIMENT_SPEED;
+const experimentSpeedToTimeIntervalScale = speed => 1 / (15 * speed ** 1.4);
+const experimentSpeedTextSpan = document.getElementById("experiment-speed");
+function updateExperimentSpeed() {
+const speed = +(this.value ?? MIN_EXPERIMENT_SPEED);
+experimentSpeed = speed;
+experimentSpeedTextSpan.innerText = `${speed}x`;
+}
+updateExperimentSpeed();
+// eslint-disable-next-line no-unused-vars
+const experimentSpeedSlider = (() => {
+const slider = document.getElementById("experiment-speed-slider");
+slider.min = MIN_EXPERIMENT_SPEED;
+slider.max = MAX_EXPERIMENT_SPEED;
+slider.step = 1;
+slider.value = MIN_EXPERIMENT_SPEED;
+slider.oninput = updateExperimentSpeed;
+})();
+const MIN_NUM_MEASUREMENTS = 50;
+const MAX_NUM_MEASUREMENTS = 100;
+function numMeasurementsSliderScale(value) {
+// eslint-disable-next-line no-use-before-define
+value = value ?? +numMeasurementsSlider.value;
+if (value === MAX_NUM_MEASUREMENTS) {
+return Infinity;
+}
+return (
+MIN_NUM_MEASUREMENTS -
+Math.floor(1.121 ** MIN_NUM_MEASUREMENTS) +
+Math.floor(1.121 ** value)
+);
+}
+const numMeasurementsTextSpan = document.getElementById("num-measurements-text");
+function updateNumMeasurementsText() {
+const value = +(this.value ?? MIN_NUM_MEASUREMENTS);
+const scaledValue = numMeasurementsSliderScale(value);
+const scaledText = isFinite(scaledValue) ? `${scaledValue}` : "Infinite";
+numMeasurementsTextSpan.innerText = scaledText;
+}
+const numMeasurementsSlider = (() => {
+const slider = document.getElementById("number-of-measurements-slider");
+slider.min = MIN_NUM_MEASUREMENTS;
+slider.max = MAX_NUM_MEASUREMENTS;
+slider.step = 1;
+slider.value = MAX_NUM_MEASUREMENTS - 1;
+slider.oninput = updateNumMeasurementsText;
+return slider;
+})();
+updateNumMeasurementsText.call(numMeasurementsSlider);
+function sample(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+const y1 = cdfPoints[left][1];
+const y2 = cdfPoints[right][1];
+let t = (r - y1) / (y2 - y1);
+if (isNaN(t)) {
+t = 0.5;
+}
+t = Math.max(0, Math.min(t, 1));
+const sampledIndex = left + (right - left) * t;
+samples.push(sampledIndex);
+}
+return samples;
+}
+function areaUnderCurve(points) {
+const len = points.length - 1;
+let area = 0;
+for (let i = 0; i < len; ++i) {
+const thisPoint = points[i];
+const nextPoint = points[i + 1];
+const dx = nextPoint[0] - thisPoint[0];
+const yAvg = (thisPoint[1] + nextPoint[1]) / 2;
+area += dx * yAvg;
+}
+return area;
+}
+function getCdf(pdfPoints) {
+const len = pdfPoints.length - 1;
+let cummArea = 0;
+const cdfPoints = [];
+cdfPoints.push([pdfPoints[0][0], 0]);
+for (let i = 0; i < len; ++i) {
+const thisPoint = pdfPoints[i];
+const nextPoint = pdfPoints[i + 1];
+const dx = nextPoint[0] - thisPoint[0];
+const yAvg = (thisPoint[1] + nextPoint[1]) / 2;
+cummArea += dx * yAvg;
+cdfPoints.push([nextPoint[0], cummArea]);
+}
+return cdfPoints;
+}
+let probaCurvePathPoints;
+// function interpolatePoints(wavefPoints, func) {
+// 	const points = [];
+// 	// This has to be small for accurate sampling (since sampling is performed
+// 	// numerically via the CDF), but too small and rendering becomes a bottleneck
+// 	const distBtwnAddedPoints = 0.003; // In unscaled units
+// 	for (let i = 0; i < wavefPoints.length - 1; ++i) {
+// 		const thisPoint = wavefPoints[i];
+// 		const nextPoint = wavefPoints[i + 1];
+// 		const [x1, y1] = thisPoint;
+// 		const [x2, y2] = nextPoint;
+// 		const dist = Math.sqrt((x1 - x2) ** 2 + (y1 - y2) ** 2);
+// 		const nPoints = Math.ceil(dist / distBtwnAddedPoints);
+// 		const dt = 1 / nPoints;
+// 		for (let i = 0; i < nPoints; ++i) {
+// 			const t = dt * i;
+// 			const x = (1 - t) * x1 + t * x2;
+// 			const y = func !== undefined ? func(x) : (1 - t) * y1 + t * y2;
+// 			points.push([x, y]);
+// 		}
+// 	}
+// 	points.push(wavefPoints[wavefPoints.length - 1]);
+// 	return points;
+// }
+function getAxesData({ name, n, L, yScaleFactor }) {
+yScaleFactor = yScaleFactor ?? 1;
+const nPoints = 250;
+let yMin, xScale, yScale, yAxisText;
+if (name === WAVEFUNCTION) {
+yMin = WAVEF_Y_MIN;
+xScale = wavefXScale;
+yScale = wavefYScale;
+yAxisText = "|𝜓(𝑥)|";
+} else if (name === PROBABILITY) {
+yMin = PROBA_Y_MIN;
+xScale = probaXScale;
+yScale = probaYScale;
+yAxisText = "|𝜓(𝑥)|²";
+} else {
+throw new Error(`Invalid plot ${name}`);
+}
+const f = x => Math.sqrt(2 / L) * Math.sin(((n * Math.PI) / L) * x);
+const curveStyle = d3.curveCatmullRom;
+let pathPoints;
+pathPoints = d3.range(nPoints).map(i => {
+const x = X_MIN + (i / (nPoints - 1)) * (L - X_MIN);
+const y = f(x);
+return [x, y];
+});
+if (name === WAVEFUNCTION) {
+pathPoints = pathPoints.map(([x, y]) => [x, y * yScaleFactor]);
+} else {
+pathPoints = pathPoints.map(([x]) => [x, (f(x) * yScaleFactor) ** 2]);
+probaCurvePathPoints = [...pathPoints];
+}
+const line = d3
+.line()
+.curve(curveStyle)
+.x(p => xScale(p[0]))
+.y(p => yScale(p[1]));
+const path = line(pathPoints);
+const data = [
+{
+shape: "line",
+classes: ["axis", "axis-axis", "x-axis"],
+attrs: {
+x1: xScale(X_MIN),
+x2: xScale(X_MAX),
+y1: yScale(Y_0),
+y2: yScale(Y_0),
+},
+},
+{
+shape: "line",
+classes: ["axis", "axis-axis", "y-axis"],
+attrs: {
+x1: xScale(X_0),
+x2: xScale(X_0),
+y1: yScale(yMin),
+y2: yScale(Y_MAX) - 200,
+},
+},
+{
+shape: "text",
+text: "𝑥",
+classes: ["axis", "axis-label", "axis-x-label"],
+attrs: {
+x: xScale(X_MAX) - 15,
+y: yScale(Y_0) + 20,
+},
+},
+{
+shape: "text",
+text: yAxisText,
+classes: ["axis", "axis-label", "axis-y-label"],
+attrs: {
+x: xScale(X_0) + 10,
+y: name === PROBABILITY ? yScale(Y_MAX) - 150 : yScale(Y_MAX) + 20,
+},
+},
+// these paths *must* go last to maintain order when moving them to the end
+// after adding histogram bars (this is simpler, if more brittle, than adding a
+// key for the join)
+{
+shape: "path",
+classes: ["axis", "axis-curve", "curve-background"],
+attrs: {
+d: path,
+},
+},
+...(name === WAVEFUNCTION
+? [
+{
+shape: "path",
+classes: ["axis", "axis-curve", "curve-grab-handle"],
+attrs: {
+d: path,
+},
+},
+]
+: []),
+{
+shape: "path",
+classes: ["axis", "axis-curve", "curve-foreground"],
+attrs: {
+d: path,
+},
+},
+];
+return { data, pathPoints };
+}
+let experimentAnimationFrame;
+function update() {
+probaPlot.selectAll(".experiment-indicator").remove();
+const n = +sliders.n.value;
+const L = +sliders.L.value;
+if (typeof katex !== "undefined") {
+katex.render(`n=${n}`, document.getElementById("text-n"));
+}
+const initialProbaPathPoints = (() => {
+// Due to lack of foresight, this call is what updates the list of curve points
+const pathPoints = getAxesData({
+name: PROBABILITY,
+n,
+L,
+}).pathPoints;
+return pathPoints;
+})();
+const probaArea = areaUnderCurve(initialProbaPathPoints);
+const yScaleFactor = 1 / probaArea ** 0.5;
+d3.selectAll(".plot").each(function (d) {
+const { name } = d;
+const sel = d3.select(this);
+const data = getAxesData({
+name,
+n,
+L,
+yScaleFactor,
+}).data;
+applyGraphicalObjs(sel, data, { selector: ".axis" });
+});
+}
+function setElementsEnabled(enabled) {
+for (const elem of [sliders.n, sliders.L]) {
+elem.disabled = !enabled;
+}
+}
+function stopExperiment() {
+setElementsEnabled(true);
+d3.select("#btn-clear-experiment").property("disabled", false);
+document.getElementById("btn-run").disabled = false;
+document.getElementById("btn-stop").disabled = true;
+// clearInterval(experimentInterval);
+window.cancelAnimationFrame(experimentAnimationFrame);
+wavefPlot.selectAll("*").style("pointer-events", null);
+}
+// eslint-disable-next-line no-unused-vars
+function clearExperiment() {
+probaPlot.selectAll(".experiment-indicator").remove();
+d3.select("#btn-clear-experiment").property("disabled", true);
+}
+function resetExperiment() {
+stopExperiment();
+probaPlot.selectAll(".experiment-indicator").remove();
+}
+// Will be adjusted to evenly divide the given probability function's support
+const APPROX_BUCKET_WIDTH = 0.05;
+d3.select("#btn-run").on("click._default", null);
+d3.select("#btn-clear-experiment").on("click._default", null);
+// eslint-disable-next-line no-unused-vars
+function runExperiment() {
+resetExperiment();
+setElementsEnabled(false);
+d3.select("#btn-run").property("disabled", true);
+d3.select("#btn-stop").property("disabled", false);
+d3.select("#btn-clear-experiment").property("disabled", true);
+wavefPlot.selectAll("*").style("pointer-events", "none");
+const L = +sliders.L.value;
+const nMeasurements = numMeasurementsSliderScale();
+const cdf = getCdf(probaCurvePathPoints);
+const maxSamplesGathered = 1000;
+let sampleIndex = maxSamplesGathered;
+let sampledIndices;
+function sampleCdf() {
+if (sampleIndex === maxSamplesGathered) {
+sampledIndices = sample(cdf, maxSamplesGathered);
+sampleIndex = 0;
+}
+const s = sampledIndices[sampleIndex];
+sampleIndex += 1;
+return s;
+}
+const supportMin = X_MIN;
+const supportMax = L;
+const supportWidth = supportMax - supportMin;
+// Round bucket width down to next number that divides the width of the support
+const nBuckets = Math.ceil(supportWidth / APPROX_BUCKET_WIDTH);
+const bucketWidth = supportWidth / nBuckets;
+// `buckets` contains nBuckets+1 buckets, the first nBuckets of which are rendered
+// on screen and the last of which aggregates all buckets that don't fit on screen
+const buckets = d3
+.range(nBuckets + 1)
+.map(i => ({ x: supportMin + i * bucketWidth, n: 0 }));
+const catchallBucketIndex = nBuckets;
+const scaledX0 = probaXScale(X_0);
+const scaledY0 = probaYScale(Y_0);
+let nMeasurementsSoFar = 1;
+function nextUpdateTimeIntervalMS() {
+return 1000 * experimentSpeedToTimeIntervalScale(experimentSpeed);
+}
+let prevTimestampMS;
+let experimentRemainderFrac = 0;
+function updateExperimentUI(timestampMS) {
+if (prevTimestampMS === undefined) {
+prevTimestampMS = timestampMS;
+}
+const elapsedMS = timestampMS - prevTimestampMS;
+prevTimestampMS = timestampMS;
+const timeBtwnSamplesMS = nextUpdateTimeIntervalMS();
+const nExperimentsExact =
+elapsedMS / timeBtwnSamplesMS + experimentRemainderFrac;
+const nExperiments = Math.floor(nExperimentsExact);
+experimentRemainderFrac = nExperimentsExact % 1;
+let bucketIndex;
+for (let i = 0; i < nExperiments; ++i) {
+const sampledIndex = sampleCdf();
+const left = Math.floor(sampledIndex);
+const right = Math.ceil(sampledIndex);
+const t = (sampledIndex - left) / (right - left);
+const sample = isNaN(t) ? left : cdf[left][0] * (1 - t) + cdf[right][0] * t;
+bucketIndex = Math.floor((sample - supportMin) / bucketWidth);
+if (bucketIndex < 0 || bucketIndex > nBuckets) {
+bucketIndex = catchallBucketIndex;
+}
+buckets[bucketIndex].n += 1;
+nMeasurementsSoFar += 1;
+if (nMeasurementsSoFar >= nMeasurements) {
+break;
+}
+}
+const currentAreaOfSamples =
+bucketWidth *
+(isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
+const scale = 1 / currentAreaOfSamples;
+// Exclude the final, catch-all bucket
+const data = buckets.slice(0, nBuckets).map((bucket, i) => {
+const height = bucket.n * scale;
+const scaledY = probaYScale(Y_0 + height);
+const scaledHeight = scaledY0 - probaYScale(height);
+const classes = ["experiment-indicator", "experiment-bucket"];
+if (timeBtwnSamplesMS >= 20 && i === bucketIndex) {
+classes.push("experiment-selected-bucket");
+}
+return {
+shape: "rect",
+classes,
+attrs: {
+x: probaXScale(bucket.x),
+y: scaledY,
+width: probaXScale(bucketWidth) - scaledX0,
+height: scaledHeight,
+},
+};
+});
+data.push({
+shape: "text",
+text: `Measurements: ${nMeasurementsSoFar}`,
+classes: ["experiment-indicator", "experiment-measurement-counter"],
+attrs: {
+x: probaXScale(X_MIN) + 60,
+y: probaYScale(Y_0) + 20,
+},
+});
+applyGraphicalObjs(probaPlot, data, { selector: ".experiment-indicator" });
+if (nMeasurementsSoFar <= 1) {
+const probaPlotNode = probaPlot.node();
+probaPlotNode.appendChild(
+probaPlotNode.querySelector(".axis-curve.curve-background"),
+);
+probaPlotNode.appendChild(
+probaPlotNode.querySelector(".axis-curve.curve-foreground"),
+);
+}
+if (nMeasurementsSoFar >= nMeasurements) {
+stopExperiment();
+} else {
+experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
+}
+}
+experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
+}
+update();
+</script>
+</body>
+</html>
