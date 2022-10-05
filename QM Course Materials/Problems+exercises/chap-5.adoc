@@ -73,13 +73,12 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 ====
 
 * {q-num} Two non-interacting particles in states ++\(\Psi_a(\vec{r_1})\)++ and  ++\(
-\Psi_b(\vec{r_2})\)++ with  energies ++\(a\)++ and ++\(b\)++ form a system with total energy ++\(E=a+b\)++. For ++\(E=4\)++ determine all degenerate wavefunctions, ++\(\Psi_{ab}(\vec{r_1}, \vec{r_2})\)++, if the particles are...
+\Psi_b(\vec{r_2})\)++ with  energies ++\(a\)++ and ++\(b\)++ form a system with total energy ++\(E=a+b\)++. For ++\(E=4\)++, determine all degenerate wavefunctions if the particles are...
 +
 [{sublist-style}]
 . Distinguishable
 . Bosons
 . Fermions
-
 
 * {q-num} Show that ... full wavefunction (sping and spatial) for indistinguisahble boson, fermion, and distinguishable particles
 
