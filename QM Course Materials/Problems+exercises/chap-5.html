@@ -832,14 +832,11 @@ In this problem we&#8217;ll build them up from scratch.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>We know that the wavefunction for two identical, non-interacting fermions is \[\psi_-(\v r_1, \v r_2)=A[\psi_a(\v r_1)\psi_b(\v r_2)-\psi_b(\v r_1)\psi_a(\v r_2)]\]
+<p>We know that the wavefunction for two identical, non-interacting fermions is \[\psi_-(\v r_1, \v r_2)=A[\psi_1(\v r_1)\psi_2(\v r_2)-\psi_2(\v r_1)\psi_1(\v r_2)]\]
 where \(A\) is the normalization factor.
-Using the fact that <span class="no-break">\(\|\psi_a\psi_b\|=1\),</span> compute \(A\).</p>
-</li>
-<li>
-<p>Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\psi_a\), \(\psi_b\), and <span class="no-break">\(\psi_c\).</span>
-This wavefunction should be the sum of \(3!=6\) different terms and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
-And, of course, it must be normalized.</p>
+Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\psi_a\), \(\psi_b\), and <span class="no-break">\(\psi_c\).</span>
+This wavefunction should be the sum of \(3!=6\) different terms (because \(3!\) is the number of ways to assign the <span class="no-break">\(\v r\)’s</span> to the <span class="no-break">\(\psi\)’s</span>) and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
+(Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)</p>
 </li>
 <li>
 <p>Suppose that three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
@@ -851,7 +848,7 @@ That is, using just the knowledge of the how the particles were relabeled, how c
 (Hint: The wavefunction&#8217;s sign flips every time you swap two fermions. Can you write the relabeling as the composition of multiple two-fermion swaps?)</p>
 </li>
 <li>
-<p>Using the principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?</p>
+<p>Using the &#8220;count the two-fermion swaps&#8221; principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
@@ -867,19 +864,19 @@ That is, using just the knowledge of the how the particles were relabeled, how c
 </div>
 </li>
 <li>
-<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> or <em>parity</em> of the permutation is the parity number of swaps: \(1\) if there are an even number of swaps and \(-1\) if there are an odd number.
-As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system.</p>
+<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> (or <em>parity</em>) of the permutation is the parity of the number of two-element swaps: \(1\) if there are an even number of swaps and \(-1\) if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system: the resulting sign change is just the sign of the permutation.</p>
 <div class="paragraph">
 <p>Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of pairwise swaps, the number of pairwise swaps will either always be even or always be odd.</p>
 </div>
 </li>
 <li>
-<p>Thankfully, you did not have to write out the wavefunction for the four-particle system in part (e).
+<p>Thankfully, you did not have to write out the wavefunction for the four-particle system in part (d).
 However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any \(N\)-fermion system.</p>
 <div class="paragraph">
-<p>Show that the <em>Slater determinant</em> shown below satisfies the properties of the wavefunction of a \(N\)-fermion system: it is antisymmetric under exchange of any two of the \(N\) fermions, and it is normalized.
+<p>Show that the <em>Slater determinant</em> shown below (where \(A\) is once again a normalization constant) satisfies the properties of the wavefunction of an \(N\)-fermion system: it contains all \(N!\) assignments of states to particles and is antisymmetric under exchange of any two of the \(N\) fermions.
 \[\begin{align*}
-\psi(\v r_1, \ldots, \v r_n):=\frac{1}{\sqrt N}\begin{vmatrix}
+\psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
 \psi_{1}(\v r_1)&amp;\psi_{2}(\v r_1)&amp;\cdots&amp; \psi_{N}(\v r_1)\\
 \psi_{1}(\v r_2)&amp;\psi_{2}(\v r_2)&amp;\cdots&amp; \psi_{N}(\v r_2)\\
 \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
@@ -888,6 +885,13 @@ However, it would not have been difficult to do so, as a standard procedure exis
 \end{align*}\]
 Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.</p>
 </div>
+</li>
+<li>
+<p>Assuming the \(\psi_n\)’s are orthonormal, show that the normalization factor in the Slater determinant is \(A=\frac{1}{\sqrt N}\).</p>
+</li>
+<li>
+<p>Derive the Pauli exclusion principle from the Slater determinant.
+Which property of the determinant leads to the Pauli exclusion principle?</p>
 </li>
 <li>
 <p>The <em>permanent</em> of a matrix is computed similarly to the determinant, except that there are no powers of \(-1\) in its cofactor expansion; you only ever <em>add</em> the submatrices (so, for instance, the permanent of \(\displaystyle\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\) is \(ad+bc\)).
