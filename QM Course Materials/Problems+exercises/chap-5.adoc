@@ -74,11 +74,17 @@ The three-way swap can be decomposed into pairwise swaps: first we swap 1 and 2 
 Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because the particles are fermions), the net result is that resulting wavefunction is equal to the original wavefunction.
 ====
 
-* {q-num} Show that ... write out first few states for e4
+* {q-num} Two non-interacting particles in states ++\(\Psi_a(\vec{r_1})\)++ and  ++\(
+\Psi_b(\vec{r_2})\)++ with  energies ++\(a\)++ and ++\(b\)++ form a system with total energy ++\(E=a+b\)++. For ++\(E=4\)++, determine all degenerate wavefunctions if the particles are...
++
+[{sublist-style}]
+. Distinguishable
+. Bosons
+. Fermions
 
 * {q-num} Show that ... full wavefunction (sping and spatial) for indistinguisahble boson, fermion, and distinguishable particles
 
-* {q-num} Show that ... central potential question
+* {q-num} Central potential question (need to think one up)
 
 == Atoms
 
