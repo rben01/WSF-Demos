@@ -90,12 +90,22 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 . Bosons
 . Fermions
 
-* {q-num} Show that ... full wavefunction (sping and spatial) for indistinguisahble boson, fermion, and distinguishable particles
+* {q-num} Show that ... full wavefunction (spin and spatial) for indistinguisahble boson, fermion, and distinguishable particles
 
 * {q-num} Central potential question (need to think one up)
 
+* {q-num} Also may be worth having a question on exchange forces
+
 == Atoms
 
+* {q-num}
+
+* {q-num}
+
 == Solids
+
+* {q-num}
+
+* {q-num}
 
 == Demonstrations
