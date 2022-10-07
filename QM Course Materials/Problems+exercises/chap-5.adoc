@@ -94,7 +94,12 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 . Bosons
 . Fermions
 
-* {q-num} Show that ... full wavefunction (spin and spatial) for indistinguishable boson, fermion, and distinguishable particles
+* {q-num} Write out the full wavefunction, including the spin and spatial components, for the following two-particle systems:
++
+[{sublist-style}]
+. Electrons in the total spin state ++\(\ket{0 \ 0}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+. Identical spin-1 particles in the total spin state ++\(\ket{1 \ -1}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+. A spin-1 particle and spin-++\(\frac{1}{2}\)++ particle in total spin state ++\(\ket{\frac{3}{2} \ \frac{3}{2}}\)++ and energetic states ++\(a\)++ and ++\(b\)++, respectively.
 
 * {q-num} Central potential question (need to think one up)
 
