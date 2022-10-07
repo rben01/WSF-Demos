@@ -835,8 +835,17 @@ In this problem we&#8217;ll build them up from scratch.</p>
 <p>We know that the wavefunction for two identical, non-interacting fermions is \[\psi_-(\v r_1, \v r_2)=A[\psi_1(\v r_1)\psi_2(\v r_2)-\psi_2(\v r_1)\psi_1(\v r_2)]\]
 where \(A\) is the normalization factor.
 Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\psi_a\), \(\psi_b\), and <span class="no-break">\(\psi_c\).</span>
-This wavefunction should be the sum of \(3!=6\) different terms (because \(3!\) is the number of ways to assign the <span class="no-break">\(\v r\)’s</span> to the <span class="no-break">\(\psi\)’s</span>) and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
+This wavefunction should be the sum of \(3!=6\) different terms and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
 (Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)</p>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Why \(3!\)&#160;?
+In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and \(3!=6\) is the number of ways to assign the 3 <span class="no-break">\(\v r\)’s</span> to the 3 <span class="no-break">\(\psi\)’s.</span>
+(In general, \(N!\) is the number of orderings of \(N\) items.)</p>
+</div>
+</div>
+</div>
 </li>
 <li>
 <p>Suppose that three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
@@ -896,6 +905,9 @@ Which property of the determinant leads to the Pauli exclusion principle?</p>
 <li>
 <p>The <em>permanent</em> of a matrix is computed similarly to the determinant, except that there are no powers of \(-1\) in its cofactor expansion; you only ever <em>add</em> the submatrices (so, for instance, the permanent of \(\displaystyle\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\) is \(ad+bc\)).
 Show that the <em>Slater permanent</em> gives the wavefunction of an \(N\)-<em>boson</em> system.</p>
+</li>
+</ol>
+</div>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -905,9 +917,6 @@ Since both two-particle swaps multiply the wavefunction by \(-1\) (because the p
 </div>
 </div>
 </details>
-</li>
-</ol>
-</div>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Two non-interacting particles in states \(\Psi_a(\vec{r_1})\) and  \(
