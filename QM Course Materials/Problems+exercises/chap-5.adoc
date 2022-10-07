@@ -23,54 +23,58 @@ f&=P^2f\\
 \end{align*}\]++
 Since ++\(\lambda^2 f=f\)++ and ++\(f\ne\ket0\)++, we see that ++\(\lambda^2=1\)++.
 The only solutions to this equation are ++\(\lambda=\pm 1\)++.
-(++\(P\)++ need not have _both_ ++\(+1\)++ and ++\(-1\)++ as eigenvalues; the identity operator itself satisfies ++\(P^2=I\)++ but its only eigenvalue is ++\(1\)++.
+(++\(P\)++ need not have _both_ ++\(+1\)++ and ++\(-1\)++ as eigenvalues; the identity operator satisfies ++\(P^2=I\)++ but its only eigenvalue is ++\(1\)++.
 ++\(\pm1\)++ are simply the only _permissible_ eigenvalues.)
 ====
 
-* {q-num} _Slater Determinants_ are a methodological approach to computing the joint wavefunctions of identical fermions.
+* {q-num} _Slater Determinants_ are a methodological approach to using the antisymmetrization principle to compute the joint wavefunctions of identical fermions.
 In this problem we'll build them up from scratch.
++
+The wavefunction ++\(\Psi_k\)++ of a fermion with label ++\(k\)++ is the product of its position wavefunction and its spin: ++\(\Psi_k(\v r_k)=\Psi_k(\v r_k)\chi_k\)++.
 [{sublist-style}]
-.. We know that the wavefunction for two identical, non-interacting fermions is ++\[\psi_-(\v r_1, \v r_2)=A[\psi_1(\v r_1)\psi_2(\v r_2)-\psi_2(\v r_1)\psi_1(\v r_2)]\]++
+.. We know that the wavefunction for two identical, non-interacting fermions is ++\[\Psi_-(\v r_1, \v r_2)=A[\Psi_1(\v r_1)\Psi_2(\v r_2)-\Psi_2(\v r_1)\Psi_1(\v r_2)]\]++
 where ++\(A\)++ is the normalization factor.
-Write the wavefunction for _three_ identical, non-interacting fermions labeled ++\((1,2,3)\)++ whose individual states are ++\(\psi_a\)++, ++\(\psi_b\)++, and [.no-break]#++\(\psi_c\)++.#
+This wavefunction has the property that it is antisymmetric under exchange of the particles.
++
+Write the wavefunction for _three_ identical, non-interacting fermions labeled ++\((1,2,3)\)++ whose individual states are ++\(\Psi_1\)++, ++\(\Psi_2\)++, and [.no-break]#++\(\Psi_3\)++.#
 This wavefunction should be the sum of ++\(3!=6\)++ different terms and should have the property that swapping any two particles — any two indices ++\(m,n\in\{1,2,3\}\)++ — should negate the resulting wavefunction.
 (Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)
 +
 [sidebar]
 ====
 Why ++\(3!\)++{nbsp}?
-In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and ++\(3!=6\)++ is the number of ways to assign the 3 [.no-break]#++\(\v r\)++’s# to the 3 [.no-break]#++\(\psi\)++’s.#
+In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and ++\(3!=6\)++ is the number of ways to assign the 3 [.no-break]#++\(\v r\)++’s# to the 3 [.no-break]#++\(\Psi\)++’s.#
 (In general, ++\(N!\)++ is the number of orderings of ++\(N\)++ items.)
 ====
 .. Suppose that three fermions labeled ++\((1,2,3)\)++ are exchanged so that they are now labeled ++\((3,1,2)\)++.
-In terms of the original wavefunction, what is the new wavefunction?
+In terms of the original wavefunction you found in part (a), what is the new wavefunction?
 .. Without using the explicitly constructed wavefunction from part (a), repeat part (b).
 That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
-(Hint: The wavefunction's sign flips every time you swap two fermions. Can you write the relabeling as the composition of multiple two-fermion swaps?)
-.. Using the "`count the two-fermion swaps`" principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?
+(Hint: The wavefunction's sign flips every time you exchange two fermions. Can you write the relabeling as the composition of multiple two-fermion exchanges?)
+.. Using the "`count the two-fermion exchanges`" principle from part (c), how would the sign of the wavefunction change under the following four-particle exchanges?
 ... ++\((1,2,3,4) \to (2,1,4,3)\)++
 ... ++\((1,2,3,4) \to (4,3,2,1)\)++
 ... ++\((1,2,3,4) \to (4,1,2,3)\)++
-.. If you write a permutation as the composition of pairwise swaps, the _sign_ (or _parity_) of the permutation is the parity of the number of two-element swaps: ++\(1\)++ if there are an even number of swaps and ++\(-1\)++ if there are an odd number.
-As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system: the resulting sign change is just the sign of the permutation.
+.. If you write a permutation as the composition of pairwise swaps, the _sign_ (or _parity_) of the permutation is the parity of the number of two-element swaps: ++\(+1\)++ if there are an even number of swaps and ++\(-1\)++ if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction of a system of multiple indistinguishable fermions will change when that permutation is used to relabel the fermions: the resulting sign change is just the sign of the permutation.
 +
-Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of pairwise swaps, the number of pairwise swaps will either always be even or always be odd.
+Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of two-particle exchanges, the number of two-particle exchanges will either always be even or always be odd.
+In other words, an even number of two-particle exchanges will never result in the same permutation as an odd number of two-particle exchanges.
 .. Thankfully, you did not have to write out the wavefunction for the four-particle system in part (d).
 However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any ++\(N\)++-fermion system.
 +
-Show that the _Slater determinant_ shown below (where ++\(A\)++ is once again a normalization constant) satisfies the properties of the wavefunction of an ++\(N\)++-fermion system: it contains all ++\(N!\)++ assignments of states to particles and is antisymmetric under exchange of any two of the ++\(N\)++ fermions.
+Show that the _Slater determinant_ shown below (where ++\(A\)++ is once again a normalization constant) satisfies the properties of the wavefunction of an ++\(N\)++-fermion system: it contains all ++\(N!\)++ assignments of states to particles (so that it is fully indeterminate about which particle is i which state) and is antisymmetric under exchange of any two of the ++\(N\)++ fermions.
 ++\[\begin{align*}
-\psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
-\psi_{1}(\v r_1)&\psi_{2}(\v r_1)&\cdots& \psi_{N}(\v r_1)\\
-\psi_{1}(\v r_2)&\psi_{2}(\v r_2)&\cdots& \psi_{N}(\v r_2)\\
+\Psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
+\Psi_{1}(\v r_1)&\Psi_{2}(\v r_1)&\cdots& \Psi_{N}(\v r_1)\\
+\Psi_{1}(\v r_2)&\Psi_{2}(\v r_2)&\cdots& \Psi_{N}(\v r_2)\\
 \vdots&\vdots&\ddots&\vdots\\
-\psi_{1}(\v r_N)&\psi_{2}(\v r_N)&\cdots& \psi_{N}(\v r_N)\\
+\Psi_{1}(\v r_N)&\Psi_{2}(\v r_N)&\cdots& \Psi_{N}(\v r_N)\\
 \end{vmatrix}
 \end{align*}\]++
 Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.
-.. Assuming the ++\(\psi_n\)++’s are orthonormal, show that the normalization factor in the Slater determinant is ++\(A=\frac{1}{\sqrt N}\)++.
-.. Derive the Pauli exclusion principle from the Slater determinant.
-Which property of the determinant leads to the Pauli exclusion principle?
+.. Assuming the ++\(\Psi_n\)++’s are orthonormal, show that the normalization factor in the Slater determinant is ++\(A=\frac{1}{\sqrt N}\)++.
+.. Derive the Pauli exclusion principle from the Slater determinant — which property of the determinant leads to the Pauli exclusion principle?
 .. The _permanent_ of a matrix is computed similarly to the determinant, except that there are no powers of ++\(-1\)++ in its cofactor expansion; you only ever _add_ the submatrices (so, for instance, the permanent of ++\(\displaystyle\begin{pmatrix}a&b\\c&d\end{pmatrix}\)++ is ++\(ad+bc\)++).
 Show that the _Slater permanent_ gives the wavefunction of an ++\(N\)++-_boson_ system.
 
@@ -90,7 +94,7 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 . Bosons
 . Fermions
 
-* {q-num} Show that ... full wavefunction (spin and spatial) for indistinguisahble boson, fermion, and distinguishable particles
+* {q-num} Show that ... full wavefunction (spin and spatial) for indistinguishable boson, fermion, and distinguishable particles
 
 * {q-num} Central potential question (need to think one up)
 

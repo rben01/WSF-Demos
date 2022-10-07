@@ -4265,28 +4265,34 @@ f&amp;=P^2f\\
 \end{align*}\]
 Since \(\lambda^2 f=f\) and \(f\ne\ket0\), we see that \(\lambda^2=1\).
 The only solutions to this equation are \(\lambda=\pm 1\).
-(\(P\) need not have <em>both</em> \(+1\) and \(-1\) as eigenvalues; the identity operator itself satisfies \(P^2=I\) but its only eigenvalue is \(1\).
+(\(P\) need not have <em>both</em> \(+1\) and \(-1\) as eigenvalues; the identity operator satisfies \(P^2=I\) but its only eigenvalue is \(1\).
 \(\pm1\) are simply the only <em>permissible</em> eigenvalues.)</p>
 </div>
 </div>
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <em>Slater Determinants</em> are a methodological approach to computing the joint wavefunctions of identical fermions.
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <em>Slater Determinants</em> are a methodological approach to using the antisymmetrization principle to compute the joint wavefunctions of identical fermions.
 In this problem we&#8217;ll build them up from scratch.</p>
+<div class="paragraph">
+<p>The wavefunction \(\Psi_k\) of a fermion with label \(k\) is the product of its position wavefunction and its spin: \(\Psi_k(\v r_k)=\Psi_k(\v r_k)\chi_k\).</p>
+</div>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>We know that the wavefunction for two identical, non-interacting fermions is \[\psi_-(\v r_1, \v r_2)=A[\psi_1(\v r_1)\psi_2(\v r_2)-\psi_2(\v r_1)\psi_1(\v r_2)]\]
+<p>We know that the wavefunction for two identical, non-interacting fermions is \[\Psi_-(\v r_1, \v r_2)=A[\Psi_1(\v r_1)\Psi_2(\v r_2)-\Psi_2(\v r_1)\Psi_1(\v r_2)]\]
 where \(A\) is the normalization factor.
-Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\psi_a\), \(\psi_b\), and <span class="no-break">\(\psi_c\).</span>
+This wavefunction has the property that it is antisymmetric under exchange of the particles.</p>
+<div class="paragraph">
+<p>Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\Psi_1\), \(\Psi_2\), and <span class="no-break">\(\Psi_3\).</span>
 This wavefunction should be the sum of \(3!=6\) different terms and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
 (Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)</p>
+</div>
 <div class="exampleblock">
 <div class="content">
 <div class="paragraph">
 <p>Why \(3!\)&#160;?
-In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and \(3!=6\) is the number of ways to assign the 3 <span class="no-break">\(\v r\)’s</span> to the 3 <span class="no-break">\(\psi\)’s.</span>
+In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and \(3!=6\) is the number of ways to assign the 3 <span class="no-break">\(\v r\)’s</span> to the 3 <span class="no-break">\(\Psi\)’s.</span>
 (In general, \(N!\) is the number of orderings of \(N\) items.)</p>
 </div>
 </div>
@@ -4294,15 +4300,15 @@ In order for the wavefunction to be truly indeterminate about which particle is 
 </li>
 <li>
 <p>Suppose that three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
-In terms of the original wavefunction, what is the new wavefunction?</p>
+In terms of the original wavefunction you found in part (a), what is the new wavefunction?</p>
 </li>
 <li>
 <p>Without using the explicitly constructed wavefunction from part (a), repeat part (b).
 That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
-(Hint: The wavefunction&#8217;s sign flips every time you swap two fermions. Can you write the relabeling as the composition of multiple two-fermion swaps?)</p>
+(Hint: The wavefunction&#8217;s sign flips every time you exchange two fermions. Can you write the relabeling as the composition of multiple two-fermion exchanges?)</p>
 </li>
 <li>
-<p>Using the &#8220;count the two-fermion swaps&#8221; principle from part (c), how would the sign of the wavefunction change under the following four-particle swaps?</p>
+<p>Using the &#8220;count the two-fermion exchanges&#8221; principle from part (c), how would the sign of the wavefunction change under the following four-particle exchanges?</p>
 <div class="olist lowerroman">
 <ol class="lowerroman" type="i">
 <li>
@@ -4318,34 +4324,34 @@ That is, using just the knowledge of the how the particles were relabeled, how c
 </div>
 </li>
 <li>
-<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> (or <em>parity</em>) of the permutation is the parity of the number of two-element swaps: \(1\) if there are an even number of swaps and \(-1\) if there are an odd number.
-As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction will change when that permutation is used to relabel the fermions in the system: the resulting sign change is just the sign of the permutation.</p>
+<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> (or <em>parity</em>) of the permutation is the parity of the number of two-element swaps: \(+1\) if there are an even number of swaps and \(-1\) if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction of a system of multiple indistinguishable fermions will change when that permutation is used to relabel the fermions: the resulting sign change is just the sign of the permutation.</p>
 <div class="paragraph">
-<p>Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of pairwise swaps, the number of pairwise swaps will either always be even or always be odd.</p>
+<p>Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of two-particle exchanges, the number of two-particle exchanges will either always be even or always be odd.
+In other words, an even number of two-particle exchanges will never result in the same permutation as an odd number of two-particle exchanges.</p>
 </div>
 </li>
 <li>
 <p>Thankfully, you did not have to write out the wavefunction for the four-particle system in part (d).
 However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any \(N\)-fermion system.</p>
 <div class="paragraph">
-<p>Show that the <em>Slater determinant</em> shown below (where \(A\) is once again a normalization constant) satisfies the properties of the wavefunction of an \(N\)-fermion system: it contains all \(N!\) assignments of states to particles and is antisymmetric under exchange of any two of the \(N\) fermions.
+<p>Show that the <em>Slater determinant</em> shown below (where \(A\) is once again a normalization constant) satisfies the properties of the wavefunction of an \(N\)-fermion system: it contains all \(N!\) assignments of states to particles (so that it is fully indeterminate about which particle is i which state) and is antisymmetric under exchange of any two of the \(N\) fermions.
 \[\begin{align*}
-\psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
-\psi_{1}(\v r_1)&amp;\psi_{2}(\v r_1)&amp;\cdots&amp; \psi_{N}(\v r_1)\\
-\psi_{1}(\v r_2)&amp;\psi_{2}(\v r_2)&amp;\cdots&amp; \psi_{N}(\v r_2)\\
+\Psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
+\Psi_{1}(\v r_1)&amp;\Psi_{2}(\v r_1)&amp;\cdots&amp; \Psi_{N}(\v r_1)\\
+\Psi_{1}(\v r_2)&amp;\Psi_{2}(\v r_2)&amp;\cdots&amp; \Psi_{N}(\v r_2)\\
 \vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
-\psi_{1}(\v r_N)&amp;\psi_{2}(\v r_N)&amp;\cdots&amp; \psi_{N}(\v r_N)\\
+\Psi_{1}(\v r_N)&amp;\Psi_{2}(\v r_N)&amp;\cdots&amp; \Psi_{N}(\v r_N)\\
 \end{vmatrix}
 \end{align*}\]
 Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.</p>
 </div>
 </li>
 <li>
-<p>Assuming the \(\psi_n\)’s are orthonormal, show that the normalization factor in the Slater determinant is \(A=\frac{1}{\sqrt N}\).</p>
+<p>Assuming the \(\Psi_n\)’s are orthonormal, show that the normalization factor in the Slater determinant is \(A=\frac{1}{\sqrt N}\).</p>
 </li>
 <li>
-<p>Derive the Pauli exclusion principle from the Slater determinant.
-Which property of the determinant leads to the Pauli exclusion principle?</p>
+<p>Derive the Pauli exclusion principle from the Slater determinant — which property of the determinant leads to the Pauli exclusion principle?</p>
 </li>
 <li>
 <p>The <em>permanent</em> of a matrix is computed similarly to the determinant, except that there are no powers of \(-1\) in its cofactor expansion; you only ever <em>add</em> the submatrices (so, for instance, the permanent of \(\displaystyle\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\) is \(ad+bc\)).
@@ -4381,7 +4387,7 @@ Since both two-particle swaps multiply the wavefunction by \(-1\) (because the p
 </div>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that &#8230;&#8203; full wavefunction (spin and spatial) for indistinguisahble boson, fermion, and distinguishable particles</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that &#8230;&#8203; full wavefunction (spin and spatial) for indistinguishable boson, fermion, and distinguishable particles</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Central potential question (need to think one up)</p>
