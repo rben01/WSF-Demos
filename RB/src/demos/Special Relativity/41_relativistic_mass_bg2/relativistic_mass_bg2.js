@@ -309,7 +309,7 @@ function getGridlinesData({ fracOfC }) {
 			shape: "path",
 			attrs: {
 				d: curve(data.slice(0, 1+100 * fracOfC)),
-				stroke: "#fffd",
+				stroke: STANDARD_COLORS.quaternary,
 				"stroke-width": 4,
 			},
 		},
