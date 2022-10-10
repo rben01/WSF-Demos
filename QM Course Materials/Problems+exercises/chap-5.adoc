@@ -99,7 +99,10 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 [{sublist-style}]
 . Electrons in the total spin state ++\(\ket{0 \ 0}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
 . Identical spin-1 particles in the total spin state ++\(\ket{1 \ -1}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
-. A spin-1 particle and spin-++\(\frac{1}{2}\)++ particle in total spin state ++\(\ket{\frac{3}{2} \ \frac{3}{2}}\)++ and energetic states ++\(a\)++ and ++\(b\)++, respectively.
+. A spin-1 particle and spin-++\(\frac{1}{2}\)++ particle in total spin state ++\(\ket{\frac{3}{2} \ \frac{1}{2}}\)++ and energetic states ++\(a\)++ and ++\(b\)++, respectively.
+. Identical spin-++\(\frac{3}{2}\)++ particles in total spin state ++\(\ket{3 \ 0}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+
+Note: we suggest using the notation ++\(\ket{s_1 \ s_2 \ m_1 \ m_2}\)++ and ++\(\psi_E\)++, where ++\(E=a,b\)++.
 
 * {q-num} Central potential question (need to think one up)
 
