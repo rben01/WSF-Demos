@@ -536,8 +536,26 @@ Now set (eq.* = eq. **):
 * {q-num} Graph the allowed energies for the even bound state wave function of the finite square well.
 Show the possible energy values and explain your reasoning.
 
-* {q-num} How do the amount of bound states change based on the depth of the well?
-How does a wide, deep well differ from a shallow, narrow well?
+* {q-num} Using a graphical plotting program, examine some properties of the finite height well.
+[sublist-style]
+.. How does the number of bound states (both odd and even) depend on the particle's mass (++\(m\)++) and the well's width (++\(a\)++) and depth (++\(V_0\)++)?
+Which variable causes the number of bound states to increase the fastest?
+How does this depend on the current values of ++\(m\)++, ++\(a\)++, and [.no-break]#++\(V_0\)++?#
+.. In the finite height well, at the boundary of the well (++\(x=\pm a\)++), the bound states go from purely sinusoidal to exponentially decaying.
+How do the values of ++\(m\)++, ++\(a\)++, ++\(V_0\)++, and the energy ++\(E\)++ of the particle affect how rapidly the bound states decay outside of the well (and in turn how likely you are to find the particle outside of the well)?
+
+
+* {q-num} For what energies ++\(E=E_n+V_0\)++ is the finite square well "`opaque`", i.e., the transmission coefficient is 0?
+
+* {q-num} Solve the "`finite square wall`":
+++\[\begin{align*}
+V(x)=\begin{cases}
+V_0>0&-a\le x\le a\\
+0&|x|\ge a
+\end{cases}
+\end{align*}\]++
+(Obviously there are only scattering states.)
+When is the wall "`transparent`" to incoming waves?
 
 === Demonstrations
 
