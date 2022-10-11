@@ -983,25 +983,24 @@ const nPoints = 500;
 const dx = (X_MAX - X_MIN) / (nPoints - 1);
 const energyLines = [];
 const energyCurves = [];
-for (const even of [true, false]) {
-const energies = findEnergies({ m, L, V, even });
+for (const isEven of [true, false]) {
+const energies = findEnergies({ m, L, V, even: isEven });
 for (let index = 0; index < energies.length; ++index) {
 const energy = energies[index];
-const psi = makePsiFunction({ even, V, L, m, energy });
-// console.log(energy, alpha, k * Math.tan((k * L) / 2));
-// console.log(alpha, k, $CEven(alpha, k), $BEven(alpha, k), (k * L) / 2);
+const psi = makePsiFunction({ even: isEven, V, L, m, energy });
 const points = [];
 for (let i = 0; i < nPoints; ++i) {
 const x = X_MIN + i * dx;
 const y = psi(x);
 points.push([xScale(x), yScale(y)]);
 }
-const energyId = `index:${index};even:${even}`;
+const energyId = `index:${index};even:${isEven}`;
 const energyY = yScale(energy);
 energyLines.push({
 shape: "g",
 class: "energy-line-container",
 energyId,
+isEven,
 energy,
 children: [
 {
@@ -1035,6 +1034,7 @@ energyCurves.push({
 shape: "g",
 class: "energy-curve-container",
 energyId,
+isEven,
 energy,
 children: [
 {
@@ -1049,7 +1049,7 @@ d: path,
 {
 shape: "path",
 class: `energy energy-curve visible curve-foreground ${
-even ? "even" : "odd"
+isEven ? "even" : "odd"
 }`,
 energyId,
 energy,
@@ -1080,6 +1080,9 @@ child.energyLevelIndex = energyLevelIndex;
 }
 }
 });
+if (!objs[0]?.isEven) {
+objs.shift();
+}
 }
 const wellInnerLeft = xScale(-L / 2);
 const wellInnerRight = xScale(L / 2);
@@ -1165,7 +1168,6 @@ y: YS_MAX + horizontalAxisOffset + axisLabelOffsetFromAxis,
 },
 },
 ];
-console.log(energyCurves);
 applyGraphicalObjs(wellContainer, wellData, { selector: ".well" });
 applyGraphicalObjs(energyLinesContainer, energyLines, {
 selector: ".energy-line-container",
