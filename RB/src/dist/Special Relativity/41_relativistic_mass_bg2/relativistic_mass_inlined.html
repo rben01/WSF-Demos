@@ -237,15 +237,10 @@ margin-right: 132px;
 <td style="height: 12px"></td>
 </tr>
 <tr>
-<td class="eqn-left">Rest mass</td>
-<td class="eqn-middle">=</td>
-<td class="eqn-right"><span class="sci-num">5.00</span>kg</td>
-</tr>
-<tr>
-<td class="eqn-left">𝑚(𝑣)</td>
+<td class="eqn-left">γ</td>
 <td class="eqn-middle">=</td>
 <td class="eqn-right">
-<span class="secondary-text sci-num" id="particle-rel-mass-text">5.00</span>𝑐<span class="operator">·</span>kg
+<span class="secondary-text sci-num" id="particle-rel-mass-text">5.00</span>
 </td>
 </tr>
 </table>
@@ -658,7 +653,6 @@ return d3Obj;
 </script>
 <script type="text/javascript">/* globals _addGraphicalObjs applyDatum lorentzFactor STANDARD_COLORS */
 "use strict";
-const REST_MASS = 5;
 const CANVAS_WIDTH = 700;
 const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
@@ -705,11 +699,11 @@ throw new Error(`Got invalid speed (outside [0,1]): ${floatVal}`);
 }
 return floatVal;
 }
-function getRelativisticMass({ fracOfC, lf }) {
+function getLF({ fracOfC, lf }) {
 if (typeof lf === "undefined") {
 lf = lorentzFactor({ fracOfC });
 }
-return REST_MASS * lf;
+return lf;
 }
 const xScale = d3
 .scaleLinear()
@@ -717,10 +711,10 @@ const xScale = d3
 .range([AX_BOUNDS.xMin, AX_BOUNDS.xMax]);
 const yScale = d3
 .scaleLinear()
-.domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
+.domain([0, getLF({ fracOfC: speedInputSlider.max })])
 .range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 const graphObjs = {};
-const data = [[0, 5]];
+const data = [[0, 1]];
 function drawGraph() {
 const base = 10;
 const startPrecision = 2;
@@ -733,7 +727,7 @@ precision === startPrecision
 const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
 for (let i = 0; i < nNums - 1; ++i) {
 const x = lower + i * scale;
-const y = getRelativisticMass({ fracOfC: x });
+const y = getLF({ fracOfC: x });
 if (y > Math.max(...yScale.domain())) {
 break outer;
 }
@@ -882,7 +876,7 @@ subcanvas
 .attr("stroke", "white")
 .attr("fill", "white")
 .attr("text-anchor", "middle")
-.text("𝑚(𝑣)");
+.text("γ");
 });
 }
 function getGridlinesData({ fracOfC }) {
@@ -890,7 +884,7 @@ if (typeof fracOfC === "undefined") {
 fracOfC = 0.5;
 }
 const x = xScale(fracOfC);
-const y = yScale(getRelativisticMass({ fracOfC }));
+const y = yScale(getLF({ fracOfC }));
 const commonLineAttrs = {
 "stroke-width": 3,
 "stroke-dasharray": "1.5 1.5",
@@ -936,7 +930,7 @@ fill: "white",
 shape: "path",
 attrs: {
 d: curve(data.slice(0, 1+100 * fracOfC)),
-stroke: STANDARD_COLORS.quaternary,
+stroke: "#fffd",
 "stroke-width": 4,
 },
 },
@@ -952,7 +946,7 @@ speedInputSlider.value = speedStr;
 }
 const speed = getSpeed(speedStr);
 speedTextSpan.textContent = speed.toFixed(3);
-const relMass = getRelativisticMass({ fracOfC: speed });
+const relMass = getLF({ fracOfC: speed });
 relMassTextSpan.textContent = relMass.toFixed(2);
 graphObjs.gridLines
 .data(getGridlinesData({ fracOfC: speed }))

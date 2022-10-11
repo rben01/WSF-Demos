@@ -2,8 +2,6 @@
 
 "use strict";
 
-const REST_MASS = 5;
-
 const CANVAS_WIDTH = 700;
 const CANVAS_HEIGHT = 500;
 const AXIS_MARGINS = { top: 0.1, bottom: 0.1, left: 0.13, right: 0.06 };
@@ -57,11 +55,11 @@ function getSpeed(speedStr) {
 	return floatVal;
 }
 
-function getRelativisticMass({ fracOfC, lf }) {
+function getLF({ fracOfC, lf }) {
 	if (typeof lf === "undefined") {
 		lf = lorentzFactor({ fracOfC });
 	}
-	return REST_MASS * lf;
+	return lf;
 }
 
 const xScale = d3
@@ -71,11 +69,11 @@ const xScale = d3
 
 const yScale = d3
 	.scaleLinear()
-	.domain([0, getRelativisticMass({ fracOfC: speedInputSlider.max })])
+	.domain([0, getLF({ fracOfC: speedInputSlider.max })])
 	.range([AX_BOUNDS.yMin, AX_BOUNDS.yMax]);
 
 const graphObjs = {};
-const data = [[0, 5]];
+const data = [[0, 1]];
 
 function drawGraph() {
 
@@ -91,7 +89,7 @@ function drawGraph() {
 		const nNums = precision === startPrecision ? Math.pow(base, precision) : base;
 		for (let i = 0; i < nNums - 1; ++i) {
 			const x = lower + i * scale;
-			const y = getRelativisticMass({ fracOfC: x });
+			const y = getLF({ fracOfC: x });
 
 			if (y > Math.max(...yScale.domain())) {
 				break outer;
@@ -254,7 +252,7 @@ function drawGraph() {
 			.attr("stroke", "white")
 			.attr("fill", "white")
 			.attr("text-anchor", "middle")
-			.text("𝑚(𝑣)");
+			.text("γ");
 	});
 }
 
@@ -264,7 +262,7 @@ function getGridlinesData({ fracOfC }) {
 	}
 
 	const x = xScale(fracOfC);
-	const y = yScale(getRelativisticMass({ fracOfC }));
+	const y = yScale(getLF({ fracOfC }));
 
 	const commonLineAttrs = {
 		"stroke-width": 3,
@@ -311,7 +309,7 @@ function getGridlinesData({ fracOfC }) {
 			shape: "path",
 			attrs: {
 				d: curve(data.slice(0, 1+100 * fracOfC)),
-				stroke: STANDARD_COLORS.quaternary,
+				stroke: "#fffd",
 				"stroke-width": 4,
 			},
 		},
@@ -331,7 +329,7 @@ function updateParticleSpeed(speedStr, { fromUserInput = true } = {}) {
 		const speed = getSpeed(speedStr);
 		speedTextSpan.textContent = speed.toFixed(3);
 
-		const relMass = getRelativisticMass({ fracOfC: speed });
+		const relMass = getLF({ fracOfC: speed });
 		relMassTextSpan.textContent = relMass.toFixed(2);
 
 		graphObjs.gridLines
