@@ -98,13 +98,19 @@ Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because t
 
 * {q-num} Central potential question (need to think one up)
 
-* {q-num} Also may be worth having a question on exchange forces
+* {q-num} A positron is like an electron in every way except that its charge is positive instead of negative.
+What would the exchange force be between an electron and a positron (ignoring any electrical force between them).
 
 == Atoms
 
-* {q-num}
+* {q-num} Using the reduced mass
 
-* {q-num}
+* {q-num} What would the ground state of helium be if its two electrons were distinguishable (say, one had a very slightly different mass)?
+
+* {q-num} _Positronium_ is a system made of one electron and one positron.
+Analogously with helium, _para_-positronium has the two particles in the singlet state while _ortho_-positronium has the two particles in the triplet state.
+Which kind of positronium has a higher energy, para- or ortho-?
+By how much?
 
 == Solids
 
