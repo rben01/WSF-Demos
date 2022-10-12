@@ -1405,6 +1405,97 @@ as desired.</p>
 <div class="ulist">
 <ul>
 <li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a fixed constant \(a\), compute the closed form for \(f(x)\coloneqq\int_{-\infty}^x\delta (t-a)\,dt\).</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>First, use \(u\)-substitution with \(u=t-a\) to obtain <span class="no-break">\(f(x)=\int_{-\infty}^{x-a} \delta(u)\,du\).</span>
+Then, if \(x&lt; a\), the integrand is everywhere 0, so \(f(x)=0\).
+Meanwhile if \(x&gt; a\), then the integrand includes \(\delta(0)\) and so \(f(x)=1\).
+The value of \(f(a)\) depends on your interpretation of \(\int_{-\infty}^0\delta(t)\,dt\), which could be undefined, \(\frac{1}{2}\), or 1.
+So we have
+\[\begin{align*}
+f(x)&amp;=\begin{cases}
+0&amp;x&lt;a\\
+\textrm{?}&amp;x=a\\
+1&amp;x&gt;a
+\end{cases}
+\end{align*}\]</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Why is it so hard to define \(\int_{-\infty}^0\delta (t)\,dt\)?
+There are three possible values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Undefined, simply because by definition the only integrals of the \(\delta\) function that exist are those containing an <em>interval</em> containing \(0\).</p>
+</li>
+<li>
+<p>\(\frac{1}{2}\), because \(\delta\) is an even &#8220;function&#8221;, so its integral from \(-\infty\) to \(0\) should be half of its integral from \(-\infty\) to <span class="no-break">\(\infty\).</span></p>
+</li>
+<li>
+<p>\(1\), because the domain of integration includes everywhere that <span class="no-break">\(\delta(x)\ne 0\).</span></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This helps to illustrate the thorniness of \(\delta\) and why it is not considered a function at all.</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the \(\delta\) function can be approximated by a \(0\)-centered Gaussian \(\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}\) whose variance \(\sigma^2\) approaches 0.</p>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Clearly, the integral of a Gaussian over the number line is 1, no matter what.
+As its variance approaches 0, its integral over domains that do not include the origin must approach 0, i.e., for \(\varepsilon&gt;0\),
+\[\begin{align*}
+\lim_{\sigma^2\to0}\int_{-\infty}^{-\varepsilon}\mathcal \varphi(x)\,dx=\lim_{\sigma^2\to0}\int_{\varepsilon}^{\infty}\mathcal \varphi(x)\,dx=0
+\end{align*}\]
+Since \(\varphi(x)&gt;0\) for all \(x\), the only way the above integrals approach \(0\) as \(\sigma^2\to 0\) is if \(\varphi(x)\to 0\) for \(x\ne 0\).
+Since \(\varphi(x)\to0\) when \(x\ne 0\) and \(\int_{-\infty}^\infty\varphi(x)\,dx=1\), it is indeed that case that \(\lim_{\sigma^2\to 0}\varphi(x)=\delta(x)\).</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show the following: \[\displaystyle\delta(x)=\lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\]
+This provides another continuous approximation of the \(\delta\) function which improves as \(k\) grows.</p>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The simplest way to show this is to observe how the expression on the RHS behaves when integrated:
+\[\begin{align*}
+&amp;\phantom{=}\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&amp;= \lim_{k\to\infty}\int_{-\infty}^z\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&amp;= \lim_{k\to\infty}\left(\left.\frac{1}{1+e^{-kx}}\right|_{-\infty}^z\right)\\
+&amp;= \lim_{k\to\infty}\left(\frac{1}{1+e^{-kz}}-0\right)
+\end{align*}\]
+When \(z&lt; 0\), \(e^{-kz}\to\infty\) and so \(\frac{1}{1+e^{-kz}}\to0\), making the integral 0.
+Meanwhile, when \(z&gt;0\), \(e^{-kz}\to0\) and so \(\frac{1}{1+e^{-kz}}\to1\), making the integral 1.
+So,
+\[\begin{align*}
+\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx&amp;=\begin{cases}
+0&amp;z&lt;0\\
+1&amp;z&gt;0
+\end{cases}
+\end{align*}\]
+which does indeed match the \(\delta\) function.</p>
+</div>
+</div>
+</details>
+</li>
+<li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Graph an example of:
 (Show the classical turning points, \(E\), and label your axes.)
 (problem may be too similar to the textbook chapter)</p>
@@ -1434,6 +1525,17 @@ possible by quantum tunneling), and explain what quantum tunneling is.</p>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Derive the reflection and transmission coefficients for the delta-function well.
 When are these coefficients exactly the same?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Describe what happens when identical waves approach the delta-potential well from <em>both</em> sides.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Solve the asymmetric double delta-function potential,
+\[\begin{align*}
+V(x)=\alpha \delta(x+a)+\beta\delta(x-a)
+\end{align*}\]
+where \(\alpha\) and \(\beta\) are arbitrary constants (positive, negative, or zero).
+When exactly one of \(\alpha\) and \(\beta\) is negative, how many bound states does this system have?</p>
 </li>
 </ul>
 </div>
@@ -1627,7 +1729,7 @@ How do the values of \(m\), \(a\), \(V_0\), and the energy \(E\) of the particle
 </div>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For what energies \(E=E_n+V_0\) is the finite square well &#8220;opaque&#8221;, i.e., the transmission coefficient is 0?</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For what energies \(E=E_n+V_0\) is the finite square well &#8220;opaque&#8221; to incoming wave packets, i.e., the transmission coefficient is 0?</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Solve the &#8220;finite square wall&#8221;:
@@ -1638,7 +1740,20 @@ V_0&gt;0&amp;-a\le x\le a\\
 \end{cases}
 \end{align*}\]
 (Obviously there are only scattering states.)
-When is the wall &#8220;transparent&#8221; to incoming waves?</p>
+When is the wall &#8220;transparent&#8221; to incoming waves?
+Opaque?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Solve the asymmetric finite square well:
+\[\begin{align*}
+V(x)=\begin{cases}
+V_1&amp;x&lt;-a\\
+0&amp;-a\le x\le a\\
+V_2&amp;x&gt;a
+\end{cases}
+\end{align*}\]
+where \(V_1,V_2\) are positive constants.
+Show that when \(V_1=V_2\) you recover the solution to the symmetric finite square well.</p>
 </li>
 </ul>
 </div>

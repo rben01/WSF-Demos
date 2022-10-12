@@ -345,6 +345,11 @@ function update() {
 			}
 		});
 
+		// Sometimes, somehow, a spurious odd solution shows up with a lower energy than
+		// the lowest energy even solution. Obviously, this is wrong (assuming that the
+		// lowest energy even solution we found is, in fact, the lowest energy solution —
+		// this is all numeric solution finding so who knows, really). Assuming that this
+		// lowest odd solution is a mistake, we delete it
 		if (!objs[0]?.isEven) {
 			objs.shift();
 		}

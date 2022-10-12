@@ -401,10 +401,77 @@ as desired.
 
 * {q-num}
 
-:!qn:
-
 == The Delta-Function Potential
 === Questions
+
+* {q-num} For a fixed constant ++\(a\)++, compute the closed form for ++\(f(x)\coloneqq\int_{-\infty}^x\delta (t-a)\,dt\)++.
++
+.Solution
+[%collapsible]
+====
+First, use ++\(u\)++-substitution with ++\(u=t-a\)++ to obtain [.no-break]#++\(f(x)=\int_{-\infty}^{x-a} \delta(u)\,du\)++.#
+Then, if ++\(x< a\)++, the integrand is everywhere 0, so ++\(f(x)=0\)++.
+Meanwhile if ++\(x> a\)++, then the integrand includes ++\(\delta(0)\)++ and so ++\(f(x)=1\)++.
+The value of ++\(f(a)\)++ depends on your interpretation of ++\(\int_{-\infty}^0\delta(t)\,dt\)++, which could be undefined, ++\(\frac{1}{2}\)++, or 1.
+So we have
+++\[\begin{align*}
+f(x)&=\begin{cases}
+0&x<a\\
+\textrm{?}&x=a\\
+1&x>a
+\end{cases}
+\end{align*}\]++
+[sidebar]
+--
+Why is it so hard to define ++\(\int_{-\infty}^0\delta (t)\,dt\)++?
+There are three possible values:
+
+* Undefined, simply because by definition the only integrals of the ++\(\delta\)++ function that exist are those containing an _interval_ containing ++\(0\)++.
+* ++\(\frac{1}{2}\)++, because ++\(\delta\)++ is an even "`function`", so its integral from ++\(-\infty\)++ to ++\(0\)++ should be half of its integral from ++\(-\infty\)++ to [.no-break]#++\(\infty\)++.#
+* ++\(1\)++, because the domain of integration includes everywhere that [.no-break]#++\(\delta(x)\ne 0\)++.#
+
+This helps to illustrate the thorniness of ++\(\delta\)++ and why it is not considered a function at all.
+--
+====
+
+* {q-num} Show that the ++\(\delta\)++ function can be approximated by a ++\(0\)++-centered Gaussian ++\(\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}\)++ whose variance ++\(\sigma^2\)++ approaches 0.
++
+.Solution
+[%collapsible%open]
+====
+Clearly, the integral of a Gaussian over the number line is 1, no matter what.
+As its variance approaches 0, its integral over domains that do not include the origin must approach 0, i.e., for ++\(\varepsilon>0\)++,
+++\[\begin{align*}
+\lim_{\sigma^2\to0}\int_{-\infty}^{-\varepsilon}\mathcal \varphi(x)\,dx=\lim_{\sigma^2\to0}\int_{\varepsilon}^{\infty}\mathcal \varphi(x)\,dx=0
+\end{align*}\]++
+Since ++\(\varphi(x)>0\)++ for all ++\(x\)++, the only way the above integrals approach ++\(0\)++ as ++\(\sigma^2\to 0\)++ is if ++\(\varphi(x)\to 0\)++ for ++\(x\ne 0\)++.
+Since ++\(\varphi(x)\to0\)++ when ++\(x\ne 0\)++ and ++\(\int_{-\infty}^\infty\varphi(x)\,dx=1\)++, it is indeed that case that ++\(\lim_{\sigma^2\to 0}\varphi(x)=\delta(x)\)++.
+====
+
+* {q-num} Show the following: ++\[\displaystyle\delta(x)=\lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\]++
+This provides another continuous approximation of the ++\(\delta\)++ function which improves as ++\(k\)++ grows.
++
+.Solution
+[%collapsible]
+====
+The simplest way to show this is to observe how the expression on the RHS behaves when integrated:
+++\[\begin{align*}
+&\phantom{=}\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&= \lim_{k\to\infty}\int_{-\infty}^z\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&= \lim_{k\to\infty}\left(\left.\frac{1}{1+e^{-kx}}\right|_{-\infty}^z\right)\\
+&= \lim_{k\to\infty}\left(\frac{1}{1+e^{-kz}}-0\right)
+\end{align*}\]++
+When ++\(z< 0\)++, ++\(e^{-kz}\to\infty\)++ and so ++\(\frac{1}{1+e^{-kz}}\to0\)++, making the integral 0.
+Meanwhile, when ++\(z>0\)++, ++\(e^{-kz}\to0\)++ and so ++\(\frac{1}{1+e^{-kz}}\to1\)++, making the integral 1.
+So,
+++\[\begin{align*}
+\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx&=\begin{cases}
+0&z<0\\
+1&z>0
+\end{cases}
+\end{align*}\]++
+which does indeed match the ++\(\delta\)++ function.
+====
 
 * {q-num} Graph an example of:
 (Show the classical turning points, ++\(E\)++, and label your axes.)
@@ -426,6 +493,14 @@ Graphs vary, but potential solutions on pg. 62 of Griffiths.
 * {q-num} Derive the reflection and transmission coefficients for the delta-function well.
 When are these coefficients exactly the same?
 
+* {q-num} Describe what happens when identical waves approach the delta-potential well from _both_ sides.
+
+* {q-num} Solve the asymmetric double delta-function potential,
+++\[\begin{align*}
+V(x)=\alpha \delta(x+a)+\beta\delta(x-a)
+\end{align*}\]++
+where ++\(\alpha\)++ and ++\(\beta\)++ are arbitrary constants (positive, negative, or zero).
+When exactly one of ++\(\alpha\)++ and ++\(\beta\)++ is negative, how many bound states does this system have?
 
 == The Finite Square Well
 === Questions
@@ -545,7 +620,7 @@ How does this depend on the current values of ++\(m\)++, ++\(a\)++, and [.no-bre
 How do the values of ++\(m\)++, ++\(a\)++, ++\(V_0\)++, and the energy ++\(E\)++ of the particle affect how rapidly the bound states decay outside of the well (and in turn how likely you are to find the particle outside of the well)?
 
 
-* {q-num} For what energies ++\(E=E_n+V_0\)++ is the finite square well "`opaque`", i.e., the transmission coefficient is 0?
+* {q-num} For what energies ++\(E=E_n+V_0\)++ is the finite square well "`opaque`" to incoming wave packets, i.e., the transmission coefficient is 0?
 
 * {q-num} Solve the "`finite square wall`":
 ++\[\begin{align*}
@@ -556,6 +631,18 @@ V_0>0&-a\le x\le a\\
 \end{align*}\]++
 (Obviously there are only scattering states.)
 When is the wall "`transparent`" to incoming waves?
+Opaque?
+
+* {q-num} Solve the asymmetric finite square well:
+++\[\begin{align*}
+V(x)=\begin{cases}
+V_1&x<-a\\
+0&-a\le x\le a\\
+V_2&x>a
+\end{cases}
+\end{align*}\]++
+where ++\(V_1,V_2\)++ are positive constants.
+Show that when ++\(V_1=V_2\)++ you recover the solution to the symmetric finite square well.
 
 === Demonstrations
 
