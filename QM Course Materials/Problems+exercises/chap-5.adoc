@@ -111,6 +111,10 @@ What would the exchange force be between an electron and a positron (ignoring an
 
 == Atoms
 
+* {q-num} Using separation of variables, show that if you ignore the electron repulsion term in the Hamiltonian, the wavefunction for Helium can be written as a product of two hydrogenic wavefunctions.
+
+* {q-num} Write out the wavefunctions for the ground and first two excited states of helium using the notation ++\(\psi_{nlm_{l}}\)++ and ++\(++\ket{s \ m_z}\). Indicate which are parahelium and orthohelium.
+
 * {q-num} Using the reduced mass
 
 * {q-num} What would the ground state of helium be if its two electrons were distinguishable (say, one had a very slightly different mass)?
@@ -119,6 +123,21 @@ What would the exchange force be between an electron and a positron (ignoring an
 Analogously with helium, _para_-positronium has the two particles in the singlet state while _ortho_-positronium has the two particles in the triplet state.
 Which kind of positronium has a higher energy, para- or ortho-?
 By how much?
+
+* {q-num} [Question 5.17 from Griffiths - I think we should use this question in combo with 5.18]
++
+[{sublist-style}]
+. Figure out the electron configurations (in the notation of Equation 5.44) for the first two rows of the periodic Table (up to neon), and check your results against Table 5.1.
+. Figure out the corresponding total angular momenta, in the notation of Equation 5.45, for the first four elements. List all the _possibilities_ for boron, carbon, and nitrogen.
+
+* {q-num} [Question 5.18 from Griffiths - I think 5.17 and 5.18 get at the heart of angular momentum configuration. I don't know how else to gain familiarity with Hund's rules other than just practicing on the periodic table]
++
+[{sublist-style}]
+. *Hund's first rule* says that, consistent with the Pauli principle, the state with the highest total spin (++\(S\)++) will have the lowest energy. What would this predict in the case of the excited states of helium?
+. *Hund's second rule* says that, for a given spin, the state with the highest total orbital angular momentum (++\(L\)++), consistent with overall antisymmetrization, will have the lowest energy. Why doesn't carbon have ++\(L=2\)++? _Hint_: Note that the "top of the ladder" ++\(M_L = L\)++ is symmetric.
+. *Hund's third rule* says that if a  subshell ++\(n, l\)++ is no more than half filled, then the lowest energy level has ++\(J= |L-S|\)++; if it is more than half filled, then ++\(J=L+S\)++ has the lowest energy. Use this to resolve the boron ambiguity in Problem 5.17(b).
+. Use Hund's rules, together with the fact that a symmetric spin state must go with an antisymmetric position state (and vice versa) to resolve the carbon and nitrogen ambiguities in Problem 5.17(b). _Hint_: Always go to the "top of the ladder" to figure out the symmetry of a state.
+
 
 == Solids
 
