@@ -2566,6 +2566,14 @@ The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^
 <div class="ulist">
 <ul>
 <li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the more localized a free particle is initially (\(\braket{x^2}\) small at \(t=0\)), the faster it will spread out over time (\(\frac{d}{dt}\braket{x^2}\) large for small <span class="no-break">\(t\));</span> and, inversely, show that the less localized a free particle is initially, the more slowly it will spread out over time.
+(Hint: this depends heavily on the dispersion relation for particles, <span class="no-break">\(\omega=\frac{\hbar k^2}{2m}\).)</span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a free particle has the initial wavefunction <span class="no-break">\(\Psi(x,0)=\delta(x)\)</span>, where \(\delta(x)\) is the Dirac delta &#8220;function&#8221;.
+Compute \(\Psi(x,t)\).</p>
+</li>
+<li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a free particle has the initial wavefunction <span class="no-break">\(\psi(x) = \frac{\sin(x)}{\pi x}\).</span>
 (Take our word for it that this wavefunction is already normalized.)</p>
 <div class="olist loweralpha">
@@ -2580,7 +2588,7 @@ You may use computational software to help you calculate the integral.
 </li>
 <li>
 <p>If you&#8217;re feeling particularly ambitious, find \(\Psi(x,t)\).
-Note that the integral involves the so-called special function the <em>error function</em>, \(\textrm{erf}(x)=\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\), which has no elementary form.</p>
+Note that the integral involves the so-called special function the <em>error function</em>, \(\textrm{erf}(x)\coloneqq\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\), which has no elementary form.</p>
 </li>
 </ol>
 </div>
@@ -2629,10 +2637,20 @@ as desired.</p>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Phase and group velocity</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Phase and group velocity: show that \(v_g-v_p=k\frac{d}{dk}v_p\).</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The phase and group velocity of light:</p>
+<div class="olist sublist-style">
+<ol class="sublist-style">
+<li>
+<p>Show that in a vacuum, the phase velocity and group velocity of light are the same.</p>
+</li>
+<li>
+<p>In a medium with refractive index \(&gt;1\) (where light travels slower than \(c\)), which is greater, the phase velocity or the group velocity?</p>
+</li>
+</ol>
+</div>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
@@ -2694,7 +2712,7 @@ There are three possible values:</p>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the \(\delta\) function can be approximated by a \(0\)-centered Gaussian \(\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}\) whose variance \(\sigma^2\) approaches 0.</p>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">

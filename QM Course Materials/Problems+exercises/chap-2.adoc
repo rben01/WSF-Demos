@@ -348,6 +348,13 @@ The *Rodrigues formula* says that ++\(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-
 
 == The Free Particle
 
+* {q-num} Show that the more localized a free particle is initially (++\(\braket{x^2}\)++ small at ++\(t=0\)++), the faster it will spread out over time (++\(\frac{d}{dt}\braket{x^2}\)++ large for small [.no-break]#++\(t\)++);# and, inversely, show that the less localized a free particle is initially, the more slowly it will spread out over time.
+(Hint: this depends heavily on the dispersion relation for particles, [.no-break]#++\(\omega=\frac{\hbar k^2}{2m}\)++.)#
+
+* {q-num} Suppose a free particle has the initial wavefunction [.no-break]#++\(\Psi(x,0)=\delta(x)\)++#, where ++\(\delta(x)\)++ is the Dirac delta "`function`".
+Compute ++\(\Psi(x,t)\)++.
+
+
 * {q-num} Suppose a free particle has the initial wavefunction [.no-break]#++\(\psi(x) = \frac{\sin(x)}{\pi x}\)++.#
 (Take our word for it that this wavefunction is already normalized.)
 [{sublist-style}]
@@ -356,7 +363,7 @@ You may use computational software to help you calculate the integral.
 (But don't just type in "`Fourier transform of ++\(\frac{\sin(x)}{\pi x}\)++`"!)
 . Verify that your result satisfies ++\(\Psi(x,0)=\frac{\sin(x)}{\pi x}\)++.
 . If you're feeling particularly ambitious, find ++\(\Psi(x,t)\)++.
-Note that the integral involves the so-called special function the _error function_, ++\(\textrm{erf}(x)=\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\)++, which has no elementary form.
+Note that the integral involves the so-called special function the _error function_, ++\(\textrm{erf}(x)\coloneqq\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\)++, which has no elementary form.
 
 +
 .Solution
@@ -395,9 +402,12 @@ as desired.
 
 * {q-num} Using the same steps as 2.4.1, find ++\(\Psi(x,t)\)++ for ++\(\Psi(x,0) = A\frac{\sin(x)}{x}\)++. You may use computational software to help you with the integrals.
 
-* {q-num} Phase and group velocity
+* {q-num} Phase and group velocity: show that ++\(v_g-v_p=k\frac{d}{dk}v_p\)++.
 
-* {q-num}
+* {q-num} The phase and group velocity of light:
+[sublist-style]
+.. Show that in a vacuum, the phase velocity and group velocity of light are the same.
+.. In a medium with refractive index ++\(>1\)++ (where light travels slower than ++\(c\)++), which is greater, the phase velocity or the group velocity?
 
 * {q-num}
 
@@ -405,6 +415,7 @@ as desired.
 === Questions
 
 * {q-num} For a fixed constant ++\(a\)++, compute the closed form for ++\(f(x)\coloneqq\int_{-\infty}^x\delta (t-a)\,dt\)++.
+
 +
 .Solution
 [%collapsible]
@@ -435,9 +446,10 @@ This helps to illustrate the thorniness of ++\(\delta\)++ and why it is not cons
 ====
 
 * {q-num} Show that the ++\(\delta\)++ function can be approximated by a ++\(0\)++-centered Gaussian ++\(\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}\)++ whose variance ++\(\sigma^2\)++ approaches 0.
+
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 Clearly, the integral of a Gaussian over the number line is 1, no matter what.
 As its variance approaches 0, its integral over domains that do not include the origin must approach 0, i.e., for ++\(\varepsilon>0\)++,
