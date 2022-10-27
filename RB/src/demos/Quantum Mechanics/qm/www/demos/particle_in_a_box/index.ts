@@ -92,10 +92,11 @@ const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
 	side: THREE.DoubleSide,
 	transparent: false,
 });
-const SHADOW_MATERIAL = new THREE.MeshLambertMaterial({
+const SHADOW_MATERIAL = new THREE.LineBasicMaterial({
 	color: 0x5599ff,
-	side: THREE.DoubleSide,
-	transparent: false,
+	linewidth: 3,
+	// side: THREE.DoubleSide,
+	// transparent: false,
 });
 
 camera.up.copy(CAMERA_UP);
