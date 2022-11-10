@@ -194,7 +194,7 @@ These properties are so important because they hold true for almost all potentia
 +
 [{sublist-style}]
 .. Normalize to find ++\(A\)++.
-(You can assume ++\(A\)++ is real.)
+(You can assume ++\(A\)++ is real and positive.)
 .. Find the constants ++\(c_n\)++ in the expression ++\(\Psi(x,0)=\sum_n c_n\psi_n(x)\)++.
 .. Compute ++\(\left|\Psi(x,t)\right|^2\)++ (this isn't very useful on its own, but you'll need it for part (d)).
 .. Compute {expect-x} as a function of ++\(t\)++.
@@ -254,7 +254,7 @@ and if ++\(m=n\)++ then
 ++\[\begin{align*}
 \int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx=\int_0^a x\sin^2\left(\frac{n\pi}{a}x\right)\,dx=\frac{a^2}{4}
 \end{align*}\]++
-(Note that this does not actually depend on ++\(n\)++.)
+(Note that this second one does not actually depend on ++\(n\)++.)
 So,
 ++\[\begin{align*}
 \int_0^a x\,\psi_1^2\,dx&=\int_0^a x\left[\sqrt{2/a}\sin\left(\frac{\pi}{a} x\right)\right]^2\,dx\\

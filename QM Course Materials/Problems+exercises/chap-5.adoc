@@ -44,7 +44,7 @@ This wavefunction should be the sum of ++\(3!=6\)++ different terms and should h
 ====
 Why ++\(3!\)++{nbsp}?
 In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and ++\(3!=6\)++ is the number of ways to assign the 3 [.no-break]#++\(\v r\)++’s# to the 3 [.no-break]#++\(\Psi\)++’s.#
-(In general, ++\(N!\)++ is the number of orderings of ++\(N\)++ items.)
+(In general, ++\(n!\)++ is the number of _permutations_, or orderings, of ++\(n\)++ items.)
 ====
 .. Suppose that three fermions labeled ++\((1,2,3)\)++ are exchanged so that they are now labeled ++\((3,1,2)\)++.
 In terms of the original wavefunction you found in part (a), what is the new wavefunction?
@@ -113,9 +113,7 @@ What would the exchange force be between an electron and a positron (ignoring an
 
 * {q-num} Using separation of variables, show that if you ignore the electron repulsion term in the Hamiltonian, the wavefunction for Helium can be written as a product of two hydrogenic wavefunctions.
 
-* {q-num} Write out the wavefunctions for the ground and first two excited states of helium using the notation ++\(\psi_{nlm_{l}}\)++ and ++\(++\ket{s \ m_z}\). Indicate which are parahelium and orthohelium.
-
-* {q-num} Using the reduced mass
+* {q-num} Write out the wavefunctions for the ground and first two excited states of helium using the notation ++\(\psi_{nlm_{l}}\)++ and ++\(\ket{s \ m_z}\)++. Indicate which are parahelium and orthohelium.
 
 * {q-num} What would the ground state of helium be if its two electrons were distinguishable (say, one had a very slightly different mass)?
 

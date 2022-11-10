@@ -433,7 +433,7 @@ which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial
 === Demonstrations
 
 * https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment (1D)^]
-** Already shown above, but this time you can emphasize how after changing the shape of the wavefunction, it immediately adjusts ++\(\psi\)++ so that its (squared) magnitude remains 1.
+** Already shown above, but this time you can emphasize how after changing the shape of the wavefunction, it immediately adjusts ++\(\psi\)++ so that its squared magnitude remains 1.
 
 == Momentum
 
@@ -671,7 +671,7 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 == The Uncertainty Principle
 
 === Questions
-* {q-num} For the wavefunction from question {q-num}, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+* {q-num} For the wavefunction from 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Calculate ++\(\Braket{p^2}\)++ and ++\(\sigma_p\)++.
 . What is the minimum possible value of ++\(\sigma_x\)++?
