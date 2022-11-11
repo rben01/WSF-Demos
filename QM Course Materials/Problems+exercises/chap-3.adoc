@@ -146,7 +146,6 @@ So all the Cauchy-Schwarz Inequality says is that ++\(\left\|P_{y'}\Ket{x}\right
 .Solution
 [%collapsible]
 ====
-If ++\(Q\)++ is defined on domain ++\(\mathcal D\)++, then
 ++\[
 \begin{align*}
 \Braket{f|Pf}&=\Braket{f|Q^\dagger Qf}\\
@@ -603,8 +602,8 @@ where ++\(\binom{n}{k}=\frac{n!}{k!(n-k)!}\)++ denotes the binomial coefficient.
 For instance, regardless of whether ++\(A\)++ and ++\(B\)++ commute,
 ++\[\begin{align*}
 (A+B)^3&=(A+B)(A+B)(A+B)\\
-&=(A^3+AB+BA+B^2)(A+B)\\
-&=A^2+ABA+BA^2+B^2A\\
+&=(A^2+AB+BA+B^2)(A+B)\\
+&=A^3+ABA+BA^2+B^2A\\
 &\phantom{=}+A^2B+AB^2+BAB+B^3
 \end{align*}\]++
 Only if ++\(A\)++ and ++\(B\)++ commute can this be simplified to ++\(A^3+3A^2B+3AB^2+B^3\)++.
@@ -631,7 +630,7 @@ Then, if ++\(Q\)++ is hermitian,
 e^{iQ}(e^{iQ})^\dagger&=e^{iQ}e^{(iQ)^\dagger}&\textrm{(part (b))}\\
 &=e^{iQ}e^{-iQ}\\
 &=e^{iQ + (-iQ)}&\textrm{(part (d))}\\
-&= e^\bf 0\\
+&= e^{\mathbf{0}}\\
 &=I&\textrm{(part (a))}
 \end{align*}\]++
 So ++\(e^{iQ}\)++ is indeed unitary.
