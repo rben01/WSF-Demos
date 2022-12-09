@@ -293,17 +293,21 @@ For each n, there are ++\(2^n\)++ total paths, and the number of paths to get to
 == Normalization
 
 === Questions
-* {q-num} Normalize the following wavefunctions (i.e. find ++\(A_i\)++) over the domain ++\(x\in \mathbb R\)++:
+* {q-num} Normalize the following wavefunctions (i.e. find ++\(A_i\)++) over the domain ++\(x\in(-\infty,\infty)\)++.
 +
+--
 [{sublist-style}]
 . ++\(\Psi_1(x,t)= A_1e^{-(\frac{ax^2}{2}+i\omega t)}\)++
 . ++\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)++
-. ++\(\Psi_3(x,0)= A_3\frac{\sin(x)}{x}\)++
+. ++\(\Psi_3(x,0)= A_3\frac{\sin(x)}{x}\)++ (you may use the fact that ++\(\int_{-\infty}^\infty\frac{\sin(x)}{x}\,dx=\pi\)++)
 . ++\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
+--
++
+NOTE: If ++\(A_i\)++ works then so does ++\(A_ie^{ix}\)++ for an real ++\(x\)++, so you might as well choose the ++\(A_i\)++ that is real and positive.
 
 +
 .Solution
-[%collapsible]
+[%collapsible%open]
 ====
 The squared norm of a wavefunction ++\(\Psi\)++ is ++\(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\)++.
 Normalizing a wavefunction simply requires setting its (squared) norm to 1, then solving for the normalization constant ++\(A\)++.
@@ -313,28 +317,92 @@ Recall that a complex number ++\(ke^{ix}\)++ has magnitude ++\(k\)++.
 [{sublist-style}]
 . Let ++\(\sigma=\frac{1}{\sqrt{2a}}\)++. Then ++\[\begin{align*}
 |\Psi_1|^2&=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
-&=\int_{-\infty}^\infty A_1^2e^{-ax^2}\,dx\\
-&=\sigma\sqrt{2\pi}A_1^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
-&= \sigma\sqrt{2\pi}A_1^2\cdot 1\\
+&=\int_{-\infty}^\infty |A_1|^2e^{-ax^2}\,dx\\
+&=\sigma\sqrt{2\pi}|A_1|^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
+&= \sigma\sqrt{2\pi}|A_1|^2\cdot 1\\
 &=\sqrt{\frac{\pi}{a}}
 \end{align*}\]++
 Setting this equal to 1, we obtain ++\(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\)++.
 
-. ++\[\begin{align*}
+. We compute: ++\[\begin{align*}
 |\Psi_2|^2&=\int_{-\infty}^\infty \left|A_2 e^{-\kappa|x|}\right|^2\,dx\\
-&=\int_{-\infty}^\infty A_2^2 e^{-2\kappa|x|}\,dx\\
-&=\int_{-\infty}^0 A_2^2 e^{2\kappa x}\,dx+\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
-&=2\int_0^{\infty} A_2^2 e^{-2\kappa x}\,dx\\
-&=2 A_2^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
-&=\frac{A_2^2}{\kappa}
+&=\int_{-\infty}^\infty |A_2|^2 e^{-2\kappa|x|}\,dx\\
+&=\int_{-\infty}^0 |A_2|^2 e^{2\kappa x}\,dx+\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&=2\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&=2 |A_2|^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
+&=\frac{|A_2|^2}{\kappa}
 \end{align*}\]++
 +
 Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
-
-. ++\[\begin{align*}
-|\Psi_3|^3&=\int_{-\infty}^\infty \left|A_3 \frac{\sin (x)}{x}\right|^2\,dx\\
-&=\int_{-\infty}^\infty A_3^2 \frac{\sin^2 (x)}{x^2}\,dx\\
+. We start off with the squared integral:
+++\[\begin{align*}
+|\Psi_3|^2&=\int_{-\infty}^\infty \left|A_3\frac{\sin(x)}{x}\right|^2\,dx=|A_3|^2\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx
 \end{align*}\]++
+To compute this complicated looking integral, we'll use integration by parts:
+++\[\begin{align*}
+u&=\sin^2(x)&dv&=x^{-2}\,dx\\
+du&=2\sin(x)\cos(x)\,dx&v&=-x^{-1}\\
+&=\sin(2x)
+\end{align*}\]++
+And so,
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&=-\left.\frac{\sin^2(x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{\sin(2x)}{x}\,dx
+\end{align*}\]++
+Now, ++\(\frac{\sin^2(x)}{x}\)++ is an odd function, so its integral over ++\((-\infty,\infty\)++ is ++\(0\)++. So we're just left with
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&= \int_{-\infty}^\infty \frac{\sin(2x)}{x}\,dx\\
+&=2\int_{-\infty}^\infty \frac{\sin(2x)}{2x}\,dx
+\end{align*}\]++
+Now, a ++\(u\)++-substition with ++\(u=2x,du=2\,dx\)++ gives us
+++\[\begin{align*}
+&=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{2}\,du\\
+&=\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\,du\\
+&=\pi
+\end{align*}\]++
+So, ++\(1=|\Psi_3|^2=|A_3|^2\pi\)++, from which we conclude that ++\(A_3=\frac{1}{\sqrt\pi}\)++.
+
+. We'll need to compute ++\(|x+e^{i\pi/2}|\)++ so we'll do that first.
+First note that ++\(e^{i\pi/2}=i\)++, and then
+++\[\begin{align*}
+|x+i|^2&=(x+i)(x+i)^* =x^2+1
+\end{align*}\]++
+So,
+++\[\begin{align*}
+|\Psi_4|^2&=\int_{-\infty}^\infty \left|A_4\frac{e^{-i\omega t}}{x+e^{i\pi/2}}\right|^2\,dx\\
+&=|A_4|^2\int_{-\infty}^\infty \frac{1}{x^2+1}\,dx
+\end{align*}\]++
++
+[TIP]
+--
+If you struggled to compute this integral and would like a hint: don't read any further, and set ++\(x=\tan\theta\)++.
+(The image of ++\(\tan\)++ is ++\((-\infty,\infty)\)++, so this is sound.)
+--
++
+Letting ++\(x=\tan\theta\)++, we have
+++\[\begin{align*}
+x^2+1&=\tan\theta+1\\
+&=\frac{\sin^2\theta}{\cos^2\theta}+1\\
+&=\frac{\sin^2\theta+\cos^2\theta}{\cos^2\theta}\\
+&=\frac{1}{\cos^2\theta}
+\end{align*}\]++
+and so ++\(\frac{1}{x^2+1}=\cos^2\theta\)++.
+Also,
+++\[\begin{align*}
+\frac{dx}{d\theta}&=\frac{d}{d\theta}\left(\frac{\sin\theta}{\cos\theta}\right)=\frac{d}{d\theta}\left(\sin\theta\cos^{-1}\theta\right)\\
+&=(\cos\theta)(\cos^{-1}\theta)+(\sin\theta)(-\sin\theta(-1\cos^{-2})\theta)\\
+&=1+\frac{\sin^2\theta}{\cos^2\theta}\\
+&=\frac{\cos^2\theta+\sin^2\theta}{\cos^2\theta}\\
+&=\frac{1}{\cos^2\theta}
+\end{align*}\]++
+Finally, note that ++\(\pm\infty=\tan^{-1}(\pm\frac{\pi}{2})\)++.
+Therefore,
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{1}{x^2+1}dx&=\int_{-\pi/2}^{\pi/2}(\cos^2\theta)\left(\frac{1}{\cos^2\theta}\right)\,d\theta\\
+&=\int_{-\pi/2}^{\pi/2} d\theta\\
+&=\theta\Bigr|_{-\pi/2}^{\pi/2}\\
+&=\pi
+\end{align*}\]++
+And so ++\(1=|\Psi_4|^2=|A_4|^2\pi\)++ and (once again) ++\(A_4=\frac{1}{\sqrt\pi}\)++.
 ====
 
 * {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with expectation ++\(\Braket{x}\)++ and standard deviation ++\(\sigma\)++ at time ++\(t=0\)++.
