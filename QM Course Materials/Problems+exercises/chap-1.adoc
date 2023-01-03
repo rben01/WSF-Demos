@@ -109,13 +109,60 @@ However, if we set up an apparatus to measure which slit the particles travel th
 .. Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by ++\(\Delta l=d\sin\theta\)++.
 .. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
 .. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
-.. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
+.. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), and the additional assumption that the ++\(n\)++^th^ crest is not too far from the center of the screen (i.e., that ++\(\tan\theta\)++ is small), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
 
 +
-.Solution (placeholder)
-[%collapsible]
+.Solution
+[%collapsible%open]
 ====
-This is the solution
+Refer to the diagram below:
+
+image::../images/1.2.2.A/img.svg[width=400]
+
+[{sublist-style}]
+. The two rays of light each form a right triangle of which they are the hypotenuse and with one leg of length ++\(D\)++.
+For ++\(l_1\)++, the other leg is of length ++\(D\tan\theta+\frac{d}{2}\)++, so by the Pythagorean theorem,
+++\[\begin{align*}
+l_1^2&=D^2+(D\tan\theta+d/2)^2\\
+&=D^2+D^2\tan^2\theta+Dd\tan\theta+\frac{1}{4}d^2\\
+&=D^2\left(sec^2\theta+\frac{d\tan\theta}{D}+\frac{d^2}{4D^2}\right)\\
+&=D^2\sec^2\theta\left(1+\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\right)\\
+l_1&=D\sec\theta\sqrt{1+K_1}
+\end{align*}\]++
+where ++\(K_1=\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\)++.
+Since the only term in ++\(K_1\)++ that could be negative is ++\(\frac{d\sin\theta\cos\theta}{D}\)++, and it must lie between ++\(-1\)++ and ++\(1\)++, the term under the square root is positive and so its Taylor expansion exists.
+Using the first two terms of the Taylor expansion of ++\(f(x)=\sqrt{1+x}\)++ about ++\(x=0\)++, we have
+++\[\begin{align*}
+l_1&\approx D\sec\theta\left(1+\frac{K_1}{2}\right)
+\end{align*}\]++
++
+Similarly, ++\(l_2\approx D\sec\theta\left(1+\frac{K_2}{2}\right)\)++, where ++\(K_2=-\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}.\)++
+And so
+++\[\begin{align*}
+\Delta l&=l_1-l_2\\
+&\approx D\sec\theta\ \frac{K_1 - K_2}{2}\\
+&=D\sec\theta\left(\frac{d\sin\theta\cos\theta}{D}\right)\\
+&=d\sin\theta
+\end{align*}\]++
+as desired.
+. Two waves exhibit maximum constructive interference when the first wave's peaks are aligned with the second wave's peaks (which would imply that their troughs are also aligned with each other), which occurs when the waves`' wavefronts are an _integer_ — ++\(\ldots,-2, -1, 0, 1, 2,\ldots\)++ — number of wavelengths apart.
+By part (a), the wavefronts are a distance ++\(d\sin\theta\)++ apart, and so maximum constructive interference occurs when ++\(d\sin\theta=n\lambda\)++.
+. Similarly, Two waves exhibit maximum destructive interference when the first wave's peaks are aligned with the second wave's troughs (which would imply that the second wave's peaks are also aligned with the first wave's troughs), which occurs when the waves`' wavefronts are a _half-integer_ — ++\(\ldots,-2+\frac{1}{2}, -1+\frac{1}{2}, \frac{1}{2}, 1+\frac{1}{2}, 2+\frac{1}{2},\ldots\)++ — number of wavelengths apart, or when ++\(d\sin\theta=(n+\frac{1}{2})\lambda\)++.
+. As we saw in part (b), the ++\(n\)++^th^ crest of the interference pattern occurs where ++\(d\sin\theta=n\lambda\)++, or where ++\(\theta=\sin^{-1}\left(\frac{n\lambda}{d}\right)\)++.
+If ++\(\theta\)++ is small, then
+++\[\begin{align*}
+\tan\theta&=\frac{\sin\theta}{\cos\theta}\\
+&\approx\frac{\sin\theta}{1-\frac{\theta^2}{2}}\\
+&\approx\sin\theta
+\end{align*}\]++
+Since point ++\(P\)++ in the diagram is a distance ++\(r=D\tan\theta\)++ from the midpoint of the screen, if a crest occurs there, then
+++\[\begin{align*}
+r&=D\tan\theta\\
+&\approx D\sin\theta\\
+&=D\sin\left(\sin^{-1}(n\lambda/d)\right)\\
+&=\frac{n\lambda D}{d}
+\end{align*}\]++
+as desired.
 ====
 
 
@@ -711,16 +758,86 @@ Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}.\]++
 In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
 We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
 +
+[TIP]
+--
+In spherical coordinates,
+++\[\begin{align*}
+\nabla=\frac{\partial }{\partial r}\hat r+\frac{1}{r}\frac{\partial }{\partial \theta}\hat\theta +\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}\hat\phi.
+\end{align*}\]++
+
+It may help to use the identity
+++\[\begin{align*}
+(\textbf a\times \textbf b)\cdot(\textbf c\times \textbf d)=(\textbf a\cdot \textbf c)(\textbf b\cdot\textbf d)-(\textbf a\cdot\textbf d)(\textbf b\cdot\textbf c)
+\end{align*}\]++
+--
++
 --
 [{sublist-style}]
 . Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
 . Find ++\(L^2\)++.
-. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++
+. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \psi(x)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++ // TODO Check that this is normalized
 
-.Solution (placeholder)
-[%collapsible]
+.Solution
+[%collapsible%open]
 ====
-This is the solution
+[{sublist-style}]
+. ++\(\textbf L=(r\hat r)\times(p\hat p)=(r\hat r)\times(-i\hbar\nabla\hat p)\)++, which we may compute as follows:
+++\[\begin{align*}
+(r\hat r)\times(-i\hbar\nabla\hat p)&=-i\hbar r\begin{vmatrix}
+\hat r&\hat\theta&\hat\phi\\
+1&0&0\\
+\frac{\partial }{\partial r}&\frac{1}{r}\frac{\partial }{\partial \theta}&\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}
+\end{vmatrix}\\
+&=-i\hbar r\left[\hat r(0-0)-\hat\theta\left(\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}-0\right)+\hat\phi\left(\frac{1}{r}\frac{\partial}{\partial\theta}-0\right)\right]\\
+&=i\hbar\left(\frac{1}{\sin\theta}\frac{\partial }{\partial \phi}\hat\theta-\frac{\partial }{\partial \theta}\hat\phi\right)
+\end{align*}\]++
+. {blank}
+. In Part (b) we found that
+++\[\begin{align*}
+L^2&=-\hbar^2\left(-\hbar^2\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right]\right)
+\end{align*}\]++
+Eventually we will find ++\(\braket{L^2}=\int_\mathcal D\psi^*L^2\psi\,dr\)++, but for now we'll just find ++\(L^2\psi\)++:
+++\[\begin{align*}
+L^2 \psi&=-\hbar^2\left[\frac{1}{\sin \theta}\right.\left.\frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right] \sqrt{\frac{15}{8 \pi}} \sin \theta \cos \theta e^{-i \phi} \\
+&=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]
+\end{align*}\]++
+The second term in the brackets is easy to compute; it's simply ++\(-\frac{1}{\sin^2\theta}\sin\theta\cos\theta e^{-i\phi}=-\cot\theta e^{-i\phi}\)++.
+As for the first term,
+++\[\begin{align*}
+&\phantom{=}\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta (\cos^2 \theta-\sin^2\theta)\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta\cos^2 \theta-\sin^3\theta\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta}\left(\cos^3\theta -2\sin^2\theta\cos\theta-3\sin^2\theta\cos\theta\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \left(\cos^3\theta -5\sin^2\theta\cos\theta\right)\\
+&=e^{-i\phi}\cot\theta \left(\cos^2\theta -5\sin^2\theta\right)\\
+&=e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)
+\end{align*}\]++
+(Depending on which trig identities you used, you might have gotten a different but equal result, as ++\(\cos2\theta=2\cos^2\theta-1=\cos^2\theta-\sin^2\theta=1-2\sin^2\theta\)++.)
+And so,
+++\[\begin{align*}
+&=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]\\
+&=-\hbar^2\sqrt\frac{15}{8\pi}(e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)-\cot\theta e^{-i\phi})\\
+&=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\cot\theta \sin^2\theta\\
+&=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta
+\end{align*}\]++
+Now, to find ++\(\braket{L^2}\)++ (we're in spherical coordinates, so don't forget the Jacobian!):
+++\[\begin{align*}
+\braket{L^2}&=\int_0^{2\pi}\int_0^\pi \psi^*L^2\psi\sin\theta\,d\theta\,d\phi\\
+&=\int_0^{2\pi}\int_0^\pi \left(\sqrt\frac{15}{8\pi}\sin\theta\cos\theta e^{i\phi}\right)\left(6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta\right)\sin\theta\,d\theta\,d\phi\\
+&=6\frac{15}{8\pi}\hbar^2\int_0^{2\pi}\int_0^\pi \sin^3\theta\cos^2\theta\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(1-\cos^2\theta)\cos^2\theta\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+\end{align*}\]++
+Now, using a ++\(u\)++-substitution with ++\(u=\cos\theta\)++, we get ++\(\sin\theta\,d\theta=-du\)++ and ++\(\cos(0)=1, \cos(\pi)=-1\)++, and so
+++\[\begin{align*}
+&\phantom{=}\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_1^{-1} -(u^2-u^4)\,du\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\left.\frac{u^5}{5}-\frac{u^3}{3}\right|_{1}^{-1}\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\frac{4}{15}\,d\phi\\
+&=6\hbar^2
+\end{align*}\]++
 ====
 --
 
