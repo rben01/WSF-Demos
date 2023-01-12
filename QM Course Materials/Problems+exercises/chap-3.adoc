@@ -6,7 +6,7 @@ include::shared_attributes.adoc[]
 
 === Questions
 
-* {q-num} [This problem is Griffiths 3.1 but is too simple to be his I.P.] Formally, a _vector space_ is a set ++\(S\)++ closed under linear combinations: if for all ++\(\vec u,\vec v\in S\)++ and for all ++\(a,b\in\mathbb C\)++, ++\(a\vec u+b\vec v\)++ is also in ++\(V\)++, then ++\(S\)++ is a vector space.
+* {q-num} [This problem is Griffiths 3.1 but is too simple to be his I.P.] Formally, a _vector space_ is a set ++\(S\)++ closed under linear combinations: if for all ++\(\vec u,\vec v\in S\)++ and for all ++\(a,b\in\mathbb C\)++, ++\(a\vec u+b\vec v\)++ is also in ++\(S\)++, then ++\(S\)++ is a vector space.
 Show that the set of square-integrable functions does indeed form a vector space.
 
 * {q-num} [Griffiths 3.2; same caveat as above] A vector space ++\(S\)++ is said to have an inner product ++\(\Braket{\cdot|\cdot}\)++ when, for all ++\(u,v,w\in S\)++ and ++\(a,b\in\mathbb C\)++, the following properties hold:
