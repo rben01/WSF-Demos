@@ -870,7 +870,7 @@ A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -893,8 +893,16 @@ x^{-\frac{1}{2}}-1&amp;x\le1\\
 </div>
 </div>
 <div class="paragraph">
-<p>This is because \(\int_0^1 x^n\,dx\) is finite if and only if \(n &gt; -1\).
-So \(x^{-\frac{1}{2}}\) is integrable, but its square, \(x^{-1}\), is not.</p>
+<p>Ultimately this relies on the fact that \(\int_0^1 x^n\,dx\) is finite if and only if \(n &gt; -1\).
+\[\begin{align*}
+\int_0^\infty f(x)\,dx&amp;=\int_0^1 x^{-\frac{1}{2}}-1\,dx\\
+&amp;=2x^\frac{1}{2}-x\Bigr|_0^1\\
+&amp;=1\\
+\int_0^\infty f(x)^2\,dx&amp;=\int_0^1 x^{-1}-2x^{-\frac{1}{2}}+1\,dx\\
+&amp;=\ln(x)-4x^{\frac{1}{2}}+x\Bigr|_0^1\\
+&amp;=\infty
+\end{align*}\]
+So \(f(x)\) is integrable, but \(f(x)^2\) is not.</p>
 </div>
 </li>
 <li>
@@ -909,8 +917,16 @@ f(x)=\frac{1}{x+1}
 </div>
 </div>
 <div class="paragraph">
-<p>This is because \(\int_1^\infty x^n\,dx\) is finite if and only if \(n&lt;-1\).
-So \(x^{-1}\) is not integrable, but its square, \(x^{-2}\), is.</p>
+<p>As shown below,
+\[\begin{align*}
+\int_0^\infty f(x)\,dx &amp;=\int_0^\infty\frac{1}{x+1}\,dx\\
+&amp;=\ln(x+1)\Bigr|_0^\infty\\
+&amp;=\infty\\
+\int_0^\infty f(x)^2\,dx&amp;=\int_0^\infty \frac{1}{(x+1)^2}\,dx\\
+&amp;=-\frac{1}{x+1}\Bigr|_0^1\\
+&amp;=\frac{1}{2}
+\end{align*}\]
+So \(f(x)\) is not integrable, but \(f(x)^2\) is.</p>
 </div>
 </li>
 </ol>

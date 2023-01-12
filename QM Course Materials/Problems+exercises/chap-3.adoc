@@ -29,7 +29,7 @@ A function ++\(f\)++ is said to be absolutely integrable when ++\(|f|\)++ is int
 
 +
 .Solution
-[%collapsible]
+[%collapsible%open]
 ====
 The "`trick`" is find functions that approach the ++\(x\)++- or ++\(y\)++-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
 
@@ -45,8 +45,16 @@ x^{-\frac{1}{2}}-1&x\le1\\
 +
 image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,width=500,role="text-center"]
 +
-This is because ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
-So ++\(x^{-\frac{1}{2}}\)++ is integrable, but its square, ++\(x^{-1}\)++, is not.
+Ultimately this relies on the fact that ++\(\int_0^1 x^n\,dx\)++ is finite if and only if ++\(n > -1\)++.
+++\[\begin{align*}
+\int_0^\infty f(x)\,dx&=\int_0^1 x^{-\frac{1}{2}}-1\,dx\\
+&=2x^\frac{1}{2}-x\Bigr|_0^1\\
+&=1\\
+\int_0^\infty f(x)^2\,dx&=\int_0^1 x^{-1}-2x^{-\frac{1}{2}}+1\,dx\\
+&=\ln(x)-4x^{\frac{1}{2}}+x\Bigr|_0^1\\
+&=\infty
+\end{align*}\]++
+So ++\(f(x)\)++ is integrable, but ++\(f(x)^2\)++ is not.
 
 . One example is the following function:
 ++\[\begin{align*}
@@ -56,8 +64,16 @@ f(x)=\frac{1}{x+1}
 +
 image::fig-3.1.1-f2.svg[A function that is square-integrable but not integrable,width=500,role="text-center"]
 +
-This is because ++\(\int_1^\infty x^n\,dx\)++ is finite if and only if ++\(n<-1\)++.
-So ++\(x^{-1}\)++ is not integrable, but its square, ++\(x^{-2}\)++, is.
+As shown below,
+++\[\begin{align*}
+\int_0^\infty f(x)\,dx &=\int_0^\infty\frac{1}{x+1}\,dx\\
+&=\ln(x+1)\Bigr|_0^\infty\\
+&=\infty\\
+\int_0^\infty f(x)^2\,dx&=\int_0^\infty \frac{1}{(x+1)^2}\,dx\\
+&=-\frac{1}{x+1}\Bigr|_0^1\\
+&=\frac{1}{2}
+\end{align*}\]++
+So ++\(f(x)\)++ is not integrable, but ++\(f(x)^2\)++ is.
 ====
 
 * {q-num} Show that the commutator is linear in its first argument: ++\([aA+bB,C]=a[A,C]+b[B,C]\)++.
