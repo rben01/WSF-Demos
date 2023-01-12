@@ -765,6 +765,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 		display: none;
 	}
 
+	table tr th,
+	table tr td {
+		padding: 0.2em 0.4em;
+	}
+
 	/* #pets-table > tbody > tr > th {
 		max-width: 13em;
 	} */
@@ -1021,7 +1026,7 @@ However, if we set up an apparatus to measure which slit the particles travel th
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -1331,29 +1336,95 @@ Calculate the expected value and standard deviation.</p>
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>You could end up at \(x = \pm 1\). There is 1 path, {T}, to \(x = - 1\) and 1 path, {H}, to \(x = - 1\), for a total of 2 paths.</p>
+<p>You could end up at \(x = \pm 1\). There is 1 path, \(T\), to \(x = - 1\) and 1 path, \(H\), to \(x = - 1\), for a total of 2 paths.</p>
 </li>
 <li>
-<p>For 0 to 3 flips:<br>
-<span class="underline">n=0</span><br>
-x=0, 1 path: {X}<br>
-total: 1<br>
-<span class="underline">n=1</span><br>
-x=-1, 1 path: {T} | x=1, 1 path: {H}<br>
-total paths: 2<br>
-<span class="underline">n=2</span><br>
-x=-2, 1 path: {TT} | x=0, 2 paths: \{TH, HT\} | x=2, 1 path: {HH}<br>
-total paths: 4<br>
-<span class="underline">n=3</span><br>
-x=-3, 1 path: {TTT} | x=-1, 3 paths: \{TTH, THT, HTT\} | x=1, 3 paths: \{HHT, HTH, THH\} |x=3, 1 path: {HHH}<br>
-total paths: 8<br>
-For each n, there are \(2^n\) total paths, and the number of paths to get to each endpoint are given by binomial coefficients, which we see in Pascal&#8217;s triangle.</p>
+<p>For 0 to 3 flips:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">\(\boldsymbol n\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol x\)</th>
+<th class="tableblock halign-left valign-top">Paths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\emptyset\) (the empty path)</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">1</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(T\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(H\)</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">2</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="4"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(TT\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(TH, HT\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(HH\)</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">4</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="5"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(TTT\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(TTH, THT, HTT\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(HHT, HTH, THH\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(HHH\)</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">8</p></th>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For each \(n\), there are \(2^n\) total paths, and the number of paths to get to each endpoint are given by binomial coefficients \(\binom{n}{k}\) where \(k\) is the number of heads, which we see in Pascal&#8217;s triangle.</p>
+</div>
 </li>
 <li>
 <p>[Insert triangle here] Using Pascal&#8217;s triangle, we come up with the following probabilities:</p>
@@ -1362,6 +1433,96 @@ For each n, there are \(2^n\) total paths, and the number of paths to get to eac
 </div>
 </div>
 </details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> &dagger; In one dimension, the <em>probability current</em> \(J\) describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by
+\[J(x,t) = \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
+    x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
+<div class="openblock">
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]
+What &#8220;law&#8221; does this equation represent?
+What happens to the probability current in the region from \(-\infty\) to \(\infty\)?
+What does this mean?</p>
+</li>
+<li>
+<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
+Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.
+(This is not so interesting in the one-dimensional case, in which there is only one direction to point, but the same idea holds in higher dimensions; \(J\) points in the direction of \(\nabla \varphi\).)</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First, recall the Schrödinger equation for a free particle,
+\[ i\hbar\frac{\partial \Psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]
+Now recall that \(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\). Then,
+\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&amp;=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
+\frac{\partial \Psi^*}{\partial t}&amp;=-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}
+\end{align*}\]
+Now, applying the product rule twice, once forwards and once backwards,
+\[\begin{align*}
+\frac{d}{dt}|\Psi|^2&amp;=\frac{d}{dt} (\Psi^*\Psi)\\
+&amp;=\frac{d\Psi^*}{dt}\Psi +\Psi^*\frac{d\Psi}{dt}\\
+&amp;=\left(-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}\right)\Psi+\Psi^*\left(\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}-\Psi^*\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left[\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}+\frac{\partial \Psi}{\partial x}\frac{\partial\Psi^*}{\partial x}\right)\right.\\
+&amp;\phantom{=\frac{i\hbar}{2m}[}-\left.\left(\Psi^*\frac{\partial^2\Psi}{\partial x^2}+\frac{\partial \Psi^*}{\partial x}\frac{\partial\Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{i\hbar}{2m}\left[\frac{\partial}{\partial x} \left(\Psi\frac{\partial\Psi^*}{\partial x}\right)-\frac{\partial}{\partial x}\left(\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial}{\partial x}\left[\frac{i\hbar}{2m}\left(\Psi\frac{\partial\Psi^*}{\partial x}-\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial J}{\partial x}
+\end{align*}\]
+And the integral is now trivial:
+\[\begin{align*}
+\frac{d}{dt}\int_a^b |\Psi|^2\,dx&amp;=\int_a^b\frac{d}{dt} |\Psi|^2\,dx\\
+&amp;=\int_a^b-\frac{\partial J}{\partial x}\,dx\\
+&amp;=-J(x,t)\Bigr|^{x=b}_{x=a}\\
+&amp;=J(a,t)-J(b,t)
+\end{align*}\]
+We see that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the values of the probability current at \(a\) and \(b\).
+This means that &#8220;probability current&#8221; is, in fact, a good name for this quantity:
+if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region&#8217;s boundary, then, via <a href="https://en.wikipedia.org/wiki/Divergence_theorem" target="_blank" rel="noopener">Gauss&#8217;s Theorem</a>, we can liken the function&#8217;s value on the surface to a current. (For more info, see <a href="https://en.wikipedia.org/wiki/Continuity_equation" target="_blank" rel="noopener">Transport Equation</a>.)
+From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region&#8217;s boundary.
+(This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when \(\frac{\partial \Psi}{\partial x}\) is replaced by \(\nabla \Psi\) and the region&#8217;s boundary is an actual surface and not just two points on either side.)</p>
+<div class="paragraph">
+<p>Since \(\Psi\) is square integrable, it must go to 0 as \(x\to\pm\infty\), and therefore so must \(J\) (just by the definition).
+And so \[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]
+This indicates that probability is conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
+(This is good — we <em>need</em> probabilities to always add up to 1.)</p>
+</div>
+</li>
+<li>
+<p>First,
+\[\begin{align*}
+\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&amp;=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
+&amp;=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
+&amp;= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
+\end{align*}\]
+And so
+\[\begin{align*}
+J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
+&amp;=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
+&amp;\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
+&amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
+&amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
+\end{align*}\]
+which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, \(\nabla \varphi\)).</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
 </li>
 </ul>
 </div>
@@ -1465,7 +1626,7 @@ If \(A_i\) works then so does \(A_ie^{ix}\) for an real \(x\), so you might as w
 </tr>
 </table>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -1482,7 +1643,7 @@ Normalizing a wavefunction simply requires setting its (squared) norm to 1, then
 |\Psi_1|^2&amp;=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
 &amp;=\int_{-\infty}^\infty |A_1|^2e^{-ax^2}\,dx\\
 &amp;=\sigma\sqrt{2\pi}|A_1|^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
-&amp;= \sigma\sqrt{2\pi}|A_1|^2\cdot 1\\
+&amp;= \sigma\sqrt{2\pi}|A_1|^2\cdot 1\quad\textrm{(the integrand is a Gaussian)}\\
 &amp;=\sqrt{\frac{\pi}{a}}
 \end{align*}\]
 Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\).</p>
@@ -1515,7 +1676,7 @@ And so,
 \[\begin{align*}
 \int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&amp;=-\left.\frac{\sin^2(x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{\sin(2x)}{x}\,dx
 \end{align*}\]
-Now, \(\frac{\sin^2(x)}{x}\) is an odd function, so its integral over \((-\infty,\infty\) is \(0\). So we&#8217;re just left with
+Now, \(\frac{\sin^2(x)}{x}\) is an odd function, so its integral over \((-\infty,\infty)\) is \(0\). So we&#8217;re just left with
 \[\begin{align*}
 \int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&amp;= \int_{-\infty}^\infty \frac{\sin(2x)}{x}\,dx\\
 &amp;=2\int_{-\infty}^\infty \frac{\sin(2x)}{2x}\,dx
@@ -1523,7 +1684,7 @@ Now, \(\frac{\sin^2(x)}{x}\) is an odd function, so its integral over \((-\infty
 Now, a \(u\)-substition with \(u=2x,du=2\,dx\) gives us
 \[\begin{align*}
 &amp;=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{2}\,du\\
-&amp;=\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\,du\\
+&amp;=\int_{-\infty}^\infty \frac{\sin(u)}{u}\,du\\
 &amp;=\pi
 \end{align*}\]
 So, \(1=|\Psi_3|^2=|A_3|^2\pi\), from which we conclude that \(A_3=\frac{1}{\sqrt\pi}\).</p>
@@ -1547,7 +1708,7 @@ So,
 </td>
 <td class="content">
 <div class="paragraph">
-<p>If you struggled to compute this integral and would like a hint: don&#8217;t read any further, and set \(x=\tan\theta\).
+<p>If you are struggling to compute this integral and would like a hint: don&#8217;t read any further, and set \(x=\tan\theta\).
 (The image of \(\tan\) is \((-\infty,\infty)\), so this is sound.)</p>
 </div>
 </td>
@@ -1557,7 +1718,7 @@ So,
 <div class="paragraph">
 <p>Letting \(x=\tan\theta\), we have
 \[\begin{align*}
-x^2+1&amp;=\tan\theta+1\\
+x^2+1&amp;=\tan^2\theta+1\\
 &amp;=\frac{\sin^2\theta}{\cos^2\theta}+1\\
 &amp;=\frac{\sin^2\theta+\cos^2\theta}{\cos^2\theta}\\
 &amp;=\frac{1}{\cos^2\theta}
@@ -1571,7 +1732,7 @@ Also,
 &amp;=\frac{\cos^2\theta+\sin^2\theta}{\cos^2\theta}\\
 &amp;=\frac{1}{\cos^2\theta}
 \end{align*}\]
-Finally, note that \(\pm\infty=\tan^{-1}(\pm\frac{\pi}{2})\).
+Finally, note that \(\tan(\pm\infty)=\pm\frac{\pi}{2}\).
 Therefore,
 \[\begin{align*}
 \int_{-\infty}^\infty\frac{1}{x^2+1}dx&amp;=\int_{-\pi/2}^{\pi/2}(\cos^2\theta)\left(\frac{1}{\cos^2\theta}\right)\,d\theta\\
@@ -1610,96 +1771,6 @@ The normal distribution with mean \(\Braket{x}\) and standard deviation \(\sigma
 </div>
 </div>
 </details>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In one dimension, the <em>probability current</em> \(J\) describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by
-\[J(x,t) = \frac{i
-    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
-    x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]</p>
-<div class="openblock">
-<div class="content">
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Show that \[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]
-What &#8220;law&#8221; does this equation represent?
-What happens to the probability current in the region from \(-\infty\) to \(\infty\)?
-What does this mean?</p>
-</li>
-<li>
-<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\). (Here, \(|\Psi(x,t)|\) represents the magnitude of the wavefunction at \((x,t)\), not the norm of the wavefunction over all space.)
-Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.
-(This is not so interesting in the one-dimensional case, in which there is only one direction to point, but the same idea holds in higher dimensions; \(J\) points in the direction of \(\nabla \varphi\).)</p>
-</li>
-</ol>
-</div>
-<details>
-<summary class="title">Solution</summary>
-<div class="content">
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>First, recall the Schrödinger equation for a free particle,
-\[ i\hbar\frac{\partial \Psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]
-Now recall that \(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\). Then,
-\[\begin{align*}
-\frac{\partial \Psi}{\partial t}&amp;=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
-\frac{\partial \Psi^*}{\partial t}&amp;=-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}
-\end{align*}\]
-Now, applying the product rule twice, once forwards and once backwards,
-\[\begin{align*}
-\frac{d}{dt}|\Psi|^2&amp;=\frac{d}{dt} (\Psi^*\Psi)\\
-&amp;=\frac{d\Psi^*}{dt}\Psi +\Psi^*\frac{d\Psi}{dt}\\
-&amp;=\left(-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}\right)\Psi+\Psi^*\left(\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\right)\\
-&amp;=-\frac{i\hbar}{2m}\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}-\Psi^*\frac{\partial^2\Psi}{\partial x^2}\right)\\
-&amp;=-\frac{i\hbar}{2m}\left[\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}+\frac{\partial \Psi}{\partial x}\frac{\partial\Psi^*}{\partial x}\right)\right.\\
-&amp;\phantom{=\frac{i\hbar}{2m}[}-\left.\left(\Psi^*\frac{\partial^2\Psi}{\partial x^2}+\frac{\partial \Psi^*}{\partial x}\frac{\partial\Psi}{\partial x}\right)\right]\\
-&amp;=-\frac{i\hbar}{2m}\left[\frac{\partial}{\partial x} \left(\Psi\frac{\partial\Psi^*}{\partial x}\right)-\frac{\partial}{\partial x}\left(\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
-&amp;=-\frac{\partial}{\partial x}\left[\frac{i\hbar}{2m}\left(\Psi\frac{\partial\Psi^*}{\partial x}-\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
-&amp;=-\frac{\partial J}{\partial x}
-\end{align*}\]
-And the integral is now trivial:
-\[\begin{align*}
-\frac{d}{dt}\int_a^b |\Psi|^2\,dx&amp;=\int_a^b\frac{d}{dt} |\Psi|^2\,dx\\
-&amp;=\int_a^b-\frac{\partial J}{\partial x}\,dx\\
-&amp;=-J(x,t)\Bigr|^{x=b}_{x=a}\\
-&amp;=J(a,t)-J(b,t)
-\end{align*}\]
-We see that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the values of the probability current at \(a\) and \(b\).
-This means that &#8220;probability current&#8221; is, in fact, a good name for this quantity:
-if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region&#8217;s boundary, then, via <a href="https://en.wikipedia.org/wiki/Divergence_theorem" target="_blank" rel="noopener">Gauss&#8217;s Theorem</a>, we can liken the function&#8217;s value on the surface to a current. (For more info, see <a href="https://en.wikipedia.org/wiki/Continuity_equation" target="_blank" rel="noopener">Transport Equation</a>.)
-From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region&#8217;s boundary.
-(This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when \(\frac{\partial \Psi}{\partial x}\) is replaced by \(\nabla \Psi\) and the region&#8217;s boundary is an actual surface and not just two points on either side.)</p>
-<div class="paragraph">
-<p>Since \(\Psi\) is square integrable, it must go to 0 as \(x\to\pm\infty\), and therefore so must \(J\) (just by the definition).
-And so \[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]
-This indicates that probability is conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
-(This is good — we <em>need</em> probabilities to always add up to 1.)</p>
-</div>
-</li>
-<li>
-<p>First,
-\[\begin{align*}
-\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&amp;=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
-&amp;=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
-&amp;= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
-\end{align*}\]
-And so
-\[\begin{align*}
-J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
-&amp;=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
-&amp;\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
-&amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
-&amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
-\end{align*}\]
-which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, \(\nabla \varphi\)).</p>
-</li>
-</ol>
-</div>
-</div>
-</details>
-</div>
-</div>
 </li>
 </ul>
 </div>
@@ -1748,7 +1819,7 @@ which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x
 </li>
 </ol>
 </div>
-<details>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -1876,41 +1947,41 @@ So \(\phi\) was real along. We finally obtain
 \end{align*}\]
 Let&#8217;s compute the integrand:
 \[\begin{align*}
-\Psi^* &amp;=e^{i\lambda_1 t}\sin(\pi x)+e^{\lambda_2 t}\sin(2\pi x)\\
-\frac{\partial \Psi}{\partial x} &amp;=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-\lambda_2 t}\cos(2\pi x)\\\\
+\Psi^* &amp;=e^{i\lambda_1 t}\sin(\pi x)+e^{i\lambda_2 t}\sin(2\pi x)\\
+\frac{\partial \Psi}{\partial x} &amp;=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\\\\
 \Psi^* \frac{\partial \Psi}{\partial x}&amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
-&amp;\phantom{=}+\,\pi e^{-(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
 &amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
 &amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
-&amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
-&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
+&amp;\phantom{=}+\,\frac{\pi}{2} e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
+&amp;\phantom{=}+\,\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
 &amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
-&amp;\phantom{=}+\,\pi\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2e^{i(\lambda_1-\lambda_2)t}\right)\\
-&amp;\phantom{=}+\,\pi\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)
+&amp;\phantom{=}+\,\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{=}+\,\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)
 \end{align*}\]
 Now, we need to integrate this.
 Thankfully we already know how to compute \(\int_0^1 \sin(n\pi x)\,dx\), and so we obtain
 \[\begin{align*}
 \Braket{p}&amp;=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
 &amp;=-i\hbar\int_0^1\left[\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\right.\\
-&amp;\phantom{i\hbar\int_0^1}\quad\quad+\pi\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
-&amp;\phantom{i\hbar\int_0^1}\quad\quad+\left.\pi\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
-&amp;=-i\hbar\left[2\left( e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
-&amp;\quad\quad+\,\left.\frac{2}{3}\left( e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
-&amp;=-i\hbar\left(\frac{8}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{8}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
-&amp;=-\frac{8i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\left.\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
+&amp;=-i\hbar\left[\left( e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&amp;\quad\quad+\,\left.\frac{1}{3}\left( e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+&amp;=-i\hbar\left(\frac{4}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{4}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;=-\frac{4i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
 \end{align*}\]
 Uh oh, this also looks like it might not be real.
 But,
 \[\begin{align*}
-e^{iw}-e^{-iw}&amp;=e^{iw}-(e^{iw})^*\\
-&amp;=2i\,\mathfrak{Im}[e^{iw}]\\
-&amp;=2i\sin(w)
+e^{-iw}-e^{iw}&amp;=-(e^{iw}-(e^{iw})^*)\\
+&amp;=-2i\,\mathfrak{Im}[e^{iw}]\\
+&amp;=-2i\sin(w)
 \end{align*}\]
 and so, finally,
 \[\begin{align*}
-\Braket{p}&amp;=-\frac{8i\hbar}{3}\left(2i\sin((\lambda_1-\lambda_2)t)\right)\\
-&amp;=\frac{16\hbar \sin((\lambda_1-\lambda_2)t)}{3}
+\Braket{p}&amp;=-\frac{4i\hbar}{3}\left(-2i\sin((\lambda_1-\lambda_2)t)\right)\\
+&amp;=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]</p>
 </div>
 </li>
@@ -1965,7 +2036,7 @@ In other words, if the potential is quadratic then we can say &#8220;the expecta
 \]</p>
 </div>
 <div class="paragraph">
-<p>If \(V\) had any higher order \(x\) terms, then its derivative would have a term of order \(x^2\) or higher, and the above procedure wouldn&#8217;t work because in general \(\Braket{x^n}\ne\Braket{x}^n\).</p>
+<p>If \(V\) had any higher-order \(x\) terms, then its derivative would have a term of order \(x^2\) or higher, and the above procedure wouldn&#8217;t work because in general \(\Braket{x^n}\ne\Braket{x}^n\).</p>
 </div>
 </div>
 </details>
@@ -2009,7 +2080,7 @@ We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\t
 <p>Find \(L^2\).</p>
 </li>
 <li>
-<p>Calculate \(\Braket{L^2}\) for the spatial component of the wavefunction \( \psi(x)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \) // TODO Check that this is normalized</p>
+<p>Calculate \(\Braket{L^2}\) for the spatial component of the wavefunction \( \psi(x)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \) <mark>TODO Check that this is normalized</mark></p>
 </li>
 </ol>
 </div>
@@ -2137,11 +2208,24 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the wavefunction from 1.5.1, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the wavefunction from 1.5.1, \[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]
+on the interval \([0,1]\):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
 <p>Calculate \(\Braket{p^2}\) and \(\sigma_p\).</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Tip</div>
+</td>
+<td class="content">
+You can reuse many of the calculations you did in 1.5.1.
+</td>
+</tr>
+</table>
+</div>
 </li>
 <li>
 <p>What is the minimum possible value of \(\sigma_x\)?</p>
@@ -2151,11 +2235,56 @@ While in QM a wavefunction is an infinite linear combination of basis functions,
 </li>
 </ol>
 </div>
-<details>
-<summary class="title">Solution (placeholder)</summary>
+<details open>
+<summary class="title">Solution</summary>
 <div class="content">
-<div class="paragraph">
-<p>This is the solution</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In general,
+\[\begin{align*}
+\braket{p^2}=\int_\mathcal D \Psi^*\left(-\hbar^2\frac{\partial ^2}{\partial x^2}\right)\Psi\,dx
+\end{align*}\]
+For the \(\Psi\) above,
+\[\begin{align*}
+\Psi &amp;= e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)\\
+\frac{\partial \Psi}{\partial x} &amp;= \pi e^{-i \lambda_1 t}\cos(\pi x) +2\pi e^{-i \lambda_2 t}\cos(2 \pi x)\\
+\frac{\partial^2 \Psi}{\partial x^2} &amp;= -\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]
+And also
+\[\begin{align*}
+\Psi^* &amp;= e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]
+And so
+\[\begin{align*}
+\braket{p^2}&amp;=-\hbar^2\int_0^1 \bigl[e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)\bigr]\\
+&amp;\phantom{=-\hbar^2}\quad\quad\cdot\bigl[-\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)\bigr]\,dx\\
+&amp;=\hbar^2\pi^2\int_0^1\sin^2(\pi x)+4\sin^2(2\pi x)\\
+&amp;\quad\quad\quad\quad\quad\quad+(4e^{i(\lambda_1-\lambda_2)t}+e^{i(\lambda_2-\lambda_1)t})\sin(\pi x)\sin(2\pi x)\,dx
+\end{align*}\]
+Thankfully we&#8217;ve already done all three of these integrals (in 1.5.1):
+\[\begin{align*}
+\int_0^1\sin^2(\pi x)\,dx&amp;=\frac{1}{2}\\
+\int_0^1\sin^2(2\pi x)\,dx&amp;=\frac{1}{2}\\
+\int_0^1\sin(\pi x)\sin(2\pi x)\,dx&amp;=0
+\end{align*}\]
+So we have
+\[\begin{align*}
+\braket{p^2}&amp;=\hbar^2\pi^2\left(\frac{1}{2}+4\cdot\frac{1}{2}+0\right)\\
+&amp;=\frac{5\hbar^2\pi^2}{2}
+\end{align*}\]
+And in 1.5.1 we computed
+\[\begin{align*}
+\braket{p}&amp;=\frac{8}{3}\hbar\sin((\lambda_1-\lambda_2)t)
+\end{align*}\]
+Now,
+\[\begin{align*}
+\sigma_p&amp;=\sqrt{\braket{p^2}-\braket{p}^2}\\
+&amp;=\sqrt{\frac{5\hbar^2\pi^2}{2}-\frac{64}{9}\hbar^2\sin^2((\lambda_1-\lambda_2)t)}\\
+&amp;=\hbar\sqrt{\frac{5\pi^2}{2}-\frac{64}{9}\sin^2((\lambda_1-\lambda_2)t)}
+\end{align*}\]</p>
+</li>
+</ol>
 </div>
 </div>
 </details>
