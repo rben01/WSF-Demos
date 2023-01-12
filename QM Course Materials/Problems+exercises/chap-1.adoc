@@ -321,8 +321,29 @@ Calculate the expected value and standard deviation.
              |++\(3\)++|++\(HHH\)++
              h|Total h|8
 |===
-For each ++\(n\)++, there are ++\(2^n\)++ total paths, and the number of paths to get to each endpoint are given by binomial coefficients ++\(\binom{n}{k}\)++ where ++\(k\)++ is the number of heads, which we see in Pascal's triangle.
-. [Insert triangle here] Using Pascal's triangle, we come up with the following probabilities:
+For each ++\(n\)++, there are ++\(2^n\)++ total paths, and the number of paths to get to each endpoint are given by binomial coefficients ++\(\binom{n}{k}\)++ where ++\(k\)++ is the number of heads, which we will see in Pascal's triangle.
+. Pascal's triangle is shown below.
++
+image::fig-1.3.4-pascal-triangle.svg[Pascal's Triangle,width=300]
++
+The ++\(k\)++^th^ element in the ++\(n\)++^th^ row (where ++\(k\)++ and ++\(n\)++ both start from 0), ++\(\binom nk\)++, is the number of sequences of ++\(H\)++ and ++\(T\)++ of length ++\(n\)++ containing ++\(k\)++ ++\(H\)++s.
+A path with ++\(k\)++&#x2007;++\(H\)++s will contain ++\(n-k\)++&#x2007;++\(T\)++s, and so its final position will be ++\(x=\#H-\#T=k-(n-k)=2k-n\)++.
+(Check that this matches what you found above.)
+There are ++\(2^7=128\)++ sequences of length 7, so the probabilities of landing at each integer are as follows:
++
+
+[cols="1,1,1,3,3",options="header"]
+|===
+|++\(\boldsymbol n\)++|++\(\boldsymbol k\)++|++\(\boldsymbol{x=2k-n}\)++|Number of paths|Probability
+.8+|++\(7\)++|++\(0\)++|++\(-7\)++|++\(1\)++|++\(\frac{1}{128}\)++
+             |++\(1\)++|++\(-5\)++|++\(7\)++|++\(\frac{7}{128}\)++
+             |++\(2\)++|++\(-3\)++|++\(21\)++|++\(\frac{21}{128}\)++
+             |++\(3\)++|++\(-1\)++|++\(35\)++|++\(\frac{35}{128}\)++
+             |++\(4\)++|++\(1\)++|++\(35\)++|++\(\frac{35}{128}\)++
+             |++\(5\)++|++\(3\)++|++\(21\)++|++\(\frac{21}{128}\)++
+             |++\(6\)++|++\(5\)++|++\(7\)++|++\(\frac{7}{128}\)++
+             |++\(7\)++|++\(7\)++|++\(1\)++|++\(\frac{1}{128}\)++
+|===
 ====
 
 * {q-num} &dagger; In one dimension, the _probability current_ ++\(J\)++ describes the rate at which probability flows past point ++\(x\)++. For a free particle with mass ++\(m\)++ whose wavefunction is ++\(\Psi(x,t)\)++, or ++\(\Psi\)++ for short, it is given by
@@ -777,7 +798,7 @@ It may help to use the identity
 [{sublist-style}]
 . Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
 . Find ++\(L^2\)++.
-. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \psi(x)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++ ##TODO Check that this is normalized##
+. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \psi(\theta,\phi)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++.
 
 .Solution
 [%collapsible%open]

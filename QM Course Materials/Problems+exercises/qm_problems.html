@@ -1541,11 +1541,91 @@ Calculate the expected value and standard deviation.</p>
 </tbody>
 </table>
 <div class="paragraph">
-<p>For each \(n\), there are \(2^n\) total paths, and the number of paths to get to each endpoint are given by binomial coefficients \(\binom{n}{k}\) where \(k\) is the number of heads, which we see in Pascal&#8217;s triangle.</p>
+<p>For each \(n\), there are \(2^n\) total paths, and the number of paths to get to each endpoint are given by binomial coefficients \(\binom{n}{k}\) where \(k\) is the number of heads, which we will see in Pascal&#8217;s triangle.</p>
 </div>
 </li>
 <li>
-<p>[Insert triangle here] Using Pascal&#8217;s triangle, we come up with the following probabilities:</p>
+<p>Pascal&#8217;s triangle is shown below.</p>
+<div class="imageblock">
+<div class="content">
+<img src="images/fig-1.3.4-pascal-triangle.svg" alt="Pascal&#8217;s Triangle" width="300">
+</div>
+</div>
+<div class="paragraph">
+<p>The \(k\)<sup>th</sup> element in the \(n\)<sup>th</sup> row (where \(k\) and \(n\) both start from 0), \(\binom nk\), is the number of sequences of \(H\) and \(T\) of length \(n\) containing \(k\) \(H\)s.
+A path with \(k\)&#x2007;\(H\)s will contain \(n-k\)&#x2007;\(T\)s, and so its final position will be \(x=\#H-\#T=k-(n-k)=2k-n\).
+(Check that this matches what you found above.)
+There are \(2^7=128\) sequences of length 7, so the probabilities of landing at each integer are as follows:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">\(\boldsymbol n\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol k\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol{x=2k-n}\)</th>
+<th class="tableblock halign-left valign-top">Number of paths</th>
+<th class="tableblock halign-left valign-top">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="8"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{1}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{7}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(21\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{21}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(35\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{35}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(4\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(35\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{35}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(21\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{21}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(6\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{7}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{1}{128}\)</p></td>
+</tr>
+</tbody>
+</table>
 </li>
 </ol>
 </div>
@@ -2199,7 +2279,7 @@ We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\t
 <p>Find \(L^2\).</p>
 </li>
 <li>
-<p>Calculate \(\Braket{L^2}\) for the spatial component of the wavefunction \( \psi(x)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \) <mark>TODO Check that this is normalized</mark></p>
+<p>Calculate \(\Braket{L^2}\) for the spatial component of the wavefunction \( \psi(\theta,\phi)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \).</p>
 </li>
 </ol>
 </div>
