@@ -1812,10 +1812,10 @@ The normal distribution with mean \(\Braket{x}\) and standard deviation \(\sigma
 <p>Calculate \(\Braket{x}\) and \(\Braket{p} \).</p>
 </li>
 <li>
-<p>Calculate \(\frac{d \Braket{x}}{dt}\). Does Ehrenfest&#8217;s theorem hold?</p>
+<p>Calculate \(\frac{d \Braket{x}}{dt}\). For Ehrenfest&#8217;s Theorem to hold, what must be true about the particle?</p>
 </li>
 <li>
-<p>Find \(\Braket{- \frac{\partial V}{\partial x}} \).</p>
+<p>Use Ehrenfest&#8217;s Theorem to find \(\Braket{- \frac{\partial V}{\partial x}} \).</p>
 </li>
 </ol>
 </div>
@@ -1991,26 +1991,31 @@ and so, finally,
 \frac{d\Braket{x}}{dt}&amp;=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
 &amp;=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
 \end{align*}\]
-This doesn&#8217;t quite look like \(\frac{\Braket{p}}{m}\) yet, but we can apply the Schrödinger equation to make it so.
-First,
+Ehrenfest&#8217;s Theorem says that \(m\frac{d\braket x}{dt}=\braket p\).
+We see that \(m\) must be equal to \(\frac{3\pi^2\hbar}{2(\lambda_2-\lambda_1)}\).</p>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<div class="title">Note</div>
+</td>
+<td class="content">
+\(m\) looks like it might be negative, in the event that \(\lambda_1&gt;\lambda_2\).
+As we&#8217;ll see in chapter 2, \(\lambda_2\) is the energy associated with the \(\sin(2\pi x)\) term.
+Because it has a higher spatial frequency, the energy of \(\sin(2\pi x)\) is greater than that of \(\sin(\pi x)\), and so indeed \(\lambda_2&gt;\lambda_1\), and the mass is positive after all.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Ehrenfest&#8217;s Theorem says that \(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}\).
 \[\begin{align*}
-\frac{\partial ^2\Psi}{\partial x^2}&amp;=\frac{\partial }{\partial x}\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\right)\\
-&amp;=-\pi^2 e^{-i\lambda_1t}\sin(\pi x)-4\pi^2 e^{-i\lambda_2 t}\sin(2\pi x)\\
-&amp;=-\pi^2\left(e^{-i\lambda_1 t}\sin(\pi x)+4e^{-i\lambda_2 t}\sin(2\pi x)\right) \\\\
-\frac{\partial \Psi}{\partial t}&amp;=-i\lambda_1 e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2 t}\sin(2\pi x)
+p&amp;=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
+\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}&amp;=\frac{8\hbar(\lambda_2-\lambda_1)\cos((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]</p>
 </li>
 </ol>
-</div>
-<div class="paragraph">
-<p>\[\begin{align*}
-\frac{\partial \Psi}{\partial t}&amp;=\frac{\partial }{\partial t}\left(e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \right)\\
-&amp;=-i\lambda_1e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2t}\sin(2\pi x)\\
-&amp;=-i\left[\lambda_1(\cos(-\lambda_1 t)+i\sin(-\lambda_1 t))\sin(\pi x)\right.\\
-&amp;\phantom{=}\,\quad+\left.\lambda_2 (\cos(-\lambda_2 t)+i\sin(-\lambda_2 t))\sin(2\pi x)\right]\\
-&amp;=-\left(\lambda_1\sin(\lambda_1 t)\sin(\pi x)+\lambda_2\sin(\lambda_2 t)\sin(2\pi x)\right)\\
-&amp;\phantom{=}-i\left(\lambda_1\cos(\lambda_1 t)\sin(\pi x)+\lambda_2\cos(\lambda_2 t)\sin(2\pi x)\right)
-\end{align*}\]</p>
 </div>
 </div>
 </details>

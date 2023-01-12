@@ -564,8 +564,8 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
 . Calculate ++\(\Braket{x}\)++ and ++\(\Braket{p} \)++.
-. Calculate ++\(\frac{d \Braket{x}}{dt}\)++. Does Ehrenfest's theorem hold?
-. Find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++. For Ehrenfest's Theorem to hold, what must be true about the particle?
+. Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
 
 +
 .Solution
@@ -718,22 +718,17 @@ and so, finally,
 \frac{d\Braket{x}}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
 &=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
 \end{align*}\]++
-This doesn't quite look like ++\(\frac{\Braket{p}}{m}\)++ yet, but we can apply the {sch} equation to make it so.
-First,
-++\[\begin{align*}
-\frac{\partial ^2\Psi}{\partial x^2}&=\frac{\partial }{\partial x}\left(\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\right)\\
-&=-\pi^2 e^{-i\lambda_1t}\sin(\pi x)-4\pi^2 e^{-i\lambda_2 t}\sin(2\pi x)\\
-&=-\pi^2\left(e^{-i\lambda_1 t}\sin(\pi x)+4e^{-i\lambda_2 t}\sin(2\pi x)\right) \\\\
-\frac{\partial \Psi}{\partial t}&=-i\lambda_1 e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2 t}\sin(2\pi x)
-\end{align*}\]++
+Ehrenfest's Theorem says that ++\(m\frac{d\braket x}{dt}=\braket p\)++.
+We see that ++\(m\)++ must be equal to ++\(\frac{3\pi^2\hbar}{2(\lambda_2-\lambda_1)}\)++.
++
+NOTE: ++\(m\)++ looks like it might be negative, in the event that ++\(\lambda_1>\lambda_2\)++.
+As we'll see in chapter 2, ++\(\lambda_2\)++ is the energy associated with the ++\(\sin(2\pi x)\)++ term.
+Because it has a higher spatial frequency, the energy of ++\(\sin(2\pi x)\)++ is greater than that of ++\(\sin(\pi x)\)++, and so indeed ++\(\lambda_2>\lambda_1\)++, and the mass is positive after all.
 
+. Ehrenfest's Theorem says that ++\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}\)++.
 ++\[\begin{align*}
-\frac{\partial \Psi}{\partial t}&=\frac{\partial }{\partial t}\left(e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \right)\\
-&=-i\lambda_1e^{-i\lambda_1 t}\sin(\pi x)-i\lambda_2 e^{-i\lambda_2t}\sin(2\pi x)\\
-&=-i\left[\lambda_1(\cos(-\lambda_1 t)+i\sin(-\lambda_1 t))\sin(\pi x)\right.\\
-&\phantom{=}\,\quad+\left.\lambda_2 (\cos(-\lambda_2 t)+i\sin(-\lambda_2 t))\sin(2\pi x)\right]\\
-&=-\left(\lambda_1\sin(\lambda_1 t)\sin(\pi x)+\lambda_2\sin(\lambda_2 t)\sin(2\pi x)\right)\\
-&\phantom{=}-i\left(\lambda_1\cos(\lambda_1 t)\sin(\pi x)+\lambda_2\cos(\lambda_2 t)\sin(2\pi x)\right)
+p&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
+\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}&=\frac{8\hbar(\lambda_2-\lambda_1)\cos((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]++
 ====
 
