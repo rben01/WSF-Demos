@@ -219,7 +219,7 @@ Verify that both ways of computing standard deviation give the same answer (i.e.
 
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 First you'll need to use the above table to find the _probability_ of encountering a household with each number of pets/
 To do this, simply divide each count by the total number of houses, 20, to obtain
@@ -320,7 +320,7 @@ Calculate the expected value and standard deviation.
 
 +
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . You could end up at ++\(x = \pm 1\)++. There is 1 path, ++\(T\)++, to ++\(x = - 1\)++ and 1 path, ++\(H\)++, to ++\(x =1\)++, for a total of 2 paths.
@@ -915,7 +915,7 @@ TIP: You can reuse many of the calculations you did in 1.5.1.
 
 +
 .Solution
-[%collapsibl]
+[%collapsible]
 ====
 [{sublist-style}]
 . In general,
