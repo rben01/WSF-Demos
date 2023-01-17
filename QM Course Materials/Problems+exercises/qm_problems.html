@@ -1711,7 +1711,7 @@ There are \(2^7=128\) sequences of length 7, so the probabilities of landing at 
 \[J(x,t) = \frac{i
     \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
     x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
-(In higher dimensions, \(\frac{\partial }{\partial x}\) is replaced by \(\nabla\), and the proof relies on Gauss&#8217;s divergence theorem.)</p>
+(In higher dimensions, \(\frac{\partial }{\partial x}\) is replaced by \(\nabla\), and the interpretation relies on Gauss&#8217;s divergence theorem.)</p>
 <div class="openblock">
 <div class="content">
 <div class="olist loweralpha">
@@ -1724,8 +1724,7 @@ What does this mean?</p>
 </li>
 <li>
 <p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
-Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.
-(This is not so interesting in the one-dimensional case, in which there is only one direction to point, but the same idea holds in higher dimensions; \(J\) points in the direction of \(\nabla \varphi\).)</p>
+Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.</p>
 </li>
 </ol>
 </div>
@@ -1788,7 +1787,7 @@ J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\
 &amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
 &amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
 \end{align*}\]
-which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, where we would have taken \(\nabla (|\Psi|e^{\pm i\phi})\), \(\nabla \varphi\)).</p>
+which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, where we would have taken \(\nabla (|\Psi|e^{\pm i\phi})\), it points in the direction of \(\nabla \varphi\)).</p>
 </li>
 </ol>
 </div>
@@ -1876,7 +1875,7 @@ which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x
 <p>\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)</p>
 </li>
 <li>
-<p>\(\Psi_3(x,0)= A_3\frac{\sin(x)}{x}\) (you may use the fact that \(\int_{-\infty}^\infty\frac{\sin(x)}{x}\,dx=\pi\))</p>
+<p>\(\Psi_3(x,0)= A_3\frac{\sin(2x)}{x}\) (you may use the fact that \(\int_{-\infty}^\infty\frac{\sin(x)}{x}\,dx=\pi\))</p>
 </li>
 <li>
 <p>\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
@@ -1935,30 +1934,30 @@ Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}
 <li>
 <p>We start off with the squared integral:
 \[\begin{align*}
-|\Psi_3|^2&amp;=\int_{-\infty}^\infty \left|A_3\frac{\sin(x)}{x}\right|^2\,dx=|A_3|^2\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx
+|\Psi_3|^2&amp;=\int_{-\infty}^\infty \left|A_3\frac{\sin(2x)}{x}\right|^2\,dx=|A_3|^2\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx
 \end{align*}\]
 To compute this complicated looking integral, we&#8217;ll use integration by parts:
 \[\begin{align*}
-u&amp;=\sin^2(x)&amp;dv&amp;=x^{-2}\,dx\\
-du&amp;=2\sin(x)\cos(x)\,dx&amp;v&amp;=-x^{-1}\\
-&amp;=\sin(2x)
+u&amp;=\sin^2(2x)&amp;dv&amp;=x^{-2}\,dx\\
+du&amp;=4\sin(2x)\cos(2x)\,dx&amp;v&amp;=-x^{-1}\\
+&amp;=2\sin(4x)
 \end{align*}\]
 And so,
 \[\begin{align*}
-\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&amp;=-\left.\frac{\sin^2(x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{\sin(2x)}{x}\,dx
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&amp;=-\left.\frac{\sin^2(2x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{2\sin(4x)}{x}\,dx
 \end{align*}\]
 Now, \(\frac{\sin^2(x)}{x}\) is an odd function, so its integral over \((-\infty,\infty)\) is \(0\). So we&#8217;re just left with
 \[\begin{align*}
-\int_{-\infty}^\infty\frac{\sin^2(x)}{x^2}\,dx&amp;= \int_{-\infty}^\infty \frac{\sin(2x)}{x}\,dx\\
-&amp;=2\int_{-\infty}^\infty \frac{\sin(2x)}{2x}\,dx
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&amp;= \int_{-\infty}^\infty \frac{2\sin(4x)}{x}\,dx\\
+&amp;=8\int_{-\infty}^\infty \frac{\sin(4x)}{4x}\,dx
 \end{align*}\]
-Now, a \(u\)-substition with \(u=2x,du=2\,dx\) gives us
+Now, a \(u\)-substition with \(u=4x,du=4\,dx\) gives us
 \[\begin{align*}
-&amp;=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{2}\,du\\
-&amp;=\int_{-\infty}^\infty \frac{\sin(u)}{u}\,du\\
-&amp;=\pi
+&amp;=8\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{4}\,du\\
+&amp;=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\,du\\
+&amp;=2\pi
 \end{align*}\]
-So, \(1=|\Psi_3|^2=|A_3|^2\pi\), from which we conclude that \(A_3=\frac{1}{\sqrt\pi}\).</p>
+So, \(1=|\Psi_3|^2=|A_3|^2\cdot2\pi\), from which we conclude that <span class="no-break">\(A_3=\frac{1}{\sqrt{2\pi}}\).</span></p>
 </li>
 <li>
 <p>We&#8217;ll need to compute \(|x+e^{i\pi/2}|\) so we&#8217;ll do that first.
@@ -1998,7 +1997,7 @@ and so \(\frac{1}{x^2+1}=\cos^2\theta\).
 Also,
 \[\begin{align*}
 \frac{dx}{d\theta}&amp;=\frac{d}{d\theta}\left(\frac{\sin\theta}{\cos\theta}\right)=\frac{d}{d\theta}\left(\sin\theta\cos^{-1}\theta\right)\\
-&amp;=(\cos\theta)(\cos^{-1}\theta)+(\sin\theta)(-\sin\theta(-1\cos^{-2})\theta)\\
+&amp;=(\cos\theta)(\cos^{-1}\theta)+(\sin\theta)(-\sin\theta(-\cos^{-2}\theta))\\
 &amp;=1+\frac{\sin^2\theta}{\cos^2\theta}\\
 &amp;=\frac{\cos^2\theta+\sin^2\theta}{\cos^2\theta}\\
 &amp;=\frac{1}{\cos^2\theta}
@@ -2088,7 +2087,7 @@ The normal distribution with mean \(\Braket{x}\) and standard deviation \(\sigma
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
@@ -2358,7 +2357,7 @@ We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\t
 </li>
 </ol>
 </div>
-<details open>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
@@ -2507,8 +2506,8 @@ You can reuse many of the calculations you did in 1.5.1.
 </li>
 </ol>
 </div>
-<details open>
-<summary class="title">Solution</summary>
+<div class="exampleblock">
+<div class="title">Example 1. Solution</div>
 <div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
@@ -2559,7 +2558,7 @@ Now,
 </ol>
 </div>
 </div>
-</details>
+</div>
 </li>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
