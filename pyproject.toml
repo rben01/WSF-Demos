@@ -20,7 +20,7 @@
 
 	[tool.poetry.dev-dependencies]
 		ipykernel = "^5.5.0"
-		ipython = "^7.21.0"
+		ipython = "^8.10.0"
 		jupyter = "^1.0.0"
 		mypy = "^0.971"
 
