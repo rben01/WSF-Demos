@@ -2,7 +2,6 @@
 = Chapter 1: The Wave Function
 include::shared_attributes.adoc[]
 
-
 == The {sch} Equation
 === Questions
 * {q-num} In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
