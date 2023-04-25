@@ -609,8 +609,12 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
 . Calculate ++\(\Braket{x}\)++ and ++\(\Braket{p} \)++.
+. ADD A PART C?
++
+////
 . Calculate ++\(\frac{d \Braket{x}}{dt}\)++. For Ehrenfest's Theorem to hold, what must be true about the particle?
 . Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+////
 
 +
 .Solution
@@ -758,6 +762,8 @@ and so, finally,
 &=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]++
 
++
+////
 . We have
 ++\[\begin{align*}
 \frac{d\Braket{x}}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
@@ -775,8 +781,23 @@ Because it has a higher spatial frequency, the energy of ++\(\sin(2\pi x)\)++ is
 p&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
 \Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}&=\frac{8\hbar(\lambda_2-\lambda_1)\cos((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]++
+////
 ====
 
+* {q-num} WAVEFUNCTION HERE - pick one from earlier
+[{sublist-style}]
+. Calculate ++\(\Braket{x}\)++ and ++\(\Braket{p} \)++.
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++. For Ehrenfest's Theorem to hold, what must be true about the particle?
+. Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Here is a placeholder
+. Here is another
+====
 
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]++
