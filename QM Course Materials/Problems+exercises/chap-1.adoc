@@ -441,7 +441,7 @@ J&=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varp
 &=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
 &=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
 \end{align*}\]++
-which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or, in higher dimensions, where we would have taken ++\(\nabla (|\Psi|e^{\pm i\phi})\)++, it points in the direction of ++\(\nabla \varphi\)++).
+which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or, in higher dimensions, where we would have taken ++\(\nabla (|\Psi|e^{\pm i\varphi})\)++, it points in the direction of ++\(\nabla \varphi\)++).
 ====
 --
 
@@ -821,7 +821,7 @@ It may help to use the identity
 --
 [{sublist-style}]
 . Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
-. Find ++\(L^2\)++.
+. Find ++\(L^2\)++, the squared magnitude of ++\(\mathbf  L\)++.
 . Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \psi(\theta,\phi)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++.
 
 .Solution
