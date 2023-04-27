@@ -2142,30 +2142,77 @@ and so, finally,
 </details>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> WAVEFUNCTION HERE - pick one from earlier</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a particle of mass \(m\) has the following wavefunction:
+\[
+\Psi(x,t)=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]
+\]
+where \(T:=1+it/\tau\) with \(\tau:=2m\sigma^2/\hbar\).</p>
+<div class="openblock">
+<div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Calculate \(\Braket{x}\) and \(\Braket{p} \).</p>
+<p>Show that at \(t=0\), the particle&#8217;s probability distribution is the Gaussian \(\mathcal N(0,\sigma^2)\).</p>
 </li>
 <li>
-<p>Calculate \(\frac{d \Braket{x}}{dt}\). For Ehrenfest&#8217;s Theorem to hold, what must be true about the particle?</p>
+<p>Calculate \(\Braket{x}\) as a function of time.</p>
+</li>
+<li>
+<p>Calculate \(\Braket{p}\) as a function of time.</p>
+</li>
+<li>
+<p>Calculate \(\frac{d \Braket{x}}{dt}\).</p>
 </li>
 <li>
 <p>Use Ehrenfest&#8217;s Theorem to find \(\Braket{- \frac{\partial V}{\partial x}} \).</p>
 </li>
 </ol>
 </div>
-<details>
+</div>
+</div>
+<div class="paragraph">
+<p>Thus we see that this wavefunction describes a free particle whose probability distribution is initially a Gaussian with initial momentum \(p_0\).</p>
+</div>
+<details open>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Here is a placeholder</p>
+<p>When \(t=0\), \(T=1\), and so
+\[\begin{align*}
+\Psi(x,0)&amp;=\left(\frac{1}{\sigma \sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}p_0x\right]
+\end{align*}\]
+The corresponding probability distribution is
+\[\begin{align*}
+|\Psi|^2=\Psi^* \Psi &amp;=\frac{1}{\sigma\sqrt{2\pi}}\exp\left[-\frac{x^2}{2\sigma^2}\right]
+\end{align*}\]
+which is indeed the normal distribution with mean 0 and variance \(\sigma^2\).</p>
 </li>
 <li>
-<p>Here is another</p>
+<p>First, note that for any complex \(z\), \((e^z)^* =e^{z^*}\), so \((e^z)(e^z)^* =e^{z+z^*}=e^{2\Re(z)}\).
+Also, \((z^a)^* =(z^*)^a\).
+Therefore,
+\[\begin{align*}
+\Psi^* \Psi &amp;= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[2\Re\left(\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right)\right]
+\end{align*}\]
+Now, \(|T|=\sqrt{T^* T}=\sqrt{1+(t/\tau)^2}\), and also
+\[\begin{align*}
+\frac{1}{T}&amp;=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-it/\tau}{1+(t/\tau)^2}
+\end{align*}\]
+So
+\[\begin{align*}
+&amp;\phantom{=}\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&amp;=\frac{1-it/\tau}{1+(t/\tau)^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&amp;=\frac{1}{1+(t/\tau)^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)+i\left(\textrm{etc.}\right)\right]
+\end{align*}\]
+We&#8217;ve deliberately skipped computing the imaginary component because we&#8217;ll only need the real component.</p>
+<div class="paragraph">
+<p>So,
+\[\begin{align*}
+\Psi^*\Psi&amp;= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[\frac{2}{1+(t/\tau)^2}\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)\right]
+\end{align*}\]</p>
+</div>
 </li>
 </ol>
 </div>
