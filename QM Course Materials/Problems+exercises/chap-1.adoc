@@ -794,6 +794,7 @@ where ++\(T:=1+it/\tau\)++ with ++\(\tau:=2m\sigma^2/\hbar\)++.
 [{sublist-style}]
 . Show that at ++\(t=0\)++, the particle's probability distribution is the Gaussian ++\(\mathcal N(0,\sigma^2)\)++.
 . Calculate ++\(\Braket{x}\)++ as a function of time.
+You may use the fact that when ++\(a>0\)++, ++\(\displaystyle\int_{\infty}^\infty xe^{-a(x-r)^2}=r\sqrt{\pi/a}\)++.
 . Calculate ++\(\Braket{p}\)++ as a function of time.
 . Calculate ++\(\frac{d \Braket{x}}{dt}\)++.
 . Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
@@ -823,22 +824,65 @@ Therefore,
 \end{align*}\]++
 Now, ++\(|T|=\sqrt{T^* T}=\sqrt{1+(t/\tau)^2}\)++, and also
 ++\[\begin{align*}
-\frac{1}{T}&=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-it/\tau}{1+(t/\tau)^2}
+\frac{1}{T}&=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-it/\tau}{|T|^2}
 \end{align*}\]++
 So
 ++\[\begin{align*}
 &\phantom{=}\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
-&=\frac{1-it/\tau}{1+(t/\tau)^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
-&=\frac{1}{1+(t/\tau)^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)+i\left(\textrm{etc.}\right)\right]
+&=\frac{1-it/\tau}{|T|^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&=\frac{1}{|T|^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)+i\left(\textrm{etc.}\right)\right]
 \end{align*}\]++
 We've deliberately skipped computing the imaginary component because we'll only need the real component.
 +
 So,
 ++\[\begin{align*}
-\Psi^*\Psi&= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[\frac{2}{1+(t/\tau)^2}\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)\right]
+\Psi^*\Psi&= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[\frac{2}{|T|^2}\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)\right]\\
+&=\frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{2}{4\sigma^2|T|^2}\left(x^2-\frac{4\sigma^2 p_0 t}{\hbar\tau}x +\frac{4\sigma^2p_0^2 t^2}{2m\hbar\tau}\right)\right]
 \end{align*}\]++
-
-
+We wish to compute ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++, which is of the form ++\(xe^{-a(x^2+bx+c)}\)++ with ++\(a>0\)++.
+The trick to computing the integral of a function of this form is to get it into the form ++\(xe^{k-a(x-r)^2}\)++.
+In general the way to do this is as follows:
+++\[\begin{align*}
+-a(x^2+bx+c)&=-a\left(x+\frac{b}{2}\right)^2 + a\left(\frac{b^2}{4}-c\right)\\
+&=a\left(\frac{b^2}{4}-c\right)-a\left(x-\frac{-b}{2}\right)^2
+\end{align*}\]++
+so ++\(k=a\left(\frac{b^2}{4}-c\right)\)++ and ++\(r=-\frac{b}{2}\)++.
++
+Then,
+++\[\begin{align*}
+\int_{-\infty}^\infty xe^{-a(x^2+bx+c)}\,dx&=\int_{-\infty}^\infty xe^{k-a(x-r)^2}\,dx\\
+&=e^k\int_{-\infty}^\infty xe^{-a(x-r)^2}\,dx\\
+&=e^kr\sqrt{\pi/a}
+\end{align*}\]++
++
+In our case,
+++\[\begin{align*}
+a&=\frac{2}{4\sigma^2|T|^2}=\frac{1}{2\sigma^2|T|^2}\\
+b&=-\frac{4\sigma^2 p_0 t}{\hbar\tau }\\
+c&=\frac{4\sigma^2p_0^2t^2}{2m\hbar\tau}=\frac{2\sigma^2p_0^2t^2}{m\hbar\tau}
+\end{align*}\]++
+So
+++\[\begin{align*}
+k&=a\left(\frac{b^2}{4}-c\right)\\
+&=\frac{1}{2\sigma^2|T|^2}\left(\frac{16\sigma^4p_0^2t^2}{4\hbar^2\tau^2}-\frac{2\sigma^2p_0^2t^2}{m\hbar\tau}\right)\\
+&=\frac{1}{2|T|^2}\left(\frac{2 p_0^{2} t^{2} \sigma^{2} \left(2 m \sigma^{2} - \hbar \tau\right)}{m \hbar^{2} \tau^{2}}\right)\\
+&=\frac{1}{2|T|^2}\left(\frac{2 p_0^{2} t^{2} \sigma^{2} \left(2 m \sigma^{2} - \hbar\frac{2m\sigma^2}{\hbar}\right)}{m \hbar^{2} \left(\frac{2m\sigma^2}{\hbar}\right)^{2}}\right)\\
+&=0\ (!)\\
+\\
+r&=-\frac{1}{2}\left(-\frac{4\sigma^2p_0t}{\hbar\tau}\right)\\
+&=\frac{2\sigma^2p_0t}{\hbar\frac{2m\sigma^2}{\hbar}}\\
+&=\frac{p_0t}{m}
+\end{align*}\]++
+and so, finally,
+++\[\begin{align*}
+\braket{x}&=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
+&=\int_{-\infty}^\infty \frac{1}{\sigma|T|\sqrt{2\pi}}xe^{k-(a-r)^2}\,dx\\
+&=\frac{e^k r\sqrt{\pi/a}}{\sigma|T|\sqrt{2\pi}}\\
+&=\frac{e^0\left(\frac{p_0t}{m}\right)\sqrt{\frac{\pi}{1/(2\sigma^2|T|^2)}}}{\sigma|T|\sqrt{2\pi}}\\
+&=\frac{p_0t}{m}\cdot\frac{\sigma|T|\sqrt{2\pi}}{\sigma|T|\sqrt{2\pi}}\\
+&=\frac{p_0t}{m}
+\end{align*}\]++
+So the particle's expected position moves with a constant velocity of ++\(p_0/m\)++.
 ====
 
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:

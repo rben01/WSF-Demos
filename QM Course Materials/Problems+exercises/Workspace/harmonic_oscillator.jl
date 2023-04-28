@@ -31,8 +31,10 @@ x_exp(f) = inner_product(x * f, f)
 x_exp(x -> Ψ(x, t))
 
 # %%
-Ψ(x, t) * conj(Ψ(x, t)) |> simplify
+a = 1 / (2 * σ^2 * abs2(T))
+b = -4 * σ^2 * p₀ * t / (ħ * τ)
+c = 4 * σ^2 * p₀^2 * t^2 / (2 * m * ħ * τ)
+k = a * (b^2 / 4 - c)
+r = -b / 2
 
-# %%
-# x_exp(exp(-(x - v * t)^2 + im * t / τ * (x^2 - v^2 * t^2)))
-(1 - im * t / τ) * (-x^2 / (4 * σ^2) + im / ħ * (p₀ * x - p₀^2 * t / (2 * m))) |> expand
+(exp(k) * r * sqrt(pi / a) / (σ * abs(T) * sqrt(2 * PI)))(T => T_, τ => τ_) |> simplify
