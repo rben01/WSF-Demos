@@ -788,101 +788,115 @@ p&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
 ++\[
 \Psi(x,t)=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]
 \]++
-where ++\(T:=1+it/\tau\)++ with ++\(\tau:=2m\sigma^2/\hbar\)++.
+where ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++.
 +
 --
 [{sublist-style}]
-. Show that at ++\(t=0\)++, the particle's probability distribution is the Gaussian ++\(\mathcal N(0,\sigma^2)\)++.
-. Calculate ++\(\Braket{x}\)++ as a function of time.
-You may use the fact that when ++\(a>0\)++, ++\(\displaystyle\int_{\infty}^\infty xe^{-a(x-r)^2}=r\sqrt{\pi/a}\)++.
-. Calculate ++\(\Braket{p}\)++ as a function of time.
-. Calculate ++\(\frac{d \Braket{x}}{dt}\)++.
-. Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+. Show that the particle's probability distribution at time ++\(t\)++ is the normal distribution ++\(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right)\)++, i.e., the normal distribution with mean ++\(\frac{p_0t}{m}\)++ and variance ++\((\sigma|T|)^2\)++.
+. Find ++\(\Braket{x}\)++ by computing ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++.
+(You should be able to predict the answer from part (a).)
+You may use the fact that ++\(\int_{\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx=\mu\sigma\sqrt{2\pi}\)++.
+. Find ++\(\Braket{p}\)++ by computing ++\(\int_{-\infty}^\infty \Psi^*\left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\,dx\)++.
+(You should be able to predict the answer from part (a).)
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++ from your answer in part (b).
+. Apply Ehrenfest's Theorem to part (c) to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+. How would you describe this particle, in words?
 --
-+
-Thus we see that this wavefunction describes a free particle whose probability distribution is initially a Gaussian with initial momentum ++\(p_0\)++.
-
 +
 .Solution
 [%collapsible%open]
 ====
 [{sublist-style}]
-. When ++\(t=0\)++, ++\(T=1\)++, and so
-++\[\begin{align*}
-\Psi(x,0)&=\left(\frac{1}{\sigma \sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}p_0x\right]
-\end{align*}\]++
-The corresponding probability distribution is
-++\[\begin{align*}
-|\Psi|^2=\Psi^* \Psi &=\frac{1}{\sigma\sqrt{2\pi}}\exp\left[-\frac{x^2}{2\sigma^2}\right]
-\end{align*}\]++
-which is indeed the normal distribution with mean 0 and variance ++\(\sigma^2\)++.
 . First, note that for any complex ++\(z\)++, ++\((e^z)^* =e^{z^*}\)++, so ++\((e^z)(e^z)^* =e^{z+z^*}=e^{2\Re(z)}\)++.
 Also, ++\((z^a)^* =(z^*)^a\)++.
 Therefore,
 ++\[\begin{align*}
 \Psi^* \Psi &= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[2\Re\left(\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right)\right]
 \end{align*}\]++
-Now, ++\(|T|=\sqrt{T^* T}=\sqrt{1+(t/\tau)^2}\)++, and also
+Now,
 ++\[\begin{align*}
-\frac{1}{T}&=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-it/\tau}{|T|^2}
+\frac{1}{T}&=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}
 \end{align*}\]++
-So
+Therefore
 ++\[\begin{align*}
 &\phantom{=}\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
-&=\frac{1-it/\tau}{|T|^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
-&=\frac{1}{|T|^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)+i\left(\textrm{etc.}\right)\right]
+&=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&=\frac{1}{|T|^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{2m\sigma^2}\right)+i\left(\textrm{etc.}\right)\right]\\
+&=-\frac{1}{4\sigma^2|T|^2}\left(x^2-\frac{2p_0 tx}{m}+\frac{p_0^2t^2}{m^2}\right)+i\left(\textrm{etc.}\right)\\
+&=-\frac{1}{4\sigma^2|T|^2}\left(x-\frac{p_0t}{m^2}\right)^2+i\left(\textrm{etc.}\right)\\
+&=-\frac{1}{4}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2+i\left(\textrm{etc.}\right)
 \end{align*}\]++
 We've deliberately skipped computing the imaginary component because we'll only need the real component.
 +
-So,
+So, we see that
 ++\[\begin{align*}
-\Psi^*\Psi&= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[\frac{2}{|T|^2}\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{\hbar \tau}\right)\right]\\
-&=\frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{2}{4\sigma^2|T|^2}\left(x^2-\frac{4\sigma^2 p_0 t}{\hbar\tau}x +\frac{4\sigma^2p_0^2 t^2}{2m\hbar\tau}\right)\right]
+\Psi^*\Psi&=\frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]
 \end{align*}\]++
-We wish to compute ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++, which is of the form ++\(xe^{-a(x^2+bx+c)}\)++ with ++\(a>0\)++.
-The trick to computing the integral of a function of this form is to get it into the form ++\(xe^{k-a(x-r)^2}\)++.
-In general the way to do this is as follows:
+which is the normal distribution ++\(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right)\)++
+. We wish to compute ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++, i.e.,
 ++\[\begin{align*}
--a(x^2+bx+c)&=-a\left(x+\frac{b}{2}\right)^2 + a\left(\frac{b^2}{4}-c\right)\\
-&=a\left(\frac{b^2}{4}-c\right)-a\left(x-\frac{-b}{2}\right)^2
+\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx
 \end{align*}\]++
-so ++\(k=a\left(\frac{b^2}{4}-c\right)\)++ and ++\(r=-\frac{b}{2}\)++.
-+
+Using the fact that
+++\[\begin{align*}
+\int_{\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx=\mu\sigma\sqrt{2\pi}
+\end{align*}\]++
+we have
+++\[\begin{align*}
+\braket{x}&=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
+&=\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{1}{\sigma |T| \sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&=\frac{p_0 t}{m}
+\end{align*}\]++
+. We wish to compute ++\(\int_{-\infty}^\infty \Psi^*\left(-i\hbar \frac{\partial }{\partial x}\right)\Psi\,dx\)++.
+For brevity, we'll give a name to the inside of the exponent in ++\(\Psi\)++:
+++\[\begin{align*}
+K=\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)
+\end{align*}\]++
 Then,
 ++\[\begin{align*}
-\int_{-\infty}^\infty xe^{-a(x^2+bx+c)}\,dx&=\int_{-\infty}^\infty xe^{k-a(x-r)^2}\,dx\\
-&=e^k\int_{-\infty}^\infty xe^{-a(x-r)^2}\,dx\\
-&=e^kr\sqrt{\pi/a}
-\end{align*}\]++
-+
-In our case,
-++\[\begin{align*}
-a&=\frac{2}{4\sigma^2|T|^2}=\frac{1}{2\sigma^2|T|^2}\\
-b&=-\frac{4\sigma^2 p_0 t}{\hbar\tau }\\
-c&=\frac{4\sigma^2p_0^2t^2}{2m\hbar\tau}=\frac{2\sigma^2p_0^2t^2}{m\hbar\tau}
+\frac{\partial \Psi}{\partial x}&=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2}e^K\frac{\partial K}{\partial x}\\
+&=\Psi\frac{\partial }{\partial x}\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]\\
+&=\Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)
 \end{align*}\]++
 So
 ++\[\begin{align*}
-k&=a\left(\frac{b^2}{4}-c\right)\\
-&=\frac{1}{2\sigma^2|T|^2}\left(\frac{16\sigma^4p_0^2t^2}{4\hbar^2\tau^2}-\frac{2\sigma^2p_0^2t^2}{m\hbar\tau}\right)\\
-&=\frac{1}{2|T|^2}\left(\frac{2 p_0^{2} t^{2} \sigma^{2} \left(2 m \sigma^{2} - \hbar \tau\right)}{m \hbar^{2} \tau^{2}}\right)\\
-&=\frac{1}{2|T|^2}\left(\frac{2 p_0^{2} t^{2} \sigma^{2} \left(2 m \sigma^{2} - \hbar\frac{2m\sigma^2}{\hbar}\right)}{m \hbar^{2} \left(\frac{2m\sigma^2}{\hbar}\right)^{2}}\right)\\
-&=0\ (!)\\
-\\
-r&=-\frac{1}{2}\left(-\frac{4\sigma^2p_0t}{\hbar\tau}\right)\\
-&=\frac{2\sigma^2p_0t}{\hbar\frac{2m\sigma^2}{\hbar}}\\
-&=\frac{p_0t}{m}
+&\phantom{=}\Psi^* \left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\\
+&=-i\hbar\Psi^* \Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)\\
+&=-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\\
 \end{align*}\]++
-and so, finally,
+To integrate this, we'll split the sum in the third term into ++\(-\frac{x}{2\sigma^2}\)++ and ++\(\frac{ip_0}{\hbar}\)++ and integrate separately.
 ++\[\begin{align*}
-\braket{x}&=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
-&=\int_{-\infty}^\infty \frac{1}{\sigma|T|\sqrt{2\pi}}xe^{k-(a-r)^2}\,dx\\
-&=\frac{e^k r\sqrt{\pi/a}}{\sigma|T|\sqrt{2\pi}}\\
-&=\frac{e^0\left(\frac{p_0t}{m}\right)\sqrt{\frac{\pi}{1/(2\sigma^2|T|^2)}}}{\sigma|T|\sqrt{2\pi}}\\
-&=\frac{p_0t}{m}\cdot\frac{\sigma|T|\sqrt{2\pi}}{\sigma|T|\sqrt{2\pi}}\\
-&=\frac{p_0t}{m}
+&\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}\right)\,dx\\
+&=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\int_{-\infty}^\infty x\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&=\frac{i\hbar p_0t}{2m\sigma^2T}\\
+\\
+&\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(\frac{ip_0}{\hbar}\right)\,dx\\
+&=\frac{p_0}{T}\int_{-\infty}^\infty \frac{1}{\sigma|T|\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{p_0}{T}
 \end{align*}\]++
-So the particle's expected position moves with a constant velocity of ++\(p_0/m\)++.
+And when we add these up, recalling that ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++, we find that
+++\[\begin{align*}
+\braket p &=\frac{i\hbar p_0t}{2m\sigma^2T}+\frac{p_0}{T}\\
+&=\frac{p_0}{1+\frac{i\hbar t}{2m\sigma^2}} \left(\frac{i\hbar t}{2m\sigma^2}+1\right)\\
+&=p_0
+\end{align*}\]++
+. ++\(\frac{d\braket x}{dt} = \frac{p_0}{m}\)++.
+So this particle moves at a constant velocity, ++\(\frac{p_0}{m}\)++ (as would a classical particle launched with momentum ++\(p_0\)++).
+. ++\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket{p}}{dt}=0\)++.
+So in fact this particle is moving in zero potential (which we could have gathered from the fact that it's not accelerating).
+. The particle whose wavefunction this is was launched with initial momentum ++\(p_0\)++ and travels through a region of zero potential.
+Its probability distribution is a Gaussian that widens with time.
+Its observables obey the classical behavior: its expected position is the mean of the Gaussian and the expected velocity is the velocity of the Gaussian's mean.
+
+
+// ++\[\begin{align*}
+// &\phantom{=}\Psi^*\left(-i\hbar \frac{\partial }{\partial x}\right)\Psi\\
+// &=\frac{1}{\sigma T\sqrt{2\pi}}\exp\left[-\frac{x^2}{2\sigma^2T}\right]\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)\\
+// &=\frac{1}{\sigma T^2\sqrt{2\pi}}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\exp\left[-\frac{x^2}{2(\sigma\sqrt{T})^2}\right]\\
+// &=\left(-\frac{1}{2\sigma^2\sqrt{2\pi}}\cdot\frac{x}{(\sigma\sqrt T)^2}+\frac{ip_0}{\hbar T^{3/2}}\cdot\frac{1}{(\sigma\sqrt{T})\sqrt{2\pi}}\right)\exp\left[-\frac{x^2}{2(\sigma\sqrt{T})^2}\right]
+// \end{align*}\]++
 ====
 
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:

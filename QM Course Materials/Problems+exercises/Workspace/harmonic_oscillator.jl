@@ -13,8 +13,11 @@ T_ = 1 + im * t / τ
 integrate(expr, interval) = sympy.integrate(expr, interval)
 integrate(expr) = integrate(expr, (x, -oo, oo))
 
-inner_product(f, g) = integrate(f * conj(g))
-x_exp(f) = inner_product(x * f, f)
+inner_product(f, g) = integrate(conj(f) * g)
+
+x_exp(f) = inner_product(f, x * f)
+mntm(f) = -im * ħ * sympy.diff(f, x)
+p_exp(f) = inner_product(f, mntm(f))
 
 Ψ(x, t) =
     let T = T_
@@ -23,8 +26,6 @@ x_exp(f) = inner_product(x * f, f)
     end
 
 Ψ(x, t)(τ => τ_) |> simplify
-
-# integrate(Ψ(x, t))
 
 # %%
 
@@ -38,3 +39,9 @@ k = a * (b^2 / 4 - c)
 r = -b / 2
 
 (exp(k) * r * sqrt(pi / a) / (σ * abs(T) * sqrt(2 * PI)))(T => T_, τ => τ_) |> simplify
+
+# %%
+imag(
+    (1 - im * ħ * t / (2 * m * σ^2)) *
+    (-x^2 / (4 * σ^2) + im / ħ * (p₀ * x - p₀^2 * t / (2 * m))),
+) |> simplify
