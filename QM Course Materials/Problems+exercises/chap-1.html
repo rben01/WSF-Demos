@@ -2156,8 +2156,7 @@ where \(T:=1+\frac{i\hbar t}{2m\sigma^2}\).</p>
 </li>
 <li>
 <p>Find \(\Braket{x}\) by computing \(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\).
-(You should be able to predict the answer from part (a).)
-You may use the fact that \(\int_{\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx=\mu\sigma\sqrt{2\pi}\).</p>
+(You should be able to predict the answer from part (a).)</p>
 </li>
 <li>
 <p>Find \(\Braket{p}\) by computing \(\int_{-\infty}^\infty \Psi^*\left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\,dx\).
@@ -2215,11 +2214,22 @@ which is the normal distribution \(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\
 \[\begin{align*}
 \int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx
 \end{align*}\]
-Using the fact that
+This requires us to integrate something of the form
 \[\begin{align*}
-\int_{\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx=\mu\sigma\sqrt{2\pi}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx
 \end{align*}\]
-we have
+We&#8217;ll compute this using \(u\)-substitution. Letting \(u=\frac{x-\mu}{\sigma}\), we have \(x=\sigma u+\mu\) and \(dx=\sigma\,du\), and when \(x=\pm\infty\) then \(u\) does as well, so
+\[\begin{align*}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx&amp;=\int_{-\infty}^\infty (\sigma u+\mu)e^{-\frac{1}{2}u^2}\sigma\,du\\
+&amp;=\int_{-\infty}^\infty \sigma^2ue^{-\frac{1}{2}u^2}\,du + \int_{-\infty}^\infty \mu\sigma e^{-\frac{1}{2}u^2}\,du
+\end{align*}\]
+The first of these integrals is of an odd function over the real line, so it&#8217;s equal to 0.
+The second can be computed as follows:
+\[\begin{align*}
+\int_{-\infty}^\infty \mu\sigma e^{-\frac{1}{2}u^2}\,du&amp;=\mu\sigma\sqrt{2\pi}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}\,du\\
+&amp;=\mu\sigma\sqrt{2\pi}
+\end{align*}\]
+Substituting \(\mu\to\frac{p_0t}{m}\) and \(\sigma\to\sigma|T|\) from above, we have
 \[\begin{align*}
 \braket{x}&amp;=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
 &amp;=\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
@@ -2274,7 +2284,7 @@ So in fact this particle is moving in zero potential (which we could have gather
 <li>
 <p>The particle whose wavefunction this is was launched with initial momentum \(p_0\) and travels through a region of zero potential.
 Its probability distribution is a Gaussian that widens with time.
-Its observables obey the classical behavior: its expected position is the mean of the Gaussian and the expected velocity is the velocity of the Gaussian&#8217;s mean.</p>
+Its observables obey the classical behavior: its expected position is the mean of the Gaussian and the expected velocity is the (constant) velocity of the Gaussian&#8217;s mean.</p>
 </li>
 </ol>
 </div>
