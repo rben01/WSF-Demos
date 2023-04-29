@@ -608,8 +608,10 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 * {q-num} For the following wavefunction over the interval ++\([0,1]\)++ ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
 [{sublist-style}]
 . Show that ++\(\Psi(x,t)\)++ is normalized.
-. Calculate ++\(\Braket{x}\)++ and ++\(\Braket{p} \)++.
-. ADD A PART C?
+. Calculate ++\(\Braket{x}\)++.
+. Calculate ++\(\Braket{p} \)++.
+. Compare and contrast this to the classical system of a ball bouncing back and forth between two walls.
+Does Ehrenfest's theorem apply to this wavefunction?
 +
 ////
 . Calculate ++\(\frac{d \Braket{x}}{dt}\)++. For Ehrenfest's Theorem to hold, what must be true about the particle?
@@ -618,7 +620,7 @@ For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the ma
 
 +
 .Solution
-[%collapsible]
+[%collapsible%open]
 ====
 You will want to have on hand a big list of trigonometric identities.
 Here are the main ones we'll use:
@@ -717,9 +719,9 @@ So ++\(\phi\)++ was real along. We finally obtain
 ++\[\begin{align*}
 \Braket{x} = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
 \end{align*}\]++
-+
-On to ++\(\Braket{p}\)++!
-++\[\begin{align*}
+
+. On to ++\(\braket{p}\)++!
+ ++\[\begin{align*}
 \Braket{p}&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
 &=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
 \end{align*}\]++
@@ -761,8 +763,18 @@ and so, finally,
 \Braket{p}&=-\frac{4i\hbar}{3}\left(-2i\sin((\lambda_1-\lambda_2)t)\right)\\
 &=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}
 \end{align*}\]++
+. Regardless of the values of ++\(\lambda_1\)++ and ++\(\lambda_2\)++, the particle oscillates between the fixed points ++\(\frac{1}{2}\pm\frac{16}{9\pi}\)++.
+The values of the ++\(\lambda\)++s only affects the rate at which it oscillates.
+Similarly, the particle's momentum oscillates between ++\(\frac{8\hbar}{3}\)++, with the ++\(\lambda\)++s only affecting the rate at which its momentum oscillates.
+This particle functions something like a classical ball bouncing between two walls, with two key differences:
+.. The particle's speed as it moves between the two walls is sinusoidal, not constant.
+.. The particle's maximum momentum does not increase as its rate of oscillation increases.
 
 +
+This latter point may seem to violate Ehrenfest's theorem — how can a particle's velocity increase without its momentum increasing?
+However, Ehrenfest's theorem applies only to linear operators over the whole real line.
+Since the wavefunction in question was defined only on ++\([0,1]\)++, Ehrenfest's theorem does not hold.
+
 ////
 . We have
 ++\[\begin{align*}
@@ -788,7 +800,7 @@ p&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
 ++\[
 \Psi(x,t)=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]
 \]++
-where ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++.
+where ++\(p_0\in\mathbb R\)++, ++\(\sigma>0\)++, and ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++.
 +
 --
 [{sublist-style}]
@@ -838,20 +850,20 @@ which is the normal distribution ++\(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^
 \end{align*}\]++
 This requires us to integrate something of the form
 ++\[\begin{align*}
-\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx
 \end{align*}\]++
-We'll compute this using ++\(u\)++-substitution. Letting ++\(u=\frac{x-\mu}{\sigma}\)++, we have ++\(x=\sigma u+\mu\)++ and ++\(dx=\sigma\,du\)++, and when ++\(x=\pm\infty\)++ then ++\(u\)++ does as well, so
+We'll compute this using ++\(u\)++-substitution. Letting ++\(u=\frac{x-a}{b}\)++, we have ++\(x=b u+a\)++ and ++\(dx=b\,du\)++, and when ++\(x=\pm\infty\)++ then ++\(u\)++ does as well, so
 ++\[\begin{align*}
-\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}\,dx&=\int_{-\infty}^\infty (\sigma u+\mu)e^{-\frac{1}{2}u^2}\sigma\,du\\
-&=\int_{-\infty}^\infty \sigma^2ue^{-\frac{1}{2}u^2}\,du + \int_{-\infty}^\infty \mu\sigma e^{-\frac{1}{2}u^2}\,du
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx&=\int_{-\infty}^\infty (b u+a)e^{-\frac{1}{2}u^2}b\,du\\
+&=\int_{-\infty}^\infty b^2ue^{-\frac{1}{2}u^2}\,du + \int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du
 \end{align*}\]++
 The first of these integrals is of an odd function over the real line, so it's equal to 0.
 The second can be computed as follows:
 ++\[\begin{align*}
-\int_{-\infty}^\infty \mu\sigma e^{-\frac{1}{2}u^2}\,du&=\mu\sigma\sqrt{2\pi}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}\,du\\
-&=\mu\sigma\sqrt{2\pi}
+\int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du&=ab\sqrt{2\pi}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}\,du\\
+&=ab\sqrt{2\pi}
 \end{align*}\]++
-Substituting ++\(\mu\to\frac{p_0t}{m}\)++ and ++\(\sigma\to\sigma|T|\)++ from above, we have
+Substituting ++\(a\to\frac{p_0t}{m}\)++ and ++\(b\to\sigma|T|\)++ from above, we have
 ++\[\begin{align*}
 \braket{x}&=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
 &=\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
@@ -893,7 +905,7 @@ And when we add these up, recalling that ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)+
 &=p_0
 \end{align*}\]++
 . ++\(\frac{d\braket x}{dt} = \frac{p_0}{m}\)++.
-So this particle moves at a constant velocity, ++\(\frac{p_0}{m}\)++ (as would a classical particle launched with momentum ++\(p_0\)++).
+So this particle moves at a constant velocity, ++\(\frac{p_0}{m}\)++ (as would a classical particle launched with momentum ++\(p_0\)++ in the absence of external forces).
 . ++\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket{p}}{dt}=0\)++.
 So in fact this particle is moving in zero potential (which we could have gathered from the fact that it's not accelerating).
 . The particle whose wavefunction this is was launched with initial momentum ++\(p_0\)++ and travels through a region of zero potential.

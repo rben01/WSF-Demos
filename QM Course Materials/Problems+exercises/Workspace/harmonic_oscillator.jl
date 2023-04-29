@@ -3,7 +3,7 @@ using SymPy
 
 T = sympy.symbols("T")
 (x, t, τ, p₀, v) = sympy.symbols("x, t, τ, p₀, v"; real=true)
-(m, σ, ħ, λ) = sympy.symbols("m, σ, ħ, λ"; positive=true)
+(m, σ, ħ, λ, λ₁, λ₂) = sympy.symbols("m, σ, ħ, λ, λ₁, λ₂"; positive=true)
 
 h = ħ * 2 * PI
 T_ = 1 + im * t / τ
@@ -45,3 +45,10 @@ imag(
     (1 - im * ħ * t / (2 * m * σ^2)) *
     (-x^2 / (4 * σ^2) + im / ħ * (p₀ * x - p₀^2 * t / (2 * m))),
 ) |> simplify
+
+# %%
+f = exp(-im * λ₁ * t) * sin(PI * x) + exp(-im * λ₂ * t) * sin(2 * PI * x)
+conj(f) * sympy.diff(f, x) |> simplify
+expand(conj(f) * sympy.diff(f, x))
+# %%
+integrate(-im * ħ * conj(f) * sympy.diff(f, x), (x, 0, 1)) |> simplify
