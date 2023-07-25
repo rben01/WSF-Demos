@@ -329,7 +329,7 @@ function beginFlash() {
 		.attr("opacity", 0);
 
 	const middleIndex = (texts.size() - 1) / 2;
-	const tickIntervalMS = durationMS / (texts.size() - 1);
+	const tickIntervalMS = 1000;
 	texts.each(function (_, i) {
 		const text = d3.select(this);
 		const distance = Math.abs(i - middleIndex);
