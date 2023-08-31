@@ -1,0 +1,168 @@
+INFO: latexindent version 3.8.2, 2020-06-10, a script to indent .tex files
+      latexindent lives here: /nix/store/0npx5j0pzjrx8cmjvpfxc97c2821f1dy-perl5.32.0-latexindent-3.8.2/bin/
+      Thu Jan 14 16:37:13 2021
+      Filename: /Users/robert/Documents/CloudDocs/Documents/Jobs/World Science Festival WSF/WSF-Demos/RB/src/demos/Quantum Mechanics/New demos/particle_finite_height_box/Findings/__latexindent_temp.tex
+INFO: Processing switches:
+      -y|--yaml: YAML settings specified via command line
+      -c|--cruft: cruft directory
+INFO: Directory for backup files and /Users/robert/Documents/CloudDocs/Documents/Jobs/World Science Festival WSF/WSF-Demos/RB/src/demos/Mikita Calculators/Habitable Zone/LaTeX//indent.log: /Users/robert/Documents/CloudDocs/Documents/Jobs/World Science Festival WSF/WSF-Demos/RB/src/demos/Mikita Calculators/Habitable Zone/LaTeX/
+INFO: YAML settings read: defaultSettings.yaml
+      Reading defaultSettings.yaml from /nix/store/aymczf47s0z4sr703c7avzxi9g45yjr1-texlive-latexindent-3.8.2/scripts/latexindent/defaultSettings.yaml
+INFO: YAML settings read: indentconfig.yaml or .indentconfig.yaml
+      Reading path information from /Users/robert/.indentconfig.yaml
+      (Alternatively /Users/robert/indentconfig.yaml can be used)
+      ---
+      paths:
+        - /Users/robert/.config/texmf-local/tex/latexIndentSettings.yaml
+      
+INFO: YAML settings, reading from the following files:
+      Reading USER settings from /Users/robert/.config/texmf-local/tex/latexIndentSettings.yaml
+      ---
+      lookForAlignDelims:
+        tabular:
+          alignDoubleBackSlash: '1'
+          alignRowsWithoutMaxDelims: '1'
+          delims: '1'
+          justification: left
+          multiColumnGrouping: '1'
+          spacesAfterAmpersand: '1'
+          spacesBeforeAmpersand: '1'
+          spacesBeforeDoubleBackSlash: '1'
+      modifyLineBreaks:
+        commands:
+          CommandNameFinishesWithLineBreak: '0'
+          CommandStartsOnOwnLine: '0'
+        condenseMultipleBlankLinesInto: '2'
+        environments:
+          BeginStartsOnOwnLine: '3'
+          BodyStartsOnOwnLine: '1'
+          DBSFinishesWithLineBreak: '1'
+          EndFinishesWithLineBreak: '3'
+          EndStartsOnOwnLine: '1'
+        ifElseFi:
+          BodyStartsOnOwnLine: '0'
+          ElseFinishesWithLineBreak: '0'
+          ElseStartsOnOwnLine: '0'
+          FiFinishesWithLineBreak: '0'
+          FiStartsOnOwnLine: '0'
+          IfStartsOnOwnLine: '0'
+          OrFinishesWithLineBreak: '0'
+          OrStartsOnOwnLine: '0'
+          ifnum:
+            BodyStartsOnOwnLine: '0'
+            ElseFinishesWithLineBreak: '0'
+            ElseStartsOnOwnLine: '0'
+            FiFinishesWithLineBreak: '0'
+            FiStartsOnOwnLine: '0'
+            IfStartsOnOwnLine: '0'
+            OrFinishesWithLineBreak: '0'
+            OrStartsOnOwnLine: '0'
+        items:
+          ItemFinishesWithLineBreak: '0'
+          ItemStartsOnOwnLine: '0'
+        keyEqualsValuesBracesBrackets:
+          EqualsFinishesWithLineBreak: '0'
+          EqualsStartsOnOwnLine: '0'
+          KeyStartsOnOwnLine: '0'
+        mandatoryArguments:
+          LCuBStartsOnOwnLine: '0'
+          MandArgBodyStartsOnOwnLine: '0'
+          RCuBFinishesWithLineBreak: '0'
+          RCuBStartsOnOwnLine: '0'
+        namedGroupingBracesBrackets:
+          NameFinishesWithLineBreak: '0'
+          NameStartsOnOwnLine: '0'
+        oneSentencePerLine:
+          manipulateSentences: '1'
+          removeSentenceLineBreaks: '1'
+          sentenceIndent: "\t"
+          sentencesBeginWith:
+            A-Z: '1'
+            a-z: '0'
+            other: '0'
+          sentencesEndWith:
+            basicFullStop: '0'
+            betterFullStop: '1'
+            exclamationMark: '1'
+            other: \\\\
+            questionMark: '1'
+          sentencesFollow:
+            blankLine: '1'
+            commentOnPreviousLine: '1'
+            exclamationMark: '1'
+            fullStop: '1'
+            other: '0'
+            par: '1'
+            questionMark: '1'
+            rightBrace: '1'
+          textWrapSentences: '0'
+        optionalArguments:
+          LSqBStartsOnOwnLine: '0'
+          OptArgBodyStartsOnOwnLine: '0'
+          RSqBFinishesWithLineBreak: '0'
+          RSqBStartsOnOwnLine: '0'
+        preserveBlankLines: '1'
+        removeParagraphLineBreaks:
+          afterHeading: '0'
+          alignAtAmpersandTakesPriority: '1'
+          all: '0'
+          beforeTextWrap: '1'
+          environments:
+            quotation: '0'
+          filecontents: '0'
+          ifElseFi: '0'
+          items: '0'
+          mandatoryArguments: '0'
+          masterDocument: '0'
+          optionalArguments: '0'
+          paragraphsStopAt:
+            commands: '0'
+            comments: '0'
+            environments: '1'
+            filecontents: '0'
+            heading: '0'
+            ifElseFi: '0'
+            items: '0'
+            specialBeginEnd: '0'
+            verbatim: '1'
+          preamble: '0'
+          specialBeginEnd: '0'
+        specialBeginEnd:
+          SpecialBeginStartsOnOwnLine: '0'
+          SpecialBodyStartsOnOwnLine: '0'
+          SpecialEndFinishesWithLineBreak: '0'
+          SpecialEndStartsOnOwnLine: '0'
+        textWrapOptions:
+          afterHeading: '1'
+          alignAtAmpersandTakesPriority: '1'
+          all: '0'
+          columns: '0'
+          environments: '0'
+          filecontents: '0'
+          ifElseFi: '0'
+          items: '0'
+          mandatoryArguments: '0'
+          masterDocument: '0'
+          optionalArguments: '0'
+          perCodeBlockBasis: '0'
+          preamble: '1'
+          separator: ''
+          specialBeginEnd: '0'
+        verbatim:
+          VerbatimBeginStartsOnOwnLine: '0'
+          VerbatimEndFinishesWithLineBreak: '0'
+      removeTrailingWhitespace:
+        afterProcessing: '1'
+        beforeProcessing: '1'
+      
+INFO: YAML settings read: -y switch
+      Updating masterSettings with defaultIndent: 	
+INFO: Phase 1: searching for objects
+INFO: Phase 2: finding surrounding indentation
+INFO: Phase 3: indenting objects
+INFO: Phase 4: final indentation check
+INFO: Output routine:
+      Not outputting to file; see -w and -o switches for more options.
+      --------------
+INFO: Please direct all communication/issues to:
+      https://github.com/cmhughes/latexindent.pl
