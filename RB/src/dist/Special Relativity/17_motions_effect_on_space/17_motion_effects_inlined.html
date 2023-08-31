@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+<html>
+<head><title>17_motion_effects.html</title>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+<style type="text/css">body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+border-top: 2px solid #fff;
+border-right: 2px solid #777;
+border-bottom: 2px solid #777;
+border-left: 2px solid #fff;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button > span {
+display: inline-block;
+position: relative;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #9c9c9c, #fff);
+color: #111;
+border-top-color: #ddd;
+border-right-color: #888;
+border-bottom-color: #888;
+border-left-color: #ddd;
+/* text-shadow: -1px -1px #d4d4d4; */
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.play-button:active > span {
+bottom: 1px;
+transform: scale(0.995, 0.98);
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+input[type="range"]:not(:disabled)::-webkit-slider-thumb,
+input[type="range"]:not(:disabled)::-moz-slider-thumb,
+input[type="range"]:not(:disabled)::-ms-thumb {
+cursor: pointer !important;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+</style>
+</head>
+<body>
+<div>
+<span>
+<label>
+<span class="slider-label">Train speed:</span>
+<input id="input-train-speed" max="0.99" min="0" name="input-train-speed" oninput="updateTrainSpeed(this.value)" step=".001" type="range" value=".0"/>
+</label>
+</span>
+<div class="div-below-slider" id="div-speed-info">
+<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right" id="train-speed-text">0.0</span>𝑐
+</div>
+</div>
+<div>
+<button class="play-button" id="btn-run-animation" onclick="beginAnimation()">
+Start
+</button>
+<button class="play-button" disabled="" id="btn-reset-animation" onclick="stopAnimation()">
+Reset
+</button>
+</div>
+<svg class="viz-canvas" id="canvas" style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const AESTHETIC = {
+solidFill: "#4ff8",
+solidStroke: "#fff8",
+durationMSOfAnimationReset: 300,
+easingForAnimationReset: d3.easePoly.exponent(2.5),
+configure: function (d3Obj, config) {
+Object.entries(config).forEach(([key, value]) => {
+if (key === "attrs") {
+const attrs = value;
+Object.entries(attrs).forEach(([attr, val]) => {
+d3Obj.attr(attr, val);
+});
+} else if (key === "class") {
+d3Obj.classed(value, true);
+} else {
+throw new Error(`Unexpected key ${key}`);
+}
+});
+return d3Obj;
+},
+};
+</script>
+<script type="text/javascript">/* global AESTHETIC  */
+"use strict";
+const USER_INFO = { trainSpeed: 0.1 };
+const CONFIG = Object.freeze({
+xMarginProptn: 0,
+yMarginProptn: 0.15,
+trainWidthProptn: 0.4,
+trainHeightProptn: 0.6,
+nTiesVisible: 9,
+axDistTraveledAsFracOfTrainWidth: 1.2,
+maxTrainSpeed: 0.99,
+trainCar: {
+class: "train-car",
+attrs: {
+fill: AESTHETIC.solidFill,
+stroke: AESTHETIC.solidStroke,
+},
+},
+trainLightSource: {
+class: "train-light-source",
+attrs: {
+fill: "white",
+stroke: "white",
+},
+},
+trainPhoton: {
+class: "train-photon",
+attrs: {
+fill: "#fff8",
+stroke: "white",
+},
+},
+railroadTie: {
+class: "railroad-tie",
+attrs: {
+stroke: "white",
+"stroke-width": 6,
+},
+},
+railroadRail: {
+class: "railroad-rail",
+attrs: {
+stroke: "white",
+"stroke-width": 5,
+},
+},
+canvasText: {
+attrs: {
+fill: "white",
+"font-size": "30px",
+"font-family": "sans-serif",
+},
+},
+});
+// https://stackoverflow.com/a/196991
+function toTitleCase(str) {
+return str.replace(/\b\w+/g, function (txt) {
+return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+});
+}
+// eslint-disable-next-line no-unused-vars
+function getRailroadTieParams({
+trackInteriorAxMinX,
+trackInteriorAxMaxX,
+nTiesVisible,
+gamma,
+}) {
+if (gamma === undefined) {
+gamma = 1;
+}
+nTiesVisible *= gamma;
+const trackInteriorAxWidth = trackInteriorAxMaxX - trackInteriorAxMinX;
+const axDistBtwnTies = trackInteriorAxWidth / (nTiesVisible - 1);
+const middleTieAxX = (trackInteriorAxMinX + trackInteriorAxMaxX) / 2;
+const initialTieAxX =
+middleTieAxX - Math.floor((nTiesVisible + 10) / 2) * axDistBtwnTies;
+return {
+axDistBtwnTies,
+initialTieAxX,
+};
+}
+document.getElementById("input-train-speed").max = `${CONFIG.maxTrainSpeed}`;
+// If the program is bug-free, any reasonably scaled values of the axis bounds will work
+const AX_MIN_X = 5;
+const AX_MIN_Y = 3;
+const AX_MAX_X = 10;
+const AX_MAX_Y = 7;
+const AX_WIDTH = AX_MAX_X - AX_MIN_X;
+const AX_HEIGHT = AX_MAX_Y - AX_MIN_Y;
+const AX_MID_X = AX_MIN_X + (AX_MAX_X - AX_MIN_X) / 2;
+const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
+const AX_TRAIN_WIDTH = AX_WIDTH * CONFIG.trainWidthProptn;
+const AX_TRAIN_HEIGHT = AX_HEIGHT * CONFIG.trainHeightProptn;
+const TOTAL_DURATION_SEC = 3;
+const TOTAL_DURATION_MS = TOTAL_DURATION_SEC * 1000;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 550;
+const canvas = d3
+.select("#canvas")
+.attr("width", CANVAS_WIDTH)
+.attr("height", CANVAS_HEIGHT)
+.attr("background-color", "black");
+const subcanvases = canvas
+.selectAll()
+.data([
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT / 2,
+observerIsStandingOn: "train",
+},
+{
+originX: 0,
+originY: CANVAS_HEIGHT / 2,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT / 2,
+observerIsStandingOn: "ground",
+},
+])
+.enter()
+.append("g")
+.attr("transform", d => `translate(0, ${d.originY})`)
+.each(function (d) {
+AESTHETIC.configure(
+d3
+.select(this)
+.append("text")
+.text(toTitleCase(`Events as seen from ${d.observerIsStandingOn}`))
+.attr("y", d.height / 10),
+CONFIG.canvasText,
+);
+})
+.classed("subcanvas", true);
+// How far something traveling at fracOfC should travel
+function axDistTraveled({ fracOfC }) {
+return fracOfC * AX_TRAIN_WIDTH * CONFIG.axDistTraveledAsFracOfTrainWidth;
+}
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
+const xFrac = (x - AX_MIN_X) / AX_WIDTH;
+const yFrac = (y - AX_MIN_Y) / AX_HEIGHT;
+const xCanvasCoords =
+canvasInfo.width * CONFIG.xMarginProptn +
+xFrac * canvasInfo.width * (1 - 2 * CONFIG.xMarginProptn);
+const yCanvasCoords =
+canvasInfo.height * CONFIG.yMarginProptn +
+yFrac * canvasInfo.height * (1 - 2 * CONFIG.yMarginProptn);
+const dxCanvasCoords = (canvasInfo.width / AX_WIDTH) * dx;
+const dyCanvasCoords = (canvasInfo.height / AX_HEIGHT) * dy;
+return {
+x: xCanvasCoords,
+y: yCanvasCoords,
+dx: dxCanvasCoords,
+dy: dyCanvasCoords,
+};
+}
+function _getTrainAndLightSourcesData(canvasInfo, v) {
+const gamma =
+canvasInfo.observerIsStandingOn === "train" ? 1 : lorentzFactor({ fracOfC: v });
+const trainWidth = AX_TRAIN_WIDTH / gamma;
+const trainXMin = AX_MID_X - trainWidth / 2;
+const trainYMin = AX_MID_Y - AX_TRAIN_HEIGHT / 2;
+const trainXMax = trainXMin + trainWidth;
+const trainYMax = trainYMin + AX_TRAIN_HEIGHT;
+const trainMinCanvasCoords = transAxisToCanvas(canvasInfo, {
+x: trainXMin,
+y: trainYMin,
+});
+const trainMaxCanvasCoords = transAxisToCanvas(canvasInfo, {
+x: trainXMax,
+y: trainYMax,
+});
+const trainCanvasWidth = trainMaxCanvasCoords.x - trainMinCanvasCoords.x;
+const trainCanvasHeight = trainMaxCanvasCoords.y - trainMinCanvasCoords.y;
+const lsCenterX = AX_MID_X;
+const lsCenterY = AX_MID_Y;
+const lsRadiusX = 0.03 * AX_WIDTH;
+const lsRadiusY = 0.03 * AX_HEIGHT;
+const {
+x: lsCanvasCenterX,
+y: lsCanvasCenterY,
+dx: lsCanvasRadiusX,
+dy: lsCanvasRadiusY,
+} = transAxisToCanvas(canvasInfo, {
+x: lsCenterX,
+y: lsCenterY,
+dx: lsRadiusX,
+dy: lsRadiusY,
+});
+const lightSourceRadius = Math.min(lsCanvasRadiusX, lsCanvasRadiusY);
+const photonRadius = lightSourceRadius / 2;
+const circleTopLevelAttrs = {
+shape: "circle",
+x0: lsCanvasCenterX,
+originXAttr: "cx",
+};
+const _circleAttrAttrs = {
+cx: lsCanvasCenterX,
+cy: lsCanvasCenterY,
+};
+const lightSourceAttrs = {
+..._circleAttrAttrs,
+r: lightSourceRadius,
+...CONFIG.trainLightSource.attrs,
+};
+const photonAttrAttrs = {
+..._circleAttrAttrs,
+r: photonRadius,
+...CONFIG.trainPhoton.attrs,
+};
+return [
+{
+class: CONFIG.trainCar.class,
+canvas: canvasInfo,
+shape: "rect",
+x0: trainMinCanvasCoords.x,
+originXAttr: "x",
+attrs: {
+x: trainMinCanvasCoords.x,
+y: trainMinCanvasCoords.y,
+width: trainCanvasWidth,
+height: trainCanvasHeight,
+...CONFIG.trainCar.attrs,
+},
+},
+{
+class: CONFIG.trainLightSource.class,
+canvas: canvasInfo,
+...circleTopLevelAttrs,
+attrs: lightSourceAttrs,
+},
+{
+class: CONFIG.trainPhoton.class,
+canvas: canvasInfo,
+...circleTopLevelAttrs,
+attrs: photonAttrAttrs,
+direction: "left",
+},
+{
+class: CONFIG.trainPhoton.class,
+canvas: canvasInfo,
+...circleTopLevelAttrs,
+attrs: photonAttrAttrs,
+direction: "right",
+},
+];
+}
+function _getTracksData(canvasInfo, v) {
+const gamma =
+canvasInfo.observerIsStandingOn === "ground"
+? 1
+: lorentzFactor({ fracOfC: v });
+const lineExtendPastFrac = 0.05;
+const trackInteriorAxMinX = AX_MIN_X + lineExtendPastFrac * AX_WIDTH;
+const trackInteriorAxMaxX = AX_MAX_X - lineExtendPastFrac * AX_WIDTH;
+const trackInteriorAxMinY = AX_MIN_Y + lineExtendPastFrac * AX_HEIGHT;
+const trackInteriorAxMaxY = AX_MAX_Y - lineExtendPastFrac * AX_HEIGHT;
+const { axDistBtwnTies, initialTieAxX } = getRailroadTieParams({
+trackInteriorAxMinX,
+trackInteriorAxMaxX,
+nTiesVisible: CONFIG.nTiesVisible,
+gamma,
+});
+const nTiesTotal =
+canvasInfo.observerIsStandingOn === "ground"
+? CONFIG.nTiesVisible + 10
+: Math.ceil(
+CONFIG.nTiesVisible * lorentzFactor({ fracOfC: 0.991 }) +
+20 +
+axDistTraveled({ fracOfC: CONFIG.maxTrainSpeed }) /
+axDistBtwnTies,
+);
+console.log(nTiesTotal, v);
+// make ties
+const data = [];
+for (let i = 0; i < nTiesTotal; i++) {
+const tieAxX = initialTieAxX + i * axDistBtwnTies;
+const [p1, p2] = [
+{ x: tieAxX, y: AX_MIN_Y },
+{ x: tieAxX, y: AX_MAX_Y },
+].map(p => transAxisToCanvas(canvasInfo, p));
+data.push({
+class: CONFIG.railroadTie.class,
+canvas: canvasInfo,
+x0: p1.x,
+shape: "line",
+attrs: {
+x1: p1.x,
+y1: p1.y,
+x2: p2.x,
+y2: p2.y,
+...CONFIG.railroadTie.attrs,
+"stroke-width": CONFIG.railroadTie.attrs["stroke-width"] / gamma,
+},
+});
+}
+// make rails -- has to go after ties because in SVGs the z-order is determined by order created, so if rails are supposed to lie above the ties...
+[trackInteriorAxMinY, trackInteriorAxMaxY].forEach(railY => {
+const [p1, p2] = [
+{ x: AX_MIN_X, y: railY },
+{ x: AX_MAX_X, y: railY },
+].map(p => transAxisToCanvas(canvasInfo, p));
+data.push({
+class: CONFIG.railroadRail.class,
+canvas: canvasInfo,
+shape: "line",
+attrs: {
+x1: p1.x,
+y1: p1.y,
+x2: p2.x,
+y2: p2.y,
+...CONFIG.railroadRail.attrs,
+},
+});
+});
+return data;
+}
+function _addGraphicalObjs(subcanvases, dataFunc, { selector, classes } = {}) {
+return subcanvases
+.selectAll(selector)
+.data(dataFunc)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit => exit.remove(),
+)
+.each(function (d) {
+const d3Obj = d3.select(this).classed(d.class, true);
+d3Obj.classed("c", true);
+for (const c of classes) {
+d3Obj.classed(c, true);
+}
+Object.keys(d.attrs).forEach(key => {
+d3Obj.attr(key, d.attrs[key]);
+});
+return d3Obj;
+});
+}
+const sliders = {
+v: document.getElementById("input-train-speed"),
+};
+function addTracks(subcanvases, { selector } = {}) {
+const v = +sliders.v.value;
+return _addGraphicalObjs(subcanvases, canvasInfo => _getTracksData(canvasInfo, v), {
+selector,
+classes: ["tracks"],
+});
+}
+function addTrain(subcanvases, { selector } = {}) {
+const v = +sliders.v.value;
+return _addGraphicalObjs(
+subcanvases,
+canvasInfo =>
+_getTrainAndLightSourcesData(canvasInfo, v).filter(
+d => d.class === CONFIG.trainCar.class,
+),
+{ selector, classes: ["train"] },
+);
+}
+function addLights(subcanvases, { selector } = {}) {
+const v = +sliders.v.value;
+return _addGraphicalObjs(
+subcanvases,
+canvasInfo =>
+_getTrainAndLightSourcesData(canvasInfo, v).filter(
+d => d.class !== CONFIG.trainCar.class,
+),
+{ selector, classes: ["light"] },
+);
+}
+let tracks = addTracks(subcanvases);
+let trains = addTrain(subcanvases);
+let lights = addLights(subcanvases);
+const playbackInfo = {
+animationStartDate: null,
+animationTimer: null,
+animationIsPlaying: false,
+isInitialized: true,
+beginButton: document.getElementById("btn-run-animation"),
+resetButton: document.getElementById("btn-reset-animation"),
+};
+let timer = null;
+// eslint-disable-next-line no-unused-vars
+function updateTrainSpeed(speed) {
+const trainSpeedInputValue =
+typeof speed !== "undefined"
+? speed
+: document.getElementById("input-train-speed").value;
+try {
+const floatVal = parseFloat(trainSpeedInputValue);
+if (floatVal < 0 || floatVal > 1) {
+console.log(`Got invalid speed (outside [0,1]): ${floatVal}`);
+}
+const clamped = Math.max(0, Math.min(floatVal, 1));
+USER_INFO.trainSpeed = clamped;
+document.getElementById(
+"train-speed-text",
+).textContent = (+trainSpeedInputValue).toFixed(3);
+clearTimeout(timer);
+const timeElapsedMS = new Date() - playbackInfo.animationStartDate;
+const animationWasPlaying = playbackInfo.animationIsPlaying;
+timer = setTimeout(
+() => {
+subcanvases.each(function (canvasInfo) {
+const subcanvas = d3.select(this);
+const tracksData = _getTracksData(
+canvasInfo,
++trainSpeedInputValue,
+);
+const ties = tracksData.filter(d => d.class === "railroad-tie");
+subcanvas
+.selectAll(".railroad-tie")
+.data(ties)
+.join(
+enter =>
+enter
+.append("line")
+.attr("stroke", d => d.attrs.stroke)
+.classed("railroad-tie", true),
+update => update,
+exit => exit.remove(),
+)
+.transition()
+.duration(animationWasPlaying ? 200 : 0)
+.attr("x1", d => d.attrs.x1)
+.attr("x2", d => d.attrs.x2)
+.attr("y1", d => d.attrs.y1)
+.attr("y2", d => d.attrs.y2)
+.attr("stroke-width", d => d.attrs["stroke-width"]);
+const trainAndLightsData = _getTrainAndLightSourcesData(
+canvasInfo,
++trainSpeedInputValue,
+);
+const trainData = trainAndLightsData.filter(
+d => d.class === CONFIG.trainCar.class,
+);
+const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
+dx: axDistTraveled({ fracOfC: +clamped }),
+}).dx;
+subcanvas
+.selectAll(".train-car")
+.data(trainData)
+.join(
+enter =>
+enter
+.append("rect")
+.attr("fill", d => d.attrs.fill)
+.attr("stroke", d => d.attrs.stroke)
+.attr("y", d => d.attrs.y)
+.attr("height", d => d.attrs.height)
+.classed("train-car", true),
+update => update,
+exit => exit.remove(),
+)
+.transition()
+.duration(animationWasPlaying ? 200 : 0)
+.attr(
+"x",
+d =>
+d.x0 +
+(canvasInfo.observerIsStandingOn === "ground" &&
+!playbackInfo.isInitialized
+? distanceTrainTravels
+: 0),
+)
+.attr("width", d => d.attrs.width);
+const lightSourceData = trainAndLightsData.filter(
+d => d.class === "train-light-source",
+);
+subcanvas
+.selectAll(".train-light-source")
+.data(lightSourceData)
+.join(
+enter =>
+enter
+.append("circle")
+.attr("fill", d => d.attrs.fill)
+.attr("stroke", d => d.attrs.stroke)
+.attr("cy", d => d.attrs.cy)
+.attr("r", d => d.attrs.r)
+.classed("train-car", true),
+update => update,
+exit => exit.remove(),
+)
+.transition()
+.duration(animationWasPlaying ? 200 : 0)
+.attr(
+"cx",
+d =>
+d.x0 +
+(canvasInfo.observerIsStandingOn === "ground" &&
+!playbackInfo.isInitialized
+? distanceTrainTravels
+: 0),
+);
+});
+},
+animationWasPlaying ? TOTAL_DURATION_MS - timeElapsedMS : 0,
+);
+} catch (e) {
+console.log(trainSpeedInputValue);
+}
+}
+// eslint-disable-next-line no-unused-vars
+function stopAnimation() {
+playbackInfo.animationIsPlaying = false;
+clearTimeout(playbackInfo.animationTimer);
+playbackInfo.beginButton.disabled = false;
+playbackInfo.resetButton.disabled = true;
+const elapsedTimeMS =
+new Date().getTime() - playbackInfo.animationStartDate.getTime();
+const easing = AESTHETIC.easingForAnimationReset;
+const durationMS =
+AESTHETIC.durationMSOfAnimationReset *
+Math.min(1, 0.5 * (1 + elapsedTimeMS / TOTAL_DURATION_MS));
+setTimeout(() => {
+playbackInfo.isInitialized = true;
+}, durationMS + 10);
+tracks
+.filter(function (d) {
+const o = d3.select(this);
+return (
+o.classed("railroad-tie") && d.canvas.observerIsStandingOn === "train"
+);
+})
+.transition()
+.duration(durationMS)
+.ease(easing)
+.attr("x1", d => d.x0)
+.attr("x2", d => d.x0);
+for (const objs of [trains, lights]) {
+objs.each(function (d) {
+d3.select(this)
+.transition()
+.duration(durationMS)
+.ease(easing)
+.attr(d.originXAttr, d.x0);
+});
+}
+}
+</script>
+<script type="text/javascript">/* globals CONFIG USER_INFO TOTAL_DURATION_MS playbackInfo subcanvases transAxisToCanvas axDistTraveled */
+"use strict";
+// eslint-disable-next-line no-unused-vars
+function beginAnimation() {
+if (playbackInfo.animationIsPlaying) {
+return;
+}
+playbackInfo.isInitialized = false;
+playbackInfo.animationIsPlaying = true;
+playbackInfo.animationStartDate = new Date();
+playbackInfo.beginButton.disabled = true;
+playbackInfo.resetButton.disabled = false;
+playbackInfo.animationTimer = setTimeout(() => {
+playbackInfo.animationIsPlaying = false;
+playbackInfo.animationEndDate = new Date();
+}, TOTAL_DURATION_MS);
+subcanvases.each(function (canvasInfo) {
+const distanceTrainTravels = transAxisToCanvas(canvasInfo, {
+dx: axDistTraveled({ fracOfC: USER_INFO.trainSpeed }),
+}).dx;
+const distanceLightTravels = transAxisToCanvas(canvasInfo, {
+dx: axDistTraveled({ fracOfC: 1 }),
+}).dx;
+if (canvasInfo.observerIsStandingOn === "train") {
+d3.select(this)
+.selectAll(`.${CONFIG.railroadTie.class}`)
+.transition()
+.duration(0)
+.attr("x1", d => d.x0)
+.attr("x2", d => d.x0)
+.transition()
+.duration(TOTAL_DURATION_MS)
+.ease(d3.easeLinear)
+.attr("x1", d => d.x0 - distanceTrainTravels)
+.attr("x2", d => d.x0 - distanceTrainTravels);
+} else if (canvasInfo.observerIsStandingOn === "ground") {
+d3.select(this)
+.selectAll(
+`.${CONFIG.trainCar.class}, .${CONFIG.trainLightSource.class}`,
+)
+.each(function (d) {
+d3.select(this)
+.transition()
+.duration(0)
+.attr(d.originXAttr, d.x0)
+.transition()
+.duration(TOTAL_DURATION_MS)
+.ease(d3.easeLinear)
+.attr(d.originXAttr, d.x0 + distanceTrainTravels);
+});
+}
+d3.select(this)
+.selectAll(`.${CONFIG.trainPhoton.class}`)
+.each(function (d) {
+const xf =
+d.direction === "left"
+? d.x0 - distanceLightTravels
+: d.x0 + distanceLightTravels;
+d3.select(this)
+.transition()
+.duration(0)
+.attr("cx", d.x0)
+.transition()
+.duration(TOTAL_DURATION_MS)
+.ease(d3.easeLinear)
+.attr("cx", xf);
+});
+});
+}
+</script>
+<script type="text/javascript">
+updateTrainSpeed(undefined, { initial: true });
+</script>
+</body>
+</html>

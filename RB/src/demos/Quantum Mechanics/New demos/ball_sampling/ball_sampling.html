@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			:root {
+				--color-red: rgb(255, 24, 51);
+				--color-green: rgb(0, 214, 43);
+				--color-blue: rgb(41, 159, 255);
+				--color-yellow: rgb(244, 220, 0);
+			}
+			body {
+				user-select: none !important;
+			}
+			.slider-container > :nth-child(2n + 3) {
+				margin-top: 8px;
+			}
+			.grid-left-right {
+				grid-template-columns: auto 1fr;
+				column-gap: 50px;
+			}
+
+			#ball-plot-container {
+				text-align: center;
+				margin-top: 5px;
+			}
+
+			.vertical-container {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.radio-button-container.horizontal button {
+				flex: 1 1 auto;
+			}
+			#wavefunction-plot {
+				margin-top: 20px;
+			}
+			.axis-axis {
+				stroke: #ccc;
+				stroke-width: 2px;
+				fill-opacity: 0;
+			}
+			.axis-curve {
+				fill: none;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+			.axis-curve.curve-background {
+				stroke-width: 8px;
+				stroke: black;
+			}
+			.axis-curve.curve-foreground {
+				stroke-width: 4px;
+				stroke: white;
+				pointer-events: none;
+			}
+			.axis-curve.axis-curve.curve-grab-handle {
+				fill: none;
+				stroke-opacity: 0;
+				stroke-width: 20px;
+			}
+			.wavef-grab-v-line {
+				stroke: #ccc;
+				stroke-width: 3;
+				stroke-dasharray: 5 5;
+				pointer-events: none;
+			}
+			.temp-path {
+				opacity: 0;
+			}
+			/* .axis-curve.axis-curve.curve-grab-handle:hover {
+				cursor: grab;
+			} */
+			/* .axis-curve.axis-curve.curve-grab-handle:active {
+				cursor: grabbing !important;
+			} */
+			.wavef-grab-indicator {
+				fill: #5df;
+				stroke: #fff;
+				stroke-width: 4px;
+				pointer-events: none;
+			}
+			.axis-label {
+				fill: white;
+				stroke-opacity: 0;
+				font-size: 24px;
+			}
+			.axis-label.x-axis-label {
+				font-size: 16px;
+			}
+			.experiment-bucket {
+				fill: #5df;
+				stroke: black;
+			}
+			.experiment-selected-bucket {
+				fill: #aef;
+			}
+			.measurement-marker {
+				fill: greenyellow;
+			}
+			.experiment-measurement-counter {
+				fill: white;
+				font-size: 20px;
+			}
+			.ball-cap.bg {
+				stroke-width: 6px;
+				stroke: black;
+			}
+			.ball-cap.fg {
+				stroke-width: 3px;
+				stroke: white;
+			}
+			.ball {
+				stroke-width: 3px;
+				stroke: black;
+			}
+			.fill-red {
+				fill: var(--color-red);
+			}
+			.fill-yellow {
+				fill: var(--color-yellow);
+			}
+			.fill-green {
+				fill: var(--color-green);
+			}
+			.fill-blue {
+				fill: var(--color-blue);
+			}
+			.ball.rolled {
+				stroke: white;
+				stroke-width: 2px;
+			}
+			.ball-cap.hidden {
+				visibility: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div>
+				<div class="controls-container">
+					<div class="slider-container">
+						<span
+							>Number of red balls: <span id="text-num-red"></span
+						></span>
+						<span
+							><label
+								><input
+									type="range"
+									name="num-reds"
+									id="slider-num-reds" /></label
+						></span>
+						<span
+							>Number of yellow balls: <span id="text-num-yellow"></span
+						></span>
+						<span
+							><label
+								><input
+									type="range"
+									name="num-yellows"
+									id="slider-num-yellows" /></label
+						></span>
+						<span
+							>Number of green balls: <span id="text-num-green"></span
+						></span>
+						<span
+							><label
+								><input
+									type="range"
+									name="num-greens"
+									id="slider-num-greens" /></label
+						></span>
+						<span
+							>Number of blue balls: <span id="text-num-blue"></span
+						></span>
+						<span
+							><label
+								><input
+									type="range"
+									name="num-blues"
+									id="slider-num-blues" /></label
+						></span>
+						<span
+							>Measurement speed: <span id="experiment-speed"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="experiment-speed"
+									id="experiment-speed-slider"
+							/></label>
+						</span>
+						<span
+							>Number of measurements:
+							<span id="num-measurements-text"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="num-measurements"
+									id="number-of-measurements-slider"
+							/></label>
+						</span>
+						<span></span>
+						<span
+							id="measurement-buttons"
+							class="radio-button-container horizontal"
+						>
+							<button
+								class="button"
+								id="btn-run"
+								onclick="runExperiment()"
+							>
+								Run experiment</button
+							><button
+								class="button"
+								id="btn-stop"
+								onclick="stopExperiment()"
+								data-button-checked
+							>
+								Pause experiment</button
+							><button
+								class="button"
+								id="btn-clear-experiment"
+								onclick="clearExperiment()"
+								data-button-checked
+							>
+								Reset
+							</button>
+						</span>
+					</div>
+				</div>
+				<div id="ball-plot-container"><svg id="balls-plot"></svg></div>
+			</div>
+			<svg id="experiment-plot" class="plot"></svg>
+		</div>
+		<div></div>
+		<script src="../../../utils.js"></script>
+		<script src="./ball_sampling.js"></script>
+	</body>
+</html>

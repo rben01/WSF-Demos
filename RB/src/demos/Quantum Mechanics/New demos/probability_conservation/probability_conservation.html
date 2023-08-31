@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+        integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+        crossorigin="anonymous">
+        </script>
+    <script src=https://cdnjs.cloudflare.com/ajax/libs/mathjs/3.3.0/math.min.js></script>
+    <link rel="stylesheet" type="text/css" href="../../qm_demo.css" />
+</head>
+
+<body>
+    <div class="controls-container">
+        <div class="radio-button-container">
+            <span class="radio-label">f: </span>
+            <button class="button" id="w1" data-button-checked="">Wavefunction 1</button>
+            <button class="button" id="w2">Wavefunction 2</button>
+            <button class="button" id="w3">Wavefunction 3</button>
+        </div>
+        <br>
+        <span class="param-slider-container">
+            <span class="slider-label" style="white-space: nowrap;">Time: </span>
+            <input id="time" oninput="sett(this.value)" class="param-slider" type="range" min="0" max="0.1" step="0.02"
+                style="white-space: nowrap; width: 82%;">
+        </span>
+    </div>
+
+    <div class="plot-container">
+        <svg xmlns="http://www.w3.org/2000/svg" id="svg" style="margin: auto; display: block;" width=1200
+            height=600></svg>
+    </div>
+
+    <script src="../../../utils.js"></script>
+    <script src="probability_conservation.js"></script>
+</body>
+
+</html>

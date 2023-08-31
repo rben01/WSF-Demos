@@ -1,0 +1,19 @@
+= Quantum Mechanics Problems and Exercises
+include::shared_attributes.adoc[]
+:sectnumlevels: 2
+
+[.lead]
+https://dts333.github.io/WSF-Demos/QM%20Course%20Materials/Problems+exercises/qm_problems.html[Link to this very page]
+
+[.lead]
+https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html[Link to QM demos]
+
+include::./chap-1.adoc[leveloffset=+1]
+
+include::./chap-2.adoc[leveloffset=+1]
+
+include::./chap-3.adoc[leveloffset=+1]
+
+include::./chap-4.adoc[leveloffset=+1]
+
+include::./chap-5.adoc[leveloffset=+1]

@@ -1,0 +1,75 @@
+{
+	// Place your WSF-Demos workspace snippets here. Each snippet is defined under a snippet name and has a scope, prefix, body and
+	// description. Add comma separated ids of the languages where the snippet is applicable in the scope field. If scope
+	// is left empty or omitted, the snippet gets applied to all languages. The prefix is what is
+	// used to trigger the snippet and the body will be expanded and inserted. Possible variables are:
+	// $1, $2 for tab stops, $0 for the final cursor position, and ${1:label}, ${2:another} for placeholders.
+	// Placeholders with the same ids are connected.
+	// Example:
+	// "Print to console": {
+	// 	"scope": "javascript,typescript",
+	// 	"prefix": "log",
+	// 	"body": [
+	// 		"console.log('$1');",
+	// 		"$2"
+	// 	],
+	// 	"description": "Log output to console"
+	// }
+	"Solution": {
+		"prefix": "sol",
+		"body": [
+			"+",
+			".Solution",
+			"[%collapsible]",
+			"====",
+			"$0",
+			"===="
+		],
+		"description": "Insert a solution block",
+		"scope": "asciidoc"
+	},
+	"Math Align": {
+		"prefix": "\\align",
+		"body": [
+			"++\\[\\begin{align*}\n$0\n\\end{align*}\\]++"
+		],
+		"description": "Block math with align*",
+		"scope": "asciidoc"
+	},
+	"frac": {
+		"prefix": "\\frac",
+		"body": "\\frac{$1}{$2}$0",
+		"description": "LaTeX frac",
+		"scope": "asciidoc"
+	},
+	"partial derivative": {
+		"prefix": "\\pd",
+		"body": "\\frac{\\partial $1}{\\partial ${2:x}}",
+		"description": "Insert a partial derivative",
+		"scope": "asciidoc"
+	},
+	"left-right parentheses": {
+		"prefix": "\\lrp",
+		"body": "\\left($0\\right)",
+		"description": "Insert a pair of LaTeX \\left(\\right) parentheses",
+		"scope": "asciidoc"
+	},
+	"left-right angle": {
+		"prefix": "\\lra",
+		"body": "\\left\\langle$0\\right\\rangle",
+		"description": "Insert a pair of LaTeX \\left\\langle\\right\\rangle angle brackets",
+		"scope": "asciidoc"
+	},
+	"inner product": {
+		"prefix": "\\ip",
+		"body": "\\langle $1|$2\\rangle$0",
+		"description": "Insert an inner product",
+		"scope": "asciidoc"
+	},
+	"begin/end environment": {
+		"prefix": "\\begin",
+		"body": "\\begin{${1:env}}$2\\end{${1:env}}$0",
+		"description": "Insert an environment",
+		"scope": "asciidoc"
+	}
+}

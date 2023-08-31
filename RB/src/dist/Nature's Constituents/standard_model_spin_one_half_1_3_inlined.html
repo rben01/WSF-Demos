@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+</head>
+<body style="background-color: white; color: black;"><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<div>
+<span><label>
+<span class="slider-label">
+Rotation angle:
+</span>
+<input id="input-rotation-angle" max="64" min="0" name="input-rotation-angle" oninput="updateRotation(this.value)" step="1" type="range" value="0"/> </label></span>
+<br/>
+<span><button class="play-button" id="btn-set-angle-0" onclick="updateRotation(0, {animated:true})">
+0°</button><button class="play-button" id="btn-set-angle-0" onclick="updateRotation(32, {animated:true})">
+360°</button><button class="play-button" id="btn-set-angle-0" onclick="updateRotation(64, {animated:true})">
+720°
+</button></span>
+<div id="div-img" style="margin-top: 1em;">
+<img id="img-0" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_0.png"/>
+<img id="img-1" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_1.png"/>
+<img id="img-2" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_2.png"/>
+<img id="img-3" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_3.png"/>
+<img id="img-4" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_4.png"/>
+<img id="img-5" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_5.png"/>
+<img id="img-6" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_6.png"/>
+<img id="img-7" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_7.png"/>
+<img id="img-8" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_8.png"/>
+<img id="img-9" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_9.png"/>
+<img id="img-10" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_10.png"/>
+<img id="img-11" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_11.png"/>
+<img id="img-12" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_12.png"/>
+<img id="img-13" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_13.png"/>
+<img id="img-14" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_14.png"/>
+<img id="img-15" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_15.png"/>
+<img id="img-16" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_16.png"/>
+<img id="img-17" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_17.png"/>
+<img id="img-18" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_18.png"/>
+<img id="img-19" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_19.png"/>
+<img id="img-20" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_20.png"/>
+<img id="img-21" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_21.png"/>
+<img id="img-22" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_22.png"/>
+<img id="img-23" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_23.png"/>
+<img id="img-24" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_24.png"/>
+<img id="img-25" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_25.png"/>
+<img id="img-26" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_26.png"/>
+<img id="img-27" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_27.png"/>
+<img id="img-28" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_28.png"/>
+<img id="img-29" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_29.png"/>
+<img id="img-30" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_30.png"/>
+<img id="img-31" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_31.png"/>
+<img id="img-32" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_32.png"/>
+<img id="img-33" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_33.png"/>
+<img id="img-34" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_34.png"/>
+<img id="img-35" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_35.png"/>
+<img id="img-36" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_36.png"/>
+<img id="img-37" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_37.png"/>
+<img id="img-38" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_38.png"/>
+<img id="img-39" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_39.png"/>
+<img id="img-40" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_40.png"/>
+<img id="img-41" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_41.png"/>
+<img id="img-42" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_42.png"/>
+<img id="img-43" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_43.png"/>
+<img id="img-44" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_44.png"/>
+<img id="img-45" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_45.png"/>
+<img id="img-46" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_46.png"/>
+<img id="img-47" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_47.png"/>
+<img id="img-48" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_48.png"/>
+<img id="img-49" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_49.png"/>
+<img id="img-50" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_50.png"/>
+<img id="img-51" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_51.png"/>
+<img id="img-52" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_52.png"/>
+<img id="img-53" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_53.png"/>
+<img id="img-54" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_54.png"/>
+<img id="img-55" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_55.png"/>
+<img id="img-56" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_56.png"/>
+<img id="img-57" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_57.png"/>
+<img id="img-58" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_58.png"/>
+<img id="img-59" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_59.png"/>
+<img id="img-60" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_60.png"/>
+<img id="img-61" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_61.png"/>
+<img id="img-62" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_62.png"/>
+<img id="img-63" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_63.png"/>
+<img id="img-64" src="https://worldscienceuniversity2.s3.us-east-2.amazonaws.com/Spin+One-Half+Images/spin_0.png"/>
+</div>
+</div>
+<script type="text/javascript">const N_IMAGES = 64;
+const FRAME_DURATION = 50;
+let currImgNum = 0;
+const slider = document.getElementById("input-rotation-angle");
+function getImageID(i) {
+return `img-${i}`;
+}
+for (let i = 0; i <= N_IMAGES; ++i) {
+const img = document.getElementById(getImageID(i));
+img.classList = "spin-img";
+img.style.display = i === currImgNum ? "block" : "none";
+}
+let timer;
+// eslint-disable-next-line no-unused-vars
+function updateRotation(imgNum, { animated = false } = {}) {
+clearInterval(timer);
+const imgs = document.getElementsByClassName("spin-img");
+if (animated) {
+for (let i = 0; i < imgs.length; ++i) {
+const img = imgs.namedItem(getImageID(i));
+img.style.display = +i === +currImgNum ? "block" : "none";
+}
+let i = +currImgNum;
+if (imgNum === currImgNum) {
+return;
+} else if (imgNum > currImgNum) {
+timer = setInterval(() => {
+imgs[i].style.display = "none";
+imgs[i + 1].style.display = "block";
+i += 1;
+if (i >= imgNum) {
+clearInterval(timer);
+}
+currImgNum = i;
+slider.value = currImgNum;
+}, FRAME_DURATION);
+} else {
+timer = setInterval(() => {
+imgs[i].style.display = "none";
+imgs[i - 1].style.display = "block";
+i -= 1;
+if (i <= imgNum) {
+clearInterval(timer);
+}
+currImgNum = i;
+slider.value = currImgNum;
+}, FRAME_DURATION);
+}
+} else {
+for (let i = 0; i < imgs.length; ++i) {
+const img = imgs.namedItem(getImageID(i));
+img.style.display = +i === +imgNum ? "block" : "none";
+}
+currImgNum = imgNum;
+}
+}
+</script></body>
+</html>

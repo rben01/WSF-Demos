@@ -1,0 +1,16 @@
+{
+	"compileOnSave": true,
+	"compilerOptions": {
+		"allowJs": true,
+		"target": "ESNext",
+		"module": "ESNext",
+		"moduleResolution": "Node"
+	},
+	"outDir": "./ts-built",
+	"exclude": [
+		"./ts-build/**",
+		"./dist-dev/**",
+		"./dist/**",
+		"./webpack.config.js"
+	]
+}

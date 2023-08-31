@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+<head><title>Time Travel Graph</title>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<link href="https://www.w3schools.com/w3css/4/w3.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet"/>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet"/>
+<style type="text/css">body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+border-top: 2px solid #fff;
+border-right: 2px solid #777;
+border-bottom: 2px solid #777;
+border-left: 2px solid #fff;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button > span {
+display: inline-block;
+position: relative;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #9c9c9c, #fff);
+color: #111;
+border-top-color: #ddd;
+border-right-color: #888;
+border-bottom-color: #888;
+border-left-color: #ddd;
+/* text-shadow: -1px -1px #d4d4d4; */
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.play-button:active > span {
+bottom: 1px;
+transform: scale(0.995, 0.98);
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+input[type="range"]:not(:disabled)::-webkit-slider-thumb,
+input[type="range"]:not(:disabled)::-moz-slider-thumb,
+input[type="range"]:not(:disabled)::-ms-thumb {
+cursor: pointer !important;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+</style>
+</head><body>
+<div class="w3-content w3-container" id="formContainer">
+<form>
+<label for="duration" style="font-size: 20px;">Trip Duration (Earth)</label>
+<input id="duration" max="10" min="0" name="duration" oninput="t = duration.value;
+if(t &gt; 1){
+yearID.innerHTML='years'
+}
+else{
+yearID.innerHTML='year'
+}
+render();" step="0.01" style="width: 70%;" type="range" value="5"/>
+<br/>
+<label for="speed" style="font-size: 20px;">Velocity of the Rocket</label>
+<input id="speed" max="0.999" min="0" name="speed" oninput="v = speed.value;
+speedID.innerHTML = speed.value;
+render();" step="0.001" style="width: 70%;" type="range" value="0"/>
+<br/>
+<text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num" id="speedID">0.001</span><i>c</i></text>
+<br/><br/>
+</form>
+</div>
+<div style="width: 950px;">
+<div id="graph"></div>
+</div>
+<div style="width: 950px;">
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px; margin-right: 20px;">
+<br/>
+<text style="font-size: 21px;"> Time Elapsed on Rocket = <span class="highlighted-text sci-num" id="rtime">1</span> years </text>
+<br/><br/>
+</div>
+<text></text>
+<div style="text-align: center; border-radius: 10px; border-style: solid; padding-left: 10px; padding-right: 10px; display: inline-block; width: 440px;">
+<br/>
+<text style="font-size: 21px;"> Time Elapsed on Earth = <span class="highlighted-text sci-num" id="etime">1</span>
+<span id="yearID">year</span> </text>
+<br/><br/>
+</div>
+</div>
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+<script type="text/javascript">
+var etime = document.getElementById('etime');
+var rtime = document.getElementById('rtime');
+var t = 5;
+var v = 0;
+var yp = 0;
+var toe = {
+x: [0, 1],
+y: [t, t],
+line: { color: 'grey' }
+}
+var tor = {
+x: [],
+y: [],
+line: { color: 'lightgrey' }
+}
+var trace1 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var trace2 = {
+x: [],
+y: [],
+line: { dash: "dash", color: 'yellow' }
+};
+var layout = {
+title: {
+text: 'Time on Rocket (years)',
+font: { color: 'white' },
+x: 0,
+},
+xaxis: {
+range: [0, 1],
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [0.2, 0.4, 0.6, 0.8, 1]
+},
+yaxis: {
+range: [0, 10],
+autorange: false,
+linecolor: 'white',
+tickcolor: 'black',
+tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+tickvals: [2, 4, 6, 8, 10]
+},
+paper_bgcolor: 'black',
+plot_bgcolor: 'black',
+showlegend: false,
+annotations: [
+{
+xref: 'paper',
+yref: 'paper',
+x: 1.04,
+y: -0.05,
+xanchor: 'right',
+yanchor: 'bottom',
+text: '<sup>v</sup>/<sub>c</sub>',
+font: { color: 'white', size: 18 },
+color: 'white',
+showarrow: false,
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: -0.0,
+y: -0.1,
+text: '0',
+font: { color: 'white', size: 18 },
+showarrow: false
+},
+{
+xref: 'paper',
+yref: 'paper',
+x: 0.9,
+y: t,
+text: 'Time on Earth',
+font: { color: 'white', size: 18 },
+showarrow: false
+}
+]
+}
+function render() {
+yp = t * Math.sqrt(1 - v ** 2);
+etime.innerHTML = t;
+rtime.innerHTML = Math.floor(yp * 100) / 100;
+layout.annotations[2].y = t;
+toe.y = [t, t];
+tor.x = [];
+tor.y = [];
+for (var i = 0; i < 1; i += 0.001) {
+tor.x.push(i);
+tor.y.push(t * Math.sqrt(1 - i ** 2));
+}
+trace1.x = [0, v];
+trace1.y = [yp, yp];
+trace2.x = [v, v];
+trace2.y = [0, yp];
+Plotly.newPlot('graph', [toe, tor, trace1, trace2], layout);
+}
+render();
+</script>
+</body></html>

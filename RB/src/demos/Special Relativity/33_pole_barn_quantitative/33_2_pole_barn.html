@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+	</head>
+
+	<body>
+		<div>
+			<span>
+				<label>
+					<span class="slider-label">Relative speed:</span>
+					<input
+						type="range"
+						id="input-relative-speed"
+						name="input-relative-speed"
+						min="0.0"
+						max="0.95"
+						step=".01"
+						value="0"
+						oninput="updateRelativeSpeed(this.value)"
+					/>
+				</label>
+			</span>
+			<div id="div-speed-info" class="div-below-slider">
+				<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
+				><span
+					id="relative-speed-text"
+					class="sci-num highlighted-text eqn-right"
+					>0.1</span
+				>𝑐
+			</div>
+		</div>
+		<div>
+			<p id="barn-pole-rest-length">
+				Rest length of barn: <span class="sci-num">6.00</span>m<br />
+				Rest length of pole: <span class="sci-num">9.00</span>m
+			</p>
+		</div>
+		<div>
+			<span>
+				<span>Barn's Perspective</span>
+				<button
+					id="btn-run-animation-barn-perspective"
+					onclick="beginAnimation(bothPlaybackInfo.barnStationary)"
+					class="play-button"
+				>
+					Start
+				</button>
+				<button
+					id="btn-reset-animation-barn-perspective"
+					onclick="stopAnimation(bothPlaybackInfo.barnStationary)"
+					class="play-button"
+					disabled
+				>
+					Reset
+				</button>
+			</span>
+			<br />
+			<span
+				>Contracted length of pole:
+				<span id="text-contracted-length-pole" class="sci-num highlighted-text"
+					>5</span
+				>m
+			</span>
+		</div>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			id="canvas-barn-perspective"
+			class="viz-canvas"
+			style="margin: 0 auto; display: block;"
+		></svg>
+		<br />
+		<div>
+			<span>
+				<span>Pole's Perspective</span>
+				<button
+					id="btn-run-animation-pole-perspective"
+					onclick="beginAnimation(bothPlaybackInfo.poleStationary)"
+					class="play-button"
+				>
+					Start
+				</button>
+				<button
+					id="btn-reset-animation-pole-perspective"
+					onclick="stopAnimation(bothPlaybackInfo.poleStationary)"
+					class="play-button"
+					disabled
+				>
+					Reset
+				</button>
+			</span>
+			<br />
+			<span
+				>Contracted length of barn:
+				<span id="text-contracted-length-barn" class="sci-num highlighted-text"
+					>5</span
+				>m
+			</span>
+		</div>
+		<svg
+			xmlns="http://www.w3.org/2000/svg"
+			id="canvas-pole-perspective"
+			class="viz-canvas"
+			style="margin: 0 auto; display: block;"
+		></svg>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script type="text/javascript" src="./33_2_pole_barn.js"></script>
+	</body>
+</html>

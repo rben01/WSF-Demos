@@ -1,0 +1,110 @@
+{
+	// See https://go.microsoft.com/fwlink/?LinkId=733558
+	// for the documentation about the tasks.json format
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "Inline QM",
+			"command": "poetry",
+			"args": [
+				"run",
+				"python",
+				"RB/src/inline_html.py",
+				"RB/src/demos/Quantum Mechanics/New Demos"
+			],
+			"detail": "Inlines the QM demos. Generally should not be run directly (use \"build QM demos\")",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "Create demo listing",
+			"command": "poetry",
+			"args": [
+				"run",
+				"python",
+				"RB/src/create_demo_listing_html.py",
+				"RB/src/dist/Quantum Mechanics/"
+			],
+			"detail": "Creates the QM demos listing. Generally should not be run directly (use \"build QM demos\")",
+			"group": "build",
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			}
+		},
+		{
+			"label": "Build QM demos",
+			"dependsOrder": "sequence",
+			"dependsOn": [
+				"Inline QM",
+				"Create demo listing"
+			],
+			"detail": "Builds the set of quantum mechanics demos. Prefer this build task.",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"presentation": {
+				"echo": true,
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared",
+				"showReuseMessage": true,
+				"clear": false
+			},
+			"problemMatcher": []
+		},
+		{
+			"label": "Start node.js live-server",
+			"detail": "Starts the node.js live-server package",
+			"group": "build",
+			"command": "live-server",
+			"args": [
+				{
+					"value": "--ignore=**/.vscode/**",
+					"quoting": "strong"
+				},
+				"--wait=1000"
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		},
+		{
+			"label": "Start node.js dead-server",
+			"detail": "Starts the node.js live-server package without auto-reload",
+			"group": "build",
+			"command": "live-server",
+			"args": [
+				{
+					"value": "--ignore=**",
+					"quoting": "strong"
+				},
+			],
+			"presentation": {
+				"echo": true,
+				"reveal": "silent",
+				"focus": false,
+				"panel": "dedicated",
+				"showReuseMessage": false,
+				"clear": false
+			}
+		}
+	]
+}

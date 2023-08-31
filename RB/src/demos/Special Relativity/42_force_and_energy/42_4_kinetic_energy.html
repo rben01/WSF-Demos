@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="./42_4_kinetic_energy.css" />
+		<style>
+			body {
+				width: 700px;
+			}
+			.slider-label-custom {
+				min-width: 7.6em;
+			}
+			td {
+				height: 1.6em;
+				padding-left: 0;
+				margin-left: 0;
+			}
+			tr {
+				padding-left: 0;
+				margin-left: 0;
+			}
+			table {
+				padding-left: 0;
+				margin-left: -1px;
+			}
+			.top-sliders-sect {
+				padding-left: 50px;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="top-sliders-sect">
+			<div class="slider-container">
+				<label>
+					<span class="slider-label slider-label-custom">
+						Rest mass (𝑚<span class="subscript">0</span
+						><span class="operator">)</span>:
+					</span>
+					<input
+						type="range"
+						id="input-m"
+						name="input-m"
+						min="1"
+						max="2"
+						step=".001"
+						value="1"
+						oninput="update({m:this.value})"
+					/> </label
+				><br /><span
+					>𝑚<span class="subscript">0</span> =
+					<span id="text-m" class="sci-num highlighted-text">0.000</span
+					>kg</span
+				>
+			</div>
+			<div class="slider-container">
+				<label>
+					<span class="slider-label slider-label-custom">
+						Velocity (𝑣):
+					</span>
+					<input
+						type="range"
+						id="input-v"
+						name="input-v"
+						min="0.0"
+						max="0.98"
+						step=".001"
+						value="0"
+						oninput="update({v:this.value})"
+					/> </label
+				><br />
+				<span
+					>𝑣 =
+					<span id="text-v" class="sci-num highlighted-text">0.000</span
+					>𝑐</span
+				>
+			</div>
+			<table style="margin-top: 15px;">
+				<tr>
+					<td class="eqn-left">KE<span class="subscript">Einstein</span></td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="text-ke-sr" class="secondary-text sci-num"
+							>0.000<span class="operator">·</span>10<span
+								class="superscript"
+								>17</span
+							></span
+						>J
+					</td>
+				</tr>
+				<tr>
+					<td class="">KE<span class="subscript">Newton</span></td>
+					<td class="eqn-middle">=</td>
+					<td class="eqn-right">
+						<span id="text-ke-newton" class="sci-num quaternary-text"
+							>0.000<span class="operator">·</span>10<span
+								class="superscript"
+								>17</span
+							></span
+						>J
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div style="text-align: center; margin-top: 20px;">
+			<div style="display: inline-block; vertical-align: bottom;">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					id="viz"
+					class="viz-canvas"
+					style="margin: auto;"
+				></svg>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script type="text/javascript" src="./42_4_kinetic_energy.js"></script>
+	</body>
+</html>

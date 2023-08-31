@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			.controls-container {
+				position: absolute;
+				background-color: black;
+			}
+			#play-button-container .button {
+				flex-grow: 1;
+			}
+			.axis-axis .axis-tick {
+				stroke-width: 3px;
+				stroke: #bbb;
+			}
+			.axis-x-label {
+				text-anchor: middle;
+				dominant-baseline: hanging;
+			}
+			.axis-y-label {
+				text-anchor: end;
+				dominant-baseline: middle;
+			}
+			.curve {
+				fill-opacity: 0;
+				stroke-linejoin: round;
+				stroke-linecap: round;
+			}
+			.curve-background {
+				stroke: black;
+				stroke-width: 8px;
+			}
+			.curve-foreground {
+				stroke: white;
+				stroke-width: 4px;
+			}
+			.vertical-dot {
+				fill: #2cf;
+				stroke: #fff;
+				stroke-width: 3;
+			}
+			.vertical-dot-background {
+				fill: black;
+				stroke-opacity: 0;
+			}
+			.dot-guide {
+				stroke: #bbb;
+				stroke-width: 2;
+				stroke-dasharray: 11 7;
+			}
+			#btn-toggle-dot {
+				width: 100%;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="controls-container hides-on-mouse-away">
+			<div class="controls">
+				<span>Type of wave</span>
+				<span
+					id="shape-button-container"
+					class="radio-button-container horizontal"
+					><button class="button" shape="sine">Sine wave</button
+					><button class="button" shape="square">Square wave</button
+					><button class="button" shape="triangle">
+						Triangular wave
+					</button></span
+				>
+				<span>Speed</span>
+				<span><input type="range" id="slider-speed" /></span>
+				<span>Vertical intersection</span>
+				<span><input type="range" id="slider-vertical-dot-x" /></span>
+				<span></span>
+				<span
+					id="play-button-container"
+					class="radio-button-container horizontal"
+					><button id="btn-play" class="button" onclick="play();">Play</button
+					><button
+						id="btn-pause"
+						class="button"
+						onclick="pause();"
+						data-button-checked
+					>
+						Pause</button
+					><button
+						id="btn-reset"
+						class="button"
+						onclick="reset();"
+						data-button-checked
+					>
+						Reset
+					</button></span
+				>
+			</div>
+		</div>
+		<svg id="plot"></svg>
+		<script src="../../../utils.js"></script>
+		<script src="./traveling_waves.js"></script>
+	</body>
+</html>

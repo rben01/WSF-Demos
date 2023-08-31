@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="./spacetime_diagrams_css.css" />
+		<style>
+			body {
+				width: 575px;
+				line-height: 1em;
+			}
+			.slider-label-custom {
+				text-align: left;
+				min-width: 10.5em;
+			}
+			.coord-container {
+				display: inline-block;
+				width: 150px;
+				margin: 0px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div class="slider-container">
+				<label
+					><span class="slider-label slider-label-custom"
+						>Time coordinate (𝑡):</span
+					><input
+						type="range"
+						id="input-t"
+						min="-1.8"
+						max="1.8"
+						value="0"
+						step=".001"
+						oninput="update({t:this.value})" /></label
+				><br />
+				<span>𝑡 = <span id="text-t" class="highlighted-text"></span></span>
+			</div>
+			<div class="slider-container">
+				<label
+					><span class="slider-label slider-label-custom"
+						>Position coordinate (𝑥):</span
+					><input
+						type="range"
+						id="input-x"
+						min="-1.8"
+						max="1.8"
+						value="0"
+						step=".001"
+						oninput="update({x:this.value})"
+				/></label>
+				<br />
+				<span>𝑥 = <span id="text-x" class="highlighted-text"></span></span>
+			</div>
+			<div class="slider-container">
+				<label
+					><span class="slider-label slider-label-custom">Velocity (𝑣):</span
+					><input
+						type="range"
+						id="input-v"
+						min="0"
+						max=".7"
+						value="0"
+						step=".001"
+						oninput="update({v:this.value})" /></label
+				><br />
+				<span
+					>𝑣 =
+					<span id="text-speed" class="sci-num highlighted-text">0</span
+					>𝑐</span
+				>
+			</div>
+			<div style="line-height: 1.4em;">
+				<span>𝑡′ = <span id="text-tp" class="quaternary-text"></span></span>
+				<br />
+				<span>𝑥′ = <span id="text-xp" class="quaternary-text"></span></span>
+			</div>
+		</div>
+		<svg id="viz"></svg>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_shared.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_26_8.js"></script>
+	</body>
+</html>

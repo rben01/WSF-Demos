@@ -1,0 +1,42 @@
+.top-sliders-sect {
+	padding-bottom: 1em;
+}
+
+.subscript {
+	position: relative;
+	top: 0.4em;
+	left: 0.1em;
+	font-size: 65%;
+}
+
+.primed-subscript {
+	position: relative;
+	left: -0.25em;
+}
+
+.rva-button {
+	width: 13em;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.slider-label {
+	display: inline-block;
+	min-width: 9em;
+}
+
+.heading {
+	margin-bottom: 0.5em;
+	margin-top: 2em;
+}
+
+.h-centered {
+	margin: auto;
+	text-align: center;
+}
+
+.galilean {
+	color: #aaaf;
+}

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://unpkg.com/three@0.123.0/build/three.min.js"
+			integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/"
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			.grid-left-right {
+				grid-template-columns: auto 1fr;
+				column-gap: 50px;
+			}
+			.vertical-container {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.radio-button-container.horizontal button {
+				flex: 1 1 auto;
+			}
+			#wavefunction-plot {
+				margin: 0 auto;
+				height: 300px;
+				width: 17em;
+			}
+			.experiment-measurement-counter {
+				fill: white;
+				font-size: 20px;
+			}
+			#experiment-plot {
+				margin-top: 0;
+				margin-left: calc(17em + 100px);
+				width: calc(100vw - 200px - 17em);
+				height: 50vw;
+			}
+			.controls-container {
+				width: 17em;
+				position: absolute;
+			}
+			.label-proba {
+				position: absolute;
+				left: calc(17em + 150px);
+				top: 22px;
+			}
+			#container-num-experiments {
+				visibility: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="controls-container">
+			<div class="slider-container">
+				<span>Shape of wavefunction ⎮𝜓(𝑥)⎮</span>
+				<span
+					id="wavefunction-shape-buttons"
+					class="radio-button-container horizontal"
+				>
+					<button
+						class="button shape-button"
+						shape="gaussian"
+						data-button-checked
+					>
+						Gaussian</button
+					><button class="button shape-button" shape="triangle">
+						Pyramid</button
+					><button class="button shape-button" shape="square">Square</button
+					><button class="button shape-button" shape="smallSquare">
+						Narrower square
+					</button>
+				</span>
+				<span></span>
+				<canvas id="wavefunction-plot" class="draggable"></canvas>
+
+				<span>Measurement speed: <span id="experiment-speed"></span></span>
+				<span>
+					<label
+						><input
+							type="range"
+							name="experiment-speed"
+							id="experiment-speed-slider"
+					/></label>
+				</span>
+				<span
+					>Number of measurements: <span id="num-measurements-text"></span
+				></span>
+				<span>
+					<label
+						><input
+							type="range"
+							name="num-measurements"
+							id="number-of-measurements-slider"
+					/></label>
+				</span>
+				<span></span>
+				<span
+					id="measurement-buttons"
+					class="radio-button-container horizontal"
+				>
+					<button class="button" id="btn-run" onclick="runExperiment()">
+						Run experiment</button
+					><button
+						class="button"
+						id="btn-stop"
+						onclick="stopExperiment()"
+						data-button-checked
+					>
+						Stop experiment</button
+					><button
+						class="button"
+						id="btn-clear-experiment"
+						onclick="clearExperiment()"
+						data-button-checked
+					>
+						Clear
+					</button>
+				</span>
+			</div>
+		</div>
+		<div class="label-proba">
+			<div>Probability distribution ⎮𝜓(𝑥)⎮²</div>
+			<div id="container-num-experiments">
+				Number of experiments: <span id="text-num-experiments"></span>
+			</div>
+		</div>
+		<canvas id="experiment-plot" class="draggable"></canvas>
+		<script src="../../../utils.js"></script>
+		<script src="../../../three_utils.js"></script>
+		<script src="./wavefunctions_and_probability_sampling_experiment_2D.js"></script>
+	</body>
+</html>

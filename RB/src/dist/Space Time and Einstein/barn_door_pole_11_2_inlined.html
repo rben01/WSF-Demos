@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<div>
+<span>
+<label>
+<span class="slider-label">Relative speed:</span>
+<input id="input-relative-speed" max="0.95" min="0.0" name="input-relative-speed" oninput="updateRelativeSpeed(this.value)" step=".05" type="range" value="0"/>
+</label>
+</span>
+<div class="div-below-slider" id="div-speed-info">
+<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right" id="relative-speed-text">0.1</span>𝑐
+</div>
+</div>
+<div>
+<p id="barn-pole-rest-length">
+Rest length of barn: <span class="sci-num">6.00</span>m<br/>
+Rest length of pole: <span class="sci-num">9.00</span>m
+</p>
+</div>
+<div>
+<span>
+<span>Barn's Perspective</span>
+<button class="play-button" id="btn-run-animation-barn-perspective" onclick="beginAnimation(bothPlaybackInfo.barnStationary)">
+Start
+</button>
+<button class="play-button" disabled="" id="btn-reset-animation-barn-perspective" onclick="stopAnimation(bothPlaybackInfo.barnStationary)">
+Reset
+</button>
+</span>
+<br/>
+<span>Contracted length of pole:
+<span class="sci-num highlighted-text" id="text-contracted-length-pole">5</span>m
+</span>
+</div>
+<svg class="viz-canvas" id="canvas-barn-perspective" style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
+<br/>
+<div>
+<span>
+<span>Pole's Perspective</span>
+<button class="play-button" id="btn-run-animation-pole-perspective" onclick="beginAnimation(bothPlaybackInfo.poleStationary)">
+Start
+</button>
+<button class="play-button" disabled="" id="btn-reset-animation-pole-perspective" onclick="stopAnimation(bothPlaybackInfo.poleStationary)">
+Reset
+</button>
+</span>
+<br/>
+<span>Contracted length of barn:
+<span class="sci-num highlighted-text" id="text-contracted-length-barn">5</span>m
+</span>
+</div>
+<svg class="viz-canvas" id="canvas-pole-perspective" style="margin: 0 auto; display: block;" xmlns="http://www.w3.org/2000/svg"></svg>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+"use strict";
+// eslint-disable-next-line no-unused-vars
+const AESTHETIC = {
+solidFill: "#4ff8",
+solidStroke: "#fff8",
+durationMSOfAnimationReset: 300,
+easingForAnimationReset: d3.easePoly.exponent(2.5),
+configure: function (d3Obj, config) {
+Object.entries(config).forEach(([key, value]) => {
+if (key === "attrs") {
+const attrs = value;
+Object.entries(attrs).forEach(([attr, val]) => {
+d3Obj.attr(attr, val);
+});
+} else if (key === "class") {
+d3Obj.classed(value, true);
+} else {
+throw new Error(`Unexpected key ${key}`);
+}
+});
+return d3Obj;
+},
+};
+/* globals AESTHETIC isIterable _addGraphicalObjs lorentzFactor */
+"use strict";
+// If the program is bug-free, any reasonably scaled values of the axis bounds will work
+const AX_MIN_X = 5;
+const AX_MIN_Y = 3;
+const AX_MAX_X = 10;
+const AX_MAX_Y = 7;
+const AX_WIDTH = AX_MAX_X - AX_MIN_X;
+const AX_HEIGHT = AX_MAX_Y - AX_MIN_Y;
+const AX_MID_Y = AX_MIN_Y + (AX_MAX_Y - AX_MIN_Y) / 2;
+const POLE_PHYSICAL_SIZE = 9;
+const BARN_PHYSICAL_SIZE = 6;
+const POLE_BARN_RATIO = 1.5;
+const BARN_WIDTH_PROPTN = 0.16;
+const BARN_HEIGHT_PROPTN = 0.8;
+const POLE_WIDTH_PROPTN = BARN_WIDTH_PROPTN * POLE_BARN_RATIO;
+const AX_STARTPOINT_RATIO = 0.37; // Should be .37 but other values are useful for testing
+const ANIMATION_AX_ENDPOINT = 0.13;
+const AX_BARN_WIDTH = AX_WIDTH * BARN_WIDTH_PROPTN;
+const AX_BARN_HEIGHT = AX_HEIGHT * BARN_HEIGHT_PROPTN;
+const AX_POLE_WIDTH = AX_WIDTH * POLE_WIDTH_PROPTN;
+const TIME_FOR_LIGHT_TO_TRAVERSE_SEC = 2; // seconds
+const TIME_FOR_LIGHT_TO_TRAVERSE_MS = TIME_FOR_LIGHT_TO_TRAVERSE_SEC * 1000;
+const CANVAS_WIDTH = 800;
+const CANVAS_HEIGHT = 100;
+const ANIMATION_STATE = {
+hasNotYetStarted: 0,
+isPlaying: 1,
+hasFinishedPlaying: 2,
+};
+const BARN_DOOR_HEIGHT_PROPTN = 0.5;
+const BARN_DOOR_OFFSET = CANVAS_WIDTH / 100;
+const USER_INFO = { relativeSpeed: 0.1 };
+const canvas = d3
+.selectAll(".viz-canvas")
+.attr("width", CANVAS_WIDTH)
+.attr("height", CANVAS_HEIGHT)
+.attr("background-color", "black");
+const subcanvases = canvas
+.data([
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT,
+observerIsStandingOn: "barn",
+},
+{
+originX: 0,
+originY: 0,
+width: CANVAS_WIDTH,
+height: CANVAS_HEIGHT,
+observerIsStandingOn: "pole",
+},
+])
+.each(function (d) {
+d3.select(this)
+.append("g")
+.attr("transform", `translate(0, ${d.originY})`)
+.classed("subcanvas", true);
+})
+.selectAll("g");
+function apparentWidthsMeters({ fracOfC }) {
+const lf = lorentzFactor({ fracOfC });
+return {
+barn: BARN_PHYSICAL_SIZE / lf,
+pole: POLE_PHYSICAL_SIZE / lf,
+};
+}
+const speedInputSlider = document.getElementById("input-relative-speed");
+const speedTextSpan = document.getElementById("relative-speed-text");
+function getSpeed(speedStr) {
+speedStr = typeof speedStr !== "undefined" ? speedStr : speedInputSlider.value;
+const floatVal = parseFloat(speedStr);
+if (floatVal < 0 || floatVal > 1) {
+throw new Error(`Got invalid speed (outside [0,1]): ${floatVal}`);
+}
+return floatVal;
+}
+function transAxisToCanvas(canvasInfo, { x, y, dx, dy }) {
+const data = { x, y, dx, dy };
+const iterableVars = {};
+const varsAsLists = {};
+Object.entries(data).forEach(([key, value]) => {
+const valueIsIterable = isIterable(value);
+iterableVars[key] = valueIsIterable;
+varsAsLists[key] = valueIsIterable ? value : [value];
+});
+const canvasCoords = {};
+Object.entries(varsAsLists).forEach(([key, value]) => {
+let coordFunc;
+switch (key) {
+case "x":
+coordFunc = x => ((x - AX_MIN_X) / AX_WIDTH) * canvasInfo.width;
+break;
+case "y":
+coordFunc = y => ((y - AX_MIN_Y) / AX_HEIGHT) * canvasInfo.height;
+break;
+case "dx":
+coordFunc = dx => (canvasInfo.width / AX_WIDTH) * dx;
+break;
+case "dy":
+coordFunc = dy => (canvasInfo.height / AX_HEIGHT) * dy;
+break;
+default:
+throw new Error(`Unexpected case ${key}`);
+}
+canvasCoords[key] = value.map(coordFunc);
+});
+const ans = {};
+Object.entries(canvasCoords).forEach(([key, coordsList]) => {
+ans[key] = iterableVars[key] ? coordsList : coordsList[0];
+});
+return ans;
+}
+function _getBarnData(canvasInfo, { fracOfC, progress = 0 } = {}) {
+if (canvasInfo.observerIsStandingOn === "barn") {
+fracOfC = 0;
+}
+if (canvasInfo.observerIsStandingOn === "barn") {
+progress = 0;
+}
+const lf = lorentzFactor({ fracOfC });
+const midAxXi = AX_MIN_X + AX_STARTPOINT_RATIO * AX_WIDTH;
+const midAxXf = AX_MIN_X + (1 - ANIMATION_AX_ENDPOINT) * AX_WIDTH;
+const barnMidAxX = (1 - progress) * midAxXi + progress * midAxXf;
+const barnMinAxX = barnMidAxX - (0.5 * AX_BARN_WIDTH) / lf;
+const barnMinAxY = AX_MID_Y - 0.5 * AX_BARN_HEIGHT;
+const barnDoorAxHeight = BARN_DOOR_HEIGHT_PROPTN * AX_BARN_HEIGHT;
+const barnSideWallAxHeight = (AX_BARN_HEIGHT - barnDoorAxHeight) / 2;
+const {
+x: [barnMidCanvasX, barnMinCanvasX],
+y: barnMinCanvasY,
+dx: barnCanvasWidth,
+dy: [barnCanvasHeight, barnDoorCanvasHeight, barnDoorSideWallCanvasHeight],
+} = transAxisToCanvas(canvasInfo, {
+x: [barnMidAxX, barnMinAxX],
+y: barnMinAxY,
+dx: AX_BARN_WIDTH / lf,
+dy: [AX_BARN_HEIGHT, barnDoorAxHeight, barnSideWallAxHeight],
+});
+const barnDashArray = [
+barnCanvasWidth + barnDoorSideWallCanvasHeight,
+barnDoorCanvasHeight,
+barnDoorSideWallCanvasHeight + barnCanvasWidth + barnDoorSideWallCanvasHeight,
+barnDoorCanvasHeight,
+barnDoorSideWallCanvasHeight + 100,
+].join(" ");
+return [
+{
+class: "barn",
+canvas: canvasInfo,
+shape: "rect",
+midX: barnMidCanvasX,
+attrs: {
+x: barnMinCanvasX,
+y: barnMinCanvasY,
+width: barnCanvasWidth,
+height: barnCanvasHeight,
+fill: AESTHETIC.solidFill,
+stroke: "white",
+"stroke-width": 5,
+"stroke-linecap": "square",
+"stroke-dasharray": barnDashArray,
+},
+},
+];
+}
+function _getPoleData(canvasInfo, { fracOfC, progress = 0 } = {}) {
+if (canvasInfo.observerIsStandingOn === "pole") {
+fracOfC = 0;
+}
+if (canvasInfo.observerIsStandingOn === "pole") {
+progress = 0;
+}
+const lf = lorentzFactor({ fracOfC });
+const midAxXi = AX_MIN_X + (1 - AX_STARTPOINT_RATIO) * AX_WIDTH;
+const midAxXf = AX_MIN_X + ANIMATION_AX_ENDPOINT * AX_WIDTH;
+const poleMidAxX = (1 - progress) * midAxXi + progress * midAxXf;
+const poleMinAxX = poleMidAxX - (0.5 * AX_POLE_WIDTH) / lf;
+const poleMaxAxX = poleMidAxX + (0.5 * AX_POLE_WIDTH) / lf;
+const poleMidAxY = AX_MID_Y;
+const {
+x: [poleMinCanvasX, poleMidCanvasX, poleMaxCanvasX],
+y: poleMidCanvasY,
+} = transAxisToCanvas(canvasInfo, {
+x: [poleMinAxX, poleMidAxX, poleMaxAxX],
+y: poleMidAxY,
+});
+return [
+{
+class: "pole",
+canvas: canvasInfo,
+shape: "line",
+midX: poleMidCanvasX,
+attrs: {
+x1: poleMinCanvasX,
+y1: poleMidCanvasY,
+x2: poleMaxCanvasX,
+y2: poleMidCanvasY,
+stroke: "white",
+"stroke-width": 5,
+},
+},
+];
+}
+function _getBarnDoorsData(
+canvasInfo,
+{ fracOfC, progress = 0, barnData, poleData } = {},
+) {
+const barnDatum = barnData
+? barnData[0]
+: _getBarnData(canvasInfo, { fracOfC, progress })[0];
+const poleDatum = poleData
+? poleData[0]
+: _getPoleData(canvasInfo, { fracOfC, progress })[0];
+const { x, y, width, height } = barnDatum.attrs;
+const doorCanvasHeight = height * BARN_DOOR_HEIGHT_PROPTN;
+const doorMinCanvasY = y + (height - doorCanvasHeight) / 2;
+const doorMaxCanvasY = doorMinCanvasY + doorCanvasHeight;
+const doorCommonAttrs = {
+class: "barn-door",
+barn: barnDatum,
+shape: "line",
+closed: {
+y1: doorMinCanvasY,
+y2: doorMaxCanvasY,
+},
+open: {
+y1: doorMaxCanvasY,
+y2: doorMaxCanvasY + doorCanvasHeight,
+},
+};
+const doorCommonAttrAttrs = {
+stroke: "white",
+"stroke-width": 4,
+};
+const leftDoorX = x - BARN_DOOR_OFFSET;
+const rightDoorX = x + width + BARN_DOOR_OFFSET;
+const leftDoorIsClosed =
+poleDatum.attrs.x2 < leftDoorX || poleDatum.attrs.x1 > leftDoorX;
+const rightDoorIsClosed =
+poleDatum.attrs.x1 > rightDoorX || poleDatum.attrs.x2 < rightDoorX;
+// https://stackoverflow.com/a/39333479
+const getYs = ({ y1, y2 }) => ({ y1, y2 });
+const leftDoorY = leftDoorIsClosed
+? getYs(doorCommonAttrs.closed)
+: getYs(doorCommonAttrs.open);
+const rightDoorY = rightDoorIsClosed
+? getYs(doorCommonAttrs.closed)
+: getYs(doorCommonAttrs.open);
+return [
+{
+...doorCommonAttrs,
+baseX: leftDoorX,
+side: "left",
+isOpen: !leftDoorIsClosed,
+attrs: {
+x1: leftDoorX,
+x2: leftDoorX,
+...leftDoorY,
+...doorCommonAttrAttrs,
+},
+},
+{
+...doorCommonAttrs,
+baseX: rightDoorX,
+side: "right",
+isOpen: !rightDoorIsClosed,
+attrs: {
+x1: rightDoorX,
+x2: rightDoorX,
+...rightDoorY,
+...doorCommonAttrAttrs,
+},
+},
+];
+}
+function _getBarnAndPoleData(canvasInfo, { progress = 0 } = {}) {
+const fracOfC = getSpeed();
+const barnData = _getBarnData(canvasInfo, { fracOfC, progress });
+const barnDoorsData = _getBarnDoorsData(canvasInfo, { fracOfC, progress });
+const poleData = _getPoleData(canvasInfo, { fracOfC, progress });
+return {
+objects: {
+barnData: barnData,
+barnDoorsData: barnDoorsData,
+poleData,
+},
+data: [...barnData, ...barnDoorsData, ...poleData],
+};
+}
+function addBarnsAndPoles(subcanvases) {
+return _addGraphicalObjs(subcanvases, d => _getBarnAndPoleData(d).data);
+}
+addBarnsAndPoles(subcanvases);
+const bothPlaybackInfo = {
+barnStationary: {
+stationary: "barn",
+animationState: ANIMATION_STATE.hasNotYetStarted,
+animationStartDate: null,
+animationTimer: null,
+beginButton: document.getElementById("btn-run-animation-barn-perspective"),
+resetButton: document.getElementById("btn-reset-animation-barn-perspective"),
+},
+poleStationary: {
+stationary: "pole",
+animationState: ANIMATION_STATE.hasNotYetStarted,
+animationStartDate: null,
+animationTimer: null,
+beginButton: document.getElementById("btn-run-animation-pole-perspective"),
+resetButton: document.getElementById("btn-reset-animation-pole-perspective"),
+},
+};
+// eslint-disable-next-line no-unused-vars
+function updateRelativeSpeed(speedStr, { fromUserInput = true } = {}) {
+try {
+const speed = getSpeed(speedStr);
+USER_INFO.trainSpeed = speed;
+if (speedStr || speedStr === 0) {
+speedTextSpan.textContent = (+speedStr).toFixed(2);
+}
+if (fromUserInput) {
+document.getElementById("div-speed-info").style.visibility = "visible";
+}
+[bothPlaybackInfo.barnStationary, bothPlaybackInfo.poleStationary].forEach(
+playbackInfo => {
+if (playbackInfo.animationState === ANIMATION_STATE.hasNotYetStarted) {
+playbackInfo.beginButton.disabled = speed === 0;
+}
+},
+);
+const BARN = ".barn";
+const POLE = ".pole";
+const {
+barn: barnApparentWidth,
+pole: poleApparentWidth,
+} = apparentWidthsMeters({
+fracOfC: speed,
+});
+subcanvases.each(function (d) {
+let stationaryObjKey,
+movingObjKey,
+getMovingObjDataFunc,
+getStationaryObjDataFunc,
+stationaryObjPlaybackInfo,
+textFieldID,
+apparentWidthStr,
+progress;
+const subcanvas = d3.select(this);
+if (d.observerIsStandingOn === "barn") {
+stationaryObjKey = BARN;
+movingObjKey = POLE;
+getStationaryObjDataFunc = _getBarnData;
+getMovingObjDataFunc = _getPoleData;
+stationaryObjPlaybackInfo = bothPlaybackInfo.barnStationary;
+textFieldID = "text-contracted-length-pole";
+apparentWidthStr = poleApparentWidth;
+} else {
+stationaryObjKey = POLE;
+movingObjKey = BARN;
+getStationaryObjDataFunc = _getPoleData;
+getMovingObjDataFunc = _getBarnData;
+stationaryObjPlaybackInfo = bothPlaybackInfo.poleStationary;
+textFieldID = "text-contracted-length-barn";
+apparentWidthStr = barnApparentWidth;
+}
+switch (stationaryObjPlaybackInfo.animationState) {
+case ANIMATION_STATE.hasNotYetStarted: {
+progress = 0;
+break;
+}
+case ANIMATION_STATE.isPlaying: {
+return;
+}
+case ANIMATION_STATE.hasFinishedPlaying: {
+progress = 1;
+break;
+}
+default: {
+throw new Error(
+`Unexpect case ${stationaryObjPlaybackInfo.animationState}`,
+);
+}
+}
+const dataMap = {
+[stationaryObjKey]: getStationaryObjDataFunc(d, {
+fracOfC: speed,
+progress,
+}),
+[movingObjKey]: getMovingObjDataFunc(d, { fracOfC: speed, progress }),
+};
+dataMap[".barn-door"] = _getBarnDoorsData(d, {
+barnData: dataMap[BARN],
+poleData: dataMap[POLE],
+});
+document.getElementById(textFieldID).textContent = apparentWidthStr.toFixed(
+2,
+);
+Object.entries(dataMap).forEach(([key, data]) => {
+const objs = subcanvas.selectAll(key);
+objs.data(data).each(function (d) {
+const transition = d3
+.select(this)
+.transition()
+.duration(100)
+.ease(d3.easeCubicOut);
+Object.entries(d.attrs).forEach(([key, val]) => {
+transition.attr(key, val);
+});
+});
+});
+});
+} catch (e) {
+console.log(speedStr);
+throw e;
+}
+}
+function getDurationMS(speed) {
+return TIME_FOR_LIGHT_TO_TRAVERSE_MS / speed;
+}
+// eslint-disable-next-line no-unused-vars
+function beginAnimation(playbackInfo) {
+updateRelativeSpeed();
+if (playbackInfo.animationIsPlaying) {
+return;
+}
+const speed = getSpeed();
+if (speed === 0) {
+return;
+}
+const netDurationMS = getDurationMS(speed);
+playbackInfo.animationState = ANIMATION_STATE.isPlaying;
+playbackInfo.animationStartDate = new Date();
+playbackInfo.beginButton.disabled = true;
+playbackInfo.resetButton.disabled = false;
+playbackInfo.animationTimer = setTimeout(() => {
+playbackInfo.animationEndDate = new Date();
+playbackInfo.animationState = ANIMATION_STATE.hasFinishedPlaying;
+updateRelativeSpeed();
+}, netDurationMS);
+const stationaryObject = playbackInfo.stationary;
+const easing = d3.easeLinear;
+const doorChangeStateDurationMS = 150;
+const BARN = ".barn";
+const POLE = ".pole";
+// All three maps are keyed by the moving object
+const getCanvasWidthMap = {
+[BARN]: datum => datum.attrs.width,
+[POLE]: datum => datum.attrs.x2 - datum.attrs.x1,
+};
+const endpointRatioMap = {
+[BARN]: 1 - ANIMATION_AX_ENDPOINT,
+[POLE]: ANIMATION_AX_ENDPOINT,
+};
+const getNetDistTraveledMap = {
+[BARN]: ({ datum, minCanvasXf }) => minCanvasXf - datum.attrs.x,
+[POLE]: ({ datum, minCanvasXf }) => datum.attrs.x1 - minCanvasXf,
+};
+subcanvases
+.filter(d => d.observerIsStandingOn === stationaryObject)
+.each(function (d) {
+const subcanvas = d3.select(this);
+const onBarn = d.observerIsStandingOn === "barn";
+const movingObjClass = onBarn ? POLE : BARN;
+const movingObj = d3.select(subcanvas.selectAll(movingObjClass).node());
+const movingObjDatum = movingObj.datum();
+const movingObjCanvasWidth = getCanvasWidthMap[movingObjClass](
+movingObjDatum,
+);
+const endpointRatio = endpointRatioMap[movingObjClass];
+const midCanvasXf = transAxisToCanvas(d, {
+x: AX_MIN_X + endpointRatio * AX_WIDTH,
+}).x;
+const minCanvasXf = midCanvasXf - movingObjCanvasWidth / 2;
+const netDistTraveled = getNetDistTraveledMap[movingObjClass]({
+datum: movingObjDatum,
+minCanvasXf,
+});
+let poleFinalPos, poleDatum, getBarnDoorXf;
+if (onBarn) {
+const poleX1f = minCanvasXf;
+const poleX2f = minCanvasXf + movingObjCanvasWidth;
+movingObj
+.transition()
+.duration(0)
+.attr("x1", movingObjDatum.attrs.x1)
+.attr("x2", movingObjDatum.attrs.x2)
+.transition()
+.duration(netDurationMS)
+.ease(easing)
+.attr("x1", poleX1f)
+.attr("x2", poleX2f);
+poleFinalPos = { x1: poleX1f, x2: poleX2f };
+poleDatum = movingObjDatum;
+getBarnDoorXf = baseX => baseX;
+} else {
+movingObj
+.transition()
+.duration(0)
+.attr("x", movingObjDatum.attrs.x)
+.transition()
+.duration(netDurationMS)
+.ease(easing)
+.attr("x", minCanvasXf);
+poleDatum = d3.select(subcanvas.selectAll(POLE).node()).datum();
+poleFinalPos = { x1: poleDatum.attrs.x1, x2: poleDatum.attrs.x2 };
+getBarnDoorXf = baseX => baseX + netDistTraveled;
+}
+subcanvas.selectAll(".barn-door").each(function (barnDoorDatum) {
+const barnDoor = d3.select(this);
+const baseX = barnDoorDatum.baseX;
+const distToPole = {
+// Magic numbers here were chosen so that they'd look good with the chosen value of doorChangeStateDurationMS
+enter: poleDatum.attrs.x1 - baseX - 3 * BARN_DOOR_OFFSET * speed,
+leave:
+poleDatum.attrs.x2 -
+baseX -
+(barnDoorDatum.side === "left" ? 1 : 2) *
+BARN_DOOR_OFFSET *
+speed,
+};
+const fracToPole = {
+enter: distToPole.enter / netDistTraveled,
+leave: distToPole.leave / netDistTraveled,
+};
+const doorChangeStateFrac = doorChangeStateDurationMS / netDurationMS;
+const xf = getBarnDoorXf(baseX);
+const doorIsOpenWhenFinished =
+poleFinalPos.x1 <= xf && xf <= poleFinalPos.x2;
+const yTweener = function (attr) {
+const yClosed = barnDoorDatum.closed[attr];
+const yOpen = barnDoorDatum.open[attr];
+const doorOpenInterpolator = d3.interpolateNumber(yClosed, yOpen);
+const doorCloseEasing =
+fracToPole.leave < 1 ? d3.easeCubicInOut : d3.easeCubicIn;
+const enterTime = fracToPole.enter;
+const leaveTime = fracToPole.leave;
+return function () {
+return t => {
+if (t < enterTime) {
+return yClosed;
+} else if (t < enterTime + doorChangeStateFrac) {
+const openFrac = (t - enterTime) / doorChangeStateFrac;
+return doorOpenInterpolator(
+d3.easeCubicInOut(openFrac),
+);
+} else if (t < leaveTime || doorIsOpenWhenFinished) {
+return yOpen;
+} else if (t < leaveTime + doorChangeStateFrac) {
+const closeFrac = (t - leaveTime) / doorChangeStateFrac;
+return doorOpenInterpolator(
+doorCloseEasing(1 - closeFrac),
+);
+} else {
+return yClosed;
+}
+};
+};
+};
+const transition = barnDoor
+.transition()
+.duration(0)
+.attr("x1", baseX)
+.attr("x2", baseX)
+.transition()
+.duration(netDurationMS)
+.ease(d3.easeLinear)
+.attrTween("y1", yTweener("y1"))
+.attrTween("y2", yTweener("y2"));
+if (!onBarn) {
+const xTweener = function () {
+const interpolator = d3.interpolateNumber(
+baseX,
+baseX + netDistTraveled,
+);
+return interpolator;
+};
+transition.attrTween("x1", xTweener).attrTween("x2", xTweener);
+}
+transition
+.transition()
+.duration(100)
+.ease(d3.easeCubicOut)
+.attr(
+"y1",
+doorIsOpenWhenFinished
+? barnDoorDatum.open.y1
+: barnDoorDatum.closed.y1,
+)
+.attr(
+"y2",
+doorIsOpenWhenFinished
+? barnDoorDatum.open.y2
+: barnDoorDatum.closed.y2,
+);
+});
+});
+}
+// eslint-disable-next-line no-unused-vars
+function stopAnimation(playbackInfo) {
+playbackInfo.animationState = ANIMATION_STATE.hasNotYetStarted;
+clearTimeout(playbackInfo.animationTimer);
+playbackInfo.beginButton.disabled = false;
+playbackInfo.resetButton.disabled = true;
+updateRelativeSpeed();
+}
+updateRelativeSpeed(0, { fromUserInput: false });
+</script></body>
+</html>

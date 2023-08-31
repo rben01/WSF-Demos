@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script src="../../../demos/utils.js"></script>
+		<link rel="stylesheet" href="../../wsf_demo.css" />
+		<style>
+			body {
+				max-width: 950px;
+			}
+			svg {
+				vertical-align: middle;
+			}
+			#btn-playpause {
+				width: 100px;
+			}
+			.orbit-circle {
+				fill: none;
+				stroke: white;
+				stroke-width: 2;
+				stroke-dasharray: 6 10;
+			}
+			.orbit-circle.variable {
+				stroke-dasharray: none;
+			}
+			.central-star {
+				fill: rgb(255, 233, 36);
+				stroke: rgb(255, 233, 36);
+				stroke-width: 5;
+				stroke-dasharray: 1 1.5;
+			}
+			.planet {
+				stroke: white;
+				stroke-width: 1;
+			}
+			.axis {
+				stroke: white;
+				stroke-width: 1;
+			}
+			.axis-label {
+				fill: white;
+				stroke: none;
+			}
+			.graph-curve {
+				stroke: #ccc;
+				stroke-width: 2;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="top-sliders-sect">
+			<div class="slider-container">
+				<label>
+					<span class="slider-label slider-label-custom">
+						Radius of red planet&rsquo;s orbit:</span
+					>
+
+					<input
+						type="range"
+						id="input-r"
+						name="input-r"
+						step=".001"
+						value="1"
+						oninput="update()"
+					/>
+				</label>
+			</div>
+			<div>
+				<span
+					><button
+						class="play-button"
+						id="btn-playpause"
+						onclick="playPause()"
+					>
+						<span>Play</span>
+					</button></span
+				>
+			</div>
+		</div>
+		<div>
+			<svg id="orbits" style="display: inline-block"></svg>
+			<svg id="v-graph" style="display: inline-block"></svg>
+		</div>
+		<script src="./turner_1_3.js"></script>
+	</body>
+</html>

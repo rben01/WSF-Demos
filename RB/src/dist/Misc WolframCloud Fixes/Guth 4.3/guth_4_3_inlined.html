@@ -1,0 +1,1164 @@
+<!DOCTYPE html>
+<html>
+<head><title>guth_4_3.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Eu5tTQS50VVQQxwVanW+THxwAH/xX2V9SQJ9n6BmM7djQDlXsfSoe5Ybt+spysWV" src="https://unpkg.com/three@0.131.3/build/three.min.js"></script>
+<style type="text/css">body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+border-top: 2px solid #fff;
+border-right: 2px solid #777;
+border-bottom: 2px solid #777;
+border-left: 2px solid #fff;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button > span {
+display: inline-block;
+position: relative;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #9c9c9c, #fff);
+color: #111;
+border-top-color: #ddd;
+border-right-color: #888;
+border-bottom-color: #888;
+border-left-color: #ddd;
+/* text-shadow: -1px -1px #d4d4d4; */
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.play-button:active > span {
+bottom: 1px;
+transform: scale(0.995, 0.98);
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+}
+input[type="range"]:not(:disabled)::-webkit-slider-thumb,
+input[type="range"]:not(:disabled)::-moz-slider-thumb,
+input[type="range"]:not(:disabled)::-ms-thumb {
+cursor: pointer !important;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+</style>
+<style>
+#main {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 20px;
+justify-items: center;
+}
+.header-container {
+text-align: center;
+}
+.p2d.vertex-dot {
+fill: white;
+stroke: black;
+stroke-width: 3;
+}
+.p2d.vertex-dot {
+cursor: grab;
+}
+.p2d.vertex-dot:active {
+cursor: grabbing;
+}
+.p2d.vertex-label {
+fill: black;
+stroke: none;
+font-size: 15px;
+pointer-events: none;
+}
+.p2d.tri-edge {
+stroke: white;
+stroke-width: 2;
+}
+</style>
+</head>
+<body>
+<div>
+<div id="main">
+<div class="header-container">
+<span class="header">Euclidean, “flat” geometry</span><br/>
+<span class="header">Sum of angles = 180°</span>
+</div>
+<div class="header-container">
+<span class="header">Non-Euclidean, “closed” geometry</span>
+<br/>
+<span class="header">Sum of angles = <span id="angle-sum"></span>° &gt; 180°</span>
+</div>
+<div>
+<svg id="plot2d"></svg>
+</div>
+<div>
+<canvas class="draggable" id="plot3d"></canvas>
+</div>
+</div>
+</div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.childNodes;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+flip = flip ?? false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = cdfPoints.length - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (y < r) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (currentIndex < cdfPoints.length - 1) {
+const [x1, a1] = cdfPoints[currentIndex];
+const [x2, a2] = cdfPoints[currentIndex + 1];
+const t = (r - a1) / (a2 - a1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[currentIndex][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp =
+originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is its transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+const newDisplacementFromPointOfFocus = originalDisplacementFromPointOfFocus
+.clone()
+.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(newDisplacementFromPointOfFocus);
+// To determine whether the rotation is pathological (doing roughly a 180deg turn,
+// which looks really abrupt and jerky), we see if the segment between the old
+// camera relative position and the new one crosses the line that is the rotation
+// axis from "up" to the original position
+const origRotAxisFromUp = originalDisplacementFromPointOfFocus
+.clone()
+.cross(up)
+.normalize();
+// THIS ASSUMES z IS UP
+// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
+// rotation axis line, Line 2 is the segment connecting the two displacements
+const a1 = origRotAxisFromUp.y;
+const b1 = -origRotAxisFromUp.x;
+const c1 = 0;
+// The _1's and _2's here refer to points on line 2; they have nothing to do with line
+// 1. The 2_'s refer to the fact that these are on line 2
+const { x2_1, y2_1, x2_2, m } = (() => {
+const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
+const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
+const m = (y2_2 - y2_1) / (x2_2 - x2_1);
+return { x2_1, x2_2, y2_1, y2_2, m };
+})();
+const a2 = m;
+const b2 = -1;
+const c2 = y2_1 - m * x2_1;
+const determinant = a1 * b2 - a2 * b1;
+// The lines are (approximately) parallel iff the determinant is small
+if (Math.abs(determinant) > 1e-5) {
+// Lines aren't parallel; get intersection x
+const x = (b1 * c2 - b2 * c1) / determinant;
+// Is x_intersect between the two original points' x's? If yes then that segment
+// crosses the rotation axis, which is pathological
+if (x2_1 < x === x < x2_2) {
+return oldPosition;
+}
+}
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>/* global THREE applyGraphicalObjs enableDragToRotateCamera makeRenderer makeTextSprite */
+const WIDTH = 350;
+const HEIGHT = 350;
+const MARGIN = 10;
+const plot3d = d3
+.select("#plot3d")
+.attr("width", WIDTH / devicePixelRatio)
+.attr("height", HEIGHT / devicePixelRatio)
+.node();
+const plot2d = d3.select("#plot2d").attr("width", WIDTH).attr("height", HEIGHT);
+const X_MIN_2d = -1;
+const X_MAX_2d = 1;
+const Y_MIN_2d = -1;
+const Y_MAX_2d = 1;
+const xScale2d = d3.scaleLinear([X_MIN_2d, X_MAX_2d], [MARGIN, WIDTH - MARGIN]);
+const yScale2d = d3.scaleLinear([Y_MIN_2d, Y_MAX_2d], [HEIGHT - MARGIN, MARGIN]);
+const thetaScale3d = d3.scaleLinear(xScale2d.range(), [
+-Math.PI / 2 - 0.7,
+-Math.PI / 2 + 0.7,
+]);
+const phiScale3d = d3.scaleLinear(yScale2d.range(), [-0.7, 0.7]);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+90,
+plot3d.clientWidth / plot3d.clientHeight,
+0.1,
+500,
+);
+const renderer = makeRenderer(plot3d);
+renderer.setSize(plot3d.clientWidth, plot3d.clientHeight);
+const SPHERE_POSITION = new THREE.Vector3(0, 0, 0);
+const SPHERE_RADIUS = 6;
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(0, -10, 1);
+const CAMERA_POINT_OF_FOCUS = SPHERE_POSITION;
+const CAMERA_UP = new THREE.Vector3(0, 0, 1);
+camera.up.copy(CAMERA_UP);
+camera.position.copy(CAMERA_DEFAULT_POSITION);
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+enableDragToRotateCamera({
+canvas: plot3d,
+camera,
+scene,
+renderer,
+pointOfFocus: CAMERA_POINT_OF_FOCUS,
+up: CAMERA_UP,
+});
+const SPHERE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x44aaff,
+transparent: false,
+});
+const VERTEX_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xffffff,
+transparent: false,
+});
+const objs3d = { empty: true };
+function initialize3d() {
+if (objs3d.empty) {
+{
+scene.add(new THREE.AmbientLight(0x555555));
+const dirLight1 = new THREE.DirectionalLight(0xffcccc, 0.5);
+dirLight1.position.set(7, -8, 10);
+scene.add(dirLight1);
+const dirLight2 = new THREE.DirectionalLight(0xccffcc, 0.5);
+dirLight2.position.set(-7, -8, 10);
+scene.add(dirLight2);
+const dirLight3 = new THREE.DirectionalLight(0xffffff, 0.2);
+dirLight3.position.set(0, -10, 0);
+scene.add(dirLight3);
+}
+{
+const sphereGeometry = new THREE.SphereGeometry(SPHERE_RADIUS, 128, 64);
+const sphere = new THREE.Mesh(sphereGeometry, SPHERE_MATERIAL);
+scene.add(sphere);
+}
+}
+renderer.render(scene, camera);
+}
+initialize3d();
+const angleFormatter = d3.format(".2f");
+const vertexPositionsScaled = [];
+function initialize() {
+const size = 0.6;
+const nVertices = 3;
+objs3d.vertices = [];
+objs3d.labels = [];
+objs3d.edges = [];
+for (let i = 0; i < nVertices; i++) {
+const _theta2d = (2 * Math.PI * i) / nVertices;
+const x = size * Math.sin(_theta2d);
+const y = size * Math.cos(_theta2d) - 0.1;
+const xs = xScale2d(x);
+const ys = yScale2d(y);
+vertexPositionsScaled.push([xs, ys]);
+const vertex3dGeom = new THREE.SphereGeometry(0.2);
+const vertex3d = new THREE.Mesh(vertex3dGeom, VERTEX_MATERIAL);
+objs3d.vertices.push(vertex3d);
+const label = makeTextSprite(i + 1, {
+fontsize: 16,
+backgroundColor: { r: 255, g: 255, b: 255, a: 1 },
+borderColor: { r: 0, g: 0, b: 0, a: 1 },
+textColor: { r: 0, g: 0, b: 0, a: 1 },
+borderThickness: 2.5,
+});
+objs3d.labels.push(label);
+const edge = new THREE.Mesh(new THREE.BufferGeometry(), VERTEX_MATERIAL);
+objs3d.edges.push(edge);
+scene.add(vertex3d, label, edge);
+}
+function getEdgesData() {
+const edges = d3.range(nVertices).map(i => {
+const j = (i + 1) % nVertices;
+const [x1, y1] = vertexPositionsScaled[i];
+const [x2, y2] = vertexPositionsScaled[j];
+return {
+shape: "line",
+class: "p2d tri-edge",
+index1: i,
+index2: j,
+attrs: {
+x1,
+y1,
+x2,
+y2,
+},
+};
+});
+return edges;
+}
+const edges = getEdgesData();
+const vertexRadius = 13;
+const vertices = vertexPositionsScaled.map(([x, y], i) => ({
+shape: "g",
+class: "p2d vertex-container",
+index: i,
+attrs: {
+transform: `translate(${x} ${y})`,
+},
+children: [
+{
+shape: "circle",
+class: "p2d vertex-dot",
+attrs: { r: vertexRadius },
+},
+{
+shape: "text",
+class: "p2d vertex-label",
+text: i + 1,
+attrs: {
+"text-anchor": "middle",
+"dominant-baseline": "central",
+},
+},
+],
+}));
+const border = (() => {
+const [xMin, xMax] = xScale2d.range().sort();
+const [yMin, yMax] = yScale2d.range().sort();
+return {
+shape: "rect",
+class: "p2d border",
+attrs: {
+x: xMin,
+y: yMin,
+width: xMax - xMin,
+height: yMax - yMin,
+fill: "none",
+stroke: "#ccc",
+"stroke-width": 1,
+"stroke-dasharray": "2 2",
+},
+};
+})();
+applyGraphicalObjs(plot2d, [...edges, ...vertices, border]);
+const dragMargin = vertexRadius + 2;
+const minDragX = xScale2d(X_MIN_2d) + dragMargin;
+const maxDragX = xScale2d(X_MAX_2d) - dragMargin;
+const minDragY = yScale2d(Y_MAX_2d) + dragMargin;
+const maxDragY = yScale2d(Y_MIN_2d) - dragMargin;
+function update(o, dx, dy, index) {
+{
+const [origX1, origY1] = vertexPositionsScaled[index];
+const newX = Math.max(minDragX, Math.min(origX1 + dx, maxDragX));
+const newY = Math.max(minDragY, Math.min(origY1 + dy, maxDragY));
+vertexPositionsScaled[index] = [newX, newY];
+if (o) {
+o.setAttribute("transform", `translate(${newX} ${newY})`);
+}
+const edges = getEdgesData();
+applyGraphicalObjs(plot2d, edges, { selector: ".p2d.tri-edge" });
+const vertex3d = objs3d.vertices[index];
+const theta3d = thetaScale3d(newX);
+const phi3d = phiScale3d(newY);
+const vx = SPHERE_RADIUS * Math.cos(phi3d) * Math.cos(theta3d);
+const vy = SPHERE_RADIUS * Math.cos(phi3d) * Math.sin(theta3d);
+const vz = SPHERE_RADIUS * Math.sin(phi3d);
+vertex3d.position.set(vx, vy, vz);
+const label = objs3d.labels[index];
+label.position.set(...[vx, vy, vz].map(vv => vv * 1.05));
+}
+{
+const vertexPoints = [];
+const nEdgePoints = 50;
+for (let i = 0; i < nVertices; i++) {
+const edge = objs3d.edges[i];
+edge.geometry.dispose();
+const [x1, y1] = vertexPositionsScaled[i];
+const [x2, y2] = vertexPositionsScaled[(i + 1) % nVertices];
+const [theta1, theta2] = [x1, x2].map(thetaScale3d);
+const [phi1, phi2] = [y1, y2].map(phiScale3d);
+const [vx1, vx2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(
+([theta, phi]) => SPHERE_RADIUS * Math.cos(phi) * Math.cos(theta),
+);
+const [vy1, vy2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(
+([theta, phi]) => SPHERE_RADIUS * Math.cos(phi) * Math.sin(theta),
+);
+const [vz1, vz2] = [
+[theta1, phi1],
+[theta2, phi2],
+].map(([_, phi]) => SPHERE_RADIUS * Math.sin(phi));
+const xInterp = d3.interpolateNumber(vx1, vx2);
+const yInterp = d3.interpolateNumber(vy1, vy2);
+const zInterp = d3.interpolateNumber(vz1, vz2);
+const interpolators = [xInterp, yInterp, zInterp];
+const edgePoints = [];
+for (let j = 0; j < nEdgePoints; j++) {
+const t = j / (nEdgePoints - 1);
+let [vx, vy, vz] = interpolators.map(f => f(t));
+const norm = Math.sqrt(vx ** 2 + vy ** 2 + vz ** 2);
+const r = SPHERE_RADIUS / norm;
+vx *= r;
+vy *= r;
+vz *= r;
+edgePoints.push(new THREE.Vector3(vx, vy, vz));
+}
+const curve = new THREE.CatmullRomCurve3(edgePoints);
+const tube = new THREE.TubeGeometry(curve, 64, 0.05);
+edge.geometry = tube;
+// origin and the actual vector
+vertexPoints.push(new THREE.Vector3(vx1, vy1, vz1));
+}
+const angles = [];
+// tl;dr to get angle ABC, we:
+// 1. project BA and BC onto the plane normal to the sphere and incident
+//    with B
+// 2. take the inner product of those two vectors, then use the fact that
+//    |<u,v>| = |u| |v| cos(theta)
+//
+// To compute (1.), we project BA and BC onto B's position vector and then
+// subtract, as a vector is the sum of its components parallel to and
+// perpendicular to another vector
+for (let i = 0; i < nVertices; i++) {
+const p0 = vertexPoints[i];
+const p1 = vertexPoints[(i - 1 + nVertices) % nVertices];
+const p2 = vertexPoints[(i + 1) % nVertices];
+const [v1, v2] = [p1, p2].map(p => p.clone().sub(p0));
+// Project onto normal plane incident with p0
+const [proj1, proj2] = [v1, v2].map(v =>
+v.clone().sub(v.clone().projectOnVector(p0)),
+);
+const innerProduct = proj1.dot(proj2);
+const angle = Math.acos(
+innerProduct / (proj1.length() * proj2.length()),
+);
+angles.push(angle);
+}
+const angleSumDeg = (angles.reduce((a, b) => a + b) * 180) / Math.PI;
+document.getElementById("angle-sum").innerText =
+angleFormatter(angleSumDeg);
+// for (let i = 0; i < nVertices; i++) {}
+}
+renderer.render(scene, camera);
+}
+d3.range(nVertices).forEach(i => update(null, 0, 0, i));
+const dragHandler = d3
+.drag()
+.on("start", () => {
+document.body.style.cursor = "grabbing";
+})
+.on("drag", function (event, d) {
+const { dx, dy } = event;
+const { index } = d;
+update(this, dx, dy, index);
+})
+.on("end", () => {
+document.body.style.cursor = null;
+});
+plot2d.selectAll(".vertex-container").call(dragHandler);
+renderer.render(scene, camera);
+}
+initialize();
+</script>
+</body>
+</html>

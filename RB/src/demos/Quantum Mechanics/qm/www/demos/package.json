@@ -1,0 +1,17 @@
+{
+	"name": "common",
+	"collaborators": [
+		"Robert Bennett <rltbennett@icloud.com>"
+	],
+	"version": "0.1.0",
+	"files": [
+		"index.ts",
+		"qm_demo.css",
+		"three_utils.ts",
+		"utils.ts"
+	],
+	"module": "index.ts",
+	"sideEffects": [
+		"*.css"
+	]
+}

@@ -1,0 +1,1581 @@
+<!DOCTYPE html>
+<html>
+<head><title>constructive_destructive_interference.html</title>
+<meta charset="utf-8"/>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style>
+body {
+width: 95vw;
+height: 95vh;
+}
+#plot {
+margin-left: 30px;
+width: 100%;
+height: 100%;
+}
+.controls-container {
+position: fixed;
+min-width: 10em;
+}
+#slit-separation-text {
+position: absolute;
+color: white;
+font-size: 20px;
+text-align: center;
+vertical-align: middle;
+}
+.button {
+flex-grow: 1;
+}
+</style>
+</head>
+<body>
+<div class="controls-container">
+<div class="controls">
+<span>Angle (𝜃)</span>
+<span><input class="param-slider" id="slider-angle" parameter="angle" type="range"/></span>
+<span>Wavelength (𝜆)</span>
+<span><input class="param-slider" id="slider-wavelength" parameter="wavelength" type="range"/></span>
+<span>Slit separation (𝑑)</span>
+<span><input class="param-slider" id="slider-slit-separation" parameter="slitSeparation" type="range"/></span>
+<span></span>
+<div class="radio-button-container horizontal">
+<button class="button" id="btn-play" onclick="play();">Play</button>
+<button class="button" data-button-checked="" id="btn-pause" onclick="pause()">
+Pause
+</button>
+</div>
+</div>
+</div>
+<canvas class="draggable" id="plot"></canvas>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp =
+originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is its transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+const newDisplacementFromPointOfFocus = originalDisplacementFromPointOfFocus
+.clone()
+.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(newDisplacementFromPointOfFocus);
+// To determine whether the rotation is pathological (doing roughly a 180deg turn,
+// which looks really abrupt and jerky), we see if the segment between the old
+// camera relative position and the new one crosses the line that is the rotation
+// axis from "up" to the original position
+const origRotAxisFromUp = originalDisplacementFromPointOfFocus
+.clone()
+.cross(up)
+.normalize();
+// THIS ASSUMES z IS UP
+// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
+// rotation axis line, Line 2 is the segment connecting the two displacements
+const a1 = origRotAxisFromUp.y;
+const b1 = -origRotAxisFromUp.x;
+const c1 = 0;
+// The _1's and _2's here refer to points on line 2; they have nothing to do with line
+// 1. The 2_'s refer to the fact that these are on line 2
+const { x2_1, y2_1, x2_2, m } = (() => {
+const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
+const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
+const m = (y2_2 - y2_1) / (x2_2 - x2_1);
+return { x2_1, x2_2, y2_1, y2_2, m };
+})();
+const a2 = m;
+const b2 = -1;
+const c2 = y2_1 - m * x2_1;
+const determinant = a1 * b2 - a2 * b1;
+// The lines are (approximately) parallel iff the determinant is small
+if (Math.abs(determinant) > 1e-5) {
+// Lines aren't parallel; get intersection x
+const x = (b1 * c2 - b2 * c1) / determinant;
+// Is x_intersect between the two original points' x's? If yes then that segment
+// crosses the rotation axis, which is pathological
+if (x2_1 < x === x < x2_2) {
+return oldPosition;
+}
+}
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>/* global THREE makeRenderer */
+const canvas = document.getElementById("plot");
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+75,
+canvas.clientWidth / canvas.clientHeight,
+0.1,
+2000,
+);
+const renderer = makeRenderer(canvas);
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+const _PANE_HEIGHT = 10;
+const SOURCE_OUTER_PANE_WIDTH = 20;
+const SOURCE_PANE_HEIGHT = _PANE_HEIGHT;
+const DETECTOR_WIDTH = 90;
+const DETECTOR_HEIGHT = _PANE_HEIGHT;
+const SOURCE_PANE_GAP_WIDTH = 2;
+const SOURCE_Z = -100;
+const DETECTOR_Z = -30;
+const DISTANCE = Math.abs(SOURCE_Z - DETECTOR_Z);
+const CAMERA_Z = (SOURCE_Z + DETECTOR_Z) * 0.45;
+const MAX_ANGLE_RAD = Math.atan2(DETECTOR_WIDTH * 0.495, DISTANCE);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(60, 40, CAMERA_Z);
+const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
+const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
+d3.select(canvas).call(
+d3.drag().on("drag", function (event) {
+const cameraDisplacementFromPointOfFocus = camera.position
+.clone()
+.sub(CAMERA_POINT_OF_FOCUS);
+const { dx, dy } = event;
+// y is up so x-drags rotate around the y-axis; y-drags rotate around a
+// combination of x-axis and z-axis depending on the current camera angle -- if
+// on the x-y plane, y-drags rotate entirely around the z-axis; if on the y-z
+// plane, y-drags rotate entirely around the x-axis
+const angleAroundY = -dx * DRAG_SPEED;
+const angleInXZPlane = Math.atan2(
+cameraDisplacementFromPointOfFocus.z,
+cameraDisplacementFromPointOfFocus.x,
+);
+const angleAroundX = -Math.sin(angleInXZPlane) * dy * DRAG_SPEED;
+const angleAroundZ = Math.cos(angleInXZPlane) * dy * DRAG_SPEED;
+cameraDisplacementFromPointOfFocus.applyEuler(
+new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
+);
+const newCameraPos = CAMERA_POINT_OF_FOCUS.clone().add(
+cameraDisplacementFromPointOfFocus,
+);
+camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+// updateSlitSeparationTextElemPos();
+}),
+);
+const screenUnitsToMetersScale = d3.scaleLinear([0, 1000], [0, 0.0001]);
+const SOURCE_PANE_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0x778899,
+side: THREE.DoubleSide,
+transparent: false,
+});
+const DETECTOR_MATERIAL_BACK = new THREE.MeshPhongMaterial({
+color: 0x99aabb,
+side: THREE.FrontSide,
+transparent: true,
+opacity: 0.2,
+reflectivity: 0.2,
+});
+const DETECTOR_MATERIAL_FRONT = new THREE.MeshStandardMaterial({
+color: 0x99aabb,
+side: THREE.BackSide,
+// transparent: true,
+// opacity: 0.5,
+// reflectivity: 0.2,
+});
+const OUTLINE_MATERIAL = new THREE.LineBasicMaterial({
+color: 0xcccccc,
+linewidth: 1,
+});
+const DETECTOR_INTENSITY_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xffffff,
+side: THREE.DoubleSide,
+// clippingPlanes: [new THREE.Plane(new THREE.Vector3(0, 0, 1), -DETECTOR_Z - 0.3)],
+});
+const PHOTON_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xffffff,
+side: THREE.DoubleSide,
+});
+const DEFAULT_ANGLE = 0;
+const MIN_WAVELENGTH = 400e-9;
+const MAX_WAVELENGTH = 800e-9;
+const DEFAULT_WAVELENGTH = (MIN_WAVELENGTH + MAX_WAVELENGTH) / 2;
+const MIN_SLIT_SEPARATION = 2;
+const MAX_SLIT_SEPARATION = 30;
+const DEFAULT_SLIT_SEPARATION = (MIN_SLIT_SEPARATION + MAX_SLIT_SEPARATION) / 2;
+const colorScale = t =>
+d3.interpolateRgb(d3.interpolateSinebow(t * 0.7), "white")(0.05);
+const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
+const ARROWHEAD_LENGTH = 1.2;
+const ARROWHEAD_WIDTH = 0.8;
+let currAngle = DEFAULT_ANGLE;
+let currWavelength = DEFAULT_WAVELENGTH;
+let currSlitSeparation = DEFAULT_SLIT_SEPARATION;
+let currOffset = 0;
+function get3DVerticesForRectAtOrigin(width, height, z) {
+const halfWidth = width / 2;
+const halfHeight = height / 2;
+return [
+[-halfWidth, -halfHeight, z],
+[-halfWidth, halfHeight, z],
+[halfWidth, halfHeight, z],
+[halfWidth, -halfHeight, z],
+];
+}
+function pointsToGeometry(
+points,
+{ closePath, geometryConstructor } = {
+closePath: true,
+geometryConstructor: THREE.BufferGeometry,
+},
+) {
+if (closePath) {
+points = [...points, points[0]];
+}
+const vector3s = points.map(point => new THREE.Vector3(...point));
+return new geometryConstructor().setFromPoints(vector3s);
+}
+const DETECTOR_AMPLITUDE = (DETECTOR_HEIGHT * 0.7) / 2;
+function getIntensityOnDetector(angle, wavelength, slitSeparation, baseIntensity) {
+// An arbitrary factor to smooth things out; the larger, the less bumpy the wave
+return (
+baseIntensity *
+Math.cos((Math.PI * slitSeparation * Math.sin(angle)) / wavelength) ** 2
+);
+}
+function getIntensityPath({
+cx,
+cy,
+z,
+wavelength,
+slitSeparation,
+maxAngle,
+nPoints,
+// dashLength,
+// gapLength,
+}) {
+nPoints = nPoints ?? 1000;
+const angleScale = d3.scaleLinear([0, 1], [-maxAngle, maxAngle]);
+const topHalfPoints = [];
+const bottomHalfPoints = [];
+for (let i = 0; i < nPoints; ++i) {
+const angle = angleScale(i / (nPoints - 1));
+const x = cx + DISTANCE * Math.tan(angle);
+const intensity = getIntensityOnDetector(
+angle,
+wavelength,
+screenUnitsToMetersScale(slitSeparation),
+DETECTOR_AMPLITUDE,
+);
+const yTop = cy + intensity;
+const yBot = cy - intensity;
+topHalfPoints.push(new THREE.Vector3(x, yTop, z));
+bottomHalfPoints.push(new THREE.Vector3(x, yBot, z));
+}
+function pathFrom(points) {
+return new THREE.CatmullRomCurve3(points);
+}
+return [pathFrom(topHalfPoints), pathFrom(bottomHalfPoints)];
+}
+function getNPeriodsTotal(originCx, originDisplacement, angle, wavelength) {
+const originX = originCx + originDisplacement;
+const endPointX = originCx + DISTANCE * Math.tan(angle);
+const waveTotalLengthPx = (DISTANCE ** 2 + (originX - endPointX) ** 2) ** 0.5;
+const waveTotalLengthMeters = screenUnitsToMetersScale(waveTotalLengthPx);
+const nPeriodsTotal = waveTotalLengthMeters / wavelength;
+return nPeriodsTotal;
+}
+function getLocalAmplitude(phase, offset, wavelength) {
+return Math.sin(2 * Math.PI * phase - offset / wavelength);
+}
+function getPhotonPath({
+originCx,
+originDisplacement,
+originCy,
+angle,
+wavelength,
+amplitude,
+offset,
+nPoints,
+}) {
+originCy = originCy ?? 0;
+amplitude = amplitude ?? SOURCE_PANE_HEIGHT * 0.15;
+offset = offset ?? 0;
+nPoints = nPoints ?? 1000;
+const originX = originCx + originDisplacement;
+const endPointX = originCx + DISTANCE * Math.tan(angle);
+const nPeriodsTotal = getNPeriodsTotal(
+originCx,
+originDisplacement,
+angle,
+wavelength,
+);
+const points = [];
+for (let i = 0; i < nPoints; ++i) {
+const t = i / (nPoints - 1);
+const x = (1 - t) * originX + t * endPointX;
+const phase = t * nPeriodsTotal;
+const y = originCy + amplitude * getLocalAmplitude(phase, offset, wavelength);
+const z = (1 - t) * SOURCE_Z + t * DETECTOR_Z;
+points.push(new THREE.Vector3(x, y, z));
+}
+return new THREE.CatmullRomCurve3(points);
+}
+function getPhotonValueOnDetector(displacement) {
+return getLocalAmplitude(
+getNPeriodsTotal(0, displacement, currAngle, currWavelength),
+currOffset,
+currWavelength,
+);
+}
+let isPlaying = false;
+function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects }) {
+if (angle !== undefined) {
+currAngle = angle;
+} else {
+angle = currAngle;
+}
+if (wavelength !== undefined) {
+currWavelength = wavelength;
+} else {
+wavelength = currWavelength;
+}
+if (slitSeparation !== undefined) {
+currSlitSeparation = slitSeparation;
+} else {
+slitSeparation = currSlitSeparation;
+}
+if (offset !== undefined) {
+currOffset = offset;
+} else {
+offset = currOffset;
+}
+const paneInnerEdgeDistFromCenterX = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH;
+if (objects === undefined) {
+objects = {};
+// Outer source panes
+(() => {
+const outerPaneGeometry = new THREE.PlaneBufferGeometry(
+SOURCE_OUTER_PANE_WIDTH,
+SOURCE_PANE_HEIGHT,
+);
+const outerPlaneBorderGeometry = pointsToGeometry(
+get3DVerticesForRectAtOrigin(
+SOURCE_OUTER_PANE_WIDTH,
+SOURCE_PANE_HEIGHT,
+SOURCE_Z,
+),
+);
+for (const paneObjsKey of ["leftPaneObjs", "rightPaneObjs"]) {
+const pane = new THREE.Mesh(outerPaneGeometry, SOURCE_PANE_MATERIAL);
+pane.position.z = SOURCE_Z;
+const border = new THREE.Line(
+outerPlaneBorderGeometry,
+OUTLINE_MATERIAL,
+);
+scene.add(pane, border);
+objects[paneObjsKey] = { pane, border };
+}
+})();
+// Middle source pane
+(() => {
+const pane = new THREE.Mesh(
+new THREE.BufferGeometry(),
+SOURCE_PANE_MATERIAL,
+);
+pane.position.z = SOURCE_Z;
+const border = new THREE.Line(new THREE.BufferGeometry(), OUTLINE_MATERIAL);
+const arrowOrigin = new THREE.Vector3(
+0,
+SOURCE_PANE_HEIGHT / 2 + 1,
+SOURCE_Z,
+);
+const leftArrowDir = new THREE.Vector3(-1, 0, 0);
+leftArrowDir.normalize();
+const rightArrowDir = new THREE.Vector3(1, 0, 0);
+rightArrowDir.normalize();
+function makeArrow(direction) {
+return new THREE.ArrowHelper(
+direction,
+arrowOrigin,
+0,
+0xffffff,
+ARROWHEAD_LENGTH,
+ARROWHEAD_WIDTH,
+);
+}
+const leftArrow = makeArrow(leftArrowDir);
+const rightArrow = makeArrow(rightArrowDir);
+const arrows = [leftArrow, rightArrow];
+scene.add(pane, border, leftArrow, rightArrow);
+objects.middlePaneObjs = { pane, border, arrows };
+})();
+// Detector
+(() => {
+const paneGeometry = new THREE.PlaneBufferGeometry(
+DETECTOR_WIDTH,
+DETECTOR_HEIGHT,
+50,
+20,
+);
+const backPane = new THREE.Mesh(paneGeometry, DETECTOR_MATERIAL_BACK);
+backPane.position.z = DETECTOR_Z;
+const frontPane = new THREE.Mesh(paneGeometry, DETECTOR_MATERIAL_FRONT);
+frontPane.position.z = DETECTOR_Z;
+const borderGeometry = pointsToGeometry(
+get3DVerticesForRectAtOrigin(
+DETECTOR_WIDTH,
+DETECTOR_HEIGHT,
+DETECTOR_Z,
+),
+);
+const border = new THREE.Line(borderGeometry, OUTLINE_MATERIAL);
+scene.add(backPane, frontPane, border);
+objects.detectorObjs = { backPane, frontPane, border };
+})();
+// Amplitude on detector
+(() => {
+function makeCurve() {
+return new THREE.Mesh(
+new THREE.BufferGeometry(),
+DETECTOR_INTENSITY_MATERIAL,
+);
+}
+const topCurve = makeCurve();
+const bottomCurve = makeCurve();
+const verticalLine = new THREE.Mesh(
+new THREE.BufferGeometry(),
+DETECTOR_INTENSITY_MATERIAL,
+);
+const superpositionDot = new THREE.Mesh(
+new THREE.SphereBufferGeometry(0.5, 10, 10),
+DETECTOR_INTENSITY_MATERIAL,
+);
+superpositionDot.position.z = DETECTOR_Z;
+scene.add(topCurve, bottomCurve, verticalLine, superpositionDot);
+objects.amplitudeObjs = {
+topCurve,
+bottomCurve,
+verticalLine,
+superpositionDot,
+};
+})();
+// Fringe lights shining on front of detector. It's actually more efficient to
+// add every light and keep them all visible at all times than to try to be
+// clever about toggling off lights that don't shine on anything visible
+(() => {
+const fringeObjs = {};
+const fringeLights = [];
+fringeObjs.fringeLights = fringeLights;
+// max number of lights visible == 2 * maxLightIndex + 1
+const maxLightIndex = Math.ceil(
+(screenUnitsToMetersScale(MAX_SLIT_SEPARATION) *
+Math.sin(MAX_ANGLE_RAD)) /
+MIN_WAVELENGTH,
+);
+for (let i = -maxLightIndex; i <= maxLightIndex; ++i) {
+const light = new THREE.SpotLight(0xffffff, 1.5, 500, Math.PI, 1, 100);
+fringeLights.push(light);
+}
+scene.add(...fringeLights);
+objects.fringeObjs = fringeObjs;
+})();
+// The photons traveling from the source to the detector
+(() => {
+const photonObjs = {};
+const photons = [];
+photonObjs.photons = photons;
+const photonGeometry = new THREE.BufferGeometry();
+const leftPhoton = new THREE.Mesh(photonGeometry, PHOTON_MATERIAL);
+const rightPhoton = new THREE.Mesh(photonGeometry, PHOTON_MATERIAL);
+scene.add(leftPhoton, rightPhoton);
+photons.push(leftPhoton, rightPhoton);
+objects.photonObjs = photonObjs;
+})();
+}
+const outerPaneXPos = paneInnerEdgeDistFromCenterX + SOURCE_OUTER_PANE_WIDTH / 2;
+// Left pane
+(() => {
+const { pane, border } = objects.leftPaneObjs;
+pane.position.x = -outerPaneXPos;
+border.position.x = -outerPaneXPos;
+})();
+// Right pane
+(() => {
+const { pane, border } = objects.rightPaneObjs;
+pane.position.x = outerPaneXPos;
+border.position.x = outerPaneXPos;
+})();
+// Middle pane
+(() => {
+const { pane, border, arrows } = objects.middlePaneObjs;
+pane.geometry.dispose();
+const paneGeometry = new THREE.PlaneBufferGeometry(
+slitSeparation,
+SOURCE_PANE_HEIGHT,
+);
+pane.geometry = paneGeometry;
+const borderGeometry = pointsToGeometry(
+get3DVerticesForRectAtOrigin(slitSeparation, SOURCE_PANE_HEIGHT, SOURCE_Z),
+);
+border.geometry.dispose();
+border.geometry = borderGeometry;
+for (const arrow of arrows) {
+const arrowLength =
+slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH - ARROWHEAD_LENGTH;
+arrow.setLength(arrowLength, ARROWHEAD_LENGTH, ARROWHEAD_WIDTH);
+}
+})();
+//
+// Detector has nothing to update
+//
+// Ampltitude (intensity) visible on back of detector
+(() => {
+const {
+topCurve,
+bottomCurve,
+verticalLine,
+superpositionDot,
+} = objects.amplitudeObjs;
+const tubeRadius = 0.1;
+const [topPath, bottomPath] = getIntensityPath({
+cx: 0,
+cy: 0,
+z: DETECTOR_Z + tubeRadius + 0.001,
+wavelength,
+slitSeparation,
+maxAngle: MAX_ANGLE_RAD,
+});
+for (const [curve, path] of [
+[topCurve, topPath],
+[bottomCurve, bottomPath],
+]) {
+curve.geometry.dispose();
+curve.geometry = new THREE.TubeBufferGeometry(
+path,
+500,
+tubeRadius,
+8,
+false,
+);
+}
+verticalLine.geometry.dispose();
+const intensity = getIntensityOnDetector(
+angle,
+wavelength,
+screenUnitsToMetersScale(slitSeparation),
+DETECTOR_AMPLITUDE,
+);
+const detectionX = DISTANCE * Math.tan(angle);
+const verticalLineCurve = new THREE.LineCurve3(
+new THREE.Vector3(detectionX, intensity, DETECTOR_Z),
+new THREE.Vector3(detectionX, -intensity, DETECTOR_Z),
+);
+verticalLine.geometry = new THREE.TubeBufferGeometry(
+verticalLineCurve,
+1,
+0.1,
+10,
+);
+superpositionDot.position.x = detectionX;
+if (!isPlaying) {
+const leftPhotonValueOnDetector = getPhotonValueOnDetector(
+currSlitSeparation / 2,
+);
+const rightPhotonValueOnDetector = getPhotonValueOnDetector(
+-currSlitSeparation / 2,
+);
+const superpositionDotY =
+(intensity / 2) *
+(leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+superpositionDot.position.y = superpositionDotY;
+}
+})();
+const color = new THREE.Color(colorScale(wavelengthScale(wavelength)));
+// Lights on front of detector
+(() => {
+const { fringeLights } = objects.fringeObjs;
+const slitSeparationMeters = screenUnitsToMetersScale(slitSeparation);
+const distanceMeters = screenUnitsToMetersScale(DISTANCE);
+const nFringeLights = fringeLights.length;
+const maxIndex = (nFringeLights - 1) / 2;
+for (let i = 0; i < nFringeLights; ++i) {
+const light = fringeLights[i];
+const lightIndex = i - maxIndex;
+const theta = Math.asin((lightIndex * wavelength) / slitSeparationMeters);
+const x = screenUnitsToMetersScale.invert(distanceMeters * Math.tan(theta));
+light.color = color;
+light.position.set(x, 0, DETECTOR_Z - 2);
+light.lookAt(x, 0, 0);
+}
+})();
+if (!isPlaying) {
+// Photons traveling from source to detector
+(() => {
+const { photonObjs } = objects;
+const photons = photonObjs.photons;
+const displacement = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
+for (let i = 0; i < photons.length; ++i) {
+const photon = photons[i];
+photon.geometry.dispose();
+const photonPath = getPhotonPath({
+originCx: 0,
+originDisplacement: (i === 0 ? -1 : 1) * displacement,
+angle,
+wavelength,
+});
+photon.geometry = new THREE.TubeBufferGeometry(
+photonPath,
+1000,
+0.15,
+10,
+);
+photon.material.color = color;
+}
+})();
+}
+renderer.render(scene, camera);
+return objects;
+}
+camera.position.x = CAMERA_DEFAULT_POSITION.x;
+camera.position.y = CAMERA_DEFAULT_POSITION.y;
+camera.position.z = CAMERA_DEFAULT_POSITION.z;
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+const objs = updateEnvironment({});
+let animationFrame;
+const PHOTON_SPEED = 0.000000005; // arbitrary units; the larger, the faster they travel
+// eslint-disable-next-line no-unused-vars
+function play() {
+isPlaying = true;
+let startMS;
+const initialOffset = currOffset;
+function step(timestampMS) {
+if (!isPlaying) {
+return;
+}
+if (startMS === undefined) {
+startMS = timestampMS;
+}
+const elapsedMS = timestampMS - startMS;
+const photons = objs.photonObjs.photons;
+const displacement = currSlitSeparation / 2 + SOURCE_PANE_GAP_WIDTH / 2;
+const color = new THREE.Color(colorScale(wavelengthScale(currWavelength)));
+const offset = initialOffset + elapsedMS * PHOTON_SPEED;
+currOffset = offset;
+for (let i = 0; i < photons.length; ++i) {
+const photon = photons[i];
+photon.geometry.dispose();
+const photonPath = getPhotonPath({
+originCx: 0,
+originDisplacement: (i === 0 ? -1 : 1) * displacement,
+angle: currAngle,
+wavelength: currWavelength,
+offset,
+});
+photon.geometry = new THREE.TubeBufferGeometry(photonPath, 1000, 0.15, 10);
+photon.material.color = color;
+}
+const superpositionDot = objs.amplitudeObjs.superpositionDot;
+const intensity = getIntensityOnDetector(
+currAngle,
+currWavelength,
+screenUnitsToMetersScale(currSlitSeparation),
+DETECTOR_AMPLITUDE,
+);
+const leftPhotonValueOnDetector = getPhotonValueOnDetector(
+currSlitSeparation / 2,
+);
+const rightPhotonValueOnDetector = getPhotonValueOnDetector(
+-currSlitSeparation / 2,
+);
+superpositionDot.position.y =
+(intensity / 2) * (leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+renderer.render(scene, camera);
+animationFrame = window.requestAnimationFrame(step);
+}
+window.requestAnimationFrame(step);
+}
+// eslint-disable-next-line no-unused-vars
+function pause() {
+isPlaying = false;
+window.cancelAnimationFrame(animationFrame);
+}
+// Angle slider
+(() => {
+const slider = document.getElementById("slider-angle");
+const maxAngle = MAX_ANGLE_RAD * 0.99;
+slider.min = -maxAngle;
+slider.max = maxAngle;
+slider.step = 0.001;
+slider.value = DEFAULT_ANGLE;
+})();
+// Wavelength slider
+(() => {
+const slider = document.getElementById("slider-wavelength");
+slider.min = MIN_WAVELENGTH;
+slider.max = MAX_WAVELENGTH;
+slider.step = 1e-9;
+slider.value = DEFAULT_WAVELENGTH;
+})();
+// Slit separation slider
+(() => {
+const slider = document.getElementById("slider-slit-separation");
+slider.min = MIN_SLIT_SEPARATION;
+slider.max = MAX_SLIT_SEPARATION;
+slider.step = 0.001;
+slider.value = DEFAULT_SLIT_SEPARATION;
+})();
+d3.selectAll(".param-slider").on("input", function () {
+const attribute = this.getAttribute("parameter");
+updateEnvironment({ [attribute]: +this.value, objects: objs });
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,347 @@
+<!-- spell-checker: disable -->
+
+<!-- <script>
+	var MathJax = {
+		loader: {
+			load: ["input/tex", "output/svg", "ui/lazy"],
+		},
+		tex: {
+			inlineMath: [["\\(", "\\)"]],
+			displayMath: [["\\[", "\\]"]],
+			processEnvironments: false,
+		},
+		svg: { fontCache: "global" },
+		options: {
+			lazyMargin: "1000px",
+		},
+		// chtml: { fontCache: "global" },
+	};
+</script>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+<script
+	id="MathJax-script"
+	async
+	src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-svg.min.js"
+	integrity="sha384-lgPn3GAyVy/GCtSzTaxwg3b2ECTLz5o3dQQ1HDZGS3+wGk8FLLQt6fUT56Z3e8Bs"
+	crossorigin="anonymous"
+></script> -->
+<!-- <script
+	id="MathJax-script"
+	async
+	src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-chtml.min.js"
+	integrity="sha384-6YlMnuTfyvaGuIg6kPs4Mn1AEBDzgQrOaIQo/ERmaZtwV3jgyCTCNBb+rPe00nI0"
+	crossorigin="anonymous"
+></script> -->
+
+<link
+	rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.css"
+	integrity="sha384-bYdxxUwYipFNohQlHt0bjN/LCpueqWz13HufFEV1SUatKs1cm4L6fFgCi1jT643X"
+	crossorigin="anonymous"
+/>
+
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/katex.min.js"
+	integrity="sha384-Qsn9KnoKISj6dI8g7p1HBlNpVx0I8p1SvlwOldgi3IorMle61nQy4zEahWYtljaz"
+	crossorigin="anonymous"
+></script>
+
+<!-- mhchem, for chemical equations -->
+<script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/mhchem.min.js"
+	integrity="sha384-RTN08a0AXIioPBcVosEqPUfKK+rPp+h1x/izR7xMkdMyuwkcZCWdxO+RSwIFtJXN"
+	crossorigin="anonymous"
+></script>
+
+<!-- copy-tex -->
+<script
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/copy-tex.min.js"
+	integrity="sha384-ww/583aHhxWkz5DEVn6OKtNiIaLi2iBRNZXfJRiY1Ai7tnJ9UXpEsyvOITVpTl4A"
+	crossorigin="anonymous"
+></script>
+
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script
+	defer
+	src="https://cdn.jsdelivr.net/npm/katex@0.16.2/dist/contrib/auto-render.min.js"
+	integrity="sha384-+VBxd3r6XgURycqtZ117nYw44OOcIax56Z4dCRWbxyPt0Koah1uHoK0o4+/RRE05"
+	crossorigin="anonymous"
+	onload="renderMathInElement(
+		document.body,
+		{
+			throwOnError: false,
+			delimiters: [
+				{left: '\\(', right: '\\)', display: false},
+				{left: '\\[', right: '\\]', display: true}
+		  ],
+			macros: {'\\v': '\\mathbf{#1}'}
+		}
+	);"
+></script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+	href="https://fonts.googleapis.com/css2?family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Source+Serif+Pro:ital,wght@0,400;0,700;1,400;1,700&display=swap"
+	rel="stylesheet"
+/>
+
+<style>
+	:root {
+		--sans-font: "Source Sans Pro", sans-serif;
+		--serif-font: "Source Serif Pro", Georgia, serif;
+		--body-font: var(--serif-font);
+		--header-font: var(--sans-font);
+	}
+
+	.hidden > h2 {
+		display: none;
+	}
+
+	html {
+		font-size: 19px;
+		font-variant-ligatures: discretionary-ligatures;
+	}
+
+	body {
+		font-family: var(--body-font);
+		margin-right: 2vw;
+	}
+
+	:is(.sect2, .sect3) {
+		contain: layout paint;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6 {
+		margin-top: 0.8em;
+		margin-bottom: 0.4em;
+	}
+
+	h2 + .sectionbody > .sect2 > h3:first-child,
+	h3 ~ .sect3 > h4 {
+		margin-top: 0.2em;
+	}
+
+	.no-break {
+		white-space: nowrap;
+	}
+
+	/* BEGIN question numbering */
+	/* create counters in all documents */
+	body {
+		counter-reset: chapter-section topic-section question;
+	}
+	/* in docs for standalone chapters, explicitly set the chapter counter for the doc */
+	body.chap-1 {
+		counter-reset: chapter-section 1 topic-section question;
+	}
+	body.chap-2 {
+		counter-reset: chapter-section 2 topic-section question;
+	}
+	body.chap-3 {
+		counter-reset: chapter-section 3 topic-section question;
+	}
+	body.chap-4 {
+		counter-reset: chapter-section 4 topic-section question;
+	}
+	body.chap-5 {
+		counter-reset: chapter-section 5 topic-section question;
+	}
+	body.chap-6 {
+		counter-reset: chapter-section 6 topic-section question;
+	}
+	body.chap-7 {
+		counter-reset: chapter-section 7 topic-section question;
+	}
+	body.chap-8 {
+		counter-reset: chapter-section 8 topic-section question;
+	}
+	body.chap-griffiths {
+		counter-reset: chapter-section 1 topic-section question;
+	}
+
+	/* render numbers */
+	.chapter-num::before {
+		content: counter(chapter-section);
+	}
+	body.chap-griffiths .chapter-num::before {
+		content: "G";
+	}
+	.topic-num::before {
+		content: counter(topic-section);
+	}
+	.question-num::before {
+		content: counter(question);
+	}
+
+	/* for complete doc with all chapters, increment chapter and reset topic */
+	body:not(.qm-chapter) > #content h2 {
+		counter-increment: chapter-section;
+		counter-reset: topic-section;
+	}
+	/* for complete doc with all chapters, increment topic */
+	body:not(.qm-chapter) > #content h3 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* for standalone chapters, increment topic */
+	body.qm-chapter > #content h2 {
+		counter-increment: topic-section;
+		counter-reset: question;
+	}
+	/* in all docs, increment question number */
+	.question-num {
+		counter-increment: question;
+	}
+
+	.problem-number {
+		font-weight: bold;
+	}
+	/* END question numbering */
+
+	#toctitle,
+	#toc ul {
+		font-family: var(--sans-font);
+	}
+
+	#toc a:hover {
+		text-decoration: underline;
+	}
+
+	@media screen and (min-width: 1280px) {
+		#toc.toc2 {
+			width: 17em;
+		}
+	}
+
+	/* mjx-container {
+		overflow-x: scroll;
+		overflow-y: hidden;
+	} */
+
+	dt {
+		font-family: var(--sans-font);
+	}
+
+	a {
+		text-decoration-style: dotted;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	a:hover {
+		text-decoration-style: solid;
+		text-decoration-skip-ink: auto;
+		-webkit-text-decoration-skip: skip;
+	}
+
+	p {
+		margin-bottom: 0.5rem;
+	}
+	:is(ol, ul) > li p {
+		margin-bottom: unset;
+	}
+
+	.paragraph ~ .sidebarblock {
+		margin-top: 10px;
+	}
+
+	.katex {
+		font-size: 1.1em;
+	}
+
+	.katex-display {
+		overflow: auto hidden;
+	}
+
+	.katex-display > .katex {
+		font-size: 1.15em;
+	}
+
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-size: 1.1rem;
+	}
+
+	h1,
+	h2,
+	h3,
+	h4,
+	h5,
+	h6,
+	.admonitionblock td.content > .title,
+	.audioblock > .title,
+	.exampleblock > .title,
+	.imageblock > .title,
+	.listingblock > .title,
+	.literalblock > .title,
+	.stemblock > .title,
+	.openblock > .title,
+	.paragraph > .title,
+	.quoteblock > .title,
+	table.tableblock > .title,
+	.verseblock > .title,
+	.videoblock > .title,
+	.dlist > .title,
+	.olist > .title,
+	.ulist > .title,
+	.qlist > .title,
+	.hdlist > .title {
+		font-family: var(--header-font);
+	}
+
+	/* td.tableblock > .content > div.olist > ol {
+		list-style-type: lower-alpha;
+	} */
+
+	/* @media screen and (min-width: 768px) {
+		#toc.toc2 {
+			width: 12em;
+		}
+	} */
+
+	summary::-webkit-details-marker {
+		display: none;
+	}
+
+	table tr th,
+	table tr td {
+		padding: 0.2em 0.4em;
+	}
+
+	/* #pets-table > tbody > tr > th {
+		max-width: 13em;
+	} */
+
+	/* #pets-table > tbody > tr:first-child > :is(th, td) {
+		vertical-align: bottom;
+	}
+	#pets-table > tbody > tr:nth-child(2) > :is(th, td) {
+		vertical-align: top;
+	} */
+</style>

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="./dipeptide_well.js"></script>
+		<script src="https://cdn.plot.ly/plotly-1.58.4.min.js"></script>
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<style>
+			body {
+				margin: auto;
+				max-width: 1000px;
+				padding-top: 50px;
+				font-family: sans-serif;
+				overflow-x: hidden;
+			}
+			#containers {
+				white-space: nowrap;
+				text-align: center;
+			}
+			svg.container {
+				display: inline-block;
+				vertical-align: middle;
+			}
+			.plot-container {
+				text-align: center;
+				display: inline-block;
+			}
+			.equation-row {
+				display: block;
+			}
+			.plot3d {
+				width: 500px;
+				height: 500px;
+			}
+			.play-button {
+				font-size: 15px;
+				width: 100%;
+				text-align: left;
+			}
+			#energy-well-plot {
+				position: absolute;
+				right: 50px;
+				top: 300px;
+				opacity: 0;
+			}
+			#bottom-section {
+				margin-top: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<div id="containers">
+				<svg id="container-1" class="container"></svg>
+				<div style="display: inline-block; vertical-align: middle">
+					<table>
+						<tr>
+							<td>
+								<button
+									id="btn-add-enzyme"
+									class="play-button"
+									onclick="update(STAGES.enzyme)"
+								>
+									1. Add Enzyme
+								</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<button
+									id="btn-add-ligand"
+									class="play-button"
+									onclick="update(STAGES.ligand)"
+								>
+									2. Add Ligand
+								</button>
+							</td>
+						</tr>
+						<!-- <tr>
+							<td>
+								<button
+									id="btn-energy-well"
+									class="play-button"
+									onclick="update(STAGES.energyWell)"
+								>
+									3. Show Energy Well
+								</button>
+							</td>
+						</tr> -->
+						<tr>
+							<td>
+								<button
+									id="btn-reset"
+									class="play-button"
+									onclick="update(STAGES.initial)"
+								>
+									3. Reset
+								</button>
+							</td>
+						</tr>
+					</table>
+					<div
+						style="
+							text-align: left;
+							width: 18em;
+							margin-top: 30px;
+							white-space: normal;
+						"
+					>
+						<span>
+							Each bead in the graph below represents a dipeptide in the
+							beaker.</span
+						>
+					</div>
+				</div>
+				<!-- <svg id="container-2" class="container"></svg>
+			<svg id="container-3" class="container"></svg> -->
+			</div>
+			<div id="bottom-section">
+				<div id="bottom-graph-container">
+					<div class="plot-container">
+						<svg id="energy-graph"></svg>
+					</div>
+					<div class="plot-container">
+						<svg id="dipeptide-equation"></svg>
+					</div>
+				</div>
+				<div id="energy-well-plot" class="plot3d"></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../utils.js"></script>
+		<script type="text/javascript" src="./well_beads.js"></script>
+		<script type="text/javascript" src="./dipeptide.js"></script>
+	</body>
+</html>

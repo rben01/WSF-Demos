@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link
+			crossorigin="anonymous"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			rel="stylesheet"
+		/>
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			crossorigin="anonymous"
+			defer=""
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			onload="update()"
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+		></script>
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			crossorigin="anonymous"
+			defer=""
+			integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+			onload="renderMathInElement(document.body);"
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+		></script>
+		<link rel="stylesheet" href="../../wsf_demo.css" />
+		<style>
+			#main {
+				display: grid;
+				grid-template-columns: min-content 1fr;
+				column-gap: 40px;
+			}
+			#table-vars {
+				font-size: 65%;
+				text-align: left;
+				border-collapse: collapse;
+			}
+			#table-vars,
+			#table-vars th,
+			#table-vars td {
+				border: 1px solid white;
+				line-height: 1.3;
+			}
+			#table-vars th,
+			#table-vars td {
+				padding: 2px 8px;
+			}
+			#table-vars th {
+				max-width: 105px;
+			}
+			#table-vars thead {
+				vertical-align: text-bottom;
+			}
+			.axis {
+				stroke: white;
+			}
+			.axis-label {
+				stroke: none;
+				fill: white;
+				font-size: 14px;
+			}
+			.point {
+				fill: #f3c002;
+				stroke: white;
+			}
+			.point-label {
+				stroke: none;
+				fill: white;
+				/* stroke-width: 0.5px; */
+				/* font-weight: 700; */
+				text-anchor: middle;
+				font-size: 14px;
+			}
+			#top-sliders-sect {
+				margin-bottom: 30px;
+			}
+			.slope-line {
+				stroke: #5df;
+				stroke-width: 2px;
+			}
+			#eqn-holder {
+				margin-top: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="top-sliders-sect">
+			<div class="slider-container">
+				<div>
+					<span class="slider-label">Slope of line, \(𝐻_0=\frac{v}{d}\)</span>
+					<label>
+						<input
+							type="range"
+							id="input-slope"
+							name="input-slope"
+							oninput="update()"
+						/>
+					</label>
+				</div>
+			</div>
+		</div>
+		<div id="main">
+			<table id="table-vars">
+				<thead>
+					<th>Supernova</th>
+					<th>Distance (Mpc)</th>
+					<th>Red-shift (z)</th>
+					<th>Receding speed (km/s)</th>
+				</thead>
+				<tr>
+					<td>1995D</td>
+					<td>36.14</td>
+					<td>0.008</td>
+					<td>2.4<span class="operator">×</span>10<sup>3</sup></td>
+				</tr>
+				<tr>
+					<td>1995E</td>
+					<td>55.72</td>
+					<td>0.012</td>
+					<td>3.6<span class="operator">×</span>10<sup>3</sup></td>
+				</tr>
+				<tr>
+					<td>1996C</td>
+					<td>145.88</td>
+					<td>0.028</td>
+					<td>8.4<span class="operator">×</span>10<sup>3</sup></td>
+				</tr>
+				<tr>
+					<td>1990af</td>
+					<td>215.77</td>
+					<td>0.050</td>
+					<td>1.5<span class="operator">×</span>10<sup>4</sup></td>
+				</tr>
+				<tr>
+					<td>1992bs</td>
+					<td>335.74</td>
+					<td>0.064</td>
+					<td>1.92<span class="operator">×</span>10<sup>4</sup></td>
+				</tr>
+				<tr>
+					<td>1992aq</td>
+					<td>463.45</td>
+					<td>0.101</td>
+					<td>3.3<span class="operator">×</span>10<sup>4</sup></td>
+				</tr>
+			</table>
+			<svg id="viz"></svg>
+		</div>
+		<div id="eqn-holder">
+			<span id="eqn-h0"></span>
+			<span id="eqn-age"></span>
+		</div>
+		<script src="../../utils.js"></script>
+		<script src="./tegmark_2_4.js"></script>
+	</body>
+</html>

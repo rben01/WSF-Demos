@@ -1,0 +1,24 @@
+name: wsf
+channels:
+  - default
+  - anaconda
+  - conda-forge
+dependencies:
+  - python
+  - ipython
+  - ipykernel
+  - jupyter
+  - pandas >=1.0
+  - sympy
+  - matplotlib
+  - numpy
+  - scipy
+  - plotly
+  - html5lib
+  - ffmpeg
+  - opencv
+  - beautifulsoup4
+  - requests
+  - lxml
+  - flake8
+  - black

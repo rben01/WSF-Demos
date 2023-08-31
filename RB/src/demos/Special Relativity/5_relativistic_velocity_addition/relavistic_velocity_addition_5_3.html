@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link
+			rel="stylesheet"
+			type="text/css"
+			href="./relavistic_velocity_addition.css"
+		/>
+		<style>
+			.slider-label-custom {
+				min-width: 12.5em;
+			}
+		</style>
+	</head>
+
+	<body>
+		<div class="top-sliders-sect">
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Rocket velocity (𝑣<span class="subscript">rocket</span> ):
+					</span>
+					<input
+						type="range"
+						id="input-rocket-speed"
+						name="input-rocket-speed"
+						min="0.0"
+						max="0.999"
+						step=".0005"
+						value="0"
+						oninput="updateRocketSpeed(this.value)"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Projectile velocity (𝑣′<span class="subscript primed-subscript"
+							>projectile</span
+						>):
+					</span>
+					<input
+						type="range"
+						id="input-projectile-speed"
+						name="input-projectile-speed"
+						min="0.0"
+						max="0.999"
+						step=".0005"
+						value="0"
+						oninput="updateProjectileSpeed(this.value)"
+					/>
+				</label>
+			</span>
+		</div>
+		<div class="button-container">
+			<button
+				id="btn-hide-newtonian"
+				onclick="toggleNewtonian()"
+				class="play-button rva-button"
+			>
+				Hide Galilean Prediction
+			</button>
+		</div>
+		<div>
+			<div style="display: inline-block; vertical-align: top; width: 10em;">
+				<h4 class="heading">Rocket Frame</h4>
+				<table>
+					<tr>
+						<td class="eqn-left">
+							𝑣′<span class="subscript primed-subscript">rocket</span>
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right"><span class="sci-num">0.000</span>𝑐</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">
+							𝑣′<span class="subscript primed-subscript">projectile</span>
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="text-rocket-frame-projectile-speed"
+								class="sci-num highlighted-text"
+								>0.000</span
+							>𝑐
+						</td>
+					</tr>
+				</table>
+				<h4 class="heading">Ground Frame</h4>
+				<table>
+					<tr>
+						<td class="eqn-left">𝑣<span class="subscript">rocket</span></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="text-ground-frame-rocket-speed"
+								class="sci-num highlighted-text"
+								>0.00</span
+							>𝑐
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">
+							𝑣<span class="subscript">projectile</span>
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="text-ground-frame-projectile-speed"
+								class="sci-num secondary-text"
+								>0.00</span
+							>𝑐
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="display: inline-block; vertical-align: bottom;">
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					id="canvas-rocket-projectile"
+					class="viz-canvas"
+					style="margin: auto;"
+				></svg>
+			</div>
+		</div>
+
+		<div
+			id="text-galilean-prediction"
+			class="h-centered"
+			style="margin-top: 2em; font-size: smaller;"
+		>
+			<i
+				>The Galilean prediction for the projectile velocity as seen in the
+				ground frame is
+				<span id="text-galilean-speed-prediction" class="sci-num galilean"
+					>0</span
+				>𝑐</i
+			>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script
+			type="text/javascript"
+			src="./relavistic_velocity_addition_shared.js"
+		></script>
+		<script
+			type="text/javascript"
+			src="./relavistic_velocity_addition_5_3.js"
+		></script>
+		<script type="text/javascript">
+			updateRocketSpeed(0, { fromUserInput: false });
+			updateProjectileSpeed(0, { fromUserInput: false });
+		</script>
+	</body>
+</html>

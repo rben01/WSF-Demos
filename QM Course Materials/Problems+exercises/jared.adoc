@@ -1,0 +1,12 @@
+= Chapter 2 — Jared
+include::./shared_attributes.adoc[]
+
+
+== 2.6 The Finite Potential Well
+=== Questions
+
+
+== Solutions
+
+
+2.2.5 idea: add Q abt deriving ++\(c_n\)++ using Fourier’s trick?

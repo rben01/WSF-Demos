@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script type="text/javascript" src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="./spacetime_diagrams_css.css" />
+		<style>
+			body {
+				width: 550px;
+			}
+		</style>
+	</head>
+	<body>
+		<div>
+			<span
+				><label
+					><span class="slider-label slider-label-custom">Velocity (𝑣):</span
+					><input
+						type="range"
+						id="input-speed"
+						min="0"
+						max=".7"
+						value="0"
+						step=".001"
+						oninput="update({speed:this.value})" /></label
+			></span>
+			<br />
+			<span
+				>𝑣 =
+				<span id="text-speed" class="sci-num highlighted-text">0</span>𝑐</span
+			>
+			<br />
+			<button id="button" class="play-button" onclick="toggle()">
+				Show Temporal Slices
+			</button>
+		</div>
+		<svg id="viz"></svg>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_shared.js"></script>
+		<script type="text/javascript" src="./spacetime_diagrams_26_6.js"></script>
+	</body>
+</html>

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link
+			crossorigin="anonymous"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			rel="stylesheet"
+		/>
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			crossorigin="anonymous"
+			defer=""
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			onload="update()"
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+		></script>
+		<!-- To automatically render math in text elements, include the auto-render extension: -->
+		<script
+			crossorigin="anonymous"
+			defer=""
+			integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa"
+			onload="renderMathInElement(document.body);"
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"
+		></script>
+		<script src="../../utils.js"></script>
+		<link rel="stylesheet" href="../../wsf_demo.css" />
+		<style>
+			body {
+				line-height: 1.3;
+			}
+			#content {
+				display: flex;
+				flex-direction: row;
+				column-gap: 20px;
+			}
+			#readout {
+				display: flex;
+				flex-direction: column;
+				row-gap: 35px;
+			}
+			#table-vars {
+				text-align: left;
+				border-collapse: collapse;
+			}
+			#table-vars,
+			#table-vars th,
+			#table-vars td {
+				border: 1px solid white;
+			}
+			#table-vars tr:first-child {
+				background-color: #333;
+			}
+			#table-vars th,
+			#table-vars td {
+				padding: 5px 12px;
+			}
+			#table-vars td:nth-child(2) {
+				width: 100%;
+				white-space: nowrap;
+			}
+			#table-vars td:nth-child(1) {
+				white-space: nowrap;
+			}
+			.heading {
+				display: inline-block;
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
+			#graphics {
+				text-align: center;
+				vertical-align: middle;
+			}
+			.nobr {
+				white-space: nowrap;
+			}
+			.eqn-spacer {
+				display: block;
+				height: 12px;
+			}
+			.diag-line,
+			.mid-line {
+				stroke: white;
+				stroke-width: 1;
+				stroke-dasharray: 2 2;
+			}
+			.far-object {
+				fill: #f22;
+				stroke: white;
+				stroke-width: 1;
+			}
+			.earth-orbit,
+			.diameter-line {
+				fill: none;
+				stroke: white;
+				stroke-dasharray: 4 4;
+				stroke-width: 1;
+			}
+			.dist-line {
+				stroke: white;
+				stroke-width: 4;
+			}
+			.the-sun {
+				--color: rgb(255, 234, 8);
+				fill: var(--color);
+				stroke: var(--color);
+				stroke-dasharray: 1 2;
+				stroke-width: 8;
+			}
+			.the-earth {
+				fill: #38f;
+				stroke: white;
+				stroke-width: 1;
+			}
+			.label {
+				fill: white;
+				stroke: none;
+			}
+			.earth-orbit-label {
+				text-anchor: middle;
+				vertical-align: text-bottom;
+				font-size: 100%;
+			}
+			.text-label {
+				font-size: 80%;
+			}
+			.epl-l {
+				text-anchor: end;
+			}
+			.epl-r {
+				text-anchor: start;
+			}
+			.dist-label {
+				fill: white;
+				stroke: none;
+				text-align: start;
+				vertical-align: middle;
+			}
+			.theta-label {
+				text-anchor: middle;
+			}
+			.obj-label {
+				text-anchor: start;
+			}
+			.sun-label {
+				fill: black;
+				text-shadow: 1px 1px white;
+				text-anchor: middle;
+				font-size: 16px;
+				font-weight: 700;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="content">
+			<div id="readout">
+				<div class="top-sliders-sect">
+					<div><span class="heading">Parameters</span></div>
+					<div class="slider-container">
+						<div>Unknown distance of object (𝑥):</div>
+						<div>
+							<label>
+								<input
+									type="range"
+									id="input-x"
+									name="input-x"
+									step=".001"
+									value="1"
+									oninput="update()"
+								/>
+							</label>
+						</div>
+					</div>
+				</div>
+				<div>
+					<div><span class="heading">Constants & Equations</span></div>
+					<div class="eqn-desc">
+						Fixed distance from Earth to Sun (\(d\)):
+					</div>
+					<div id="eqn-dist">\(d=1.496\times10^8\,\textrm{km}\)</div>
+					<div class="eqn-spacer"></div>
+					<div class="eqn-desc">
+						Relationship between \(\theta\), \(x\), and \(d\):
+					</div>
+					<div id="eqn-tan">\(\tan\theta=\frac{d}{x}\)</div>
+				</div>
+				<div>
+					<div>
+						<span class="heading">Measurements & Calculated Values</span>
+					</div>
+					<div>
+						<table id="table-vars">
+							<tr>
+								<th>Variable</th>
+								<th>Value</th>
+							</tr>
+							<tr>
+								<td>
+									Parallax <wbr />angle
+									<span class="nobr">(\(\theta\))</span>
+								</td>
+								<td><span id="var-px-angle"></span></td>
+							</tr>
+							<tr>
+								<td>
+									Distance <wbr />of object
+									<span class="nobr">(\(x\))</span>
+								</td>
+								<td><span id="var-obj-dist"></span></td>
+							</tr>
+						</table>
+					</div>
+				</div>
+			</div>
+			<div id="graphics">
+				<svg id="viz"></svg>
+			</div>
+		</div>
+		<script src="./tegmark_1_4.js"></script>
+	</body>
+</html>

@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+<html>
+<head><title>wave_particle_duality_double_slit.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style>
+.grid-left-right {
+grid-template-columns: 15em 1fr;
+column-gap: 50px;
+}
+.button {
+width: 100%;
+}
+.header {
+font-size: 110%;
+}
+.v-divider {
+height: 20px;
+}
+</style>
+</head>
+<body>
+<div class="grid-left-right">
+<div class="controls-container">
+<div class="controls">
+<span>Wavelength of light:
+<span class="sci-num" id="text-wavelength"></span>nm</span>
+<span><input id="slider-wavelength" type="range"/></span>
+<span>Slit separation:
+<span class="sci-num" id="text-slit-sep"></span>μm</span>
+<span><input id="slider-slit-sep" type="range"/></span>
+<span>Photons per second:
+<span class="sci-num" id="text-num-photons"></span></span>
+<span><input id="slider-num-photons" type="range"/></span>
+<span></span>
+<span class="radio-button-container horizontal manual-radio-buttons"><button class="button" id="btn-run" onclick="run()">Run</button><button class="button" data-button-checked="" id="btn-pause" onclick="pause()">
+Pause</button><button class="button" data-button-checked="" id="btn-reset" onclick="reset()">
+Reset
+</button></span>
+</div>
+</div>
+<div>
+<div><span class="header">Expected intensity</span></div>
+<div><canvas id="plot-expected"></canvas></div>
+<div class="v-divider"></div>
+<div><span class="header">Actual photon detections</span></div>
+<div><canvas id="plot-actual"></canvas></div>
+</div>
+</div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global sampleFromCdf */
+const WIDTH = 925;
+const HEIGHT_EXPECTED = 150;
+const HEIGHT_ACTUAL = 500;
+const DPI = window.devicePixelRatio;
+d3.select("#plot-expected")
+.style("width", `${WIDTH}px`)
+.style("height", `${HEIGHT_EXPECTED}px`);
+d3.select("#plot-actual")
+.style("width", `${WIDTH}px`)
+.style("height", `${HEIGHT_ACTUAL}px`);
+const buttons = {
+run: document.getElementById("btn-run"),
+pause: document.getElementById("btn-pause"),
+reset: document.getElementById("btn-reset"),
+};
+const canvasExpected = document.getElementById("plot-expected");
+canvasExpected.width = WIDTH * DPI;
+canvasExpected.height = HEIGHT_EXPECTED * DPI;
+const contextExpected = canvasExpected.getContext("2d");
+const canvasActual = document.getElementById("plot-actual");
+canvasActual.width = WIDTH * DPI;
+canvasActual.height = HEIGHT_ACTUAL * DPI;
+const contextActual = canvasActual.getContext("2d");
+const X_MIN = -1e-1;
+const X_MAX = -X_MIN;
+const Y_MIN = 0;
+const Y_MAX = 1;
+const L = 1;
+const xScale = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
+const margin = 5 * DPI;
+const yScaleExpected = d3.scaleLinear(
+[Y_MIN, Y_MAX],
+[HEIGHT_EXPECTED - margin, margin],
+);
+const yScaleActual = d3.scaleLinear([Y_MIN, Y_MAX], [HEIGHT_ACTUAL - margin, margin]);
+// Remove rainbowness because green won't work well with projector
+// const colorScale = t =>
+// 	d3.interpolateRgb(d3.interpolateSinebow((1 - t) * 0.7), "white")(0.1);
+const colorScale = () => "white";
+const wavelengthScale = d3.scaleLinear([0, 1], [400e-9, 700e-9]);
+const wavelengthSlider = (() => {
+const slider = document.getElementById("slider-wavelength");
+const [min, max] = wavelengthScale.domain();
+slider.min = min;
+slider.max = max;
+slider.step = 0.0001;
+slider.value = (min + max) / 2;
+const wavelenthFormatter = (() => {
+const intFormatter = d3.format(".3r");
+return wavelengthMeters => intFormatter(wavelengthMeters * 1e9);
+})();
+const wavelengthTextSpan = document.getElementById("text-wavelength");
+slider.oninput = function () {
+const wavelength = +this.value;
+wavelengthTextSpan.innerText = wavelenthFormatter(wavelengthScale(wavelength));
+// eslint-disable-next-line no-use-before-define
+updateExpected();
+};
+wavelengthTextSpan.innerText = wavelenthFormatter(wavelengthScale(+slider.value));
+return slider;
+})();
+const slitSepScale = d3.scaleLinear([0, 1], [20e-6, 40e-6]);
+const slitSepSlider = (() => {
+const slider = document.getElementById("slider-slit-sep");
+const [min, max] = wavelengthScale.domain();
+slider.min = min;
+slider.max = max;
+slider.step = 0.0001;
+slider.value = (min + max) / 2;
+const slitSepFormatter = (() => {
+const intFormatter = d3.format(".3r");
+return slitSepMeters => intFormatter(slitSepMeters * 1e6);
+})();
+const slitSepTextSpan = document.getElementById("text-slit-sep");
+slider.oninput = function () {
+const slitSep = +this.value;
+slitSepTextSpan.innerText = slitSepFormatter(slitSepScale(slitSep));
+// eslint-disable-next-line no-use-before-define
+updateExpected();
+};
+slitSepTextSpan.innerText = slitSepFormatter(slitSepScale(+slider.value));
+return slider;
+})();
+const numPhotonsPerSecScale = d3.scaleLinear().domain([0, 1]).rangeRound([100, 1500]);
+const numPhotonsPerSecSlider = (() => {
+const slider = document.getElementById("slider-num-photons");
+const [min, max] = numPhotonsPerSecScale.domain();
+slider.min = min;
+slider.max = max;
+slider.step = 0.0001;
+slider.value = (min + max) / 2;
+const numPhotonsFormatter = (() => {
+const intFormatter = d3.format(",");
+return numPhotons => intFormatter(numPhotons);
+})();
+const numPhotonsTextSpan = document.getElementById("text-num-photons");
+slider.oninput = function () {
+const numPhotons = +this.value;
+numPhotonsTextSpan.innerText = numPhotonsFormatter(
+numPhotonsPerSecScale(numPhotons),
+);
+// eslint-disable-next-line no-use-before-define
+updateExpected();
+};
+numPhotonsTextSpan.innerText = numPhotonsFormatter(
+numPhotonsPerSecScale(+slider.value),
+);
+return slider;
+})();
+function sinc(x) {
+if (x === 0) {
+return 1;
+}
+return Math.sin(x) / x;
+}
+function pdf(x, slitSep, wavelength, intensity) {
+const a = 3e-6;
+const sinTheta = x / (x ** 2 + L ** 2) ** 0.5;
+const n = (Math.PI * sinTheta) / wavelength;
+return intensity * Math.cos(slitSep * n) ** 2 * sinc(a * n) ** 2;
+}
+function cdf(xMin, xMax, slitSep, wavelength, intensity) {
+intensity = intensity ?? 1;
+const boundPdf = x => pdf(x, slitSep, wavelength, intensity);
+const nIntervals = 1000;
+const dx = (xMax - xMin) / nIntervals;
+let cummArea = 0;
+const cdfPoints = [];
+for (let i = 0; i < nIntervals; ++i) {
+const x1 = xMin + i * dx;
+const y1 = boundPdf(x1);
+const x2 = x1 + dx;
+const y2 = boundPdf(x2);
+const yAvg = (y1 + y2) / 2;
+cummArea += dx * yAvg;
+cdfPoints.push([x2, cummArea]);
+}
+return cdfPoints.map(([x, area]) => [x, area / cummArea]);
+}
+function sample(n, slitSep, wavelength, intensity) {
+intensity = intensity ?? 1;
+const xMin = X_MIN;
+const xMax = X_MAX;
+const cdfPoints = cdf(xMin, xMax, slitSep, wavelength, intensity);
+// console.log(cdfPoints);
+const samples = sampleFromCdf(cdfPoints, n);
+return samples.map(x => [x, Y_MIN + (Y_MAX - Y_MIN) * Math.random()]);
+}
+function updateExpected() {
+const wavelength = wavelengthScale(+wavelengthSlider.value);
+const slitSep = slitSepScale(+slitSepSlider.value);
+// const numPhotons = numPhotonsPerSecScale(+numPhotonsPerSecSlider.value);
+// const samples = sample(numPhotons, slitSep, wavelength);
+// console.log(samples.map(([x, y]) => [xScale(x), yScale(y)]));
+// const color = colorScale(+wavelengthSlider.value);
+// const r = 2.5 * DPI;
+// const borderThickness = 0.5 * DPI;
+// contextActual.clearRect(0, 0, WIDTH * DPI, HEIGHT_ACTUAL * DPI);
+contextExpected.clearRect(0, 0, WIDTH * DPI, HEIGHT_EXPECTED * DPI);
+// for (const sample of samples) {
+// 	const cx = xScale(sample[0]) * DPI;
+// 	const cy = yScaleActual(sample[1]) * DPI;
+// 	contextActual.beginPath();
+// 	contextActual.arc(cx, cy, r, 0, 2 * Math.PI, false);
+// 	contextActual.fillStyle = color;
+// 	contextActual.fill();
+// 	contextActual.lineWidth = borderThickness;
+// 	contextActual.strokeStyle = "#000000";
+// 	contextActual.stroke();
+// }
+const boundPdf = x => pdf(x, slitSep, wavelength, 1);
+const nCurvePoints = 1000;
+const dx = (X_MAX - X_MIN) / (nCurvePoints - 1);
+for (const { lineWidth, strokeStyle } of [
+// {
+// 	lineWidth: 10 * DPI,
+// 	strokeStyle: "#000000",
+// },
+{
+lineWidth: 5 * DPI,
+strokeStyle: "#ffffff",
+},
+]) {
+contextExpected.beginPath();
+contextExpected.lineWidth = lineWidth;
+contextExpected.strokeStyle = strokeStyle;
+contextExpected.lineCap = "round";
+for (let i = 0; i < nCurvePoints; ++i) {
+const x = X_MIN + i * dx;
+const y = boundPdf(x);
+contextExpected.lineTo(xScale(x) * DPI, yScaleExpected(y) * DPI);
+}
+contextExpected.stroke();
+}
+}
+updateExpected();
+let experimentAnimationFrame;
+// eslint-disable-next-line no-unused-vars
+function run() {
+buttons.run.disabled = true;
+buttons.pause.disabled = false;
+buttons.reset.disabled = false;
+wavelengthSlider.disabled = true;
+slitSepSlider.disabled = true;
+const wavelength = wavelengthScale(+wavelengthSlider.value);
+const slitSep = slitSepScale(+slitSepSlider.value);
+const color = colorScale(+wavelengthSlider.value);
+const r = 2.5 * DPI;
+const borderThickness = 0.5 * DPI;
+// contextExpected.clearRect(0, 0, WIDTH * DPI, HEIGHT_EXPECTED * DPI);
+let remainder = 0;
+let prevTimestampMS;
+function step(timestampMS) {
+const numPhotonsPerSec = numPhotonsPerSecScale(+numPhotonsPerSecSlider.value);
+if (prevTimestampMS === undefined) {
+prevTimestampMS = timestampMS;
+}
+const elapsedSec = (timestampMS - prevTimestampMS) / 1000;
+prevTimestampMS = timestampMS;
+const numPhotonsTotal = remainder + elapsedSec * numPhotonsPerSec;
+const numWholePhotons = Math.floor(numPhotonsTotal);
+remainder = numPhotonsTotal % 1;
+const samples = sample(numWholePhotons, slitSep, wavelength);
+// console.log(remainder, samples);
+for (const sample of samples) {
+const cx = xScale(sample[0]) * DPI;
+const cy = yScaleActual(sample[1]) * DPI;
+contextActual.beginPath();
+contextActual.arc(cx, cy, r, 0, 2 * Math.PI, false);
+contextActual.fillStyle = color;
+contextActual.fill();
+contextActual.lineWidth = borderThickness;
+contextActual.strokeStyle = "#000000";
+contextActual.stroke();
+}
+experimentAnimationFrame = window.requestAnimationFrame(step);
+}
+experimentAnimationFrame = window.requestAnimationFrame(step);
+}
+function pause() {
+buttons.pause.disabled = true;
+buttons.run.disabled = false;
+window.cancelAnimationFrame(experimentAnimationFrame);
+}
+// eslint-disable-next-line no-unused-vars
+function reset() {
+pause();
+buttons.reset.disabled = true;
+buttons.pause.disabled = true;
+buttons.run.disabled = false;
+wavelengthSlider.disabled = false;
+slitSepSlider.disabled = false;
+contextActual.clearRect(0, 0, WIDTH * DPI, HEIGHT_ACTUAL * DPI);
+}
+</script>
+</body>
+</html>

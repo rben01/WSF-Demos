@@ -1,0 +1,146 @@
+[.qm-chapter.chap-5]
+= Chapter 5: Identical Particles
+include::shared_attributes.adoc[]
+
+== Two-Particle Systems
+
+=== Questions
+
+* {q-num} Show that an operator ++\(P\)++ satisfying ++\(P^2=I\)++ (such as the *exchange operator*) has no eigenvalues other than ++\(1\)++ and ++\(-1\)++.
+(Since the eigenvalues are real, such an operator is necessarily hermitian.)
++
+.Solution
+[%collapsible%open]
+====
+We want to solve ++\(Pf=\lambda f\)++ with ++\(f\ne\ket0\)++.
+Multiplying both sides by ++\(P\)++, we have
+++\[\begin{align*}
+f&=P^2f\\
+&=P(Pf)\\
+&=P(\lambda f)\\
+&=\lambda (Pf)\\
+&=\lambda^2 f
+\end{align*}\]++
+Since ++\(\lambda^2 f=f\)++ and ++\(f\ne\ket0\)++, we see that ++\(\lambda^2=1\)++.
+The only solutions to this equation are ++\(\lambda=\pm 1\)++.
+(++\(P\)++ need not have _both_ ++\(+1\)++ and ++\(-1\)++ as eigenvalues; the identity operator satisfies ++\(P^2=I\)++ but its only eigenvalue is ++\(1\)++.
+++\(\pm1\)++ are simply the only _permissible_ eigenvalues.)
+====
+
+* {q-num} _Slater Determinants_ are a methodological approach to using the antisymmetrization principle to compute the joint wavefunctions of identical fermions.
+In this problem we'll build them up from scratch.
++
+The wavefunction ++\(\Psi_k\)++ of a fermion with label ++\(k\)++ is the product of its position wavefunction and its spin: ++\(\Psi_k(\v r_k)=\Psi_k(\v r_k)\chi_k\)++.
+[{sublist-style}]
+.. We know that the wavefunction for two identical, non-interacting fermions is ++\[\Psi_-(\v r_1, \v r_2)=A[\Psi_1(\v r_1)\Psi_2(\v r_2)-\Psi_2(\v r_1)\Psi_1(\v r_2)]\]++
+where ++\(A\)++ is the normalization factor.
+This wavefunction has the property that it is antisymmetric under exchange of the particles.
++
+Write the wavefunction for _three_ identical, non-interacting fermions labeled ++\((1,2,3)\)++ whose individual states are ++\(\Psi_1\)++, ++\(\Psi_2\)++, and [.no-break]#++\(\Psi_3\)++.#
+This wavefunction should be the sum of ++\(3!=6\)++ different terms and should have the property that swapping any two particles — any two indices ++\(m,n\in\{1,2,3\}\)++ — should negate the resulting wavefunction.
+(Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)
++
+[sidebar]
+====
+Why ++\(3!\)++{nbsp}?
+In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and ++\(3!=6\)++ is the number of ways to assign the 3 [.no-break]#++\(\v r\)++’s# to the 3 [.no-break]#++\(\Psi\)++’s.#
+(In general, ++\(n!\)++ is the number of _permutations_, or orderings, of ++\(n\)++ items.)
+====
+.. Suppose that three fermions labeled ++\((1,2,3)\)++ are exchanged so that they are now labeled ++\((3,1,2)\)++.
+In terms of the original wavefunction you found in part (a), what is the new wavefunction?
+.. Without using the explicitly constructed wavefunction from part (a), repeat part (b).
+That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
+(Hint: The wavefunction's sign flips every time you exchange two fermions. Can you write the relabeling as the composition of multiple two-fermion exchanges?)
+.. Using the "`count the two-fermion exchanges`" principle from part (c), how would the sign of the wavefunction change under the following four-particle exchanges?
+... ++\((1,2,3,4) \to (2,1,4,3)\)++
+... ++\((1,2,3,4) \to (4,3,2,1)\)++
+... ++\((1,2,3,4) \to (4,1,2,3)\)++
+.. If you write a permutation as the composition of pairwise swaps, the _sign_ (or _parity_) of the permutation is the parity of the number of two-element swaps: ++\(+1\)++ if there are an even number of swaps and ++\(-1\)++ if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction of a system of multiple indistinguishable fermions will change when that permutation is used to relabel the fermions: the resulting sign change is just the sign of the permutation.
++
+Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of two-particle exchanges, the number of two-particle exchanges will either always be even or always be odd.
+In other words, an even number of two-particle exchanges will never result in the same permutation as an odd number of two-particle exchanges.
+.. Thankfully, you did not have to write out the wavefunction for the four-particle system in part (d).
+However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any ++\(N\)++-fermion system.
++
+Show that the _Slater determinant_ shown below (where ++\(A\)++ is once again a normalization constant) satisfies the properties of the wavefunction of an ++\(N\)++-fermion system: it contains all ++\(N!\)++ assignments of states to particles (so that it is fully indeterminate about which particle is i which state) and is antisymmetric under exchange of any two of the ++\(N\)++ fermions.
+++\[\begin{align*}
+\Psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
+\Psi_{1}(\v r_1)&\Psi_{2}(\v r_1)&\cdots& \Psi_{N}(\v r_1)\\
+\Psi_{1}(\v r_2)&\Psi_{2}(\v r_2)&\cdots& \Psi_{N}(\v r_2)\\
+\vdots&\vdots&\ddots&\vdots\\
+\Psi_{1}(\v r_N)&\Psi_{2}(\v r_N)&\cdots& \Psi_{N}(\v r_N)\\
+\end{vmatrix}
+\end{align*}\]++
+Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.
+.. Assuming the ++\(\Psi_n\)++’s are orthonormal, show that the normalization factor in the Slater determinant is ++\(A=\frac{1}{\sqrt N}\)++.
+.. Derive the Pauli exclusion principle from the Slater determinant — which property of the determinant leads to the Pauli exclusion principle?
+.. The _permanent_ of a matrix is computed similarly to the determinant, except that there are no powers of ++\(-1\)++ in its cofactor expansion; you only ever _add_ the submatrices (so, for instance, the permanent of ++\(\displaystyle\begin{pmatrix}a&b\\c&d\end{pmatrix}\)++ is ++\(ad+bc\)++).
+Show that the _Slater permanent_ gives the wavefunction of an ++\(N\)++-_boson_ system.
+
++
+.Solution
+[%collapsible]
+====
+The three-way swap can be decomposed into pairwise swaps: first we swap 1 and 2 to obtain ++\((2,1,3)\)++, and then we swap 2 and 3 to obtain ++\((3,1,2)\)++.
+Since both two-particle swaps multiply the wavefunction by ++\(-1\)++ (because the particles are fermions), the net result is that resulting wavefunction is equal to the original wavefunction.
+====
+
+* {q-num} Two non-interacting particles in states ++\(\Psi_a(\vec{r_1})\)++ and  ++\(
+\Psi_b(\vec{r_2})\)++ with  energies ++\(a\)++ and ++\(b\)++ form a system with total energy ++\(E=a+b\)++. For ++\(E=4\)++, determine all degenerate wavefunctions if the particles are...
++
+[{sublist-style}]
+. Distinguishable
+. Bosons
+. Fermions
+
+* {q-num} Write out the full wavefunction, including the spin and spatial components, for the following two-particle systems:
++
+[{sublist-style}]
+. Electrons in the total spin state ++\(\ket{0 \ 0}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+. Identical spin-1 particles in the total spin state ++\(\ket{1 \ -1}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+. A spin-1 particle and spin-++\(\frac{1}{2}\)++ particle in total spin state ++\(\ket{\frac{3}{2} \ \frac{1}{2}}\)++ and energetic states ++\(a\)++ and ++\(b\)++, respectively.
+. Identical spin-++\(\frac{3}{2}\)++ particles in total spin state ++\(\ket{3 \ 0}\)++ and energetic states ++\(a\)++ and ++\(b\)++.
+
+Note: we suggest using the notation ++\(\ket{s_1 \ s_2 \ m_1 \ m_2}\)++ and ++\(\psi_E\)++, where ++\(E=a,b\)++.
+
+* {q-num} Central potential question (need to think one up)
+
+* {q-num} A positron is like an electron in every way except that its charge is positive instead of negative.
+What would the exchange force be between an electron and a positron (ignoring any electrical force between them).
+
+== Atoms
+
+* {q-num} Using separation of variables, show that if you ignore the electron repulsion term in the Hamiltonian, the wavefunction for Helium can be written as a product of two hydrogenic wavefunctions.
+
+* {q-num} Write out the wavefunctions for the ground and first two excited states of helium using the notation ++\(\psi_{nlm_{l}}\)++ and ++\(\ket{s \ m_z}\)++. Indicate which are parahelium and orthohelium.
+
+* {q-num} What would the ground state of helium be if its two electrons were distinguishable (say, one had a very slightly different mass)?
+
+* {q-num} _Positronium_ is a system made of one electron and one positron.
+Analogously with helium, _para_-positronium has the two particles in the singlet state while _ortho_-positronium has the two particles in the triplet state.
+Which kind of positronium has a higher energy, para- or ortho-?
+By how much?
+
+* {q-num} [Question 5.17 from Griffiths - I think we should use this question in combo with 5.18]
++
+[{sublist-style}]
+. Figure out the electron configurations (in the notation of Equation 5.44) for the first two rows of the periodic Table (up to neon), and check your results against Table 5.1.
+. Figure out the corresponding total angular momenta, in the notation of Equation 5.45, for the first four elements. List all the _possibilities_ for boron, carbon, and nitrogen.
+
+* {q-num} [Question 5.18 from Griffiths - I think 5.17 and 5.18 get at the heart of angular momentum configuration. I don't know how else to gain familiarity with Hund's rules other than just practicing on the periodic table]
++
+[{sublist-style}]
+. *Hund's first rule* says that, consistent with the Pauli principle, the state with the highest total spin (++\(S\)++) will have the lowest energy. What would this predict in the case of the excited states of helium?
+. *Hund's second rule* says that, for a given spin, the state with the highest total orbital angular momentum (++\(L\)++), consistent with overall antisymmetrization, will have the lowest energy. Why doesn't carbon have ++\(L=2\)++? _Hint_: Note that the "top of the ladder" ++\(M_L = L\)++ is symmetric.
+. *Hund's third rule* says that if a  subshell ++\(n, l\)++ is no more than half filled, then the lowest energy level has ++\(J= |L-S|\)++; if it is more than half filled, then ++\(J=L+S\)++ has the lowest energy. Use this to resolve the boron ambiguity in Problem 5.17(b).
+. Use Hund's rules, together with the fact that a symmetric spin state must go with an antisymmetric position state (and vice versa) to resolve the carbon and nitrogen ambiguities in Problem 5.17(b). _Hint_: Always go to the "top of the ladder" to figure out the symmetry of a state.
+
+
+== Solids
+
+* {q-num}
+
+* {q-num}
+
+== Demonstrations

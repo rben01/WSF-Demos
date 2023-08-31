@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<link rel="stylesheet" type="text/css" href="./coordinate_transformation.css" />
+	</head>
+
+	<body>
+		<div class="top-sliders-sect">
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑥-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-x-coord"
+						name="input-x-coord"
+						oninput="updateAngle({x: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑦-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-y-coord"
+						name="input-y-coord"
+						oninput="updateAngle({y: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Angle (𝜃):
+					</span>
+					<input
+						type="range"
+						id="input-angle-rad"
+						name="input-angle-rad"
+						oninput="updateAngle({angleRad: +this.value})"
+					/>
+				</label>
+			</span>
+		</div>
+		<br />
+		<div style="display: inline-block; vertical-align: bottom;">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="viz-canvas"
+				style="margin: auto;"
+			></svg>
+		</div>
+		<div class="coordinate-box">
+			<div
+				style="
+					vertical-align: middle;
+					display: table-cell;
+					padding-top: auto;
+					padding-bottom: auto;
+				"
+			>
+				<table cellpadding="0" cellspacing="0">
+					<tr>
+						<td class="eqn-left">𝑥</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-x" class="highlighted-text"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑦</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-y" class="highlighted-text"></span>
+						</td>
+					</tr>
+					<tr class="blank-row"></tr>
+					<tr>
+						<td class="eqn-left">𝜃</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-angle" class="quaternary-text">0</span
+							><span class="operator">º</span>
+						</td>
+					</tr>
+					<tr class="blank-row"></tr>
+					<tr>
+						<td class="eqn-left">𝑥′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-transformed-x" class="secondary-text"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left">𝑦′</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-transformed-y" class="secondary-text"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="../../global_aesthetic.js"></script>
+		<script
+			type="text/javascript"
+			src="./coordinates_for_spacetime_transformation.js"
+		></script>
+	</body>
+</html>

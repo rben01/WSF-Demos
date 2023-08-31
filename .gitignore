@@ -1,0 +1,34 @@
+.DS_Store
+.vscode/*
+.venv
+.mypy_cache
+.grok
+__pycache__
+*.min.*
+RB/src/demos/CDFs
+.ebextensions
+*.aux
+*.fdb_latexmk
+*.fls
+*.xdv
+node_modules/*
+anim*.mp4
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+*.xdv
+
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/snippets.code-snippets
+
+QM Course Materials/Problems+exercises/Quantum Solutions
+
+# Added by cargo
+
+/target

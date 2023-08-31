@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://d3js.org/d3.v5.min.js" type="text/javascript"></script>
+</head>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+.slider-label-custom {
+text-align: left;
+}
+.viz-canvas {
+padding-top: 5px;
+}
+.smaller {
+font-size: 70%;
+}
+.play-button {
+width: 13em;
+}
+body {
+width: 550px;
+}
+</style>
+<div>
+<span><label><span class="slider-label slider-label-custom">Velocity (𝑣):</span><input id="input-speed" max=".7" min="0" oninput="update({speed:this.value})" step=".001" type="range" value="0"/></label></span>
+<br/>
+<span>𝑣 =
+<span class="sci-num highlighted-text" id="text-speed">0</span>𝑐</span>
+<br/>
+<button class="play-button" id="button-spatial" onclick="toggleSpatial()">
+Show Spatial Slices
+</button>
+<button class="play-button" id="button-temporal" onclick="toggleTemporal()">
+Show Temporal Slices
+</button>
+</div>
+<svg id="viz"></svg>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+/* global STANDARD_COLORS defineArrowhead applyDatum lorentzFactor */
+const AXES = {
+x: { min: -2, max: 2 },
+y: { min: -2, max: 2 },
+};
+const MARGINS = { t: 10, b: 10, l: 10, r: 10 };
+const AXES_EXTENT_PAST_DATA = 90;
+const WIDTH = 550,
+HEIGHT = 550;
+const svg = d3.select("#viz").attr("width", WIDTH).attr("height", HEIGHT);
+const AXIS_ARROWHEAD_ID = "arrowhead_axis_";
+const LINE_ARROWHEAD_ID = "arrowhead_line_";
+const lineColor = STANDARD_COLORS.secondary;
+(() => {
+const speedSlider = document.getElementById("input-speed");
+if (speedSlider) {
+speedSlider.max = 0.7;
+}
+})();
+// eslint-disable-next-line no-unused-vars
+function fmtFloat(x, precision) {
+return x.toFixed(precision).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+const defs = svg.append("svg:defs");
+defineArrowhead(defs, {
+id: AXIS_ARROWHEAD_ID,
+length: 18,
+width: 15,
+color: "white",
+attrs: { "stroke-dasharray": 0 },
+});
+defineArrowhead(defs, {
+id: LINE_ARROWHEAD_ID,
+length: 18,
+width: 15,
+color: lineColor,
+attrs: { "stroke-dasharray": 0 },
+});
+(() => {
+const filter = defs
+.append("filter")
+.attr("x", 0)
+.attr("y", 0)
+.attr("width", 1)
+.attr("height", 1)
+.attr("id", "text-bg");
+filter.append("feFlood").attr("flood-color", "black");
+filter.append("feComposite").attr("in", "SourceGraphic").attr("operator", "atop");
+})();
+const axisColor = "#eee";
+const tickColor = "#ccc";
+const tickLength = 5;
+const xScale = d3
+.scaleLinear()
+.domain([AXES.x.min, AXES.x.max])
+.range([
+MARGINS.l + AXES_EXTENT_PAST_DATA,
+WIDTH - MARGINS.r - AXES_EXTENT_PAST_DATA,
+]);
+const yScale = d3
+.scaleLinear()
+.domain([AXES.y.min, AXES.y.max])
+.range([
+HEIGHT - MARGINS.b - AXES_EXTENT_PAST_DATA,
+MARGINS.t + AXES_EXTENT_PAST_DATA,
+]);
+const ticks = d3.range(-2, 2 + 0.001, 1);
+function drawAxes() {
+svg.append("rect")
+.attr("x", 0)
+.attr("y", 0)
+.attr("width", WIDTH)
+.attr("height", HEIGHT)
+.attr("fill", "black");
+svg.selectAll()
+.data(ticks)
+.join("line")
+.attr("x1", xScale)
+.attr("x2", xScale)
+.attr("y1", yScale(0) - tickLength / 2)
+.attr("y2", yScale(0) + tickLength / 2)
+.style("stroke", tickColor)
+.style("stroke-width", 1.5);
+svg.selectAll()
+.data(ticks)
+.join("line")
+.attr("x1", xScale(0) - tickLength / 2)
+.attr("x2", xScale(0) + tickLength / 2)
+.attr("y1", yScale)
+.attr("y2", yScale)
+.style("stroke", tickColor)
+.style("stroke-width", 1.5);
+svg.append("line")
+.attr("x1", xScale(AXES.x.min) - AXES_EXTENT_PAST_DATA)
+.attr("y1", yScale(0))
+.attr("x2", xScale(AXES.x.max) + AXES_EXTENT_PAST_DATA)
+.attr("y2", yScale(0))
+.attr("stroke", axisColor)
+.attr("stroke-width", 1)
+.attr("marker-end", `url(#${AXIS_ARROWHEAD_ID})`);
+svg.append("line")
+.attr("x1", xScale(0))
+.attr("y1", yScale(AXES.y.min) + AXES_EXTENT_PAST_DATA)
+.attr("x2", xScale(0))
+.attr("y2", yScale(AXES.y.max) - AXES_EXTENT_PAST_DATA)
+.attr("stroke", axisColor)
+.attr("stroke-width", 1)
+.attr("marker-end", `url(#${AXIS_ARROWHEAD_ID})`);
+svg.append("text")
+.text("𝑥")
+.attr("x", xScale(AXES.x.max) + AXES_EXTENT_PAST_DATA - 4)
+.attr("y", yScale(0) - 15)
+.attr("font-size", 24)
+.attr("fill", "white")
+.attr("text-anchor", "right")
+.attr("dominant-baseline", "bottom");
+svg.append("text")
+.text("𝑡")
+.attr("x", xScale(0) + 15)
+.attr("y", yScale(AXES.y.max) - AXES_EXTENT_PAST_DATA)
+.attr("font-size", 24)
+.attr("fill", "white")
+.attr("text-anchor", "left")
+.attr("dominant-baseline", "middle");
+}
+drawAxes();
+const lineGroupsClass = "spatial-slice-group";
+const ANIM_STATES = { before: 0, during: 1, after: 2 };
+const states = { spatial: ANIM_STATES.before, temporal: ANIM_STATES.before };
+const showSlices = { spatial: false, temporal: false };
+// eslint-disable-next-line no-unused-vars
+function _toggleSlices(
+svg,
+button,
+{ sliceType, beforeBeginCallback, afterFinishCallback, afterResetCallback },
+) {
+function call(callback) {
+if (typeof callback !== "undefined") {
+callback(button);
+}
+}
+const state = states[sliceType];
+showSlices[sliceType] = state === ANIM_STATES.before;
+call(beforeBeginCallback);
+button.disabled = true;
+let t = svg
+.selectAll(`.${lineGroupsClass}`)
+.filter(
+d =>
+(sliceType === undefined || d.sliceType === sliceType) &&
+!d.alwaysVisible,
+);
+if (state === ANIM_STATES.before) {
+t.transition()
+.delay((d, i) => i * 400)
+.duration(1000)
+.style("opacity", 1)
+.end()
+.then(
+() => {
+states[sliceType] = ANIM_STATES.after;
+call(afterFinishCallback);
+button.disabled = false;
+},
+() => {},
+);
+} else if (state === ANIM_STATES.after) {
+t = t
+.transition()
+.duration(200)
+.style("opacity", 0)
+.end()
+.then(
+() => {
+call(afterResetCallback);
+states[sliceType] = ANIM_STATES.before;
+button.disabled = false;
+},
+() => {},
+);
+return;
+} else {
+throw new Error(`Invalid state ${state}`);
+}
+states[sliceType] = ANIM_STATES.during;
+}
+const lineElemsClass = "spatial-elem";
+// eslint-disable-next-line no-unused-vars
+function _updateDiagrams({
+axes,
+speed,
+speedSlider,
+speedText,
+hideSecondaryAxesByDefault,
+}) {
+if (typeof speed === "undefined") {
+speed = speedSlider.value;
+}
+speed = +speed;
+if (typeof axes === "string") {
+axes = [axes];
+}
+if (typeof hideSecondaryAxesByDefault === "undefined") {
+hideSecondaryAxesByDefault = true;
+}
+const nLinesAbove = 2;
+const lineGroups = axes
+.map(axis =>
+d3.range(2 * nLinesAbove + 1).map(i => {
+const index = -nLinesAbove + i;
+const alwaysVisible = index === 0 || !hideSecondaryAxesByDefault;
+const sliceType = axis === "x" ? "spatial" : "temporal";
+const opacity = showSlices[sliceType] || alwaysVisible ? 1 : 0;
+return {
+axis,
+index,
+opacity,
+alwaysVisible,
+wasAnimating: states[sliceType] !== ANIM_STATES.before,
+sliceType,
+};
+}),
+)
+.flat(Infinity);
+const gamma = lorentzFactor({ fracOfC: speed });
+function dataForGroup(d) {
+const index = d.index;
+const arrowheadOffset = 0.0001;
+let x1, y1, x2, y2, axisSymbol;
+const vectorScale = 2.3;
+if (d.axis === "t") {
+const x0 = index / gamma;
+({ min: y2, max: y1 } = AXES.y);
+[x1, x2] = [y1, y2].map(y => speed * y + x0);
+axisSymbol = "𝑥";
+} else if (d.axis === "x") {
+const y0 = index / gamma;
+({ min: x2, max: x1 } = AXES.x);
+[y1, y2] = [x1, x2].map(x => speed * x + y0);
+axisSymbol = "𝑡";
+} else {
+throw new Error(`Unexpected axis ${d.axis}`);
+}
+const midX = (x1 + x2) / 2;
+const midY = (y1 + y2) / 2;
+const dx1 = Math.abs(x1 - midX);
+const dy1 = Math.abs(y1 - midY);
+const mag1 = (dx1 ** 2 + dy1 ** 2) ** 0.5;
+x1 = midX + (vectorScale * dx1) / mag1;
+y1 = midY + (vectorScale * dy1) / mag1;
+const dx2 = -Math.abs(x2 - midX);
+const dy2 = -Math.abs(y2 - midY);
+const mag2 = (dx2 ** 2 + dy2 ** 2) ** 0.5;
+x2 = midX + (vectorScale * dx2) / mag2;
+y2 = midY + (vectorScale * dy2) / mag2;
+let arrowheadX2, arrowheadY2;
+if (d.axis === "t") {
+arrowheadX2 = x1 + speed * arrowheadOffset;
+arrowheadY2 = y1 + arrowheadOffset;
+} else if (d.axis === "x") {
+arrowheadX2 = x1 + arrowheadOffset;
+arrowheadY2 = y1 + speed * arrowheadOffset;
+} else {
+throw new Error(`Unexpected axis ${d.axis}`);
+}
+const dx = d.axis === "t" ? 0 : -15;
+const dy = d.axis === "t" ? -15 : -12;
+const textPos = {
+x: xScale(x1) + dx,
+y: yScale(y1) + dy,
+};
+if (textPos.x > xScale(AXES.x.max) - 20 + AXES_EXTENT_PAST_DATA) {
+textPos.x = xScale(x2) - 10;
+textPos.y = yScale(y2) + 16;
+}
+[x1, x2] = [x1, x2].map(xScale);
+[y1, y2] = [y1, y2].map(yScale);
+arrowheadX2 = xScale(arrowheadX2);
+arrowheadY2 = yScale(arrowheadY2);
+const lineAttrs = {
+stroke: lineColor,
+"stroke-width": 2,
+"stroke-dasharray": "3 3",
+"stroke-dashoffset": 1.5,
+};
+return [
+{
+shape: "line",
+attrs: {
+x1: (x1 + x2) / 2,
+y1: (y1 + y2) / 2,
+x2: x1,
+y2: y1,
+...lineAttrs,
+},
+},
+{
+shape: "line",
+attrs: {
+x1: (x1 + x2) / 2,
+y1: (y1 + y2) / 2,
+x2: x2,
+y2: y2,
+...lineAttrs,
+},
+},
+{
+shape: "line",
+attrs: {
+x1: x1,
+y1: y1,
+x2: arrowheadX2,
+y2: arrowheadY2,
+stroke: lineColor,
+"stroke-width": 2,
+"marker-end": `url(#${LINE_ARROWHEAD_ID})`,
+},
+},
+{
+shape: "text",
+text: `${axisSymbol}′ = ${index}`.replace("-", "−"),
+attrs: {
+...textPos,
+fill: "white",
+"font-size": 17,
+"text-anchor": d.axis === "t" ? "middle" : "begin",
+"dominant-baseline": d.axis === "t" ? "bottom" : "center",
+filter: `url(#text-bg)`,
+},
+},
+];
+}
+const elems = svg
+.selectAll(`.${lineGroupsClass}`)
+.data(lineGroups)
+.join("g")
+.each(function (d) {
+const g = d3.select(this);
+if (!d.wasAnimating) {
+g.style("opacity", d => d.opacity);
+}
+})
+.classed(lineGroupsClass, true)
+.selectAll(`.${lineElemsClass}`)
+.data(dataForGroup)
+.join(enter => enter.append(d => d3.create(`svg:${d.shape}`).node()))
+.classed(lineElemsClass, true);
+elems.each(function (d) {
+applyDatum.call(this, d);
+});
+speedText.innerHTML = fmtFloat(speed, 2);
+}
+/* global _toggleSlices svg _updateDiagrams */
+const sliders = {
+speed: document.getElementById("input-speed"),
+};
+const textSpans = {
+speed: document.getElementById("text-speed"),
+};
+function update({ speed }) {
+_updateDiagrams({
+axes: ["x", "t"],
+speed,
+speedSlider: sliders.speed,
+speedText: textSpans.speed,
+});
+}
+update({ axes: ["x", "t"] });
+const buttons = {
+spatial: document.getElementById("button-spatial"),
+temporal: document.getElementById("button-temporal"),
+};
+buttons.spatial.textContent = "Show Spatial Slices";
+function _toggle(sliceType) {
+const b = sliceType === "spatial" ? buttons.spatial : buttons.temporal;
+const buttonText = sliceType.charAt(0).toUpperCase() + sliceType.slice(1);
+_toggleSlices(svg, b, {
+sliceType,
+afterFinishCallback: () => {
+b.innerText = `Hide ${buttonText} Slices`;
+},
+afterResetCallback: () => {
+b.innerText = `Show ${buttonText} Slices`;
+},
+});
+}
+// eslint-disable-next-line no-unused-vars
+function toggleSpatial() {
+_toggle("spatial");
+}
+// eslint-disable-next-line no-unused-vars
+function toggleTemporal() {
+_toggle("temporal");
+}
+</script></body>
+</html>

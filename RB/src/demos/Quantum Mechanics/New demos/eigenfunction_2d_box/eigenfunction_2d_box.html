@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="renderLatex()"
+		></script>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.plot.ly/plotly-1.57.0.min.js"
+			integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			.button {
+				flex-grow: 1;
+			}
+			.latex {
+				font-size: 18px;
+			}
+			.grid-top-bottom {
+				display: grid;
+				grid-template-rows: 1fr 100px;
+				row-gap: 20px;
+			}
+			.controls-container {
+				width: 300px;
+			}
+			.grid-left-right {
+				column-gap: 200px;
+				overflow-x: visible;
+			}
+			.eqn-container {
+				/* position: relative; */
+				white-space: nowrap;
+				line-height: 80px;
+				min-height: 100%;
+				height: 150px;
+				z-index: 999;
+			}
+			.eqn-spacer {
+				display: inline-block;
+				width: 70px;
+			}
+			.plot-container {
+				max-height: 800px;
+				vertical-align: top;
+				overflow-y: hidden;
+				z-index: -999;
+			}
+			#plot {
+				position: relative;
+				top: -50px;
+				left: -50px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div class="grid-top-bottom">
+				<div class="controls-container">
+					<div class="controls">
+						<span>𝑛<sub>𝑥</sub></span>
+						<div class="radio-button-container horizontal">
+							<button
+								class="button n-button"
+								id="btn-nx-1"
+								axis="x"
+								wavenumber="1"
+								data-button-checked
+							>
+								1</button
+							><button
+								class="button n-button"
+								id="btn-nx-2"
+								axis="x"
+								wavenumber="2"
+							>
+								2</button
+							><button
+								class="button n-button"
+								id="btn-nx-3"
+								axis="x"
+								wavenumber="3"
+							>
+								3</button
+							><button
+								class="button n-button"
+								id="btn-nx-4"
+								axis="x"
+								wavenumber="4"
+							>
+								4</button
+							><button
+								class="button n-button"
+								id="btn-nx-5"
+								axis="x"
+								wavenumber="5"
+							>
+								5
+							</button>
+						</div>
+						<span>𝑛<sub>𝑦</sub></span>
+						<div class="radio-button-container horizontal">
+							<button
+								class="button n-button"
+								id="btn-ny-1"
+								axis="y"
+								wavenumber="1"
+								data-button-checked
+							>
+								1</button
+							><button
+								class="button n-button"
+								id="btn-ny-2"
+								axis="y"
+								wavenumber="2"
+							>
+								2</button
+							><button
+								class="button n-button"
+								id="btn-ny-3"
+								axis="y"
+								wavenumber="3"
+							>
+								3</button
+							><button
+								class="button n-button"
+								id="btn-ny-4"
+								axis="y"
+								wavenumber="4"
+							>
+								4</button
+							><button
+								class="button n-button"
+								id="btn-ny-5"
+								axis="y"
+								wavenumber="5"
+							>
+								5
+							</button>
+						</div>
+						<span>𝑎</span>
+						<span
+							><input type="range" class="length-slider" id="slider-lx"
+						/></span>
+						<span>𝑏</span>
+						<span
+							><input type="range" class="length-slider" id="slider-ly"
+						/></span>
+					</div>
+				</div>
+				<div class="eqn-container math">
+					<span class="latex" id="text-eqn-wavefunction"></span><br /><span
+						class="latex"
+						id="text-eqn-energy"
+					></span>
+				</div>
+			</div>
+
+			<div>
+				<div class="plot-container">
+					<div id="plot" class="draggable"></div>
+				</div>
+			</div>
+		</div>
+		<script src="../../../utils.js"></script>
+		<script src="./eigenfunction_2d_box.js"></script>
+	</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+	font-family: sans-serif;
+	width: 950px;
+	margin: auto;
+	margin-top: 10px;
+}
+
+#params-container {
+	width: 700px;
+	display: grid;
+	grid-template-columns: 9em 0.6fr 0.3fr;
+	column-gap: 12px;
+	row-gap: 5px;
+}
+
+/* https://css-tricks.com/snippets/css/prevent-superscripts-and-subscripts-from-affecting-line-height/ */
+sup,
+sub {
+	vertical-align: baseline;
+	position: relative;
+	top: -0.4em;
+}
+sub {
+	top: 0.4em;
+}
+
+input[type="range"] {
+	width: 95%;
+}
+
+.sci-num {
+	padding-right: 0.15em;
+}
+
+svg {
+	margin-top: 15px;
+}
+
+.button-container,
+.text-container {
+	margin-top: 10px;
+}
+
+button {
+	width: 8em;
+	height: 2em;
+	margin-right: 8px;
+	font-size: 16px;
+}

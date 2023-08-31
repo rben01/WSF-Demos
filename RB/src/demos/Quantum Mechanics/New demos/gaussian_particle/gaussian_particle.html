@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<script
+			src="https://cdn.plot.ly/plotly-1.57.0.min.js"
+			integrity="sha512-hYTm5fiLwl7dI0CCvHmXeekhxHTYeVlHSd/HDjc1hlO/SFSitk2Zy289ChHW+ihHhx5WK8XzkiLHaApwngC22w=="
+			crossorigin="anonymous"
+		></script>
+		<link
+			rel="stylesheet"
+			href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css"
+			integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X"
+			crossorigin="anonymous"
+		/>
+
+		<!-- The loading of KaTeX is deferred to speed up page rendering -->
+		<script
+			defer
+			src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"
+			integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4"
+			crossorigin="anonymous"
+			onload="updateAll();"
+		></script>
+		<script src="https://unpkg.com/svd-js" type="application/javascript"></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			body {
+				width: 60em;
+				height: 33.75em;
+				vertical-align: top;
+			}
+			.grid {
+				display: grid;
+				grid-template-columns: 18.5em 1fr;
+				align-items: start;
+				column-gap: 35px;
+			}
+			.slider-container {
+				grid-row: span 2;
+				display: grid;
+				grid-template-columns: 1fr;
+				row-gap: 4px;
+			}
+			.slider-container :nth-child(2n + 3) {
+				margin-top: 40px;
+			}
+			.param-slider-container {
+				display: inline-block;
+				width: 100%;
+			}
+			input[type="range"] {
+				width: 100%;
+			}
+			.plot {
+				display: inline-block;
+			}
+			.plot-container {
+				display: grid;
+				grid-template-columns: 1fr 1fr;
+				column-gap: 10px;
+				align-items: start;
+				align-content: start;
+			}
+
+			#plot-2d .ellipse {
+				fill-opacity: 0;
+				stroke: black;
+				stroke-width: 3;
+				stroke-dasharray: 6;
+				visibility: hidden;
+			}
+			#plot-2d .level-set {
+				fill-opacity: 0;
+			}
+			#plot-2d .level-set-foreground {
+				stroke-width: 5;
+			}
+			#plot-2d .level-set-background {
+				stroke-width: 7;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid">
+			<div class="controls-container">
+				<div class="slider-container">
+					<span class="slider-label"
+						>Correlation of particles, <span id="text-correlation"></span
+					></span>
+					<span class="param-slider-container"
+						><input
+							id="slider-correlation"
+							class="param-slider correlation-slider"
+							type="range"
+					/></span>
+					<span class="slider-label"
+						>Particle 1 spread, <span id="text-particle-1-spread"></span
+					></span>
+					<span
+						><input
+							id="slider-particle-1-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label"
+						>Particle 2 spread, <span id="text-particle-2-spread"></span
+					></span>
+					<span
+						><input
+							id="slider-particle-2-spread"
+							class="param-slider spread-slider"
+							type="range"
+					/></span>
+					<span class="slider-label"
+						>Particle 1 mean position,
+						<span id="text-particle-1-mean-pos"></span
+					></span>
+					<span
+						><input
+							id="slider-particle-1-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+					<span class="slider-label"
+						>Particle 2 mean position,
+						<span id="text-particle-2-mean-pos"></span
+					></span>
+					<span
+						><input
+							id="slider-particle-2-mean-pos"
+							class="param-slider position-slider"
+							type="range"
+					/></span>
+				</div>
+			</div>
+			<div class="plot-container">
+				<div>
+					<div>3D Plot</div>
+
+					<div id="plot-3d" class="plot draggable"></div>
+				</div>
+				<div>
+					<div>Contour Plot</div>
+					<svg id="plot-2d" class="plot"></svg>
+				</div>
+			</div>
+		</div>
+		<script src="../../../utils.js"></script>
+		<script src="gaussian_particle.js"></script>
+	</body>
+</html>

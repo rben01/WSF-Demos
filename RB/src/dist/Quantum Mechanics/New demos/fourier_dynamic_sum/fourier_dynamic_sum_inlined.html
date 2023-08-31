@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head><title>fourier_dynamic_sum.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js">
+</script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="update();" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+</head>
+<body style="background-color: black;">
+<div class="grid-left-right">
+<div class="controls-container">
+<span>
+<label>
+<span class="radio-label" style="color: white;">Fourier Mode </span>
+<button class="button" id="n1" onclick="setn(1)">n=1</button>
+<button class="button" id="n3" onclick="setn(3)">n=3</button>
+<button class="button" id="n5" onclick="setn(5)">n=5</button>
+<button class="button" id="n7" onclick="setn(7)">n=7</button>
+<button class="button" id="n9" onclick="setn(9)">n=9</button>
+</label>
+</span>
+<br/>
+<br/>
+<span>
+<button class="button" id="add" onclick="add()">Add to sum</button>
+<button class="button" id="reset" onclick="reset()">Reset</button>
+<button class="button" id="add-remainder" onclick="addRemainder()">Add n=11 through n=21 to sum</button>
+</span>
+</div>
+<div><span class="math" id="eqn-container"></span></div>
+</div>
+<div>
+<svg height="600" id="svg" style="margin: auto; display: block;" width="1200" xmlns="http://www.w3.org/2000/svg"></svg>
+</div>
+<script>var svg = d3.select("#svg"),
+buttons = d3.selectAll("button"),
+w = 500,
+h = 500,
+n = 1,
+sumpath,
+x = d3
+.scaleLinear()
+.range([-w / 2, w / 2])
+.domain([-3, 3]),
+y = d3
+.scaleLinear()
+.range([h / 2, -h / 2])
+.domain([-3, 3]),
+equation = document.getElementById("eqn-container");
+equation.innerHTML = "y = 0";
+var g1 = svg
+.append("g")
+.attr("transform", "translate(" + w / 2 + ", " + (50 + h / 2) + ")");
+g1.append("g")
+.attr("class", "axis")
+.call(d3.axisBottom(x).tickValues([-3, -2, -1, 1, 2, 3]));
+g1.append("g")
+.attr("class", "axis")
+.call(d3.axisLeft(y).tickValues([-3, -2, -1, 1, 2, 3]));
+var l1 = g1
+.append("path")
+.attr("fill", "none")
+.style("stroke", "#5df")
+.style("stroke-width", 3);
+var g2 = svg
+.append("g")
+.attr(
+"transform",
+"translate(" + (100 + (3 * w) / 2) + ", " + (50 + h / 2) + ")"
+);
+g2.append("g")
+.attr("class", "axis")
+.call(d3.axisBottom(x).tickValues([-3, -2, -1, 1, 2, 3]));
+g2.append("g")
+.attr("class", "axis")
+.call(d3.axisLeft(y).tickValues([-3, -2, -1, 1, 2, 3]));
+var l3 = g2
+.append("path")
+.attr("fill", "none")
+.attr("stroke", "#f3c002")
+.style("stroke-width", 3);
+var l2 = g2
+.append("path")
+.attr("fill", "none")
+.style("stroke", "#5df")
+.style("stroke-width", 3);
+function fourier(n) {
+var ar = [];
+for (var i = -3; i < 3; i += 6 / 1000) {
+ar.push([x(i), y(((-1) ** ((n - 1) / 2) * Math.cos(n * Math.PI * i)) / n)]);
+}
+return ar;
+}
+function setn(x) {
+n = x;
+buttons.style("background", "#FCFCFC");
+d3.select("#n" + n).style("background-color", "darkgrey");
+l1.attr("d", d3.line()(fourier(n)));
+}
+function add() {
+var delta = fourier(n);
+for (var i = 0; i < sumpath.length; i++) {
+sumpath[i][1] += delta[i][1];
+}
+var path = d3.line()(sumpath);
+l3.attr("d", path);
+var length = l3.node().getTotalLength();
+l3.attr("stroke-dasharray", length + " " + length).attr(
+"stroke-dashoffset",
+length
+);
+l3.transition()
+.ease(d3.easeLinear)
+.duration(4000)
+.attr("stroke-dashoffset", 0);
+l2.transition()
+.ease(d3.easeLinear)
+.delay(4000)
+.duration(2000)
+.attr("d", path);
+var sign = (-1) ** ((n - 1) / 2);
+if (equation.innerHTML == "y = 0") {
+equation.innerHTML =
+"y = " + katex.renderToString(`\\frac{\\cos{${n}\\pi x}}{${n}}`);
+} else {
+equation.innerHTML =
+equation.innerHTML +
+katex.renderToString(
+`${sign == 1 ? "+" : "-"}\\frac{\\cos{${n}\\pi x}}{${n}}`
+);
+}
+}
+function reset() {
+sumpath = [];
+for (var i = -3; i < 3; i += 6 / 1000) {
+sumpath.push([(w * i) / 6, 0]);
+}
+l2.attr("d", d3.line()(sumpath));
+l3.attr("d", "");
+equation.innerHTML = "y = 0";
+}
+function addRemainder() {
+l3.attr("d", "");
+n = 13;
+var delta = fourier(n);
+for (var i = 0; i < sumpath.length; i++) {
+sumpath[i][1] += delta[i][1];
+}
+var sign = (-1) ** ((n - 1) / 2);
+equation.innerHTML =
+equation.innerHTML +
+katex.renderToString(
+`${sign == 1 ? "+" : "-"}\\frac{\\cos{${n}\\pi x}}{${n}}`
+);
+l2.transition()
+.ease(d3.easeLinear)
+.duration(2000)
+.attr("d", d3.line()(sumpath))
+.on("end", function repeat() {
+n += 2;
+if (n > 21) {
+return;
+}
+delta = fourier(n);
+for (var i = 0; i < sumpath.length; i++) {
+sumpath[i][1] += delta[i][1];
+}
+sign = (-1) ** ((n - 1) / 2);
+equation.innerHTML =
+equation.innerHTML +
+katex.renderToString(
+`${sign == 1 ? "+" : "-"}\\frac{\\cos{${n}\\pi x}}{${n}}`
+);
+l2.transition()
+.ease(d3.easeLinear)
+.duration(2000)
+.attr("d", d3.line()(sumpath))
+.on("end", repeat);
+});
+}
+d3.selectAll(".tick text").attr("class", "axis-label");
+reset();
+setn(1);
+</script>
+</body>
+</html>

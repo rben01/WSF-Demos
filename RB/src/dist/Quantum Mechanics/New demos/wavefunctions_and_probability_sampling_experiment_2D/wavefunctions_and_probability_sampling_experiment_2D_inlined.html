@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html>
+<head><title>wavefunctions_and_probability_sampling_experiment_2D.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style>
+.grid-left-right {
+grid-template-columns: auto 1fr;
+column-gap: 50px;
+}
+.vertical-container {
+height: 100%;
+display: flex;
+flex-direction: column;
+justify-content: space-between;
+align-items: center;
+}
+.radio-button-container.horizontal button {
+flex: 1 1 auto;
+}
+#wavefunction-plot {
+margin: 0 auto;
+height: 300px;
+width: 17em;
+}
+.experiment-measurement-counter {
+fill: white;
+font-size: 20px;
+}
+#experiment-plot {
+margin-top: 0;
+margin-left: calc(17em + 100px);
+width: calc(100vw - 200px - 17em);
+height: 50vw;
+}
+.controls-container {
+width: 17em;
+position: absolute;
+}
+.label-proba {
+position: absolute;
+left: calc(17em + 150px);
+top: 22px;
+}
+#container-num-experiments {
+visibility: hidden;
+}
+</style>
+</head>
+<body>
+<div class="controls-container">
+<div class="slider-container">
+<span>Shape of wavefunction ⎮𝜓(𝑥)⎮</span>
+<span class="radio-button-container horizontal" id="wavefunction-shape-buttons">
+<button class="button shape-button" data-button-checked="" shape="gaussian">
+Gaussian</button><button class="button shape-button" shape="triangle">
+Pyramid</button><button class="button shape-button" shape="square">Square</button><button class="button shape-button" shape="smallSquare">
+Narrower square
+</button>
+</span>
+<span></span>
+<canvas class="draggable" id="wavefunction-plot"></canvas>
+<span>Measurement speed: <span id="experiment-speed"></span></span>
+<span>
+<label><input id="experiment-speed-slider" name="experiment-speed" type="range"/></label>
+</span>
+<span>Number of measurements: <span id="num-measurements-text"></span></span>
+<span>
+<label><input id="number-of-measurements-slider" name="num-measurements" type="range"/></label>
+</span>
+<span></span>
+<span class="radio-button-container horizontal" id="measurement-buttons">
+<button class="button" id="btn-run" onclick="runExperiment()">
+Run experiment</button><button class="button" data-button-checked="" id="btn-stop" onclick="stopExperiment()">
+Stop experiment</button><button class="button" data-button-checked="" id="btn-clear-experiment" onclick="clearExperiment()">
+Clear
+</button>
+</span>
+</div>
+</div>
+<div class="label-proba">
+<div>Probability distribution ⎮𝜓(𝑥)⎮²</div>
+<div id="container-num-experiments">
+Number of experiments: <span id="text-num-experiments"></span>
+</div>
+</div>
+<canvas class="draggable" id="experiment-plot"></canvas>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp =
+originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is its transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+const newDisplacementFromPointOfFocus = originalDisplacementFromPointOfFocus
+.clone()
+.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(newDisplacementFromPointOfFocus);
+// To determine whether the rotation is pathological (doing roughly a 180deg turn,
+// which looks really abrupt and jerky), we see if the segment between the old
+// camera relative position and the new one crosses the line that is the rotation
+// axis from "up" to the original position
+const origRotAxisFromUp = originalDisplacementFromPointOfFocus
+.clone()
+.cross(up)
+.normalize();
+// THIS ASSUMES z IS UP
+// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
+// rotation axis line, Line 2 is the segment connecting the two displacements
+const a1 = origRotAxisFromUp.y;
+const b1 = -origRotAxisFromUp.x;
+const c1 = 0;
+// The _1's and _2's here refer to points on line 2; they have nothing to do with line
+// 1. The 2_'s refer to the fact that these are on line 2
+const { x2_1, y2_1, x2_2, m } = (() => {
+const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
+const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
+const m = (y2_2 - y2_1) / (x2_2 - x2_1);
+return { x2_1, x2_2, y2_1, y2_2, m };
+})();
+const a2 = m;
+const b2 = -1;
+const c2 = y2_1 - m * x2_1;
+const determinant = a1 * b2 - a2 * b1;
+// The lines are (approximately) parallel iff the determinant is small
+if (Math.abs(determinant) > 1e-5) {
+// Lines aren't parallel; get intersection x
+const x = (b1 * c2 - b2 * c1) / determinant;
+// Is x_intersect between the two original points' x's? If yes then that segment
+// crosses the rotation axis, which is pathological
+if (x2_1 < x === x < x2_2) {
+return oldPosition;
+}
+}
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>/* global THREE getGridlines makeRenderer */
+function makeCanvasObjs(canvasId) {
+const canvas = document.getElementById(canvasId);
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(
+75,
+canvas.clientWidth / canvas.clientHeight,
+0.1,
+20,
+);
+const renderer = makeRenderer(canvas);
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+return { canvas, scene, camera, renderer };
+}
+const {
+canvas: canvasWavef,
+scene: sceneWavef,
+camera: cameraWavef,
+renderer: rendererWavef,
+} = makeCanvasObjs("wavefunction-plot");
+const {
+canvas: canvasProba,
+scene: sceneProba,
+camera: cameraProba,
+renderer: rendererProba,
+} = makeCanvasObjs("experiment-plot");
+const shapeButtonContainer = d3.select("#wavefunction-shape-buttons");
+const MIN_EXPERIMENT_SPEED = 1;
+const MAX_EXPERIMENT_SPEED = 100;
+let experimentSpeed = MIN_EXPERIMENT_SPEED;
+const experimentSpeedToTimeIntervalScale = speed => 1 / (15 * speed ** 1.4);
+const experimentSpeedTextSpan = document.getElementById("experiment-speed");
+function updateExperimentSpeed() {
+const speed = +(this.value ?? MIN_EXPERIMENT_SPEED);
+experimentSpeed = speed;
+experimentSpeedTextSpan.innerText = `${speed}x`;
+}
+updateExperimentSpeed();
+// eslint-disable-next-line no-unused-vars
+const experimentSpeedSlider = (() => {
+const slider = document.getElementById("experiment-speed-slider");
+slider.min = MIN_EXPERIMENT_SPEED;
+slider.max = MAX_EXPERIMENT_SPEED;
+slider.step = 1;
+slider.value = MIN_EXPERIMENT_SPEED;
+slider.oninput = updateExperimentSpeed;
+})();
+const MIN_NUM_MEASUREMENTS = 50;
+const MAX_NUM_MEASUREMENTS = 100;
+function numMeasurementsSliderScale(value) {
+// eslint-disable-next-line no-use-before-define
+value = value ?? +numMeasurementsSlider.value;
+if (value === MAX_NUM_MEASUREMENTS) {
+return Infinity;
+}
+return (
+MIN_NUM_MEASUREMENTS -
+Math.floor(1.121 ** MIN_NUM_MEASUREMENTS) +
+Math.floor(1.121 ** value)
+);
+}
+const numMeasurementsTextSpan = document.getElementById("num-measurements-text");
+function updateNumMeasurementsText() {
+const value = +(this.value ?? MIN_NUM_MEASUREMENTS);
+const scaledValue = numMeasurementsSliderScale(value);
+const scaledText = isFinite(scaledValue) ? `${scaledValue}` : "Infinite";
+numMeasurementsTextSpan.innerText = scaledText;
+}
+const numMeasurementsSlider = (() => {
+const slider = document.getElementById("number-of-measurements-slider");
+slider.min = MIN_NUM_MEASUREMENTS;
+slider.max = MAX_NUM_MEASUREMENTS;
+slider.step = 1;
+slider.value = MAX_NUM_MEASUREMENTS - 1;
+slider.oninput = updateNumMeasurementsText;
+return slider;
+})();
+updateNumMeasurementsText.call(numMeasurementsSlider);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(2.5, -2.5, 1);
+const PROBA_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0.7);
+const WAVEF_CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, -0.1);
+const DRAG_SPEED = 0.004; // scale factor to convert pixels dragged to radians
+for (const canvas of [canvasProba, canvasWavef]) {
+d3.select(canvas).call(
+d3.drag().on("drag", function (event) {
+for (const [camera, scene, renderer, pointOfFocus] of [
+[cameraProba, sceneProba, rendererProba, PROBA_CAMERA_POINT_OF_FOCUS],
+[cameraWavef, sceneWavef, rendererWavef, WAVEF_CAMERA_POINT_OF_FOCUS],
+]) {
+const cameraDisplacementFromPointOfFocus = camera.position
+.clone()
+.sub(pointOfFocus);
+const { dx, dy } = event;
+// z is up so x-drags rotate around the z-axis; y-drags rotate around a
+// combination of x-axis and y-axis depending on the current camera angle -- if
+// on the x-z plane, y-drags rotate entirely around the y-axis; if on the y-z
+// plane, y-drags rotate entirely around the x-axis
+const angleAroundZ = -dx * DRAG_SPEED;
+const angleInXYPlane = Math.atan2(
+cameraDisplacementFromPointOfFocus.y,
+cameraDisplacementFromPointOfFocus.x,
+);
+const angleAroundX = Math.sin(angleInXYPlane) * dy * DRAG_SPEED;
+const angleAroundY = -Math.cos(angleInXYPlane) * dy * DRAG_SPEED;
+cameraDisplacementFromPointOfFocus.applyEuler(
+new THREE.Euler(angleAroundX, angleAroundY, angleAroundZ, "XYZ"),
+);
+const newCameraPos = pointOfFocus
+.clone()
+.add(cameraDisplacementFromPointOfFocus);
+camera.position.set(newCameraPos.x, newCameraPos.y, newCameraPos.z);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+}),
+);
+}
+const GRIDLINE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x2288ff, // new THREE.Color(STANDARD_COLORS.graphicPrimary),
+// transparent: true,
+// opacity: 0.5,
+// emissive: 0x1111ee,
+// emissiveIntensity: 0.5,
+// wireframe: true,
+side: THREE.DoubleSide,
+});
+const BUCKET_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0xffbb22,
+side: THREE.DoubleSide,
+});
+const _SIZE = 1.5;
+const X_MIN = -_SIZE;
+const X_MAX = _SIZE;
+const Y_MIN = -_SIZE;
+const Y_MAX = _SIZE;
+const N_GRIDLINES = 33;
+const WAVEFUNCTION = "wavefunction";
+const PROBABILITY = "probability";
+const GAUSSIAN_SIGMA = 0.4;
+const GAUSSIAN_MU = 0;
+function gaussianWavefunction(x, y) {
+// return x + y;
+const u1 = GAUSSIAN_MU;
+const u2 = GAUSSIAN_MU;
+const s1 = GAUSSIAN_SIGMA;
+const s2 = GAUSSIAN_SIGMA;
+const r = 0;
+const dx = x - u1;
+const dy = y - u2;
+const p = r / (s1 * s2);
+return (
+2 *
+(Math.PI * s1 * s2) ** 0.5 *
+((1 / (2 * Math.PI * s1 * s2 * Math.sqrt(1 - p ** 2))) *
+Math.exp(
+(-1 / (2 * (1 - p ** 2))) *
+(dx ** 2 / s1 ** 2 +
+dy ** 2 / s2 ** 2 -
+(2 * p * dx * dy) / (s1 * s2)),
+))
+);
+}
+const TRIANGLE_PEAK = 1.2;
+const TRIANGLE_EXTENT = Math.sqrt(3) / TRIANGLE_PEAK;
+function triangleWavefunction(x, y) {
+return (
+(TRIANGLE_PEAK / TRIANGLE_EXTENT) *
+Math.max(0, TRIANGLE_EXTENT - Math.abs(x) - Math.abs(y))
+);
+}
+const SQUARE_MAGNITUDE = 0.8;
+const SMALL_SQUARE_MAGNITUDE = 1.3;
+// Magnitude is the magnitude of the wavefunction; we need \int\int magnitude**2 dx dy == 1
+function _squareThreshold(magnitude) {
+return 0.5 / magnitude;
+}
+function _squareFunc(x, y, magnitude) {
+const threshold = _squareThreshold(magnitude);
+return Math.abs(x) < threshold && Math.abs(y) < threshold ? magnitude : 0;
+}
+function squareWavefunction(x, y) {
+return _squareFunc(x, y, SQUARE_MAGNITUDE);
+}
+function smallSquareWavefunction(x, y) {
+return _squareFunc(x, y, SMALL_SQUARE_MAGNITUDE);
+}
+const wavefunctions = {
+gaussian: gaussianWavefunction,
+triangle: triangleWavefunction,
+square: squareWavefunction,
+smallSquare: smallSquareWavefunction,
+};
+// https://en.wikipedia.org/wiki/Box–Muller_transform
+function gaussianSample() {
+const rand = Math.random;
+let u, v;
+do {
+u = rand();
+} while (u === 0);
+do {
+v = rand();
+} while (v === 0);
+const R = Math.sqrt(-2 * Math.log(u));
+const theta = 2 * Math.PI * v;
+const z0 = R * Math.cos(theta);
+const z1 = R * Math.sin(theta);
+// Math tl;dr: Wavefunction is bivariate gaussian N(mu, sigma) normalized so that
+// its squared integral is 1. Its square is then the bivariate gaussian N(mu,
+// sigma/sqrt(2)).
+return [z0, z1].map(z => GAUSSIAN_MU + z * (GAUSSIAN_SIGMA / 2 ** 0.5));
+}
+function triangleSample() {
+// Let a = TRIANGLE_EXTENT. We'll do the math in quadrant 1, then rotate to a random
+// quadrant. To randomly sample from the 2D CDF in quadrant 1, first compute the
+// integral from 0 to a-x of 4*psi(x,y)^2 dy; that's the PDF along the x direction.
+// Integrate *that* with respect to x to get the CDF along the x direction; use that
+// to sample r_x along the x direction. Then fix x, integrate 4*psi(x,y)^2 dy from 0
+// to a-x, find the scalar factor c that makes that integral 1, then integrate
+// c*4*psi(x,t)^2 dt from 0 to y to get the CDF for y with fixed x; sample r_y from
+// that. Finally choose the signs of x and y randomly.
+const r_x = Math.random();
+const x = TRIANGLE_EXTENT * (1 - (1 - r_x) ** (1 / 4));
+const r_y = Math.random();
+const y = (TRIANGLE_EXTENT - x) * (1 - (1 - r_y) ** (1 / 3));
+// So now we have x and y in the selected quadrant. But we haven't selected a
+// quadrant yet
+const q = Math.random();
+const x_sign = Math.floor(q / 0.5) % 2 === 0 ? 1 : -1;
+const y_sign = Math.floor(q / 0.25) % 2 === 0 ? 1 : -1;
+return [x * x_sign, y * y_sign];
+}
+function _genericSquareSample(magnitude) {
+const threshold = _squareThreshold(magnitude);
+const r_x = 2 * (Math.random() - 0.5) * threshold;
+const r_y = 2 * (Math.random() - 0.5) * threshold;
+return [r_x, r_y];
+}
+function squareSample() {
+return _genericSquareSample(SQUARE_MAGNITUDE);
+}
+function smallSquareSample() {
+return _genericSquareSample(SMALL_SQUARE_MAGNITUDE);
+}
+const triangulationInfo = (() => {
+const xMin = X_MIN;
+const xMax = X_MAX;
+const nXPoints = 101;
+const dx = (xMax - xMin) / (nXPoints - 1);
+const yMin = Y_MIN;
+const yMax = Y_MAX;
+const nYPoints = 103;
+const dy = (yMax - yMin) / (nYPoints - 1);
+const gridPoints = [];
+for (let i = 0; i < nXPoints; ++i) {
+const x = xMin + i * dx;
+for (let j = 0; j < nYPoints; ++j) {
+const y = yMin + j * dy;
+gridPoints.push([x, y, null]);
+}
+}
+const xs = gridPoints.map(p => p[0]);
+const ys = gridPoints.map(p => p[1]);
+const delaunay = d3.Delaunay.from(gridPoints);
+const { triangles } = delaunay;
+const i = d3.range(triangles.length / 3).map(i => triangles[3 * i]);
+const j = d3.range(triangles.length / 3).map(i => triangles[3 * i + 1]);
+const k = d3.range(triangles.length / 3).map(i => triangles[3 * i + 2]);
+const nPointsPerGridline = 51;
+const xGridlines = getGridlines({
+nGridlines: N_GRIDLINES,
+xMin: X_MIN,
+xMax: X_MAX,
+yMin: Y_MIN,
+yMax: Y_MAX,
+drawEdges: true,
+nPointsPerGridline,
+});
+const yGridlines = getGridlines({
+nGridlines: N_GRIDLINES,
+xMin: X_MIN,
+xMax: X_MAX,
+yMin: Y_MIN,
+yMax: Y_MAX,
+drawEdges: true,
+nPointsPerGridline,
+swapOrientation: true,
+});
+return { gridPoints, xs, ys, i, j, k, gridlines: { x: xGridlines, y: yGridlines } };
+})();
+const objsWavef = { empty: true };
+const objsProba = { empty: true, bucketMeshes: [] };
+let selectedProbDist;
+function update(probDistName) {
+selectedProbDist = probDistName;
+const gridlines = [
+...triangulationInfo.gridlines.x,
+...triangulationInfo.gridlines.y,
+];
+if (objsProba.empty) {
+objsProba.empty = false;
+// Add the probability distribution meshes (to be filled with tube buffer geometries)
+(() => {
+const probDistGridlineMeshes = gridlines.map(
+() => new THREE.Mesh(new THREE.BufferGeometry(), GRIDLINE_MATERIAL),
+);
+sceneProba.add(...probDistGridlineMeshes);
+objsProba.gridlineMeshes = probDistGridlineMeshes;
+})();
+}
+if (objsWavef.empty) {
+objsWavef.empty = false;
+// Add the wavefunction meshes (to be filled with tube buffer geometries)
+(() => {
+const wavefGridlineMeshes = gridlines.map(
+() => new THREE.Mesh(new THREE.BufferGeometry(), GRIDLINE_MATERIAL),
+);
+sceneWavef.add(...wavefGridlineMeshes);
+objsWavef.gridlineMeshes = wavefGridlineMeshes;
+})();
+}
+const f = wavefunctions[probDistName];
+for (const { func, objs, renderer, scene, camera } of [
+{
+func: f,
+objs: objsWavef,
+renderer: rendererWavef,
+scene: sceneWavef,
+camera: cameraWavef,
+},
+{
+func: (x, y) => f(x, y) ** 2,
+objs: objsProba,
+renderer: rendererProba,
+scene: sceneProba,
+camera: cameraProba,
+},
+]) {
+for (let i = 0; i < gridlines.length; ++i) {
+const gridline = gridlines[i];
+const path = new THREE.CatmullRomCurve3(
+gridline.map(([x, y]) => new THREE.Vector3(x, y, func(x, y))),
+);
+const geometry = new THREE.TubeBufferGeometry(path, 100, 0.007, 7);
+const mesh = objs.gridlineMeshes[i];
+mesh.geometry.dispose();
+mesh.geometry = geometry;
+}
+renderer.render(scene, camera);
+}
+return;
+}
+const numExperimentObjs = {
+container: document.getElementById("container-num-experiments"),
+textSpan: document.getElementById("text-num-experiments"),
+};
+function showNumExperiments() {
+numExperimentObjs.container.style.visibility = "visible";
+}
+function hideNumExperiments() {
+numExperimentObjs.container.style.visibility = "hidden";
+}
+function enableShapeButtons() {
+document.getElementById("number-of-measurements-slider").disabled = false;
+shapeButtonContainer.selectAll(".shape-button").property("disabled", function () {
+return this.hasAttribute("data-button-checked");
+});
+}
+function disableShapeButtons() {
+document.getElementById("number-of-measurements-slider").disabled = true;
+shapeButtonContainer.selectAll(".shape-button").property("disabled", true);
+}
+let experimentAnimationFrame;
+function stopExperiment() {
+enableShapeButtons();
+d3.select("#btn-clear-experiment").property("disabled", false);
+document.getElementById("btn-run").disabled = false;
+document.getElementById("btn-stop").disabled = true;
+// clearInterval(experimentInterval);
+window.cancelAnimationFrame(experimentAnimationFrame);
+}
+// eslint-disable-next-line no-unused-vars
+function clearExperiment() {
+hideNumExperiments();
+for (const mesh of objsProba.bucketMeshes) {
+mesh.geometry.dispose();
+mesh.geometry = new THREE.BufferGeometry();
+}
+rendererProba.render(sceneProba, cameraProba);
+d3.select("#btn-clear-experiment").property("disabled", true);
+}
+function resetExperiment() {
+stopExperiment();
+clearExperiment();
+}
+// Will be adjusted to evenly divide the given probability function's support
+const APPROX_BUCKET_WIDTH = (X_MAX - X_MIN) / (N_GRIDLINES - 1);
+d3.select("#btn-run").on("click._default", null);
+d3.select("#btn-clear-experiment").on("click._default", null);
+// eslint-disable-next-line no-unused-vars
+function runExperiment() {
+resetExperiment();
+disableShapeButtons();
+showNumExperiments();
+d3.select("#btn-run").property("disabled", true);
+d3.select("#btn-stop").property("disabled", false);
+d3.select("#btn-clear-experiment").property("disabled", true);
+const nMeasurements = numMeasurementsSliderScale();
+const samplingFunc =
+selectedProbDist === "gaussian"
+? gaussianSample
+: selectedProbDist === "square"
+? squareSample
+: selectedProbDist === "smallSquare"
+? smallSquareSample
+: selectedProbDist === "triangle"
+? triangleSample
+: null;
+const squareMagnitude =
+selectedProbDist === "square" ? SQUARE_MAGNITUDE : SMALL_SQUARE_MAGNITUDE;
+const supports =
+selectedProbDist === "square" || selectedProbDist === "smallSquare"
+? d3
+.range(2)
+.map(() =>
+[-1, 1].map(sign => sign * _squareThreshold(squareMagnitude)),
+)
+: [
+[X_MIN, X_MAX],
+[Y_MIN, Y_MAX],
+];
+const xMin = supports[0][0];
+const yMin = supports[1][0];
+const supportSizes = supports.map(supp => supp[1] - supp[0]);
+// Round bucket width down to next number that divides the width of the support
+const nBuckets = supportSizes.map(s => Math.ceil(s / APPROX_BUCKET_WIDTH));
+const bucketSizes = supportSizes.map((s, i) => s / nBuckets[i]);
+const bucketArea = bucketSizes.reduce((a, b) => a * b);
+console.log(nBuckets, N_GRIDLINES);
+// `buckets` contains prod(nBuckets)+1 buckets, the first prod(nBuckets) of which
+// are rendered on screen and the last of which aggregates all buckets that don't
+// fit on screen. Each bucket is labeled {x,y} according to the lower left corner of
+// the bucket (towards (-inf, -inf))
+const buckets = d3.range(nBuckets.reduce((a, b) => a * b) + 1).map(i => {
+const ix = Math.floor(i / nBuckets[0]);
+const iy = i % nBuckets[1];
+const x = xMin + bucketSizes[0] * ix;
+const y = yMin + bucketSizes[1] * iy;
+let mesh = objsProba.bucketMeshes[i];
+if (mesh === undefined) {
+mesh = new THREE.Mesh(new THREE.BufferGeometry(), BUCKET_MATERIAL);
+objsProba.bucketMeshes.push(mesh);
+sceneProba.add(mesh);
+}
+mesh.position.x = x + bucketSizes[0] / 2;
+mesh.position.y = y + bucketSizes[1] / 2;
+return { x, y, n: 0, mesh };
+});
+const catchallBucketIndex = nBuckets;
+let nMeasurementsSoFar = 1;
+function nextUpdateTimeIntervalMS() {
+return 1000 * experimentSpeedToTimeIntervalScale(experimentSpeed);
+}
+let prevTimestampMS;
+let experimentRemainderFrac = 0;
+function updateExperimentUI(timestampMS) {
+if (prevTimestampMS === undefined) {
+prevTimestampMS = timestampMS;
+}
+const elapsedMS = timestampMS - prevTimestampMS;
+prevTimestampMS = timestampMS;
+const timeBtwnSamplesMS = nextUpdateTimeIntervalMS();
+const nExperimentsExact =
+elapsedMS / timeBtwnSamplesMS + experimentRemainderFrac;
+const nExperiments = Math.floor(nExperimentsExact);
+experimentRemainderFrac = nExperimentsExact % 1;
+let bucketIndex;
+for (let i = 0; i < nExperiments; ++i) {
+const sample = samplingFunc();
+const [x, y] = sample;
+const ix = Math.floor((x - xMin) / bucketSizes[0]);
+const iy = Math.floor((y - yMin) / bucketSizes[1]);
+bucketIndex = ix * nBuckets[0] + iy;
+if (ix < 0 || ix > nBuckets[0] || iy < 0 || iy > nBuckets[1]) {
+bucketIndex = catchallBucketIndex;
+}
+buckets[bucketIndex].n += 1;
+nMeasurementsSoFar += 1;
+if (nMeasurementsSoFar >= nMeasurements) {
+break;
+}
+}
+const currentVolumeOfSamples =
+bucketArea * (isFinite(nMeasurements) ? nMeasurements : nMeasurementsSoFar);
+const scale = 1 / currentVolumeOfSamples;
+// Exclude the final, catch-all bucket
+for (let i = 0; i < buckets.length - 1; ++i) {
+const bucket = buckets[i];
+const { n, mesh } = bucket;
+const height = n * scale;
+mesh.geometry.dispose();
+if (height > 0) {
+const geometry = new THREE.BoxBufferGeometry(
+bucketSizes[0],
+bucketSizes[1],
+Math.max(height, 0.0001),
+);
+mesh.position.z = height / 2;
+mesh.geometry = geometry;
+}
+}
+numExperimentObjs.textSpan.innerText = nMeasurementsSoFar;
+rendererProba.render(sceneProba, cameraProba);
+if (nMeasurementsSoFar >= nMeasurements) {
+stopExperiment();
+} else {
+experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
+}
+}
+experimentAnimationFrame = window.requestAnimationFrame(updateExperimentUI);
+}
+for (const [camera, scene] of [
+[cameraProba, sceneProba],
+[cameraWavef, sceneWavef],
+]) {
+camera.up.set(0, 0, 1);
+if (camera === cameraWavef) {
+console.log("wavefc");
+camera.position.set(
+CAMERA_DEFAULT_POSITION.x * 0.8,
+CAMERA_DEFAULT_POSITION.y * 0.8,
+CAMERA_DEFAULT_POSITION.z * 0.5,
+);
+camera.lookAt(WAVEF_CAMERA_POINT_OF_FOCUS);
+} else {
+console.log("probac");
+camera.position.set(
+CAMERA_DEFAULT_POSITION.x,
+CAMERA_DEFAULT_POSITION.y,
+CAMERA_DEFAULT_POSITION.z,
+);
+camera.lookAt(PROBA_CAMERA_POINT_OF_FOCUS);
+}
+const light = new THREE.PointLight(0xffffff, 1, 100);
+light.position.set(1.5, -2.5, 1);
+scene.add(light, new THREE.AmbientLight(0x2277ff, 0.8));
+}
+shapeButtonContainer.selectAll(".shape-button").on("click.select-shape", function () {
+update(this.getAttribute("shape"));
+});
+update("gaussian");
+</script>
+</body>
+</html>

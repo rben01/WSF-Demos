@@ -1,0 +1,1732 @@
+<!DOCTYPE html>
+<html>
+<head><title>particle_in_a_box.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="//update()" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style>
+:root {
+--color-real-part: #5df;
+--color-imag-part: #f3c002;
+--color-phase: #e5d;
+}
+.radio-button-container.horizontal button {
+flex: 1;
+white-space: nowrap;
+}
+.grid-left-right {
+grid-template-columns: max-content 1fr;
+column-gap: 50px;
+}
+.curve {
+fill: none;
+stroke-linejoin: round;
+}
+.curve-foreground.real-part {
+stroke: var(--color-real-part);
+}
+.curve-foreground.imag-part {
+stroke: var(--color-imag-part);
+}
+.curve-foreground.phase {
+stroke: var(--color-phase);
+}
+.axis-name {
+font-size: 30px;
+}
+.curve {
+fill: none;
+}
+.curve-background {
+stroke: black;
+stroke-width: 8px;
+}
+.curve-foreground {
+stroke: var(--color-highlight);
+stroke-width: 5px;
+}
+.barrier {
+stroke: #bbb;
+stroke-width: 3;
+stroke-dasharray: 4 4;
+}
+#plots {
+margin-top: 10px;
+}
+</style>
+</head>
+<body>
+<div class="grid-left-right">
+<div class="controls-container">
+<div class="controls">
+<span>Well width: <span id="text-L">\(L\)</span></span>
+<span><input class="slider" id="slider-L" type="range"/></span>
+<span>Particle mass: <span id="text-m">\(m\)</span></span>
+<span><input class="slider" id="slider-m" type="range"/></span>
+<!-- <span
+>Wavepacket initial position:
+<span id="text-x0">\(x\)</span></span
+>
+<span><input type="range" class="slider" id="slider-x0" /></span> -->
+<span>Wavepacket initial width:
+<span id="text-sigma">\(\sigma\)</span></span>
+<span><input class="slider" id="slider-sigma" type="range"/></span>
+<span>Wavepacket initial momentum:
+<span id="text-p0">\(p_0\)</span></span>
+<span><input class="slider" id="slider-p0" type="range"/></span>
+<span class="radio-button-container horizontal">
+<button class="button" onclick="play()">Play</button><button class="button" data-button-checked="" onclick="pause()">
+Pause</button><button class="button" data-button-checked="" onclick="reset()">
+Reset
+</button>
+</span>
+</div>
+</div>
+<div id="plots">
+<div><span>Wavefunction</span></div>
+<canvas class="draggable" id="plot-3D"></canvas>
+<div><span>Probability distribution</span></div>
+<svg id="plot-2D"></svg>
+</div>
+</div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp =
+originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is its transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+const newDisplacementFromPointOfFocus = originalDisplacementFromPointOfFocus
+.clone()
+.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(newDisplacementFromPointOfFocus);
+// To determine whether the rotation is pathological (doing roughly a 180deg turn,
+// which looks really abrupt and jerky), we see if the segment between the old
+// camera relative position and the new one crosses the line that is the rotation
+// axis from "up" to the original position
+const origRotAxisFromUp = originalDisplacementFromPointOfFocus
+.clone()
+.cross(up)
+.normalize();
+// THIS ASSUMES z IS UP
+// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
+// rotation axis line, Line 2 is the segment connecting the two displacements
+const a1 = origRotAxisFromUp.y;
+const b1 = -origRotAxisFromUp.x;
+const c1 = 0;
+// The _1's and _2's here refer to points on line 2; they have nothing to do with line
+// 1. The 2_'s refer to the fact that these are on line 2
+const { x2_1, y2_1, x2_2, m } = (() => {
+const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
+const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
+const m = (y2_2 - y2_1) / (x2_2 - x2_1);
+return { x2_1, x2_2, y2_1, y2_2, m };
+})();
+const a2 = m;
+const b2 = -1;
+const c2 = y2_1 - m * x2_1;
+const determinant = a1 * b2 - a2 * b1;
+// The lines are (approximately) parallel iff the determinant is small
+if (Math.abs(determinant) > 1e-5) {
+// Lines aren't parallel; get intersection x
+const x = (b1 * c2 - b2 * c1) / determinant;
+// Is x_intersect between the two original points' x's? If yes then that segment
+// crosses the rotation axis, which is pathological
+if (x2_1 < x === x < x2_2) {
+return oldPosition;
+}
+}
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>class Complex {
+constructor(magnitude, phase) {
+this._$mag = magnitude;
+this._$theta = phase;
+this._$re = magnitude * Math.cos(phase);
+this._$im = magnitude * Math.sin(phase);
+}
+toStr(precision = 4) {
+const re = this.re.toFixed(precision);
+const im = this.im.toFixed(precision);
+const r = this.magnitude.toFixed(precision);
+const theta = this.phase.toFixed(precision);
+return `${re} + ${im} j == ${r} expj(${theta})`;
+}
+static from(other) {
+if (other.magnitude !== undefined || other.phase !== undefined) {
+return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+} else if (other.re !== undefined || other.im !== undefined) {
+return this.fromCartesian(other.re ?? 0, other.im ?? 0);
+} else if (typeof other === "number") {
+return this.fromReal(other);
+} else {
+throw new Error(`Argument ${other} not understood in Complex.from`);
+}
+}
+static fromPolar(magnitude, phase) {
+return new this(magnitude, phase);
+}
+static fromCartesian(re, im) {
+const magnitude = (re ** 2 + im ** 2) ** 0.5;
+const phase = Math.atan2(im, re);
+return new this(magnitude, phase);
+}
+static fromReal(realNumber) {
+return new this(realNumber, 0);
+}
+static fromImag(realNumber) {
+return new this(realNumber, Math.PI / 2);
+}
+get magnitude() {
+return this._$mag;
+}
+get phase() {
+return this._$theta;
+}
+get re() {
+return this._$re;
+}
+get im() {
+return this._$im;
+}
+conj() {
+return this.constructor.fromPolar(this._$mag, -this._$theta);
+}
+toPolar() {
+return { magnitude: this._$mag, phase: this._$theta };
+}
+toCartesian() {
+return { re: this._$re, im: this._$im };
+}
+static prod(args) {
+let magnitude = 1;
+let phase = 0;
+for (const arg of args) {
+magnitude *= arg.magnitude ?? arg;
+phase += arg.phase ?? 0;
+}
+return this.fromPolar(magnitude, phase);
+}
+static mul(...args) {
+return this.prod(args);
+}
+mul(...others) {
+return this.constructor.mul(this, ...others);
+}
+_mulReal(other) {
+return this.constructor.fromPolar(this.magnitude * other, this.phase);
+}
+static div(z1, z2) {
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+if (typeof z2 === "number") {
+z2 = Complex.fromReal(z2);
+}
+return this.fromPolar(
+(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+(z1.phase ?? 0) - (z2.phase ?? 0),
+);
+}
+div(other) {
+return this.constructor.div(this, other);
+}
+static sum(args) {
+let re = 0;
+let im = 0;
+for (const arg of args) {
+re += arg.re ?? arg;
+im += arg.im ?? 0;
+}
+return this.fromCartesian(re, im);
+}
+static add(...args) {
+return this.sum(args);
+}
+add(...others) {
+return this.constructor.add(this, ...others);
+}
+static sub(z1, z2) {
+return this.fromCartesian(
+(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+);
+}
+sub(other) {
+return this.constructor.sub(this, other);
+}
+static exp(z) {
+if (typeof z === "number") {
+return Complex.fromReal(Math.exp(z));
+}
+return z.exp();
+}
+exp() {
+const magnitude = Math.exp(this.re);
+const phase = this.im;
+return Complex.fromPolar(magnitude, phase);
+}
+static cis(z) {
+if (typeof z === "number") {
+return Complex.fromPolar(1, z);
+}
+return z.cis();
+}
+cis() {
+// exp(i*(x+iy)) = e^(-y)e^(ix)
+return Complex.fromPolar(Math.exp(-this.im), this.re);
+}
+static pow(z, realNumber) {
+if (typeof realNumber.im === "function" && Math.abs(realNumber.im()) < 1e-7) {
+console.log(JSON.stringify({ z, realNumber }));
+throw new Error(
+"raising to a complex power with nonzero phase is unsupported",
+);
+}
+if (typeof z === "number") {
+z = Complex.fromReal(z);
+}
+realNumber = realNumber.magnitude ?? realNumber;
+return z.pow(realNumber);
+}
+pow(realNumber) {
+const magnitude = Math.pow(this._$mag, realNumber);
+const phase = this._$theta * realNumber;
+return this.constructor.fromPolar(magnitude, phase);
+}
+}
+Complex.i = Complex.fromImag(1);
+// eslint-disable-next-line no-unused-vars
+function innerProduct(
+f,
+g,
+{ xMin, xMax, nPoints = 1000, fIsComplex = true, gIsComplex = true } = {},
+) {
+const dx = (xMax - xMin) / nPoints;
+const v = (() => {
+if (fIsComplex) {
+if (gIsComplex) {
+return x => f(x).mul(g(x).conj());
+} else {
+return x => f(x)._mulReal(g(x));
+}
+} else {
+if (gIsComplex) {
+return x => g(x)._mulReal(f(x));
+} else {
+return x => f(x) * g(x);
+}
+}
+})();
+const products = [];
+for (let i = 0; i < nPoints; ++i) {
+const x = xMin + (i + 0.5) * dx;
+products.push(v(x));
+}
+return Complex.sum(products).mul(dx);
+}
+</script>
+<script>/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera katex makeRenderer innerProduct */
+const WIDTH = 800;
+const HEIGHT = 325;
+const HEIGHT_3D = 325;
+const X_MIN = -1;
+const X_0 = 0;
+const X_MAX = 9;
+const CAMERA_EXTENT = 11;
+const xScale3D = d3.scaleLinear(
+[X_MIN, X_MAX],
+[-CAMERA_EXTENT * 0.95, CAMERA_EXTENT * 0.95],
+);
+const Y_MAX = 1.1;
+const Y_0 = 0;
+const Y_MIN = -Y_MAX;
+const yScale3D = d3.scaleLinear([0, 1], [0, 3]);
+const Z_MAX = Y_MAX;
+const Z_0 = 0;
+const Z_MIN = -Z_MAX;
+const zScale3D = yScale3D;
+const H_BAR = 1;
+// The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
+const N_MAX = 300;
+const N_WAVEFUNCTION_POINTS = 125;
+// This 1D array simulates a 2D array with N_MAX rows and N_WAVEFUNCTION_POINTS columns,
+// where (row,col)=(n-1,i) contains the initial value for the n^th term at x=x_i. In
+// other words, arr[(n-1)*N_WF_PTS+i] is zn(x=x_i,t=0). Note that the n-1 business is because
+// n starts at 1 but arrays start at 0
+const initialStateCache = d3.range(N_MAX * N_WAVEFUNCTION_POINTS).map(() => null);
+const floatFormatter = d3
+.formatLocale({ minus: "-", decimal: ".", thousands: "," })
+.format(".2f");
+const textSpans = {
+m: document.getElementById("text-m"),
+sigma: document.getElementById("text-sigma"),
+p: document.getElementById("text-p"),
+};
+const canvas = document.getElementById("plot-3D");
+d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
+const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera(
+// 	150,
+// 	canvas.clientWidth / canvas.clientHeight,
+// 	0.1,
+// 	2000,
+// );
+const camera = new THREE.OrthographicCamera(
+-CAMERA_EXTENT,
+CAMERA_EXTENT,
+(CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
+(-CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
+-50,
+50,
+);
+const renderer = makeRenderer(canvas);
+renderer.setSize(WIDTH, HEIGHT_3D);
+// z will be up
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+scene.add(
+(() => {
+const pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(0, -3, 20);
+return pointLight;
+})(),
+);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(1.4, -5.7, 2.2);
+const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
+const CAMERA_UP = new THREE.Vector3(0, 0, 1);
+enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus: CAMERA_POINT_OF_FOCUS,
+up: CAMERA_UP,
+});
+const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xaaaaaa,
+side: THREE.DoubleSide,
+transparent: false,
+});
+const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x2277ff,
+side: THREE.DoubleSide,
+transparent: false,
+});
+camera.up.copy(CAMERA_UP);
+camera.position.copy(CAMERA_DEFAULT_POSITION);
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
+const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH]);
+const y2dMax = 2.25;
+const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
+let currentLength = 6;
+let currentMass = 0.75;
+let currentTime = 0;
+let isAnimating = false;
+const sliders = {
+L: (() => {
+const slider = document.getElementById("slider-L");
+slider.min = 4;
+slider.max = X_MAX - 1;
+slider.step = 0.01;
+slider.value = currentLength;
+return slider;
+})(),
+// x0: (() => {
+// 	const slider = document.getElementById("slider-x0");
+// 	slider.min = 0.5;
+// 	slider.max = 1.5;
+// 	slider.step = 0.01;
+// 	slider.value = 1;
+// 	return slider;
+// })(),
+m: (() => {
+const slider = document.getElementById("slider-m");
+slider.min = 0.5;
+slider.max = 1;
+slider.step = 0.01;
+slider.value = currentMass;
+return slider;
+})(),
+sigma: (() => {
+const slider = document.getElementById("slider-sigma");
+slider.min = 0.3;
+slider.max = 0.5;
+slider.step = 0.01;
+slider.value = (slider.min + slider.max) / 2;
+return slider;
+})(),
+p0: (() => {
+const slider = document.getElementById("slider-p0");
+slider.min = -3;
+slider.max = 3;
+slider.step = 0.01;
+slider.value = 0;
+return slider;
+})(),
+};
+// eslint-disable-next-line no-use-before-define
+d3.selectAll(".slider").on("input", () => update(0, true));
+function populateCaches({ L, _m, theta, mu, sigma }) {
+const ns = d3.range(1, N_MAX + 1);
+const normCoeff = Math.sqrt(2 / L);
+const psis = ns.map(n => {
+const k = (n * Math.PI) / L;
+return x => normCoeff * Math.sin(k * x);
+});
+const cns = ns.map(n => {
+const psi = psis[n - 1];
+return innerProduct(
+x => psi(x) * Math.exp(-0.5 * ((x - mu) / sigma) ** 2),
+x => Complex.fromPolar(1, theta * (x - mu)),
+{ fIsComplex: false, xMin: 0, xMax: L, nPoints: 1000 },
+);
+});
+const cnNorm =
+cns
+.map(cn => cn.magnitude ** 2)
+// Place the small numbers at the front for slightly more accurate
+// summation; THIS MUST FOLLOW .MAP OR ELSE IT WILL OPERATE IN PLACE
+.reverse()
+.reduce((a, b) => a + b) ** 0.5;
+for (let i = 0; i < N_MAX; ++i) {
+cns[i] = cns[i].div(cnNorm);
+}
+const dx = L / (N_WAVEFUNCTION_POINTS - 1);
+for (let n = 1; n <= N_MAX; ++n) {
+const psi = psis[n - 1];
+const cn = cns[n - 1];
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const x = i * dx;
+const z0_nx = cn.mul(psi(x));
+initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i] = z0_nx;
+}
+}
+}
+function getAxisData({ L } = {}) {
+const tickLength = 7;
+const xAxisTicks = xScale2D.ticks(20).filter(x => x !== X_0);
+const nXAxisLabels = 5;
+const xAxisLabelTicks = xScale2D.ticks(nXAxisLabels).filter(x => x !== X_0);
+const xAxisFormatter = xScale2D.tickFormat(nXAxisLabels);
+const yAxisTicks = yScale2D.ticks(5).filter(y => y !== Y_0);
+const nYAxisLabels = 5;
+const yAxisLabelTicks = yScale2D.ticks(nYAxisLabels).filter(y => y !== Y_0);
+const yAxisFormatter = yScale2D.tickFormat(nYAxisLabels, "~g");
+const xs0 = xScale2D(X_0);
+const ys0 = yScale2D(Y_0);
+const [xMin, xMax] = xScale2D.range();
+const [yMin, yMax] = yScale2D.range();
+const axisData = [
+{
+shape: "line",
+class: "axis x-axis",
+attrs: {
+x1: xMin,
+x2: xMax,
+y1: ys0,
+y2: ys0,
+},
+},
+{
+shape: "line",
+class: "axis y-axis",
+attrs: {
+x1: xs0,
+x2: xs0,
+y1: yMin,
+y2: yMax,
+},
+},
+...xAxisTicks.map(x => {
+const xs = xScale2D(x);
+return {
+shape: "line",
+class: "axis axis-tick x-axis-tick",
+attrs: {
+x1: xs,
+x2: xs,
+y1: ys0,
+y2: ys0 + tickLength,
+},
+};
+}),
+...xAxisLabelTicks.map(x => {
+const xs = xScale2D(x);
+return {
+shape: "text",
+class: "axis axis-label x-axis-label",
+text: xAxisFormatter(x),
+attrs: {
+x: xs,
+y: ys0 + 12,
+},
+};
+}),
+...yAxisTicks.map(y => {
+const ys = yScale2D(y);
+return {
+shape: "line",
+class: "axis axis-tick y-axis-tick",
+attrs: {
+x1: xs0,
+x2: xs0 - tickLength,
+y1: ys,
+y2: ys,
+},
+};
+}),
+...yAxisLabelTicks.map(y => {
+const ys = yScale2D(y);
+return {
+shape: "text",
+class: "axis axis-label y-axis-label",
+text: yAxisFormatter(y),
+attrs: {
+x: xs0 - 10,
+y: ys,
+},
+};
+}),
+{
+shape: "text",
+class: "axis axis-label x-axis-label axis-name x-axis-name",
+text: "𝑥",
+attrs: {
+x: xScale2D.range()[1] - 40,
+y: ys0 + 20,
+},
+},
+{
+shape: "text",
+class: "axis axis-label axis-name",
+text: "|𝜓|²",
+attrs: {
+x: xs0 + 60,
+y: yScale2D.range()[1] + 5,
+"text-anchor": "end",
+"dominant-baseline": "hanging",
+},
+},
+];
+return axisData;
+}
+applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
+// arr[2*i] is x_i, arr[2*i+1] is z_i
+const wavefunctionPoints = d3.range(2 * N_WAVEFUNCTION_POINTS).map(() => null);
+function computeWavefunctionPoints() {
+const t = currentTime;
+const L = currentLength;
+const m = currentMass;
+const dx = L / (N_WAVEFUNCTION_POINTS - 1);
+const baseEnergyTerm = (t * (Math.PI / L) ** 2) / (2 * m * H_BAR ** 2);
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const zs = [];
+const x = i * dx;
+wavefunctionPoints[2 * i] = x;
+// Trick to keep the magnitude of angles small: e^{in^2} =
+// e^{i(n-1)^2}*(e^{i*(2n-1)}). So we track e^{i(n-1)^2} (from the previous loop
+// iteration) and then multiply it by smallish numbers. So, since we want
+// e^{-i*n^2*b} where b is baseEnergyTerm, we compute e^{in^2} as just
+// described, and then (e^{in^2})^(-b)
+let energyNSqExpTerm = Complex.fromPolar(1, 0);
+for (let n = 1; n <= N_MAX; ++n) {
+energyNSqExpTerm = Complex.prod([
+energyNSqExpTerm,
+Complex.fromPolar(1, 2 * n - 1),
+]);
+const energyExpTerm = energyNSqExpTerm.pow(-baseEnergyTerm);
+const zn0 = initialStateCache[(n - 1) * N_WAVEFUNCTION_POINTS + i];
+zs.push(Complex.prod([zn0, energyExpTerm]));
+}
+wavefunctionPoints[2 * i + 1] = Complex.sum(zs);
+}
+}
+function getWavefunctionPath3D() {
+const pathPoints = [];
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const x = wavefunctionPoints[2 * i];
+const z = wavefunctionPoints[2 * i + 1];
+pathPoints.push(
+new THREE.Vector3(xScale3D(x), yScale3D(-z.im), zScale3D(z.re)),
+);
+}
+const path = new THREE.CatmullRomCurve3(pathPoints);
+return path;
+}
+function makeAxisLabel(text) {
+return makeTextSprite(text, { fontface: "Times", fontsize: 20 });
+}
+const xMin = xScale3D(X_MIN);
+const xs0 = xScale3D(X_0);
+const xMax = xScale3D(X_MAX);
+const yMin = yScale3D(Y_MIN);
+const ys0 = yScale3D(Y_0);
+const yMax = yScale3D(Y_MAX);
+const zMin = zScale3D(Z_MIN);
+const zs0 = zScale3D(Z_0);
+const zMax = zScale3D(Z_MAX);
+const objs3d = { empty: true };
+function update3D() {
+const arrowheadRadius = 0.25;
+const arrowheadHeight = 0.7;
+const arrowheadGeometry = new THREE.ConeBufferGeometry(
+arrowheadRadius,
+arrowheadHeight,
+);
+if (objs3d.empty) {
+objs3d.empty = false;
+const axisRadius = 0.06;
+// x axis
+(() => {
+const xAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xMin, ys0, zs0),
+new THREE.Vector3(xMax, ys0, zs0),
+),
+64,
+axisRadius * 1.2,
+8,
+);
+const xAxis = new THREE.Mesh(xAxixGeometry, AXIS_MATERIAL);
+// arrowhead rotation code from https://stackoverflow.com/a/11060965
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateZ(-Math.PI / 2);
+arrowhead.position.set(xMax, ys0, zs0);
+scene.add(xAxis, arrowhead);
+})();
+// y axis
+(() => {
+const yAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xs0, yMin, zs0),
+new THREE.Vector3(xs0, yMax, zs0),
+),
+64,
+axisRadius,
+8,
+);
+const yAxis = new THREE.Mesh(yAxixGeometry, AXIS_MATERIAL);
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateX(Math.PI);
+arrowhead.position.set(xs0, yMin, zs0);
+scene.add(yAxis, arrowhead);
+})();
+// z axis
+(() => {
+const zAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xs0, ys0, zMin),
+new THREE.Vector3(xs0, ys0, zMax),
+),
+64,
+axisRadius,
+8,
+);
+const zAxis = new THREE.Mesh(zAxixGeometry, AXIS_MATERIAL);
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateX(Math.PI / 2);
+arrowhead.position.set(xs0, ys0, zMax);
+scene.add(zAxis, arrowhead);
+})();
+// axis labels
+(() => {
+const xAxisLabel = makeAxisLabel("𝑥");
+xAxisLabel.position.x = xMax;
+xAxisLabel.position.y = ys0;
+xAxisLabel.position.z = zs0;
+scene.add(xAxisLabel);
+const yAxisLabel = makeAxisLabel("Im[𝜓]");
+yAxisLabel.position.x = xs0;
+yAxisLabel.position.y = yMin - 0.1;
+yAxisLabel.position.z = -0.2;
+scene.add(yAxisLabel);
+const zAxisLabel = makeAxisLabel("Re[𝜓]");
+zAxisLabel.position.x = xs0 + 0.1;
+zAxisLabel.position.y = ys0 + 0.2;
+zAxisLabel.position.z = zMax;
+scene.add(zAxisLabel);
+})();
+// wave template geometry
+(() => {
+const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
+scene.add(wave);
+objs3d.wave = { wave };
+})();
+}
+// console.log(m, sigma, p, currentTime);
+const { wave } = objs3d.wave;
+wave.geometry.dispose();
+wave.geometry = new THREE.TubeBufferGeometry(
+getWavefunctionPath3D(),
+1000,
+0.11,
+8,
+);
+renderer.render(scene, camera);
+}
+const line = d3.line().curve(d3.curveNatural);
+function getData2D() {
+const points = [];
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const x = wavefunctionPoints[2 * i];
+const z = wavefunctionPoints[2 * i + 1];
+points.push([xScale2D(x), yScale2D(z.magnitude ** 2)]);
+}
+const barrierX = xScale2D(currentLength);
+const data = [
+{
+shape: "path",
+class: "curve curve-background",
+attrs: {
+d: line(points),
+},
+},
+{
+shape: "path",
+class: "curve curve-foreground",
+attrs: {
+d: line(points),
+},
+},
+{
+shape: "line",
+class: "curve barrier",
+attrs: {
+x1: barrierX,
+x2: barrierX,
+y1: yScale2D(0),
+y2: yScale2D(y2dMax),
+},
+},
+];
+return data;
+}
+let isFirstRun = true;
+function update(dtMS, refreshCache = false) {
+dtMS = dtMS ?? 0;
+currentTime += (0.5 * dtMS) / 1000;
+const L = +sliders.L.value;
+const m = +sliders.m.value;
+currentLength = L;
+currentMass = m;
+if (refreshCache) {
+populateCaches({
+L,
+m,
+theta: +sliders.p0.value,
+mu: 2,
+// mu: +sliders.x0.value,
+sigma: +sliders.sigma.value,
+});
+}
+if (dtMS !== 0 || refreshCache || isFirstRun) {
+computeWavefunctionPoints();
+isFirstRun = false;
+}
+// const [m, sigma, p] = ["m", "sigma", "p"].map(k => +sliders[k].value);
+// populateWavefunctionPoints(m, sigma, p, currentTime);
+applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
+update3D();
+// if (typeof katex !== "undefined") {
+// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
+// 	katex.render(`\\sigma=${floatFormatter(sigma)}`, textSpans.sigma);
+// 	katex.render(`p=${floatFormatter(p)}`, textSpans.p);
+// }
+}
+update(0, true);
+let animationFrame;
+// eslint-disable-next-line no-unused-vars
+function play() {
+isAnimating = true;
+d3.selectAll(".slider").property("disabled", true);
+let prevTimestampMS;
+function step(timestampMS) {
+if (prevTimestampMS === undefined) {
+prevTimestampMS = timestampMS;
+}
+const elapsedMS = timestampMS - prevTimestampMS;
+prevTimestampMS = timestampMS;
+update(elapsedMS);
+if (isAnimating) {
+animationFrame = window.requestAnimationFrame(step);
+}
+}
+animationFrame = window.requestAnimationFrame(step);
+}
+function pause() {
+window.cancelAnimationFrame(animationFrame);
+isAnimating = false;
+}
+// eslint-disable-next-line no-unused-vars
+function reset() {
+pause();
+d3.selectAll(".slider").property("disabled", false);
+currentTime = 0;
+update(0, true);
+}
+</script>
+</body>
+</html>

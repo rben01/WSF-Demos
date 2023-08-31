@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<script
+			type="text/javascript"
+			src="https://cdn.plot.ly/plotly-latest.min.js"
+		></script>
+		<style>
+			body {
+				width: 740px;
+			}
+
+			.slider-label-custom {
+				min-width: 16em;
+				margin-right: 0.2em;
+			}
+
+			.ib {
+				display: inline-block;
+				margin-top: auto;
+				margin-bottom: auto;
+				vertical-align: middle;
+			}
+
+			.flex-row {
+				display: inline-block;
+			}
+
+			.frame {
+				display: inline-block;
+				width: 300px;
+			}
+
+			.divider {
+				width: 50px;
+				display: inline-block;
+			}
+
+			.frame-title {
+				font-weight: bold;
+			}
+
+			.minus-sign {
+				margin-right: 1px;
+			}
+
+			.prime {
+				width: 0px;
+				padding: 0px;
+				margin: 0px;
+				margin-right: -2px;
+			}
+
+			.plot-container {
+				display: inline-block;
+				text-align: center;
+			}
+
+			.reset-button {
+				margin-bottom: 20px;
+			}
+
+			.plot-title {
+				display: inline-block;
+			}
+
+			#plot {
+				margin-left: 30px;
+				margin-right: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑥-direction (𝑢<span class="subscript">𝑥</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vx"
+					name="input-vx"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vx:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑢<span class="subscript">𝑥</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vx">1</span>𝑐
+		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑦-direction (𝑢<span class="subscript">𝑦</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vy"
+					name="input-vy"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vy:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑢<span class="subscript">𝑦</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vy">1</span>𝑐
+		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Object's speed in 𝑧-direction (𝑢<span class="subscript">𝑧</span>):
+				</span>
+				<input
+					type="range"
+					id="input-vz"
+					name="input-vz"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vz:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑢<span class="subscript">𝑧</span></span
+			><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vz">1</span>𝑐
+		</div>
+		<div class="slider-container">
+			<label>
+				<span class="slider-label slider-label-custom">
+					Relative velocity along 𝑥-axis (𝑣):
+				</span>
+				<input
+					type="range"
+					id="input-vr"
+					name="input-vr"
+					min="-.99"
+					max=".99"
+					step=".01"
+					value="0"
+					oninput="update({vr:this.value})"
+				/>
+			</label>
+			<br />
+			<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span
+			><span class="sci-num highlighted-text eqn-right text-vr">1</span>𝑐
+		</div>
+		<button class="play-button reset-button" onclick="reset()">Reset</button>
+
+		<div>
+			<span class="plot-title">Velocity as Seen in Stationary Frame</span
+			><span class="plot-title" style="width: 50px;"></span
+			><span class="plot-title">Velocity as Seen in Moving Frame</span>
+		</div>
+		<div>
+			<div class="plot-container">
+				<div id="plot"></div>
+				<div>
+					<span class="velocity" style="margin-left: 20px;"
+						>𝑢 =
+						<span class="sci-num"
+							>(<span class="text-vx highlighted-text">0</span>,
+							<span class="text-vy highlighted-text">0</span>,
+							<span class="text-vz highlighted-text">0</span>)</span
+						>𝑐</span
+					>
+					<div style="display: inline-block; width: 160px;"></div>
+					<span class="velocity"
+						>𝑢<span class="prime">′</span> =
+						<span class="sci-num"
+							>(<span class="text-vxp secondary-text">0</span>,
+							<span class="text-vyp secondary-text">0</span>,
+							<span class="text-vzp secondary-text">0</span>)</span
+						>𝑐</span
+					>
+				</div>
+				<div></div>
+			</div>
+		</div>
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./arrowhead.js"></script>
+		<script type="text/javascript" src="./combining_velocities_25_5.js"></script>
+	</body>
+</html>

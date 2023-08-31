@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+<title>Binary Stars</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+
+<body>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed"><span class="slider-label">Angular Speed (<i>v</i>):</span>
+                <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
+                    oninput="speedID.innerHTML = speed.value"></label>
+            <br>
+            <text><i>v</i> = <span id="speedID" class="highlighted-text sci-num"></span><i>c</i></text>
+            <br>
+            <label for="distance"> <span class="slider-label">Distance from Earth (<i>d</i>):</span>
+                <input type="range" id="distance" name="distance" min="5" max="10" step="0.01" value="5"
+                    oninput="distanceID.innerHTML = distance.value; dist_change();"></label>
+            <br>
+            <text><i>d</i> = <span id="distanceID" class="highlighted-text sci-num"></span> light years</text>
+            <br>
+            <input type="button" id="start" value="Start" class="play-button">
+            <input type="button" id="reset" value="Reset" class="play-button" disabled>
+        </form>
+        <br>
+        <br>
+    </div>
+
+    <div id="animate" class="w3-content w3-container">
+        <canvas id="canvas" width="900" height="300"></canvas>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
+        integrity="sha256-CIc5A981wu9+q+hmFYYySmOvsA3IsoX+apaYlL0j6fg=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+
+    <script type="text/javascript">
+        var elem = document.getElementById("animate");
+        var speed = 0.001;
+        var distance = 5;
+        var lypx = 49; //light year pixels
+        var x1 = 0;
+        var x2 = 0;
+        var t1 = 0;
+        var t2 = 0;
+        var theta = 0;
+        var interval;
+
+        function render() {
+            var ctx = document.getElementById("canvas")
+            ctx = ctx.getContext("2d");
+            ctx.clearRect(0, 0, 900, 300);
+            ctx.fillStyle = "blue";
+            ctx.beginPath();
+            ctx.arc(150, 150, 150, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.font = "30px Helvetica";
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.fillText("Earth", 110, 160);
+            ctx.fill();
+            ctx.fillStyle = "orange";
+            ctx.beginPath();
+            ctx.arc(300 + distance * lypx, 150, 50, 0, 2 * Math.PI);
+            ctx.arc(300 + distance * lypx - 100 * Math.cos(theta), 150 + 100 * Math.sin(theta), 10, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.fillStyle = "yellow";
+            ctx.beginPath();
+            if (theta > Math.PI / 2) {
+                t1 += 1
+                x1 = x0 - 3 * t1 * (1 - speed);
+                if (x1 >= 150 + 150 / Math.sqrt(2)) {
+                    ctx.moveTo(x1, 250);
+                    ctx.arc(x1, 250, 4, 0, 2 * Math.PI);
+                }
+            }
+            if (theta > 3 * Math.PI / 2) {
+                t2 += 1;
+                x2 = x0 - 3 * t2 * (1 + speed);
+                if (x2 >= 150 + 150 / Math.sqrt(2)) {
+                    ctx.moveTo(x2, 50);
+                    ctx.arc(x2, 50, 4, 0, 2 * Math.PI);
+                }
+            }
+            ctx.fill();
+            ctx.fillStyle = "white"
+            ctx.beginPath();
+            ctx.fillText("Star", 275 + distance * lypx, 160);
+            ctx.fill();
+        }
+
+        function go() {
+            theta += speed * 2 * Math.PI / 20;
+            render();
+        }
+
+        function dist_change() {
+            distance = document.getElementById("distance").value;
+            render();
+        }
+
+        $("#start").click(function () {
+            speed = Number(document.getElementById("speed").value);
+            theta = 0;
+            t1 = 0;
+            t2 = 0;
+            x0 = 300 + distance * lypx;
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(go, 50);
+            this.disabled = true;
+            document.getElementById("reset").disabled = false;
+        })
+
+        $("#reset").click(function () {
+            speed = Number(document.getElementById("speed").value);
+            distance = document.getElementById("distance").value;
+            theta = 0;
+            t1 = 0;
+            t2 = 0;
+            x0 = 300 + distance * lypx;
+            if (interval) {
+                clearInterval(interval);
+            }
+            render();
+            this.disabled = true;
+            document.getElementById("start").disabled = false;
+        })
+
+        $(document).ready(function () {
+            label = document.getElementById("speedID");
+            input = document.getElementById("speed");
+            label.innerHTML = input.value;
+            label = document.getElementById("distanceID");
+            input = document.getElementById("distance");
+            label.innerHTML = input.value;
+            render();
+        })
+    </script>
+</body>

@@ -1,0 +1,23 @@
+.slider-label-custom {
+	text-align: right;
+	min-width: 13em;
+}
+.h-centered {
+	margin: auto;
+	text-align: center;
+}
+.text-div {
+	display: inline;
+	vertical-align: middle;
+}
+
+.coordinate-box {
+	padding-left: 0px;
+	height: 400px;
+	vertical-align: middle;
+	display: inline-table;
+}
+
+.blank-row {
+	height: 40px;
+}

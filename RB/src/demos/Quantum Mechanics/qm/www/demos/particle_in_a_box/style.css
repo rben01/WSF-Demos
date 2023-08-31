@@ -1,0 +1,57 @@
+:root {
+	--color-real-part: #5df;
+	--color-imag-part: #f3c002;
+	--color-phase: #e5d;
+}
+.radio-button-container.horizontal button {
+	flex: 1;
+	white-space: nowrap;
+}
+.grid-left-right {
+	grid-template-columns: max-content 1fr;
+	column-gap: 50px;
+}
+.controls-container {
+	width: 17em;
+}
+.curve {
+	fill: none;
+	stroke-linejoin: round;
+}
+.curve-foreground.real-part {
+	stroke: var(--color-real-part);
+}
+.curve-foreground.imag-part {
+	stroke: var(--color-imag-part);
+}
+.curve-foreground.phase {
+	stroke: var(--color-phase);
+}
+.axis-name {
+	font-size: 30px;
+}
+.curve {
+	fill: none;
+}
+.curve-background {
+	stroke: black;
+	stroke-width: 8px;
+}
+.curve-foreground {
+	stroke: var(--color-highlight);
+	stroke-width: 5px;
+}
+.barrier {
+	stroke: #bbb;
+	stroke-width: 3;
+	stroke-dasharray: 4 4;
+}
+#plots {
+	margin-top: 10px;
+}
+#btn-more-coefs {
+	width: 100%;
+}
+#coefs-text-container {
+	padding-left: 10px;
+}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			body {
+				user-select: none !important;
+			}
+			.grid-left-right {
+				grid-template-columns: auto 1fr;
+				column-gap: 50px;
+			}
+
+			#dice-plot-container {
+				text-align: center;
+				margin-top: 20px;
+			}
+
+			.vertical-container {
+				height: 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+				align-items: center;
+			}
+			.radio-button-container.horizontal button {
+				flex: 1 1 auto;
+			}
+			#wavefunction-plot {
+				margin-top: 20px;
+			}
+			.axis-axis {
+				stroke: #ccc;
+				stroke-width: 2px;
+				fill-opacity: 0;
+			}
+			.axis-curve {
+				fill: none;
+				stroke-linecap: round;
+				stroke-linejoin: round;
+			}
+			.axis-curve.curve-background {
+				stroke-width: 8px;
+				stroke: black;
+			}
+			.axis-curve.curve-foreground {
+				stroke-width: 4px;
+				stroke: white;
+				pointer-events: none;
+			}
+			.axis-curve.axis-curve.curve-grab-handle {
+				fill: none;
+				stroke-opacity: 0;
+				stroke-width: 20px;
+			}
+			.wavef-grab-v-line {
+				stroke: #ccc;
+				stroke-width: 3;
+				stroke-dasharray: 5 5;
+				pointer-events: none;
+			}
+			.temp-path {
+				opacity: 0;
+			}
+			/* .axis-curve.axis-curve.curve-grab-handle:hover {
+				cursor: grab;
+			} */
+			/* .axis-curve.axis-curve.curve-grab-handle:active {
+				cursor: grabbing !important;
+			} */
+			.wavef-grab-indicator {
+				fill: #5df;
+				stroke: #fff;
+				stroke-width: 4px;
+				pointer-events: none;
+			}
+			.axis-label {
+				fill: white;
+				stroke-opacity: 0;
+				font-size: 24px;
+			}
+			.axis-label.x-axis-label {
+				font-size: 16px;
+			}
+			.plot {
+				align-self: end;
+				vertical-align: bottom;
+			}
+			.experiment-bucket {
+				fill: #5df;
+				stroke: black;
+			}
+			.experiment-selected-bucket {
+				fill: #aef;
+			}
+			.measurement-marker {
+				fill: greenyellow;
+			}
+			.experiment-measurement-counter {
+				fill: white;
+				font-size: 20px;
+			}
+			.die.body {
+				fill: white;
+			}
+			#dice-sum-wrapper {
+				margin-left: 30px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div>
+				<div class="controls-container">
+					<div class="slider-container">
+						<span
+							>Number of <span id="text-experiment-type">dice</span>:
+							<span id="text-num-objects">1</span></span
+						>
+						<span
+							><label
+								><input
+									type="range"
+									name="num-objects"
+									id="slider-num-objects" /></label
+						></span>
+						<span
+							>Measurement speed: <span id="experiment-speed"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="experiment-speed"
+									id="experiment-speed-slider"
+							/></label>
+						</span>
+						<span
+							>Number of measurements:
+							<span id="num-measurements-text"></span
+						></span>
+						<span>
+							<label
+								><input
+									type="range"
+									name="num-measurements"
+									id="number-of-measurements-slider"
+							/></label>
+						</span>
+						<span></span>
+						<span
+							id="measurement-buttons"
+							class="radio-button-container horizontal"
+						>
+							<button
+								class="button"
+								id="btn-run"
+								onclick="runExperiment()"
+							>
+								Run experiment</button
+							><button
+								class="button"
+								id="btn-stop"
+								onclick="stopExperiment()"
+								data-button-checked
+							>
+								Pause experiment</button
+							><button
+								class="button"
+								id="btn-clear-experiment"
+								onclick="clearExperiment()"
+								data-button-checked
+							>
+								Reset
+							</button>
+						</span>
+					</div>
+				</div>
+				<div id="dice-plot-container"><svg id="dice-plot"></svg></div>
+				<span id="dice-sum-wrapper"
+					>Dice sum: <span id="text-dice-sum"></span
+				></span>
+			</div>
+			<svg id="experiment-plot" class="plot"></svg>
+		</div>
+		<div></div>
+		<script src="../../../utils.js"></script>
+		<script src="./dice_sampling.js"></script>
+	</body>
+</html>

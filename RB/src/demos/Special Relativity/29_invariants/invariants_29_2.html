@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<script src="https://d3js.org/d3.v5.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+		<style>
+			body {
+				width: 750px;
+			}
+			.slider-label-custom {
+				text-align: left;
+				min-width: 7em;
+				padding-left: 3em;
+			}
+			.h-centered {
+				margin: auto;
+				text-align: center;
+			}
+			.text-div {
+				display: inline;
+				vertical-align: middle;
+			}
+
+			.coordinate-box {
+				display: inline-flex;
+				flex-direction: column;
+				padding-left: 15px;
+				height: 400px;
+			}
+
+			.pythagorean {
+				display: inline-block;
+				border-style: solid;
+				border-radius: 3px;
+				border-width: 2px;
+				border-color: white;
+				padding: 3px;
+				padding-left: 8px;
+				padding-right: 8px;
+				margin-top: 2px;
+				margin-left: -14px;
+				min-width: 285px;
+			}
+		</style>
+	</head>
+
+	<body id="bod">
+		<div class="top-sliders-sect">
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑥-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-x-coord"
+						name="input-x-coord"
+						oninput="updateAngle({x: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						𝑦-coordinate:
+					</span>
+					<input
+						type="range"
+						id="input-y-coord"
+						name="input-y-coord"
+						oninput="updateAngle({y: +this.value})"
+					/>
+				</label>
+			</span>
+			<br />
+			<span>
+				<label>
+					<span class="slider-label slider-label-custom">
+						Angle (𝜃):
+					</span>
+					<input
+						type="range"
+						id="input-angle-rad"
+						name="input-angle-rad"
+						oninput="updateAngle({angleRad: +this.value})"
+					/>
+				</label>
+			</span>
+		</div>
+		<br />
+		<div style="display: inline-block; vertical-align: bottom; text-align: center;">
+			<svg
+				xmlns="http://www.w3.org/2000/svg"
+				id="viz-canvas"
+				style="margin: auto;"
+			></svg>
+		</div>
+		<div class="coordinate-box">
+			<div style="height: 100px;"></div>
+			<div class="text-div" style="vertical-align: top;">
+				<span
+					>𝑥 = <span id="text-upright-x" class="highlighted-text"></span
+				></span>
+				<br />
+				<span
+					>𝑦 = <span id="text-upright-y" class="highlighted-text"></span
+				></span>
+				<br />
+
+				<table class="pythagorean">
+					<tr>
+						<td class="eqn-left">𝑥²<span class="operator">+</span>𝑦²</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span id="text-upright-x-sq" class="highlighted-text"></span
+							><span class="operator">+</span
+							><span
+								id="text-upright-y-sq"
+								class="highlighted-text"
+							></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left"></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="distance highlighted-text"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="height: 100px; flex-grow: 1;"></div>
+			<span style="display: inline;"
+				>𝜃 = <span id="text-angle" class="quaternary-text">0</span
+				><span class="operator">º</span></span
+			>
+			<div style="height: 100px; flex-grow: 1;"></div>
+			<div class="text-div" style="vertical-align: bottom;">
+				<span
+					><span class="primed-coord">𝑥′</span> =
+					<span id="text-transformed-x" class="secondary-text"></span
+				></span>
+				<br />
+				<span
+					><span class="primed-coord">𝑦′</span> =
+					<span id="text-transformed-y" class="secondary-text"></span
+				></span>
+				<br />
+				<table class="pythagorean">
+					<tr>
+						<td class="eqn-left">
+							(𝑥′)²<span class="operator">+</span>(𝑦′)²
+						</td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span
+								id="text-transformed-x-sq"
+								class="secondary-text"
+							></span
+							><span class="operator">+</span
+							><span
+								id="text-transformed-y-sq"
+								class="secondary-text"
+							></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="eqn-left"></td>
+						<td class="eqn-middle">=</td>
+						<td class="eqn-right">
+							<span class="distance secondary-text"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div style="height: 100px;"></div>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./invariants_29_2.js"></script>
+	</body>
+</html>

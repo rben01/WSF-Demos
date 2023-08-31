@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="stylesheet" type="text/css" href="../../wsf_demo.css" />
+	</head>
+
+	<body>
+		<div>
+			<span>
+				<label>
+					<span class="slider-label">Speed of cab:</span>
+					<input
+						type="range"
+						id="input-taxi-speed"
+						name="input-taxi-speed"
+						min="0.0"
+						max="0.9999"
+						step=".0001"
+						value="0"
+						oninput="updateTaxiSpeed(this.value, true);stopAnimation()"
+					/>
+				</label>
+			</span>
+			<div>
+				<br />
+				<div style="float: left; min-width: 150px;">
+					<button
+						id="btn-run-animation"
+						onclick="toggleAnimation()"
+						class="play-button"
+					>
+						Start
+					</button>
+					<br />
+					<span>
+						𝑣 =
+						<span id="taxi-speed-text" class="sci-num highlighted-text"
+							>0.0000</span
+						>𝑐
+					</span>
+					<br />
+					<span
+						>𝛾 =
+						<span id="taxi-lorentz-factor-text" class="highlighted-text"
+							>1.0000</span
+						></span
+					>
+				</div>
+				<img
+					src="./lorentz_contraction_taxi.png"
+					id="img-taxi"
+					width="500px"
+					style="margin-left: 100px; transform-origin: center;"
+				/>
+			</div>
+		</div>
+
+		<script type="text/javascript" src="../../utils.js"></script>
+		<script type="text/javascript" src="./lorentz_contraction_taxi.js"></script>
+		<script type="text/javascript">
+			updateTaxiSpeed(0);
+		</script>
+	</body>
+</html>

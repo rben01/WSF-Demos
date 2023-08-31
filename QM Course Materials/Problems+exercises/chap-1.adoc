@@ -1,0 +1,1144 @@
+[.qm-chapter.chap-1]
+= Chapter 1: The Wave Function
+include::shared_attributes.adoc[]
+
+== The {sch} Equation
+=== Questions
+* {q-num} In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
+++\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]++
+with ++\(\kappa=\frac{i\hbar}{2m}\)++.
+The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle's position.
++
+Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Heat_equation[Heat Equation].
+What does this tell you about how the wavefunction flows over time?
++
+NOTE: Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
+However it is still instructive and at a high level gives good intuition for how probability density "`flows`" over time.
++
+.Solution
+[%collapsible]
+====
+Wavefunctions share the following features with solutions to the heat equation:
+
+* Solutions are waves!
+* In the heat equation, with ++\(\kappa\)++ real, heat flows opposite the direction of the temperature gradient, and flows with a magnitude proportional to the magnitude of the gradient.
+In the {sch} equation, with ++\(\kappa\)++ imaginary, "`probability current`" (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction's phase, and with a magnitude proportional to this gradient's magnitude.
+
+* As with the heat equation, solutions to the {sch} equation in free space get smoother and more diffuse over time.
+Combined with the above point, this means that the more concentrated a wavefunction is in space initially, the more rapidly it spreads out.
+====
+
+* {q-num} [Modified from Townsend] Show that the {sch} is linear: if \(\Psi_{n}\) is a solution to the {sch} equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.
++
+.Solution
+[%collapsible]
+====
+Ultimately this is just due to the linearity of the differentiation operator and of ordinary multiplication.
+
+If ++\(\Psi_n\)++ is a solution to the {sch} equation then ++\[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V(x)\Psi_n = 0\]++
+Now for ++\(\Psi\)++,
+++\[\begin{align*}
+&\phantom{=}-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi\\
+&= -i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V(x)\sum_n c_n\Psi_n\\
+& = \sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(x) (c_n\Psi_n) \\
+&= \sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V(x) \Psi_n )\\
+&=\sum_n c_n \cdot 0= 0 \end{align*}\]++
+We find that if ++\(\Psi_n\)++ is a solution to the {sch}, then ++\(\Psi = \sum_n c_n \Psi_n\)++ is also a solution to the {sch} equation.
+====
+
+* {q-num} [Modified from Townsend] Show that ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ (with appropriate choices of  ++\(\omega,n,l\)++) is a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\)++, but *not* the {sch} equation.
+(Ignore the trivial case where \(u=0\).)
++
+.Solution
+[%collapsible]
+====
+For \(u(x,t)\) to be a solution to the classical wave equation, ++\( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\)++.
+For ++\(u(x,t)\)++ to be a solution to the {sch} equation for a free particle then ++\(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = 0\)++.
+Let's begin with the classical wave equation:
+++\[\begin{align*}
+\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2}
+&= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&=-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\\
+&=\left[\left(\frac{n\pi}{l}\right)^2-\frac{\omega^2}{v^2}\right]A\cos(\omega t+\phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}
+\]++
+We see that if ++\(v = \frac{\omega l}{n \pi}\)++ then \(u(x,t)\) is a solution to the classical wave equation. For the {sch} equation,
+++\[\begin{align*}
+&\phantom{=}-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} \\
+&= [-i\hbar \frac{\partial}{\partial t}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right]
+    - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&= Ai\hbar\omega\sin(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)+A\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}\]++
+In order for this to equal 0 for all ++\(x,t\)++, and for \(u\) to be nontrivial, we must have
+++\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi) = 0\]++
+There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so ++\(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \)++ is not a solution to the {sch} equation for a free particle.
+
+====
+
+=== Demonstrations
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html[Collapse of Wavefunction Direction and Momentum]
+** Notes: for this section, show just the position component; remove momentum.
+
+=== Other Ideas, Notes, Materials
+
+* Interactive timeline like the ones in some of our WSU courses (e.g., https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/[From Einstein to Ligo^]).
+
+
+== The Statistical Interpretation
+
+=== Questions
+* {q-num} In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?
+
+** Using single photons
+** Using single electrons
+** Using a beam of electrons
+** Measuring which slit the particle passes through
+** Using helium atoms
+
++
+.Solution
+[%collapsible]
+====
+For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used.
+In quantum mechanics, wavelike interference is not an artifact of collective motion -- a single particle passes through both slits and interacts with _itself_!
+We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms!
+However, if we set up an apparatus to measure which slit the particles travel through, we do _not_ observe an interference pattern because the wavefunctions collapse upon measurement.
+====
+
+* {q-num} Let's derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.
+.. Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by ++\(\Delta l=d\sin\theta\)++.
+.. Show that the locations of maximum constructive interference (maximum intensity) are given by ++\(d\sin\theta=n\lambda\)++ for ++\(n\in\mathbb Z\)++.
+.. Show that the locations of maximum destructive interference (minimum intensity) are given by ++\(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\)++ for ++\(n\in\mathbb Z\)++.
+.. Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), and the additional assumption that the ++\(n\)++^th^ crest is not too far from the center of the screen (i.e., that ++\(\tan\theta\)++ is small), show that the distance from the center of the detector screen to the \(n\)^th^ crest is approximately \(\frac{n\lambda D}{d}\).
+
++
+.Solution
+[%collapsible]
+====
+Refer to the diagram below:
+
+image::../images/1.2.2.A/img.svg[width=400]
+
+[{sublist-style}]
+. The two rays of light each form a right triangle of which they are the hypotenuse and with one leg of length ++\(D\)++.
+For ++\(l_1\)++, the other leg is of length ++\(D\tan\theta+\frac{d}{2}\)++, so by the Pythagorean theorem,
+++\[\begin{align*}
+l_1^2&=D^2+(D\tan\theta+d/2)^2\\
+&=D^2+D^2\tan^2\theta+Dd\tan\theta+\frac{1}{4}d^2\\
+&=D^2\left(sec^2\theta+\frac{d\tan\theta}{D}+\frac{d^2}{4D^2}\right)\\
+&=D^2\sec^2\theta\left(1+\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\right)\\
+l_1&=D\sec\theta\sqrt{1+K_1}
+\end{align*}\]++
+where ++\(K_1=\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\)++.
+Since the only term in ++\(K_1\)++ that could be negative is ++\(\frac{d\sin\theta\cos\theta}{D}\)++, and it must lie between ++\(-1\)++ and ++\(1\)++, the term under the square root is positive and so its Taylor expansion exists.
+Using the first two terms of the Taylor expansion of ++\(f(x)=\sqrt{1+x}\)++ about ++\(x=0\)++, we have
+++\[\begin{align*}
+l_1&\approx D\sec\theta\left(1+\frac{K_1}{2}\right)
+\end{align*}\]++
++
+Similarly, ++\(l_2\approx D\sec\theta\left(1+\frac{K_2}{2}\right)\)++, where ++\(K_2=-\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}.\)++
+And so
+++\[\begin{align*}
+\Delta l&=l_1-l_2\\
+&\approx D\sec\theta\ \frac{K_1 - K_2}{2}\\
+&=D\sec\theta\left(\frac{d\sin\theta\cos\theta}{D}\right)\\
+&=d\sin\theta
+\end{align*}\]++
+as desired.
+. Two waves exhibit maximum constructive interference when the first wave's peaks are aligned with the second wave's peaks (which would imply that their troughs are also aligned with each other), which occurs when the waves`' wavefronts are an _integer_ — ++\(\ldots,-2, -1, 0, 1, 2,\ldots\)++ — number of wavelengths apart.
+By part (a), the wavefronts are a distance ++\(d\sin\theta\)++ apart, and so maximum constructive interference occurs when ++\(d\sin\theta=n\lambda\)++.
+. Similarly, two waves exhibit maximum destructive interference when the first wave's peaks are aligned with the second wave's troughs (which would imply that the second wave's peaks are also aligned with the first wave's troughs), which occurs when the waves`' wavefronts are a _half-integer_ — ++\(\ldots,-2+\frac{1}{2}, -1+\frac{1}{2}, \frac{1}{2}, 1+\frac{1}{2}, 2+\frac{1}{2},\ldots\)++ — number of wavelengths apart, or when ++\(d\sin\theta=(n+\frac{1}{2})\lambda\)++.
+. As we saw in part (b), the ++\(n\)++^th^ crest of the interference pattern occurs where ++\(d\sin\theta=n\lambda\)++, or where ++\(\theta=\sin^{-1}\left(\frac{n\lambda}{d}\right)\)++.
+If ++\(\theta\)++ is small, then
+++\[\begin{align*}
+\tan\theta&=\frac{\sin\theta}{\cos\theta}\\
+&\approx\frac{\sin\theta}{1-\frac{\theta^2}{2}}\\
+&\approx\sin\theta
+\end{align*}\]++
+Since point ++\(P\)++ in the diagram is a distance ++\(r=D\tan\theta\)++ from the midpoint of the screen, if a crest occurs there, then
+++\[\begin{align*}
+r&=D\tan\theta\\
+&\approx D\sin\theta\\
+&=D\sin\left(\sin^{-1}(n\lambda/d)\right)\\
+&=\frac{n\lambda D}{d}
+\end{align*}\]++
+as desired.
+====
+
+
+=== Demonstrations
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543[Double slit detector simulation (2D)^]
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/constructive_destructive_interference/constructive_destructive_interference_inlined.html?t=1657044227[Double slit with waves (3D)^]
+
+== Probability
+=== Questions
+
+* {q-num} An integer is chosen uniformly at random from the set ++\(\{0,1, 2,\ldots, 199\}\)++.
++
+[{sublist-style}]
+.. What are the probabilities of selecting a number with 1, 2, or 3 digits?
+.. Calculate the expected number of digits.
+.. Find the standard deviation of the number of digits.
+
++
+.Solution
+[%collapsible]
+====
+
+[{sublist-style}]
+. There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers.
+The probability of selecting a 1, 2, or 3 digit number are: ++\[P(\textrm{1}) = \frac{10}{200} = \frac{1}{20}\]++  ++\[P(\textrm{2}) = \frac{90}{200} = \frac{9}{20}\]++ ++\[P(\textrm{3}) = \frac{100}{200} = \frac{1}{2}\]++
+. The expected number of digits is ++\[\begin{align*}\Braket{d} &= (1)P(1)+(2)P(2) + (3)P(3) \\ &=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &=  2.45  \end{align*}\]++
+If you choose a number at random, the expected value for the number of digits is 2.45.
+. Standard deviation is given by \(\sqrt{\Braket{d^2} - \Braket{d}^2}\), where \(d\) is the number of digits that a selected number has. ++\[\begin{align*} \Braket{d^2}  &=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &=  6.35 \end{align*}\]++
+The standard deviation is: ++\[\sigma = \sqrt{6.35-(2.45)^2} = 0.59\]++
+====
+
+* {q-num} You survey your neighbors to determine the number of pets they have in their households and collect the following data:
++
+--
+[#pets-table,cols=">1h,<1",stripes=none,frame=all,grid=rows,width=40em]
+|===
+|Number of pets in household
+s|Number of households with that number of pets
+|0|3
+|1|6
+|2|5
+|3|2
+|4|2
+|5|0
+|6|0
+|7|1
+|8|0
+|9|0
+|10|1
+|===
+
+
+Verify that both ways of computing standard deviation give the same answer (i.e. show that ++\(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2}\)++ where ++\(n\)++ is the number of pets in the household).
+
+
+.Solution
+[%collapsible]
+====
+First you'll need to use the above table to find the _probability_ of encountering a household with each number of pets/
+To do this, simply divide each count by the total number of houses, 20, to obtain
+
+[#pets-table-2,cols=">1h,<1",stripes=none,frame=all,grid=rows,width=40em]
+|===
+|Number of pets in household
+s|Probability a household has that number of pets
+|0|0.15
+|1|0.3
+|2|0.25
+|3|0.1
+|4|0.1
+|5|0
+|6|0
+|7|0.05
+|8|0
+|9|0
+|10|0.05
+|===
+
+
+We'll calculate ++\(\Braket{n}\)++, ++\(\Braket{n^2}\)++, and ++\(\Braket{(\Delta n)^2}\)++:
+++\[\begin{align*} \Braket{n} &= 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1)  \\ &\quad+5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\&= 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 \\&= 2.35\\
+ \Braket{n^2} &= 0(.15) + 1(.3) + 4(.25)+ 9(.1)+ 16(.1)  \\ &\quad+25(0) + 36(0) + 49(.05) + 64(0) + 81(0) + 100(.05) \\&= 0+ .3 + 1 + .9 + 1.6  + 0 + 0+ 2.45 + 0 + 0 + 5 \\&=  11.25 \\
+ \Braket{(\Delta n)^2} &= (0-2.35)^2(.15) + (1-2.35)^2(.3) +(2-2.35)^2(.25) \\ &\quad+(3-2.35)^2(.1)+ (4-2.35)^2(.1) + (5-2.35)^2(0) \\ &\quad+(6-2.35)^2(0) + (7-2.35)^2(.05) + (8-2.35)^2(0)\\ &\quad+(9-2.35)^2(0) + (10-2.35)^2(.05) \\&= 0.828375 + 0.54675 + 0.030625 + 0.04225 \\ &\quad+ 0.27225 + 0 + 0 + 1.081125 + 0 + 0 + 2.926125\\ &= 5.7275 \end{align*}\]++
+We find that ++\(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2} = 2.39\)++
+====
+--
+
+* {q-num} Plot the following two probability density distributions over the interval 0 to 1:
++
+--
+++\[\begin{align*}
+\rho_1(x)&=
+    \begin{cases}
+        4x & 0\le x \le \frac{1}{2}\\
+        -4x+4 & \frac{1}{2}\le x\le 1
+    \end{cases}\\
+    \rho_2(x) &= 2\sin^2(2\pi x)\end{align*}\]++
+
+[{sublist-style}]
+. Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall, one line at a standard deviation below the mean and one line at a standard deviation above the mean.
+. Calculate ++\(\Braket{x}\)++ and ++\(\sigma\)++ for both distributions.
+. For both distributions, calculate the probability of selecting a value that falls within 1 standard deviation of the mean.
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. The correct graphs are below.
+The expectation is marked with a solid gray line and one standard deviation above and below are marked with dashed gray lines.
++
+image::fig-1.3.1-graphs.svg[width=450]
+. For the first probability distribution, ++\(\rho_1(x)\)++:
+++\[\begin{align*} \Braket{x} &= \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\
+&= \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\
+&= \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} \\
+&= \frac{1}{2} \\\\
+  \Braket{x^2} &=   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\
+&= \left. x^4 \right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\
+&= \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} \\
+&= \frac{7}{24} \\
+\sigma &= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204
+\end{align*}\]++
++
+For the second probability distribution, ++\(\rho_2(x)\)++:
+++\[\begin{align*} \Braket{x} &= \int_0^1 x (2\sin^2{(2 \pi x)}) dx \\
+&= \int_0^1 x (1-\cos(4 \pi x)) dx \\
+&= \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\
+&= \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} \\
+&= \frac{1}{2} \\
+\Braket{x^2} &= \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx \\
+&= \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\
+ &= \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ &= \frac{1}{3} - \frac{1}{8\pi^2}
+ \\  \sigma &= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\left(\frac{1}{3}-\frac{1}{8\pi^2}\right) - \frac{1}{4}}
+  \approx 0.266
+  \end{align*}\]++
+. For ++\(\rho_1\)++ the probability of selecting a value within one standard deviation of the mean is given by:
+++\[\begin{align*} &\phantom{=}\int_{0.296}^{0.5} (4x)dx + \int_{0.5}^{0.704} (-4x+4)dx \\ &= 2x^2 \Bigr|_ {0.296}^{0.5} + \left( -2x^2 + 4x \right) \Bigr|_{0.5}^{0.704} \\
+&= 0.650 \end{align*}\]++
+For ++\(\rho_2\)++ the probability of selecting a value within one standard deviation of the mean is given by: ++\[\begin{align*} &\int_{0.234}^{0.766} 2\sin^2(2\pi x)dx =  \left. x - \frac{\sin(4 \pi x)}{4 \pi} \right|_{0.234}^{0.766}  = 0.564 \end{align*}\]++
+====
+--
+
+* {q-num} You are standing at the center of a number line (++\(x=0\)++).
+You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
+Every time you flip tails, you take a unit step in the negative direction.
+[{sublist-style}]
+. Where on the number line could you end up after flipping the coin exactly once (++\(n=1\)++)?
+How many total paths are there?
+. For ++\(n=0\)++ to ++\(n=3\)++, how many sequences of ++\(n\)++ coin flips land you at each integer?
+How many total paths are there?
+Do you notice a pattern?
+. Use https://en.wikipedia.org/wiki/Pascal's_triangle[Pascal's triangle] to determine the probability of landing at each integer after 7 steps.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.
+
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. You could end up at ++\(x = \pm 1\)++. There is 1 path, ++\(T\)++, to ++\(x = - 1\)++ and 1 path, ++\(H\)++, to ++\(x =1\)++, for a total of 2 paths.
+. For 0 to 3 flips:
++
+[cols="1,1,3",options="header"]
+|===
+|++\(\boldsymbol n\)++|++\(\boldsymbol x\)++|Paths
+.2+|++\(0\)++|++\(0\)++|++\(\emptyset\)++ (the empty path; no coin flips)
+             h|Total h|1
+.3+|++\(1\)++|++\(-1\)++|T
+             |++\(1\)++|H
+             h|Total h|2
+.4+|++\(2\)++|++\(-2\)++|TT
+             |++\(0\)++|TH, HT
+             |++\(2\)++|HH
+             h|Total h|4
+.5+|++\(3\)++|++\(-3\)++|TTT
+             |++\(-1\)++|TTH, THT, HTT
+             |++\(1\)++|HHT, HTH, THH
+             |++\(3\)++|HHH
+             h|Total h|8
+|===
+For each ++\(n\)++, there are ++\(2^n\)++ total paths, and the number of paths to get to each endpoint are given by binomial coefficients ++\(\binom{n}{k}\)++ where ++\(k\)++ is the number of heads, which we will see in Pascal's triangle.
++
+NOTE: You should justify to yourself _why_ there are ++\(2^n\)++ total paths.
+. Pascal's triangle is shown below.
++
+image::fig-1.3.4-pascal-triangle.svg[Pascal's Triangle,width=300]
++
+The ++\(k\)++^th^ element in the ++\(n\)++^th^ row (where ++\(k\)++ and ++\(n\)++ both start from 0), ++\(\binom nk\)++, is the number of sequences of H and T of length ++\(n\)++ containing ++\(k\)++ H&lsquo;s.
+A path with ++\(k\)++&#x2007;H&lsquo;s will contain ++\(n-k\)++&#x2007;T&lsquo;s, and so its final position will be ++\(x=\#\mathrm H-\#\mathrm T=k-(n-k)=2k-n\)++.
+(Check that this matches what you found above.)
+There are ++\(2^7=128\)++ sequences of length 7, so the probabilities of landing at each integer are as follows:
++
+
+[cols="1,1,1,3,3",options="header"]
+|===
+|++\(\boldsymbol n\)++|++\(\boldsymbol k\)++|++\(\boldsymbol{x=2k-n}\)++|Number of paths|Probability
+.8+|++\(7\)++|++\(0\)++|++\(-7\)++|++\(1\)++|++\(\frac{1}{128}\)++
+             |++\(1\)++|++\(-5\)++|++\(7\)++|++\(\frac{7}{128}\)++
+             |++\(2\)++|++\(-3\)++|++\(21\)++|++\(\frac{21}{128}\)++
+             |++\(3\)++|++\(-1\)++|++\(35\)++|++\(\frac{35}{128}\)++
+             |++\(4\)++|++\(1\)++|++\(35\)++|++\(\frac{35}{128}\)++
+             |++\(5\)++|++\(3\)++|++\(21\)++|++\(\frac{21}{128}\)++
+             |++\(6\)++|++\(5\)++|++\(7\)++|++\(\frac{7}{128}\)++
+             |++\(7\)++|++\(7\)++|++\(1\)++|++\(\frac{1}{128}\)++
+|===
+====
+
+* {q-num} &dagger; In one dimension, the _probability current_ ++\(J\)++ describes the rate at which probability flows past point ++\(x\)++. For a free particle with mass ++\(m\)++ whose wavefunction is ++\(\Psi(x,t)\)++, or ++\(\Psi\)++ for short, it is given by
+++\[J(x,t) = \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
+    x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]++
+(In higher dimensions, ++\(\frac{\partial }{\partial x}\)++ is replaced by ++\(\nabla\)++, and the interpretation relies on Gauss's divergence theorem.)
++
+--
+[{sublist-style}]
+. Show that ++\[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]++
+What "`law`" does this equation represent?
+What happens to the probability current in the region from ++\(-\infty\)++ to ++\(\infty\)++?
+What does this mean?
+. [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
+Show that ++\(J\)++ as defined above points in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or in the 3D case, ++\(\nabla \varphi\)++), i.e., in the direction of increasing phase.
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. First, recall the {sch} equation for a free particle,
+++\[ i\hbar\frac{\partial \Psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi \]++
+Now recall that ++\(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\)++. Then,
+++\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
+\frac{\partial \Psi^*}{\partial t}&=-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}
+\end{align*}\]++
+Now, applying the product rule twice, once forwards and once backwards,
+++\[\begin{align*}
+\frac{d}{dt}|\Psi|^2&=\frac{d}{dt} (\Psi^*\Psi)\\
+&=\frac{d\Psi^*}{dt}\Psi +\Psi^*\frac{d\Psi}{dt}\\
+&=\left(-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}\right)\Psi+\Psi^*\left(\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&=-\frac{i\hbar}{2m}\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}-\Psi^*\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&=-\frac{i\hbar}{2m}\left[\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}+\frac{\partial \Psi}{\partial x}\frac{\partial\Psi^*}{\partial x}\right)\right.\\
+&\phantom{=\frac{i\hbar}{2m}[}-\left.\left(\Psi^*\frac{\partial^2\Psi}{\partial x^2}+\frac{\partial \Psi^*}{\partial x}\frac{\partial\Psi}{\partial x}\right)\right]\\
+&=-\frac{i\hbar}{2m}\left[\frac{\partial}{\partial x} \left(\Psi\frac{\partial\Psi^*}{\partial x}\right)-\frac{\partial}{\partial x}\left(\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&=-\frac{\partial}{\partial x}\left[\frac{i\hbar}{2m}\left(\Psi\frac{\partial\Psi^*}{\partial x}-\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&=-\frac{\partial J}{\partial x}
+\end{align*}\]++
+And the integral is now trivial:
+++\[\begin{align*}
+\frac{d}{dt}\int_a^b |\Psi|^2\,dx&=\int_a^b\frac{d}{dt} |\Psi|^2\,dx\\
+&=\int_a^b-\frac{\partial J}{\partial x}\,dx\\
+&=-J(x,t)\Bigr|^{x=b}_{x=a}\\
+&=J(a,t)-J(b,t)
+\end{align*}\]++
+We see that the net amount of probability leaving or entering the region ++\([a,b]\)++ is the difference between the values of the probability current at ++\(a\)++ and ++\(b\)++.
+This means that "`probability current`" is, in fact, a good name for this quantity:
+if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region's boundary, then, via https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem^], we can liken the function's value on the surface to a flux, or current. (For more info, see https://en.wikipedia.org/wiki/Continuity_equation[Transport Equation^].)
+From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region's boundary.
+(This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when ++\(\frac{\partial \Psi}{\partial x}\)++ is replaced by ++\(\nabla \Psi\)++ and the region's boundary is an actual surface and not just two points on either side.)
++
+Since ++\(\Psi\)++ is square integrable, it must go to 0 as ++\(x\to\pm\infty\)++, and therefore so must ++\(J\)++ (just by the definition).
+And so ++\[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]++
+This indicates that probability is conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
+(This is good — we _need_ probabilities to always add up to 1.)
+
+. First,
+++\[\begin{align*}
+\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
+&=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
+&= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
+\end{align*}\]++
+And so
+++\[\begin{align*}
+J&=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
+&=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
+&\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
+&=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
+&=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
+\end{align*}\]++
+which does indeed point in the direction of ++\(\frac{\partial \varphi}{\partial x}\)++ (or, in higher dimensions, where we would have taken ++\(\nabla (|\Psi|e^{\pm i\varphi})\)++, it points in the direction of ++\(\nabla \varphi\)++).
+====
+--
+
+=== Demonstrations
+
+* Discrete density function
+** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/ball_sampling/ball_sampling_inlined.html?t=1656456918[Balls in a bag^]
+** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/dice_sampling/dice_sampling_inlined.html?t=1656456918[Sum of N dice^]
+* Continuous density function
+** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment (1D)^]
+** https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543[Probability and Sampling Experiment (2D)^]
+
+* Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter ++\(\sigma\)++).
+
+=== Other Ideas, Notes, Materials
+
+* Discuss basic properties of probability distributions:
+** Linearity of expectation
+** How scaling ++\(x\)++ affects ++\(\sigma\)++
+
+
+== Normalization
+
+=== Questions
+* {q-num} Normalize the following wavefunctions (i.e. find ++\(A_i\)++) over the domain ++\(x\in(-\infty,\infty)\)++.
++
+--
+[{sublist-style}]
+. ++\(\Psi_1(x,t)= A_1e^{-(\frac{ax^2}{2}+i\omega t)}\)++
+. ++\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)++
+. ++\(\Psi_3(x,0)= A_3\frac{\sin(2x)}{x}\)++ (you may use the fact that ++\(\int_{-\infty}^\infty\frac{\sin(x)}{x}\,dx=\pi\)++)
+. ++\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)++
+--
++
+NOTE: If ++\(A_i\)++ works then so does ++\(A_ie^{ix}\)++ for an real ++\(x\)++, so you might as well choose the ++\(A_i\)++ that is real and positive.
+
++
+.Solution
+[%collapsible]
+====
+The squared norm of a wavefunction ++\(\Psi\)++ is ++\(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\)++.
+Normalizing a wavefunction simply requires setting its (squared) norm to 1, then solving for the normalization constant ++\(A\)++.
+
+Recall that a complex number ++\(ke^{ix}\)++ has magnitude ++\(k\)++.
+
+[{sublist-style}]
+. Let ++\(\sigma=\frac{1}{\sqrt{2a}}\)++. Then ++\[\begin{align*}
+|\Psi_1|^2&=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
+&=\int_{-\infty}^\infty |A_1|^2e^{-ax^2}\,dx\\
+&=\sigma\sqrt{2\pi}|A_1|^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
+&= \sigma\sqrt{2\pi}|A_1|^2\cdot 1\quad\textrm{(the integrand is a Gaussian)}\\
+&=\sqrt{\frac{\pi}{a}}
+\end{align*}\]++
+Setting this equal to 1, we obtain ++\(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\)++.
+
+. We compute: ++\[\begin{align*}
+|\Psi_2|^2&=\int_{-\infty}^\infty \left|A_2 e^{-\kappa|x|}\right|^2\,dx\\
+&=\int_{-\infty}^\infty |A_2|^2 e^{-2\kappa|x|}\,dx\\
+&=\int_{-\infty}^0 |A_2|^2 e^{2\kappa x}\,dx+\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&=2\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&=2 |A_2|^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
+&=\frac{|A_2|^2}{\kappa}
+\end{align*}\]++
++
+Setting this equal to 1, we obtain ++\(A_2=\sqrt\kappa\)++.
+. We start off with the squared integral:
+++\[\begin{align*}
+|\Psi_3|^2&=\int_{-\infty}^\infty \left|A_3\frac{\sin(2x)}{x}\right|^2\,dx=|A_3|^2\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx
+\end{align*}\]++
+To compute this complicated looking integral, we'll use integration by parts:
+++\[\begin{align*}
+u&=\sin^2(2x)&dv&=x^{-2}\,dx\\
+du&=4\sin(2x)\cos(2x)\,dx&v&=-x^{-1}\\
+&=2\sin(4x)
+\end{align*}\]++
+And so,
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&=-\left.\frac{\sin^2(2x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{2\sin(4x)}{x}\,dx
+\end{align*}\]++
+Now, ++\(\frac{\sin^2(x)}{x}\)++ is an odd function, so its integral over ++\((-\infty,\infty)\)++ is ++\(0\)++. So we're just left with
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&= \int_{-\infty}^\infty \frac{2\sin(4x)}{x}\,dx\\
+&=8\int_{-\infty}^\infty \frac{\sin(4x)}{4x}\,dx
+\end{align*}\]++
+Now, a ++\(u\)++-substition with ++\(u=4x,du=4\,dx\)++ gives us
+++\[\begin{align*}
+&=8\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{4}\,du\\
+&=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\,du\\
+&=2\pi
+\end{align*}\]++
+So, ++\(1=|\Psi_3|^2=|A_3|^2\cdot2\pi\)++, from which we conclude that [.no-break]#++\(A_3=\frac{1}{\sqrt{2\pi}}\)++.#
+
+. We'll need to compute ++\(|x+e^{i\pi/2}|\)++ so we'll do that first.
+First note that ++\(e^{i\pi/2}=i\)++, and then
+++\[\begin{align*}
+|x+i|^2&=(x+i)(x+i)^* =x^2+1
+\end{align*}\]++
+So,
+++\[\begin{align*}
+|\Psi_4|^2&=\int_{-\infty}^\infty \left|A_4\frac{e^{-i\omega t}}{x+e^{i\pi/2}}\right|^2\,dx\\
+&=|A_4|^2\int_{-\infty}^\infty \frac{1}{x^2+1}\,dx
+\end{align*}\]++
++
+[TIP]
+--
+If you are struggling to compute this integral and would like a hint: don't read any further, and set ++\(x=\tan\theta\)++.
+(The image of ++\(\tan\)++ is ++\((-\infty,\infty)\)++, so this is sound.)
+--
++
+Letting ++\(x=\tan\theta\)++, we have
+++\[\begin{align*}
+x^2+1&=\tan^2\theta+1\\
+&=\frac{\sin^2\theta}{\cos^2\theta}+1\\
+&=\frac{\sin^2\theta+\cos^2\theta}{\cos^2\theta}\\
+&=\frac{1}{\cos^2\theta}
+\end{align*}\]++
+and so ++\(\frac{1}{x^2+1}=\cos^2\theta\)++.
+Also,
+++\[\begin{align*}
+\frac{dx}{d\theta}&=\frac{d}{d\theta}\left(\frac{\sin\theta}{\cos\theta}\right)=\frac{d}{d\theta}\left(\sin\theta\cos^{-1}\theta\right)\\
+&=(\cos\theta)(\cos^{-1}\theta)+(\sin\theta)(-\sin\theta(-\cos^{-2}\theta))\\
+&=1+\frac{\sin^2\theta}{\cos^2\theta}\\
+&=\frac{\cos^2\theta+\sin^2\theta}{\cos^2\theta}\\
+&=\frac{1}{\cos^2\theta}
+\end{align*}\]++
+Finally, note that ++\(\tan(\pm\infty)=\pm\frac{\pi}{2}\)++.
+Therefore,
+++\[\begin{align*}
+\int_{-\infty}^\infty\frac{1}{x^2+1}dx&=\int_{-\pi/2}^{\pi/2}(\cos^2\theta)\left(\frac{1}{\cos^2\theta}\right)\,d\theta\\
+&=\int_{-\pi/2}^{\pi/2} d\theta\\
+&=\theta\Bigr|_{-\pi/2}^{\pi/2}\\
+&=\pi
+\end{align*}\]++
+And so ++\(1=|\Psi_4|^2=|A_4|^2\pi\)++ and (once again) ++\(A_4=\frac{1}{\sqrt\pi}\)++.
+====
+
+* {q-num} Write a normalized wavefunction, ++\(\Psi(x,t)\)++,  with expectation ++\(\Braket{x}\)++ and standard deviation ++\(\sigma\)++ at time ++\(t=0\)++.
++
+.Solution
+[%collapsible]
+====
+It's easiest to start with a known probability distribution — their means and standard deviations are often part of their parameterization, and by definition they're normalized — and then work backwards to the wavefunction.
+
+One probability distribution parameterized by its mean and standard deviation is the normal distribution.
+The normal distribution with mean ++\(\Braket{x}\)++ and standard deviation ++\(\sigma\)++ is
+++\[f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
+
+One wavefunction whose probability distribution is ++\(f\)++ is ++\(f\)++’s square root:
+++\[\psi(x)=\sqrt{f(x)} =\frac{1}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
+
+For fun, we can throw in a phase dependence on ++\(t\)++; it won't affect the magnitude:
+++\[\Psi(x,t)=\frac{e^{-it}}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]++
+
+====
+
+=== Demonstrations
+
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543[Probability and Sampling Experiment (1D)^]
+** Already shown above, but this time you can emphasize how after changing the shape of the wavefunction, it immediately adjusts ++\(\psi\)++ so that its squared magnitude remains 1.
+
+== Momentum
+
+=== Questions
+* {q-num} For the following wavefunction over the interval ++\([0,1]\)++ ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+[{sublist-style}]
+. Show that ++\(\Psi(x,t)\)++ is normalized.
+. Calculate ++\(\Braket{x}\)++.
+. Calculate ++\(\Braket{p} \)++.
+. Compare and contrast this to the classical system of a ball bouncing back and forth between two walls.
+Does Ehrenfest's theorem apply to this wavefunction?
++
+////
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++. For Ehrenfest's Theorem to hold, what must be true about the particle?
+. Use Ehrenfest's Theorem to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+////
+
++
+.Solution
+[%collapsible%open]
+====
+You will want to have on hand a big list of trigonometric identities.
+Here are the main ones we'll use:
+
+++\[\begin{align*}
+\sin^2(x)&=\frac{1}{2}(1-\cos(2x))\\
+\sin(2\alpha)&=2\sin(\alpha)\cos(\alpha)\\
+\sin(\alpha)\sin(\beta)&=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))
+\end{align*}\]++
+
+We'll also want the following two integrals: for integer ++\(n\)++,
+++\[\begin{align*}
+\int_0^1\cos(n\pi x)\,dx&=\left.\frac{\sin(n\pi x)}{n\pi}\right|^1_0=0\\
+\int_0^1\sin(n\pi x)\,dx&=\left.-\frac{\cos(n\pi x)}{n\pi}\right|^1_0=\begin{cases}\frac{2}{n\pi}&n\ \textrm{odd}\\0&n\ \textrm{even}\end{cases}
+\end{align*}\]++
+
+And we'll want the following, which requires integration by parts.
+Let ++\(u=x,dv=\cos(n\pi x)\,dx\)++.
+Then ++\(du=dx\)++ and ++\(v=\frac{\sin(n\pi x)}{n \pi }\)++.
+++\[\begin{align*}
+\int_0^1x\cos(n\pi x)\,dx&=\int_0^1u\,dv\\
+&=uv\Bigr|^1_0 - \int_0^1v\,du\\
+&=\left.\frac{x\sin(n\pi x)}{n\pi}\right|^1_0-\int_0^1\frac{\sin(n\pi x)}{n\pi }\,dx\\
+&=\begin{cases}-\frac{2}{(n\pi)^2}&n\ \textrm{odd}\\0&n\ \textrm{even}\end{cases}
+\end{align*}\]++
+
+Ok, on to the task at hand.
+
+[{sublist-style}]
+. First note that
+++\[\begin{align*}
+\int_0^1\sin^2(n\pi x)\,dx =\int_0^1\frac{1}{2}(1-\cos(2n\pi x))\,dx=\frac{1}{2}
+\end{align*}\]++
+And if ++\(m\ne n\)++ then
+++\[\begin{align*}
+&\phantom{=}\int_0^1\sin(m\pi x)\sin(n \pi x)\,dx\\
+&=\int_0^1\frac{1}{2}(\cos((m-n)\pi x)-\cos((m+n)\pi x))\,dx\\
+&=0
+\end{align*}\]++
+Now,
+++\[\begin{align*}
+|\Psi(x,t)|^2&=\Psi^*\Psi\\
+&=(e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x))\\
+&\phantom{=}\cdot (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x))\\
+&=\sin^2(\pi x)+\sin^2(2\pi x) \\
+&\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
+&=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
+\end{align*}\]++
+where ++\(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\)++.
+Now we simply compute:
+++\[\begin{align*}
+|\Psi|^2&=\int_{0}^1 \Psi^*\Psi \,dx\\
+&=\int_0^1 \sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)\,dx\\
+&=\frac{1}{2}+\frac{1}{2}+0\\
+&=1
+\end{align*}\]++
+So ++\(\Psi\)++ is indeed normalized.
+. {nbsp}
++
+WARNING: These integrals won't be pretty.
++
+++\[\begin{align*}
+\Braket{x}&=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
+&=\int_0^1x|\Psi(x,t)|^2\,dx\\
+&=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
+\end{align*}\]++
+We'll do the three components separately, starting with the first two.
+++\[\begin{align*}
+\int_0^1x\sin^2(n\pi x)&=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
+&=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)\\
+&=\frac{1}{2}\left(\left.\frac{x^2}{2}\right|^1_0-0\right)\\
+&=\frac{1}{4}
+\end{align*}\]++
+Great, that's two components down. Now let's do the third component (without the ++\(\phi\)++ constant for now).
+++\[\begin{align*}
+&\phantom{=}\int_0^1x\sin(\pi x)\sin(2\pi x)\,dx\\
+&=\int_0^1 x\cdot\frac{1}{2}\left(\cos(-x)-\cos(3x)\right)\,dx\\
+&=\frac{1}{2}\left(-\frac{2}{(-\pi)^2}-\frac{2}{(3\pi)^2}\right)\\
+&=-\frac{8}{9\pi^2}
+\end{align*}\]++
+And so, we finally obtain
+++\[\Braket{x}=\frac{1}{4}+\frac{1}{4}-\frac{8\phi}{9\pi^2}=\frac{1}{2}-\frac{8\phi}{9\pi^2}\]++
+Wait a minute — ++\(\phi\)++ is complex, but ++\(\Braket{x}\)++ must be real.
+Well, if ++\(w\in\mathbb R\)++, then
+++\[\begin{align*}
+e^{iw}+e^{-iw}&=e^{iw}+(e^{iw})^*\\
+&=2\,\mathfrak{Re}[e^{iw}]\\
+&=2\cos(w)
+\end{align*}\]++
+So,
+++\[\begin{align*}
+\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}=2\cos((\lambda_1-\lambda_2)t)
+\end{align*}\]++
+So ++\(\phi\)++ was real along. We finally obtain
+++\[\begin{align*}
+\Braket{x} = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
+\end{align*}\]++
+
+. On to ++\(\braket{p}\)++!
+ ++\[\begin{align*}
+\Braket{p}&=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
+&=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
+\end{align*}\]++
+Let's compute the integrand:
+++\[\begin{align*}
+\Psi^* &=e^{i\lambda_1 t}\sin(\pi x)+e^{i\lambda_2 t}\sin(2\pi x)\\
+\frac{\partial \Psi}{\partial x} &=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\\\\
+\Psi^* \frac{\partial \Psi}{\partial x}&=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+&\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
+&=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&\phantom{=}+\,\frac{\pi}{2} e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
+&\phantom{=}+\,\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
+&=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&\phantom{=}+\,\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2e^{i(\lambda_1-\lambda_2)t}\right)\\
+&\phantom{=}+\,\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]++
+Now, we need to integrate this.
+Thankfully we already know how to compute ++\(\int_0^1 \sin(n\pi x)\,dx\)++, and so we obtain
+++\[\begin{align*}
+\Braket{p}&=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
+&=-i\hbar\int_0^1\left[\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\right.\\
+&\phantom{i\hbar\int_0^1}\quad\quad+\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
+&\phantom{i\hbar\int_0^1}\quad\quad+\left.\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
+&=-i\hbar\left[\left( e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&\quad\quad+\,\left.\frac{1}{3}\left( e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+&=-i\hbar\left(\frac{4}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{4}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
+&=-\frac{4i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]++
+Uh oh, this also looks like it might not be real.
+But,
+++\[\begin{align*}
+e^{-iw}-e^{iw}&=-(e^{iw}-(e^{iw})^*)\\
+&=-2i\,\mathfrak{Im}[e^{iw}]\\
+&=-2i\sin(w)
+\end{align*}\]++
+and so, finally,
+++\[\begin{align*}
+\Braket{p}&=-\frac{4i\hbar}{3}\left(-2i\sin((\lambda_1-\lambda_2)t)\right)\\
+&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}
+\end{align*}\]++
+. Regardless of the values of ++\(\lambda_1\)++ and ++\(\lambda_2\)++, the particle oscillates between the fixed points ++\(\frac{1}{2}\pm\frac{16}{9\pi}\)++.
+The values of the ++\(\lambda\)++s only affects the rate at which it oscillates.
+Similarly, the particle's momentum oscillates between ++\(\frac{8\hbar}{3}\)++, with the ++\(\lambda\)++s only affecting the rate at which its momentum oscillates.
+This particle functions something like a classical ball bouncing between two walls, with two key differences:
+.. The particle's speed as it moves between the two walls is sinusoidal, not constant.
+.. The particle's maximum momentum does not increase as its rate of oscillation increases.
+
++
+This latter point may seem to violate Ehrenfest's theorem — how can a particle's velocity increase without its momentum increasing?
+However, Ehrenfest's theorem applies only to linear operators over the whole real line.
+Since the wavefunction in question was defined only on ++\([0,1]\)++, Ehrenfest's theorem does not hold.
+
+////
+. We have
+++\[\begin{align*}
+\frac{d\Braket{x}}{dt}&=\frac{d}{dt}\left(\frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}\right)\\
+&=(\lambda_1-\lambda_2)\frac{16\sin((\lambda_1-\lambda_2)t)}{9\pi ^2}
+\end{align*}\]++
+Ehrenfest's Theorem says that ++\(m\frac{d\braket x}{dt}=\braket p\)++.
+We see that ++\(m\)++ must be equal to ++\(\frac{3\pi^2\hbar}{2(\lambda_2-\lambda_1)}\)++.
++
+NOTE: ++\(m\)++ looks like it might be negative, in the event that ++\(\lambda_1>\lambda_2\)++.
+As we'll see in chapter 2, ++\(\lambda_2\)++ is the energy associated with the ++\(\sin(2\pi x)\)++ term.
+Because it has a higher spatial frequency, the energy of ++\(\sin(2\pi x)\)++ is greater than that of ++\(\sin(\pi x)\)++, and so indeed ++\(\lambda_2>\lambda_1\)++, and the mass is positive after all.
+
+. Ehrenfest's Theorem says that ++\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}\)++.
+++\[\begin{align*}
+p&=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}\\
+\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket p}{dt}&=\frac{8\hbar(\lambda_2-\lambda_1)\cos((\lambda_2-\lambda_1)t)}{3}
+\end{align*}\]++
+////
+====
+
+// https://www.reed.edu/physics/faculty/wheeler/documents/Quantum%20Mechanics/Miscellaneous%20Essays/Gaussian%20Wavepackets.pdf
+* {q-num} Suppose a particle of mass ++\(m\)++ has the following wavefunction:
+++\[
+\Psi(x,t)=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]
+\]++
+where ++\(p_0\in\mathbb R\)++, ++\(\sigma>0\)++, and ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++.
++
+--
+[{sublist-style}]
+. Show that the particle's probability distribution at time ++\(t\)++ is the normal distribution ++\(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right)\)++, i.e., the normal distribution with mean ++\(\frac{p_0t}{m}\)++ and variance ++\((\sigma|T|)^2\)++.
+. Find ++\(\Braket{x}\)++ by computing ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++.
+(You should be able to predict the answer from part (a).)
+. Find ++\(\Braket{p}\)++ by computing ++\(\int_{-\infty}^\infty \Psi^*\left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\,dx\)++.
+(You should be able to predict the answer from part (a).)
+. Calculate ++\(\frac{d \Braket{x}}{dt}\)++ from your answer in part (b).
+. Apply Ehrenfest's Theorem to part (c) to find ++\(\Braket{- \frac{\partial V}{\partial x}} \)++.
+. How would you describe this particle, in words?
+--
++
+.Solution
+[%collapsible%open]
+====
+[{sublist-style}]
+. First, note that for any complex ++\(z\)++, ++\((e^z)^* =e^{z^*}\)++, so ++\((e^z)(e^z)^* =e^{z+z^*}=e^{2\Re(z)}\)++.
+Also, ++\((z^a)^* =(z^*)^a\)++.
+Therefore,
+++\[\begin{align*}
+\Psi^* \Psi &= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[2\Re\left(\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right)\right]
+\end{align*}\]++
+Now,
+++\[\begin{align*}
+\frac{1}{T}&=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}
+\end{align*}\]++
+Therefore
+++\[\begin{align*}
+&\phantom{=}\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&=\frac{1}{|T|^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{2m\sigma^2}\right)+i\left(\textrm{etc.}\right)\right]\\
+&=-\frac{1}{4\sigma^2|T|^2}\left(x^2-\frac{2p_0 tx}{m}+\frac{p_0^2t^2}{m^2}\right)+i\left(\textrm{etc.}\right)\\
+&=-\frac{1}{4\sigma^2|T|^2}\left(x-\frac{p_0t}{m^2}\right)^2+i\left(\textrm{etc.}\right)\\
+&=-\frac{1}{4}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2+i\left(\textrm{etc.}\right)
+\end{align*}\]++
+We've deliberately skipped computing the imaginary component because we'll only need the real component.
++
+So, we see that
+++\[\begin{align*}
+\Psi^*\Psi&=\frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]
+\end{align*}\]++
+which is the normal distribution ++\(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right)\)++
+. We wish to compute ++\(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\)++, i.e.,
+++\[\begin{align*}
+\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx
+\end{align*}\]++
+This requires us to integrate something of the form
+++\[\begin{align*}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx
+\end{align*}\]++
+We'll compute this using ++\(u\)++-substitution. Letting ++\(u=\frac{x-a}{b}\)++, we have ++\(x=b u+a\)++ and ++\(dx=b\,du\)++, and when ++\(x=\pm\infty\)++ then ++\(u\)++ does as well, so
+++\[\begin{align*}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx&=\int_{-\infty}^\infty (b u+a)e^{-\frac{1}{2}u^2}b\,du\\
+&=\int_{-\infty}^\infty b^2ue^{-\frac{1}{2}u^2}\,du + \int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du
+\end{align*}\]++
+The first of these integrals is of an odd function over the real line, so it's equal to 0.
+The second can be computed as follows:
+++\[\begin{align*}
+\int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du&=ab\sqrt{2\pi}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}\,du\\
+&=ab\sqrt{2\pi}
+\end{align*}\]++
+Substituting ++\(a\to\frac{p_0t}{m}\)++ and ++\(b\to\sigma|T|\)++ from above, we have
+++\[\begin{align*}
+\braket{x}&=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
+&=\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{1}{\sigma |T| \sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&=\frac{p_0 t}{m}
+\end{align*}\]++
+. We wish to compute ++\(\int_{-\infty}^\infty \Psi^*\left(-i\hbar \frac{\partial }{\partial x}\right)\Psi\,dx\)++.
+For brevity, we'll give a name to the inside of the exponent in ++\(\Psi\)++:
+++\[\begin{align*}
+K=\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)
+\end{align*}\]++
+Then,
+++\[\begin{align*}
+\frac{\partial \Psi}{\partial x}&=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2}e^K\frac{\partial K}{\partial x}\\
+&=\Psi\frac{\partial }{\partial x}\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]\\
+&=\Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)
+\end{align*}\]++
+So
+++\[\begin{align*}
+&\phantom{=}\Psi^* \left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\\
+&=-i\hbar\Psi^* \Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)\\
+&=-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\\
+\end{align*}\]++
+To integrate this, we'll split the sum in the third term into ++\(-\frac{x}{2\sigma^2}\)++ and ++\(\frac{ip_0}{\hbar}\)++ and integrate separately.
+++\[\begin{align*}
+&\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}\right)\,dx\\
+&=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\int_{-\infty}^\infty x\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&=\frac{i\hbar p_0t}{2m\sigma^2T}\\
+\\
+&\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(\frac{ip_0}{\hbar}\right)\,dx\\
+&=\frac{p_0}{T}\int_{-\infty}^\infty \frac{1}{\sigma|T|\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&=\frac{p_0}{T}
+\end{align*}\]++
+And when we add these up, recalling that ++\(T:=1+\frac{i\hbar t}{2m\sigma^2}\)++, we find that
+++\[\begin{align*}
+\braket p &=\frac{i\hbar p_0t}{2m\sigma^2T}+\frac{p_0}{T}\\
+&=\frac{p_0}{1+\frac{i\hbar t}{2m\sigma^2}} \left(\frac{i\hbar t}{2m\sigma^2}+1\right)\\
+&=p_0
+\end{align*}\]++
+. ++\(\frac{d\braket x}{dt} = \frac{p_0}{m}\)++.
+So this particle moves at a constant velocity, ++\(\frac{p_0}{m}\)++ (as would a classical particle launched with momentum ++\(p_0\)++ in the absence of external forces).
+. ++\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket{p}}{dt}=0\)++.
+So in fact this particle is moving in zero potential (which we could have gathered from the fact that it's not accelerating).
+. The particle whose wavefunction this is was launched with initial momentum ++\(p_0\)++ and travels through a region of zero potential.
+Its probability distribution is a Gaussian that widens with time.
+Its observables obey the classical behavior: its expected position is the mean of the Gaussian and the expected velocity is the (constant) velocity of the Gaussian's mean.
+
+
+// ++\[\begin{align*}
+// &\phantom{=}\Psi^*\left(-i\hbar \frac{\partial }{\partial x}\right)\Psi\\
+// &=\frac{1}{\sigma T\sqrt{2\pi}}\exp\left[-\frac{x^2}{2\sigma^2T}\right]\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)\\
+// &=\frac{1}{\sigma T^2\sqrt{2\pi}}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\exp\left[-\frac{x^2}{2(\sigma\sqrt{T})^2}\right]\\
+// &=\left(-\frac{1}{2\sigma^2\sqrt{2\pi}}\cdot\frac{x}{(\sigma\sqrt T)^2}+\frac{ip_0}{\hbar T^{3/2}}\cdot\frac{1}{(\sigma\sqrt{T})\sqrt{2\pi}}\right)\exp\left[-\frac{x^2}{2(\sigma\sqrt{T})^2}\right]
+// \end{align*}\]++
+====
+
+* {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
+++\[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]++
+In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\Braket{x}\)++`".
++
+
+.Solution
+[%collapsible]
+====
+Starting with Ehrenfest's theorem, all we need to do is compute ++\(-\frac{\partial V}{\partial x}\)++ and use the linearity of expectation:
+
+++\[
+\begin{align*}
+\frac{d\Braket{p}}{dt}&=\Braket{-\frac{\partial V}{\partial x}}\\
+&=\Braket{-(2ax+b)}\\
+&=-(2a\Braket{x} + b)\\
+&=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}
+\end{align*}
+\]++
+
+If \(V\) had any higher-order \(x\) terms, then its derivative would have a term of order ++\(x^2\)++ or higher, and the above procedure wouldn't work because in general ++\(\Braket{x^n}\ne\Braket{x}^n\)++.
+====
+
+* {q-num} Any dynamical variable can be expressed in terms of position and momentum.
+Angular momentum is given by ++\[\textbf{L} = \textbf{r} \times \textbf{p}.\]++
+In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
+We will be working in three dimensions, where ++\(\textbf{r} = r\hat{r}\)++ and ++\(\textbf{p} = -i \hbar \nabla \)++.
++
+[TIP]
+--
+In spherical coordinates,
+++\[\begin{align*}
+\nabla=\frac{\partial }{\partial r}\hat r+\frac{1}{r}\frac{\partial }{\partial \theta}\hat\theta +\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}\hat\phi.
+\end{align*}\]++
+
+It may help to use the identity
+++\[\begin{align*}
+(\textbf a\times \textbf b)\cdot(\textbf c\times \textbf d)=(\textbf a\cdot \textbf c)(\textbf b\cdot\textbf d)-(\textbf a\cdot\textbf d)(\textbf b\cdot\textbf c)
+\end{align*}\]++
+--
++
+--
+[{sublist-style}]
+. Find the expression for ++\(\textbf{L}\)++ in spherical coordinates.
+. Find ++\(L^2\)++, the squared magnitude of ++\(\mathbf  L\)++.
+. Calculate ++\(\Braket{L^2}\)++ for the spatial component of the wavefunction ++\( \psi(\theta,\phi)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \)++.
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. ++\(\textbf L=(r\hat r)\times(p\hat p)=(r\hat r)\times(-i\hbar\nabla\hat p)\)++, which we may compute as follows:
+++\[\begin{align*}
+(r\hat r)\times(-i\hbar\nabla\hat p)&=-i\hbar r\begin{vmatrix}
+\hat r&\hat\theta&\hat\phi\\
+1&0&0\\
+\frac{\partial }{\partial r}&\frac{1}{r}\frac{\partial }{\partial \theta}&\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}
+\end{vmatrix}\\
+&=-i\hbar r\left[\hat r(0-0)-\hat\theta\left(\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}-0\right)+\hat\phi\left(\frac{1}{r}\frac{\partial}{\partial\theta}-0\right)\right]\\
+&=i\hbar\left(\frac{1}{\sin\theta}\frac{\partial }{\partial \phi}\hat\theta-\frac{\partial }{\partial \theta}\hat\phi\right)
+\end{align*}\]++
+. {blank}
+. In Part (b) we found that
+++\[\begin{align*}
+L^2&=-\hbar^2\left(-\hbar^2\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right]\right)
+\end{align*}\]++
+Eventually we will find ++\(\braket{L^2}=\int_\mathcal D\psi^*L^2\psi\,dr\)++, but for now we'll just find ++\(L^2\psi\)++:
+++\[\begin{align*}
+L^2 \psi&=-\hbar^2\left[\frac{1}{\sin \theta}\right.\left.\frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right] \sqrt{\frac{15}{8 \pi}} \sin \theta \cos \theta e^{-i \phi} \\
+&=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]
+\end{align*}\]++
+The second term in the brackets is easy to compute; it's simply ++\(-\frac{1}{\sin^2\theta}\sin\theta\cos\theta e^{-i\phi}=-\cot\theta e^{-i\phi}\)++.
+As for the first term,
+++\[\begin{align*}
+&\phantom{=}\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta (\cos^2 \theta-\sin^2\theta)\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta\cos^2 \theta-\sin^3\theta\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta}\left(\cos^3\theta -2\sin^2\theta\cos\theta-3\sin^2\theta\cos\theta\right)\\
+&=\frac{e^{-i\phi}}{\sin \theta} \left(\cos^3\theta -5\sin^2\theta\cos\theta\right)\\
+&=e^{-i\phi}\cot\theta \left(\cos^2\theta -5\sin^2\theta\right)\\
+&=e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)
+\end{align*}\]++
+(Depending on which trig identities you used, you might have gotten a different but equal result, as ++\(\cos2\theta=2\cos^2\theta-1=\cos^2\theta-\sin^2\theta=1-2\sin^2\theta\)++.)
+And so,
+++\[\begin{align*}
+&=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]\\
+&=-\hbar^2\sqrt\frac{15}{8\pi}(e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)-\cot\theta e^{-i\phi})\\
+&=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\cot\theta \sin^2\theta\\
+&=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta
+\end{align*}\]++
+Now, to find ++\(\braket{L^2}\)++ (we're in spherical coordinates, so don't forget the Jacobian!):
+++\[\begin{align*}
+\braket{L^2}&=\int_0^{2\pi}\int_0^\pi \psi^*L^2\psi\sin\theta\,d\theta\,d\phi\\
+&=\int_0^{2\pi}\int_0^\pi \left(\sqrt\frac{15}{8\pi}\sin\theta\cos\theta e^{i\phi}\right)\left(6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta\right)\sin\theta\,d\theta\,d\phi\\
+&=6\frac{15}{8\pi}\hbar^2\int_0^{2\pi}\int_0^\pi \sin^3\theta\cos^2\theta\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(1-\cos^2\theta)\cos^2\theta\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+\end{align*}\]++
+Now, using a ++\(u\)++-substitution with ++\(u=\cos\theta\)++, we get ++\(\sin\theta\,d\theta=-du\)++ and ++\(\cos(0)=1, \cos(\pi)=-1\)++, and so
+++\[\begin{align*}
+&\phantom{=}\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_1^{-1} -(u^2-u^4)\,du\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\left.\frac{u^5}{5}-\frac{u^3}{3}\right|_{1}^{-1}\,d\phi\\
+&=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\frac{4}{15}\,d\phi\\
+&=6\hbar^2
+\end{align*}\]++
+====
+--
+
+=== Demonstrations
+* Demonstrate Ehrenfest's Theorem on various wavefunctions evolving over time by showing ++\(\Braket{x}_\psi\)++ and ++\(\Braket{p}_\psi\)++.
+** [x] Harmonic oscillator: https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543[the quantum harmonic oscillator^]
+** [ ] Particle in a box
+** [ ] others?
+* Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+Let the resulting ++\(\delta\)++ function evolve (spread out, oscillate), then sample again. Etc.
+** Unfortunately this doesn't seem feasible.
+The universe is fortunate to get to run its computations instantly, but computers aren't so lucky.
+While in QM a wavefunction is an infinite linear combination of basis functions, actually rendering it on a computer requires taking only a finite linear combination, and for Gaussians with variance outside a relative narrow band centered around 1 it takes more terms to render them faithfully than be computed in a reasonable amount of time.
+
+
+== The Uncertainty Principle
+
+=== Questions
+* {q-num} For the wavefunction from 1.5.1, ++\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x) \]++
+on the interval ++\([0,1]\)++:
+[{sublist-style}]
+. Calculate ++\(\Braket{p^2}\)++ and ++\(\sigma_p\)++.
++
+TIP: You can reuse many of the calculations you did in 1.5.1.
+
+. What is the minimum possible value of ++\(\sigma_x\)++?
+. Calculate ++\(\Braket{x^2}\)++ and ++\(\sigma_x\)++. Does the Heisenberg uncertainty principle hold?
+
++
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. In general,
+++\[\begin{align*}
+\braket{p^2}=\int_\mathcal D \Psi^*\left(-\hbar^2\frac{\partial ^2}{\partial x^2}\right)\Psi\,dx
+\end{align*}\]++
+For the ++\(\Psi\)++ above,
+++\[\begin{align*}
+\Psi &= e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)\\
+\frac{\partial \Psi}{\partial x} &= \pi e^{-i \lambda_1 t}\cos(\pi x) +2\pi e^{-i \lambda_2 t}\cos(2 \pi x)\\
+\frac{\partial^2 \Psi}{\partial x^2} &= -\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]++
+And also
+++\[\begin{align*}
+\Psi^* &= e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]++
+And so
+++\[\begin{align*}
+\braket{p^2}&=-\hbar^2\int_0^1 \bigl[e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)\bigr]\\
+&\phantom{=-\hbar^2}\quad\quad\cdot\bigl[-\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)\bigr]\,dx\\
+&=\hbar^2\pi^2\int_0^1\sin^2(\pi x)+4\sin^2(2\pi x)\\
+&\quad\quad\quad\quad\quad\quad+(4e^{i(\lambda_1-\lambda_2)t}+e^{i(\lambda_2-\lambda_1)t})\sin(\pi x)\sin(2\pi x)\,dx
+\end{align*}\]++
+Thankfully we've already done all three of these integrals (in 1.5.1):
+++\[\begin{align*}
+\int_0^1\sin^2(\pi x)\,dx&=\frac{1}{2}\\
+\int_0^1\sin^2(2\pi x)\,dx&=\frac{1}{2}\\
+\int_0^1\sin(\pi x)\sin(2\pi x)\,dx&=0
+\end{align*}\]++
+So we have
+++\[\begin{align*}
+\braket{p^2}&=\hbar^2\pi^2\left(\frac{1}{2}+4\cdot\frac{1}{2}+0\right)\\
+&=\frac{5\hbar^2\pi^2}{2}
+\end{align*}\]++
+And in 1.5.1 we computed
+++\[\begin{align*}
+\braket{p}&=\frac{8}{3}\hbar\sin((\lambda_1-\lambda_2)t)
+\end{align*}\]++
+Now,
+++\[\begin{align*}
+\sigma_p&=\sqrt{\braket{p^2}-\braket{p}^2}\\
+&=\sqrt{\frac{5\hbar^2\pi^2}{2}-\frac{64}{9}\hbar^2\sin^2((\lambda_1-\lambda_2)t)}\\
+&=\hbar\sqrt{\frac{5\pi^2}{2}-\frac{64}{9}\sin^2((\lambda_1-\lambda_2)t)}
+\end{align*}\]++
+====
+
+
+* {q-num} Estimate ++\(\sigma_p\)++ for a photon that is confined to a cone cell in the eye with a diameter of 2 ++\(\mu\)++m.
++
+.Solution (placeholder)
+[%collapsible]
+====
+This is the solution
+====
+
+
+=== Demonstrations
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543[Fourier Transformed Gaussian^]
+
+
+// Verify Ehrenfest's theorem for the following wavefunction:
+
+//[stem]
+//++++
+//\Psi(x,t) = \left(\frac{a}{\pi}\right)^{\frac{1}{4}}e^{-(\frac{a x^2}{2}+i\omega t) }
+//++++
+
+//where
+
+//[stem]
+//++++
+//a=\frac{m\omega}{\hbar}
+//++++
+
+// . Calculate ++\(\frac{d\Braket{p}}{dt}\)++
+// . Use Schrodinger's equation to find ++\(V(x)\)++.
+// . Calculate ++\(\Braket{-\frac{\partial V}{\partial x}}\)++. Does Ehrenfest's theorem hold?
+// . This wavefunction is the ground state of the quantum harmonic oscillator, the quantum analog of a https://en.wikipedia.org/wiki/Harmonic_oscillator[classical spring^] that has been displaced from its equilibrium.
+//What does part (c) tell you about the behavior of the quantum harmonic oscillator?
+//How does this compare to the classical harmonic oscillator?
+
+// end::content[]

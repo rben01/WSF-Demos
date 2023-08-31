@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<title>Light Clock</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+
+<body>
+    <div id='formContainer' style="margin-left: -75px;" class='w3-content w3-container'>
+        <form>
+            <label for="speed" style="font-size: 20px;"><span class="slider-label">Speed (<i>v</i>):</span></label>
+            <input type="range" id="speed" name="speed" min="0.001" max=".999" step="0.001" value="0.001"
+                oninput="speedID.innerHTML = speed.value">
+            <br>
+            <text style="font-size:20px"><i>v</i> = <span class="highlighted-text sci-num"
+                    id="speedID"></span><i>c</i></text>
+            <br><br>
+            <input type="button" class="play-button" id="start" value="Start">
+            <input type="button" class="play-button" id="reset" value="Reset">
+        </form>
+    </div>
+    <br>
+
+    <div id="animate" style="margin-left: -75px;" class="w3-content w3-container">
+        <canvas id="canvas" width="900" height="300"></canvas>
+    </div>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/canvasjs/1.7.0/canvasjs.min.js"
+        integrity="sha256-CIc5A981wu9+q+hmFYYySmOvsA3IsoX+apaYlL0j6fg=" crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.2.0.min.js"></script>
+    <script type="text/javascript" src="../utils.js"></script>
+
+    <script type="text/javascript">
+        var elem = document.getElementById("animate");
+        var speed = 0.001;
+        var dx = 900 * speed / 20;
+        var dy = Math.sqrt((900 / 20) ** 2 - dx ** 2);
+        var pos = 0;
+        var phoup = true;
+        var phox0 = 62;
+        var phoy0 = 250;
+        var phox = phox0;
+        var phoy = phoy0;
+        var interval;
+
+        function render() {
+            if (pos >= 775) {
+                return;
+            }
+            phoup = true;
+            var ctx = document.getElementById("canvas")
+            ctx = ctx.getContext("2d");
+            ctx.clearRect(0, 0, 900, 300);
+            ctx.strokeStyle = "white";
+            ctx.fillStyle = "white";
+            ctx.beginPath();
+            ctx.arc(25 + pos, 275, 25, 0, 2 * Math.PI);
+            ctx.moveTo(125 + pos, 275);
+            ctx.arc(100 + pos, 275, 25, 0, 2 * Math.PI);
+            ctx.fill();
+            ctx.lineWidth = 5;
+            ctx.beginPath();
+            ctx.moveTo(0 + pos, 250);
+            ctx.lineTo(125 + pos, 250);
+            ctx.moveTo(0 + pos, 50);
+            ctx.lineTo(125 + pos, 50);
+            ctx.moveTo(0, 300);
+            ctx.lineTo(900, 300);
+            ctx.stroke();
+            ctx.strokeStyle = STANDARD_COLORS.highlighted;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(100 + pos, 52);
+            ctx.lineTo(100 + pos, 248);
+            ctx.stroke();
+            ctx.strokeStyle = STANDARD_COLORS.quaternary;
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(phox0, phoy0);
+            phox = phox0;
+            phoy = phoy0;
+            for (let i = 0; i < Math.floor(pos * (dy / dx) / 200); i++) {
+                phox += 200 * dx / dy;
+                if (phoup) {
+                    phoy -= 200;
+                }
+                else {
+                    phoy += 200;
+                }
+                ctx.lineTo(phox, phoy);
+                phoup = !phoup;
+            }
+            phox = pos + phox0;
+            if (phoup) {
+                phoy -= pos * dy / dx % 200;
+            }
+            else {
+                phoy += pos * dy / dx % 200;
+            }
+            ctx.lineTo(phox, phoy);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.fillStyle = "yellow";
+            ctx.arc(phox, phoy, 7, 0, 2 * Math.PI);
+            ctx.fill();
+        }
+
+        function go() {
+            pos += dx;
+            render();
+        }
+
+        $("#start").click(function () {
+            speed = document.getElementById("speed").value;
+            dx = 900 * speed / 20;
+            dy = Math.sqrt((900 / 20) ** 2 - dx ** 2);
+            if (interval) {
+                clearInterval(interval);
+            }
+            interval = setInterval(go, 50);
+        })
+
+        $("#reset").click(function () {
+            pos = 0;
+            phox = phox0;
+            phoy = phoy0;
+            clearInterval(interval);
+            render();
+        })
+
+        $(document).ready(function () {
+            const label = document.getElementById("speedID");
+            const input = document.getElementById("speed");
+            label.innerHTML = input.value;
+            render();
+        })
+    </script>
+</body>

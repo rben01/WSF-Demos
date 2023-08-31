@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<script src="https://cdn.plot.ly/plotly-latest.min.js" type="text/javascript"></script>
+</head>
+<body><style>body {
+max-width: 800px;
+margin: 50px auto;
+padding-left: auto;
+padding-right: auto;
+background-color: black;
+color: white;
+font-size: 21px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.slider-container {
+line-height: 1.4em;
+display: block;
+margin-bottom: 10px;
+}
+.play-button {
+margin-top: 1.5em;
+margin-bottom: 1em;
+margin-right: 3px;
+width: 5em;
+height: 30px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.play-button:hover {
+cursor: pointer;
+}
+.play-button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.play-button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.slider-label {
+margin-right: 1em;
+display: inline-block;
+}
+.highlighted-text {
+color: #5df;
+}
+.secondary-text {
+color: #f3c002;
+}
+.tertiary-text {
+color: #14c778;
+}
+.quaternary-text {
+color: #e5d;
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0em;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0em;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 320px;
+height: 8px;
+padding: 0 0px;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0px 0px 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+body {
+width: 740px;
+}
+.slider-label-custom {
+min-width: 16em;
+margin-right: 0.2em;
+}
+.ib {
+display: inline-block;
+margin-top: auto;
+margin-bottom: auto;
+vertical-align: middle;
+}
+.flex-row {
+display: inline-block;
+}
+.frame {
+display: inline-block;
+width: 300px;
+}
+.divider {
+width: 50px;
+display: inline-block;
+}
+.frame-title {
+font-weight: bold;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.prime {
+width: 0px;
+padding: 0px;
+margin: 0px;
+margin-right: -2px;
+}
+.plot-container {
+display: inline-block;
+text-align: center;
+}
+.reset-button {
+margin-bottom: 20px;
+}
+.plot-title {
+display: inline-block;
+}
+#plot {
+margin-left: 30px;
+margin-right: auto;
+}
+</style>
+<div class="slider-container">
+<label>
+<span class="slider-label slider-label-custom">
+Object's speed in 𝑥-direction (𝑢<span class="subscript">𝑥</span>):
+</span>
+<input id="input-vx" max=".99" min="-.99" name="input-vx" oninput="update({vx:this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<span class="eqn-left">𝑢<span class="subscript">𝑥</span></span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right text-vx">1</span>𝑐
+</div>
+<div class="slider-container">
+<label>
+<span class="slider-label slider-label-custom">
+Object's speed in 𝑦-direction (𝑢<span class="subscript">𝑦</span>):
+</span>
+<input id="input-vy" max=".99" min="-.99" name="input-vy" oninput="update({vy:this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<span class="eqn-left">𝑢<span class="subscript">𝑦</span></span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right text-vy">1</span>𝑐
+</div>
+<div class="slider-container">
+<label>
+<span class="slider-label slider-label-custom">
+Object's speed in 𝑧-direction (𝑢<span class="subscript">𝑧</span>):
+</span>
+<input id="input-vz" max=".99" min="-.99" name="input-vz" oninput="update({vz:this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<span class="eqn-left">𝑢<span class="subscript">𝑧</span></span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right text-vz">1</span>𝑐
+</div>
+<div class="slider-container">
+<label>
+<span class="slider-label slider-label-custom">
+Relative velocity along 𝑥-axis (𝑣):
+</span>
+<input id="input-vr" max=".99" min="-.99" name="input-vr" oninput="update({vr:this.value})" step=".01" type="range" value="0"/>
+</label>
+<br/>
+<span class="eqn-left">𝑣</span><span class="eqn-middle">=</span><span class="sci-num highlighted-text eqn-right text-vr">1</span>𝑐
+</div>
+<button class="play-button reset-button" onclick="reset()">Reset</button>
+<div>
+<span class="plot-title">Velocity as Seen in Stationary Frame</span><span class="plot-title" style="width: 50px;"></span><span class="plot-title">Velocity as Seen in Moving Frame</span>
+</div>
+<div>
+<div class="plot-container">
+<div id="plot"></div>
+<div>
+<span class="velocity" style="margin-left: 20px;">𝑢 =
+<span class="sci-num">(<span class="text-vx highlighted-text">0</span>,
+<span class="text-vy highlighted-text">0</span>,
+<span class="text-vz highlighted-text">0</span>)</span>𝑐</span>
+<div style="display: inline-block; width: 160px;"></div>
+<span class="velocity">𝑢<span class="prime">′</span> =
+<span class="sci-num">(<span class="text-vxp secondary-text">0</span>,
+<span class="text-vyp secondary-text">0</span>,
+<span class="text-vzp secondary-text">0</span>)</span>𝑐</span>
+</div>
+<div></div>
+</div>
+</div>
+<script type="text/javascript">"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (typeof datum.text !== "undefined") {
+d3Obj.text(datum.text);
+}
+if (typeof datum.children !== "undefined") {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, { selector: "*", transition });
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+if (typeof mat1[0].length === "undefined") {
+mat1 = [mat1];
+}
+const squeezeAns = typeof mat2[0].length === "undefined";
+if (squeezeAns) {
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (squeezeAns) {
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs }) {
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto",
+},
+};
+const arrowheadAttrs = {
+attrs: {
+d: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+const ARROWHEAD_POINTS = {
+"arrowhead": {
+"x": [
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.0,
+0.2
+],
+"y": [
+0.05,
+0.048831027785504334,
+0.04537877098354785,
+0.03980465328528219,
+0.03236931423909139,
+0.023420422034989508,
+0.013376416926461038,
+0.0027069454292708807,
+-0.008089099827638236,
+-0.018506907766995723,
+-0.028059353268119116,
+-0.03629977459615654,
+-0.042842858808379465,
+-0.047382658559140124,
+-0.04970689785771798,
+-0.04970689785771798,
+-0.047382658559140124,
+-0.04284285880837946,
+-0.03629977459615654,
+-0.028059353268119133,
+-0.018506907766995723,
+-0.008089099827638238,
+0.00270694542927088,
+0.013376416926461049,
+0.02342042203498952,
+0.03236931423909139,
+0.0398046532852822,
+0.045378770983547846,
+0.048831027785504334,
+0.05,
+0
+],
+"z": [
+0.0,
+0.010748522010551204,
+0.02099445507801323,
+0.030258710759688258,
+0.03810810275638182,
+0.04417560222230115,
+0.04817749962596116,
+0.04992667069255619,
+0.04934132612707631,
+0.04644883599083957,
+0.04138444990784453,
+0.03438497294267117,
+0.025777692858851082,
+0.01596507650679899,
+0.005405950921197097,
+-0.005405950921197084,
+-0.015965076506799,
+-0.025777692858851092,
+-0.03438497294267117,
+-0.041384449907844525,
+-0.04644883599083957,
+-0.04934132612707631,
+-0.04992667069255619,
+-0.04817749962596115,
+-0.044175602222301144,
+-0.038108102756381816,
+-0.03025871075968824,
+-0.020994455078013247,
+-0.010748522010551221,
+-1.2246467991473533e-17,
+0
+],
+"simplices": [
+[
+6,
+7,
+30
+],
+[
+7,
+8,
+30
+],
+[
+30,
+28,
+29
+],
+[
+1,
+30,
+0
+],
+[
+1,
+2,
+30
+],
+[
+3,
+4,
+30
+],
+[
+2,
+3,
+30
+],
+[
+4,
+5,
+30
+],
+[
+5,
+6,
+30
+],
+[
+13,
+14,
+30
+],
+[
+12,
+13,
+30
+],
+[
+10,
+11,
+30
+],
+[
+11,
+12,
+30
+],
+[
+9,
+10,
+30
+],
+[
+8,
+9,
+30
+],
+[
+26,
+27,
+30
+],
+[
+27,
+28,
+30
+],
+[
+22,
+23,
+30
+],
+[
+23,
+24,
+30
+],
+[
+25,
+26,
+30
+],
+[
+24,
+25,
+30
+],
+[
+14,
+15,
+30
+],
+[
+15,
+16,
+30
+],
+[
+17,
+18,
+30
+],
+[
+16,
+17,
+30
+],
+[
+21,
+22,
+30
+],
+[
+20,
+21,
+30
+],
+[
+18,
+19,
+30
+],
+[
+19,
+20,
+30
+]
+]
+}
+}
+/* global Plotly lorentzFactor matMul ARROWHEAD_POINTS STANDARD_COLORS */
+const STEP = 0.01;
+const variables = ["vx", "vy", "vz", "vr"];
+const sliders = {};
+variables.forEach(v => {
+sliders[v] = document.getElementById(`input-${v}`);
+});
+const plotDiv = document.getElementById("plot");
+const config = { displayModeBar: false, scrollZoom: false };
+const axesAttrs = {
+type: "scatter3d",
+mode: "lines",
+line: {
+color: "#888",
+width: 2,
+},
+};
+const axisLabelAttrs = {
+type: "scatter3d",
+mode: "text",
+textposition: "center center",
+textfont: {
+color: "#fff",
+size: 18,
+},
+};
+const velocityVectorAttrs = {
+type: "scatter3d",
+mode: "lines",
+line: {
+width: 5,
+},
+};
+function getDefault(v, name) {
+let x = v[name];
+if (typeof x === "undefined") {
+x = sliders[name].value;
+}
+x = +x;
+return x;
+}
+function fmtFloat(x) {
+return x.toFixed(2).replace(/^-/, '<span class="minus-sign">−</span>');
+}
+function getRy(angle) {
+const c = Math.cos(angle);
+const s = Math.sin(angle);
+return [
+[c, 0, s],
+[0, 1, 0],
+[-s, 0, c],
+];
+}
+function getRz(angle) {
+const c = Math.cos(angle);
+const s = Math.sin(angle);
+return [
+[c, -s, 0],
+[s, c, 0],
+[0, 0, 1],
+];
+}
+const isNeg = { vx: false, vy: false, vz: false };
+function update(vars, { restoreCamera } = {}) {
+const givenVal = Object.keys(vars)[0];
+if (typeof restoreCamera === "undefined") {
+restoreCamera = true;
+}
+variables.forEach(k => {
+const v = getDefault(vars, k);
+vars[k] = v;
+isNeg[k] = v < 0;
+});
+let { vx, vy, vz } = vars;
+const { vr } = vars;
+let v = Math.sqrt(vx * vx + vy * vy + vz * vz);
+if (v >= 1) {
+const roundToStep = x => Math.floor(x / STEP) * STEP;
+if (givenVal === "vx") {
+vx = roundToStep(Math.sqrt(0.999999999999 - vy * vy - vz * vz));
+if (isNeg.vx) {
+vx *= -1;
+}
+sliders[givenVal].value = vx;
+} else if (givenVal === "vy") {
+vy = roundToStep(Math.sqrt(0.999999999999 - vx * vx - vz * vz));
+if (isNeg.vy) {
+vy *= -1;
+}
+sliders[givenVal].value = vy;
+} else if (givenVal === "vz") {
+vz = roundToStep(Math.sqrt(0.999999999999 - vx * vx - vy * vy));
+if (isNeg.vz) {
+vz *= -1;
+}
+sliders[givenVal].value = vz;
+}
+v = Math.sqrt(vx * vx + vy * vy + vz * vz) * 0.99999999999;
+}
+const theta = Math.atan2(vy, vx);
+const r = Math.sqrt(vx * vx + vy * vy);
+const phi = Math.atan2(vz, r);
+const vxp = (vx - vr) / (1 - vx * vr);
+const vyp = (Math.sqrt(1 - vr * vr) * vy) / (1 - vx * vr);
+const vzp = (Math.sqrt(1 - vr * vr) * vz) / (1 - vx * vr);
+const primedTheta = Math.atan2(vyp, vxp);
+const primedR = Math.sqrt(vxp * vxp + vyp * vyp);
+const primedPhi = Math.atan2(vzp, primedR);
+const baseArrowhead = ARROWHEAD_POINTS.arrowhead;
+const arrowheads = [];
+[
+{
+velocity: [vx, vy, vz],
+rotTrans: matMul(getRz(theta), getRy(-phi)),
+scene: "scene1",
+color: STANDARD_COLORS.highlighted,
+},
+{
+velocity: [vxp, vyp, vzp],
+rotTrans: matMul(getRz(primedTheta), getRy(-primedPhi)),
+scene: "scene2",
+color: STANDARD_COLORS.secondary,
+},
+].forEach(({ velocity, rotTrans, scene, color }) => {
+const transArrowhead = { x: [], y: [], z: [] };
+for (let i = 0; i < baseArrowhead.x.length; ++i) {
+const coords = [baseArrowhead.x, baseArrowhead.y, baseArrowhead.z].map(
+l => l[i],
+);
+const newPoint = matMul(rotTrans, coords);
+for (let i = 0; i < 3; ++i) {
+newPoint[i] += velocity[i];
+}
+transArrowhead.x.push(newPoint[0]);
+transArrowhead.y.push(newPoint[1]);
+transArrowhead.z.push(newPoint[2]);
+}
+const i = baseArrowhead.simplices.map(s => s[0]);
+const j = baseArrowhead.simplices.map(s => s[1]);
+const k = baseArrowhead.simplices.map(s => s[2]);
+const facecolor = baseArrowhead.simplices.map(() => color);
+arrowheads.push({
+type: "mesh3d",
+scene,
+...transArrowhead,
+i,
+j,
+k,
+facecolor,
+});
+});
+const text = ["𝑥", "𝑦", "𝑧"];
+const primedText = text.map(t => `${t}′`);
+const zero = [0, 0];
+const line = [-1, 1];
+const axisLabelDist = 1.1;
+const perGraphData = [
+{
+x: line,
+y: zero,
+z: zero,
+...axesAttrs,
+},
+{
+x: zero,
+y: line,
+z: zero,
+...axesAttrs,
+},
+{
+x: zero,
+y: zero,
+z: line,
+...axesAttrs,
+},
+];
+const data = [
+...perGraphData.map(d => ({ scene: "scene1", ...d })),
+...perGraphData.map(d => ({ scene: "scene2", ...d })),
+...arrowheads,
+];
+data.push(
+{
+x: [axisLabelDist, 0, 0],
+y: [0, axisLabelDist, 0],
+z: [0, 0, axisLabelDist],
+text: text,
+scene: "scene1",
+...axisLabelAttrs,
+},
+{
+x: [axisLabelDist, 0, 0],
+y: [0, axisLabelDist, 0],
+z: [0, 0, axisLabelDist],
+text: primedText,
+scene: "scene2",
+...axisLabelAttrs,
+},
+{
+x: [0, vx],
+y: [0, vy],
+z: [0, vz],
+scene: "scene1",
+...velocityVectorAttrs,
+line: {
+...velocityVectorAttrs.line,
+color: STANDARD_COLORS.highlighted,
+},
+},
+{
+x: [0, vxp],
+y: [0, vyp],
+z: [0, vzp],
+scene: "scene2",
+...velocityVectorAttrs,
+line: {
+...velocityVectorAttrs.line,
+color: STANDARD_COLORS.secondary,
+},
+},
+);
+const sceneAttrs = (() => {
+const axisAttrs = {
+showgrid: false,
+visible: false,
+showspikes: false,
+};
+const sceneAttrs = {
+xaxis: axisAttrs,
+yaxis: axisAttrs,
+zaxis: axisAttrs,
+aspectmode: "cube",
+};
+return sceneAttrs;
+})();
+const layout = {
+width: 700,
+height: 400,
+hovermode: false,
+showlegend: false,
+margin: { t: 0, b: 0, l: 0, r: 0 },
+paper_bgcolor: "black",
+scene1: {
+domain: { x: [0, 0.45], y: [0, 1] },
+...sceneAttrs,
+},
+scene2: {
+domain: { x: [0.55, 1], y: [0, 1] },
+...sceneAttrs,
+},
+text: {
+color: "#fff",
+size: 14,
+},
+};
+["scene1", "scene2"].forEach(scene => {
+if (restoreCamera) {
+const sceneName = scene === "scene1" ? "scene" : scene;
+layout[scene].camera = plotDiv._fullLayout[sceneName]._scene.getCamera();
+} else {
+layout[scene].camera = {
+up: { x: 0, y: 0, z: 1 },
+center: { x: 0, y: 0, z: 0 },
+eye: {
+x: 0.88,
+y: -0.88,
+z: 0.98,
+},
+projection: { type: "perspective" },
+};
+}
+});
+Plotly.react(plotDiv, data, layout, config);
+const velocities = { vx, vy, vz, vxp, vyp, vzp, vr };
+Object.entries(velocities).forEach(([k, v]) => {
+const textSpans = document.getElementsByClassName(`text-${k}`);
+const text = fmtFloat(v);
+for (let i = 0; i < textSpans.length; ++i) {
+textSpans[i].innerHTML = text;
+}
+});
+}
+function reset() {
+update({ vx: 0, vy: 0, vz: 0, vr: 0 }, { restoreCamera: false });
+variables.forEach(v => {
+sliders[v].value = 0;
+});
+}
+reset();
+let isRelayingOut = false;
+plotDiv.on("plotly_relayout", sceneInfo => {
+if (typeof sceneInfo === "undefined" || Object.keys(sceneInfo).length === 0) {
+return;
+}
+const camera = Object.values(sceneInfo)[0];
+if (isRelayingOut) {
+return;
+}
+// console.log(sceneCam, camera);
+isRelayingOut = true;
+Promise.all(
+["scene.camera", "scene2.camera"].map(sceneCam =>
+Plotly.relayout(plotDiv, sceneCam, camera),
+),
+).then(() => (isRelayingOut = false));
+});
+</script></body>
+</html>

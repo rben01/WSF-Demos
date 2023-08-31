@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<title>Relativity Simultaneity Graph</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" type="text/css" href="../wsf_demo.css" />
+
+<body>
+    <div id='formContainer' class='w3-content w3-container'>
+        <form>
+            <label for="speed" style="font-size: 20px;"><span class="slider-label">Speed of Train (<i>v</i>):</span>
+            </label>
+            <input type="range" id="speed" name="speed" min="0" max="0.999" step="0.01" value="0" oninput="v = speed.value;
+                speedID.innerHTML = speed.value;
+                render();">
+            <br>
+            <text style=" font-size:20px"> <i>v</i> = <span class="highlighted-text sci-num"
+                    id="speedID">0.01</span><i>c</i></text>
+            <br>
+            <label for="length" style="font-size: 20px;"><span class="slider-label">Length of Train (<i>L</i>):</span>
+            </label>
+            <input type="range" id="length" name="length" min="1000" max="100000" value="10000" step="1" oninput="L = length.value;
+                lengthID.innerHTML = numberWithCommas(length.value);
+                render();">
+            <br>
+            <text style="font-size:20px"> <i>L</i> = <span class="highlighted-text sci-num" id="lengthID">10,000</span>
+                m</text>
+            <br><br>
+        </form>
+    </div>
+
+    <div style="width: 950px; height: 600px;">
+        <div id="graph"></div>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script src="../utils.js"></script>
+    <script type="text/javascript">
+        var c = 299792000;
+        var L = 10000;
+        var v = 0;
+        var dt = 0;
+        var dtline = {
+            x: [],
+            y: [],
+            line: { color: 'grey' }
+        }
+        var trace1 = {
+            x: [],
+            y: [],
+            line: { dash: "dash", color: STANDARD_COLORS.secondary }
+        };
+        var trace2 = {
+            x: [],
+            y: [],
+            line: { dash: "dash", color: STANDARD_COLORS.highlighted }
+        };
+        var layout = {
+            title: {
+                text: 'Time Difference (s)',
+                font: { color: 'white' },
+                x: 0,
+            },
+            xaxis: {
+                range: [0, 1],
+                linecolor: 'white',
+                tickcolor: 'black',
+                tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+                tickvals: [0.2, 0.4, 0.6, 0.8, 1]
+            },
+            yaxis: {
+                range: [0, 0.02],
+                autorange: false,
+                linecolor: 'white',
+                tickcolor: 'black',
+                tickfont: { color: 'white', family: 'sans-serif', size: 18 },
+                tickvals: [0.005, 0.01, 0.015]
+            },
+            height: 600,
+            paper_bgcolor: 'black',
+            plot_bgcolor: 'black',
+            showlegend: false,
+            annotations: [
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 1.04,
+                    y: -0.05,
+                    xanchor: 'right',
+                    yanchor: 'bottom',
+                    text: '<sup>v</sup>/<sub>c</sub>',
+                    font: { color: 'white', size: 20, family: 'sans-serif' },
+                    color: 'white',
+                    showarrow: false,
+                },
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: -0.0,
+                    y: -0.1,
+                    text: '0',
+                    font: { color: 'white', size: 18, family: 'sans-serif' },
+                    showarrow: false
+                },
+                {
+                    xref: 'paper',
+                    yref: 'paper',
+                    x: 0.5,
+                    y: 0.5,
+                    text: "Δt = 0",
+                    font: { color: 'white', size: 18, family: 'sans-serif' },
+                    showarrow: false
+                }
+            ]
+        }
+
+        function numberWithCommas(n) {
+            return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        function render() {
+            dt = L / c * v / (1 - v ** 2);
+            layout.annotations[2].text = ("Δt = <span style='color:#5df'>" + dt).substr(0, 38) + "</span> s";
+            dtline.x = [];
+            dtline.y = [];
+            for (var i = 0; i < 1; i += 0.001) {
+                dtline.x.push(i);
+                dtline.y.push(L / c * i / (1 - i ** 2));
+            }
+            trace1.x = [0, v];
+            trace1.y = [dt, dt];
+            trace2.x = [v, v];
+            trace2.y = [0, dt];
+            Plotly.newPlot('graph', [dtline, trace1, trace2], layout, { displayModeBar: false, staticPlot: true });
+        }
+
+        render();
+    </script>
+
+</body>

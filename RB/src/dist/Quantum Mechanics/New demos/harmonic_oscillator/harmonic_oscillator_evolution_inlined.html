@@ -1,0 +1,1903 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8"/>
+<title>Harmonic Oscillator Evolution</title>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<script crossorigin="anonymous" integrity="sha384-Zey5WOa8rpr7paItC3eiAwLrGdLz9T46Pc0b74Yag0V+73BgWBpx1xQqHoNEVJM/" src="https://unpkg.com/three@0.123.0/build/three.min.js"></script>
+<link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css" integrity="sha384-AfEj0r4/OFrOo5t7NnNe46zW/tFgW6x/bCJG8FqQCEo3+Aro6EYUG4+cU+KJWu/X" rel="stylesheet"/>
+<!-- The loading of KaTeX is deferred to speed up page rendering -->
+<script crossorigin="anonymous" defer="" integrity="sha384-g7c+Jr9ZivxKLnZTDUhnkOnsh30B4H0rpLUpJ4jAIKs4fnJI+sEnkvrMWph2EDg4" onload="//update()" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.js"></script>
+<!-- To automatically render math in text elements, include the auto-render extension: -->
+<script crossorigin="anonymous" defer="" integrity="sha384-mll67QQFJfxn0IYznZYonOWZ644AWYC+Pt2cHqMaRhXVrursRwvLnLaebdGIlYNa" onload="renderMathInElement(document.body);" src="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/contrib/auto-render.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style>
+:root {
+--color-real-part: #5df;
+--color-imag-part: #f3c002;
+--color-phase: #e5d;
+--color-expect: #eee;
+}
+.controls {
+width: 12em;
+}
+.radio-button-container.horizontal button {
+flex: 1;
+white-space: nowrap;
+}
+.grid-left-right {
+grid-template-columns: max-content 1fr;
+column-gap: 50px;
+}
+.curve {
+fill: none;
+stroke-linejoin: round;
+}
+.curve-foreground.real-part {
+stroke: var(--color-real-part);
+}
+.curve-foreground.imag-part {
+stroke: var(--color-imag-part);
+}
+.curve-foreground.phase {
+stroke: var(--color-phase);
+}
+.axis-name {
+font-size: 30px;
+}
+.curve {
+fill: none;
+}
+.curve-background {
+stroke: black;
+stroke-width: 8px;
+}
+.curve-foreground {
+stroke: var(--color-highlight);
+stroke-width: 5px;
+}
+.barrier {
+stroke: #bbb;
+stroke-width: 3;
+stroke-dasharray: 4 4;
+}
+#plots {
+margin-top: 10px;
+}
+.curve.amplitude-line {
+stroke: var(--color-secondary);
+stroke-width: 2px;
+fill: unset;
+}
+.classically-allowed-region {
+fill: var(--color-secondary);
+font-size: 20px;
+stroke: none;
+}
+.expect-line {
+stroke: var(--color-expect);
+stroke-width: 2;
+}
+.expect-label {
+fill: var(--color-expect);
+}
+.expect-label-sub {
+font-size: 0.5em;
+}
+.p-expect {
+stroke: var(--color-expect);
+stroke-width: 2;
+}
+#btn-measure {
+width: 100%;
+}
+</style>
+</head>
+<body>
+<div class="grid-left-right">
+<div class="controls-container">
+<div class="controls">
+<span>“Spring constant”, <span id="text-k">\(k\)</span></span>
+<span><input class="slider ic" id="slider-k" type="range"/></span>
+<span>Particle mass, <span id="text-m">\(m\)</span></span>
+<span><input class="slider ic" id="slider-m" type="range"/></span>
+<span>Initial position, <span id="text-mu">\(x_0\)</span></span>
+<span><input class="slider ic" id="slider-mu" type="range"/></span>
+<span>Initial width, <span id="'text-sigma">\(\sigma_0\)</span></span>
+<span><input class="slider ic" id="slider-sigma" type="range"/></span>
+<span>Initial momentum, <span id="'text-p">\(p_0\)</span></span>
+<span><input class="slider ic" id="slider-p" type="range"/></span>
+<span class="radio-button-container horizontal">
+<button class="button" onclick="play()">Play</button><button class="button" data-button-checked="" onclick="pause()">
+Pause</button><button class="button" data-button-checked="" onclick="reset()">
+Reset
+</button>
+</span>
+<!--
+<span></span>
+<span
+><button
+id="btn-measure"
+class="button"
+onclick="takeMeasurement()"
+>
+Measure position
+</button></span
+> -->
+</div>
+</div>
+<div id="plots">
+<div><span>Wavefunction</span></div>
+<canvas class="draggable" id="plot-3D"></canvas>
+<div><span>Probability distribution</span></div>
+<svg id="plot-2D"></svg>
+</div>
+</div>
+<script>"use strict";
+// eslint-disable-next-line no-unused-vars
+const C = 299792458;
+// eslint-disable-next-line no-unused-vars
+const HL_COLOR = "#5df";
+// eslint-disable-next-line no-unused-vars
+const STANDARD_COLORS = {
+highlighted: "#5df", // cyan used for variables
+secondary: "#f3c002", // yellow
+tertiary: "#14c778", // green
+quaternary: "#e5d", // pinkish
+graphicPrimary: "#27f", // brilliant blue
+};
+// https://stackoverflow.com/a/32538867
+// eslint-disable-next-line no-unused-vars
+function isIterable(obj) {
+// checks for null and undefined
+if (obj === null || typeof obj === "undefined") {
+return false;
+}
+return typeof obj[Symbol.iterator] === "function";
+}
+function applyDatum(datum, { transition } = {}) {
+const d3Obj = d3.select(this);
+d3Obj.datum(datum);
+if (
+(datum.class !== undefined || datum.classes !== undefined) &&
+this.hasAttribute("class")
+) {
+this.removeAttribute("class");
+}
+if (typeof datum.class !== "undefined") {
+d3Obj.classed(datum.class, true);
+}
+if (typeof datum.classes !== "undefined") {
+for (const c of datum.classes) {
+d3Obj.classed(c, true);
+}
+}
+const t = typeof transition === "undefined" ? d3Obj : d3Obj.transition(transition);
+if (datum.attrs !== undefined) {
+Object.entries(datum.attrs).forEach(([key, val]) => {
+t.attr(key, val);
+});
+}
+if (datum.styles !== undefined) {
+Object.entries(datum.styles).forEach(([key, val]) => {
+t.style(key, val);
+});
+}
+if (datum.text !== undefined) {
+d3Obj.text(datum.text);
+}
+if (datum.children !== undefined) {
+// eslint-disable-next-line no-use-before-define
+applyGraphicalObjs(d3Obj, () => datum.children, {
+selector: function () {
+return this.children;
+},
+transition,
+});
+}
+}
+// eslint-disable-next-line no-unused-vars
+function _addGraphicalObjs(sel, dataFunc) {
+return sel
+.selectAll()
+.data(dataFunc)
+.enter()
+.append(d => d3.create(`svg:${d.shape}`).node())
+.each(applyDatum);
+}
+// eslint-disable-next-line no-unused-vars
+function applyGraphicalObjs(sel, data, { key, selector, cssClass, transition } = {}) {
+const s = sel
+.selectAll(selector)
+.data(data, key)
+.join(
+enter => enter.append(d => d3.create(`svg:${d.shape}`).node()),
+update => update,
+exit =>
+(transition !== undefined
+? exit.transition(transition).style("opacity", 0)
+: exit
+).remove(),
+)
+.each(function (d) {
+applyDatum.call(this, d, { transition });
+});
+if (typeof cssClass !== "undefined") {
+s.classed(cssClass, true);
+}
+return s;
+}
+// eslint-disable-next-line no-unused-vars
+function lorentzFactor({ fracOfC }) {
+if (!fracOfC) {
+fracOfC = 0;
+}
+return 1 / Math.sqrt(1 - fracOfC * fracOfC);
+}
+// eslint-disable-next-line no-unused-vars
+function sign(x, epsilon) {
+if (typeof epsilon === "undefined") {
+epsilon = 1e-6;
+}
+return x < -epsilon ? -1 : x < epsilon ? 0 : 1;
+}
+// eslint-disable-next-line no-unused-vars
+function l2Norm(...vector) {
+const sum = vector.reduce((accum, currVal) => accum + currVal * currVal, 0);
+return Math.sqrt(sum);
+}
+function __matMulHelper(mat1, mat2) {
+const mat1IsVector = typeof mat1[0].length === "undefined";
+if (mat1IsVector) {
+// Convert to row vector if necessary
+mat1 = [mat1];
+}
+const mat2IsVector = typeof mat2[0].length === "undefined";
+if (mat2IsVector) {
+// Convert to column vector if necessary
+mat2 = mat2.map(elem => [elem]);
+}
+const m = mat1.length;
+const k = mat2.length;
+const n = mat2[0].length;
+const ans = [];
+for (let r = 0; r < m; ++r) {
+const rowAns = [];
+for (let c = 0; c < n; ++c) {
+let sum = 0;
+for (let i = 0; i < k; ++i) {
+sum += mat1[r][i] * mat2[i][c];
+}
+rowAns.push(sum);
+}
+ans.push(rowAns);
+}
+if (mat1IsVector) {
+if (mat2IsVector) {
+// ans will look like [[x]]
+return ans[0][0];
+}
+// ans will look like [[x, y, z, ...]]
+return ans[0];
+} else if (mat2IsVector) {
+// ans will look like [[x], [y], [z], ...]
+return ans.map(row => row[0]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function matMul(...mats) {
+let ans = mats[0];
+for (let i = 1; i < mats.length; ++i) {
+ans = __matMulHelper(ans, mats[i]);
+}
+return ans;
+}
+// eslint-disable-next-line no-unused-vars
+function defineArrowhead(defs, { id, length, width, color, attrs, flip }) {
+attrs = attrs ?? {};
+// flip = flip ?? false;
+flip = false;
+const markerAttrs = {
+attrs: {
+refX: length / 2,
+refY: width / 2,
+markerUnits: "userSpaceOnUse",
+markerWidth: length,
+markerHeight: width,
+orient: "auto-start-reverse",
+},
+};
+const path = flip
+? `M ${length - 1} 1 L 1 ${width / 2} L ${length - 1} ${width - 1} L ${
+(2 * length) / 3
+} ${width / 2} z`
+: `M 1 1 L ${length - 1} ${width / 2} L 1 ${width - 1} L ${length / 3} ${
+width / 2
+} z`;
+const arrowheadAttrs = {
+attrs: {
+d: path,
+"stroke-linejoin": "miter",
+stroke: color,
+fill: color,
+...attrs,
+},
+};
+defs.append("svg:marker")
+.attr("id", id)
+.each(function () {
+applyDatum.call(this, markerAttrs);
+})
+.append("svg:path")
+.each(function () {
+applyDatum.call(this, arrowheadAttrs);
+});
+}
+// eslint-disable-next-line no-unused-vars
+function groupBy(array, keyFunc, expectedKeys, asArray = true) {
+const grouped = {};
+for (const elem of array) {
+const key = keyFunc(elem);
+if (key in grouped) {
+grouped[key].push(elem);
+} else {
+grouped[key] = [elem];
+}
+}
+if (expectedKeys) {
+for (const k of expectedKeys) {
+if (!(k in grouped)) {
+grouped[k] = [];
+}
+}
+}
+if (asArray) {
+return Object.entries(grouped);
+}
+return grouped;
+}
+// We'll use x and y terminology to describe gridlines running parallel to the y axis,
+// but of course you can swap x and y in the returned array to get gridlines in the
+// other direction. Returns an array of gridlines; each gridline is an array of points
+// [x,y]
+// eslint-disable-next-line no-unused-vars
+function getGridlines({
+nGridlines,
+xMin,
+xMax,
+yMin,
+yMax,
+zFunc,
+drawEdges,
+nPointsPerGridline,
+swapOrientation,
+}) {
+drawEdges = drawEdges ?? false;
+swapOrientation = swapOrientation ?? false;
+nPointsPerGridline = nPointsPerGridline ?? 51;
+if (swapOrientation) {
+[xMin, yMin] = [yMin, xMin];
+[xMax, yMax] = [yMax, xMax];
+}
+const iMin = drawEdges ? 0 : 1;
+const iMaxPlus1 = drawEdges ? nGridlines : nGridlines - 1;
+const dx = (xMax - xMin) / (nGridlines - 1);
+const dy = (yMax - yMin) / (nPointsPerGridline - 1);
+const gridlines = [];
+for (let i = iMin; i < iMaxPlus1; ++i) {
+const x = xMin + i * dx;
+const gridline = [];
+for (let j = 0; j < nPointsPerGridline; ++j) {
+const y = yMin + j * dy;
+let trueX, trueY;
+if (!swapOrientation) {
+trueX = x;
+trueY = y;
+} else {
+trueX = y;
+trueY = x;
+}
+const point = [trueX, trueY];
+if (zFunc === null) {
+point.push(null);
+} else if (zFunc) {
+point.push(zFunc(trueX, trueY));
+}
+gridline.push(point);
+}
+gridlines.push(gridline);
+}
+return gridlines;
+}
+// eslint-disable-next-line no-unused-vars
+function sampleFromCdf(cdfPoints, n) {
+n = n ?? 1;
+const samples = [];
+const nPoints = cdfPoints.length;
+for (let i = 0; i < n; ++i) {
+const r = Math.random();
+let left = 0;
+let right = nPoints - 1;
+let currentIndex;
+while (left < right - 1) {
+currentIndex = Math.floor((left + right) / 2);
+const currentPoint = cdfPoints[currentIndex];
+const y = currentPoint[1];
+if (r > y) {
+left = currentIndex;
+} else {
+right = currentIndex;
+}
+}
+let value;
+if (left < nPoints - 1) {
+const [x1, y1] = cdfPoints[left];
+const [x2, y2] = cdfPoints[right];
+const t = (r - y1) / (y2 - y1);
+value = (1 - t) * x1 + t * x2;
+} else {
+value = cdfPoints[left][0];
+}
+samples.push(value);
+}
+return samples;
+}
+function syncButtonState(button) {
+if (button.hasAttribute("data-button-checked")) {
+button.disabled = true;
+} else if (button.disabled) {
+button.setAttribute("data-button-checked", "");
+}
+}
+function _initializeRadioButtons() {
+const radioButtonContainers = document.getElementsByClassName(
+"radio-button-container",
+);
+for (let i = 0; i < radioButtonContainers.length; ++i) {
+const rbc = radioButtonContainers[i];
+const sel = d3
+.select(rbc)
+.selectAll("button")
+.each(function () {
+syncButtonState(this);
+});
+if (!rbc.classList.contains("manual-radio-buttons")) {
+sel.on("click._default", function () {
+this.setAttribute("data-button-checked", "");
+this.disabled = true;
+const siblings = this.closest(
+".radio-button-container",
+).querySelectorAll("button");
+for (const sibling of siblings) {
+if (this === sibling) {
+continue;
+}
+sibling.disabled = false;
+sibling.removeAttribute("data-button-checked");
+}
+});
+}
+}
+}
+_initializeRadioButtons();
+function _initializeHideableControlsContainer() {
+const MIN_DIST_FOR_FULL_OPACITY = 40;
+const MAX_DIST_FOR_NONZERO_OPACITY = 400;
+const opacityScale = d3
+.scaleLinear([MIN_DIST_FOR_FULL_OPACITY, MAX_DIST_FOR_NONZERO_OPACITY], [1, 0])
+.clamp(true);
+function adjustHidableElemOpacity(event) {
+const [mouseX, mouseY] = d3.pointer(event, document.body);
+const hidableElems = document.getElementsByClassName("hides-on-mouse-away");
+const nHidableElems = hidableElems.length;
+for (let i = 0; i < nHidableElems; ++i) {
+const elem = hidableElems[i];
+const { left, right, top, bottom } = elem.getBoundingClientRect();
+const horizontalDist = Math.max(0, left - mouseX, mouseX - right);
+const verticalDist = Math.max(0, top - mouseY, mouseY - bottom);
+const dist = (horizontalDist ** 2 + verticalDist ** 2) ** 0.5;
+const opacity = opacityScale(dist);
+elem.style.opacity = opacity;
+}
+if (hidableElems.length === 0) {
+return;
+}
+}
+d3.select(document.body).on(
+"mousemove.hide-container-on-mouse-away",
+adjustHidableElemOpacity,
+);
+}
+_initializeHideableControlsContainer();
+</script>
+<script>/* global THREE */
+// https://stackoverflow.com/a/27348780
+function roundRect(ctx, x, y, w, h, r) {
+ctx.beginPath();
+ctx.moveTo(x + r, y);
+ctx.lineTo(x + w - r, y);
+ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+ctx.lineTo(x + w, y + h - r);
+ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+ctx.lineTo(x + r, y + h);
+ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+ctx.lineTo(x, y + r);
+ctx.quadraticCurveTo(x, y, x + r, y);
+ctx.closePath();
+ctx.fill();
+ctx.stroke();
+}
+const _three_utils_white = { r: 255, g: 255, b: 255, a: 1.0 };
+const _three_utils_clear = { r: 0, g: 0, b: 0, a: 0.0 };
+// eslint-disable-next-line no-unused-vars
+function makeTextSprite(
+message,
+{
+fontface,
+fontsize,
+fontweight,
+borderThickness,
+borderColor,
+backgroundColor,
+textColor,
+aspectRatio,
+depthWrite,
+} = {},
+) {
+// const _black = { r: 0, g: 0, b: 0, a: 1.0 };
+fontface = fontface ?? "sans-serif";
+fontsize = (fontsize ?? 27) / (window.devicePixelRatio / 2) ** 0.5;
+fontweight = fontweight ?? "";
+borderThickness = borderThickness ?? 0;
+borderColor = borderColor ?? _three_utils_clear;
+backgroundColor = backgroundColor ?? _three_utils_clear;
+textColor = textColor ?? _three_utils_white;
+aspectRatio = aspectRatio ?? 1;
+depthWrite = depthWrite ?? false;
+const canvas = document.createElement("canvas");
+// Create the context and set its scale correctly
+const context = canvas.getContext("2d");
+// These three lines have to go right after creating the context, and they have to
+// go in this order
+// https://stackoverflow.com/a/15666143/5496433
+canvas.width *= 2;
+canvas.height *= 2;
+const _pxRat = window.devicePixelRatio;
+context.setTransform(_pxRat, 0, 0, _pxRat, 0, 0);
+// Don't change the above!
+context.font = `${fontweight} ${fontsize}px ${fontface}`;
+const metrics = context.measureText(message);
+const textWidth = metrics.width;
+context.fillStyle = `rgba(${backgroundColor.r},${backgroundColor.g},${backgroundColor.b},${backgroundColor.a})`;
+context.strokeStyle = `rgba(${borderColor.r},${borderColor.g},${borderColor.b},${borderColor.a})`;
+context.lineWidth = borderThickness;
+roundRect(
+context,
+borderThickness / 2,
+borderThickness / 2,
+(textWidth + borderThickness) * 1.1,
+fontsize * 1.4 + borderThickness,
+8,
+);
+context.fillStyle = `rgba(${textColor.r}, ${textColor.g}, ${textColor.b}, 1.0)`;
+context.fillText(`${message}`, borderThickness + 0.5, fontsize + borderThickness);
+const texture = new THREE.CanvasTexture(canvas);
+const spriteMaterial = new THREE.SpriteMaterial({
+map: texture,
+// useScreenCoordinates: false,
+});
+const sprite = new THREE.Sprite(spriteMaterial);
+sprite.scale.set(0.5 * fontsize * aspectRatio, 0.25 * fontsize, 0.75 * fontsize);
+sprite.center.set(0, 1);
+sprite.material.depthWrite = depthWrite;
+return sprite;
+}
+const _three_utils_upZ = new THREE.Vector3(0, 0, 1);
+function getNewPositionForDrag({ dx, dy, up, oldPosition, pointOfFocus, dragSpeed }) {
+const rotAxisHypotenuse = (dx ** 2 + dy ** 2) ** 0.5;
+if (rotAxisHypotenuse < 1e-12) {
+return null;
+}
+const rotAxisXDir = -dy;
+const rotAxisYDir = -dx;
+const rotAxisCosTheta = rotAxisXDir / rotAxisHypotenuse;
+const rotAxisSinTheta = rotAxisYDir / rotAxisHypotenuse;
+const originalDisplacementFromPointOfFocus = oldPosition.clone().sub(pointOfFocus);
+const originalDisplacementComponentParallelToUp = up
+.clone()
+.multiplyScalar(originalDisplacementFromPointOfFocus.dot(up));
+const originalDisplacementComponentPerpendicularToUp =
+originalDisplacementFromPointOfFocus
+.clone()
+.sub(originalDisplacementComponentParallelToUp);
+const right = up
+.clone()
+.cross(originalDisplacementComponentPerpendicularToUp)
+.normalize();
+// Because our vectors are orthonormal, the Ax=b problem has an orthogonal
+// matrix and hence its inverse is its transpose, and so x = A^t b, where b =
+// [0, sin, cos]
+const rotationAxis = new THREE.Vector3(
+up.x * rotAxisSinTheta + right.x * rotAxisCosTheta,
+up.y * rotAxisSinTheta + right.y * rotAxisCosTheta,
+up.z * rotAxisSinTheta + right.z * rotAxisCosTheta,
+);
+const rotationMagnitude = rotAxisHypotenuse * dragSpeed;
+const rotationQuaternion = new THREE.Quaternion().setFromAxisAngle(
+rotationAxis,
+rotationMagnitude,
+);
+const newDisplacementFromPointOfFocus = originalDisplacementFromPointOfFocus
+.clone()
+.applyQuaternion(rotationQuaternion);
+const newPosition = pointOfFocus.clone().add(newDisplacementFromPointOfFocus);
+// To determine whether the rotation is pathological (doing roughly a 180deg turn,
+// which looks really abrupt and jerky), we see if the segment between the old
+// camera relative position and the new one crosses the line that is the rotation
+// axis from "up" to the original position
+const origRotAxisFromUp = originalDisplacementFromPointOfFocus
+.clone()
+.cross(up)
+.normalize();
+// THIS ASSUMES z IS UP
+// We have two lines, a1*x + b1*y + c = 0 and same with 1 -> 2. Line 1 is the
+// rotation axis line, Line 2 is the segment connecting the two displacements
+const a1 = origRotAxisFromUp.y;
+const b1 = -origRotAxisFromUp.x;
+const c1 = 0;
+// The _1's and _2's here refer to points on line 2; they have nothing to do with line
+// 1. The 2_'s refer to the fact that these are on line 2
+const { x2_1, y2_1, x2_2, m } = (() => {
+const { x: x2_1, y: y2_1 } = originalDisplacementFromPointOfFocus;
+const { x: x2_2, y: y2_2 } = newDisplacementFromPointOfFocus;
+const m = (y2_2 - y2_1) / (x2_2 - x2_1);
+return { x2_1, x2_2, y2_1, y2_2, m };
+})();
+const a2 = m;
+const b2 = -1;
+const c2 = y2_1 - m * x2_1;
+const determinant = a1 * b2 - a2 * b1;
+// The lines are (approximately) parallel iff the determinant is small
+if (Math.abs(determinant) > 1e-5) {
+// Lines aren't parallel; get intersection x
+const x = (b1 * c2 - b2 * c1) / determinant;
+// Is x_intersect between the two original points' x's? If yes then that segment
+// crosses the rotation axis, which is pathological
+if (x2_1 < x === x < x2_2) {
+return oldPosition;
+}
+}
+return newPosition;
+}
+// eslint-disable-next-line no-unused-vars
+function makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+dragSpeed = dragSpeed ?? 0.006;
+up = up ?? _three_utils_upZ;
+return d3.drag().on("drag", function (event) {
+const { dx, dy } = event;
+const newCameraPos = getNewPositionForDrag({
+dx,
+dy,
+up,
+oldPosition: camera.position,
+pointOfFocus,
+dragSpeed,
+});
+if (newCameraPos !== null) {
+camera.position.copy(newCameraPos);
+camera.lookAt(pointOfFocus);
+camera.updateProjectionMatrix();
+renderer.render(scene, camera);
+}
+if (callback) {
+callback();
+}
+});
+}
+// eslint-disable-next-line no-unused-vars
+function enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus,
+up, // Must be normalized
+dragSpeed,
+callback,
+}) {
+d3.select(canvas).call(
+makeThreeCameraDrag({
+camera,
+scene,
+renderer,
+pointOfFocus,
+up,
+dragSpeed,
+callback,
+}),
+);
+}
+// https://stackoverflow.com/a/9039885
+function userIsOn_iOS() {
+return (
+[
+"iPad Simulator",
+"iPhone Simulator",
+"iPod Simulator",
+"iPad",
+"iPhone",
+"iPod",
+].includes(navigator.platform) ||
+// iPad on iOS 13 detection
+(navigator.userAgent.includes("Mac") && "ontouchend" in document)
+);
+}
+// eslint-disable-next-line no-unused-vars
+function makeRenderer(canvas) {
+const on_iOS = userIsOn_iOS();
+const renderer = new THREE.WebGLRenderer({
+canvas: canvas,
+antialias: !on_iOS,
+powerPreference: on_iOS ? "low-power" : "high-performance",
+});
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
+renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+renderer.localClippingEnabled = false;
+renderer.setPixelRatio(window.devicePixelRatio);
+return renderer;
+}
+</script>
+<script>class Complex {
+constructor(magnitude, phase) {
+this._$mag = magnitude;
+this._$theta = phase;
+this._$re = magnitude * Math.cos(phase);
+this._$im = magnitude * Math.sin(phase);
+}
+toStr(precision = 4) {
+const re = this.re.toFixed(precision);
+const im = this.im.toFixed(precision);
+const r = this.magnitude.toFixed(precision);
+const theta = this.phase.toFixed(precision);
+return `${re} + ${im} j == ${r} expj(${theta})`;
+}
+static from(other) {
+if (other.magnitude !== undefined || other.phase !== undefined) {
+return this.fromPolar(other.magnitude ?? 1, other.phase ?? 0);
+} else if (other.re !== undefined || other.im !== undefined) {
+return this.fromCartesian(other.re ?? 0, other.im ?? 0);
+} else if (typeof other === "number") {
+return this.fromReal(other);
+} else {
+throw new Error(`Argument ${other} not understood in Complex.from`);
+}
+}
+static fromPolar(magnitude, phase) {
+return new this(magnitude, phase);
+}
+static fromCartesian(re, im) {
+const magnitude = (re ** 2 + im ** 2) ** 0.5;
+const phase = Math.atan2(im, re);
+return new this(magnitude, phase);
+}
+static fromReal(realNumber) {
+return new this(realNumber, 0);
+}
+static fromImag(realNumber) {
+return new this(realNumber, Math.PI / 2);
+}
+get magnitude() {
+return this._$mag;
+}
+get phase() {
+return this._$theta;
+}
+get re() {
+return this._$re;
+}
+get im() {
+return this._$im;
+}
+conj() {
+return this.constructor.fromPolar(this._$mag, -this._$theta);
+}
+toPolar() {
+return { magnitude: this._$mag, phase: this._$theta };
+}
+toCartesian() {
+return { re: this._$re, im: this._$im };
+}
+static prod(args) {
+let magnitude = 1;
+let phase = 0;
+for (const arg of args) {
+magnitude *= arg.magnitude ?? arg;
+phase += arg.phase ?? 0;
+}
+return this.fromPolar(magnitude, phase);
+}
+static mul(...args) {
+return this.prod(args);
+}
+mul(...others) {
+return this.constructor.mul(this, ...others);
+}
+_mulReal(other) {
+return this.constructor.fromPolar(this.magnitude * other, this.phase);
+}
+static div(z1, z2) {
+if (typeof z1 === "number") {
+z1 = Complex.fromReal(z1);
+}
+if (typeof z2 === "number") {
+z2 = Complex.fromReal(z2);
+}
+return this.fromPolar(
+(z1.magnitude ?? z1) / (z2.magnitude ?? z2) ?? 1,
+(z1.phase ?? 0) - (z2.phase ?? 0),
+);
+}
+div(other) {
+return this.constructor.div(this, other);
+}
+static sum(args) {
+let re = 0;
+let im = 0;
+for (const arg of args) {
+re += arg.re ?? arg;
+im += arg.im ?? 0;
+}
+return this.fromCartesian(re, im);
+}
+static add(...args) {
+return this.sum(args);
+}
+add(...others) {
+return this.constructor.add(this, ...others);
+}
+static sub(z1, z2) {
+return this.fromCartesian(
+(z1.re ?? z1) - (z2.re ?? z2) ?? 0, // ?? binds looser than -
+(z1.im ?? 0) - (z2.im ?? 0) ?? 0,
+);
+}
+sub(other) {
+return this.constructor.sub(this, other);
+}
+static exp(z) {
+if (typeof z === "number") {
+return Complex.fromReal(Math.exp(z));
+}
+return z.exp();
+}
+exp() {
+const magnitude = Math.exp(this.re);
+const phase = this.im;
+return Complex.fromPolar(magnitude, phase);
+}
+static cis(z) {
+if (typeof z === "number") {
+return Complex.fromPolar(1, z);
+}
+return z.cis();
+}
+cis() {
+// exp(i*(x+iy)) = e^(-y)e^(ix)
+return Complex.fromPolar(Math.exp(-this.im), this.re);
+}
+static pow(z, realNumber) {
+if (typeof realNumber.im === "function" && Math.abs(realNumber.im()) < 1e-7) {
+console.log(JSON.stringify({ z, realNumber }));
+throw new Error(
+"raising to a complex power with nonzero phase is unsupported",
+);
+}
+if (typeof z === "number") {
+z = Complex.fromReal(z);
+}
+realNumber = realNumber.magnitude ?? realNumber;
+return z.pow(realNumber);
+}
+pow(realNumber) {
+const magnitude = Math.pow(this._$mag, realNumber);
+const phase = this._$theta * realNumber;
+return this.constructor.fromPolar(magnitude, phase);
+}
+}
+Complex.i = Complex.fromImag(1);
+// eslint-disable-next-line no-unused-vars
+function innerProduct(
+f,
+g,
+{ xMin, xMax, nPoints = 1000, fIsComplex = true, gIsComplex = true } = {},
+) {
+const dx = (xMax - xMin) / nPoints;
+const v = (() => {
+if (fIsComplex) {
+if (gIsComplex) {
+return x => f(x).mul(g(x).conj());
+} else {
+return x => f(x)._mulReal(g(x));
+}
+} else {
+if (gIsComplex) {
+return x => g(x)._mulReal(f(x));
+} else {
+return x => f(x) * g(x);
+}
+}
+})();
+const products = [];
+for (let i = 0; i < nPoints; ++i) {
+const x = xMin + (i + 0.5) * dx;
+products.push(v(x));
+}
+return Complex.sum(products).mul(dx);
+}
+</script>
+<script>/* global Complex H_BAR FACTORIAL*/
+function basisCoefficient(n,{sigma, p, omega, m}) {
+const coef_ = Complex.div((Complex.mul((Complex.mul((Complex.pow((2),(Complex.div((3),(4),)),)),(Complex.pow(sigma, 1/2)),)),(Complex.pow((Complex.mul((m),(omega),(Complex.pow((H_BAR),(Complex.add((Complex.mul((2),(n),)),(1),)),)),)),(Complex.div((1),(4),)),)),(Complex.exp((Complex.sub((0),(Complex.div((Complex.mul((Complex.pow((p),(2),)),(Complex.pow((sigma),(2),)),)),(Complex.add((Complex.mul((2),(m),(Complex.pow((sigma),(2),)),(omega),(H_BAR),)),(Complex.pow((H_BAR),(2),)),)),)),)),)),)),(Complex.mul((Complex.pow((Complex.add((Complex.mul((2),(m),(Complex.pow((sigma),(2),)),(omega),)),(H_BAR),)),(Complex.add((n),(Complex.div((1),(2),)),)),)),(Complex.pow(Complex.mul((Complex.pow((2),(n),)),(FACTORIAL[n]),), 1/2)),(Complex.pow((H_BAR),(n),)),)),);
+switch(n){
+case 0: return Complex.mul(coef_, 1);
+case 1: return Complex.mul(coef_, Complex.mul((4),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 2: return Complex.mul(coef_, Complex.sub((Complex.add((Complex.mul((-16),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),)),(Complex.mul((8),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((2),(Complex.pow((H_BAR),(3),)),)),));
+case 3: return Complex.mul(coef_, Complex.mul((8),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.sub((Complex.add((Complex.mul((-8),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),)),(Complex.mul((12),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(3),)),)),)),));
+case 4: return Complex.mul(coef_, Complex.mul((4),(Complex.add((Complex.mul((-192),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(H_BAR),)),(Complex.mul((48),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),(Complex.mul((48),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(3),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((8),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),));
+case 5: return Complex.mul(coef_, Complex.mul((16),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.add((Complex.mul((-320),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(H_BAR),)),(Complex.mul((240),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),(Complex.mul((80),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(3),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((8),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),));
+case 6: return Complex.mul(coef_, Complex.mul((8),(Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-5760),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),(Complex.mul((960),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((360),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((64),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((240),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(H_BAR),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((60),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),));
+case 7: return Complex.mul(coef_, Complex.mul((32),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-13440),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),(Complex.mul((6720),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((840),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((64),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((336),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(H_BAR),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((84),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),));
+case 8: return Complex.mul(coef_, Complex.mul((16),(Complex.add((Complex.sub((Complex.add((Complex.mul((-215040),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),)),(Complex.mul((26880),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(4),)),)),(Complex.mul((3360),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(9),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((3584),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(H_BAR),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((896),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((26880),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1680),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((32),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3360),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((315),(Complex.pow((H_BAR),(8),)),)),)),)),)),));
+case 9: return Complex.mul(coef_, Complex.mul((64),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.mul((-645120),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),)),(Complex.mul((241920),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(4),)),)),(Complex.mul((10080),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(9),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((4608),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(H_BAR),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((1152),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((48384),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((5),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((3024),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((5),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((32),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((6048),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((2835),(Complex.pow((H_BAR),(8),)),)),)),)),)),));
+case 10: return Complex.mul(coef_, Complex.mul((32),(Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-9676800),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(4),)),)),(Complex.mul((967680),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((37800),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(15),)),)),)),(Complex.mul((645120),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((40320),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((403200),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((6300),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((5760),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(H_BAR),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1440),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((256),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((10080),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((14175),(Complex.pow((H_BAR),(8),)),)),)),)),)),));
+case 11: return Complex.mul(coef_, Complex.mul((128),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-35481600),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(4),)),)),(Complex.mul((10644480),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((138600),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(15),)),)),)),(Complex.mul((1013760),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((35),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((63360),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((35),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((887040),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((13860),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((7040),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(H_BAR),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1760),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((256),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((15840),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((51975),(Complex.pow((H_BAR),(8),)),)),)),)),)),));
+case 12: return Complex.mul(coef_, Complex.mul((64),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.mul((-510935040),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(5),)),)),(Complex.mul((42577920),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((498960),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(15),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(18),)),)),)),(Complex.mul((14192640),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((221760),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((21288960),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(4),)),(Complex.sub((Complex.mul((40),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((83160),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(12),)),(Complex.sub((Complex.mul((40),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((380160),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(2),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((2240),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((23760),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((2240),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((67584),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(H_BAR),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((5040),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4725),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((16896),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((5040),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4725),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((256),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((190080),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1247400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((51975),(Complex.pow((H_BAR),(12),)),)),)),)),)),));
+case 13: return Complex.mul(coef_, Complex.mul((256),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.mul((-2214051840),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(5),)),)),(Complex.mul((553512960),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((2162160),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(15),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(18),)),)),)),(Complex.mul((26357760),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((411840),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.mul((32),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((276756480),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(4),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((1081080),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(12),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((549120),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(2),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((4032),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((34320),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((4032),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((79872),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(H_BAR),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((7920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((17325),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((19968),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((7920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((17325),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((256),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((274560),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3243240),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((675675),(Complex.pow((H_BAR),(12),)),)),)),)),)),));
+case 14: return Complex.mul(coef_, Complex.mul((128),(Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-30996725760),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((2214051840),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((7567560),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(18),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(21),)),)),)),(Complex.mul((5166120960),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(4),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((9),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((20180160),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(12),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((9),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((3874590720),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(5),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((3783780),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(15),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((46126080),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((63),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((720720),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(9),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((63),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((6150144),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(2),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((6720),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4725),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((384384),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((6720),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4725),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((2048),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((384384),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((7567560),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((23296),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(H_BAR),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((380160),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1663200),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((51975),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((5824),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((380160),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1663200),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((51975),(Complex.pow((H_BAR),(12),)),)),)),)),)),));
+case 15: return Complex.mul(coef_, Complex.mul((512),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-154983628800),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(6),)),)),(Complex.mul((33210777600),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((37837800),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(18),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(21),)),)),)),(Complex.mul((11070259200),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(4),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((21),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((43243200),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(12),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((21),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((11623772160),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(5),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((5),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((11351340),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(15),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((5),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((76876800),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((567),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1201200),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(9),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((567),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((8386560),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(2),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((10560),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((17325),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((524160),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((10560),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((17325),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((2048),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((524160),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((16216200),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((23648625),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((26880),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(H_BAR),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((549120),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4324320),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((675675),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((6720),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((549120),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((4324320),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((675675),(Complex.pow((H_BAR),(12),)),)),)),)),)),));
+case 16: return Complex.mul(coef_, Complex.mul((256),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.mul((-2125489766400),(Complex.pow((m),(15),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(15),)),(Complex.pow((H_BAR),(7),)),)),(Complex.mul((132843110400),(Complex.pow((m),(16),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(16),)),(Complex.pow((H_BAR),(8),)),)),(Complex.mul((129729600),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(21),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(24),)),)),)),(Complex.mul((247973806080),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(5),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((242161920),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(15),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((88562073600),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((21621600),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(18),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((11070259200),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(4),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((672),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((21),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((43243200),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(12),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((672),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((21),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((984023040),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((5040),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((2835),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((15375360),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(9),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((5040),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((2835),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((245760),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(H_BAR),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((768768),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10090080),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((61440),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((768768),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10090080),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((11182080),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((126720),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((415800),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((698880),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((126720),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((415800),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((512),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((22364160),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1037836800),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((3027024000),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((70945875),(Complex.pow((H_BAR),(16),)),)),)),)),)),));
+case 17: return Complex.mul(coef_, Complex.mul((1024),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.mul((-12044442009600),(Complex.pow((m),(15),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(15),)),(Complex.pow((H_BAR),(7),)),)),(Complex.mul((2258332876800),(Complex.pow((m),(16),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(16),)),(Complex.pow((H_BAR),(8),)),)),(Complex.mul((735134400),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(21),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(24),)),)),)),(Complex.mul((602222100480),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(5),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((35),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((588107520),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(15),)),(Complex.sub((Complex.mul((16),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((35),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((301111050240),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((73513440),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(18),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((4182097920),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(4),)),(Complex.add((Complex.sub((Complex.mul((640),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((6048),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((16336320),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(12),)),(Complex.add((Complex.sub((Complex.mul((640),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((6048),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1520762880),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((7920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((23761920),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(9),)),(Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((7920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((278528),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(H_BAR),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((1048320),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((21621600),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((23648625),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((69632),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((1048320),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((21621600),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((23648625),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((14622720),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((183040),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1081080),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((913920),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((183040),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1081080),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((512),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((29245440),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1960358400),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((10291881600),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((1206079875),(Complex.pow((H_BAR),(16),)),)),)),)),)),));
+case 18: return Complex.mul(coef_, Complex.mul((512),(Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-162599967129600),(Complex.pow((m),(17),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(17),)),(Complex.pow((H_BAR),(8),)),)),(Complex.mul((9033331507200),(Complex.pow((m),(18),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(18),)),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((2481078600),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(24),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(27),)),)),)),(Complex.mul((7226665205760),(Complex.pow((m),(15),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(15),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((1764322560),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(18),)),(Complex.sub((Complex.mul((56),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((6774998630400),(Complex.pow((m),(16),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(16),)),(Complex.pow((H_BAR),(7),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((413513100),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(21),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((1354999726080),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(5),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((560),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1323241920),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(15),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((560),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((301111050240),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(4),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((2016),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((1176215040),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(12),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((2016),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((150405120),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((256256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((2522520),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((945945),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((9400320),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((256256),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((2522520),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((945945),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((1140572160),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((190080),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((498960),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((17821440),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((190080),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((498960),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((313344),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(H_BAR),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((11182080),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((345945600),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((756756000),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((14189175),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((78336),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((11182080),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((345945600),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((756756000),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((14189175),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((4096),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((37601280),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3528645120),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((30875644800),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((10854718875),(Complex.pow((H_BAR),(16),)),)),)),)),)),));
+case 19: return Complex.mul(coef_, Complex.mul((2048),(Complex.i),(p),(Complex.pow((sigma),(2),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),(Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.sub((Complex.sub((Complex.sub((Complex.add((Complex.mul((-1029799791820800),(Complex.pow((m),(17),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(17),)),(Complex.pow((H_BAR),(8),)),)),(Complex.mul((171633298636800),(Complex.pow((m),(18),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(18),)),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((15713497800),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(24),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(27),)),)),)),(Complex.mul((137306638909440),(Complex.pow((m),(15),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(15),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((33522128640),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(18),)),(Complex.sub((Complex.mul((8),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((25744994795520),(Complex.pow((m),(16),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(16),)),(Complex.pow((H_BAR),(7),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((1571349780),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(21),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((2860554977280),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(5),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1008),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((135),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((2793510720),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(15),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1008),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((135),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((520100904960),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(4),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3168),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3465),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((2031644160),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(12),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((3168),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3465),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((190513152),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(Complex.pow((H_BAR),(2),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((349440),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((5405400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((11907072),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(6),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((2048),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((349440),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((5405400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((1666990080),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((274560),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1297296),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((26046720),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((274560),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1297296),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((350208),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(H_BAR),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((14622720),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((653452800),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((2572970400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((241215975),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((87552),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((14622720),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((653452800),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((2572970400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((241215975),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((4096),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((47628288),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((6094932480),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((83805321600),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((68746552875),(Complex.pow((H_BAR),(16),)),)),)),)),)),));
+case 20: return Complex.mul(coef_, Complex.mul((1024),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.mul((-13730663890944000),(Complex.pow((m),(19),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(40),)),(Complex.pow((omega),(19),)),(Complex.pow((H_BAR),(9),)),)),(Complex.mul((686533194547200),(Complex.pow((m),(20),)),(Complex.pow((sigma),(40),)),(Complex.pow((omega),(20),)),(Complex.pow((H_BAR),(10),)),)),(Complex.mul((52378326000),(m),(Complex.pow((p),(2),)),(Complex.pow((sigma),(4),)),(omega),(Complex.pow((H_BAR),(27),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(30),)),)),)),(Complex.mul((686533194547200),(Complex.pow((m),(17),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(17),)),(Complex.pow((H_BAR),(7),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),)),(Complex.mul((41902660800),(Complex.pow((m),(3),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(21),)),(Complex.sub((Complex.mul((64),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.mul((1716332986368000),(Complex.pow((m),(18),)),(Complex.pow((sigma),(36),)),(Complex.pow((omega),(18),)),(Complex.pow((H_BAR),(8),)),(Complex.sub((Complex.mul((24),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((26189163000),(Complex.pow((m),(2),)),(Complex.pow((sigma),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(24),)),(Complex.sub((Complex.mul((24),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((42908324659200),(Complex.pow((m),(16),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(16),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(8),)),)),)),)),(Complex.mul((10475665200),(Complex.pow((m),(4),)),(Complex.pow((sigma),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(18),)),(Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1920),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((45),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((45768879636480),(Complex.pow((m),(15),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(32),)),(Complex.pow((omega),(15),)),(Complex.pow((H_BAR),(5),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((675),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((44696171520),(Complex.pow((m),(5),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(15),)),(Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),)),(Complex.mul((1680),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((675),(Complex.pow((H_BAR),(8),)),)),)),)),)),(Complex.mul((19051315200),(Complex.pow((m),(13),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(13),)),(Complex.pow((H_BAR),(3),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((384384),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3027024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((945945),(Complex.pow((H_BAR),(12),)),)),)),)),)),(Complex.mul((297676800),(Complex.pow((m),(7),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(9),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((4096),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((384384),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3027024),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((945945),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((866834841600),(Complex.pow((m),(14),)),(Complex.pow((sigma),(28),)),(Complex.pow((omega),(14),)),(Complex.pow((H_BAR),(4),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((38016),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((83160),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((1485),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((3386073600),(Complex.pow((m),(6),)),(Complex.pow((sigma),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(12),)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),)),(Complex.mul((38016),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((83160),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((1485),(Complex.pow((H_BAR),(12),)),)),)),)),(Complex.mul((119070720),(Complex.pow((m),(12),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(12),)),(Complex.pow((H_BAR),(2),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((7454720),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((172972800),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((302702400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(16),)),)),)),)),(Complex.mul((7441920),(Complex.pow((m),(8),)),(Complex.pow((sigma),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(6),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((7454720),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((172972800),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((302702400),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((4729725),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((3112960),(Complex.pow((m),(11),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(24),)),(Complex.pow((omega),(11),)),(H_BAR),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((18800640),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1176215040),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((7718911200),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((2170943775),(Complex.pow((H_BAR),(16),)),)),)),)),)),(Complex.mul((778240),(Complex.pow((m),(9),)),(Complex.pow((p),(2),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(9),)),(Complex.pow((H_BAR),(3),)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32768),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),)),(Complex.mul((18800640),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1176215040),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((7718911200),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((2170943775),(Complex.pow((H_BAR),(16),)),)),)),)),(Complex.mul((4096),(Complex.pow((m),(10),)),(Complex.pow((sigma),(20),)),(Complex.pow((omega),(10),)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((262144),(Complex.pow((p),(20),)),(Complex.pow((sigma),(20),)),)),(Complex.mul((476282880),(Complex.pow((p),(16),)),(Complex.pow((sigma),(16),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((81265766400),(Complex.pow((p),(12),)),(Complex.pow((sigma),(12),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((1676106432000),(Complex.pow((p),(8),)),(Complex.pow((sigma),(8),)),(Complex.pow((H_BAR),(12),)),)),)),(Complex.mul((2749862115000),(Complex.pow((p),(4),)),(Complex.pow((sigma),(4),)),(Complex.pow((H_BAR),(16),)),)),)),(Complex.mul((41247931725),(Complex.pow((H_BAR),(20),)),)),)),)),)),));
+default: throw new Error("Got n greater than N_MAX");
+}
+}</script>
+<script>/* global Complex H_BAR FACTORIAL */
+function deltaCoef(n, {omega, m, xMeasured: x}) {
+const coef_ = Complex.div((Complex.mul((Complex.pow((Complex.mul((m),(omega),)),(Complex.div((3),(4),)),)),(Complex.exp(Complex.div((Complex.mul((Complex.sub((0),(m),)),(Complex.pow((x),(2),)),(omega),)),(Complex.mul((2),(H_BAR),)),))),)),(Complex.mul((Complex.pow((H_BAR),(Complex.div((n),(2),)),)),(Complex.pow((Complex.mul((H_BAR),(Math.PI),)),(Complex.div((1),(4),)),)),(Complex.pow(Complex.mul((Complex.pow((2),(n),)),(FACTORIAL[n]),), 1/2)),)),);
+switch(n){
+case 0: return Complex.mul(coef_, Complex.div((1),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 1: return Complex.mul(coef_, Complex.mul((2),(x),));
+case 2: return Complex.mul(coef_, Complex.div((Complex.sub((Complex.mul((4),(m),(Complex.pow((x),(2),)),(omega),)),(Complex.mul((2),(H_BAR),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 3: return Complex.mul(coef_, Complex.sub((Complex.mul((8),(m),(Complex.pow((x),(3),)),(omega),)),(Complex.mul((12),(x),(H_BAR),)),));
+case 4: return Complex.mul(coef_, Complex.div((Complex.mul((4),(Complex.add((Complex.sub((Complex.mul((4),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),)),(Complex.mul((12),(m),(Complex.pow((x),(2),)),(omega),(H_BAR),)),)),(Complex.mul((3),(Complex.pow((H_BAR),(2),)),)),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 5: return Complex.mul(coef_, Complex.mul((8),(Complex.add((Complex.sub((Complex.mul((4),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),)),(Complex.mul((20),(m),(Complex.pow((x),(3),)),(omega),(H_BAR),)),)),(Complex.mul((15),(x),(Complex.pow((H_BAR),(2),)),)),)),));
+case 6: return Complex.mul(coef_, Complex.div((Complex.mul((8),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),)),(Complex.mul((60),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((90),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(3),)),)),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 7: return Complex.mul(coef_, Complex.mul((16),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),)),(Complex.mul((84),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((210),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((105),(x),(Complex.pow((H_BAR),(3),)),)),)),));
+case 8: return Complex.mul(coef_, Complex.div((Complex.mul((16),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),)),(Complex.mul((224),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((840),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((840),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 9: return Complex.mul(coef_, Complex.mul((32),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),)),(Complex.mul((288),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((1512),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((2520),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((945),(x),(Complex.pow((H_BAR),(4),)),)),)),));
+case 10: return Complex.mul(coef_, Complex.div((Complex.mul((32),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),)),(Complex.mul((720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((5040),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((12600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((9450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(5),)),)),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 11: return Complex.mul(coef_, Complex.mul((64),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(11),)),(Complex.pow((omega),(5),)),)),(Complex.mul((880),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((7920),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((27720),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((34650),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10395),(x),(Complex.pow((H_BAR),(5),)),)),)),));
+case 12: return Complex.mul(coef_, Complex.div((Complex.mul((64),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2112),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((23760),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((110880),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((207900),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((124740),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(6),)),)),)),)),(Complex.pow(Complex.mul((m),(omega),), 1/2)),));
+case 13: return Complex.mul(coef_, Complex.mul((128),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(13),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2496),(Complex.pow((m),(5),)),(Complex.pow((x),(11),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((34320),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((205920),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((540540),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((540540),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((135135),(x),(Complex.pow((H_BAR),(6),)),)),)),));
+case 14: return Complex.mul(coef_, Complex.mul((Complex.div((1),(Complex.pow(Complex.mul((m),(omega),), 1/2)),)),(128),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),)),(Complex.mul((5824),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((96096),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((720720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((2522520),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3783780),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1891890),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(7),)),)),)),));
+case 15: return Complex.mul(coef_, Complex.mul((256),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(15),)),(Complex.pow((omega),(7),)),)),(Complex.mul((6720),(Complex.pow((m),(6),)),(Complex.pow((x),(13),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((131040),(Complex.pow((m),(5),)),(Complex.pow((x),(11),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((1201200),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((5405400),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((11351340),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((9459450),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((2027025),(x),(Complex.pow((H_BAR),(7),)),)),)),));
+case 16: return Complex.mul(coef_, Complex.mul((Complex.div((1),(Complex.pow(Complex.mul((m),(omega),), 1/2)),)),(256),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),)),(Complex.mul((15360),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((349440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((3843840),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((21621600),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((60540480),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((75675600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((32432400),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(8),)),)),)),));
+case 17: return Complex.mul(coef_, Complex.mul((512),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(17),)),(Complex.pow((omega),(8),)),)),(Complex.mul((17408),(Complex.pow((m),(7),)),(Complex.pow((x),(15),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((456960),(Complex.pow((m),(6),)),(Complex.pow((x),(13),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((5940480),(Complex.pow((m),(5),)),(Complex.pow((x),(11),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((40840800),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((257297040),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((183783600),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((34459425),(x),(Complex.pow((H_BAR),(8),)),)),)),));
+case 18: return Complex.mul(coef_, Complex.mul((Complex.div((1),(Complex.pow(Complex.mul((m),(omega),), 1/2)),)),(512),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),)),(Complex.mul((39168),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1175040),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((17821440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((661620960),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1543782240),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((1654052400),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((620269650),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(9),)),)),)),));
+case 19: return Complex.mul(coef_, Complex.mul((1024),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(19),)),(Complex.pow((omega),(9),)),)),(Complex.mul((43776),(Complex.pow((m),(8),)),(Complex.pow((x),(17),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1488384),(Complex.pow((m),(7),)),(Complex.pow((x),(15),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((26046720),(Complex.pow((m),(6),)),(Complex.pow((x),(13),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((253955520),(Complex.pow((m),(5),)),(Complex.pow((x),(11),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1396755360),(Complex.pow((m),(4),)),(Complex.pow((x),(9),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((4190266080),(Complex.pow((m),(3),)),(Complex.pow((x),(7),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((6285399120),(Complex.pow((m),(2),)),(Complex.pow((x),(5),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((3928374450),(m),(Complex.pow((x),(3),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((654729075),(x),(Complex.pow((H_BAR),(9),)),)),)),));
+case 20: return Complex.mul(coef_, Complex.mul((Complex.div((1),(Complex.pow(Complex.mul((m),(omega),), 1/2)),)),(1024),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((m),(10),)),(Complex.pow((x),(20),)),(Complex.pow((omega),(10),)),)),(Complex.mul((97280),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),(H_BAR),)),)),(Complex.mul((3720960),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((74419200),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((846518400),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((5587021440),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((20951330400),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((41902660800),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((39283744500),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((13094581500),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(10),)),)),)),));
+default: throw new Error("Got n greater than N_MAX");
+}
+}</script>
+<script>/* global Complex H_BAR FACTORIAL */
+function psiFunction(n,{ omega, m}) {
+const coef_ = x => Complex.div((Complex.mul((Complex.exp(Complex.sub((0),(Complex.div((Complex.mul((m),(omega),(Complex.pow((x),(2),)),)),(Complex.mul((2),(H_BAR),)),)),))),(Complex.pow((Complex.div((Complex.mul((m),(omega),)),(H_BAR),)),(Complex.div((1),(4),)),)),)),(Complex.mul((Complex.pow((Math.PI),(Complex.div((1),(4),)),)),(Complex.pow(Complex.mul((Complex.pow((2),(n),)),(FACTORIAL[n]),), 1/2)),)),);
+switch(n){
+case 0: return x => Complex.mul(coef_(x), 1);
+case 1: return x => Complex.mul(coef_(x), Complex.mul((2),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),));
+case 2: return x => Complex.mul(coef_(x), Complex.add((-2),(Complex.div((Complex.mul((4),(m),(Complex.pow((x),(2),)),(omega),)),(H_BAR),)),));
+case 3: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((4),(x),(Complex.sub((Complex.mul((2),(m),(Complex.pow((x),(2),)),(omega),)),(Complex.mul((3),(H_BAR),)),)),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),)),(H_BAR),));
+case 4: return x => Complex.mul(coef_(x), Complex.sub((Complex.add((12),(Complex.div((Complex.mul((16),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.div((Complex.mul((48),(m),(Complex.pow((x),(2),)),(omega),)),(H_BAR),)),));
+case 5: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((8),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.mul((4),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),)),(Complex.mul((20),(m),(Complex.pow((x),(2),)),(omega),(H_BAR),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(2),)),)),)),)),(Complex.pow((H_BAR),(2),)),));
+case 6: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((8),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),)),(Complex.mul((60),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((90),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((15),(Complex.pow((H_BAR),(3),)),)),)),)),(Complex.pow((H_BAR),(3),)),));
+case 7: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((16),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.mul((8),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),)),(Complex.mul((84),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(H_BAR),)),)),(Complex.mul((210),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(3),)),)),)),)),(Complex.pow((H_BAR),(3),)),));
+case 8: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((16),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),)),(Complex.mul((224),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((840),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((840),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((105),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.pow((H_BAR),(4),)),));
+case 9: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((32),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((16),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),)),(Complex.mul((288),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(H_BAR),)),)),(Complex.mul((1512),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((2520),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(4),)),)),)),)),(Complex.pow((H_BAR),(4),)),));
+case 10: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((32),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),)),(Complex.mul((720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((5040),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((12600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((9450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((945),(Complex.pow((H_BAR),(5),)),)),)),)),(Complex.pow((H_BAR),(5),)),));
+case 11: return x => Complex.mul(coef_(x), Complex.div((Complex.mul((64),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((32),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),)),(Complex.mul((880),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(H_BAR),)),)),(Complex.mul((7920),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((27720),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((34650),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(5),)),)),)),)),(Complex.pow((H_BAR),(5),)),));
+case 12: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(6),)),)),(64),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2112),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((23760),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((110880),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((207900),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((124740),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((10395),(Complex.pow((H_BAR),(6),)),)),)),));
+case 13: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(6),)),)),(128),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((64),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),)),(Complex.mul((2496),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(H_BAR),)),)),(Complex.mul((34320),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((205920),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((540540),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((540540),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(6),)),)),)),));
+case 14: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(7),)),)),(128),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),)),(Complex.mul((5824),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((96096),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((720720),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((2522520),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((3783780),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1891890),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((135135),(Complex.pow((H_BAR),(7),)),)),)),));
+case 15: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(7),)),)),(256),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((128),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),)),(Complex.mul((6720),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(H_BAR),)),)),(Complex.mul((131040),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((1201200),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((5405400),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((11351340),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((9459450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(7),)),)),)),));
+case 16: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(8),)),)),(256),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),)),(Complex.mul((15360),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((349440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((3843840),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((21621600),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((60540480),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((75675600),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((32432400),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((2027025),(Complex.pow((H_BAR),(8),)),)),)),));
+case 17: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(8),)),)),(512),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((256),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),)),(Complex.mul((17408),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(H_BAR),)),)),(Complex.mul((456960),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((5940480),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((40840800),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((257297040),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((183783600),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(8),)),)),)),));
+case 18: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(9),)),)),(512),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),)),(Complex.mul((39168),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1175040),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((17821440),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((147026880),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((661620960),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((1543782240),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((1654052400),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((620269650),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((34459425),(Complex.pow((H_BAR),(9),)),)),)),));
+case 19: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(9),)),)),(1024),(x),(Complex.pow(Complex.div((Complex.mul((m),(omega),)),(H_BAR),), 1/2)),(Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((512),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),)),(Complex.mul((43776),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(H_BAR),)),)),(Complex.mul((1488384),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((26046720),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((253955520),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((1396755360),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((4190266080),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((6285399120),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((3928374450),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(9),)),)),)),));
+case 20: return x => Complex.mul(coef_(x), Complex.mul((Complex.div((1),(Complex.pow((H_BAR),(10),)),)),(1024),(Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.add((Complex.sub((Complex.mul((1024),(Complex.pow((m),(10),)),(Complex.pow((x),(20),)),(Complex.pow((omega),(10),)),)),(Complex.mul((97280),(Complex.pow((m),(9),)),(Complex.pow((x),(18),)),(Complex.pow((omega),(9),)),(H_BAR),)),)),(Complex.mul((3720960),(Complex.pow((m),(8),)),(Complex.pow((x),(16),)),(Complex.pow((omega),(8),)),(Complex.pow((H_BAR),(2),)),)),)),(Complex.mul((74419200),(Complex.pow((m),(7),)),(Complex.pow((x),(14),)),(Complex.pow((omega),(7),)),(Complex.pow((H_BAR),(3),)),)),)),(Complex.mul((846518400),(Complex.pow((m),(6),)),(Complex.pow((x),(12),)),(Complex.pow((omega),(6),)),(Complex.pow((H_BAR),(4),)),)),)),(Complex.mul((5587021440),(Complex.pow((m),(5),)),(Complex.pow((x),(10),)),(Complex.pow((omega),(5),)),(Complex.pow((H_BAR),(5),)),)),)),(Complex.mul((20951330400),(Complex.pow((m),(4),)),(Complex.pow((x),(8),)),(Complex.pow((omega),(4),)),(Complex.pow((H_BAR),(6),)),)),)),(Complex.mul((41902660800),(Complex.pow((m),(3),)),(Complex.pow((x),(6),)),(Complex.pow((omega),(3),)),(Complex.pow((H_BAR),(7),)),)),)),(Complex.mul((39283744500),(Complex.pow((m),(2),)),(Complex.pow((x),(4),)),(Complex.pow((omega),(2),)),(Complex.pow((H_BAR),(8),)),)),)),(Complex.mul((13094581500),(m),(Complex.pow((x),(2),)),(omega),(Complex.pow((H_BAR),(9),)),)),)),(Complex.mul((654729075),(Complex.pow((H_BAR),(10),)),)),)),));
+default: throw new Error("Got n greater than N_MAX");
+}
+}</script>
+<script>/* global applyGraphicalObjs Complex THREE makeTextSprite enableDragToRotateCamera
+makeRenderer basisCoefficient defineArrowhead psiFunction sampleFromCdf */
+const WIDTH = 800;
+const HEIGHT = 325;
+const HEIGHT_3D = 325;
+const X_MIN = -5;
+const X_0 = 0;
+const X_MAX = 5;
+const xInterp = d3.interpolate(X_MIN, X_MAX);
+const CAMERA_EXTENT = 11;
+const xScale3D = d3.scaleLinear(
+[X_MIN, X_MAX],
+[-CAMERA_EXTENT * 0.95, CAMERA_EXTENT * 0.95],
+);
+const Y_MAX = 1.1;
+const Y_0 = 0;
+const Y_MIN = -Y_MAX;
+const yScale3D = d3.scaleLinear([0, 1], [0, 3]);
+const Z_MAX = Y_MAX;
+const Z_0 = 0;
+const Z_MIN = -Z_MAX;
+const XP_MAX = 2.5;
+const zScale3D = yScale3D;
+// The time complexity of updating is O(N_MAX * N_WAVEFUNCTION_POINTS)
+const N_MAX = 20;
+const N_WAVEFUNCTION_POINTS = 100;
+const H_BAR = 1;
+const canvas = document.getElementById("plot-3D");
+d3.select(canvas).attr("width", WIDTH).attr("height", HEIGHT_3D);
+const scene = new THREE.Scene();
+// const camera = new THREE.PerspectiveCamera(
+// 	150,
+// 	canvas.clientWidth / canvas.clientHeight,
+// 	0.1,
+// 	2000,
+// );
+const camera = new THREE.OrthographicCamera(
+-CAMERA_EXTENT,
+CAMERA_EXTENT,
+(CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
+(-CAMERA_EXTENT * HEIGHT_3D) / WIDTH,
+-50,
+50,
+);
+const renderer = makeRenderer(canvas);
+renderer.setSize(WIDTH, HEIGHT_3D);
+// z will be up
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+scene.add(
+(() => {
+const pointLight = new THREE.PointLight(0xffffff, 1);
+pointLight.position.set(0, -3, 20);
+return pointLight;
+})(),
+);
+const CAMERA_DEFAULT_POSITION = new THREE.Vector3(1.4, -5.7, 2.2);
+const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, 0, 0);
+const CAMERA_UP = new THREE.Vector3(0, 0, 1);
+enableDragToRotateCamera({
+canvas,
+camera,
+scene,
+renderer,
+pointOfFocus: CAMERA_POINT_OF_FOCUS,
+up: CAMERA_UP,
+});
+const AXIS_MATERIAL = new THREE.MeshBasicMaterial({
+color: 0xaaaaaa,
+side: THREE.DoubleSide,
+transparent: false,
+});
+const WAVE_MATERIAL = new THREE.MeshLambertMaterial({
+color: 0x2277ff,
+side: THREE.DoubleSide,
+transparent: false,
+});
+camera.up.copy(CAMERA_UP);
+camera.position.copy(CAMERA_DEFAULT_POSITION);
+camera.lookAt(CAMERA_POINT_OF_FOCUS);
+const plot2D = d3.select("#plot-2D").attr("width", WIDTH).attr("height", HEIGHT);
+const defs = plot2D.selectAll("defs").data([0]).join("defs");
+defineArrowhead(defs, {
+id: "arrowhead",
+length: 18,
+width: 14,
+color: "#ccc",
+});
+defineArrowhead(defs, {
+id: "arrowhead-small",
+length: 14,
+width: 10.5,
+color: "#eee",
+});
+const xScale2D = d3.scaleLinear([X_MIN, X_MAX], [0, WIDTH - 10]);
+const y2dMax = 1.5;
+const yScale2D = d3.scaleLinear([-0.15, y2dMax], [HEIGHT - 25, 0]);
+let currentTime = 0;
+let isAnimating = false;
+const sliders = {
+k: (() => {
+const slider = document.getElementById("slider-k");
+const min = 1;
+const max = 2.25;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+m: (() => {
+const slider = document.getElementById("slider-m");
+const min = 1;
+const max = 2.25;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+mu: (() => {
+const slider = document.getElementById("slider-mu");
+const [min, max] = [-XP_MAX, XP_MAX];
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+sigma: (() => {
+const slider = document.getElementById("slider-sigma");
+const mid = 0.5 ** 0.5;
+const min = mid - 0.25;
+const max = mid + 0.1;
+slider.min = min;
+slider.max = max;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+p: (() => {
+const slider = document.getElementById("slider-p");
+const [min, max] = [-XP_MAX, XP_MAX];
+slider.min = -XP_MAX;
+slider.max = XP_MAX;
+slider.step = 0.01;
+slider.value = (min + max) / 2;
+return slider;
+})(),
+};
+// eslint-disable-next-line no-use-before-define
+d3.selectAll(".slider").on("input", () => update(0, true));
+function sliderValues() {
+const o = Object.fromEntries(
+Object.entries(sliders).map(([k, slider]) => [k, +slider.value]),
+);
+o.omega = (o.k / o.m) ** 0.5;
+return o;
+}
+// eslint-disable-next-line no-unused-vars
+const FACTORIAL = d3.range(0, N_MAX + 1).map(n => {
+let acc = 1;
+for (let i = 1; i <= n; i++) {
+acc *= i;
+}
+return acc;
+});
+const COEFFS = d3.range(0, N_MAX + 1).map(() => 0);
+function populateCaches({ sigma, p, m, omega, xMeasured }) {
+if (xMeasured !== undefined) {
+sigma = 0.1;
+for (let n = 0; n <= N_MAX; n++) {
+COEFFS[n] = psiFunction(n, { sigma, p, m, omega })(xMeasured);
+}
+} else {
+for (let n = 0; n <= N_MAX; n++) {
+COEFFS[n] = basisCoefficient(n, { sigma, p, m, omega });
+}
+}
+}
+function getAxisData() {
+const xs0 = xScale2D(X_0);
+const ys0 = yScale2D(Y_0);
+const [xMin, xMax] = xScale2D.range();
+const yMax = yScale2D.range()[1];
+const yMin = yScale2D(Y_0);
+const axisData = [
+{
+shape: "line",
+class: "axis x-axis",
+attrs: {
+x1: xMin,
+x2: xMax,
+y1: ys0,
+y2: ys0,
+"marker-end": "url(#arrowhead)",
+},
+},
+{
+shape: "line",
+class: "axis y-axis",
+attrs: {
+x1: xs0,
+x2: xs0,
+y1: yMin,
+y2: yMax,
+},
+},
+{
+shape: "text",
+class: "axis axis-label x-axis-label axis-name x-axis-name",
+text: "𝑥",
+attrs: {
+x: xScale2D.range()[1] - 40,
+y: ys0 + 10,
+},
+},
+{
+shape: "text",
+class: "axis axis-label axis-name",
+text: "|𝜓|²",
+attrs: {
+x: xs0 + 60,
+y: yScale2D.range()[1] + 5,
+"text-anchor": "end",
+"dominant-baseline": "hanging",
+},
+},
+{
+shape: "text",
+class: "axis axis-label classically-allowed-region",
+text: "Classically allowed region",
+attrs: {
+x: xScale2D(X_0),
+y: yScale2D(Y_0) + 20,
+"text-anchor": "middle",
+"dominant-baseline": "hanging",
+},
+},
+];
+return axisData;
+}
+applyGraphicalObjs(plot2D, getAxisData(), { selector: ".axis" });
+// arr[2*i] is x_i, arr[2*i+1] is z_i
+const wavefunctionPoints = d3.range(2 * N_WAVEFUNCTION_POINTS);
+const cdfPoints = new Array(N_WAVEFUNCTION_POINTS);
+function computeWavefunctionPoints(xMeasured) {
+const { omega, m, mu } = sliderValues();
+const t = currentTime;
+const xt = xMeasured === undefined ? mu * Math.cos(t) : xMeasured;
+const pt = -mu * Math.sin(t);
+let cummProbability = 0;
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const xNaive = xInterp(i / N_WAVEFUNCTION_POINTS);
+const x = xNaive - xt;
+let z = Complex.fromReal(0);
+for (let n = 0; n <= N_MAX; n++) {
+const energy = n + 1 / 2;
+const thisZContribution = Complex.mul(
+Complex.cis((mu ** 2 / 4) * Math.sin(2 * t) + pt),
+COEFFS[n],
+Complex.cis(-energy * t),
+psiFunction(n, { omega, m })(x),
+);
+z = z.add(thisZContribution);
+}
+wavefunctionPoints[2 * i] = xNaive;
+wavefunctionPoints[2 * i + 1] = z;
+const probability = z.magnitude ** 2;
+cummProbability += probability;
+cdfPoints[i] = [x, cummProbability];
+}
+// Normalize probability so that it sums to 1 over the region of interest
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; i++) {
+cdfPoints[i][1] /= cummProbability;
+}
+}
+function getWavefunctionPath3D() {
+const pathPoints = [];
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const x = wavefunctionPoints[2 * i];
+const z = wavefunctionPoints[2 * i + 1];
+pathPoints.push(
+new THREE.Vector3(xScale3D(x), yScale3D(-z.im), zScale3D(z.re)),
+);
+}
+const path = new THREE.CatmullRomCurve3(pathPoints);
+return path;
+}
+function makeAxisLabel(text) {
+return makeTextSprite(text, { fontface: "Times", fontsize: 20 });
+}
+const xMin = xScale3D(X_MIN);
+const xs0 = xScale3D(X_0);
+const xMax = xScale3D(X_MAX);
+const yMin = yScale3D(Y_MIN);
+const ys0 = yScale3D(Y_0);
+const yMax = yScale3D(Y_MAX);
+const zMin = zScale3D(Z_MIN);
+const zs0 = zScale3D(Z_0);
+const zMax = zScale3D(Z_MAX);
+const objs3d = { empty: true };
+function update3D() {
+const arrowheadRadius = 0.25;
+const arrowheadHeight = 0.7;
+const arrowheadGeometry = new THREE.ConeBufferGeometry(
+arrowheadRadius,
+arrowheadHeight,
+);
+if (objs3d.empty) {
+objs3d.empty = false;
+const axisRadius = 0.06;
+// x axis
+(() => {
+const xAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xMin, ys0, zs0),
+new THREE.Vector3(xMax, ys0, zs0),
+),
+64,
+axisRadius * 1.2,
+8,
+);
+const xAxis = new THREE.Mesh(xAxixGeometry, AXIS_MATERIAL);
+// arrowhead rotation code from https://stackoverflow.com/a/11060965
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateZ(-Math.PI / 2);
+arrowhead.position.set(xMax, ys0, zs0);
+scene.add(xAxis, arrowhead);
+})();
+// y axis
+(() => {
+const yAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xs0, yMin, zs0),
+new THREE.Vector3(xs0, yMax, zs0),
+),
+64,
+axisRadius,
+8,
+);
+const yAxis = new THREE.Mesh(yAxixGeometry, AXIS_MATERIAL);
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateX(Math.PI);
+arrowhead.position.set(xs0, yMin, zs0);
+scene.add(yAxis, arrowhead);
+})();
+// z axis
+(() => {
+const zAxixGeometry = new THREE.TubeBufferGeometry(
+new THREE.LineCurve3(
+new THREE.Vector3(xs0, ys0, zMin),
+new THREE.Vector3(xs0, ys0, zMax),
+),
+64,
+axisRadius,
+8,
+);
+const zAxis = new THREE.Mesh(zAxixGeometry, AXIS_MATERIAL);
+const arrowhead = new THREE.Mesh(arrowheadGeometry, AXIS_MATERIAL);
+arrowhead.rotateX(Math.PI / 2);
+arrowhead.position.set(xs0, ys0, zMax);
+scene.add(zAxis, arrowhead);
+})();
+// axis labels
+(() => {
+const xAxisLabel = makeAxisLabel("𝑥");
+xAxisLabel.position.x = xMax;
+xAxisLabel.position.y = ys0;
+xAxisLabel.position.z = zs0;
+scene.add(xAxisLabel);
+const yAxisLabel = makeAxisLabel("Im[𝜓]");
+yAxisLabel.position.x = xs0;
+yAxisLabel.position.y = yMin - 0.1;
+yAxisLabel.position.z = -0.2;
+scene.add(yAxisLabel);
+const zAxisLabel = makeAxisLabel("Re[𝜓]");
+zAxisLabel.position.x = xs0 + 0.1;
+zAxisLabel.position.y = ys0 + 0.2;
+zAxisLabel.position.z = zMax;
+scene.add(zAxisLabel);
+})();
+// wave template geometry
+(() => {
+const wave = new THREE.Mesh(new THREE.BufferGeometry(), WAVE_MATERIAL);
+scene.add(wave);
+objs3d.wave = { wave };
+})();
+}
+// console.log(m, sigma, p, currentTime);
+const { wave } = objs3d.wave;
+wave.geometry.dispose();
+wave.geometry = new THREE.TubeBufferGeometry(
+getWavefunctionPath3D(),
+1000,
+0.11,
+8,
+);
+renderer.render(scene, camera);
+}
+const line = d3.line().curve(d3.curveNatural);
+function getData2D() {
+const points = [];
+for (let i = 0; i < N_WAVEFUNCTION_POINTS; ++i) {
+const x = wavefunctionPoints[2 * i];
+const z = wavefunctionPoints[2 * i + 1];
+points.push([xScale2D(x), yScale2D(z.magnitude ** 2)]);
+}
+const { mu, p, omega, m } = sliderValues();
+const cosT = Math.cos(currentTime);
+const sinT = Math.sin(currentTime);
+const scaleFactor = (m * omega) / H_BAR;
+const xt = (sinT * p) / scaleFactor + cosT * mu;
+const pt = (cosT * p - sinT * mu * scaleFactor) / scaleFactor;
+const xtS = xScale2D(X_0 + xt);
+const ptS = xScale2D(X_0 + xt + pt);
+const expectYMax = yScale2D(0.75 * y2dMax);
+const energy = mu ** 2 + p ** 2 / (m ** 2 * omega ** 2);
+const amplitude = energy ** 0.5;
+const y0S = yScale2D(Y_0);
+const data = [
+{
+shape: "path",
+class: "curve curve-background",
+attrs: {
+d: line(points),
+},
+},
+{
+shape: "path",
+class: "curve curve-foreground",
+attrs: {
+d: line(points),
+},
+},
+...[-1, 1].map(sign => {
+const x = xScale2D(sign * amplitude);
+return {
+shape: "line",
+class: "curve amplitude-line",
+attrs: {
+x1: x,
+x2: x,
+y1: y0S + 15,
+y2: yScale2D(y2dMax),
+},
+};
+}),
+{
+shape: "line",
+class: "curve expect-line",
+attrs: {
+x1: xtS,
+x2: xtS,
+y1: y0S,
+y2: expectYMax,
+},
+},
+{
+shape: "text",
+class: "curve expect-label",
+text: "⟨𝑥⟩",
+attrs: {
+x: xtS,
+y: expectYMax,
+dx: 4,
+dy: 23,
+"text-anchor": "left",
+"dominant-baseline": "top",
+},
+children: [
+{
+shape: "tspan",
+class: "expect-label expect-label-sub",
+text: "𝜓",
+attrs: {
+dx: -2,
+dy: 5,
+},
+},
+],
+},
+{
+shape: "text",
+class: "curve expect-label",
+text: "⟨𝑝⟩",
+attrs: {
+x: ptS,
+y: expectYMax,
+dx: 8,
+dy: -13,
+"text-anchor": "middle",
+"dominant-baseline": "bottom",
+},
+children: [
+{
+shape: "tspan",
+class: "expect-label expect-label-sub",
+text: "𝜓",
+attrs: {
+dx: -2,
+dy: 5,
+},
+},
+],
+},
+];
+if (Math.abs(pt) > 0.05) {
+data.push({
+shape: "line",
+class: "curve p-expect",
+attrs: {
+x1: xtS,
+x2: ptS,
+y1: expectYMax,
+y2: expectYMax,
+"marker-end": "url(#arrowhead-small)",
+},
+});
+}
+return data;
+}
+// eslint-disable-next-line no-unused-vars
+function takeMeasurement() {
+const xMeasured = sampleFromCdf(cdfPoints)[0];
+const { omega, m, sigma, p } = sliderValues();
+populateCaches({ sigma, p, m, omega, xMeasured });
+computeWavefunctionPoints(xMeasured);
+console.log(xMeasured);
+}
+let isFirstRun = true;
+function update(dtMS, refreshCache = false) {
+dtMS = dtMS ?? 0;
+const { omega, m, sigma, p } = sliderValues();
+const timeScale = 1;
+currentTime += (timeScale * (omega * dtMS)) / 1000;
+if (refreshCache) {
+populateCaches({
+m,
+sigma,
+p,
+omega,
+});
+}
+if (dtMS !== 0 || refreshCache || isFirstRun) {
+computeWavefunctionPoints();
+isFirstRun = false;
+}
+// const [m, sigma, p] = ["m", "sigma", "p"].map(k => +sliders[k].value);
+// populateWavefunctionPoints(m, sigma, p, currentTime);
+applyGraphicalObjs(plot2D, getData2D(), { selector: ".curve" });
+update3D();
+// if (typeof katex !== "undefined") {
+// 	katex.render(`m=${floatFormatter(m)}`, textSpans.m);
+// 	katex.render(`\\sigma=${floatFormatter(sigma)}`, textSpans.sigma);
+// 	katex.render(`p=${floatFormatter(p)}`, textSpans.p);
+// }
+}
+update(0, true);
+let animationFrame;
+// eslint-disable-next-line no-unused-vars
+function play() {
+isAnimating = true;
+d3.selectAll(".slider.ic").property("disabled", true);
+let prevTimestampMS;
+function step(timestampMS) {
+if (prevTimestampMS === undefined) {
+prevTimestampMS = timestampMS;
+}
+const elapsedMS = timestampMS - prevTimestampMS;
+prevTimestampMS = timestampMS;
+update(elapsedMS);
+if (isAnimating) {
+animationFrame = window.requestAnimationFrame(step);
+}
+}
+animationFrame = window.requestAnimationFrame(step);
+}
+function pause() {
+window.cancelAnimationFrame(animationFrame);
+isAnimating = false;
+}
+// eslint-disable-next-line no-unused-vars
+function reset() {
+pause();
+d3.selectAll(".slider").property("disabled", false);
+currentTime = 0;
+update(0, true);
+}
+</script>
+</body>
+</html>

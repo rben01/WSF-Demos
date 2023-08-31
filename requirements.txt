@@ -1,0 +1,7 @@
+certifi==2019.9.11
+flask
+matplotlib==3.1.1
+mysqlclient
+numpy==1.17.2
+pillow
+pyopenssl

@@ -1,0 +1,220 @@
+[.qm-chapter.chap-4]
+= Chapter 4: Quantum Mechanics in Three Dimensions
+include::shared_attributes.adoc[]
+
+== The {sch} Equation
+
+=== Questions
+
+* {q-num} Show that the position and momentum operators along different axes are compatible, e.g., that ++\(\sigma_x\)++ and ++\(\sigma_{p_y}\)++ (but also ++\(\sigma_x\)++ and ++\(\sigma_{p_z}\)++, ++\(\sigma_{y}\)++ and ++\(\sigma_{p_x}\)++, ++\(\sigma_y\)++ and ++\(\sigma_{p_z}\)++, etc.) are compatible operators and so ++\(\sigma_x\sigma_{p_y}\)++ can equal 0.
+
+* {q-num} The uncertainty principle ++\(\sigma_x \sigma_p\ge \frac{\hbar}{2}\)++ only holds in one dimension.
+Show that in ++\(n\)++ dimensions, in which ++\(\hat x\Ket{f}=\vec x f\)++ and ++\(\hat p\Ket{f}=i\hbar \nabla f\)++, the uncertainty principle becomes ++\(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\)++.
+(Hint: what's ++\([x,p]\)++ with these new definitions of ++\(\hat x\)++ and ++\(\hat p\)++?)
+
+* {q-num} Show that the Legendre polynomials, defined by ++\(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\)++, are orthgonal over ++\([-1,1]\)++.
+(Hint: use integration by parts to compute ++\(\int_{-1}^1 P_m(x)P_n(x)\,dx\)++ for ++\(m< n\)++.)
++
+.Solution
+[%collapsible%open]
+====
+To compute ++\(\int_{-1}^1 P_m(x)P_n(x)\,dx\)++ using integration by parts, let
+++\[\begin{align*}
+u&=P_m(x)&dv&=P_n(x)\,dx\\
+du&=P_m'(x)\,dx&v&=F_{n,1}(x)
+\end{align*}\]++
+where ++\(F_{n,1}(x)\)++ is the antiderivative of ++\(P_n\)++.
+While we can't easily compute ++\(F_{n,1}\)++, we do know it has to be of the form ++\(F_{n,1}(x)=f_1(x)\frac{d^{n-1}}{dx^{n-1}}(x^2-1)^{n}\)++ for some function ++\(f_1\)++.
+Since taking fewer than ++\(n\)++ derivatives of ++\((x^2-1)^{n}\)++ times must leave a factor of ++\(x^2-1\)++, we see that ++\(F_{n,1}(1)=F_n(-1)=0\)++.
+And so,
+++\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)\,dx &=P_m(x)F_{n,1}(x)\Bigr|^1_{-1}-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx\\
+&=-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx
+\end{align*}\]++
+We'll do a second integration by parts:
+++\[\begin{align*}
+u&=P_m'(x)&dv&=F_{n,1}(x)\,dx\\
+du&=P_m''(x)&v&=F_{n,2}(x)
+\end{align*}\]++
+where ++\(F_{n,2}\)++ is the antiderivative of ++\(F_{n,1}\)++.
+Again, we won't compute ++\(F_{n,2}\)++, but we know it must be of the form ++\(F_{n,2}(x)=f_2(x)\frac{d^{n-2}}{dx^{n-2}}(x^2-1)^n\)++, which, for the same reason as above, has a factor of ++\(x^2-1\)++.
+Therefore,
+++\[\begin{align*}
+\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx&= P_m'(x)F_{n,2}(x)\Bigr|^1_{-1}-\int_{-1}^2 P_m''(x) F_{n,2}(x)\,dx\\
+&=-\int_{-1}^1 P_m''(x) F_{n,2}(x)\,dx
+\end{align*}\]++
+Were we to perform ++\(m\)++ integrations by parts in total, we'd see that
+++\[\begin{align*}
+\int_{-1}^1P_m(x)P_n(x)\,dx=(-1)^m \int_{-1}^1\frac{d^m P_m(x)}{dx^m} F_{n,m}(x)\,dx
+\end{align*}\]++
+where ++\(F_{n,m}\)++ is the ++\(m\)++^th^ antiderivative of ++\(P_n\)++.
+But, since ++\(P_m\)++ has degree ++\(m\)++, ++\(\frac{d^m}{dx^m} P_m(x)\)++ is some constant ++\(q\)++, and so this is simply
+++\[\begin{align*}
+(-1)^m \int_{-1}^1 q F_{n,m}(x)\,dx&=(-1)^m q F_{n,m+1}\Bigr|^1_{-1}
+\end{align*}\]++
+But ++\(F_{n,m+1}\)++ has no derivatives of ++\(x^2-1\)++ and so it must carry a factor of ++\(x^2-1\)++, so this integral is in fact 0!
+And so we see that
+++\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)&=0
+\end{align*}\]++
+as desired.
+[sidebar]
+--
+Since none of the Legendre polynomials are identically 0, ++\(\int_{-1}^1P_n(x)P_n(x)\ne 0\)++.
+Why couldn't the above proof be used to show that ++\(\int_{-1}^1P_m(x)P_n(x)=0\)++ when ++\(m=n\)++?
+Where would it fall apart?
+
+Answer: the highest antiderivative we had to take was ++\(F_{n,m+1}\)++, and since ++\(m< n \)++ this looked like ++\(f_m(x)(x^2-1)^n\)++.
+But if you take one more antiderivative you no longer have a factor of ++\(x^2-1\)++ (for instance, ++\(\int x^2-1\,dx=\frac{x^3}{3}-x+C\)++).
+--
+====
+
+* {q-num} [I have not worked out this equation yet] Solve the spherical harmonic oscillator, ++\(V(r)=-k\lVert\mathbf r\rVert^2\)++.
+
+* {q-num} In this question you will examine some of the constraints on the separation constants ++\(l(l+1)\)++ and ++\(m^2\)++.
++
+[{sublist-style}]
+.. The solution to the azimuthal differential equation ++\[\frac{d^2\Phi}{d\phi^2} = -m^2 \Phi \]++ is ++\(\Phi(\phi) = e^{im\phi}\)++. Show that ++\(m\)++ must be an integer.
+.. Given the ++\(l\)++th Legendre polynomial, ++\(\displaystyle P_l(x)=\frac{1}{2^l l!}\left(\frac{d}{dx}\right)^l(x^2-1)^l\)++, why must ++\(l\)++ be a non-negative integer?
+.. Explain why ++\(m\le l\)++ using the Legendre function ++\(P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)\)++
+
+* {q-num}
++
+[{sublist-style}]
+.. Calculate the Legendre functions, ++\(P_l^m(x)\)++, for ++\(l=2\)++ and ++\(m = 0, \pm1, \pm2\)++.
+.. Show that if ++\(m>l\)++ then ++\(P_2^m(x) = 0\)++ (and therefore ++\(\Theta\)++ is 0 as well).
+.. Show that ++\(\Theta(\theta) = A P_2^2 (\cos\theta)\)++ is a solution to the angular differential equation ++\[\sin\theta \frac{d}{d\theta} \left( \sin\theta \frac{d\Theta}{d\theta}\right)+ \left[ l(l+1) \sin^2\theta -m^2\right]\Theta = 0 \]++
+.. Show that ++\(Y_2^2\)++ is normalized.
+.. Show that ++\(Y_2^2\)++ and ++\(Y_2^{-2}\)++ are orthogonal.
+
+* {q-num} For a particle in the infinite spherical well, determine whether ++\(\psi_{320}\)++ and ++\(\psi_{400}\)++ are closer in energy or if ++\(\psi_{400}\)++ and ++\(\psi_{530}\)++ are closer in energy.
+
+=== Demonstrations
+
+* A Legendre polynomial demo similar to the Hermite polynomial demo (nothing fancy, just showing the polynomials)
+* Demonstration of spherical harmonics? (Not sure how it would look in practice, since there isn't really a good way to show all of a 3D surface... I'd have to think about it.)
+
+== The Hydrogen Atom
+
+=== Questions
+
+* {q-num} Write out the radial wavefunctions ++\(R_{nl}(r)\)++, and corresponding energies ++\(E_n\)++, for the ground state and first two excited states of hydrogen (++\(n=1,2,3\)++). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.
+
+* {q-num} For a hydrogen atom with quantum numbers ++\(n=4\)++ and ++\(l=1\)++:
++
+[{sublist-style}]
+.. Use the recursion relation ++\(c_{j+1} = \frac{2(j+l+1-n)}{(j+1)(j+2l+2)} c_j \)++ to find ++\(v(\rho)\)++.
+.. Use the formula for associated Laguerre polynomials ++\(L_q^p(x) = \frac{e^x x^{-p}}{q!}\frac{d^q}{dx^q}(e^{-x}x^{p+q})\)++ to find ++\(v(\rho)\)++.
+.. Write the normalized expression for ++\(R_{41}(r)\)++.
+.. Show that ++\(R_{41}(r)\)++ is a solution to the radial equation.
+
+* {q-num} For the hydrogen atom, why is ++\(n>l\)++? Why isn't ++\(n\ge l\)++?
+
+* {q-num} Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.
+
+* {q-num} Determine the corresponding quantum numbers for the following density plot of a hydrogen wave function based on its nodes. Write out the full, normalized wavefunction. [insert density plot of ++\(\psi_{410}\)++]
+
+* {q-num} [*question 4.20 from Griffiths* - give credit or change. I really like this question and think it would be worth using and crediting] Consider the earth-sun system as a gravitational analog to the hydrogen atom.
++
+[{sublist-style}]
+.. What is the potential energy function? (Let ++\(m_E\)++ be the mass of the earth, and ++\(M\)++ the mass of the sun.)
+.. What is the "Bohr radius," ++\(a_g\)++, for this system? Work out the actual number.
+.. Write down the gravitational "Bohr formula," and, by equating ++\(E_n\)++ to the classical energy of a planet in a circular orbit of radius ++\(r_0\)++, show that ++\(n=\sqrt{r_0/a_g}\)++. From this, estimate the quantum number ++\(n\)++ of the earth.
+.. Suppose the earth made a transition to the next lower level (++\(n-1\)++). How much energy (in Joules) would be released? What would the wavelength of the emitted photon (or, more likely, graviton) be? (Express your answer in light years -- is the remarkable answer a coincidence?)
+
+=== Demonstrations
+
+* A demo showing the orbitals?
+Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.
+
+== Angular Momentum
+=== Questions
+
+* {q-num} Do ++\(L_+\)++ and ++\(L_-\)++ commute? Why is this significant?
+
+* {q-num} Suppose you have a hydrogen atom in the orbital angular momentum state ++\[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]++
++
+[{sublist-style}]
+.. Determine ++\(\braket{L^2}\)++ and ++\(\braket{L_z}\)++.
+.. Find ++\(\braket{L_x}\)++ and ++\(\braket{L_y}\)++ (hint: use the raising and lowering operators).
+.. Find the expectation value of the angular momentum in the ++\(\hat{n}\)++ direction, where ++\(\hat{n} = \sin{\theta}\cos{\phi} \hat{x} + \sin{\theta}\sin{\phi} \hat{y} + \cos{\theta}\hat{z}\)++ and ++\(\theta\)++ is the angle incident to the z-axis. In other words, find ++\(\braket{L_n} \)++ with ++\(L_n = \vec{L} \cdot \hat{n}\)++.
+
+* {q-num} Convert ++\(L^2\)++ from cartesian coordinates to spherical coordinates.
+
+* {q-num} For the spherical harmonic ++\(Y_3^2 = \left (\frac{105}{32\pi}\right )^{\frac{1}{2}} \sin^2\theta\cos\theta e^{2i\phi}\)++
++
+[{sublist-style}]
+.. Apply the raising and lowering operators, ++\(L_+ = \hbar e^{i\phi}(\frac{\partial}{\partial\theta} + i\cot\theta \frac{\partial}{\partial \phi})\)++ and  ++\(L_- = -\hbar e^{-i\phi}(\frac{\partial}{\partial \theta} - i\cot\theta \frac{\partial}{\partial \phi})\)++, to find  ++\(Y_3^3\)++ and ++\(Y_3^1\)++.
+.. Using your results from part (a), verify that ++\(L_+Y_3^2\)++ is an eigenfunction of ++\(L^2\)++ with the same eigenvalue as the eigenfunction ++\(Y_3^2\)++ (i.e. show that ++\(L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) \)++ and ++\(L^2 Y_3^2 = \lambda Y_3^2\)++ where ++\(\lambda\)++ is a constant).
+.. Determine ++\(\sigma_{L_x}\)++ and ++\(\sigma_{L_y}\)++ for ++\(Y_3^2\)++ and ++\(Y_3^3\)++. What do you notice?
+
+
+* {q-num} [From *Angelini* "Solved Problems in Quantum Mechanics" *3.4(d)*]
+Prove that, in an eigenstate of ++\(J^2\)++ and ++\(J_z\)++ corresponding to the quantum numbers ++\(j\)++ and ++\(m\)++, the maximum accuracy of the simultaneous measurement of ++\(J_x\)++ and ++\(J_y\)++ is obtained when ++\(|m| = j\)++.
+
+
+
+== Spin
+=== Questions
+
+* {q-num} Given ++\([S_x, S_y] = i\hbar S_z \)++, ++\([S_y, S_z] = i\hbar S_x \)++, and ++\([S_z, S_x] = i\hbar S_y\)++, show that ++\(S_x\)++, ++\(S_y\)++, ++\(S_z\)++, and ++\(S^2\)++ are pairwise compatible observables.
+
+* {q-num} This problem will walk you through the steps to algebraically determine the eigenvalues of ++\(S^2\)++ and ++\(S_z\)++.
++
+[{sublist-style}]
+.. Find ++\([S_{\pm}, S^2]\)++ and ++\([S_{\pm}, S_z]\)++.
+.. If ++\(\ket{a, b}\)++ is an eigenstate of ++\(S^2\)++  and ++\(S_z\)++ with eigenvalues ++\(a\)++ and ++\(b\)++ respectively, show that ++\(S_{\pm}\ket{a, b}\)++ is also an eigenstate of ++\(S^2\)++  and ++\(S_z\)++ with eigenvalues ++\(a\)++ and ++\(b\pm\hbar\)++.
+.. Show that ++\(S^2(S_{\pm}^n \ket{a, b}) = a(S_{\pm}^n \ket{a, b})\)++ and ++\(S_z(S_{\pm}^n \ket{a, b}) = (b\pm n\hbar)(S_{\pm}^n \ket{a, b})\)++.
+.. Since ++\(S^2 = S_x^2 + S_y^2 + S_z^2\)++, then ++\(a^2 \ge (b+n\hbar)^2\)++. There must be a maximum value of ++\(n\)++, which we will call ++\(N\)++, such that ++\(S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}\)++  and ++\(S_z (S_+)^{N+1}\ket{a,b} = 0\)++. Use the operator ++\(S_{-}S_{+}\)++ and eigenstate ++\(\ket{a, b+N\hbar}\)++ to show that ++\( a = (b+N\hbar)(b+N\hbar + \hbar) \)++.
+.. Let ++\(b=\hbar m\)++ and ++\(b+N\hbar = \hbar s\)++. Write out the full eigenvalue equations for ++\(S^2\)++ and ++\(S_z\)++.
+
+
+* {q-num} For a spin-++\(\frac{1}{2}\)++ particle use the Pauli matrices, ++\(\sigma_{x} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}\)++, ++\(\sigma_{y} =  \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}\)++, and ++\(\sigma_{z} =  \begin{pmatrix}1 & 0 \\ 0 & -1 \end{pmatrix} \)++ to
++
+[{sublist-style}]
+.. Show that  ++\([S_x, S_y] = i\hbar S_z \)++, ++\([S_y, S_z] = i\hbar S_x \)++, and ++\([S_z, S_x] = i\hbar S_y\)++ .
+.. Find the eigenvalues for ++\(S_x\)++, ++\(S_y\)++, and ++\(S_z\)++.
+.. Find the eigenvectors for ++\(S_x\)++, ++\(S_y\)++, and ++\(S_z\)++.
+
+
+* {q-num} Suppose a spin-++\(\frac{1}{2}\)++ particle is in the state ++\(A\begin{pmatrix}3+4i\\12\end{pmatrix}\)++.
++
+[{sublist-style}]
+.. Compute ++\(A\)++ so that the state is normalized.
+.. For each spin observable ++\(S=S_x,S_y,S_z\)++:
+... Rewrite the state as a linear combinations of the eigenvectors of ++\(S\)++.
+... What are the probabilities of getting ++\(\pm\frac{\hbar}{2}\)++ if you measure ++\(S\)++?
+... Compute ++\(\Braket{S}\)++.
+
+
+* {q-num} Compute ++\(e^{\sigma_r}\)++ for ++\(r=x,y,z\)++.
+
+
+* {q-num} A beam of silver atoms passes through a Stern-Gerlach device. Half of the atoms are deflected in the ++\(+z\)++ direction and half of the atoms are deflected in the ++\(-z\)++ direction.
++
+[{sublist-style}]
+ .. The atoms deflected in the ++\(+z\)++ direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the ++\(+z\)++ or ++\(-z\)++ direction. What percentage of the atoms are deflected in the ++\(+z\)++ direction? The ++\(-z\)++ direction?
+ .. The atoms from part (a) that were deflected in the ++\(+z\)++ direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the ++\(+x\)++ or ++\(-x\)++ direction. What percentage of the atoms are deflected in the ++\(+x\)++ direction? The ++\(-x\)++ direction?
+ .. The atoms from part (b) that were deflected in the ++\(+x\)++ direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the ++\(+z\)++ or ++\(-z\)++ direction. What percentage of the atoms are deflected in the ++\(+z\)++ direction? The ++\(-z\)++ direction?
+
+
+* {q-num} [I remember especially liking the following question *(1.1) from Townsend* as an undergraduate] Determine the field gradient of a 50-cm-long Stern-Gerlach magnet that would produce a 1-mm separation at the detector between spin-up and spin-down silver atoms that are emitted from an over at ++\(T=1500 \)++K. Assume the detector (see Fig 1.1) is located 50 cm from the magnet. _Note_: While the atoms in the oven have average kinetic energy ++\(3k_BT/2\)++, the more energetic atoms strike the hold in hte oven more frequently. Thus the _emitted_ atoms have average kinetic energy ++\(2k_BT\)++, where ++\(k_B\)++ is the Boltzmann constant. The magnetic dipole moment of the silver atom is due to the intrinsic spin of the single electron. Appendix F gives the numerical value of the Bohr magneton, ++\(e\hbar /2m_ec\)++, in a convenient form.
+
+* {q-num} What are ++\(s\)++ and ++\(m\)++ for two particles in the state ++\[\Ket{s \, m} = \frac{\sqrt{3}}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-1}{2} \, \frac{-1}{2}} + \frac{1}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-3}{2} \, \frac{1}{2}} \]++
+
+* {q-num} You have a spin-++\(2\)++ and spin-++\(\frac{1}{2}\)++ particle in a combined state with ++\(s=\frac{3}{2}\)++ and ++\(m=-\frac{3}{2}\)++. You may use a table of Clebsch-Gordan coefficients to help you.
++
+[{sublist-style}]
+.. What are the possible spin states that each of the particles could be in?
+.. What are the probabilities of each particle being in the spin states from part (a)?
+
+
+== Electromagnetic Interactions
+=== Questions
+* {q-num} Generalize the method to derive 4.213 to time-dependent vector potentials ++\(\mathbf A\)++ resulting in zero magnetic field (++\(\mathbf{B}=\nabla\times \mathbf{A}=0\)++).
+
+* {q-num} The total magnetic flux through a solenoid made of a wire of length ++\(l\)++ coiled ++\(N\)++ times, whose cross section has area ++\(A\)++, and with a current ++\(I\)++, is ++\(\Phi=\mu_0\frac{NIA}{l}\)++ where ++\(\mu_0\)++ is the permeability of free space.
+(Assume that the solenoid is long enough that end effects do not need to be taken into account.)
+.. In the Aharonov–Bohm Effect, what values of ++\(l\)++, ++\(N\)++, ++\(I\)++, and ++\(A\)++ lead to maximum constructive interference of the two electron beams. How about for maximum destructive interference?
+.. Suppose the center of the solenoid is now filled not with air, but with iron, which has a permeability of approximately++\(2\times 10^6\mu_0\)++.
+Repeat part (a).

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html>
+<head><title>resonant_tunneling.html</title>
+<meta charset="utf-8"/>
+<script crossorigin="anonymous" integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw==" src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"></script>
+<style type="text/css">:root {
+--color-highlight: #5df;
+--color-secondary: #f3c002;
+--color-tertiary: #14c778;
+--color-quaternary: #e5d;
+--color-graphic-primary: #27f;
+}
+body {
+/* margin-left: 10px;
+margin-top: 10px; */
+background-color: black;
+color: white;
+font-size: 22px;
+font-family: sans-serif;
+line-height: 1.8em;
+}
+.grid-left-right {
+display: grid;
+grid-template-columns: 13em 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.grid-left-right-2 {
+display: grid;
+grid-template-columns: max-content 1fr;
+align-items: start;
+column-gap: 40px;
+}
+.controls-container {
+display: inline-block;
+border: 2px solid white;
+border-radius: 5px;
+padding: 10px;
+background-color: black;
+}
+.controls {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+.controls > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.controls-grid {
+display: grid;
+grid-template-columns: max-content 1fr;
+column-gap: 20px;
+row-gap: 5px;
+}
+.draggable:hover {
+cursor: grab;
+}
+.draggable:active {
+cursor: grabbing;
+}
+.graph-key {
+display: grid;
+grid-template-columns: 30px 1fr;
+align-items: center;
+column-gap: 20px;
+background-color: black;
+padding: 15px 6px;
+border-radius: 4px;
+border: black solid 2px;
+}
+.key-line {
+height: 7px;
+width: 40px;
+}
+/* Legacy; don't use */
+.slider-container {
+grid-row: span 2;
+display: grid;
+grid-template-columns: 1fr;
+row-gap: 2px;
+}
+/* Legacy; don't use */
+.slider-container > :nth-child(2n + 3) {
+margin-top: 30px;
+}
+.param-slider-container {
+display: inline-block;
+width: 100%;
+}
+input[type="range"] {
+width: 100%;
+}
+.plot {
+display: inline-block;
+}
+.plot-container {
+display: grid;
+grid-template-columns: 1fr 1fr;
+column-gap: 10px;
+}
+.axis {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-tick {
+stroke-width: 3;
+stroke: #aaa;
+}
+.axis-label {
+stroke-opacity: 0;
+fill: #ddd;
+font-size: 17px;
+}
+.x-axis-label {
+text-anchor: middle;
+dominant-baseline: hanging;
+}
+.y-axis-label {
+text-anchor: end;
+dominant-baseline: middle;
+}
+.math {
+color: black;
+background-color: white;
+padding: 9px 5px;
+border-radius: 2px;
+/* border: 1px solid white; */
+}
+.radio-button-container label input {
+display: none;
+}
+.radio-button-container.horizontal {
+display: flex;
+flex-direction: row;
+align-content: stretch;
+line-height: initial;
+column-gap: 1px;
+}
+.radio-button-container button {
+flex: 1;
+}
+.radio-button-container.vertical {
+display: flex;
+flex-direction: column;
+/* align-content: stretch;
+line-height: initial; */
+}
+.button {
+padding: 7px 8px;
+margin-left: 2px;
+margin-right: 2px;
+font-size: 15px;
+border-radius: 4px;
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #fff, #aaa);
+color: black;
+text-shadow: 1px 1px #ddd;
+}
+.button:not(:disabled):hover {
+cursor: pointer;
+}
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #fff);
+color: #333;
+}
+.button:disabled {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #999, #aaa);
+color: #444;
+text-shadow: 1px 1px #ccc;
+cursor: default;
+}
+.highlighted-text {
+color: var(--color-highlight);
+}
+.secondary-text {
+color: var(--color-secondary);
+}
+.tertiary-text {
+color: var(--color-tertiary);
+}
+.quaternary-text {
+color: var(--color-quaternary);
+}
+.viz-canvas {
+padding-top: 1em;
+}
+.sci-num {
+padding-right: 0.15em;
+}
+.eqn-left {
+text-align: right;
+}
+.eqn-middle {
+padding-left: 0.25em;
+padding-right: 0.25em;
+}
+.eqn-right {
+text-align: left;
+}
+.radio-label {
+padding-left: 3px;
+}
+.subscript {
+position: relative;
+top: 0.3em;
+left: 0;
+font-size: 65%;
+}
+.superscript {
+position: relative;
+bottom: 0.8em;
+left: 0;
+font-size: 65%;
+}
+.minus-sign {
+margin-right: 1px;
+}
+.operator {
+margin-left: 3px;
+margin-right: 3px;
+}
+button.depressed-button {
+background-color: #555;
+color: white;
+}
+input[type="radio"] {
+position: relative;
+bottom: 4px;
+}
+input[type="range"] {
+-webkit-appearance: none;
+-moz-apperance: none;
+height: 8px;
+padding: 0 0;
+background: #8b8f92;
+border-radius: 2px;
+position: relative;
+bottom: 4px;
+outline: none;
+}
+input[type="range"]:disabled {
+opacity: 0.5;
+}
+input[type="range"]::-webkit-slider-thumb {
+-webkit-appearance: none;
+-moz-apperance: none;
+width: 25px;
+height: 25px;
+-webkit-border-radius: 20px;
+-moz-border-radius: 20px;
+-ms-border-radius: 20px;
+-o-border-radius: 20px;
+border-radius: 20px;
+background-image: -webkit-gradient(
+linear,
+left top,
+left bottom,
+color-stop(0, #fefefe),
+color-stop(0.49, #d7d7d7),
+color-stop(0.51, #d1d1d1),
+color-stop(1, #c8c8c8)
+);
+border: 1px solid #787878;
+}
+input[type="range"]::-moz-range-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+/* All the same stuff for IE */
+input[type="range"]::-ms-thumb {
+box-shadow: 1px 1px 1px #000000, 0 0 1px #0d0d0d;
+border: 1px solid #000000;
+height: 20px;
+width: 20px;
+border-radius: 20px;
+background: #ffffff;
+cursor: pointer;
+}
+</style>
+<style></style>
+</head>
+<body>
+<svg id="plot"></svg>
+<script>/* global applyGraphicalObjs */
+class Complex {
+constructor(magnitude, phase) {
+this._$r = magnitude;
+this._$theta = phase;
+}
+static from(other) {
+if (other.constructor === this) {
+return other;
+} else if (typeof other === "number") {
+return this.fromReal(other);
+} else {
+throw new Error(`Argument ${other} not understood in Complex.from`);
+}
+}
+static fromPolar(magnitude, phase) {
+return new this(magnitude, phase);
+}
+static fromCartesian(x, y) {
+const magnitude = (x ** 2 + y ** 2) ** 0.5;
+const phase = Math.atan2(y, x);
+return new this(magnitude, phase);
+}
+static fromReal(realNumber) {
+return new this(realNumber, 0);
+}
+static fromImag(realNumber) {
+return new this(realNumber, Math.PI / 2);
+}
+get magnitude() {
+return this._$r;
+}
+get phase() {
+return this._$theta;
+}
+get x() {
+return this._$r * Math.cos(this._$theta);
+}
+get y() {
+return this._$r * Math.sin(this._$theta);
+}
+conj() {
+return Complex.fromPolar(this._$r, this._$theta);
+}
+static mul(...args) {
+let magnitude = 1;
+let phase = 0;
+for (const arg of args) {
+if (typeof arg === "number") {
+magnitude *= arg;
+} else {
+magnitude *= arg.magnitude;
+phase += arg.phase;
+}
+}
+return this.fromPolar(magnitude, phase);
+}
+mul(...others) {
+return this.constructor.mul(this, ...others);
+}
+div(other) {
+if (typeof other === "number") {
+return new this.constructor(this.magnitude * other, this.phase);
+} else {
+return new this.constructor(
+this.magnitude / other.magnitude,
+this.phase - other.phase,
+);
+}
+}
+static add(...args) {
+let x = 0;
+let y = 0;
+for (const arg of args) {
+x += arg.x;
+y += arg.y;
+}
+return this.fromCartesian(x, y);
+}
+add(...others) {
+return this.constructor.add(this, ...others);
+}
+static sub(z1, z2) {
+return this.fromCartesian(z1.x - z2.x, z1.y - z2.y);
+}
+sub(other) {
+return this.constructor.fromCartesian(this.x - other.x, this.y - other.y);
+}
+static exp(z) {
+if (typeof z === "number") {
+return Math.exp(z);
+}
+return z.exp();
+}
+exp() {
+const magnitude = Math.exp(this.x);
+const phase = this.y;
+return Complex.fromPolar(magnitude, phase);
+}
+static cis(z) {
+if (typeof z === "number") {
+return Complex.fromReal(z).cis();
+}
+return z.cis();
+}
+cis() {
+return Complex.fromCartesian(0, 1).mul(this).exp();
+}
+pow(realNumber) {
+const magnitude = Math.pow(this._$r, realNumber);
+const phase = this._$theta * realNumber;
+return this.constructor.fromPolar(magnitude, phase);
+}
+}
+Complex.i = Complex.fromImag(1);
+const z1 = Complex.fromCartesian(3, 4);
+const z2 = Complex.fromPolar(2, Math.PI / 6);
+const WIDTH = 400;
+const HEIGHT = 400;
+const plot = d3.select("#plot").attr("width", WIDTH).attr("height", HEIGHT);
+function k(m, en) {
+Complex.mul(2, m, en).pow(0.5);
+}
+function a2(chi, k, a, b) {
+chi = Complex.from(chi);
+k = Complex.from(k);
+a = Complex.from(a);
+b = Complex.from(b);
+const numerator = Complex.mul(
+-1,
+Complex.mul(-2, b, k).cis(),
+Complex.sub(Complex.mul(2, a, chi).exp(), Complex.mul(2, b, chi).exp()),
+Complex.add(k.pow(2), chi.pow(2)),
+Complex.add(
+Complex.mul(
+Complex.add(Complex.i.mul(4, a, k), Complex.mul(2, b, chi)).exp(),
+Complex.sub(k, Complex.i.mul(chi)).pow(2),
+),
+Complex.mul(
+-1,
+Complex.mul(2, a, Complex.i.mul(2, k).add(chi).exp()),
+Complex.sum(k, Complex.i.mul(chi)).pow(2),
+),
+),
+);
+}
+function a3() {}
+function a4() {}
+function a5() {}
+function a6() {}
+function a7() {}
+function a8() {}
+function a9() {}
+function $xi(m, en, a) {
+return Complex.mul(2, m, en, a.pow(2)).pow(0.5);
+}
+function $chi() {}
+function circle(m, en, a, V) {
+return Complex.mul(2, m, V, a.pow(2)).sub($xi(m, en, a).pow(2)).pow(0.5);
+}
+function $psi(m, en, V, a, b, x) {
+const k_m_en = k(m, en);
+const chi_m_en_V = $chi(m, en, V);
+if (x <= -b) {
+return Complex.add(
+Complex.mul(k_m_en, x).cis(),
+Complex.mul(a2(chi_m_en_V, k_m_en, a, b), Complex.mul(k_m_en, x, -1).cis()),
+);
+} else if (x <= -a) {
+return Complex.add(
+Complex.mul(a3(chi_m_en_V, k_m_en, a, b), Complex.mul(chi_m_en_V, x).exp()),
+Complex.mul(
+a4(chi_m_en_V, k_m_en, a, b),
+Complex.mul(-1, chi_m_en_V, x).exp(),
+),
+);
+} else if (x <= a) {
+return Complex.add(
+Complex.mul(a5(chi_m_en_V, k_m_en, a, b), Complex.mul(k_m_en, x).cis()),
+Complex.mul(a6(chi_m_en_V, k_m_en, a, b), Complex.mul(-1, k_m_en, x).cis()),
+);
+} else if (x <= b) {
+return Complex.add(
+Complex.mul(a7(chi_m_en_V, k_m_en, a, b), Complex.mul(chi_m_en_V, x).exp()),
+Complex.mul(
+a8(chi_m_en_V, k_m_en, a, b),
+Complex.mul(-1, chi_m_en_V, x).exp(),
+),
+);
+} else {
+return Complex.mul(a9(chi_m_en_V, k_m_en, a, b), Complex.mul(k_m_en, x).cis());
+}
+}
+</script>
+</body>
+</html>

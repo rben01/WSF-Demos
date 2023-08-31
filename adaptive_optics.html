@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<title>Adaptive Optics</title>
+
+<head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+
+<body>
+    <div>
+        <button id="advance" onclick="advance()">Advance</button>
+        <button id="reset" onclick="render()">Reset</button>
+    </div>
+    <br>
+    <svg xmlns="https://www.w3.org/2000/svg" id="svg" width=1200 height=450></svg>
+    <script>
+        var svg = d3.select("#svg");
+        svg.append("rect").attr("width", "100%").attr("height", "100%").attr("fill", "black")
+        var g = svg.append("g"),
+            height = svg.style("height").replace("px", ""),
+            width = svg.style("width").replace("px", ""),
+            data = [],
+            sig_lines,
+            y,
+            step,
+            star,
+            artstar,
+            defmir;
+        const arcgen = d3.arc().outerRadius(26).innerRadius(25).startAngle(-Math.PI / 2).endAngle(Math.PI / 2),
+            linegen = d3.line().curve(d3.curveCardinal);
+        for (var i = 0; i < 6; i++) {
+            data.push(Math.floor(Math.random() * 50));
+        }
+
+        function path(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, d[i]]);
+            }
+            return (ar);
+        }
+
+        function invpath(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, 50 - d[i] + 10 * i]);
+            }
+            return (ar);
+        }
+
+        function starpath(d) {
+            var ar = [];
+            for (var i = 0; i < d.length; i++) {
+                ar.push([20 * i, 50 - d[i]]);
+            }
+            d[2] = Math.min(50, d[2] + 15);
+            return (ar);
+        }
+
+        function render() {
+            g.selectAll("*").remove();
+            d3.select("#advance").attr("disabled", null);
+            sig_lines = [];
+            step = 0;
+            g.append("line").attr("x1", 100).attr("x2", 300).attr("y1", height).attr("y2", height).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 300).attr("x2", 300).attr("y1", height).attr("y2", height - 100).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 300).attr("y1", height - 100).attr("y2", height - 100).attr("stroke", "white");
+            g.append("path").attr("transform", "translate(150, " + (height - 100) + ")").attr("d", arcgen()).attr("stroke", "white");
+            g.append("polyline")
+                .attr("points", "200 " + height + ", 200 " + (height - 75) + ", 300 " + (height - 50) + ", 200 " + (height - 25))
+                .style("stroke", "white");
+            g.append("text").attr("x", 350).attr("y", height - 50).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Telescope");
+            g.append("text").attr("x", 50).attr("y", height - 100).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Observatory");
+            defmir = g.append("path")
+                .attr("transform", "translate(100, " + (height - 75) + ")")
+                .attr("stroke", "lightgrey")
+                .attr("d", linegen(invpath([50, 50, 50, 50, 50, 50])));
+            g.append("text").attr("x", 150).attr("y", height - 5).style("text-anchor", "middle").style("fill", "white").attr("font-size", "12").text("Deformable mirror");
+            for (var i = 0; i < width / 50; i++) {
+                g.append("circle").style("fill", "yellow").attr("r", 2).attr("cx", 50 * i + 50).attr("cy", i == 2 ? height - 350 : height - 250 - Math.floor(200 * Math.random()));
+            }
+        }
+
+        function advance() {
+            if (step == 0) {
+                trans();
+            }
+            else if (step == 1) {
+                trans2();
+            }
+            else if (step == 2) {
+                trans3();
+                d3.select("#advance").attr("disabled", "disabled");
+            }
+        }
+
+        function trans() {
+            sig_lines.push(g.append("line").attr("x1", 150).attr("x2", 150).attr("y1", height - 350).attr("y2", height - 350).attr("stroke", "yellow"));
+            sig_lines.push(g.append("line").attr("x1", 150).attr("x2", 150).attr("y1", height - 50).attr("y2", height - 50).attr("stroke", "yellow"));
+            sig_lines[0].transition().duration(1000).attr("y1", height - 50);
+            sig_lines[1].transition().delay(1000).duration(500).attr("x2", 200);
+            g.append("line").attr("x1", 100).attr("x2", 200).attr("y1", height - 350).attr("y2", height - 350).attr("stroke", "white");
+            g.append("line").attr("x1", 100).attr("x2", 100).attr("y1", height - 350).attr("y2", height - 400).attr("stroke", "white");
+            g.append("text").attr("x", 50).attr("y", height - 375).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").text("Observed signal");
+            star = g.append("path")
+                .attr("transform", "translate(100, " + (height - 400) + ")")
+                .attr("stroke", "yellow")
+                .attr("d", linegen(starpath(data)));
+
+            step = 1;
+        }
+
+        function trans2() {
+            g.append("line").attr("x1", 168).attr("x2", 168).attr("y1", height - 119).attr("y2", height - 119).attr("stroke", "red").transition().duration(1000).attr("x2", 318).attr("y2", height - 219);
+            g.append("line").attr("x1", 268).attr("x2", 268).attr("y1", height - 219).attr("y2", height - 219).attr("stroke", "white").transition().delay(1000).attr("x2", 368);
+            g.append("line").attr("x1", 268).attr("x2", 268).attr("y1", height - 219).attr("y2", height - 219).attr("stroke", "white").transition().delay(1000).attr("y2", height - 269);
+            g.append("text").attr("x", 218).attr("y", height - 254).style("text-anchor", "middle").style("fill", "white").attr("font-size", "15").transition().delay(1000).text("Reference star");
+            g.append("text").attr("x", 268).attr("y", height - 158).style("text-anchor", "start").style("fill", "white").attr("font-size", "15").text("Laser");
+            artstar = g.append("path")
+                .attr("transform", "translate(268, " + (height - 269) + ")")
+                .attr("stroke", "red");
+            artstar.transition().delay(1000).attr("d", linegen(path(data)));
+
+            step = 2;
+        }
+
+        function trans3() {
+            step = 3;
+        }
+
+        function animate() {
+            data.shift();
+            data.push(Math.floor(Math.random() * 50));
+            if (step > 0) {
+                if (step < 3) {
+                    star.transition().duration(1000).attr("d", linegen(starpath(data)));
+                    defmir.transition().duration(1000).attr("d", linegen(invpath([50, 50, 50, 50, 50, 50])));
+                }
+                else {
+                    star.transition().duration(1000).attr("d", linegen(starpath([0, 15, 0, 0, 0, 0])));
+                    defmir.transition().duration(1000).attr("d", linegen(invpath(data)));
+                    y = height - 75 + (invpath(data)[2][1] + invpath(data)[3][1]) / 2;
+                    sig_lines[0].transition().duration(1000).attr("y1", y);
+                    sig_lines[1].transition().duration(1000).attr("y1", y).attr("y2", y);
+                }
+                artstar.transition().duration(1000).attr("d", linegen(path(data)));
+            }
+        }
+
+        render();
+        d3.interval(animate, 1000);
+    </script>
+</body>

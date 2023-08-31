@@ -1,0 +1,51 @@
+0: 1/Sqrt[m \[Omega]]
+
+1: 2 x
+
+2: (4 m x^2 \[Omega]-2 \[HBar])/Sqrt[m \[Omega]]
+
+3: 8 m x^3 \[Omega]-12 x \[HBar]
+
+4: (4 (4 m^2 x^4 \[Omega]^2-12 m x^2 \[Omega] \[HBar]+3 \[HBar]^2))/Sqrt[m \[Omega]]
+
+5: 8 (4 m^2 x^5 \[Omega]^2-20 m x^3 \[Omega] \[HBar]+15 x \[HBar]^2)
+
+6: (8 (8 m^3 x^6 \[Omega]^3-60 m^2 x^4 \[Omega]^2 \[HBar]+90 m x^2 \[Omega] \[HBar]^2-15 \[HBar]^3))/Sqrt[m \[Omega]]
+
+7: 16 (8 m^3 x^7 \[Omega]^3-84 m^2 x^5 \[Omega]^2 \[HBar]+210 m x^3 \[Omega] \[HBar]^2-105 x \[HBar]^3)
+
+8: (16 (16 m^4 x^8 \[Omega]^4-224 m^3 x^6 \[Omega]^3 \[HBar]+840 m^2 x^4 \[Omega]^2 \[HBar]^2-840 m x^2 \[Omega] \[HBar]^3+105 \[HBar]^4))/Sqrt[m \[Omega]]
+
+9: 32 (16 m^4 x^9 \[Omega]^4-288 m^3 x^7 \[Omega]^3 \[HBar]+1512 m^2 x^5 \[Omega]^2 \[HBar]^2-2520 m x^3 \[Omega] \[HBar]^3+945 x \[HBar]^4)
+
+10: (32 (32 m^5 x^10 \[Omega]^5-720 m^4 x^8 \[Omega]^4 \[HBar]+5040 m^3 x^6 \[Omega]^3 \[HBar]^2-12600 m^2 x^4 \[Omega]^2 \[HBar]^3+9450 m x^2 \[Omega] \[HBar]^4-945 \[HBar]^5))/Sqrt[m \[Omega]]
+
+11: 64 (32 m^5 x^11 \[Omega]^5-880 m^4 x^9 \[Omega]^4 \[HBar]+7920 m^3 x^7 \[Omega]^3 \[HBar]^2-27720 m^2 x^5 \[Omega]^2 \[HBar]^3+34650 m x^3 \[Omega] \[HBar]^4-10395 x \[HBar]^5)
+
+12: (64 (64 m^6 x^12 \[Omega]^6-2112 m^5 x^10 \[Omega]^5 \[HBar]+23760 m^4 x^8 \[Omega]^4 \[HBar]^2-110880 m^3 x^6 \[Omega]^3 \[HBar]^3+207900 m^2 x^4 \[Omega]^2 \[HBar]^4-124740 m x^2 \[Omega] \[HBar]^5+10395 \[HBar]^6))/Sqrt[m \[Omega]]
+
+13: 128 (64 m^6 x^13 \[Omega]^6-2496 m^5 x^11 \[Omega]^5 \[HBar]+34320 m^4 x^9 \[Omega]^4 \[HBar]^2-205920 m^3 x^7 \[Omega]^3 \[HBar]^3+540540 m^2 x^5 \[Omega]^2 \[HBar]^4-540540 m x^3 \[Omega] \[HBar]^5+135135 x \[HBar]^6)
+
+14: (1/Sqrt[m \[Omega]])128 (128 m^7 x^14 \[Omega]^7-5824 m^6 x^12 \[Omega]^6 \[HBar]+96096 m^5 x^10 \[Omega]^5 \[HBar]^2-720720 m^4 x^8 \[Omega]^4 \[HBar]^3+2522520 m^3 x^6 \[Omega]^3 \[HBar]^4-3783780 m^2 x^4 \[Omega]^2 \[HBar]^5+1891890 m x^2 \[Omega] \[HBar]^6-135135 \[HBar]^7)
+
+15: 256 (128 m^7 x^15 \[Omega]^7-6720 m^6 x^13 \[Omega]^6 \[HBar]+131040 m^5 x^11 \[Omega]^5 \[HBar]^2-1201200 m^4 x^9 \[Omega]^4 \[HBar]^3+5405400 m^3 x^7 \[Omega]^3 \[HBar]^4-11351340 m^2 x^5 \[Omega]^2 \[HBar]^5+9459450 m x^3 \[Omega] \[HBar]^6-2027025 x \[HBar]^7)
+
+16: (1/Sqrt[m \[Omega]])256 (256 m^8 x^16 \[Omega]^8-15360 m^7 x^14 \[Omega]^7 \[HBar]+349440 m^6 x^12 \[Omega]^6 \[HBar]^2-3843840 m^5 x^10 \[Omega]^5 \[HBar]^3+21621600 m^4 x^8 \[Omega]^4 \[HBar]^4-60540480 m^3 x^6 \[Omega]^3 \[HBar]^5+75675600 m^2 x^4 \[Omega]^2 \[HBar]^6-32432400 m x^2 \[Omega] \[HBar]^7+2027025 \[HBar]^8)
+
+17: 512 (256 m^8 x^17 \[Omega]^8-17408 m^7 x^15 \[Omega]^7 \[HBar]+456960 m^6 x^13 \[Omega]^6 \[HBar]^2-5940480 m^5 x^11 \[Omega]^5 \[HBar]^3+40840800 m^4 x^9 \[Omega]^4 \[HBar]^4-147026880 m^3 x^7 \[Omega]^3 \[HBar]^5+257297040 m^2 x^5 \[Omega]^2 \[HBar]^6-183783600 m x^3 \[Omega] \[HBar]^7+34459425 x \[HBar]^8)
+
+18: (1/Sqrt[m \[Omega]])512 (512 m^9 x^18 \[Omega]^9-39168 m^8 x^16 \[Omega]^8 \[HBar]+1175040 m^7 x^14 \[Omega]^7 \[HBar]^2-17821440 m^6 x^12 \[Omega]^6 \[HBar]^3+147026880 m^5 x^10 \[Omega]^5 \[HBar]^4-661620960 m^4 x^8 \[Omega]^4 \[HBar]^5+1543782240 m^3 x^6 \[Omega]^3 \[HBar]^6-1654052400 m^2 x^4 \[Omega]^2 \[HBar]^7+620269650 m x^2 \[Omega] \[HBar]^8-34459425 \[HBar]^9)
+
+19: 1024 (512 m^9 x^19 \[Omega]^9-43776 m^8 x^17 \[Omega]^8 \[HBar]+1488384 m^7 x^15 \[Omega]^7 \[HBar]^2-26046720 m^6 x^13 \[Omega]^6 \[HBar]^3+253955520 m^5 x^11 \[Omega]^5 \[HBar]^4-1396755360 m^4 x^9 \[Omega]^4 \[HBar]^5+4190266080 m^3 x^7 \[Omega]^3 \[HBar]^6-6285399120 m^2 x^5 \[Omega]^2 \[HBar]^7+3928374450 m x^3 \[Omega] \[HBar]^8-654729075 x \[HBar]^9)
+
+20: (1/Sqrt[m \[Omega]])1024 (1024 m^10 x^20 \[Omega]^10-97280 m^9 x^18 \[Omega]^9 \[HBar]+3720960 m^8 x^16 \[Omega]^8 \[HBar]^2-74419200 m^7 x^14 \[Omega]^7 \[HBar]^3+846518400 m^6 x^12 \[Omega]^6 \[HBar]^4-5587021440 m^5 x^10 \[Omega]^5 \[HBar]^5+20951330400 m^4 x^8 \[Omega]^4 \[HBar]^6-41902660800 m^3 x^6 \[Omega]^3 \[HBar]^7+39283744500 m^2 x^4 \[Omega]^2 \[HBar]^8-13094581500 m x^2 \[Omega] \[HBar]^9+654729075 \[HBar]^10)
+
+21: 2048 (1024 m^10 x^21 \[Omega]^10-107520 m^9 x^19 \[Omega]^9 \[HBar]+4596480 m^8 x^17 \[Omega]^8 \[HBar]^2-104186880 m^7 x^15 \[Omega]^7 \[HBar]^3+1367452800 m^6 x^13 \[Omega]^6 \[HBar]^4-10666131840 m^5 x^11 \[Omega]^5 \[HBar]^5+48886437600 m^4 x^9 \[Omega]^4 \[HBar]^6-125707982400 m^3 x^7 \[Omega]^3 \[HBar]^7+164991726900 m^2 x^5 \[Omega]^2 \[HBar]^8-91662070500 m x^3 \[Omega] \[HBar]^9+13749310575 x \[HBar]^10)
+
+22: (1/Sqrt[m \[Omega]])2048 (2048 m^11 x^22 \[Omega]^11-236544 m^10 x^20 \[Omega]^10 \[HBar]+11235840 m^9 x^18 \[Omega]^9 \[HBar]^2-286513920 m^8 x^16 \[Omega]^8 \[HBar]^3+4297708800 m^7 x^14 \[Omega]^7 \[HBar]^4-39109150080 m^6 x^12 \[Omega]^6 \[HBar]^5+215100325440 m^5 x^10 \[Omega]^5 \[HBar]^6-691393903200 m^4 x^8 \[Omega]^4 \[HBar]^7+1209939330600 m^3 x^6 \[Omega]^3 \[HBar]^8-1008282775500 m^2 x^4 \[Omega]^2 \[HBar]^9+302484832650 m x^2 \[Omega] \[HBar]^10-13749310575 \[HBar]^11)
+
+23: 4096 (2048 m^11 x^23 \[Omega]^11-259072 m^10 x^21 \[Omega]^10 \[HBar]+13601280 m^9 x^19 \[Omega]^9 \[HBar]^2-387636480 m^8 x^17 \[Omega]^8 \[HBar]^3+6589820160 m^7 x^15 \[Omega]^7 \[HBar]^4-69193111680 m^6 x^13 \[Omega]^6 \[HBar]^5+449755225920 m^5 x^11 \[Omega]^5 \[HBar]^6-1766895530400 m^4 x^9 \[Omega]^4 \[HBar]^7+3975514943400 m^3 x^7 \[Omega]^3 \[HBar]^8-4638100767300 m^2 x^5 \[Omega]^2 \[HBar]^9+2319050383650 m x^3 \[Omega] \[HBar]^10-316234143225 x \[HBar]^11)
+
+24: (1/Sqrt[m \[Omega]])4096 (4096 m^12 x^24 \[Omega]^12-565248 m^11 x^22 \[Omega]^11 \[HBar]+32643072 m^10 x^20 \[Omega]^10 \[HBar]^2-1033697280 m^9 x^18 \[Omega]^9 \[HBar]^3+19769460480 m^8 x^16 \[Omega]^8 \[HBar]^4-237233525760 m^7 x^14 \[Omega]^7 \[HBar]^5+1799020903680 m^6 x^12 \[Omega]^6 \[HBar]^6-8481098545920 m^5 x^10 \[Omega]^5 \[HBar]^7+23853089660400 m^4 x^8 \[Omega]^4 \[HBar]^8-37104806138400 m^3 x^6 \[Omega]^3 \[HBar]^9+27828604603800 m^2 x^4 \[Omega]^2 \[HBar]^10-7589619437400 m x^2 \[Omega] \[HBar]^11+316234143225 \[HBar]^12)
+
+25: 8192 (4096 m^12 x^25 \[Omega]^12-614400 m^11 x^23 \[Omega]^11 \[HBar]+38860800 m^10 x^21 \[Omega]^10 \[HBar]^2-1360128000 m^9 x^19 \[Omega]^9 \[HBar]^3+29072736000 m^8 x^17 \[Omega]^8 \[HBar]^4-395389209600 m^7 x^15 \[Omega]^7 \[HBar]^5+3459655584000 m^6 x^13 \[Omega]^6 \[HBar]^6-19275223968000 m^5 x^11 \[Omega]^5 \[HBar]^7+66258582390000 m^4 x^9 \[Omega]^4 \[HBar]^8-132517164780000 m^3 x^7 \[Omega]^3 \[HBar]^9+139143023019000 m^2 x^5 \[Omega]^2 \[HBar]^10-63246828645000 m x^3 \[Omega] \[HBar]^11+7905853580625 x \[HBar]^12)
