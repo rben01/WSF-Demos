@@ -23,6 +23,8 @@ anim*.mp4
 *.toc
 *.xdv
 
+QM Course Materials/Animations/media
+
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/snippets.code-snippets
