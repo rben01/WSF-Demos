@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<link rel="stylesheet" href="../../qm_demo.css" />
+		<style>
+			.grid-left-right {
+				grid-template-columns: 15em 1fr;
+				column-gap: 50px;
+			}
+			.button {
+				width: 100%;
+			}
+			.header {
+				font-size: 110%;
+			}
+			.v-divider {
+				height: 20px;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="grid-left-right">
+			<div class="controls-container">
+				<div class="controls">
+					<span
+						>Wavelength of light:
+						<span id="text-wavelength" class="sci-num"></span>nm</span
+					>
+					<span><input type="range" id="slider-wavelength" /></span>
+					<span
+						>Slit separation:
+						<span id="text-slit-sep" class="sci-num"></span>μm</span
+					>
+					<span><input type="range" id="slider-slit-sep" /></span>
+					<span
+						>Slit width:
+						<span id="text-slit-width" class="sci-num"></span>μm</span
+					>
+					<span><input type="range" id="slider-slit-width" /></span>
+					<span
+						>Photons per second:
+						<span id="text-num-photons" class="sci-num"></span
+					></span>
+					<span><input type="range" id="slider-num-photons" /></span>
+					<span></span>
+					<span class="radio-button-container horizontal manual-radio-buttons"
+						><button class="button" id="btn-run" onclick="run()">Run</button
+						><button
+							class="button"
+							id="btn-pause"
+							onclick="pause()"
+							data-button-checked
+						>
+							Pause</button
+						><button
+							class="button"
+							id="btn-reset"
+							onclick="reset()"
+							data-button-checked
+						>
+							Reset
+						</button></span
+					>
+				</div>
+			</div>
+			<div>
+				<div><span class="header">Expected intensity</span></div>
+				<div><canvas id="plot-expected"></canvas></div>
+				<div class="v-divider"></div>
+				<div><span class="header">Actual photon detections</span></div>
+				<div><canvas id="plot-actual"></canvas></div>
+			</div>
+		</div>
+		<script src="../../../utils.js"></script>
+		<script src="./wave_particle_duality_double_slit.js"></script>
+	</body>
+</html>
