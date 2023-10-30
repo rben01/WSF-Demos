@@ -24,6 +24,7 @@ anim*.mp4
 *.xdv
 
 QM Course Materials/Animations/media
+QM Course Materials/Manim Animations/media
 
 !.vscode/tasks.json
 !.vscode/launch.json
