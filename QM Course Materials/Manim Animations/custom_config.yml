@@ -14,7 +14,7 @@ camera_qualities:
     frame_rate: 60
     resolution: 3840x2160
 directories:
-  mirror_module_path: false
+  mirror_module_path: true
   output: media
   raster_images: assets/image
   sounds: assets/audio

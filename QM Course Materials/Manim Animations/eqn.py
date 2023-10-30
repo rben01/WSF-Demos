@@ -187,4 +187,13 @@ class Tex2(ma.Scene):
         self.wait()
 
 
-# %%
+if __name__ == "__main__":
+    for class_ in [Tex1, Tex2]:
+        with ma.tempconfig(
+            {
+                "quality": "fourk_quality",
+                "input_file": "eqn",
+                "preview": True,
+            }
+        ):
+            _ = class_().render()
