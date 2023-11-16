@@ -1,0 +1,75 @@
+:stem: latexmath
+:docinfo: shared
+:customcss: ./theme.css
+:linkcss:
+:revealjs_theme: black
+:revealjs_progress: false
+:revealjs_transition: none
+:revealjs_controlsLayout: edges
+:revealjs_controlsTutorial: false
+:revealjs_disablelayout: true
+:revealjs_center: false
+:revealjs_navigationMode: linear
+:revealjs_history: true
+
+[.title]
+== Quantum Mechanics
+
+Brian Greene +
+Professor of Physics & Mathematics +
+Columbia University
+
+[.columns.wrap]
+[.stretch]
+== Harmonic Oscillator
+
+[.column.is-one-third]
+--
+[stem.fade-right, step=1]
+++++
+F = -kx
+++++
+[stem.fade-right, step=5]
+++++
+F = ma
+++++
+[stem.fade-right, step=6]
+++++
+m \frac{d^2 x}{dt^2} = -kx
+++++
+--
+
+[.column.is-one-third]
+--
+[step=2]
+video::out.mp4[height=400,opts="autoplay,nocontrols"]
+--
+
+[.column.is-one-third]
+--
+[stem.fade-left, step=3]
+++++
+F = - \frac{\partial V}{\partial x} 
+++++
+[stem.fade-left, step=4]
+++++
+\Rightarrow V(x) = \frac{1}{2}kx^2
+++++
+--
+
+[.column.is-full]
+--
+[.step]#Classical solutions:# [.step]#stem:[\quad x(t) = A\sin(\omega t)+B\cos(\omega t)]# [.step]#stem:[, \quad \omega=\sqrt{\frac{k}{m}}]#
+
+[.step]#Importance:# [.step]#stem:[\quad V(x) = V(x_0) + 0 + \frac{1}{2}k(x-x_0)^2 + \ldots]# [.step]#stem:[, \quad k = \left. \frac{\partial^2V}{\partial x^2} \right|_{x_0}]#
+
+{nbsp}
+--
+
+[.column.is-one-third.centered]
+[%step]
+[sidebar]
+====
+Classically
+====
+

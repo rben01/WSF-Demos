@@ -1,0 +1,133 @@
+:root {
+	--accent-color: #42affa;
+	--title-underline-color: var(--accent-color);
+	--bright-color: #7cd8ff;
+	--highlight-color: rgb(255, 236, 0);
+
+	--r-main-font: "Inter Var", Helvetica, sans-serif;
+	--r-heading-font: var(--r-main-font);
+}
+
+body.reveal-viewport {
+	background: black;
+}
+
+.reveal .slides:has(.title:not(.past)) {
+	/* to vertically center the title slide (when combined with align-self: center) */
+	display: flex;
+}
+
+.reveal :is(.columns, .columns > .content) {
+	display: flex;
+	flex-direction: row;
+}
+
+.reveal .columns > .content {
+	width: 100%;
+	text-align: center;
+}
+
+.reveal .columns .column.imageblock {
+	justify-content: stretch;
+}
+
+.reveal .columns .column {
+	display: block;
+	flex: 1 0 0%;
+}
+
+.reveal .columns .slide-content > .paragraph {
+	height: max-content;
+}
+
+.reveal .columns.wrap-cols .slide-content {
+	flex-wrap: wrap;
+}
+
+.reveal .columns.wrap-cols .slide-content > .paragraph:first-child {
+	width: 100%;
+}
+
+.reveal .columns > .slide-content > div:not(.column) {
+	flex-grow: 1;
+	flex-shrink: 0;
+	flex-basis: 100%;
+}
+
+.reveal .title.present {
+	height: 75%;
+	align-self: center;
+	vertical-align: bottom;
+	display: grid !important;
+	grid-template-columns: 1fr 1fr;
+	align-items: stretch;
+	align-content: stretch;
+	color: var(--bright-color);
+}
+
+.reveal .title.present h2 {
+	display: flex;
+	align-items: center;
+	text-align: right;
+	justify-self: right;
+	margin: 0;
+	padding-right: 40px;
+	border-bottom: none;
+	font-size: 72px;
+	width: min-content;
+	color: var(--bright-color);
+	border-right: 1px solid var(--bright-color);
+}
+
+.reveal .title.present .slide-content {
+	display: flex;
+	align-items: center;
+	text-align: left;
+	justify-self: left;
+	margin: 0;
+	padding-left: 40px;
+	font-size: 28px;
+	width: 80%;
+	border-left: 1px solid var(--bright-color);
+}
+
+.reveal h1 {
+	vertical-align: middle;
+	text-align: center;
+}
+
+.reveal h2 {
+	font-size: 48px;
+	margin-right: 40px;
+	text-align: left;
+	padding-left: 50px;
+	margin-top: 10px;
+	border-bottom: 10px double var(--title-underline-color);
+}
+.reveal .slide-content {
+	text-align: left;
+	margin: 0 70px;
+}
+
+.exampleblock {
+	color: var(--highlight-color);
+	text-align: center;
+	margin: 0 auto;
+	padding: 0 80px;
+	width: max-content;
+	max-width: 80%;
+	border: 2px solid var(--highlight-color);
+	border-radius: 8px;
+}
+
+.hl {
+	color: var(--highlight-color);
+}
+
+.reveal :is(ul, ol) > li > p {
+	--r-block-margin: 8px;
+}
+
+.columns .slide-content > .column > * {
+	padding: revert;
+}

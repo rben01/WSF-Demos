@@ -1,0 +1,163 @@
+:stem: latexmath
+:docinfo: shared
+:customcss: ./theme.css
+:linkcss:
+:revealjs_theme: black
+:revealjs_progress: false
+:revealjs_transition: none
+:revealjs_controlsLayout: edges
+:revealjs_controlsTutorial: false
+:revealjs_disablelayout: true
+:revealjs_center: false
+:revealjs_navigationMode: linear
+:revealjs_history: true
+
+[.title]
+== Quantum Mechanics
+
+Brian Greene +
+Professor of Physics & Mathematics +
+Columbia University
+
+[.columns.wrap]
+[.stretch]
+== Harmonic Oscillator
+
+[.column.is-one-third]
+--
+[stem.fade-right, step=1]
+++++
+F = -kx
+++++
+[stem.fade-right, step=5]
+++++
+F = ma
+++++
+[stem.fade-right, step=6]
+++++
+m \frac{d^2 x}{dt^2} = -kx
+++++
+--
+
+[.column.is-one-third]
+--
+[step=2]
+video::out.mp4[height=400,opts="autoplay,nocontrols"]
+--
+
+[.column.is-one-third]
+--
+[stem.fade-left, step=3]
+++++
+F = - \frac{\partial V}{\partial x} 
+++++
+[stem.fade-left, step=4]
+++++
+\Rightarrow V(x) = \frac{1}{2}kx^2
+++++
+--
+
+[.column.is-full]
+--
+[.step]#Classical solutions:# [.step]#stem:[\quad x(t) = A\sin(\omega t)+B\cos(\omega t)]# [.step]#stem:[, \quad \omega=\sqrt{\frac{k}{m}}]#
+
+[.step]#Importance:# [.step]#stem:[\quad V(x) = V(x_0) + 0 + \frac{1}{2}k(x-x_0)^2 + \ldots]# [.step]#stem:[, \quad k = \left. \frac{\partial^2V}{\partial x^2} \right|_{x_0}]#
+
+{nbsp}
+--
+
+[.column.is-one-third.centered]
+[%step]
+[sidebar]
+====
+Classically
+====
+
+[.stretch]
+== Harmonic Oscillator
+
+[%step]
+[sidebar]
+====
+Quantum Mechanically
+====
+[%step]
+[stem]
+++++
+\fragment{-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}}\fragment{+\frac{1}{2}m\omega^2\psi}\fragment{=E\psi}
+++++
+
+[%step]
+Solve: 
+. Brute force DEQ
+. Algebraic 
+[%step]
+Clever Approach (Dirac)
+
+== Special Relativity
+
+[%step]
+* REALITY has unexpected features that become manifest at high speeds.
+[%step]
+** From the perspective of stationary observer:
+[%step]
+*** Moving clocks run slow (by factor of ++\(\gamma=1/\sqrt{1-v^2/c^2}\)++)
+*** Moving objects appear shortened (by factor of ++\(\gamma\)++)
+*** Moving object’s mass grows with speed (by factor ++\(\gamma\)++)
+
+== Twin Paradox
+
+[%step]
+* Final thought
+* Who is moving
+
+[%step]
+[sidebar]
+====
+The Twin “Paradox”
+====
+
+[%step]
+* Usual solution: to compare watches, one twin must accelerate
+* New twist: Spatial direction is compact, say a circular dimension
+
+== INSERT TITLE HERE
+
+[sidebar]
+====
+NEED ANIMATION OF TWO OBSERVERS ON A CIRCLE IN RELATIVE MOTION
+====
+
+== Compact Twin Paradox
+
+* [.hl]#Qualitative Solution#
+
+== INSERT TITLE HERE
+
+[sidebar]
+====
+ANIMATION: LIGHT BEAM ANIMATION. LEFT AND RIGHT BEAMS
+====
+
+== Compact Twin Paradox
+
+* [.hl]#Qualitative Solution#
+** There is a [.hl]#preferred# frame of reference
+** All other frames of reference are in motion relative to preferred frame
+
+[.columns.wrap-cols]
+== Special Relativity on a circle: Mathematical Setup
+
+[.column]
+* Spacetime diagrams
+** Traversing the circle, identify ++\(z\to z+2\pi R\)++
+** Yellow dots on same horizontal time slice are identified as the same point (by all observers)
++
+[.columns]
+--
+[.column]
+image::./imgs/graph-1.jpg[width=500px]
+
+[.column]
+image::./imgs/graph-2.jpg[width=500px]
+--

@@ -1,0 +1,40 @@
+{
+	"name": "asciidoc-slides-test",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"type": "commonjs",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "npx asciidoctor-revealjs bg-slides.adoc",
+		"build-themes": "cd reveal.js && npx gulp css-themes"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"@asciidoctor/reveal.js": "^5.0.0-rc.1",
+		"asciidoctor": "^2.2.6"
+	},
+	"devDependencies": {
+		"@rollup/plugin-babel": "^6.0.3",
+		"@rollup/plugin-commonjs": "^24.0.1",
+		"@rollup/plugin-node-resolve": "^15.0.1",
+		"@rollup/plugin-terser": "^0.4.0",
+		"asciidoctor-katex": "^0.4.1",
+		"gulp": "^4.0.2",
+		"gulp-autoprefixer": "^8.0.0",
+		"gulp-clean-css": "^4.3.0",
+		"gulp-connect": "^5.7.0",
+		"gulp-eslint": "^6.0.0",
+		"gulp-header": "^2.0.9",
+		"gulp-tap": "^2.0.0",
+		"gulp-zip": "^5.1.0",
+		"load-grunt-tasks": "^5.1.0",
+		"node-qunit-puppeteer": "^2.1.2",
+		"node-sass": "^8.0.0",
+		"reveal.js": "^4.4.0",
+		"rollup": "^3.19.1",
+		"sass": "^1.59.2",
+		"watch": "^1.0.2"
+	}
+}

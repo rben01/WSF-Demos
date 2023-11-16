@@ -1,0 +1,90 @@
+= Title Slide
+:stem: latexmath
+:docinfo: shared
+:customcss: ./theme.css
+:linkcss:
+:revealjs_theme: black
+:revealjs_progress: false
+:revealjs_transition: none
+:revealjs_controlsLayout: edges
+:revealjs_controlsTutorial: false
+:revealjs_disablelayout: true
+:revealjs_center: false
+:revealjs_navigationMode: linear
+
+== LaTeX Test
+
+[.step]#LaTeX# [.step]#will# [.step]#appear#
+
+stem:[\displaystyle\fragment{\sum_{n=1}^\infty}\fragment{\frac{1}{n^2}}\fragment{=}\fragment{\frac{\pi^2}{6}}]
+
+[stem]
+++++
+\fragment{i\hbar \frac{\partial}{\partial t}\left|\Psi\right\rangle =\hat H\left|\Psi\right\rangle}
+++++
+
+[.notes]
+--
+* First we start off with a summation
+* Then we have the Schrödinger Equation
+--
+
+== Slide One
+
+[%step]
+* this
+* is
+* revealed
+* gradually
+
+[%step]
+[.highlight-current-blue.step]#the# [.highlight-current-blue.step]#highlight# [.highlight-current-blue.step]#advances#
+
+[#images]
+== Images
+
+Asciidoctor Reveal.js supports images
+
+[.center]
+--
+[.step]##image:https://upload.wikimedia.org/wikipedia/commons/f/f8/Bundesarchiv_Bild183-R57262%2C_Werner_Heisenberg.jpg[height=400]##
+[.step]##image:https://upload.wikimedia.org/wikipedia/commons/2/2e/Erwin_Schrödinger_%281933%29.jpg[height=400]##
+[.step]##image:https://upload.wikimedia.org/wikipedia/commons/6/6d/Niels_Bohr.jpg[height=400]##
+[.step]##image:https://upload.wikimedia.org/wikipedia/commons/a/a7/Max_Planck_%281858-1947%29.jpg[height=400]##
+--
+
+[#videos.columns.wrap-cols]
+== Columns and Videos
+
+Asciidoctor Reveal.js supports columns and videos
+
+[.column%step]
+--
+This is a video (click to play):
+
+video::RDVgfFzZVsA[youtube, width=400, height=300]
+--
+
+[.column%step]
+--
+This is a video that autoplays, has minimal branding, no visible controls, and plays muted:
+
+video::MD-O4Gpx74s[youtube, width=400, height=300, options="autoplay,modest,nocontrols,nofullscreen,muted"]
+--
+
+== Interactive Content
+
+Interactive content, such as the quantum mechanics demonstrations, is supported
+
+
+[%notitle,background-iframe="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1663794423",src="",preload=""]
+== Interactive Content Demo
+
+== Final slide
+
+This is the final slide.
+
+For more information, visit https://docs.asciidoctor.org/reveal.js-converter/latest/[^].
+
+For another sample demonstration, see https://bentolor.github.io/java9to13/#/[here^].
+Note that it has vertical navigation as well as horizontal.
