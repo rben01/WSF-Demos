@@ -11,7 +11,7 @@ RB/src/demos/CDFs
 *.fdb_latexmk
 *.fls
 *.xdv
-node_modules/*
+node_modules
 anim*.mp4
 *.aux
 *.fdb_latexmk
