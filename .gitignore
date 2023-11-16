@@ -25,6 +25,8 @@ anim*.mp4
 
 QM Course Materials/Animations/media
 QM Course Materials/Manim Animations/media
+QM Course Materials/Manim Animations/quantum-test/media
+QM Course Materials/Manim Animations/quantum-test/Harmonic Oscillator Audio.m4a
 
 !.vscode/tasks.json
 !.vscode/launch.json
