@@ -40,7 +40,6 @@ from manim import (
     TexTemplate,
     ValueTracker,
     VGroup,
-    Write,
     rate_functions,
 )
 from numpy import cos, pi, sin
@@ -87,6 +86,19 @@ def QmTitle(*text_parts: str) -> Title:
         underline_buff=SMALL_BUFF,
         font_size=TITLE_FONT_SIZE,
     )
+
+
+def QmWrite(
+    m: Mobject,
+    run_time: float | None = None,
+    *,
+    lag_ratio: float = 0.9,
+    rate_func: Callable[[float], float] | None = None,
+) -> ma.Write:
+    if rate_func is None:
+        rate_func = rate_functions.linear
+
+    return ma.Write(m, run_time=run_time, lag_ratio=lag_ratio)
 
 
 def anim_pause(time: float) -> Animation:
@@ -157,7 +169,7 @@ class Qm1(QmScene):
             _ = self.add(NumberPlane())
 
         title = Tex("Harmonic Oscillator", font_size=TITLE_FONT_SIZE).to_edge(UP)
-        self.play(Write(title, lag_ratio=0.5, run_time=6))
+        self.play(QmWrite(title, 6, lag_ratio=0.5))
 
         underline = Line(*([sign * 3.3, TITLE_BOTTOM_Y, 0] for sign in (-1, 1)))
         self.play(Create(underline, run_time=0.8))
@@ -167,9 +179,9 @@ class Qm1(QmScene):
         self.pause(11)
 
         self.play(
-            Write(
+            QmWrite(
                 MathTex("F=-kx").to_edge(LEFT, H_PADDING).set_y(1, DOWN),
-                run_time=4,
+                4,
                 lag_ratio=1.5,
             )
         )
@@ -262,24 +274,24 @@ class Qm1(QmScene):
         self.wait()
         self.pause(3)
 
-        self.play(Write(f_tex, run_time=15, lag_ratio=0.7))
+        self.play(QmWrite(f_tex, 15, lag_ratio=0.7))
 
         self.wait()
         self.pause(2)
 
         self.play(
-            Write(MathTex("F=ma").to_edge(LEFT, H_PADDING).set_y(0, DOWN), run_time=3),
+            QmWrite(MathTex("F=ma").to_edge(LEFT, H_PADDING).set_y(0, DOWN), 3),
         )
 
         self.wait()
 
         self.play(
-            Write(
+            QmWrite(
                 MathTex(r"m\frac{d^2x}{dt^2}=-kx")
                 .to_edge(RIGHT, H_PADDING)
                 .set_y(0.6, UP),
+                10,
                 lag_ratio=1.75,
-                run_time=10,
             ),
         )
 
@@ -306,7 +318,7 @@ class Qm1(QmScene):
         animations = []
         for d in durations:
             if d > 0:
-                anim = Write(soln_tex[part_idx], run_time=d, lag_ratio=0.8)
+                anim = QmWrite(soln_tex[part_idx], run_time=d, lag_ratio=0.8)
                 part_idx += 1
             elif d < 0:
                 anim = anim_pause(-d)
@@ -326,7 +338,7 @@ class Qm1(QmScene):
         self.play(
             LaggedStart(
                 *(
-                    Write(Line([2, y, 0], [4.1, y, 0], color=INDICATOR_COLOR))
+                    QmWrite(Line([2, y, 0], [4.1, y, 0], color=INDICATOR_COLOR))
                     for y in (-2.6, -2.7)
                 ),
                 lag_ratio=0.5,
@@ -342,7 +354,7 @@ class Qm1(QmScene):
         self.play(
             LaggedStart(
                 *(
-                    Write(Line([5, y, 0], [6.1, y, 0], color=INDICATOR_COLOR))
+                    QmWrite(Line([5, y, 0], [6.1, y, 0], color=INDICATOR_COLOR))
                     for y in (1.02, 0.92)
                 ),
                 lag_ratio=0.5,
@@ -363,15 +375,15 @@ class Qm2(QmScene):
             _ = self.add(NumberPlane())
 
         title = QmTitle("Quantum Mechanically")
-        self.play(Write(title, lag_ratio=0.5, run_time=6))
+        self.play(QmWrite(title, 6, lag_ratio=0.5))
 
         self.wait()
         self.pause(17)
 
         schrodinger = MathTex(
-            r"-\tfrac{\hbar^2}{2m}\frac{d^2\Psi}{dt^2}+\tfrac{1}{2}m\omega^2x^2\Psi=E\Psi"
+            r"-\frac{\hbar^2}{2m}\frac{d^2\Psi}{dt^2}+\tfrac{1}{2}m\omega^2x^2\Psi=E\Psi"
         ).next_to(title, DOWN, V_PADDING)
-        self.play(Write(schrodinger, run_time=14, lag_ratio=0.8))
+        self.play(QmWrite(schrodinger, 16, lag_ratio=0.8))
 
         schrodinger_box = Rectangle(width=8, height=1.7, color=INDICATOR_COLOR).next_to(
             title, DOWN, V_PADDING - 0.3
@@ -380,7 +392,7 @@ class Qm2(QmScene):
 
         self.wait()
 
-        self.pause(18)
+        self.pause(16)
 
         solve_tex = (
             Tex("Solve:").next_to(schrodinger_box, DOWN, V_PADDING).set_x(-2, RIGHT)
@@ -397,11 +409,11 @@ class Qm2(QmScene):
         _ = solve_group.next_to(schrodinger_box, DOWN, buff=V_PADDING).set_x(0, ORIGIN)
 
         animations = [
-            Write(solve_tex, run_time=2, lag_ratio=0.9),
+            QmWrite(solve_tex, 2),
             anim_pause(4),
-            Write(brute_force, run_time=5, lag_ratio=0.9),
+            QmWrite(brute_force, 5),
             anim_pause(6),
-            Write(algebraic, run_time=4, lag_ratio=0.9),
+            QmWrite(algebraic, 4),
         ]
         for anim in animations:
             self.play(anim)
@@ -415,53 +427,47 @@ class Qm2(QmScene):
             _ = self.add(NumberPlane())
 
         title = QmTitle("Clever Approach (Dirac)")
-        self.play(Write(title), run_time=4)
+        self.play(QmWrite(title, 4))
         self.wait()
 
         self.pause(16)
 
-        with_ = (
-            Tex("With")
-            # .next_to(title, DOWN, buff=V_PADDING).to_edge(LEFT, H_PADDING)
-        )
-        note = (
-            Tex("Note:")
-            # .next_to(with_, DOWN, buff=V_PADDING).to_edge(LEFT, H_PADDING)
-        )
-        consider = (
-            Tex("Consider:")
-            # .next_to(note, DOWN, buff=V_PADDING)
-            # .to_edge(LEFT, H_PADDING)
-        )
+        with_ = Tex("With:")
+        note = Tex("Note:")
+        consider = Tex("Consider:")
+        then = Tex("Then:")
 
-        # labels = VGroup(with_, note, consider)
-
-        # tex_left = labels.get_x(RIGHT) + H_PADDING
-        p_tex = (
-            MathTex(
-                r"p=-i\hbar \tfrac{d}{dx},",
-                r"SE\to \tfrac{1}{2m}[p^2+(m\omega x)^2]\Psi=E\Psi",
-            )
-            # .next_to(title, DOWN, buff=V_PADDING)
-            # .set_x(tex_left, LEFT)
+        with_tex = MathTex(
+            r"p=-i\hbar \tfrac{d}{dx},",
+            r"SE\to \tfrac{1}{2m}[p^2",
+            r"+(m\omega x)^2]\Psi=E\Psi",
         )
-        note_tex = (
-            MathTex(r"a^2+b^2=(a+ib)(a-ib)")
-            # .next_to(p_tex, DOWN, buff=V_PADDING)
-            # .set_x(tex_left, LEFT)
+        note_tex = MathTex(r"a^2+b^2=", r"(a+ib)(a-ib)")
+        consider_tex = MathTex(
+            r"a_{\pm}\equiv",
+            r"\frac{1}{\sqrt{2\hbar m\omega}}(\mp",
+            r" ip+m\omega x)",
         )
-        consider_tex = (
-            MathTex(
-                r"a_{\pm}\equiv",
-                r"\frac{1}{\sqrt{2\hbar m\omega}}(\mp",
-                r" ip+m\omega x)",
-            )
-            # .next_to(note_tex, DOWN, buff=V_PADDING)
-            # .set_x(tex_left, LEFT)
+        then_tex = MathTex(
+            r"a_-a_+",
+            r"&=\frac{1}{2\hbar m\omega}(",
+            r"ip+m\omega x)(",
+            r"-ip+m\omega x)\\",
+            r"&=\frac{1}{2\hbar m\omega}\left[",
+            r"p^2",
+            r"+(m\omega x)^2",
+            r"-im\omega",
+            r"(",
+            r"xp-px)\right]",
         )
 
         table = MobjectTable(
-            [[with_, p_tex], [note, note_tex], [consider, consider_tex]],
+            [
+                [with_, with_tex],
+                [note, note_tex],
+                [consider, consider_tex],
+                [then, then_tex],
+            ],
             h_buff=1,
             v_buff=0.3,
             arrange_in_grid_config={"col_alignments": ["l", "l"]},
@@ -469,22 +475,49 @@ class Qm2(QmScene):
         _ = table.next_to(title, DOWN, buff=V_PADDING).set_x(0, ORIGIN)
 
         animations = [
-            Write(with_, run_time=4, lag_ratio=0.9),
-            Write(p_tex[0], run_time=8, lag_ratio=0.9),
-            Write(p_tex[1], run_time=20, lag_ratio=0.9),
-            anim_pause(8),
-            Write(note, run_time=2, lag_ratio=0.9),
+            QmWrite(with_, 4),
+            QmWrite(with_tex[0], 6),
+            QmWrite(with_tex[1], 7),
+            anim_pause(2),
+            QmWrite(with_tex[2], 9),
+            anim_pause(9),
+            QmWrite(note, 2),
             anim_pause(1),
-            Write(note_tex, run_time=8, lag_ratio=0.9),
-            anim_pause(11),
-            Write(consider, runtime=5, lag_ratio=0.9),
+            QmWrite(note_tex[0], 3),
+            QmWrite(note_tex[1], 5.5),
+            anim_pause(13),
+            QmWrite(consider, 3),
             anim_pause(4),
-            Write(consider_tex, run_time=27, lag_ratio=0.9),
+            QmWrite(consider_tex[0], 2),
+            QmWrite(consider_tex[1], 8),
+            anim_pause(3),
+            QmWrite(consider_tex[2], 5),
+            anim_pause(6),
+            QmWrite(then, 1.5),
+            QmWrite(then_tex[0], 2),
+            anim_pause(0.5),
+            QmWrite(then_tex[1], 4.5),
+            anim_pause(8),
+            QmWrite(then_tex[2], 4),
+            QmWrite(then_tex[3], 4),
+            anim_pause(1.5),
+            QmWrite(then_tex[4], 4),
+            anim_pause(2),
+            QmWrite(then_tex[5], 1),
+            anim_pause(0.25),
+            QmWrite(then_tex[6], 2.75),
+            QmWrite(then_tex[7], 2),
+            anim_pause(9),
+            QmWrite(then_tex[8], 0.25),
+            QmWrite(then_tex[9], 3),
+            anim_pause(13),
         ]
 
         for anim in animations:
             self.play(anim)
             self.wait()
+
+        self.pause(30)
 
 
 @dataclass
@@ -513,8 +546,7 @@ class NoChange:
 
 if __name__ == "__main__":
     BASE_PATH = Path()
-    QUALITY = "m"
-    DEBUG = True
+    (QUALITY, DEBUG) = ("k", False)
 
     qualities: dict[str, tuple[str, str]] = {
         "l": ("low_quality", "480p15"),
