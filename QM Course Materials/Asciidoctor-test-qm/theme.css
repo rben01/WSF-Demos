@@ -131,3 +131,27 @@ body.reveal-viewport {
 .columns .slide-content > .column > * {
 	padding: revert;
 }
+
+.color-highlight {
+	color: var(--highlight-color);
+}
+
+.color-bright {
+	color: var(--bright-color);
+}
+
+.font-size-big-1 {
+	font-size: 1.1em;
+}
+
+.font-size-big-2 {
+	font-size: 1.2em;
+}
+
+.font-size-big-3 {
+	font-size: 1.3em;
+}
+
+.h-centered {
+	text-align: center;
+}
