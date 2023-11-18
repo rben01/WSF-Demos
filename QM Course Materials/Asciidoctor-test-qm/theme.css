@@ -3,6 +3,7 @@
 	--title-underline-color: var(--accent-color);
 	--bright-color: #7cd8ff;
 	--highlight-color: rgb(255, 236, 0);
+	--key-point-color: #ff60a7;
 
 	--r-main-font: "Inter Var", Helvetica, sans-serif;
 	--r-heading-font: var(--r-main-font);
@@ -147,6 +148,10 @@ body.reveal-viewport {
 
 .color-bright {
 	color: var(--bright-color);
+}
+
+.color-key-point {
+	color: var(--key-point-color);
 }
 
 .font-size-big-1 {

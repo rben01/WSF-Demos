@@ -104,19 +104,19 @@ Solve:{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{n
 
 [.column.is-full.h-centered]
 --
-[.font-size-big-7%step]
+[.font-size-big-5%step]
 Clever Approach (Dirac)
 --
 
-[.column.is-full]
+[.column.is-full.font-size-big-1]
 --
 [cols="1,6",width="100%",stripes="none",frame="none",grid="none"]
 |===
 a|[.step]#With:#
 a| [.step]#stem:[\quad p=-i\hbar\frac{d}{dx}]# [.step]#stem:[, \quad SE \rightarrow \frac{1}{2m} \left( p^2 + (m\omega x)^2 \right)\psi=E\psi ]#
 
-a|[.step.color-highlight]#Note:#
-a|[.step.color-highlight]##stem:[\quad a^2 + b^2 = (a+ib)(a-ib)]##
+a|[.step.color-key-point]#Note:#
+a|[.step.color-key-point]##stem:[\quad a^2 + b^2 = (a+ib)(a-ib)]##
 a|[.step]##Consider:##
 a|[.step]##stem:[\quad a_{\pm} \equiv \frac{1}{\sqrt{2\hbar m \omega}}(\mp ip + m\omega x)]##
 a|[.step]#Then:#
