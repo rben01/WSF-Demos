@@ -51,10 +51,7 @@
 				"Create demo listing"
 			],
 			"detail": "Builds the set of quantum mechanics demos. Prefer this build task.",
-			"group": {
-				"kind": "build",
-				"isDefault": true
-			},
+			"group": "build",
 			"presentation": {
 				"echo": true,
 				"reveal": "always",
@@ -71,10 +68,7 @@
 			"group": "build",
 			"command": "live-server",
 			"args": [
-				{
-					"value": "--ignore=**/.vscode/**",
-					"quoting": "strong"
-				},
+				"--ignore=**/.vscode/**",
 				"--wait=1000"
 			],
 			"presentation": {
@@ -95,7 +89,7 @@
 				{
 					"value": "--ignore=**",
 					"quoting": "strong"
-				},
+				}
 			],
 			"presentation": {
 				"echo": true,
@@ -105,6 +99,21 @@
 				"showReuseMessage": false,
 				"clear": false
 			}
+		},
+		{
+			"label": "Asciidoctor-revealjs",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"command": "npx",
+			"args": [
+				"--prefix",
+				"${relativeFileDirname}",
+				"asciidoctor-revealjs",
+				"${file}"
+			],
+			"problemMatcher": []
 		}
 	]
 }
