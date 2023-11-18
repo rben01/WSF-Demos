@@ -1,0 +1,31 @@
+= Slides Test
+:stem: latexmath
+:docinfo: shared
+:customcss: ./theme.css
+:linkcss:
+:revealjs_theme: black
+:revealjs_progress: false
+:revealjs_transition: none
+:revealjs_controlsLayout: edges
+:revealjs_controlsTutorial: false
+:revealjs_disablelayout: true
+:revealjs_center: false
+:revealjs_navigationMode: linear
+:revealjs_history: true
+
+
+[.columns.wrap.center]
+== Slide
+
+[.column]
+--
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+--
+
+[.column.h-centered]
+--
+[.font-size-big-2.color-highlight]
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua
+Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat
+--

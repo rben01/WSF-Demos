@@ -20,7 +20,6 @@ Professor of Physics & Mathematics +
 Columbia University
 
 [.columns.wrap]
-[.stretch]
 == Harmonic Oscillator
 
 [.column.is-one-third]
@@ -49,7 +48,7 @@ video::out.mp4[height=400,opts="autoplay,nocontrols"]
 --
 [stem.fade-left, step=3]
 ++++
-F = - \frac{\partial V}{\partial x} 
+F = - \frac{\partial V}{\partial x}
 ++++
 [stem.fade-left, step=4]
 ++++
@@ -62,8 +61,6 @@ F = - \frac{\partial V}{\partial x}
 [.step]#Classical solutions:# [.step]#stem:[\quad x(t) = A\sin(\omega t)+B\cos(\omega t)]# [.step]#stem:[, \quad \omega=\sqrt{\frac{k}{m}}]#
 
 [.step]#Importance:# [.step]#stem:[\quad V(x) = V(x_0) + 0 + \frac{1}{2}k(x-x_0)^2 + \ldots]# [.step]#stem:[, \quad k = \left. \frac{\partial^2V}{\partial x^2} \right|_{x_0}]#
-
-{nbsp}
 --
 
 [.column.is-one-third.centered]
@@ -72,4 +69,61 @@ F = - \frac{\partial V}{\partial x}
 ====
 Classically
 ====
+{nbsp}
 
+[.columns.wrap-cols]
+== Harmonic Oscillator
+
+[column.is-full]
+--
+[%step]
+[sidebar]
+====
+Quantum Mechanically
+====
+--
+
+[.column.is-full.h-centered]
+--
+{nbsp}
+[%step]
+[.step.font-size-big-6]#stem:[\frac{-\hbar^2}{2m}\frac{d^2\psi}{dx^2}]# [.step]#stem:[+\frac{1}{2}m\omega^2x^2\psi]# [.step]#stem:[=E\psi]#
+{nbsp}
+{nbsp}
+[%step]
+Solve:
+[%step]
+. Brute force DEQ
+. Algebraic
+--
+
+
+[.columns.wrap-cols]
+== Harmonic Oscillator
+
+[.column.is-full.h-centered]
+--
+[.font-size-big-7%step]
+Clever Approach (Dirac)
+--
+
+[.column.is-full]
+--
+[cols="1,6",width="100%",stripes="none",frame="none",grid="none"]
+|===
+a|[.step]#With:#
+a| [.step]#stem:[\quad p=-i\hbar\frac{d}{dx}]# [.step]#stem:[, \quad SE \rightarrow \frac{1}{2m} \left( p^2 + (m\omega x)^2 \right)\psi=E\psi ]#
+
+a|[.step.color-highlight]#Note:#
+a|[.step.color-highlight]##stem:[\quad a^2 + b^2 = (a+ib)(a-ib)]##
+a|[.step]##Consider:##
+a|[.step]##stem:[\quad a_{\pm} \equiv \frac{1}{\sqrt{2\hbar m \omega}}(\mp ip + m\omega x)]##
+a|[.step]#Then:#
+a|[.step.halign-left]#\[
+	\quad \begin{align*}
+	a_{-}a_{+} &=  \frac{1}{2\hbar m \omega} \left(ip + m\omega x\right) \left(-ip+m\omega x\right) \\ &= \frac{1}{2\hbar m \omega} \left(p^2 + (m\omega x)^2 - im\omega(xp-px)\right)
+	\end{align*}
+	\]#
+|===
+
+--

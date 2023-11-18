@@ -48,11 +48,16 @@ body.reveal-viewport {
 	width: 100%;
 }
 
-.reveal .columns > .slide-content > div:not(.column) {
+/* .reveal .columns > .slide-content > div:not(.column) {
 	flex-grow: 1;
 	flex-shrink: 0;
 	flex-basis: 100%;
-}
+} */
+
+/* .reveal .columns.wrap .slide-content > .column {
+	flex-basis: unset;
+	flex: 1 0 0%;
+} */
 
 .reveal .title.present {
 	height: 75%;
@@ -89,6 +94,10 @@ body.reveal-viewport {
 	font-size: 28px;
 	width: 80%;
 	border-left: 1px solid var(--bright-color);
+}
+
+.reveal .present .slide-content {
+	font-size: 80%;
 }
 
 .reveal h1 {
@@ -152,6 +161,26 @@ body.reveal-viewport {
 	font-size: 1.3em;
 }
 
+.font-size-big-4 {
+	font-size: 1.4em;
+}
+
+.font-size-big-5 {
+	font-size: 1.5em;
+}
+
+.font-size-big-6 {
+	font-size: 1.6em;
+}
+
+.font-size-big-7 {
+	font-size: 1.7em;
+}
+
 .h-centered {
 	text-align: center;
+}
+
+.halign-left :is(.katex-display, .katex, .katex-display > .katex) {
+	text-align: start;
 }

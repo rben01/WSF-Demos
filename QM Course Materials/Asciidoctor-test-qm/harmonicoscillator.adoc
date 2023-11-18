@@ -20,7 +20,6 @@ Professor of Physics & Mathematics +
 Columbia University
 
 [.columns.wrap]
-[.stretch]
 == Harmonic Oscillator
 
 [.column.is-one-third]
@@ -62,8 +61,6 @@ F = - \frac{\partial V}{\partial x}
 [.step]#Classical solutions:# [.step]#stem:[\quad x(t) = A\sin(\omega t)+B\cos(\omega t)]# [.step]#stem:[, \quad \omega=\sqrt{\frac{k}{m}}]#
 
 [.step]#Importance:# [.step]#stem:[\quad V(x) = V(x_0) + 0 + \frac{1}{2}k(x-x_0)^2 + \ldots]# [.step]#stem:[, \quad k = \left. \frac{\partial^2V}{\partial x^2} \right|_{x_0}]#
-
-{nbsp}
 --
 
 [.column.is-one-third.centered]
@@ -72,92 +69,69 @@ F = - \frac{\partial V}{\partial x}
 ====
 Classically
 ====
+{nbsp}
 
-[.stretch]
+[.columns.wrap-cols]
 == Harmonic Oscillator
 
+[column.is-full]
+--
 [%step]
 [sidebar]
 ====
 Quantum Mechanically
 ====
-[%step]
-[stem]
-++++
-\fragment{-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}}\fragment{+\frac{1}{2}m\omega^2\psi}\fragment{=E\psi}
-++++
+--
 
+[.column.is-one-third]
+--
+{nbsp}
+--
+
+[.column.is-one-third]
+--
+{nbsp}
+[%step]
+[.step]#stem:[\frac{-\hbar^2}{2m}\frac{d^2\psi}{dx^2}]# [.step]#stem:[+\frac{1}{2}m\omega^2x^2\psi]# [.step]#stem:[=E\psi]#
+{nbsp}
+{nbsp}
 [%step]
 Solve: 
+[%step]
 . Brute force DEQ
 . Algebraic 
-[%step]
-Clever Approach (Dirac)
+--
 
-== Special Relativity
-
-[%step]
-* REALITY has unexpected features that become manifest at high speeds.
-[%step]
-** From the perspective of stationary observer:
-[%step]
-*** Moving clocks run slow (by factor of ++\(\gamma=1/\sqrt{1-v^2/c^2}\)++)
-*** Moving objects appear shortened (by factor of ++\(\gamma\)++)
-*** Moving object’s mass grows with speed (by factor ++\(\gamma\)++)
-
-== Twin Paradox
-
-[%step]
-* Final thought
-* Who is moving
-
-[%step]
-[sidebar]
-====
-The Twin “Paradox”
-====
-
-[%step]
-* Usual solution: to compare watches, one twin must accelerate
-* New twist: Spatial direction is compact, say a circular dimension
-
-== INSERT TITLE HERE
-
-[sidebar]
-====
-NEED ANIMATION OF TWO OBSERVERS ON A CIRCLE IN RELATIVE MOTION
-====
-
-== Compact Twin Paradox
-
-* [.hl]#Qualitative Solution#
-
-== INSERT TITLE HERE
-
-[sidebar]
-====
-ANIMATION: LIGHT BEAM ANIMATION. LEFT AND RIGHT BEAMS
-====
-
-== Compact Twin Paradox
-
-* [.hl]#Qualitative Solution#
-** There is a [.hl]#preferred# frame of reference
-** All other frames of reference are in motion relative to preferred frame
+[.column.is-one-third]
+--
+{nbsp}
+--
 
 [.columns.wrap-cols]
-== Special Relativity on a circle: Mathematical Setup
+== Harmonic Oscillator
 
-[.column]
-* Spacetime diagrams
-** Traversing the circle, identify ++\(z\to z+2\pi R\)++
-** Yellow dots on same horizontal time slice are identified as the same point (by all observers)
-+
-[.columns]
+[.column.is-one-third]
 --
-[.column]
-image::./imgs/graph-1.jpg[width=500px]
+{nbsp}
+--
 
-[.column]
-image::./imgs/graph-2.jpg[width=500px]
+[.column.is-one-third]
 --
+[%step]
+Clever Approach (Dirac)
+--
+
+[.column.is-one-third]
+--
+{nbsp}
+--
+
+[.step]#With:# [.step]#stem:[\quad p=-i\hbar\frac{d}{dx}]# [.step]#stem:[, \quad SE \rightarrow \frac{1}{2m} \left( p^2 + (m\omega x)^2 \right)\psi=E\psi ]#
+
+
+[.step]#Note:# [.step]#stem:[\quad a^2 + b^2 = (a+ib)(a-ib)]#
+
+
+[.step]#Consider:# [.step]#stem:[\quad a_{\pm} \equiv \frac{1}{\sqrt{2\hbar m \omega}}(\mp ip + m\omega x)]# 
+
+[.step]#Then:# [.step]#stem:[\quad \begin{align} a_{-}a_{+} &=  \frac{1}{2\hbar m \omega} \left(ip + m\omega x\right) \left(-ip+m\omega x\right) \\ &= \frac{1}{2\hbar m \omega} \left(p^2 + (m\omega x)^2 - im\omega(xp-px)\right)\end{align} ]# 
