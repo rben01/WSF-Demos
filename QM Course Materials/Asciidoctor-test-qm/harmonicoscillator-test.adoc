@@ -86,8 +86,9 @@ Quantum Mechanically
 [.column.is-full.h-centered]
 --
 {nbsp}
-[%step]
-[.step.font-size-big-6]#stem:[\frac{-\hbar^2}{2m}\frac{d^2\psi}{dx^2}]# [.step]#stem:[+\frac{1}{2}m\omega^2x^2\psi]# [.step]#stem:[=E\psi]#
+
+[.font-size-big-6]
+[.step]#stem:[\tfrac{-\hbar^2}{2m}\tfrac{d^2\psi}{dx^2}]# [.step]#stem:[+\,\frac{1}{2}m\omega^2x^2\psi]# [.step]#stem:[=E\psi]#
 {nbsp}
 {nbsp}
 [%step]
