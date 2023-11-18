@@ -83,16 +83,16 @@ Quantum Mechanically
 ====
 --
 
-[.column.is-full.h-centered]
+[.column.is-full.h-centered.font-size-big-2]
 --
 {nbsp}
 
-[.font-size-big-6]
+[.font-size-big-3]
 [.step]#stem:[\tfrac{-\hbar^2}{2m}\tfrac{d^2\psi}{dx^2}]# [.step]#stem:[+\,\frac{1}{2}m\omega^2x^2\psi]# [.step]#stem:[=E\psi]#
 {nbsp}
 {nbsp}
 [%step]
-Solve:
+Solve:{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}{nbsp}
 [%step]
 . Brute force DEQ
 . Algebraic
