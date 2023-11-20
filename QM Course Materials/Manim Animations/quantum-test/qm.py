@@ -235,7 +235,6 @@ class Qm1(QmScene):
 
         spring_bouncer = ValueTracker(0)
 
-        # :'(
         _ = spring.add_updater(
             lambda m: (
                 m.become(
@@ -245,7 +244,7 @@ class Qm1(QmScene):
                         y_scale=0.25,
                         stretch=get_stretch(spring_bouncer.get_value()),
                     )
-                ),
+                )
             )
         )
         _ = mass_box_1.add_updater(
@@ -348,7 +347,7 @@ class Qm1(QmScene):
 
         self.wait()
 
-        self.play(anim_pause(17))
+        self.play(anim_pause(2))
         self.wait()
 
         self.play(
@@ -363,8 +362,21 @@ class Qm1(QmScene):
         )
 
         self.wait()
+        self.pause(15.95)
 
-        self.pause(15)
+        self.play(
+            # FadeOut(
+            #     *self.mobjects,
+            #     *self.foreground_mobjects,
+            # ),
+            # hack for spring not disappearing when fading out
+            FadeIn(
+                # default w,h
+                Rectangle(color=BLACK, width=14, height=8).set_fill(BLACK, opacity=1)
+            ),
+            run_time=1,
+        )
+        self.wait()
 
 
 class Qm2(QmScene):
@@ -381,7 +393,7 @@ class Qm2(QmScene):
         self.pause(17)
 
         schrodinger = MathTex(
-            r"-\frac{\hbar^2}{2m}\frac{d^2\Psi}{dt^2}+\tfrac{1}{2}m\omega^2x^2\Psi=E\Psi"
+            r"-\frac{\hbar^2}{2m}\frac{d^2\Psi}{dx^2}+\tfrac{1}{2}m\omega^2x^2\Psi=E\Psi"
         ).next_to(title, DOWN, V_PADDING)
         self.play(QmWrite(schrodinger, 16, lag_ratio=0.8))
 
@@ -546,7 +558,9 @@ class NoChange:
 
 if __name__ == "__main__":
     BASE_PATH = Path()
-    (QUALITY, DEBUG) = ("k", False)
+    QUALITY: str = "l"
+    DEBUG: bool = False
+    PREVIEW: bool = False
 
     qualities: dict[str, tuple[str, str]] = {
         "l": ("low_quality", "480p15"),
@@ -556,8 +570,8 @@ if __name__ == "__main__":
     }
 
     scenes: list[tuple[ma.Scene, Duration]] = [
-        # (Qm1, PadVideoStart(5)),
-        (Qm2, TrimAudioStart(220)),
+        (Qm1, PadVideoStart(5)),
+        # (Qm2, TrimAudioStart(220)),
     ]
 
     for class_, audio_delay in scenes:
@@ -618,7 +632,8 @@ if __name__ == "__main__":
         for line in iter(proc.stdout.readline, b""):
             _ = sys.stdout.write(line)
 
-        _ = subprocess.check_call(["open", str(output_file)])
+        if PREVIEW:
+            _ = subprocess.check_call(["open", str(output_file)])
 
 
 # %%
