@@ -362,7 +362,7 @@ class Qm1(QmScene):
         )
 
         self.wait()
-        self.pause(15.95)
+        self.pause(10.95)
 
         self.play(
             # FadeOut(
@@ -445,7 +445,7 @@ class Qm2(QmScene):
         self.pause(16)
 
         with_ = Tex("With:")
-        note = Tex("Note:")
+        note = Tex("Note:").set_color(INDICATOR_COLOR)
         consider = Tex("Consider:")
         then = Tex("Then:")
 
@@ -454,7 +454,7 @@ class Qm2(QmScene):
             r"SE\to \tfrac{1}{2m}[p^2",
             r"+(m\omega x)^2]\Psi=E\Psi",
         )
-        note_tex = MathTex(r"a^2+b^2=", r"(a+ib)(a-ib)")
+        note_tex = MathTex(r"a^2+b^2=", r"(a+ib)(a-ib)").set_color(INDICATOR_COLOR)
         consider_tex = MathTex(
             r"a_{\pm}\equiv",
             r"\frac{1}{\sqrt{2\hbar m\omega}}(\mp",
@@ -558,7 +558,7 @@ class NoChange:
 
 if __name__ == "__main__":
     BASE_PATH = Path()
-    QUALITY: str = "l"
+    QUALITY: str = "k"
     DEBUG: bool = False
     PREVIEW: bool = False
 
@@ -571,7 +571,7 @@ if __name__ == "__main__":
 
     scenes: list[tuple[ma.Scene, Duration]] = [
         (Qm1, PadVideoStart(5)),
-        # (Qm2, TrimAudioStart(220)),
+        (Qm2, TrimAudioStart(220)),
     ]
 
     for class_, audio_delay in scenes:
