@@ -28,7 +28,7 @@ section:not(:has(h2)) {
 == Bungee
 
 [.column.is-full-width.stretch.h-centered]
-video::./imgs/bungee.mp4["",4000,4000,opts="autoplay,nocontrols"]
+video::./imgs/bungee.mp4[width=4000,height=4000,options="autoplay,nocontrols"]
 
 [%notitle]
 == BLANK
@@ -37,7 +37,7 @@ video::./imgs/bungee.mp4["",4000,4000,opts="autoplay,nocontrols"]
 == {blank}
 
 [.column.is-full-width.stretch.h-centered]
-video::./imgs/pendulum.mp4["",4000,4000,opts="autoplay,nocontrols"]
+video::./imgs/pendulum.mp4[width=4000,height=4000,options="autoplay,nocontrols"]
 
 [%notitle]
 == BLANK

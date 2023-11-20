@@ -28,6 +28,8 @@ QM Course Materials/Manim Animations/media
 QM Course Materials/Manim Animations/quantum-test/media
 QM Course Materials/Manim Animations/quantum-test/Harmonic Oscillator Audio.m4a
 
+!QM Course Materials/Asciidoctor-test-qm/node_modules/reveal.js
+
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/snippets.code-snippets
