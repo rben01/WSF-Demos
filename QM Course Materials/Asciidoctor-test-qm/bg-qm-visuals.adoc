@@ -1,0 +1,46 @@
+= Quantum Mechanics Visuals
+:stem: latexmath
+:docinfo: shared
+:customcss: ./theme.css
+:linkcss:
+:revealjs_theme: black
+:revealjs_progress: false
+:revealjs_transition: none
+:revealjs_controlsLayout: edges
+:revealjs_controlsTutorial: false
+:revealjs_disablelayout: true
+:revealjs_center: false
+:revealjs_navigationMode: linear
+:revealjs_history: true
+
+++++
+<style>
+section:not(:has(h2)) {
+	margin-top: 100px;
+}
+</style>
+++++
+
+[%notitle]
+== BLANK
+
+[.columns.is-vcentered%notitle]
+== Bungee
+
+[.column.is-full-width.stretch.h-centered]
+video::./imgs/bungee.mp4["",4000,4000,opts="autoplay,nocontrols"]
+
+[%notitle]
+== BLANK
+
+[.columns.is-vcentered%notitle]
+== {blank}
+
+[.column.is-full-width.stretch.h-centered]
+video::./imgs/pendulum.mp4["",4000,4000,opts="autoplay,nocontrols"]
+
+[%notitle]
+== BLANK
+
+[%notitle,background-iframe="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1698702551"]
+== Demo
