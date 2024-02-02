@@ -134,11 +134,11 @@ input[type="range"] {
 	/* border: 1px solid white; */
 }
 
-.radio-button-container label input {
+:is(.radio-button-container, .button-container) label input {
 	display: none;
 }
 
-.radio-button-container.horizontal {
+:is(.radio-button-container, .button-container).horizontal {
 	display: flex;
 	flex-direction: row;
 	align-content: stretch;
@@ -146,11 +146,11 @@ input[type="range"] {
 	column-gap: 1px;
 }
 
-.radio-button-container button {
+:is(.radio-button-container, .button-container) button {
 	flex: 1;
 }
 
-.radio-button-container.vertical {
+:is(.radio-button-container, .button-container).vertical {
 	display: flex;
 	flex-direction: column;
 	/* align-content: stretch;
