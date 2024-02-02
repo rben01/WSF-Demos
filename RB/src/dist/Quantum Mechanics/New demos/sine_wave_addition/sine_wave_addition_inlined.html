@@ -303,8 +303,9 @@ stroke-width: 3px;
 stroke: #bbb;
 }
 .axis-x-label {
-text-anchor: middle;
+text-anchor: start;
 dominant-baseline: hanging;
+font-size: 24px;
 }
 .axis-y-label {
 text-anchor: end;
@@ -894,7 +895,6 @@ function nonzero(x) {
 return x !== 0;
 }
 const xTickLocs = xScale.ticks(20).filter(nonzero);
-const xLabelLocs = xScale.ticks(4).filter(nonzero);
 const yTickLocs = yScale.ticks(10).filter(nonzero);
 const yLabelLocs = yScale.ticks(5).filter(nonzero);
 const scaledX0 = xScale(X_0);
@@ -933,18 +933,18 @@ y2: scaledY0 + tickLengthPx,
 },
 };
 }),
-...xLabelLocs.map(x => {
-const scaledX = xScale(x);
-return {
+...[
+[0.5, "𝐿"],
+[1, "𝟤𝐿"],
+].map(([x, text]) => ({
 shape: "text",
 class: "axis axis-label axis-x-label",
-text: labelFormatter(x),
+text,
 attrs: {
-x: scaledX,
-y: scaledY0 + tickLengthPx + 10,
+x: xScale(x) + 10,
+y: scaledY0 + tickLengthPx + 5,
 },
-};
-}),
+})),
 ...yTickLocs.map(y => {
 const scaledY = yScale(y);
 return {

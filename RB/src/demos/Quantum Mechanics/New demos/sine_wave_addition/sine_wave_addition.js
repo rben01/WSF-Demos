@@ -143,7 +143,6 @@ function getAxesData() {
 		return x !== 0;
 	}
 	const xTickLocs = xScale.ticks(20).filter(nonzero);
-	const xLabelLocs = xScale.ticks(4).filter(nonzero);
 
 	const yTickLocs = yScale.ticks(10).filter(nonzero);
 	const yLabelLocs = yScale.ticks(5).filter(nonzero);
@@ -185,18 +184,18 @@ function getAxesData() {
 				},
 			};
 		}),
-		...xLabelLocs.map(x => {
-			const scaledX = xScale(x);
-			return {
-				shape: "text",
-				class: "axis axis-label axis-x-label",
-				text: labelFormatter(x),
-				attrs: {
-					x: scaledX,
-					y: scaledY0 + tickLengthPx + 10,
-				},
-			};
-		}),
+		...[
+			[0.5, "𝐿"],
+			[1, "𝟤𝐿"],
+		].map(([x, text]) => ({
+			shape: "text",
+			class: "axis axis-label axis-x-label",
+			text,
+			attrs: {
+				x: xScale(x) + 10,
+				y: scaledY0 + tickLengthPx + 5,
+			},
+		})),
 		...yTickLocs.map(y => {
 			const scaledY = yScale(y);
 			return {
