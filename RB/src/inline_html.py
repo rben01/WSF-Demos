@@ -239,7 +239,7 @@ class TagContainerABC:
 
     @property
     def content(self) -> str:
-        if self._content == None:
+        if self._content is None:
             self._content = self._get_content()
         return self._content
 

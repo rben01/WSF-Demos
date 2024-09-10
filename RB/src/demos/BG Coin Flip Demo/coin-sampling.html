@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" href="../Quantum Mechanics/qm_demo.css" />
+		<script
+			src="https://cdnjs.cloudflare.com/ajax/libs/d3/6.2.0/d3.min.js"
+			integrity="sha512-C2RveGuPIWqkaLAluvoxyiaN1XYNe5ss11urhZWZYBUA9Ydgj+hfGKPcxCzTwut1/fmjEZR7Ac35f2aycT8Ogw=="
+			crossorigin="anonymous"
+		></script>
+		<style>
+			body {
+				display: flex;
+				column-gap: 40px;
+				background-color: white;
+				color: black;
+			}
+
+			.controls {
+				display: grid;
+				grid-template-columns: max-content 6em;
+				column-gap: 20px;
+				row-gap: 10px;
+				align-items: center;
+				justify-content: start;
+				width: 100%;
+
+				& > :nth-child(2n + 3) {
+					margin-top: 0;
+				}
+			}
+
+			.input {
+				display: flex;
+				width: 100%;
+				place-items: center;
+			}
+
+			input {
+				width: 100%;
+				font-size: 20px;
+			}
+
+			#buttons {
+				display: flex;
+				width: 100%;
+
+				grid-column: 1 / 3;
+				align-items: center;
+				justify-content: stretch;
+
+				button {
+					flex: 1 0 auto;
+					background-image: -webkit-linear-gradient(top, #eee, #999);
+					border-top-color: #999;
+					border-left-color: #888;
+					border-right-color: #aaa;
+					border-bottom-color: #aaa;
+				}
+			}
+
+			.chart-path {
+				stroke: rgb(209, 0, 0);
+				stroke-linecap: round;
+				stroke-width: 2px;
+				fill: none;
+			}
+
+			:is(#x-axis, #y-axis) .tick {
+				line {
+					display: none;
+				}
+				text {
+					font-size: 14px;
+				}
+			}
+
+			.x-gridline,
+			.y-gridline {
+				stroke: #ddd;
+				stroke-width: 1px;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="controls">
+			<div class="controls">
+				<span># coins: <span id="text-n-coins"></span></span>
+				<span class="input"
+					><input type="number" min="1" max="20000" value="1000" id="input-n-coins"
+				/></span>
+				<span># rounds: <span id="text-n-rounds"></span></span>
+				<span class="input"
+					><input type="number" min="1" max="10000" value="1000" id="input-n-rounds"
+				/></span>
+				<span># flips / round: <span id="text-n-flips-per-round"></span></span>
+				<span class="input"
+					><input type="number" min="1" value="1" id="input-n-flips-per-round"
+				/></span>
+				<span># heads to start: <span id="text-n-initial-heads"></span></span>
+				<span class="input"
+					><input type="number" min="1" value="0" id="input-n-initial-heads"
+				/></span>
+
+				<span id="buttons" class="radio-button-container"
+					><button id="play-button" class="button" onclick="play()">Play</button></span
+				>
+			</div>
+		</div>
+		<div id="container"></div>
+		<script src="../utils.js"></script>
+		<script>
+			function clear() {
+				svg.selectAll(".chart-path").data([]).join("line");
+			}
+
+			const W = 1000;
+			const H = 600;
+			const MARGIN = 20;
+			const LEFT = MARGIN + 40;
+
+			const svg = d3
+				.select("#container")
+				.append("svg")
+				.attr("width", W)
+				.attr("height", H)
+				.attr("viewBox", `0 0 ${W} ${H}`);
+
+			let xScale;
+			let yScale;
+
+			const inputs = {
+				nCoins: (() => {
+					const input = document.getElementById("input-n-coins");
+					const nTicks = 5;
+
+					function gridlines() {
+						svg
+							.selectAll("line.y-gridline")
+							.data(yScale.ticks(nTicks).slice(1)) // remove gridline on axis itself
+							.join("line")
+							.attr("class", "y-gridline")
+							.attr("x1", LEFT)
+							.attr("x2", W - MARGIN)
+							.attr("y1", yScale)
+							.attr("y2", yScale);
+					}
+
+					function yAxis() {
+						return d3.axisLeft(yScale).ticks(nTicks);
+					}
+
+					yScale = d3.scaleLinear([0, +input.value], [H - MARGIN, MARGIN]);
+					const yAxisElem = svg
+						.selectAll("#y-axis")
+						.data([0])
+						.join("g")
+						.attr("id", "y-axis")
+						// -.5 is for some sort of d3 issue with axis ticks
+						.attr("transform", `translate(${LEFT - 0.5},-.5)`)
+						.call(yAxis());
+
+					gridlines();
+
+					input.addEventListener("input", function () {
+						clear();
+
+						let value = +input.value;
+						if (!value || value < 2) {
+							return;
+						}
+
+						yScale = d3.scaleLinear([0, +input.value], [H - MARGIN, MARGIN]);
+
+						yAxis()(yAxisElem);
+						gridlines();
+					});
+
+					return input;
+				})(),
+				nRounds: (() => {
+					const input = document.getElementById("input-n-rounds");
+					const nTicks = 5;
+
+					function gridlines() {
+						svg
+							.selectAll("line.x-gridline")
+							.data(xScale.ticks(nTicks).slice(1))
+							.join("line")
+							.attr("class", "x-gridline")
+							.attr("x1", xScale)
+							.attr("x2", xScale)
+							.attr("y1", MARGIN)
+							.attr("y2", H - MARGIN);
+					}
+
+					function xAxis() {
+						return d3.axisBottom(xScale).ticks(nTicks);
+					}
+
+					xScale = d3.scaleLinear([0, +input.value], [LEFT, W - MARGIN]);
+
+					const xAxisElem = svg
+						.selectAll("#x-axis")
+						.data([0])
+						.join("g")
+						.attr("id", "x-axis")
+						// -.5 is for some sort of d3 issue with axis ticks
+						.attr("transform", `translate(-.5, ${H - MARGIN - 0.5})`)
+						.call(xAxis());
+
+					gridlines();
+
+					input.addEventListener("input", function () {
+						clear();
+
+						let value = +input.value;
+						if (!value || value < 2) {
+							return;
+						}
+
+						xScale = d3.scaleLinear([0, +input.value], [LEFT, W - MARGIN]);
+
+						xAxis()(xAxisElem);
+						gridlines();
+					});
+
+					return input;
+				})(),
+				nFlipsPerRound: (() => {
+					const input = document.getElementById("input-n-flips-per-round");
+					input.addEventListener("input", clear);
+					return input;
+				})(),
+				nInitialHeads: (() => {
+					const input = document.getElementById("input-n-initial-heads");
+					input.addEventListener("input", clear);
+					return input;
+				})(),
+			};
+
+			const line = d3
+				.line()
+				.x(([x, _]) => xScale(x))
+				.y(([_, y]) => yScale(y))
+				.curve(d3.curveLinear);
+
+			function play() {
+				for (const input of Object.values(inputs)) {
+					input.disabled = true;
+				}
+
+				function flipOnce(coins, nFlipsPerRound) {
+					// sample indices with replacement
+					for (let i = 0; i < nFlipsPerRound; i++) {
+						const idx = Math.floor(Math.random() * nCoins);
+						coins[idx] = 1 - coins[idx];
+					}
+				}
+
+				const nCoins = +inputs.nCoins.value;
+				const nRounds = +inputs.nRounds.value;
+				const nFlipsPerRound = +inputs.nFlipsPerRound.value;
+				const nInitialHeads = +inputs.nInitialHeads.value;
+
+				const totalTimeMs = Math.min(nRounds * 0.2, 5) * 1000;
+
+				// 0 = tails, 1 = heads. all 0 by default
+				const coins = new Uint8Array(nCoins);
+				// we "randomly" set nInitialHeads coins to heads. since everything
+				// subsequent is random, it doesn't matter that this isn't random at all and
+				// actually the first nInitialHeads coins are heads.
+				for (let i = 0; i < nInitialHeads; i++) {
+					coins[i] = 1;
+				}
+
+				let nRoundsSoFar = 0;
+				let prevNumHeads = nInitialHeads;
+				let start = undefined;
+
+				// delete all lines
+				svg.selectAll(".chart-path").data([]).join("line");
+
+				function step(timestamp) {
+					if (start === undefined) {
+						start = timestamp;
+					}
+					const elapsed = timestamp - start;
+					const roundsByThisFrame = Math.min(
+						nRounds,
+						Math.floor((nRounds * elapsed) / totalTimeMs),
+					);
+
+					for (let i = nRoundsSoFar; i < roundsByThisFrame; i++) {
+						flipOnce(coins, nFlipsPerRound);
+						const thisNumHeads = d3.sum(coins);
+
+						svg
+							.append("line")
+							.attr("class", "chart-path")
+							.attr("x1", xScale(i))
+							.attr("x2", xScale(i + 1))
+							.attr("y1", yScale(prevNumHeads))
+							.attr("y2", yScale(thisNumHeads));
+
+						prevNumHeads = thisNumHeads;
+					}
+
+					if (roundsByThisFrame >= nRounds) {
+						document.getElementById("play-button").disabled = false;
+						for (const input of Object.values(inputs)) {
+							input.disabled = false;
+						}
+						return;
+					}
+
+					requestAnimationFrame(step);
+					nRoundsSoFar = roundsByThisFrame;
+				}
+
+				requestAnimationFrame(step);
+			}
+		</script>
+	</body>
+</html>
