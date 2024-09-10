@@ -1,0 +1,680 @@
+1
+00:00:00,000 --> 00:00:15,320
+ Okay, let's now take up the famous example of the harmonic oscillator, which you will
+
+2
+00:00:15,320 --> 00:00:23,400
+ recall even from your studies of elementary classical mechanics, is a situation in which
+
+3
+00:00:23,400 --> 00:00:29,000
+ we have a force that's a restoring force, that's why we have the minus sign and the
+
+4
+00:00:29,000 --> 00:00:35,760
+ strength of the force is proportional to the displacement x. So the example that you can
+
+5
+00:00:35,760 --> 00:00:44,440
+ have in mind for this can be, for instance, a spring with a mass on it that is oscillating,
+
+6
+00:00:44,440 --> 00:00:54,840
+ vibrating back and forth. Now, bearing in mind that the force F is related to a potential
+
+7
+00:00:54,840 --> 00:01:07,920
+ in the usual way of minus dv/dx, we see therefore that our potential v(x) is equal to 1/2 kx^2.
+
+8
+00:01:07,920 --> 00:01:15,280
+ Now bear in mind as well that because F=ma, we have our classical equations of motion
+
+9
+00:01:15,280 --> 00:01:30,440
+ being md2x/dt^2 is equal to -kx, and that gives rise to classical solutions that we
+
+10
+00:01:30,440 --> 00:01:44,360
+ can immediately write down in the form x(t)=a*sin(omega t)+b*cos(omega t), where a and b are coefficients
+
+11
+00:01:44,360 --> 00:01:49,800
+ that are determined by the initial conditions, by the boundary conditions, and as expression
+
+12
+00:01:49,800 --> 00:01:57,980
+ omega is defined to be the square root of the spring constant k over the mass m. Now
+
+13
+00:01:57,980 --> 00:02:06,240
+ this example of the harmonic oscillator equation is incredibly important, and you might say
+
+14
+00:02:06,240 --> 00:02:12,640
+ why, why does it crop up so much in physics? And if you haven't seen that yet, you will
+
+15
+00:02:12,640 --> 00:02:17,460
+ see it, just about every problem you ever solve analytically in physics in some sense is related
+
+16
+00:02:17,460 --> 00:02:23,160
+ to the harmonic oscillator. The reason is simply this, if you take any potential at all in
+
+17
+00:02:23,160 --> 00:02:31,040
+ the world, and you expand it in the vicinity of its minimum, then if you call x0 that min,
+
+18
+00:02:31,040 --> 00:02:35,720
+ then we have v(x0), because x0 is assumed to be a minimum, then next term, which is
+
+19
+00:02:35,720 --> 00:02:41,900
+ proportional to the derivative of v with respect to x at x0, gives you 0, and therefore the
+
+20
+00:02:41,900 --> 00:02:52,440
+ first non-trivial term is the quadratic term, 1/2k(x-x0)^2, where k in this expression just
+
+21
+00:02:52,440 --> 00:02:59,920
+ comes from the second derivative of v with respect to x^2 evaluated at x0. So you see
+
+22
+00:02:59,920 --> 00:03:07,960
+ right away that any potential in the world, if you are looking sufficiently near a stable
+
+23
+00:03:07,960 --> 00:03:15,280
+ minimum, will have deviations of the potential from the value of the potential at the minimum
+
+24
+00:03:15,280 --> 00:03:24,400
+ given by 1/2k(x^2) or 1/2kΔ(x^2), which of course is exactly the potential that we have
+
+25
+00:03:24,400 --> 00:03:30,980
+ associated with the harmonic oscillator. And that's why this example comes up all the time.
+
+26
+00:03:30,980 --> 00:03:36,480
+ Any potential near its minimum gives rise to fluctuations that look like a harmonic
+
+27
+00:03:36,480 --> 00:03:47,080
+ oscillator. Now of course this is the classical description. If we go on to the quantum description,
+
+28
+00:03:47,080 --> 00:03:54,920
+ well now we know how to do that in terms of Schrodinger's equation, which gives us there
+
+29
+00:03:54,920 --> 00:04:04,340
+ for the equation, whoops, let me go back to where I was here, gives us our equation minus
+
+30
+00:04:04,340 --> 00:04:16,840
+ h-bar squared over 2m d2 psi dx^2 plus v(x), which we'll write as 1/2m omega squared x^2
+
+31
+00:04:16,840 --> 00:04:27,240
+ psi equals e psi. So there we have the quantum mechanical version of the harmonic oscillator
+
+32
+00:04:27,240 --> 00:04:34,760
+ seeking the energy eigenstates. Now here is the thing, there are two, well there are many
+
+33
+00:04:34,760 --> 00:04:40,360
+ ways, but let me just broadly speak, and there are two ways that you can go about solving
+
+34
+00:04:40,360 --> 00:04:45,800
+ this Schrodinger equation for the harmonic oscillator. The first is, well look, you can
+
+35
+00:04:45,800 --> 00:04:55,620
+ just do brute force solution of a differential equation, right? It's not that hard. However,
+
+36
+00:04:55,620 --> 00:05:04,080
+ you can also take a far more clever approach, which is an algebraic approach, and that more
+
+37
+00:05:04,080 --> 00:05:10,920
+ clever approach is the one that I'd like to spend a little bit of time now on developing.
+
+38
+00:05:10,920 --> 00:05:20,280
+ And this clever approach comes initially, I believe historically this is accurate, from
+
+39
+00:05:20,280 --> 00:05:33,160
+ Paul Dirac, one of the great pioneers of quantum mechanics, and here's how it goes. So remembering
+
+40
+00:05:33,160 --> 00:05:43,000
+ that the momentum can be written as minus ih-bar d by dx, then the Schrodinger equation
+
+41
+00:05:43,000 --> 00:05:50,200
+ that we wrote down can simply now be written as 1/2m. p^2 will give us that first equation,
+
+42
+00:05:50,200 --> 00:06:00,080
+ first term of the equation, and then the potential term we'll write as m omega x^2 times psi,
+
+43
+00:06:00,080 --> 00:06:06,920
+ and we want all of this to be equal to e*psi. That's the equation that we want to solve.
+
+44
+00:06:06,920 --> 00:06:13,880
+ Now our inspiration for solving this, or perhaps Dirac's inspiration for solving this, will
+
+45
+00:06:13,880 --> 00:06:20,080
+ be to note the very simple fact that we're all familiar with, that for ordinary numbers,
+
+46
+00:06:20,080 --> 00:06:28,880
+ a^2 + b^2, that can be factored as a + ib times a - ib. Good. So let's try to play the
+
+47
+00:06:28,880 --> 00:06:35,640
+ same game now, but with x's and p's, these operators in quantum mechanics. In other words,
+
+48
+00:06:35,640 --> 00:06:41,840
+ we're going to try to factor the Schrodinger differential equation. So to that end, let's
+
+49
+00:06:41,840 --> 00:06:48,840
+ consider two new operators whose definition I'll give you, and the motivation will become
+
+50
+00:06:48,840 --> 00:06:58,600
+ clear in just a moment. Let's call them a+ or - that are defined to be 1/sqrt(2h-bar
+
+51
+00:06:58,600 --> 00:07:10,960
+ m omega - + (that will be corresponding to the plus and minus on the a) ip + m omega
+
+52
+00:07:10,960 --> 00:07:21,080
+ x. Okay, so this is our definition of a+ and a-, and now I want you to note the following.
+
+53
+00:07:21,080 --> 00:07:31,360
+ Let's consider a- times a+. What does that equal? Well, that is 1/2h-bar m omega from
+
+54
+00:07:31,360 --> 00:07:41,440
+ the coefficient out front. The a- term will give us minus, or the a- term gives us a plus,
+
+55
+00:07:41,440 --> 00:07:51,720
+ sorry about that, ip + m omega x. And then the a+ gives us the -ip + m omega x. Good.
+
+56
+00:07:51,720 --> 00:07:59,840
+ Okay, now let's just expand this out a little bit. So that's 1/2h-bar m omega times, well,
+
+57
+00:07:59,840 --> 00:08:06,400
+ the ip with the -ip gives us our p squared. The m omega x times itself will give us our
+
+58
+00:08:06,400 --> 00:08:13,240
+ m omega x squared. And then the remaining part is minus i m omega, after we do a little
+
+59
+00:08:13,240 --> 00:08:26,480
+ bit of cancellation of the h-bar that comes into this, the i omega times xp minus px.
+
+60
+00:08:26,480 --> 00:08:31,960
+ Let me just make sure I haven't left out any terms. H-bar m omega, yeah, no cancellation,
+
+61
+00:08:31,960 --> 00:08:39,400
+ perfect. Alright, excellent. Okay, given that now, let me just note that if a+ and a- were
+
+62
+00:08:39,400 --> 00:08:48,440
+ ordinary numbers, right, so for classical numbers, of course, xp minus px would simply
+
+63
+00:08:48,440 --> 00:08:55,560
+ be equal to zero, and that's how, of course, you get to the usual identity that for numbers
+
+64
+00:08:55,560 --> 00:09:02,980
+ I've written over here. But for operators, for quantum operators, things are a little
+
+65
+00:09:02,980 --> 00:09:12,720
+ bit different because xp is not equal to px, so their difference, xp minus px, which we
+
+66
+00:09:12,720 --> 00:09:18,720
+ can write as bracket x, p, this generally will not equal to zero. And let me show you
+
+67
+00:09:18,720 --> 00:09:23,140
+ that explicitly right now. And the way to do this, the way you should always do this
+
+68
+00:09:23,140 --> 00:09:30,080
+ when it comes to operator ordering, is to act on a function, a test function, to see
+
+69
+00:09:30,080 --> 00:09:36,840
+ how the bracket operates. So let me show you that. So let's take our bracket xp, let's
+
+70
+00:09:36,840 --> 00:09:44,540
+ act on psi of x, and we'll just spell this out. So that's x times minus i h-bar d by
+
+71
+00:09:44,540 --> 00:09:50,960
+ dx, there's the p, times psi. And now it's the same thing but in reverse order, minus
+
+72
+00:09:50,960 --> 00:10:00,960
+ i h-bar d by dx, x, psi. Alright, this now we can easily expand out as x times minus
+
+73
+00:10:00,960 --> 00:10:09,720
+ i h-bar d psi dx. And notice that we have another term, the first one, when the dx acts
+
+74
+00:10:09,720 --> 00:10:19,360
+ on the x itself, that will give us a term that looks just like this. Well, I actually
+
+75
+00:10:19,360 --> 00:10:24,440
+ said that a little bit backwards, let me take that back a little bit. So let me operate
+
+76
+00:10:24,440 --> 00:10:32,720
+ first with the dx on the psi, and pull the x out so I can get my initial cancellation
+
+77
+00:10:32,720 --> 00:10:43,640
+ over here, x i h-bar times d psi dx. But there's a second term from the product rule of course,
+
+78
+00:10:43,640 --> 00:10:53,400
+ where the dx now acts just on the x part over here, and that will give us a plus i h-bar
+
+79
+00:10:53,400 --> 00:11:00,840
+ times psi of x. So we get this nice little cancellation over here between this term and
+
+80
+00:11:00,840 --> 00:11:07,340
+ this term, but unlike with ordinary numbers with quantum operators, we have something
+
+81
+00:11:07,340 --> 00:11:16,280
+ left over. x p operating on psi of x is equal to i h-bar psi of x. And since psi of x is
+
+82
+00:11:16,280 --> 00:11:20,760
+ a completely general function, just a test function, maybe I should have given it a different
+
+83
+00:11:20,760 --> 00:11:27,180
+ name, call it f or t for test function, it doesn't matter, we come to the general recognition
+
+84
+00:11:27,180 --> 00:11:38,560
+ that x, p as an operator is equal to i h-bar. Good. Okay, so given that, let me make that
+
+85
+00:11:38,560 --> 00:11:49,880
+ box a little bit nicer, excellent. Okay. Alright, so given that now, we can write our expression
+
+86
+00:11:49,880 --> 00:12:02,360
+ for the product of a minus times a plus, that's equal to 1 over 2 h-bar m omega times p squared
+
+87
+00:12:02,360 --> 00:12:10,160
+ plus m omega x squared, and now that commutator, the bracket of x and p gives us minus i m
+
+88
+00:12:10,160 --> 00:12:17,080
+ omega, and the bracket part itself is i h-bar. Okay, so if we now look at this, it's kind
+
+89
+00:12:17,080 --> 00:12:24,920
+ of beautiful. We have 1 over h-bar omega times something which you'll note is nothing but
+
+90
+00:12:24,920 --> 00:12:31,200
+ our Hamiltonian h because we have our nice 1 over 2 m p squared plus our potential term
+
+91
+00:12:31,200 --> 00:12:38,720
+ x squared, and we have an additional term left over at the end here, which is a factor
+
+92
+00:12:38,720 --> 00:12:45,440
+ of one half coming from the bracket term on the far right-hand side. From that now, we
+
+93
+00:12:45,440 --> 00:12:55,160
+ can solve for the Hamiltonian h is equal to h-bar omega times a minus a plus minus one
+
+94
+00:12:55,160 --> 00:13:03,240
+ half. Beautiful, simple little formula where we have now successfully factored the quantum
+
+95
+00:13:03,240 --> 00:13:10,360
+ mechanical Hamiltonian into the product of a minus and a plus with a little correction
+
+96
+00:13:10,360 --> 00:13:17,360
+ term, this little correction piece which is vital, this term of minus one half. Now similarly,
+
+97
+00:13:17,360 --> 00:13:22,160
+ I'm not going to go through the calculation because it's effectively identical. You could
+
+98
+00:13:22,160 --> 00:13:29,520
+ also have done the same calculation multiplying not a minus times a plus but a plus times
+
+99
+00:13:29,520 --> 00:13:35,960
+ a minus, and if you do that, it's a good exercise just to get practice. You will find h equals
+
+100
+00:13:35,960 --> 00:13:44,120
+ h-bar omega a plus times a minus plus one half. That's the only difference when you change
+
+101
+00:13:44,120 --> 00:13:51,880
+ the order of a plus and a minus, and from this you can immediately see, or in fact you
+
+102
+00:13:51,880 --> 00:13:59,100
+ can just calculate it directly from the definition of a plus and a minus. You see that we have
+
+103
+00:13:59,100 --> 00:14:08,760
+ the commutator, the bracket of a minus with a plus is equal to one. You can see that immediately
+
+104
+00:14:08,760 --> 00:14:16,440
+ from the expressions above just by subtracting them, or you could have done that directly.
+
+105
+00:14:16,440 --> 00:14:25,000
+ Good. All right. We're almost at the finish line here because here is the key observation
+
+106
+00:14:25,000 --> 00:14:33,440
+ once we've done this factoring. Key observation. In fact, there are two key observations. This
+
+107
+00:14:33,440 --> 00:14:41,080
+ is really the first of them. Imagine that we have some eigenfunction psi of energy E
+
+108
+00:14:41,080 --> 00:14:48,800
+ of this quantum mechanical harmonic oscillator. The claim is that if you act with a plus or
+
+109
+00:14:48,800 --> 00:14:58,440
+ a minus on this given eigenfunction and then operate with the Hamiltonian h, you will still
+
+110
+00:14:58,440 --> 00:15:04,800
+ have an eigenfunction, but the eigenvalue will be different. It will be E either increased
+
+111
+00:15:04,800 --> 00:15:11,720
+ or decreased by an amount h-bar omega. In fact, let me move this all over so I can fit
+
+112
+00:15:11,720 --> 00:15:21,800
+ this nicely on the screen here. That would be E plus or minus h-bar omega times a plus
+
+113
+00:15:21,800 --> 00:15:32,080
+ minus acting on psi. You see the beauty here is given one eigenfunction of a given eigenvalue,
+
+114
+00:15:32,080 --> 00:15:36,840
+ these operators that are called raising and lowering operators for reasons now become
+
+115
+00:15:36,840 --> 00:15:44,840
+ clear because a plus raises the energy by an amount h-bar omega and it is an eigenfunction
+
+116
+00:15:44,840 --> 00:15:52,920
+ because this is proportional to a plus acting on psi and a minus lowers the energy by an
+
+117
+00:15:52,920 --> 00:16:00,120
+ amount h-bar omega and indeed, I don't know if you can see that minus, a minus is itself
+
+118
+00:16:00,120 --> 00:16:08,480
+ an eigenfunction as well. That's the key observation and let me just show you how to prove that.
+
+119
+00:16:08,480 --> 00:16:17,680
+ It's quite simple. You just do this one by following your nose. Let's do h on a plus
+
+120
+00:16:17,680 --> 00:16:26,640
+ psi. This is equal to h-bar omega. Now let me substitute in for the Hamiltonian a plus,
+
+121
+00:16:26,640 --> 00:16:34,880
+ a minus plus one half acting on a plus psi. Now notice what we can do here. We can pull
+
+122
+00:16:34,880 --> 00:16:45,320
+ out an a plus from here and an a plus from this term as well. Let me just do that in
+
+123
+00:16:45,320 --> 00:16:51,840
+ one step if you don't mind. a plus h-bar omega. When you pull out this first a plus,
+
+124
+00:16:51,840 --> 00:16:59,320
+ what will be left is a minus times a plus and by pulling out the a plus in this term,
+
+125
+00:16:59,320 --> 00:17:08,280
+ all that will be left is one half on psi. Now that's quite nice because you will recognize
+
+126
+00:17:08,280 --> 00:17:18,860
+ this term over here from our calculation above. This looks just like the Hamiltonian except
+
+127
+00:17:18,860 --> 00:17:27,120
+ it's actually the Hamiltonian augmented by h-bar omega. If we go back to our expression
+
+128
+00:17:27,120 --> 00:17:34,640
+ for h, when it's a minus a plus, it needs to be a minus sign but we have over here a
+
+129
+00:17:34,640 --> 00:17:41,600
+ minus a plus and a plus sign and the difference between them is just a factor of one which
+
+130
+00:17:41,600 --> 00:17:47,920
+ when multiplied by the h-bar omega out front gives us an h-bar omega inside. Of course
+
+131
+00:17:47,920 --> 00:17:57,680
+ this is all acting on psi and that's nice because h acting on psi just gives us a factor
+
+132
+00:17:57,680 --> 00:18:04,920
+ of e. After all psi was defined to be an eigenfunction of h with eigenvalue e. The a plus now can
+
+133
+00:18:04,920 --> 00:18:11,200
+ pull right through those numbers. Let me just bring in the h-bar omega here as well and
+
+134
+00:18:11,200 --> 00:18:19,720
+ so this is all multiplied by the function a plus acting on psi and now this is beautiful
+
+135
+00:18:19,720 --> 00:18:28,720
+ because this is h acting on a plus psi is equal to a number, the eigenvalue, e plus
+
+136
+00:18:28,720 --> 00:18:35,600
+ h-bar omega acting on the very same function. Therefore it is an eigenfunction. We have
+
+137
+00:18:35,600 --> 00:18:41,720
+ successfully raised the energy by an amount h-bar omega. Similarly I'm not going to go
+
+138
+00:18:41,720 --> 00:18:50,120
+ through it, same calculation, if you act with a minus on psi you will get e minus h-bar
+
+139
+00:18:50,120 --> 00:18:55,880
+ omega, it is still an eigenfunction but now the eigenvalue has gone down by an amount
+
+140
+00:18:55,880 --> 00:19:05,340
+ h-bar omega. And the beauty of this is given this one eigenfunction psi of eigenvalue e,
+
+141
+00:19:05,340 --> 00:19:13,680
+ we now can from it generate a whole tower of eigenfunctions. We can act with a minus
+
+142
+00:19:13,680 --> 00:19:22,160
+ a whole bunch of times, so let me just a minus squared on psi, a minus on psi, psi itself
+
+143
+00:19:22,160 --> 00:19:30,720
+ or we can act with a plus on psi or a plus squared on psi and so on. So given one eigenfunction
+
+144
+00:19:30,720 --> 00:19:37,560
+ we get a whole series or a whole tower of eigenfunctions whose eigenvalues start with
+
+145
+00:19:37,560 --> 00:19:42,720
+ an eigenvalue e, in fact let me use a different color to make this a little bit more clear,
+
+146
+00:19:42,720 --> 00:19:52,720
+ I'll use red. So this guy has eigenvalue energy e, this one has eigenvalue e plus h-bar, this
+
+147
+00:19:52,720 --> 00:20:02,080
+ has e plus 2 h-bar, this has e minus h-bar omega, this has e minus 2 h-bar omega and
+
+148
+00:20:02,080 --> 00:20:07,840
+ on it goes. So that's beautiful, we have an algorithm for generating new eigenfunctions
+
+149
+00:20:07,840 --> 00:20:15,000
+ from old ones. Now finally I mentioned there's two key observations, let me go to the second
+
+150
+00:20:15,000 --> 00:20:22,760
+ key observation with simply that because the energy e needs to be greater than the minimum
+
+151
+00:20:22,760 --> 00:20:32,080
+ of the potential energy, we can't continue this series downwards indefinitely, right?
+
+152
+00:20:32,080 --> 00:20:40,680
+ Because at some point this energy e minus n h-bar omega is going to be less than v-min
+
+153
+00:20:40,680 --> 00:20:48,800
+ and that's not okay. So what that means is there has to be some number n such that when
+
+154
+00:20:48,800 --> 00:20:56,760
+ we act with this lowering operator n times on our original eigenfunction it must vanish,
+
+155
+00:20:56,760 --> 00:21:03,480
+ it cannot be non-zero otherwise we would have generated an eigenfunction whose energy
+
+156
+00:21:03,480 --> 00:21:09,920
+ was less than the minimum of the potential energy which cannot happen. So let's write
+
+157
+00:21:09,920 --> 00:21:17,920
+ this as a minus acting on a minus to the n minus 1 psi equals zero and let's just call
+
+158
+00:21:17,920 --> 00:21:25,040
+ this guy psi zero, the last eigenfunction that can be achieved by using the lowering
+
+159
+00:21:25,040 --> 00:21:32,720
+ operator because if you use the lowering operator one more time you get zero. That's a beautiful
+
+160
+00:21:32,720 --> 00:21:38,960
+ equation too because now let's use our definition for a minus so it's 1 over square root of
+
+161
+00:21:38,960 --> 00:21:51,000
+ 2 h-bar m omega i p plus m omega x psi not equal zero or as a differential equation let's
+
+162
+00:21:51,000 --> 00:22:02,920
+ spell it out 1 over 2 h-bar m omega times h-bar d by d x plus m omega x psi not equal
+
+163
+00:22:02,920 --> 00:22:11,160
+ zero and that is a differential equation that we can solve very easily, just a nice Gaussian
+
+164
+00:22:11,160 --> 00:22:23,920
+ e to the minus m omega over 2 h-bar x squared and so we have gotten our lowest energy eigenfunction
+
+165
+00:22:23,920 --> 00:22:32,280
+ whose energy eigenvalue e not is such that you can't go any lower than that and from
+
+166
+00:22:32,280 --> 00:22:38,520
+ psi not now since we're now sort of at the bottom of the series, the bottom of the tower,
+
+167
+00:22:38,520 --> 00:22:50,640
+ psi not with energy eigenvalue e not goes to a plus on psi not which is e not plus h-bar
+
+168
+00:22:50,640 --> 00:23:02,880
+ omega a plus acting twice takes us to e not plus 2 h-bar omega and on and on it goes to
+
+169
+00:23:02,880 --> 00:23:08,080
+ generate the rest of the eigenfunctions, the rest of the eigenvalues.
+
+170
+00:23:08,080 --> 00:23:18,080
+ [BLANK_AUDIO]
+
