@@ -45,16 +45,16 @@ pub struct Experiment {
 	hist_bucket_approx_width: Real,
 }
 
-#[wasm_bindgen]
-impl Experiment {
-	pub fn new(cdf_points: Vec<(Real, Real)>, hist_bucket_approx_width: Real) -> Self {
+// #[wasm_bindgen]
+// impl Experiment {
+// 	pub fn new(cdf_points: Vec<(Real, Real)>, hist_bucket_approx_width: Real) -> Self {
 
-		let n_buckets =
-		Self {
-			xs,
-			cdf_values,
-			buckets: Vec::new(),
-			hist_bucket_approx_width,
-		}
-	}
-}
+// 		let n_buckets =
+// 		Self {
+// 			xs,
+// 			cdf_values,
+// 			buckets: Vec::new(),
+// 			hist_bucket_approx_width,
+// 		}
+// 	}
+// }
