@@ -273,7 +273,7 @@ function get_eigenfunction_expansion(
         push!(prev_cₙ_sq_sums, (n, cₙs_sq_sum))
 
         # Use last several data points to build model of expected n needed to get the sum of
-        # the squared cₙ's to get close enough to 1. If it exceeds max_n_allowed, throw a
+        # the squared cₙ's to get close enough to 1. If n exceeds max_n_allowed, throw a
         # ConvergenceError
         if length(prev_cₙ_sq_sums) >= n_model_datapoints && n > 5000
             data = prev_cₙ_sq_sums[(end - n_model_datapoints + 1):end]
@@ -335,15 +335,15 @@ function Ψₜ!(
     return nothing
 end
 
-function get_plots_dir()
-    return mkpath(joinpath(@__DIR__, "plots"))
+function get_plots_dir(extn::AbstractString)
+    return mkpath(joinpath(@__DIR__, "plots", extn))
 end
 
 function get_save_path(params::Parameters, extn::AbstractString)
     (; L, μ, p₀, σ, m) = params
 
     outfile_basename = @sprintf "anim_L=%g_mu=%g_p0=%g_sigma=%g_m=%g.%s" L μ p₀ σ m extn
-    dst = joinpath(get_plots_dir(), outfile_basename)
+    dst = joinpath(get_plots_dir(extn), outfile_basename)
 
     return dst
 end
@@ -388,16 +388,14 @@ function plot_particle_static(
     dst = @something dst get_save_path(params, "pdf")
 
     width = 600
-    height = round(
-        Int, (width - 100) * ((maximum(ts) - minimum(ts)) / (maximum(xs) - minimum(xs)))
-    )
+    height = round(Int, (width - 100) * (length(ts) / length(xs)))
 
-    fig = Figure(; resolution=(width, height))
+    fig = Figure(; size=(width, height))
 
     Label(
         fig[1, :],
         "Probability Density Over Space and Time";
-        textsize=20,
+        fontsize=20,
         tellwidth=false,
         tellheight=true,
     )
@@ -410,6 +408,7 @@ function plot_particle_static(
         ylabel=L"t",
         ylabelsize=20,
         yreversed=true,
+        ylabelrotation=0,
         aspect=DataAspect(),
         title=params_title_latex(params),
         titlegap=16,
@@ -465,12 +464,12 @@ function plot_particle_video(
     Ψ_re = @lift real.($Ψ)
     Ψ_im = @lift imag.($Ψ)
 
-    fig = Figure(; resolution=(800, 1400))
+    fig = Figure(; size=(1400, 800))
 
-    Label(fig[1, :], params_title_latex(params); tellwidth=false, textsize=32)
+    Label(fig[1, :], params_title_latex(params); tellwidth=false, fontsize=32)
 
     Label(
-        fig[2, :], @lift(latexstring(@sprintf "t=%.2f" $time)); tellwidth=false, textsize=24
+        fig[2, :], @lift(latexstring(@sprintf "t=%.2f" $time)); tellwidth=false, fontsize=24
     )
 
     axis_label_fontsize = 30
@@ -564,10 +563,12 @@ function plot_particle_video(
     return plot_particle_video(params::Parameters, xs, ts, Ψ_mat; framerate, kwargs...)
 end
 
-# %%
+params = Parameters(; L=40, μ=10, σ=5, p₀=2, m=2)
+eigens = get_eigenfunction_expansion(params; tol=1e-5)
 
-params = Parameters(; L=80, μ=40, σ=8, p₀=3, m=5)
-eigens = get_eigenfunction_expansion(params; tol=1e-6)
+plot_particle_static(params, eigens; dx=0.1, t_max=1000, dt=0.1)
+
+# %%
 
 # %%
 [ep.cₙ for ep in eigens.eigens]
