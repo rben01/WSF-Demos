@@ -327,9 +327,18 @@ border-left-color: #888;
 border-right-color: #aaa;
 border-bottom-color: #aaa;
 }
+.button:active {
+background: #ccc;
+background-image: -webkit-linear-gradient(top, #bbb, #eee);
+color: #555;
+border-top-color: #ccc;
+border-left-color: #bbb;
+border-right-color: #888;
+border-bottom-color: #888;
+}
 .button:disabled {
 background: #ccc;
-background-image: -webkit-linear-gradient(top, #aaa, #ccc);
+background-image: -webkit-linear-gradient(top, #bbb, #ddd);
 color: #666;
 text-shadow: 1px 1px #ccc;
 }
@@ -369,9 +378,9 @@ position: absolute;
 <div id="controls">
 <div class="controls">
 <span># coins: <span id="text-n-coins"></span></span>
-<span class="input"><input id="input-n-coins" max="20000" min="1" type="number" value="1000"/></span>
+<span class="input"><input id="input-n-coins" min="1" type="number" value="1000"/></span>
 <span># rounds: <span id="text-n-rounds"></span></span>
-<span class="input"><input id="input-n-rounds" max="10000" min="1" type="number" value="1000"/></span>
+<span class="input"><input id="input-n-rounds" max="100000000" min="1" type="number" value="1000"/></span>
 <span># flips / round: <span id="text-n-flips-per-round"></span></span>
 <span class="input"><input id="input-n-flips-per-round" min="1" type="number" value="1"/></span>
 <span># heads to start: <span id="text-n-initial-heads"></span></span>
