@@ -29,7 +29,7 @@ const CAMERA_POINT_OF_FOCUS = new THREE.Vector3(0, -20, CAMERA_Z);
 const DRAG_SPEED = 0.002; // scale factor to convert pixels dragged to radians
 
 d3.select(canvas).call(
-	d3.drag().on("drag", function (event) {
+	d3.drag().on("drag", (event) => {
 		const cameraDisplacementFromPointOfFocus = camera.position
 			.clone()
 			.sub(CAMERA_POINT_OF_FOCUS);
@@ -113,9 +113,12 @@ const MIN_SLIT_SEPARATION = 2;
 const MAX_SLIT_SEPARATION = 30;
 const DEFAULT_SLIT_SEPARATION = (MIN_SLIT_SEPARATION + MAX_SLIT_SEPARATION) / 2;
 
-const colorScale = t =>
+const colorScale = (t) =>
 	d3.interpolateRgb(d3.interpolateSinebow(t * 0.7), "white")(0.05);
-const wavelengthScale = d3.scaleLinear([MAX_WAVELENGTH, MIN_WAVELENGTH], [0, 1]);
+const wavelengthScale = d3.scaleLinear(
+	[MAX_WAVELENGTH, MIN_WAVELENGTH],
+	[0, 1],
+);
 
 const ARROWHEAD_LENGTH = 1.2;
 const ARROWHEAD_WIDTH = 0.8;
@@ -147,17 +150,24 @@ function pointsToGeometry(
 		points = [...points, points[0]];
 	}
 
-	const vector3s = points.map(point => new THREE.Vector3(...point));
+	const vector3s = points.map((point) => new THREE.Vector3(...point));
 	return new geometryConstructor().setFromPoints(vector3s);
 }
 
 const DETECTOR_AMPLITUDE = (DETECTOR_HEIGHT * 0.7) / 2;
 
-function getIntensityOnDetector(angle, wavelength, slitSeparation, baseIntensity) {
+function getIntensityOnDetector(
+	angle,
+	wavelength,
+	slitSeparation,
+	baseIntensity,
+) {
+	const x = 0 + DISTANCE * Math.tan(angle);
 	// An arbitrary factor to smooth things out; the larger, the less bumpy the wave
 	return (
 		baseIntensity *
-		Math.cos((Math.PI * slitSeparation * Math.sin(angle)) / wavelength) ** 2
+		Math.cos((Math.PI * slitSeparation * Math.sin(angle)) / wavelength) ** 2 *
+		sinc(5e-2 * x) ** 2
 	);
 }
 
@@ -210,7 +220,14 @@ function getNPeriodsTotal(originCx, originDisplacement, angle, wavelength) {
 	return nPeriodsTotal;
 }
 
-function getLocalAmplitude(phase, offset, wavelength) {
+function sinc(x) {
+	if (x === 0) {
+		return 1;
+	}
+	return Math.sin(x) / x;
+}
+
+function getLocalAmplitude(phase, offset, wavelength, modulate) {
 	return Math.sin(2 * Math.PI * phase - offset / wavelength);
 }
 
@@ -244,7 +261,8 @@ function getPhotonPath({
 		const x = (1 - t) * originX + t * endPointX;
 
 		const phase = t * nPeriodsTotal;
-		const y = originCy + amplitude * getLocalAmplitude(phase, offset, wavelength);
+		const y =
+			originCy + amplitude * getLocalAmplitude(phase, offset, wavelength);
 
 		const z = (1 - t) * SOURCE_Z + t * DETECTOR_Z;
 		points.push(new THREE.Vector3(x, y, z));
@@ -258,11 +276,18 @@ function getPhotonValueOnDetector(displacement) {
 		getNPeriodsTotal(0, displacement, currAngle, currWavelength),
 		currOffset,
 		currWavelength,
+		true,
 	);
 }
 
 let isPlaying = false;
-function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects }) {
+function updateEnvironment({
+	angle,
+	wavelength,
+	slitSeparation,
+	offset,
+	objects,
+}) {
 	if (angle !== undefined) {
 		currAngle = angle;
 	} else {
@@ -287,7 +312,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 		offset = currOffset;
 	}
 
-	const paneInnerEdgeDistFromCenterX = slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH;
+	const paneInnerEdgeDistFromCenterX =
+		slitSeparation / 2 + SOURCE_PANE_GAP_WIDTH;
 	if (objects === undefined) {
 		objects = {};
 
@@ -328,7 +354,10 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 			);
 			pane.position.z = SOURCE_Z;
 
-			const border = new THREE.Line(new THREE.BufferGeometry(), OUTLINE_MATERIAL);
+			const border = new THREE.Line(
+				new THREE.BufferGeometry(),
+				OUTLINE_MATERIAL,
+			);
 
 			const arrowOrigin = new THREE.Vector3(
 				0,
@@ -458,7 +487,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 		})();
 	}
 
-	const outerPaneXPos = paneInnerEdgeDistFromCenterX + SOURCE_OUTER_PANE_WIDTH / 2;
+	const outerPaneXPos =
+		paneInnerEdgeDistFromCenterX + SOURCE_OUTER_PANE_WIDTH / 2;
 	// Left pane
 	(() => {
 		const { pane, border } = objects.leftPaneObjs;
@@ -485,7 +515,11 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 		pane.geometry = paneGeometry;
 
 		const borderGeometry = pointsToGeometry(
-			get3DVerticesForRectAtOrigin(slitSeparation, SOURCE_PANE_HEIGHT, SOURCE_Z),
+			get3DVerticesForRectAtOrigin(
+				slitSeparation,
+				SOURCE_PANE_HEIGHT,
+				SOURCE_Z,
+			),
 		);
 		border.geometry.dispose();
 		border.geometry = borderGeometry;
@@ -503,12 +537,8 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 
 	// Ampltitude (intensity) visible on back of detector
 	(() => {
-		const {
-			topCurve,
-			bottomCurve,
-			verticalLine,
-			superpositionDot,
-		} = objects.amplitudeObjs;
+		const { topCurve, bottomCurve, verticalLine, superpositionDot } =
+			objects.amplitudeObjs;
 
 		const tubeRadius = 0.1;
 		const [topPath, bottomPath] = getIntensityPath({
@@ -567,6 +597,7 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 		}
 	})();
 
+	const black = new THREE.Color(0x000000);
 	const color = new THREE.Color(colorScale(wavelengthScale(wavelength)));
 
 	// Lights on front of detector
@@ -583,9 +614,16 @@ function updateEnvironment({ angle, wavelength, slitSeparation, offset, objects 
 			const lightIndex = i - maxIndex;
 
 			const theta = Math.asin((lightIndex * wavelength) / slitSeparationMeters);
-			const x = screenUnitsToMetersScale.invert(distanceMeters * Math.tan(theta));
+			const x = screenUnitsToMetersScale.invert(
+				distanceMeters * Math.tan(theta),
+			);
 
-			light.color = color;
+			light.color = color
+				.clone()
+				.lerp(
+					black,
+					(2 * Math.abs(i - (nFringeLights - 1) / 2)) / nFringeLights,
+				);
 			light.position.set(x, 0, DETECTOR_Z - 2);
 			light.lookAt(x, 0, 0);
 		}
@@ -665,11 +703,17 @@ function play() {
 				wavelength: currWavelength,
 				offset,
 			});
-			photon.geometry = new THREE.TubeBufferGeometry(photonPath, 1000, 0.15, 10);
+			photon.geometry = new THREE.TubeBufferGeometry(
+				photonPath,
+				1000,
+				0.15,
+				10,
+			);
 			photon.material.color = color;
 		}
 
 		const superpositionDot = objs.amplitudeObjs.superpositionDot;
+		const x = 0 + DISTANCE * Math.tan(currAngle);
 		const intensity = getIntensityOnDetector(
 			currAngle,
 			currWavelength,
@@ -685,7 +729,8 @@ function play() {
 		);
 
 		superpositionDot.position.y =
-			(intensity / 2) * (leftPhotonValueOnDetector + rightPhotonValueOnDetector);
+			(intensity / 2) *
+			(leftPhotonValueOnDetector + rightPhotonValueOnDetector);
 
 		renderer.render(scene, camera);
 
