@@ -1,0 +1,861 @@
+[.qm-chapter.chap-2]
+= The Time-Independent {sch} Equation
+
+== Stationary States
+=== Questions
+==== Problem
+
+Which of the following are always true when we use separation of variables to solve the Schrodinger equation?
+[{sublist-style}]
+. stem:[\Psi(x,t)=\psi(x)\phi(t)]
+. Both sides of the Schrodinger equation are constant
+. stem:[\Psi(x,t)] is a stationary state
+. stem:[V(x,t) = V(x)]
+. stem:[i\hbar \frac{\partial \Psi}{\partial t} = 0]
+
+.Solution
+[%collapsible]
+====
+Only (a) is true. NEED TO EDIT! Check other answers in 2
+====
+
+==== Problem
+Why is stem:[\Psi_E(x,t)= \psi_E(x)e^{-iEt/\hbar}] called a stationary state if it is time-dependent?
+
+[{sublist-style}]
+. Show that stem:[|\Psi_E(x,t)|^2 = |\psi_E(x)|^2].
+. Show that stem:[ \Braket{p} = 0] for stem:[\Psi_E(x,t)].
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. {nbsp}
++
+[stem]
+++++
+\begin{align*}|
+\Psi_E(x,t)|^2 &= \Psi_E^* \Psi_E\\
+&= (\psi_E^*(x)e^{iEt/\hbar}) (\psi_E(x) e^{-iEt/\hbar}) \\
+&= |\psi_E(x)|^2
+\end{align*}
+++++
+
+. For a particle in state stem:[\Psi_E],
++
+[stem]
+++++
+\begin{align*}
+\Braket{x}&=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
+&=\int_{\mathcal D} x|\psi_E(x)|^2\,dx\\
+&=\textrm{constant w.r.t time}
+\end{align*}
+++++
+
+So stem:[\frac{d\Braket{x}}{dt}=0].
+Then, Ehrenfest's theorem says that stem:[\Braket{p}=m\frac{d\Braket{x}}{dt}=0].
+
+====
+
+
+==== Problem
+{startsb}Similar to Griffiths text (not a problem). Need to modify more{endsb}
+The classical Hamiltonian, the total energy in a system, is given by stem:[H(x,p)=\frac{p^2}{2m}+V(x)], where stem:[\frac{p^2}{2m}] is the kinetic energy and stem:[V(x)] is the potential energy.
+
+[{sublist-style}]
+* Using the quantum mechanical substitution rule stem:[p \rightarrow -i\hbar \frac{\partial}{\partial x}], find the quantum mechanical Hamiltonian stem:[\hat H].
+Substituting this Hamiltonian into the time-independent {sch} equation
++
+[stem]
+++++
+-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V\psi = E\psi
+++++
+
+yields stem:[\hat H\psi=E\psi].
+* Show that stem:[\braket{\hat H} = E].
+* Show that stem:[\braket{\hat H^2} = E^2]. (Hint: first show that stem:[\hat H^2\psi=E^2\psi])
+* Conclude that the variance of stem:[\hat H] is 0.
+
+In other words, every measurement of the total energy of a solution to the time-dependent {sch} equation will yield stem:[E].
+
+==== Problem
+If you were to measure the energy of a particle with the wavefunction stem:[\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)], what is the probability that you’d measure the energy to be stem:[E_2]?
+
+.Solution
+[%collapsible]
+====
+When a wavefunction is written as stem:[\Psi(x,t)=\sum_n c_n\Psi_n(x)=\sum_n c_n\psi_n(x) e^{-iE_n t/\hbar}], the probability that a measurement of the energy yields stem:[E_n] is stem:[|c_n|^2].
+The probability that energy is stem:[E_2], then, is stem:[\left|c_2\right|^2=\left|-\frac{3i}{5}\right|^2=\frac{9}{25}].
+(As there are only two eigenstates in this example, the probability of measuring an energy of stem:[E_1] must be one minus this, or stem:[\frac{16}{25}].)
+====
+
+==== Problem
+Griffiths's questions 2.1 and 2.2 are very good. Check to see how those can be modified.
+
+
+== The Infinite Square Well
+=== Questions
+
+==== Problem
+The solutions to the time-independent {sch} equation in the infinite square well of width \(a\) are stem:[\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)] with stem:[n\ge 1].
+Show that these functions are _orthonormal_, i.e., that stem:[\Braket{\psi_m,\psi_n}] is 1 when stem:[m=n] and 0 otherwise.
+(Hint: stem:[\cos] is an even function, stem:[\sin] is an odd function, and stem:[\cos(a+b)=\cos a\cos b-\sin a\sin b].)
+
+.Solution
+[%collapsible]
+====
+Using the trigonometric identities in the hint, we have
++
+[stem]
+++++
+\begin{align*}
+\cos(a+b)&=\cos a\cos b-\sin a\sin b\\
+\cos(a-b)&=\cos a\cos b+\sin a\sin b\\
+\cos(a+b)-\cos(a-b)&=-2\sin a\sin b\\
+\sin a \sin b &=\frac{1}{2}(\cos(a-b) - \cos(a+b))
+\end{align*}
+++++
+
+Regardless of whether stem:[m=n],
++
+[stem]
+++++
+\begin{align*}
+\Braket{\psi_m,\psi_n}&= \int_0^a \psi_m^*\psi_n\,dx\\
+&=\int_0^a \sqrt\frac{2}{a}\sin\left(\frac{m\pi}{a}x\right)\ \sqrt\frac{2}{a}\sin\left(\frac{n\pi}{a}x\right)\,dx\\
+&=\frac{1}{a}\int_0^a \cos\left(\frac{(m-n)\pi}{a}x\right)-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx
+\end{align*}
+++++
+
+And for stem:[k\ne 0],
++
+[stem]
+++++
+\begin{align*}
+\int_0^a \cos\left(\frac{k\pi}{a}x\right)\,dx=\left.\frac{a}{k\pi}\sin\left(\frac{k\pi}{a}x\right)\right|^a_0=0
+\end{align*}
+++++
+
+When stem:[m=n], stem:[\Braket{\psi_m,\psi_n}] becomes
++
+[stem]
+++++
+\begin{align*}
+\frac{1}{a}\int_0^a \cos 0-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx=\frac{1}{a}\int_0^a dx=1
+\end{align*}
+++++
+
+When stem:[m\ne n], both of the stem:[\cos] terms in the integral are of the form stem:[\cos\left(\frac{k\pi}{a}x\right),k\ne 0] and so they both integrate to 0, and then stem:[\Braket{\psi_m,\psi_n}=0].
+====
+
+==== Problem
+Let stem:[V] be the potential in the infinite square well:
+[stem]
+++++
+V(x) = \begin{cases}
+            0 &  0 \leq x \leq a \\
+            \infty &  \textrm{otherwise}
+\end{cases}
+++++
+
+[{sublist-style}]
+. Find the general solution using the time-independent {sch} equation, the simple harmonic oscillator equation, and applying the constraints of the infinite square well.
+. Apply the boundary conditions to solve for the constants stem:[A] and stem:[B].
+. Find solutions for stem:[kx] and, using those results, solve for the possible values of the energy stem:[E].
+. How does this result compare to what we’d expect from a classical case?
+. Use this result and normalize stem:[\Psi] to solve for stationary states.
+. What is the significance of this result?
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Inside the well, stem:[V(x) = 0], and so the {sch} equation says stem:[\frac{-\hbar^2}{2m}\frac{\partial^2\psi}{\partial x^2}=E\psi(x)].
+Letting stem:[k=\sqrt{2mE/\hbar}], we have
+stem:[\frac{d^2\psi(x)}{dx^2}= -k^2\psi(x)].
+ Assuming stem:[E\geq0], the solution isn’t contradicting the boundary conditions. Recognize:
+stem:[\frac{d^2\psi(x)}{dx^2} + k^2\psi = 0] as the equation of the
+simple harmonic oscillator.
+The solution of this equation is
+stem:[\psi(x)=A\sin(kx)+B\cos(kx)] where stem:[A,B] are constants determined by the boundary conditions.
+
+. For stem:[\psi] to be continuous at stem:[0] and stem:[a], we must have stem:[\psi(0) =\psi(a)=0].
+So stem:[\psi(0) = A\sin(0) + B\cos(0) = B], and hence
+stem:[B=0].
+This leaves us with: stem:[\psi(x)=A\sin(kx)],
+so either stem:[A=0] — in which case stem:[\psi] is 0 everywhere, which is not a valid wavefunction — or stem:[\sin(ka)=0].
+. The boundary condition stem:[\psi(a)=A\sin(ka)=0] requires that stem:[k= \frac{n\pi}{a}] with stem:[n] an integer.
+But if stem:[n=0] then stem:[\psi(x)=0] everywhere, so stem:[n] must in fact be nonzero.
+Additionally, stem:[\sin\left(\frac{-n\pi}{a}x\right)=-\sin\left(\frac{n\pi}{a}x\right)] — a solution we've already accounted for, since stem:[A] can absorb the leading minus sign — so the distinct solutions are stem:[k= \frac{n\pi}{a}] for positive integer stem:[n].
+Therefore the permissible values of the energy stem:[E] are
+stem:[E_n=\frac{\hbar^2 k_n^2}{2m} =\frac{\pi^2 n^2\hbar^2}{2ma^2}] with stem:[n] a positive integer.
+
+. Unlike the classical case, a quantum particle in the infinite square well cannot have an arbitrary value of energy.
+Instead, a quantum particle can only be in a superposition of one of these special _allowed_ states that fit within the constraints of the infinite square well.
+When observed, a quantum particle in the infinite square well will have an energy that is one of the stem:[E_n].
+. To compute the integral, we'll need the fact that stem:[\sin^2(a)=\frac{1}{2}(1-\cos(2a))].
++
+[stem]
+++++
+\begin{align*}
+|\psi_n(x)|^2&=\int_0^a |A|^2\sin^2\left(\frac{n\pi}{a}x\right)\,dx\\
+&=|A|^2\int_0^a\frac{1}{2}\left[1-\cos\left(\frac{2n\pi}{a}x\right)\right]\,dx\\
+&=\frac{|A|^2}{2}\left.\left[x-\frac{\sin(\frac{2n\pi}{a}x)}{\frac{2n\pi}{a}}\right]\right|^a_0\\
+&=\frac{|A|^2a}{2}
+\end{align*}
+++++
++
+For the norm to be 1, we must have stem:[|A|=\sqrt{\frac{2}{a}}].
+Any choice of stem:[A] satisfying this will do — stem:[A] can be complex, but its phase doesn't matter — so let's pick the most obvious and simplest choice, stem:[A=\sqrt{\frac{2}{a}}], to obtain stem:[\psi_n(x)=\sqrt\frac{2}{a}\sin\left(\frac{\pi}{a}x\right)].
+(In general, it's always simplest to choose the stationary states that are real-valued.)
+
+====
+
+==== Problem
+What are the four properties of the functions stem:[\Psi_n(x)] in the infinite square well?
+Are these properties unique to the infinite square well?
+Why are they so important?
+
+.Solution
+[%collapsible]
+====
+. These functions are alternatively even and odd about
+the center of the potential well.
+This is true for any symmetrical potential well.
+. With increasing stem:[n], each successive state has one more node in the wavefunction.
+This is true regardless of the shape of the potential well.
+. They are mutually orthogonal: stem:[\int \psi_m(x)^*\psi_n(x)\,dx=\delta_{mn}].
+This is true regardless of the potential well, as long as it's normalized.
+. The state functions form a complete set. This is not
+universal, but is almost always applicable for any potential we will
+encounter.
+
+These properties are so important because they hold true for almost all potentials, which means we can apply these four properties to help solve many different types of problems.
+====
+
+==== Problem
+A particle in the infinite square well of width stem:[a] has the following initial wave function: stem:[\Psi(x,0)=A(\psi_1(x) + \psi_4(x))].
+
+[{sublist-style}]
+. Normalize to find stem:[A].
+(You can assume stem:[A] is real and positive.)
+. Find the constants stem:[c_n] in the expression stem:[\Psi(x,0)=\sum_n c_n\psi_n(x)].
+. Compute stem:[\left|\Psi(x,t)\right|^2] (this isn't very useful on its own, but you'll need it for part (d)).
+. Compute stem:[\braket x] as a function of stem:[t].
+What is the frequency of oscillations?
+What is the amplitude?
+
+.Solution
+[%collapsible%open]
+====
+[{sublist-style}]
+. To normalize, we set stem:[\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=1] and simply compute, using the fact that the stem:[\psi_n] are orthonormal over stem:[[0,a]].
+(In the integrals below, for brevity, we omit the stem:[x] as an argument of the [.no-break]#stem:[\psi_n].#)
++
+[stem]
+++++
+\begin{align*}
+1&=\int_0^a\left|\Psi(x,0)\right|\\
+&=\int_0^a\left|A(\psi_1+\psi_4)\right|^2\,dx\\
+&=\int_0^a\left|A\right|^2(\psi_1^2+2\psi_1\psi_4+\psi_4^2)\,dx\\
+&=\left|A\right|^2(1+2\cdot 0+1)\\
+&=2\left|A\right|^2
+\end{align*}
+++++
++
+So stem:[A=\frac{1}{\sqrt{2}}] (or any complex number with that magnitude, but we can always take the normalization constant to be real, so we might as well do so.)
+. Simply referring to the expression for stem:[\Psi] in the problem statement, we have
++
+[stem]
+++++
+\Psi(x,0)=A(\psi_1(x)+\psi_4(x))=\frac{1}{\sqrt{2}}\psi_1(x)+\frac{1}{\sqrt{2}}\psi_4(x)
+++++
++
+so stem:[c_1=c_4=\frac{1}{\sqrt{2}}] and the other stem:[c_n] are zero.
+. In general, if stem:[\Psi(x,0)=\sum_n c_n\psi_n(x)], then stem:[\Psi(x,t)=\sum_n c_n\psi_n(x)\varphi_n(t) ] where stem:[\varphi_n(t):=e^{-iE_nt/\hbar}].
++
+--
+And if we write [.no-break]#stem:[E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1],# then [.no-break]#stem:[\varphi_n(t)=e^{-i n^2E_1t/\hbar}],# and so we can compute something that we'll need very soon:
+
+[stem]
+++++
+\begin{align*}
+\varphi_1(t)\varphi_4^* (t) &= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
+\end{align*}
+++++
+
+which means
+
+[stem]
+++++
+\begin{align*}
+\varphi_1(t)\varphi_4^* (t) + \varphi_1^*(t)\varphi_4(t)&=\varphi_1(t)\varphi_4^* (t) + (\varphi_1(t)\varphi_4^*(t))^*\\
+&=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
+&=2\cos(15E_1t/\hbar)
+\end{align*}
+++++
+
+Now to compute stem:[\left|\Psi(x,t)\right|^2].
+Below, for brevity, we'll write stem:[\varphi_n] instead of stem:[\varphi_n(t)] and stem:[\psi_n] instead of stem:[\psi_n(x)], and use the fact that stem:[c_n] and stem:[\psi_n] are real.
+
+[stem]
+++++
+\begin{align*}
+\left|\Psi(x,t)\right|^2&=\Psi(x,t)^*\Psi(x,t)\\
+&=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
+&=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
+&\quad+((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&=c_1^2\psi_1^2+c_4^2\psi_4^2+c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4
+\end{align*}
+++++
+--
+. We wish to compute stem:[\braket x] (as a function of stem:[t]), which is just the following expression:
++
+--
+[stem]
+++++
+\begin{align*}
+\braket x&=\int_0^a x\left|\Psi(x,t)\right|^2\,dx
+\end{align*}
+++++
+
+Before proceeding we'll want the following facts (which you can feel free to derive on your own).
+If stem:[m] and stem:[n] are integers, then if stem:[m\ne n], then
+
+[stem]
+++++
+\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx&=\frac{2mna^2((-1)^{m+n}-1)}{(m^2-n^2)^2\pi^2}
+\end{align*}
+++++
+
+and if stem:[m=n] then
+
+[stem]
+++++
+\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx=\int_0^a x\sin^2\left(\frac{n\pi}{a}x\right)\,dx=\frac{a^2}{4}
+\end{align*}
+++++
+
+(Note that this second one does not actually depend on stem:[n].)
+So,
+
+[stem]
+++++
+\begin{align*}
+\int_0^a x\,\psi_1^2\,dx&=\int_0^a x\left[\sqrt{2/a}\sin\left(\frac{\pi}{a} x\right)\right]^2\,dx\\
+&=\frac{2}{a}\int_0^ax\sin^2\left(\frac{\pi}{a} x\right)\,dx\\
+&=\frac{2}{a}\cdot\frac{a^2}{4}\\
+&=\frac{a}{2}\\\\
+\int_0^a x\,\psi_4^2\,dx&=\frac{a}{2}\\\\
+\int_0^a x\,\psi_1\psi_4 \,dx&=\int_0^ax\left[\sqrt{2/a}\sin\left(\frac{\pi}{a}x\right)\right]\left[\sqrt{2/a}\sin\left(\frac{4\pi}{a}x\right)\right]\,dx\\
+&=\frac{2}{a}\cdot\frac{2\cdot1\cdot4a^2(-2)}{(1^2-4^2)^2\pi^2}\\
+&=-\frac{32a}{225\pi^2}
+\end{align*}
+++++
+
+So, we may finally compute our answer:
+
+[stem]
+++++
+\begin{align*}
+\braket x&=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
+&=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&=\frac{a}{2}-\frac{32a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&=a\left(\frac{1}{2}-\frac{32}{225\pi^2}\cos(15E_1t/\hbar)\right)
+\end{align*}
+++++
+
+The frequency of oscillation is stem:[\frac{15E_1}{2\pi\hbar}=\frac{15\pi\hbar}{4ma^2}].
+The particle oscillates between stem:[a\left(\frac{1}{2}\pm\frac{32}{225\pi^2}\right)] and so its amplitude is stem:[\frac{64a}{225\pi^2}].
+
+Notably, unlike a classical particle, its amplitude is _not_ stem:[\frac{a}{2}] (stem:[\frac{64}{225\pi^2}\approx0.0288\ll 0.5]).
+The expected position of a quantum mechanical particle _cannot_ get arbitrarily close to the walls of the well — why not?
+--
+
+====
+
+
+== The Harmonic Oscillator
+
+=== Questions
+
+==== Problem
+Show that every solution of the time-independent harmonic oscillator {sch} equation stem:[\hat H\psi = E\psi] lies on the same "`ladder`":
+for every pair of solutions stem:[\psi_a,\psi_b] with stem:[a >b], there is some stem:[m] for which stem:[\psi_a=k\hat a_{+}^m\psi_b] (for some normalization constant stem:[k]).
+
+.Solution
+[%collapsible]
+====
+Suppose stem:[\psi_a] lies on ladder stem:[A] and stem:[\psi_b] on ladder stem:[B].
+By successively applying the lowering operator to stem:[\psi_a] and stem:[\psi_b], we obtain the bottommost rungs on the two ladders, which we'll denote stem:[\psi_{A,0}] and stem:[\psi_{B,0}].
+By virtue of being the bottommost rungs, they must satisfy stem:[\hat a_-\psi_{A,0}=\hat a_-\psi_{B,0}=0].
+Substituting stem:[\hat a_-=\frac{1}{\sqrt{2\hbar m\omega}}(i\hat p+m\omega x)], we obtain the differential equation stem:[\frac{d\psi_{L,0}}{dx}=-\frac{m\omega}{\hbar}x\psi_{L,0}] for stem:[L=A,B].
+In both cases this leads to the same solution:
+
+[stem]
+++++
+
+\psi_{A,0}(x)=\psi_{B,0}(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{\frac{1}{4}}e^{-\frac{m\omega}{2\hbar}x^2}
+
+++++
+
+So the ladders share their bottom rung, which we may now write as just stem:[\psi_0(x)].
+Every subsequent rung — on either ladder — is given by successive applications of the raising operator: stem:[\psi_{A,n}=\psi_{B,n}=k(\hat a_+)^n\psi_{0}].
+So,
+
+[stem]
+++++
+\begin{align*}
+\psi_a&=k(\hat a_+)^{a}\psi_0\\
+&=k(\hat a_+)^{a-b}(\hat a_+)^b\psi_0\\
+&=k(\hat a_+)^{n-b}\psi_b
+\end{align*}
+++++
+
+as desired.
+====
+
+==== Problem
+For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+What is an example of a potential field stem:[V(x)] for which the harmonic oscillator is _not_ a good approximation?
+
+.Solution
+[%collapsible]
+====
+stem:[V(x)=x^4] is one such potential, as it has no quadratic terms.
+====
+
+==== Problem
+*Coherent States* A _coherent state_ of the harmonic oscillator is a "`minimum uncertainty wavepacket`": a Gaussian wavefunction stem:[\Psi] for which stem:[\sigma_x^2+\sigma_p^2] at stem:[t=0] is minimized.
+
+. Find stem:[\sigma_x] and stem:[\sigma_p] at stem:[t=0].
+. Show that stem:[\sigma_x] and stem:[\sigma_p] are, in fact, constant over time (hence the name _coherent_ state — the probability distribution does not change shape over time).
+. Show that stem:[\Psi] is an eigenfunction of the lowering operator stem:[\hat a_-] (or the raising operator, as they have the same eigenvectors).
+
+==== Problem
+[Thaller] Show that solutions stem:[\Psi(x,t)] of the harmonic oscillator satisfy stem:[\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)].
+(Corollary: stem:[\Psi(x,t+2\pi)=-\Psi(x,t)].)
+So, while the probability distribution has period stem:[2\pi], matching the situation in classical physics, the wavefunction itself only has period stem:[4\pi].
+
+==== Problem
+Show that in the harmonic oscillator, stem:[ \frac{d\braket p}{dt}=-k\braket x].
+
+==== Problem
+[Adapted from Griffiths 2.16]
+The *Rodrigues formula* says that stem:[H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})].
+
+[{sublist-style}]
+* Use this to derive the recurrence relation stem:[H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x)].
+* Show that stem:[H_n] satisfies stem:[\frac{d H_n(x)}{dx}=2nH_{n-1}(x)].
+* Show that stem:[H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}].
+
+:!qn:
+=== Demonstrations
+
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816[Harmonic oscillator stationary states (static)^]
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816[Harmonic oscillator evolution over time^]
+
+== The Free Particle
+=== Questions
+==== Problem
+Show that the more localized a free particle is initially (stem:[\braket{x^2}] small at stem:[t=0]), the faster it will spread out over time (stem:[\frac{d}{dt}\braket{x^2}] large for small [.no-break]#stem:[t]);# and, inversely, show that the less localized a free particle is initially, the more slowly it will spread out over time.
+(Hint: this depends heavily on the dispersion relation for particles, [.no-break]#stem:[\omega=\frac{\hbar k^2}{2m}].)#
+
+==== Problem
+Suppose a free particle has the initial wavefunction [.no-break]#stem:[\Psi(x,0)=\delta(x)]#, where stem:[\delta(x)] is the Dirac delta “function”.
+Compute stem:[\Psi(x,t)].
+
+
+==== Problem
+Suppose a free particle has the initial wavefunction [.no-break]#stem:[\psi(x) = \frac{\sin(x)}{\pi x}].#
+(Take our word for it that this wavefunction is already normalized.)
+
+[{sublist-style}]
+. Find stem:[F(k):=\mathcal{F}[\psi](k)].
+You may use computational software to help you calculate the integral.
+(But don't just type in "`Fourier transform of stem:[\frac{\sin(x)}{\pi x}]`"!)
+. Verify that your result satisfies stem:[\Psi(x,0)=\frac{\sin(x)}{\pi x}].
+. If you're feeling particularly ambitious, find stem:[\Psi(x,t)].
+Note that the integral involves the so-called special function the _error function_, stem:[\textrm{erf}(x)\coloneqq\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt], which has no elementary form.
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. {nbsp}
++
+[stem]
+++++
+\begin{align*}
+F(k)&=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \psi(x)e^{-ikx}\,dx\\
+&=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \frac{1}{\pi} \ \frac{\sin(x)e^{-ikx}}{x}\,dx\\
+&= \textrm{(... computational software ...)}\\
+&=\frac{1}{\pi\sqrt{2\pi}}\begin{cases}\pi&-1 \lt k \lt 1\\
+0&\textrm{otherwise}
+\end{cases}\\
+&=\begin{cases}\frac{1}{\sqrt{2\pi}} &-1 \lt k \lt 1 \\
+0&\textrm{otherwise}
+\end{cases}
+\end{align*}
+++++
+
+
+. For all stem:[t],
++
+--
+[stem]
+++++
+\begin{align*}
+\Psi(x,t)&=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty F(k)e^{i(kx-\frac{\hbar k^2}{2m}t)}\,dk\\
+&=\frac{1}{\sqrt{2\pi}}\int_{-1}^1 \frac{1}{\sqrt{2\pi}}e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk\\
+&=\frac{1}{2\pi}\int_{-1}^1 e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk
+\end{align*}
+++++
+
+When stem:[t=0],
+
+[stem]
+++++
+\begin{align*}
+\Psi(x,0)&=\frac{1}{2\pi}\int_{-1}^1 e^{ikx}\,dk\\
+&=\frac{1}{2\pi}\left.\frac{e^{ikx}}{ix}\right|^{k=1}_{k=-1}\\
+&=\frac{1}{2\pi ix}(e^{ix}-e^{-ix})\\
+&=\frac{2i\sin(x)}{2\pi ix}\\
+&=\frac{\sin(x)}{\pi x}
+\end{align*}
+++++
+
+as desired.
+--
+====
+
+==== Problem
+Using the same steps as 2.4.1, find stem:[\Psi(x,t)] for stem:[\Psi(x,0) = A\frac{\sin(x)}{x}]. You may use computational software to help you with the integrals.
+
+==== Problem
+Phase and group velocity: show that stem:[v_g-v_p=k\frac{d}{dk}v_p].
+
+==== Problem
+The phase and group velocity of light:
+
+[sublist-style]
+. Show that in a vacuum, the phase velocity and group velocity of light are the same.
+. In a medium with refractive index stem:[>1] (where light travels slower than stem:[c]), which is greater, the phase velocity or the group velocity?
+
+== The Delta-Function Potential
+=== Questions
+==== Problem
+For a fixed constant stem:[a], compute the closed form for stem:[f(x)\coloneqq\int_{-\infty}^x\delta (t-a)\,dt].
+
+.Solution
+[%collapsible]
+====
+First, use stem:[u]-substitution with stem:[u=t-a] to obtain [.no-break]#stem:[f(x)=\int_{-\infty}^{x-a} \delta(u)\,du].#
+Then, if stem:[x< a], the integrand is everywhere 0, so stem:[f(x)=0].
+Meanwhile if stem:[x> a], then the integrand includes stem:[\delta(0)] and so stem:[f(x)=1].
+The value of stem:[f(a)] depends on your interpretation of stem:[\int_{-\infty}^0\delta(t)\,dt], which could be undefined, stem:[\frac{1}{2}], or 1.
+So we have
+
+[stem]
+++++
+\begin{align*}
+f(x)&=\begin{cases}
+0&x<a\\
+\textrm{?}&x=a\\
+1&x>a
+\end{cases}
+\end{align*}
+++++
+
+[sidebar]
+--
+Why is it so hard to define stem:[\int_{-\infty}^0\delta (t)\,dt]?
+There are three possible values:
+
+* Undefined, simply because by definition the only integrals of the stem:[\delta] function that exist are those containing an _interval_ containing stem:[0].
+* stem:[\frac{1}{2}], because stem:[\delta] is an even "`function`", so its integral from stem:[-\infty] to stem:[0] should be half of its integral from stem:[-\infty] to [.no-break]#stem:[\infty].#
+* stem:[1], because the domain of integration includes everywhere that [.no-break]#stem:[\delta(x)\ne 0].#
+
+This helps to illustrate the thorniness of stem:[\delta] and why it is not considered a function at all.
+--
+====
+
+==== Problem
+Show that the stem:[\delta] function can be approximated by a stem:[0]-centered Gaussian stem:[\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}] whose variance stem:[\sigma^2] approaches 0.
+
+
+.Solution
+[%collapsible]
+====
+Clearly, the integral of a Gaussian over the number line is 1, no matter what.
+As its variance approaches 0, its integral over domains that do not include the origin must approach 0, i.e., for stem:[\varepsilon>0],
+
+[stem]
+++++
+\begin{align*}
+\lim_{\sigma^2\to0}\int_{-\infty}^{-\varepsilon}\mathcal \varphi(x)\,dx=\lim_{\sigma^2\to0}\int_{\varepsilon}^{\infty}\mathcal \varphi(x)\,dx=0
+\end{align*}
+++++
+
+Since stem:[\varphi(x)>0] for all stem:[x], the only way the above integrals approach stem:[0] as stem:[\sigma^2\to 0] is if stem:[\varphi(x)\to 0] for stem:[x\ne 0].
+Since stem:[\varphi(x)\to0] when stem:[x\ne 0] and stem:[\int_{-\infty}^\infty\varphi(x)\,dx=1], it is indeed that case that stem:[\lim_{\sigma^2\to 0}\varphi(x)=\delta(x)].
+====
+
+==== Problem
+Show the following:
+
+[stem]
+++++
+\displaystyle\delta(x)=\lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)
+++++
+
+This provides another continuous approximation of the stem:[\delta] function which improves as stem:[k] grows.
+
+.Solution
+[%collapsible]
+====
+The simplest way to show this is to observe how the expression on the RHS behaves when integrated:
+
+[stem]
+++++
+\begin{align*}
+&\phantom{=}\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&= \lim_{k\to\infty}\int_{-\infty}^z\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&= \lim_{k\to\infty}\left(\left.\frac{1}{1+e^{-kx}}\right|_{-\infty}^z\right)\\
+&= \lim_{k\to\infty}\left(\frac{1}{1+e^{-kz}}-0\right)
+\end{align*}
+++++
+
+When stem:[z< 0], stem:[e^{-kz}\to\infty] and so stem:[\frac{1}{1+e^{-kz}}\to0], making the integral 0.
+Meanwhile, when stem:[z>0], stem:[e^{-kz}\to0] and so stem:[\frac{1}{1+e^{-kz}}\to1], making the integral 1.
+So,
+
+[stem]
+++++
+\begin{align*}
+\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx&=\begin{cases}
+0&z\lt 0\\
+1&z\gt 0
+\end{cases}
+\end{align*}
+++++
+
+which does indeed match the stem:[\delta] function.
+====
+
+==== Problem
+Graph an example of:
+(Show the classical turning points, stem:[E], and label your axes.)
+(problem may be too similar to the textbook chapter)
+
+[{sublist-style}]
+. A bound state
+. A scattering state
+. A classical bound state/quantum scattering state (made
+possible by quantum tunneling), and explain what quantum tunneling is.
+
+
+.Solution
+[%collapsible]
+====
+Graphs vary, but potential solutions on pg. 62 of Griffiths.
+====
+
+==== Problem
+Derive the reflection and transmission coefficients for the delta-function well.
+When are these coefficients exactly the same?
+
+==== Problem
+Describe what happens when identical waves approach the delta-potential well from _both_ sides.
+
+==== Problem
+Solve the asymmetric double delta-function potential,
+
+[stem]
+++++
+\begin{align*}
+V(x)=\alpha \delta(x+a)+\beta\delta(x-a)
+\end{align*}
+++++
+
+where stem:[\alpha] and stem:[\beta] are arbitrary constants (positive, negative, or zero).
+When exactly one of stem:[\alpha] and stem:[\beta] is negative, how many bound states does this system have?
+
+== The Finite Square Well
+=== Questions
+
+==== Problem
+When is the square well approximation valid and why is it usable to make fair predictions?
+
+.Solution
+[%collapsible]
+====
+If the de Broglie wavelength of the particle
+(stem:[\lambda = \hbar/p]) stem:[<]
+stem:[\Delta x_1] stem:[\Delta x_2], the square well
+approximation is valid.
+(Unless the particle is relativistic).
+Nothing we are trying to predict, like transmission and reflection coefficients,
+changes after making this approximation (as long as the above condition is met).
+====
+
+==== Problem [[question-finite-well-diff-eq]]
+Find the general solution to the finite square well differential equations for each section of the well (with stem:[V_0>0]):
+[stem]
+++++
+V(x) = \begin{cases}
+-V_0 &   |x| \le a \\
+0 &  |x| \gt a
+\end{cases}
+++++
+
+[{sublist-style}]
+. Left side of the well (stem:[x<-a])
+. Middle of the well (stem:[-a\le x\le a])
+. Right side of the well (stem:[x>a])
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. If stem:[V(x) = 0] then the {sch} equation says stem:[-\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx} = E\psi].
+Then stem:[\frac{d^2\psi}{dx^2}=k^2\psi] where stem:[k=-\sqrt{2mE/\hbar}>0] (because stem:[E< 0]), which has solutions of the form stem:[\psi_1(x)=Ae^{-kx} + Be^{kx}].
+
+. If stem:[V(x) = -V_0] then {sch} equation says stem:[\left(-V_0-\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx}\right) \psi= E\psi], so stem:[\frac{d^2\psi}{dx^2}=-\frac{2m}{\hbar^2}(E+V_0)\psi], which has solutions stem:[\psi_2(x)=C\sin(lx)+D\cos(lx)] where stem:[l=\sqrt{2m(E+V_0)} > 0].
+
+. This is the same as part (a): stem:[\psi_3(x) = Ee^{-kx}+Fe^{kx}].
+====
+
+==== Problem
+Using your results from xref:question-finite-well-diff-eq[the above problem], apply the boundary conditions to all the general solutions.
+Use these equations and their coefficients to derive the transcendental equation:
+stem:[(k-il)/(k+il)= \pm e^{2ila}]. (Hint: stem:[k] as coefficient from stem:[a] and stem:[l] as coefficient from stem:[b].)
+
+.Solution
+[%collapsible]
+====
+The boundary conditions constitute the following:
+
+. Finite as stem:[x\to-\infty]: stem:[\psi_1(x\rightarrow-\infty) < \infty].
+. Finite as stem:[x\to-\infty]:
+stem:[\psi_3(x\rightarrow\infty) < \infty].
+. Continuous at the boundaries: stem:[\psi_1(-a)=\psi_2(-a)] and stem:[\psi_2(a) = \psi_3(a)].
+. The derivative of the wave function is continuous at boundaries:
++
+--
+[stem]
+++++
+\begin{align*}
+\left.\frac{d\psi_1}{dx}\right|_{x=-a} &= \left.\frac{d\psi_2}{dx}\right|_{x=-a}\\
+\left.\frac{d\psi_2}{dx}\right|_{x=a} &= \left.\frac{d\psi_3}{dx}\right|_{x=a}
+\end{align*}
+++++
+
+Applying these conditions to the results from xref:question-finite-well-diff-eq[]:
+
+. stem:[\psi_1(-\infty)<\infty] implies that stem:[A=0] and so stem:[\psi_1(x)=Be^{kx}].
+. stem:[\psi_3(\infty)<\infty] implies that stem:[D=0] and so stem:[\psi_3(x)=Ce^{-kx}].
+. As in part (b) of xref:question-finite-well-diff-eq[], let stem:[\psi_2(x)=Ce]
+stem:[\frac{}{} \psi_1(x=-\infty)<\infty] A=0
+stem:[\psi_1(x) =  Be^{kx}]
+
+{empty}2. stem:[\psi_3(x=\infty)<\infty] D=0
+stem:[\psi_3(x)=Ce^{-kx}]
+
+{empty}3. Let stem:[\psi_2 = Ce^{ilx} + De^{-ilx}]
+stem:[Be^{-ka}=Ce^{-ila} + De^{ila}](eq.1) and
+stem:[Be^{-ka} = Cile^{-ila} - Dile^{ila}](eq.2) Now take:
+k(eq.1) - (eq.2):
+stem:[Cke^{-ila} + Dke^{ila} = Cile^{-ila} - Dile^{ila}]
+stem:[C(ile^{-ila} - ke^{-ila})  = D(ke^{-ila} + ile^{ila})]
+stem:[C/D = - ((k+il)/(k-il))e^{2ila}] (eq.*)
+
+{empty}4.
+stem:[\psi_2(x=a)=\psi_3(x=a) an\frac{d d\psi_2}{dx}|_{x=a} = \frac{d\psi_3}{dx}|_{x=a}]
+stem:[Ce^{-ila} + De^{-ila} = Ee^{-ka}](eq.3) and
+stem:[ilCe^{-ila}-ilDe^{-ila}=-kEe^{-ka}](eq.4)
+
+Now take: k(eq.3) + (eq.4):
+
+stem:[Cke^{-ila}+Dke^{-ila}+ilCe^{-ila}-ilDe^{-ila}=0]
+
+stem:[C(ke^{-ila}+ile^{-ila})=-D(ke^{-ila}-ile^{-ila})]
+
+stem:[C/D = - ((k+il)/(k-il))e^{-2ila}] (eq.**)
+
+Now set (eq.* = eq. **):
+stem:[((k+il)/(k-il))e^{2ila}=((k-il)/(k+il))e^{-2ila}]
+stem:[((k-il)/(k+il))^2=e^{4ila}]
+stem:[(k-il)/(k+il) = \pm e^{2ila}]
+--
+
+====
+
+==== Problem
+[{sublist-style}]
+. Calculate the transmission and reflection coefficients for xref:question-finite-well-diff-eq[].
+. What happens as stem:[T\to 1] and stem:[R\to 1]?
+
+==== Problem
+Graph the allowed energies for the even bound state wave function of the finite square well.
+Show the possible energy values and explain your reasoning.
+
+==== Problem
+Using a graphical plotting program, examine some properties of the finite height well.
+
+[{sublist-style}]
+. How does the number of bound states (both odd and even) depend on the particle's mass (stem:[m]) and the well's width (stem:[a]) and depth (stem:[V_0])?
+Which variable causes the number of bound states to increase the fastest?
+How does this depend on the current values of stem:[m], stem:[a], and [.no-break]#stem:[V_0]?#
+. In the finite height well, at the boundary of the well (stem:[x=\pm a]), the bound states go from purely sinusoidal to exponentially decaying.
+How do the values of stem:[m], stem:[a], stem:[V_0], and the energy stem:[E] of the particle affect how rapidly the bound states decay outside of the well (and in turn how likely you are to find the particle outside of the well)?
+
+
+==== Problem
+For what energies stem:[E=E_n+V_0] is the finite square well ”opaque” to incoming wave packets, i.e., the transmission coefficient is 0?
+
+==== Problem
+Solve the “finite square wall”:
+
+[stem]
+++++
+\begin{align*}
+V(x)=\begin{cases}
+V_0\gt 0&-a\le x\le a\\
+0&|x|\ge a
+\end{cases}
+\end{align*}
+++++
+
+(Obviously there are only scattering states.)
+When is the wall “transparent” to incoming waves?
+Opaque?
+
+==== Problem
+Solve the asymmetric finite square well:
+
+[stem]
+++++
+\begin{align*}
+V(x)=\begin{cases}
+V_1&x<-a\\
+0&-a\le x\le a\\
+V_2&x>a
+\end{cases}
+\end{align*}
+++++
+
+where stem:[V_1,V_2] are positive constants.
+Show that when stem:[V_1=V_2] you recover the solution to the symmetric finite square well.
+
+=== Demonstrations
+
+* https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816[Finite square well stationary states (static)^]
++
+CAUTION: The stationary states are solved numerically in the browser (requires solving something like stem:[\tan z=\sqrt{(z_0/z)^2-1}], which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)

@@ -1,0 +1,917 @@
+[.qm-chapter.chap-3]
+= Formalism
+
+== Hilbert Space
+
+=== Questions
+
+==== Problem
+[This problem is Griffiths 3.1 but is too simple to be his I.P.] Formally, a _vector space_ is a set stem:[S] closed under linear combinations: if for all stem:[\vec u,\vec v\in S] and for all stem:[a,b\in\mathbb C], stem:[a\vec u+b\vec v] is also in stem:[S], then stem:[S] is a vector space.
+Show that the set of square-integrable functions does indeed form a vector space. CHANGE
+
+==== Problem
+[Griffiths 3.2; same caveat as above] A vector space stem:[S] is said to have an inner product stem:[\Braket{\cdot|\cdot}] when, for all stem:[u,v,w\in S] and stem:[a,b\in\mathbb C], the following properties hold:
+
+* Conjugate symmetry: stem:[\Braket{v|u}=\Braket{u|v}^*]
+* Nonnegativity: stem:[\Braket{u|u}\ge 0] (in particular, it's real), and stem:[\Braket{u|u}=0] if and only if stem:[\Ket{u}=\Ket 0]
+* Linearity: stem:[\Braket{u|(av+bw)}=a\Braket{u|v} + b\Braket{u|w}]
+
+In addition, we define the _norm_ of a vector, corresponding to the length of a vector in stem:[\mathbb R^n], to be stem:[\|v\|=\sqrt{\Braket{v|v}}] (or stem:[\|v\|^2=\Braket{v|v}]). +
+Show that the inner product below, defined on the set of square-integrable functions over domain stem:[(a,b)], satisfies these properties.
+[stem]
+++++
+\begin{align*}
+\Braket{f|g}:=\int_a^b f^*(x)g(x)\,dx
+\end{align*}
+++++
+
+
+==== Problem
+A function stem:[f] is said to be absolutely integrable when stem:[|f|] is integrable.
+
+. Find a continuous real-valued function on stem:[(0,\infty)] that is absolutely integrable, but not square-integrable.
+. Find a continuous real-valued function on stem:[(0,\infty)] that is square-integrable, but not absolutely integrable.
+
+.Solution
+[%collapsible]
+====
+The “trick” is find functions that approach the stem:[x]- or stem:[y]-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).
+
+[{sublist-style}]
+. One example is the following function:
++
+--
+[stem]
+++++
+\begin{align*}
+f(x)=\begin{cases}
+x^{-\frac{1}{2}}-1&x\le1\\
+0&x\ge 1
+\end{cases}
+\end{align*}
+
+++++
+
+image::fig-3.1.1-f1.svg[A function that is integrable but not square-integrable,width=500,role="text-center"]
+
+Ultimately this relies on the fact that stem:[\int_0^1 x^n\,dx] is finite if and only if stem:[n > -1].
+
+[stem]
+++++
+\begin{align*}
+\int_0^\infty f(x)\,dx&=\int_0^1 x^{-\frac{1}{2}}-1\,dx\\
+&=2x^\frac{1}{2}-x\Bigr|_0^1\\
+&=1\\
+\int_0^\infty f(x)^2\,dx&=\int_0^1 x^{-1}-2x^{-\frac{1}{2}}+1\,dx\\
+&=\ln(x)-4x^{\frac{1}{2}}+x\Bigr|_0^1\\
+&=\infty
+\end{align*}
+++++
+
+So stem:[f(x)] is integrable, but stem:[f(x)^2] is not.
+--
+. One example is the following function:
+--
+[stem]
+++++
+\begin{align*}
+f(x)=\frac{1}{x+1}
+\end{align*}
+
+++++
+
+image::fig-3.1.1-f2.svg[A function that is square-integrable but not integrable,width=500,role="text-center"]
+
+As shown below,
+[stem]
+++++
+\begin{align*}
+\int_0^\infty f(x)\,dx &=\int_0^\infty\frac{1}{x+1}\,dx\\
+&=\ln(x+1)\Bigr|_0^\infty\\
+&=\infty\\
+\int_0^\infty f(x)^2\,dx&=\int_0^\infty \frac{1}{(x+1)^2}\,dx\\
+&=-\frac{1}{x+1}\Bigr|_0^1\\
+&=\frac{1}{2}
+\end{align*}
+++++
+
+So stem:[f(x)] is not integrable, but stem:[f(x)^2] is.
+--
+====
+
+==== Problem
+Show that the commutator is linear in its first argument: stem:[[aA+bB, C\]=a[A,C\]+b[B,C\]].
+(It is also linear in its second argument; the proof is practically identical.)
+
+.Solution
+[%collapsible]
+====
+Operators don't necessarily commute, but scalars do.
+So,
+[stem]
+++++
+\begin{align*}
+[aA+bB,C]&=(aA+bB)C - C(aA+bB)\\
+&=aAC-aCA+bBC-bCB\\
+&=a(AC-CA)+b(BC-CB)\\
+&=a[A,C]+b[B,C]
+\end{align*}
+++++
+
+as desired.
+====
+
+==== Problem [[Cauchy-Schwarz]]
+Let's prove the Cauchy-Schwarz Inequality: stem:[\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}], or equivalently stem:[\left|\Braket{x|y}\right|\le \|x\|\|y\|] (“the magnitude of the inner product is at most the product of the norms.”).
+This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).
+
+[{sublist-style}]
+. First, prove the Pythagorean Theorem for vectors: If stem:[x] and stem:[y] are orthogonal, then stem:[\|x+y\|^2=\|x\|^2+\|y\|^2].
+. Use this to prove the Cauchy-Schwarz Inequality.
+(Hint: let stem:[z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y].)
+. For which pairs of vectors stem:[x,y] is the quantity on the left hand side maximized, i.e., when is the inequality an equality?
+
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Since stem:[x] and stem:[y] are orthogonal, stem:[\Braket{x|y}=\Braket{y|x}=0]. Now we simply apply the linearity of the inner product:
++
+[stem]
+++++
+\begin{align*}
+\|x+y\|^2&=\Braket{x+y|x+y}\\
+&=\Braket{x|x}+\Braket{x|y} +\Braket{y|x} +\Braket{y|y}\\
+&=\Braket{x|x}+\Braket{y|y}\\
+&=\|x\|^2+\|y\|^2
+\end{align*}
+++++
+
+. First, if stem:[y=\Ket{0}], this is trivial; both sides of the inequality are 0.
+So assume stem:[y\ne\Ket{0}], from which it follows that stem:[\Braket{y|y}\ne 0].
+As the hint suggests, let stem:[z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y]. This reason for this choice of stem:[z] will soon be clear:
++
+--
+[stem]
+++++
+\begin{align*}
+\Braket{y|z}&=\Braket{y|x-\frac{\Braket{y|x}}{\Braket{y|y}}y}\\
+&=\Braket{y|x}-\frac{\Braket{y|x}}{\Braket{y|y}}\Braket{y|y}\\
+&=\Braket{y|x}-\Braket{y|x}\\
+&=0
+\end{align*}
+++++
+
+So stem:[y] and stem:[z] are orthogonal.
+(In fact, stem:[\frac{\Braket{y|x}}{\Braket{y|y}}y] is the projection of stem:[x] onto stem:[y], which when subtracted from stem:[x] leaves the portion of stem:[x] orthogonal to stem:[y].)
+Now, stem:[x=z+\frac{\Braket{y|x}}{\Braket{y|y}}y], the sum of two orthogonal vectors.
+And, of course, stem:[\|z\|\ge 0].
+So, applying the Pythagorean Theorem, we have
+[stem]
+++++
+\begin{align*}
+\|x\|^2&=\|z\|^2+\left\|\frac{\Braket{y|x}}{\Braket{y|y}}y\right\|^2\\
+&=\|z\|^2+\left|\frac{\Braket{y|x}}{\|y\|^2}\right|^2\|y\|^2\\
+&=\|z\|^2+\frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}\\
+&\ge \frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}
+\end{align*}
+++++
+
+Therefore,
+[stem]
+++++
+\begin{align*}
+\left|\Braket{x|y}\right|^2\le \|x\|^2\|y\|^2=\Braket{x|x}\Braket{y|y}
+\end{align*}
+++++
+
+as desired.
+
+Let's think about what this actually means, using the following form of the statement: stem:[\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}].
+If we define stem:[y'=\frac{y}{\|y\|}] to be stem:[y] normalized, and define stem:[P_{y'}=\Ket{y'}\Bra{y'}] to be the projection operator onto stem:[y'], then
+[stem]
+++++
+\begin{align*}
+\Bigl\|P_{y'}\Ket{x}\Bigr\|&=\Bigl\|\Ket{y'}\Braket{y'|x}\Bigr\|\\
+&=\left|\Braket{y'|x}\right|\ \Bigl\|\Ket{y'}\Bigr\|\\
+&=\frac{\left|\Braket{y|x}\right|}{\|y\|}\cdot 1\\
+&=\frac{\left|\Braket{y|x}\right|}{\|y\|}
+\end{align*}
+++++
+
+So all the Cauchy-Schwarz Inequality says is that stem:[\left\|P_{y'}\Ket{x}\right\|\le\|x\|], i.e. the norm of the projection of a vector stem:[x] onto some other vector cannot exceed the norm of stem:[x] itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).
+--
+
+. For this inequality to be an equality, we need stem:[\|z\|^2=0], which implies stem:[x=\frac{\Braket{y|x}}{\Braket{y|y}}y]. So stem:[x] must be a scalar multiple of stem:[y] (which, in the finite-dimensional case, would mean they're parallel).
+====
+
+=== Demonstrations
+
+== Observables
+
+=== Questions
+==== Problem
+Show that if stem:[P=Q^\dagger Q] for some operator stem:[Q], then stem:[\Braket{f|Pf}\ge 0] for all stem:[f].
+
+.Solution
+[%collapsible]
+====
+[stem]
+++++
+
+\begin{align*}
+\Braket{f|Pf}&=\Braket{f|Q^\dagger Qf}\\
+&=\Braket{Qf| Qf}\\
+&=\|Qf\|^2\\
+&\ge 0
+\end{align*}
+
+++++
+
+as desired
+====
+
+==== Problem
+Show that stem:[Q^{\dagger\dagger}=Q] for any operator stem:[Q]. (In other words, show that the adjoint of the adjoint is the original operator.)
+
+.Solution
+[%collapsible]
+====
+Simply by the definition of the adjoint and the fact that stem:[\Braket{g|f}=\Braket{f|g}^*], we have, for all stem:[f] and stem:[g],
+[stem]
+++++
+
+\begin{align*}
+\Braket{Q^{\dagger\dagger} f|g}&=\Braket{f|Q^\dagger g}\\
+&=\Braket{Q^\dagger g|f}^*\\
+&=\Braket{g|Qf}^*\\
+&=\Braket{Qf|g}^{**}\\
+&=\Braket{Qf|g}
+\end{align*}
+
+++++
+
+
+Now, because the inner product is linear,
+[stem]
+++++
+\begin{align*}
+0&=\Braket{Q^{\dagger\dagger} f|g}-\Braket{Qf|g}\\
+&=\Braket{Q^{\dagger\dagger} f-Qf|g}\\
+&=\Braket{(Q^{\dagger\dagger} -Q)f|g}
+\end{align*}
+++++
+
+In particular, taking stem:[g=(Q^{\dagger\dagger} -Q)f], we have
+
+[stem]
+++++
+\begin{align*}
+0&=\Braket{(Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f}\\
+&=\|(Q^{\dagger\dagger} -Q)f\|^2
+\end{align*}
+++++
+
+Hence stem:[(Q^{\dagger\dagger} -Q)f=\Ket 0].
+Since stem:[f] was arbitrary, stem:[Q^{\dagger\dagger} -Q] must be the zero operator, and so stem:[Q^{\dagger\dagger} =Q].
+====
+
+== Eigenfunctions of a Hermitian Operator
+
+=== Questions
+
+==== Problem
+Find the eigenfunctions and eigenvalues of the position operator stem:[x], defined by stem:[x(f)=xf], and stem:[p], defined by stem:[p(f)=-i\hbar \frac{\partial f}{\partial x}].
+
+==== Problem
+Suppose stem:[f] is an eigenfunction of stem:[A] with eigenvalue stem:[\lambda].
+
+[{sublist-style}]
+. Must stem:[f] also be an eigenfunction of stem:[A^\dagger]?
+Either show that this is the case or find a counterexample.
+. When is stem:[\lambda^*] an eigenvalue of stem:[A^\dagger]?
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. No, stem:[f] need not be an eigenfunction of stem:[A^\dagger].
+For instance, if stem:[\displaystyle A=\begin{pmatrix}3&2\\0&1\end{pmatrix}], then
++
+--
+[stem]
+++++
+\begin{align*}
+A\begin{bmatrix}1\\0\end{bmatrix}=\begin{pmatrix}3&2\\0&1\end{pmatrix}\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\0\end{bmatrix}=3\begin{bmatrix}1\\0\end{bmatrix}
+\end{align*}
+++++
+
+yet
+[stem]
+++++
+\begin{align*}
+A^\dagger=\begin{pmatrix}3&0\\2&1\end{pmatrix}\\
+A^\dagger\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\2\end{bmatrix}
+\end{align*}
+++++
+
+so while stem:[\begin{bmatrix}1\\0\end{bmatrix}] is an eigenvector of stem:[A], it is not an eigenvector of stem:[A^\dagger].
+--
+. stem:[\lambda^*] is an eigenvalue of stem:[A^\dagger] as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is _not_ finite-dimensional).
++
+--
+Supposing stem:[\lambda^*] were _not_ an eigenvalue of stem:[A^\dagger], then there would be no nonzero stem:[f] for which stem:[(A^\dagger-\lambda^* I)f=0], from which we may conclude that stem:[A^\dagger-\lambda^* I] is invertible; call its inverse stem:[B]. Then stem:[(A^\dagger-\lambda^* I)B=I], and so stem:[I=I^\dagger=B^\dagger(A^\dagger-\lambda^* I)^\dagger = B^\dagger (A -\lambda I)].
+So stem:[A-\lambda I] is also invertible, which means stem:[\lambda] is not an eigenvalue of stem:[A].
+By the contrapositive, if stem:[\lambda] is an eigenvalue of stem:[A], then stem:[\lambda^*] is an eigenvalue of stem:[A^\dagger].
+But if the underlying vector space is infinite dimensional, then consider stem:[T] defined on the Hilbert space of square-integrable functions over stem:[[0,\infty)] by stem:[Tf(x):=f(x+1)].
+(Showing that stem:[T] is linear is left as an exercise to the reader.) Then
+[stem]
+++++
+\begin{align*}
+\Braket{g,Tf}&=\int_{0}^\infty g^*(x)Tf(x)\,dx\\
+&=\int_{0}^\infty g^*(x)f(x+1)\,dx\\
+&=\int_{1}^\infty g^*(x-1)f(x)\,dx\\
+\end{align*}
+++++
+
+So, evidently,
+[stem]
+++++
+\begin{align*}
+T^\dagger g(x)=\begin{cases}0&0\le x\lt 1\\g(x-1)&x\ge 1\end{cases}
+\end{align*}
+++++
+
+If stem:[f(x):=\lambda^x] (with stem:[0<\lambda< 1] for square integrability), then stem:[Tf=\lambda^{x+1}=\lambda\lambda^x=\lambda f], so stem:[f] is an eigenvalue of stem:[T] with eigenvalue stem:[\lambda].
+Yet, if stem:[g] were an eigenvalue of stem:[T^\dagger] with eigenvalue stem:[\kappa], then we'd have
+[stem]
+++++
+\begin{align*}
+\kappa g(x)&=\begin{cases}0&0\le x\lt 1\\g(x-1)&x\ge 1\end{cases}
+\end{align*}
+++++
+
+If stem:[\kappa=0], then stem:[g(x-1)=0] for all stem:[x\ge 1], which is to say stem:[g(x)=0] for all stem:[x].
+But stem:[0] is not a permissible eigenfunction, so we must have stem:[\kappa\ne0], from which we conclude that
+[stem]
+++++
+\begin{align*}
+g(x)&=\begin{cases}0&0\le x\lt 1\\\frac{1}{\kappa}g(x-1)&x\ge 1\end{cases}
+\end{align*}
+++++
+
+Since stem:[g(x)=0] for stem:[0\le x< 1], we must also have stem:[g(x)=0] for stem:[1\le x< 2], then for stem:[2\le x< 3], and indeed for all of stem:[[0,\infty)] — stem:[g] is again identically 0!
+So, in fact, stem:[T^\dagger] has _no_ eigenvalues whatsoever (and certainly not stem:[\lambda^*]).
+
+[sidebar]
+=====
+In the first part of part (b), where exactly did we use the finite dimensionality of the underlying vector space?
+
+Answer: it was in stating if there is no nonzero stem:[f] for which stem:[(A^\dagger - \kappa^* I)f=0], then stem:[A^\dagger - \kappa^* I] has an inverse: an operator stem:[B] such that stem:[(A^\dagger - \kappa^* I)B=I].
+In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
+Indeed, stem:[T] as defined above sends to zero all (not-identically-zero) functions that are zero for stem:[x\ge 1], and yet stem:[T] has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on stem:[[0,1)]; it's just lost.
+=====
+--
+====
+
+==== Problem
+Suppose that stem:[f] is an eigenfunction of operators stem:[Q_1] and stem:[Q_2] with eigenvalues stem:[q_1] and stem:[q_2], respectively.
+Show that stem:[f] is an eigenfunction of the following operators, and find the corresponding eigenvalues.
+
+[{sublist-style}]
+. stem:[\alpha Q_1] for stem:[\alpha\in\mathbb C ]
+. stem:[Q_1+Q_2]
+. stem:[Q_1Q_2]
+. stem:[Q_2Q_1]
+
+.Solution
+[%collapsible]
+====
+The following laws are helpful:
+
+* Operator application is associative
+* Operator application distributes over addition
+* Scalars commute with everything
+
+//
+
+[{sublist-style}]
+. stem:[(\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f], so stem:[f] is an eigenfunction of stem:[\alpha Q_1] with eigenvalue stem:[\alpha q_1].
+. stem:[(Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f], so stem:[f] is an eigenfunction of stem:[Q_1+Q_2] with eigenvalue stem:[q_1+q_2].
+. {nbsp}
++
+--
+[stem]
+++++
+\begin{align*}
+(Q_1Q_2)f&=Q_1(Q_2f)\\
+&=Q_1(q_2f)\\
+&=q_2(Q_1f)\\
+&=q_2q_1f
+\end{align*}
+++++
+
+So stem:[f] is an eigenfunction of stem:[Q_1Q_2] with eigenvalue stem:[q_1q_2].
+--
+. The proof proceeds exactly as above. The eigenvalue is again stem:[q_1q_2]. So, while operators may not commute, the eigenvalues of the product of two operators does not depend on the order of the product.
+====
+
+==== Problem
+Show that if stem:[A] and stem:[B] commute, then stem:[AB] and stem:[BA] have the same eigenfunctions and eigenvalues.
+
+.Solution
+[%collapsible]
+====
+If stem:[f] is an eigenfunction of stem:[AB] with eigenvalue stem:[\lambda], then
+[stem]
+++++
+\begin{align*}
+(BA) f&=(AB)f=\lambda f
+\end{align*}
+++++
+
+as desired.
+====
+
+==== Problem
+Find the eigenfunctions and eigenvalues of the operator stem:[\frac{d^n}{dx^n}] for positive integer stem:[n].
+(Don't worry about whether the solutions are square-integrable.)
+
+.Solution
+[%collapsible]
+====
+For fixed stem:[q\ne 0], solving stem:[\frac{d^n}{dx^n}f(x)=qf(x)] yields
+[stem]
+++++
+ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right]
+++++
+
+where stem:[f_q] is the eigenfunction belonging to eigenvalue stem:[q], and the stem:[c_k] are constants determined by the boundary conditions.
+Evidently, every nonzero complex number is an eigenvalue.
+
+If stem:[q=0], then the solutions to stem:[\frac{d^n}{dx^n}f(x)=0] are simply the polynomials of degree at most stem:[n-1].
+
+NOTE: This problem highlights the fact that the eigenfunctions of an operator depend on the _precise_ operator in question; stem:[\frac{d^n}{dx^n}-q] is quite different from stem:[\frac{d^n}{dx^n}] when stem:[q\ne0].
+====
+
+==== Problem
+Show that if two (not necessarily hermitian) operators stem:[A] and stem:[B] commute, then, given an eigenfunction stem:[f] of stem:[A] with eigenvalue stem:[\lambda], either stem:[f] is an eigenfunction of stem:[B] or stem:[\lambda] is a degenerate eigenvalue of stem:[A] (i.e., there are at least two linearly independent eigenfunctions of stem:[A] corresponding to stem:[\lambda]).
+
+.Solution
+[%collapsible]
+====
+We have:
+[stem]
+++++
+\begin{align*}
+A(Bf)&=BAf\\
+&=B(\lambda f)\\
+&=\lambda (Bf)
+\end{align*}
+++++
+
+If stem:[Bf] is a scalar multiple of stem:[f], then by definition stem:[f] is an eigenfunction of stem:[B].
+(We don't know the eigenvalue, but no matter.)
+Otherwise, stem:[Bf] and stem:[f] are linearly independent, and both are eigenfunctions of stem:[A] corresponding to stem:[\lambda], so indeed stem:[\lambda] is degenerate.
+====
+
+== Generalized Statistical Interpretation
+
+=== Questions
+
+==== Problem
+Recall that if stem:[A] is an observable with (normalized) eigenvectors stem:[f_\alpha], we can write
+[stem]
+++++
+\begin{align*}
+\Psi&=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
+\Psi&=\int_{\mathcal D} c_z f_z\,dz\quad \textrm{(continuous spectrum)}\\
+\end{align*}
+++++
+
+and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by stem:[c_\alpha =\Braket{f_\alpha | \Psi}].
+Show that this is equivalent to “projecting” stem:[\Psi] onto stem:[f_\alpha]: if stem:[P_\alpha=\Ket{f_\alpha}\Bra{f_\alpha}], then stem:[P_\alpha\Ket\Psi=c_\alpha \Ket{f_\alpha}].
+
+.Solution
+[%collapsible]
+====
+The computation is straightforward:
+[stem]
+++++
+\begin{align*}
+P_\alpha\Ket{\Psi}&=(\Ket{f_\alpha}\Bra{f_\alpha})\Ket{\Psi}\\
+&=\Ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
+&=c_\alpha \Ket{f_\alpha}
+\end{align*}
+++++
+
+[NOTE]
+=====
+This is exactly why we can say that stem:[c_\alpha =\Braket{f_\alpha | \Psi}] tells you how much of stem:[f_\alpha] is in stem:[\Psi]. Because the inner project with a normalized vector stem:[u] is equivalent to a projection onto stem:[u], the inner product picks out just the component corresponding to stem:[u].
+For a concrete example, consider the vector space stem:[\mathbb R^n], where projecting a vector stem:[v] onto the stem:[k]^th^ basis vector stem:[e_n], i.e., computing stem:[\Braket{v|e_k}], picks out the stem:[k]^th^ component of stem:[v] — that's what the components of a vector in stem:[\mathbb R^n] _mean_.
+
+The Fourier transform is nothing more than a projection of a function onto the complex exponentials stem:[e^{-i\omega x}].
+=====
+====
+
+== The Uncertainty Principle
+
+=== Questions
+
+==== Problem
+Show that the commutator of two hermitian operators is of the form stem:[iQ] where stem:[Q] is hermitian.
+
+.Solution
+[%collapsible]
+====
+Let stem:[A] and stem:[B] be two hermitian operators, i.e., stem:[A=A^\dagger] and stem:[B=B^\dagger].
+Then
+[stem]
+++++
+\begin{align*}
+[A,B]^\dagger&=(AB-BA)^\dagger\\
+&=(AB)^\dagger-(BA)^\dagger\\
+&=B^\dagger A^\dagger - A^\dagger B^\dagger\\
+&=BA-AB\\
+&=-[A,B]
+\end{align*}
+++++
+
+Therefore,
+[stem]
+++++
+\begin{align*}
+(-i[A,B])^\dagger&=(-i)^*[A,B]^\dagger\\
+&=i(-[A,B])\\
+&=-i[A,B]
+\end{align*}
+++++
+
+So stem:[-i[A,B\]] is hermitian.
+Letting stem:[Q=-i[A,B\]], we have stem:[[A,B\]=iQ] with stem:[Q] hermitian, as desired.
+
+NOTE: The operators stem:[R] for which stem:[R^\dagger=-R] are known as https://en.wikipedia.org/wiki/Skew-Hermitian_matrix[_anti-hermitian_].
+As we saw above, just as an imaginary number is stem:[i] times a real number, an anti-hermitian matrix is stem:[i] times a hermitian matrix.
+And in the same way that hermitian operators are akin to real numbers (e.g., their eigenvalues are all real), anti-hermitian operators are akin to imaginary numbers (e.g., their eigenvalues are all imaginary).
+====
+
+
+==== Problem
+The so-called *Generalized Ehrenfest Theorem* states that for any observable stem:[Q(x,p,t)],
+[stem]
+++++
+\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}
+++++
+
+One thing it states is that a sufficient condition for stem:[\Braket{Q}] to be constant over time is that stem:[\Braket{[\hat H,\hat Q\]}=0] and stem:[\Braket{\frac{\partial \hat Q}{\partial t}}=0]. (In particular, if stem:[Q] does not depend on stem:[t], then stem:[\Braket{\frac{\partial \hat Q}{\partial t}}=0] and so all we need to check is that stem:[\Braket{[\hat H,\hat Q\]}]).
+
+[{sublist-style}]
+. Using this fact, when is stem:[\Braket{x}] constant?
+Before working it out explicitly, use your physical intuition to make a guess.
+. For which Hamiltonians is stem:[\Braket{p}] conserved?
+Before working it out explicitly, use your physical intuition to make a guess.
+
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. stem:[\hat x] doesn't depend on time, so we only need to determine when stem:[\Braket{[\hat H,\hat x\]}=0].
+The general form of the Hamiltonian is stem:[-\hbar^2\frac{\partial ^2}{\partial x^2}+V(x)], and so for an arbitrary wavefunction stem:[\psi],
++
+--
+[stem]
+++++
+\begin{align*}
+(\hat x\hat H)\psi=x\left(-\hbar ^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)
+\end{align*}
+++++
+
+whereas
+[stem]
+++++
+\begin{align*}
+(\hat H\hat x)\psi&=\left(-\hbar ^2\frac{\partial^2}{\partial x^2}+V(x)\right)(x\psi)\\
+&=-\hbar^2\frac{\partial }{\partial x}\left(\psi+x\frac{\partial \psi}{\partial x}\right)+xV(x)\psi\\
+&=-\hbar^2\left(2\frac{\partial \psi}{\partial x}+x\frac{\partial ^2\psi}{\partial x}\right)+xV(x)\psi\\
+&=x\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)-2\hbar^2\frac{\partial \psi}{\partial x}\\
+&=(\hat x\hat H)\psi - 2\hbar^2\frac{\partial \psi}{\partial x}\\
+&=(\hat x\hat H)\psi + 2i\hbar(\hat p\psi)
+\end{align*}
+++++
+
+So stem:[[\hat H,\hat x\]=2i\hbar \hat p], and so
+[stem]
+++++
+\begin{align*}
+\frac{d\Braket{x}}{dt}=\Braket{[\hat H,\hat x]}&=\Braket{2i\hbar \hat p}=2i\hbar\Braket{p}
+\end{align*}
+++++
+
+As expected, stem:[\Braket{x}] is constant as long as stem:[\Braket{p}=0].
+--
+. stem:[\hat p] also doesn't depend on time so once again we simply need to find the Hamiltonians it commutes with.
++
+--
+[stem]
+++++
+\begin{align*}
+(\hat p\hat H)\psi &=-i\hbar\frac{\partial }{\partial x}\left[\left(-\hbar^2\frac{\partial^2 }{\partial^2 x}+V(x)\right)\psi\right]\\
+&=-i\hbar\frac{\partial }{\partial x}\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)\\
+&=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+\frac{\partial V(x)}{\partial x}\psi+V(x)\frac{\partial \psi}{\partial x}\right)
+\end{align*}
+++++
+
+whereas
+[stem]
+++++
+\begin{align*}
+(\hat H\hat p)\psi&=\left(-\hbar^2\frac{\partial^2 }{\partial x^2}+V(x)\right)\left(-i\hbar\frac{\partial \psi}{\partial x}\right)\\
+&=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+V(x)\frac{\partial \psi}{\partial x}\right)\\
+&=(\hat p\hat H)\psi +i\hbar\frac{\partial V(x)}{\partial x}\psi
+\end{align*}
+++++
+
+So stem:[[\hat H,\hat p\]=i\hbar\frac{\partial V}{\partial x}], and we want to determine when stem:[\Braket{[\hat H,\hat p\]}=0].
+stem:[\frac{\partial V}{\partial x}] is an extrinsic property of the system — it doesn't depend on stem:[\Psi] — and so its expectation is just its value: stem:[\Braket{\frac{\partial V}{\partial x}}=\frac{\partial V}{\partial x}].
+So, in order for stem:[\Braket{[\hat H,\hat p\]}=0], we need stem:[\frac{\partial V}{\partial x}=0].
+In other words, stem:[\Braket p] is conserved whenever the potential is uniform over all space.
+We would expect this result; in a flat potential, an object feels no net force, so its momentum won't change.
+--
+====
+
+== Vectors and Operators
+
+=== Questions
+
+==== Problem
+Find the eigenvalues and normalized eigenvectors of
+[stem]
+++++
+A=\begin{pmatrix}4&2\\1&5\end{pmatrix}
+++++
+
+.Solution
+[%collapsible]
+====
+We wish to solve stem:[A\Ket{x}=\lambda \Ket{x}] with stem:[\Ket{x}\ne \Ket{0}].
+Subtracting stem:[\lambda\Ket{x}] from both sides and factoring, we obtain stem:[(A-\lambda I)\Ket{x}=\Ket{0}], where stem:[I] is the identity matrix (of the correct dimensions; in this case, stem:[2\times 2]).
+Since stem:[\Ket{x}\ne \Ket{0}], stem:[A-\lambda I] must be singular (non-invertible), which means its determinant is 0.
+So, we have
+[stem]
+++++
+\begin{align*}
+0&=\det (A-\lambda I)\\&=(4-\lambda)(5-\lambda)-1\cdot 2\\&=\lambda^2-9\lambda+18\\&=(\lambda-3)(\lambda-6)
+\end{align*}
+++++
+
+So the eigenvalues are stem:[\lambda_1=3] and stem:[\lambda_2=6].
+
+Now we must solve stem:[\lambda_i\Ket{x} x=A\Ket{x}] for the concrete eigenvalues stem:[\lambda_1, \lambda_2].
+If stem:[\Ket{x}=\begin{bmatrix}x\\y\end{bmatrix}], then we find the eigenvectors corresponding to stem:[\lambda_1] as follows:
+[stem]
+++++
+
+\begin{align*}
+3\begin{bmatrix}x\\y\end{bmatrix}&=\begin{pmatrix}4&2\\1&5\end{pmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}4x+2y\\x+5y\end{bmatrix}
+\end{align*}
+
+++++
+
+Since equal vectors must have equal components, we have the system of equations stem:[3x=4x+2y,3y=x+5y].
+This has solution stem:[x=-2y], which means the eigenvectors corresponding to stem:[\lambda_1=3] are of the form stem:[\begin{bmatrix}-2y\\y\end{bmatrix}], which as a unit vector is stem:[\dfrac{1}{\sqrt{5}}\begin{bmatrix}-2\\1\end{bmatrix}].
+
+Similarly, for stem:[\lambda_2=6], we obtain stem:[6x=4x+2y,6y=x+5y] which has solution stem:[x=y], so the unit eigenvector is stem:[\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\end{bmatrix}].
+====
+
+==== Problem
+What are the eigenvalues and normalized eigenvectors of a diagonal matrix stem:[A] with diagonal entries stem:[m_1, \ldots, m_n]?
+
+.Solution
+[%collapsible]
+====
+An stem:[n]-dimensional matrix can have at most stem:[n] linearly independent eigenvectors, so if we find stem:[n] eigenvectors then we're done.
+If we define stem:[v_k:=] the stem:[k]^th^ column of the stem:[n\times n] identity matrix — i.e., stem:[v_k] is the vector whose only nonzero component is component stem:[k], which is 1 — then clearly stem:[Av_k=m_k v_k].
+So the normalized eigenvectors are these stem:[v_k] and the corresponding eigenvalues are stem:[\lambda_k=m_k].
+====
+
+==== Problem
+[This problem is technically in Griffiths but I imagine it's also in every linear algebra book ever written.] Suppose stem:[P] is a projection operator, i.e., that it can be written as stem:[P=\Ket{a}\Bra{a}] for some unit vector stem:[a].
+
+[{sublist-style}]
+. Show that stem:[P] is _idempotent_, i.e., that stem:[P^2=P].
+(Corollary: stem:[P^n=P] for every positive integer stem:[n].)
+. What are the eigenvalues of stem:[P]?
+. What are the corresponding eigenvectors? (With stem:[P] arbitrary, you can't write out the eigenvectors explicitly, so merely describe them in terms of stem:[a].)
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Every projection operator is of the form stem:[P=\Ket{a}\Bra{a}] where stem:[a] is a unit vector.
++
+--
+So
+[stem]
+++++
+\begin{align*}
+P^2&=(\Ket{a}\Bra{a})(\Ket{a}\Bra{a})\\
+&=\Ket{a}(\Braket{a|a})\Bra{a}\\
+&=\Ket{a}(1)\Bra{a}|\\
+&=\Ket{a}\Bra{a}\\
+&=P
+\end{align*}
+++++
+--
+
+. We wish to solve stem:[P\Ket{x}=\lambda\Ket{x}] (with stem:[\Ket{x}\ne \Ket{0}]).
+By the corollary to part (a), for every positive integer stem:[n], we have stem:[\lambda^{n+1}\Ket{x}=P^{n+1}\Ket{x}=P\Ket{x}=\lambda x], and so stem:[(\lambda^{n+1}-\lambda)\Ket{x}=\Ket{0}].
+Since stem:[\Ket{x}\ne \Ket{0}], we have stem:[\lambda^{n+1}=\lambda].
+The only values of stem:[\lambda] for which this holds for all stem:[n] are stem:[\lambda_0=0] and stem:[\lambda_1=1], so those are the two eigenvalues.
+. We simply solve for stem:[\Ket{x}] corresponding to stem:[\lambda_0]:
++
+--
+[stem]
+++++
+\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_0\Ket{x}=\Ket{0}
+++++
+
+stem:[\Ket{a}\ne\Ket{0}], so stem:[\Braket{a|x}=0].
+Thus the eigenvectors corresponding to stem:[\lambda_0=0] are the vectors orthogonal to stem:[a].
+
+Now we solve for stem:[\Ket{x}] corresponding to stem:[\lambda_1]:
+[stem]
+++++
+\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_1\Ket{x}=\Ket{x}
+++++
+
+Since stem:[\Braket{a|x}] is just a scalar, the eigenvectors corresponding to stem:[\lambda_1=1] are the vectors parallel to stem:[a].
+--
+====
+
+==== Problem
+For a matrix stem:[A], the _matrix exponential_ is defined by replacing stem:[x] in the power series for stem:[e^x] with stem:[A]:
+[stem]
+++++
+e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.
+++++
+
+(By analogy with numbers, stem:[A^0] is defined to be the identity operator — perhaps the summation should be written stem:[e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}].)
+The matrix exponential stem:[e^A] shares some properties with the ordinary exponential stem:[e^z] over complex numbers (or, with respect to the exponential, matrices themselves share several properties with complex numbers):
+
+[{sublist-style}]
+. Show that the matrix exponential of the zero operator is the identity operator. (Analog: stem:[e^0=1].)
+. Show that stem:[e^{A^\dagger}=(e^A)^\dagger]. (Analog: stem:[e^{z^*}=(e^z)^*].)
+. Show that if stem:[A] is hermitian then so is stem:[e^A]. (Analog: the exponential of a real number is real.)
+. Under what conditions on matrices stem:[A] and stem:[B] does it hold that stem:[e^{A+B}=e^Ae^B]? (Analog: stem:[e^{z+w}=e^z e^w], always.)
++
+--
+A helpful fact is the *binomial theorem*: if stem:[\binom{n}{k}=\frac{n!}{k!(n-k)!}] represents the number of ways to choose a stem:[k]-element subset from an stem:[n]-element set, and stem:[x] and stem:[y] are numbers, then
+[stem]
+++++
+\begin{align*}
+(x+y)^n=\sum_{k=0}^n\binom{n}{k}x^ky^{n-k}
+\end{align*}
+++++
+
+(Hint: under what conditions does the binomial theorem apply when stem:[x] and stem:[y] are replaced with operators?
+It may help to compute stem:[(A+B)^3] by hand.)
+
+[sidebar]
+====
+The proof of the binomial theorem is simple: in stem:[(x+y)^n], the coefficient of stem:[x^ky^{n-k}] is the number of ways to pick which stem:[k] of the stem:[n] copies of stem:[x+y] will contribute a factor of stem:[x]; the other stem:[n-k] will contribute a factor of stem:[y].
+But the number of ways to pick stem:[k] things from a set of size stem:[n] is, by definition, stem:[\binom nk].
+It's left as an exercise to the reader to show why stem:[\binom nk=\frac{n!}{k!(n-k)!}].
+====
+--
+. A _unitary_ matrix is a matrix stem:[U] that satisfies stem:[UU^\dagger =U^\dagger U=I] — its adjoint is its inverse.
+Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices — matrices of the form stem:[iQ] where stem:[Q] is hermitian — are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (their eigenvalues all have magnitude 1, and their multiplicative inverse is equal to their hermitian conjugate).
++
+Accordingly, show that if stem:[Q] is hermitian then stem:[e^{iQ}] is unitary.
+(Analog: the exponential of an imaginary number has magnitude 1.)
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Let stem:[\mathbf 0] denote the zero operator.
+stem:[e^{\mathbf 0}=\sum_{n=0}^\infty \frac{\mathbf 0^n}{n!}].
+The only nonzero term of this sum is the stem:[n=0] term, which by definition is the identity matrix.
+. First, note that since stem:[(AB)^\dagger=B^\dagger A^\dagger] for all operators stem:[A,B], we have stem:[(A^\dagger)^n=(A^n)^\dagger].
++
+--
+Also recall that stem:[(A+B)^\dagger=A^\dagger+B^\dagger].
+Then,
+[stem]
+++++
+\begin{align*}
+e^{A^\dagger}&=\sum_{n=0}^\infty \frac{(A^\dagger)^n}{n!}\\
+&=\sum_{n=0}^\infty \frac{(A^n)^\dagger}{n!}\\
+&=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)^\dagger\\
+&=(e^A)^\dagger
+\end{align*}
+++++
+
+as desired.
+--
+. By part (b), if stem:[Q] is hermitian, then stem:[(e^{Q})^\dagger=e^{Q^\dagger}=e^Q], so stem:[e^Q] is indeed hermitian.
+. For stem:[e^{A+B}=e^A e^B] to hold, stem:[A] and stem:[B] must commute.
++
+--
+If and only if stem:[A] and stem:[B] commute, we have
+[stem]
+++++
+\begin{align*}
+(A+B)^n&=\sum_{k=0}^n \binom{n}{k}A^kB^{n-k}
+\end{align*}
+++++
+
+where stem:[\binom{n}{k}=\frac{n!}{k!(n-k)!}] denotes the binomial coefficient.
+For instance, regardless of whether stem:[A] and stem:[B] commute,
+[stem]
+++++
+\begin{align*}
+(A+B)^3&=(A+B)(A+B)(A+B)\\
+&=(A^2+AB+BA+B^2)(A+B)\\
+&=A^3+ABA+BA^2+B^2A\\
+&\phantom{=}+A^2B+AB^2+BAB+B^3
+\end{align*}
+++++
+
+Only if stem:[A] and stem:[B] commute can this be simplified to stem:[A^3+3A^2B+3AB^2+B^3].
+
+Then,
+[stem]
+++++
+\begin{align*}
+e^{A+B}&=\sum_{n=0}^\infty \frac{(A+B)^n}{n!}\\
+&=\sum_{n=0}^\infty \left(\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}A^kB^{n-k}\right)\\
+&=\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\\
+&=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\\
+&=e^Ae^B
+\end{align*}
+++++
+
+as desired.
+
+[sidebar]
+How did we turn stem:[\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}] into stem:[\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)]?
+This is just an advanced application of the distributive property.
+Simply write out the product of the summations by hand, apply the distributive property, and group terms according to the sum of the powers of stem:[A] and stem:[B] (so that e.g., the stem:[A^3], stem:[A^2B], stem:[AB^2], and stem:[B^3] terms are grouped together).
+You'll see the nested summations appear.
+--
+. First, note that stem:[iQ] and stem:[-iQ] commute — the scalars commute with everything and stem:[Q] commutes with itself.
++
+--
+Then, if stem:[Q] is hermitian,
+[stem]
+++++
+\begin{align*}
+e^{iQ}(e^{iQ})^\dagger&=e^{iQ}e^{(iQ)^\dagger}&\textrm{(part (b))}\\
+&=e^{iQ}e^{-iQ}\\
+&=e^{iQ + (-iQ)}&\textrm{(part (d))}\\
+&= e^{\mathbf{0}}\\
+&=I&\textrm{(part (a))}
+\end{align*}
+++++
+
+So stem:[e^{iQ}] is indeed unitary.
+--
+====
+
+==== Problem
+Let stem:[\hat x] be the operator corresponding to the stem:[x] observable, which is multiplication by stem:[x] (in position space).
+Show that stem:[e^{\hat x}\Ket{f}=e^x \Ket{f}], i.e., the operator exponential of stem:[\hat x] is multiplication by stem:[e^x].
+
+==== Problem
+Show that the solution to the differential equation stem:[\frac{d}{dt}\Ket{x(t)}= A\Ket{x(t)}] with initial condition stem:[\Ket{x(0)}=\Ket{x_0}], where stem:[A] is a constant nonzero operator, is stem:[\Ket{x(t)}=e^{At}\Ket{x_0}].
+
+NOTE: This exactly mirrors the scalar-valued differential equation stem:[\frac{d}{dt}y(t)=ky(t),y(0)=y_0] with stem:[k] constant, which has solution stem:[y(t)=e^{kt}y_0].
+
+.Solution
+[%collapsible]
+====
+First we'll check the initial condition:
+[stem]
+++++
+e^{A\cdot 0}\Ket{x_0}=I\Ket{x_0}=\Ket{x_0}
+++++
+
+Now we'll check that the proposed solution satisfies the differential equation.
+[stem]
+++++
+\begin{align*}
+\frac{d}{dt}\Ket{x(t)}&=\frac{d}{dt}\Ket{\left(e^{At}\Ket{x_0}\right)}\\
+&=\left(\frac{d}{dt}e^{At}\right)\Ket{x_0}\\
+&=\frac{d}{dt}\left(\sum_{n=0}^\infty \frac{(At)^n}{n!}\right)\Ket{x_0}\\
+&=\left(\sum_{n=1}^\infty \frac{A^n\,nt^{n-1}}{n!}\right)\Ket{x_0}\\
+&=A\left(\sum_{n=1}^\infty \frac{A^{n-1}t^{n-1}}{(n-1)!}\right)\Ket{x_0}\\
+&=A\left(\sum_{n=0}^\infty \frac{A^{n}t^{n}}{n!}\right)\Ket{x_0}\\
+&=Ae^{At}\Ket{x_0}\\
+&=A\Ket{x(t)}
+\end{align*}
+++++
+
+as desired.
+====

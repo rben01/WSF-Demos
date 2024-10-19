@@ -1,0 +1,188 @@
+[.qm-chapter.chap-6]
+= Chapter 6: Symmetries and Conservation Laws
+
+== Introduction
+
+=== Questions
+
+==== Problem
+Given a regular stem:[n]-sided polygon stem:[P_n], a symmetry of stem:[P_n] is any mapping stem:[f] between the vertices that preserves adjacency: if and only if vertices stem:[v_i] and stem:[v_j] are adjacent in stem:[P_n] are stem:[f(v_i)] and stem:[f(v_j)] adjacent in stem:[f(P_n)].
+
+. Explicitly compute the symmetries of the equilateral triangle.
+How many are there?
+. Do the same for the square.
+. In words, describe the symmetries of stem:[P_n].
+
+==== Problem
+Show that stem:[\hat T(a)\hat\Pi=\hat\Pi\hat T(-a)]
+
+.Solution
+[%collapsible]
+====
+We simply compute, using the test function stem:[f]:
+
+[stem]
+++++
+\begin{align*}
+\hat T(a)\hat\Pi f(x)&=\hat T(a) f(-x)\\
+&=f(-x-a)\\
+&=\hat\Pi f(x+a)\\
+&=\hat\Pi \hat T(-a)f(x)
+\end{align*}
+++++
+
+as desired.
+====
+
+== The Translation Operator
+
+=== Questions
+
+==== Problem
+Compute stem:[[T(a), \hat x\]], the commutator of the translation and position operators.
+
+==== Problem
+Show that _all_ observables invariant under translation (observables stem:[Q] for which stem:[\hat T^\dagger Q\hat T=Q]) are of the form stem:[Q(x,p)=\sum_{n=0}^\infty a_n p^n], where the stem:[a_n] are constants.
+
+== Conservation Laws
+
+=== Questions
+
+== Parity
+
+=== Questions
+
+==== Problem
+Show that the position and momentum operators are “odd under parity”: if stem:[\hat\Pi] is the parity operator, then
+
+[{sublist-style}]
+. stem:[\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x]
+. stem:[\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p]
+
+You may assume that stem:[\hat \Pi] is hermitian.
+
+.Solution
+[%collapsible]
+====
+[{sublist-style}]
+. Using the test function stem:[f], we have
++
+--
+[stem]
+++++
+\begin{align*}
+\hat\Pi^\dagger \,\hat x\,\hat\Pi f(x)&=\hat\Pi^\dagger \,\hat x f(-x)\\
+&=(-\hat x)f(x)
+\end{align*}
+++++
+
+So indeed stem:[\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x].
+--
+. Similarly,
++
+--
+[stem]
+++++
+\begin{align*}
+\hat\Pi^\dagger \,\hat p\,\hat\Pi f(x)&=\hat\Pi^\dagger \,\hat p f(-x)\\
+&=\hat\Pi^\dagger \left(-i\hbar\frac{d}{dx}\right)f(-x)\\
+&=-i\hbar\frac{d}{d(-x)}f(x)\\
+&=i\hbar\frac{d}{dx}f(x)\\
+&=-\hat pf(x)
+\end{align*}
+++++
+
+So indeed stem:[\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p].
+--
+====
+
+==== Problem
+Compute the following two operator exponentials in terms of stem:[\hat\Pi], stem:[I] (the identity operator), and stem:[e]:
+
+[{sublist-style}]
+. stem:[\exp(\hat\Pi)]
+. stem:[\exp(i\hat\Pi)]
+
+.Solution
+[%collapsible]
+====
+As stem:[\hat\Pi] is its own inverse,
+
+[stem]
+++++
+\begin{align*}
+\hat\Pi^n &=\begin{cases}
+\hat\Pi&n\ \textrm{odd}\\
+I&n\ \textrm{even}
+\end{cases}
+\end{align*}
+++++
+
+[{sublist-style}]
+. Then,
++
+--
+[stem]
+++++
+\begin{align*}
+\exp(\hat\Pi)&=\sum_{n=0}^\infty \frac{\hat\Pi^n}{n!}\\
+&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{\hat\Pi^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi^n}{n!}\\
+&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi}{n!}\\
+&=I\left(\frac{e+e^{-1}}{2}\right)+\hat\Pi\left(\frac{e-e^{-1}}{2}\right)\\
+&=I\cosh(1)+\hat\Pi\sinh(1)
+\end{align*}
+++++
+--
+. Similarly,
++
+--
+[stem]
+++++
+\begin{align*}
+\exp(i\hat\Pi)&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{(i\hat\Pi)^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{(i\hat\Pi)^n}{n!}\\
+&=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{Ii^{n}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi i^{n}}{n!}\\
+&=I\sum_{n=0}^\infty \frac{i^{2n}}{(2n)!}+\hat\Pi\sum_{n=0}^\infty \frac{i^{2n+1}}{(2n+1)!}\\
+&=I\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n)!}+i\hat\Pi\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n+1)!}\\
+&=I\cos(1)+\hat\Pi\ i\sin(1)
+\end{align*}
+++++
+--
+====
+
+== Rotational Symmetry
+
+=== Questions
+
+
+== Degeneracy
+
+=== Questions
+
+== Rotational Selection Rules
+
+=== Questions
+
+== Translations in Time
+
+=== Questions
+
+==== Problem
+The Generalized Ehrenfest Theorem states that
+
+[stem]
+++++
+\frac{d}{dt}\braket{\hat Q}=\frac{1}{i\hbar}\Braket{[\hat H, \hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}
+++++
+
+In particular, if stem:[\hat Q] commutes with the Hamiltonian, then the time-derivative of the expectation of stem:[\hat Q] is the expectation of the time-derivative of stem:[\hat Q].
+
+But, in the {sch} picture, operators remain constant, while in the Heisenberg picture they change over time.
+So in the {sch} picture, the RHS of this equation is zero, while in the Heisenberg picture it's nonzero.
+But in both cases the LHS of the equation is the same (and it's an observable quantity, so it had better not depend on the formulation of QM used).
+
+Reconcile this with the Generalized Ehrenfest Theorem.
+Where in particular in the proof of the Theorem does the issue lie?
+
+==== Problem
+In the quantum harmonic oscillator, where [.no-break]#stem:[\hat H=\frac{1}{2m}\hat p^2+\frac{1}{2}m\omega^2\hat x^2]#, let stem:[\hat x_H(t)] and stem:[\hat p_H(t)] be the Heisenberg picture position and momentum operators.
+Show that stem:[\frac{d}{dt}\hat x_H(t)=\frac{1}{m\omega^2}\hat p_H(t)] and stem:[\frac{d}{dt}\hat p_H(t)=-m\omega^2\hat x_H(t)] — just as is the case in the classical situation.

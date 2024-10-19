@@ -1,0 +1,3780 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>All Problems :: Quantum Mechanics Problems</title>
+    <meta name="generator" content="Antora 3.1.9">
+    <link rel="stylesheet" href="./_/css/site.css">
+<script async>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            macros: {
+                v: ["\\mathbf{#1}", 1],
+            }
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+
+    (function () {
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js';
+        script.async = true;
+        document.head.appendChild(script);
+    })();
+</script>
+  </head>
+  <body class="article">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">Quantum Mechanics Problems</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" target="_blank"
+          href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html">Quantum demos</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container"  data-component="ROOT"
+  data-version="" >
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">QM</a></h3>
+  <ul class="nav-list">
+      <li class="nav-item is-active"
+        data-depth="0">
+          <ul class="nav-list">
+      <li class="nav-item is-active is-current-page"
+        data-depth="1">
+            <a class="nav-link" href="index.html">All Problems</a>
+              </li>
+  </ul>
+      </li>
+      <li class="nav-item is-active"
+        data-depth="0">
+            <button class="nav-item-toggle"></button>
+            <span class="nav-text">Individual Sections</span>
+          <ul class="nav-list">
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-1.html">1. The Wavefunction</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-2.html">2. The Time-Independent Schrödinger Equation</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-3.html">3. Formalism</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-4.html">4. 3D</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-5.html">5. Identical Particles</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-6.html">6. Symmetries and Conservation Laws</a>
+              </li>
+  </ul>
+      </li>
+  </ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link is-current"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">QM</a></li>
+    <li><a href="index.html">All Problems</a></li>
+  </ul>
+</nav>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="3">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">All Problems</h1>
+<div class="sect1 qm-chapter chap-1">
+<h2 id="_the_wave_function"><a class="anchor" href="#_the_wave_function"></a><a class="link" href="#_the_wave_function">1. The Wave Function</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_the_schrödinger_equation"><a class="anchor" href="#_the_schrödinger_equation"></a><a class="link" href="#_the_schrödinger_equation">1.1. The Schrödinger equation</a></h3>
+<div class="sect3">
+<h4 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem"><a class="anchor" href="#_problem"></a><a class="link" href="#_problem">1.1.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>In the absence of potential (\(V(x,t)=0\)), the Schrödinger equation can be written as</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]
+</div>
+</div>
+<div class="paragraph">
+<p>with \(\kappa=\frac{i\hbar}{2m}\).
+The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle&#8217;s position.</p>
+</div>
+<div class="paragraph">
+<p>Compare this form of the Schrödinger equation to the <a href="https://en.wikipedia.org/wiki/Heat_equation">Heat Equation</a>.
+What does this tell you about how the wavefunction flows over time?</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
+However it is still instructive and at a high level gives good intuition for how probability density “flows” over time.
+</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Wavefunctions share the following features with solutions to the heat equation:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Solutions are waves!</p>
+</li>
+<li>
+<p>In the heat equation, with \(\kappa\) real, heat flows opposite the direction of the temperature gradient, and flows with a magnitude proportional to the magnitude of the gradient.
+In the Schrödinger equation, with \(\kappa\) imaginary, “probability current” (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction&#8217;s phase, and with a magnitude proportional to this gradient&#8217;s magnitude.</p>
+</li>
+<li>
+<p>As with the heat equation, solutions to the Schrödinger equation in free space get smoother and more diffuse over time.
+Combined with the above point, this means that the more concentrated a wavefunction is in space initially, the more rapidly it spreads out.</p>
+</li>
+</ul>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_2"><a class="anchor" href="#_problem_2"></a><a class="link" href="#_problem_2">1.1.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>[Modified from Townsend] Show that the Schrödinger is linear: if \(\Psi_{n}\) is a solution to the Schrödinger equation, then \(\Psi = \sum_{n}c_n \Psi_n\) is also a solution.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Ultimately this is just due to the linearity of the differentiation operator and of ordinary multiplication.</p>
+</div>
+<div class="paragraph">
+<p>If \(\Psi_n\) is a solution to the Schrödinger equation then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[-i\hbar \frac{\partial \Psi_{n}}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2}+ V(x)\Psi_n = 0\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now for \(\Psi\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}-i\hbar \frac{\partial \Psi}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi}{\partial x^2}+ V(x)\Psi\\
+&amp;= -i\hbar \frac{\partial }{\partial t}\sum_n c_n\Psi_n - \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2}\sum_n c_n\Psi_n + V(x)\sum_n c_n\Psi_n\\
+&amp; = \sum_n -i\hbar \frac{\partial }{\partial t}(c_n\Psi_n) - \sum_n \frac{\hbar ^2}{2m}\frac{\partial ^2 }{\partial x^2} (c_n\Psi_n) + \sum_n V(x) (c_n\Psi_n) \\
+&amp;= \sum_n c_n (-i\hbar \frac{\partial \Psi_n }{\partial t} -  \frac{\hbar ^2}{2m}\frac{\partial ^2 \Psi_n}{\partial x^2} +  V(x) \Psi_n )\\
+&amp;=\sum_n c_n \cdot 0= 0 \end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We find that if \(\Psi_n\) is a solution to the Schrödinger, then \(\Psi = \sum_n c_n \Psi_n\) is also a solution to the Schrödinger equation.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_3"><a class="anchor" href="#_problem_3"></a><a class="link" href="#_problem_3">1.1.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>[Modified from Townsend] Show that \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) (with appropriate choices of  \(\omega,n,l\)) is a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} = \frac{\partial ^2 u }{\partial x^2}\), but <strong>not</strong> the Schrödinger equation.
+(Ignore the trivial case where \(u=0\).)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>For \(u(x,t)\) to be a solution to the classical wave equation, \( \frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2} = 0\).
+For \(u(x,t)\) to be a solution to the Schrödinger equation for a free particle then \(-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} = 0\).
+Let&#8217;s begin with the classical wave equation:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{1}{v^2}\frac{\partial ^2 u}{\partial t^2} - \frac{\partial ^2 u }{\partial x^2}
+&amp;= \frac{1}{v^2}\frac{\partial ^2}{\partial t^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] - \frac{\partial ^2}{\partial x^2} \left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&amp;=-A\frac{\omega^2}{v^2}\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right) + A\left(\frac{n\pi}{l}\right)^2 \cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\\
+&amp;=\left[\left(\frac{n\pi}{l}\right)^2-\frac{\omega^2}{v^2}\right]A\cos(\omega t+\phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We see that if \(v = \frac{\omega l}{n \pi}\) then \(u(x,t)\) is a solution to the classical wave equation. For the Schrödinger equation,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}-i\hbar \frac{\partial u}{\partial t} - \frac{\hbar ^2}{2m}\frac{\partial ^2 u}{\partial x^2} \\
+&amp;= [-i\hbar \frac{\partial}{\partial t}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right]
+    - \frac{\hbar ^2}{2m}\frac{\partial ^2}{\partial x^2}\left[A\cos(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)\right] \\
+&amp;= Ai\hbar\omega\sin(\omega t+ \phi) \sin\left(\frac{n\pi x}{l}\right)+A\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi)\sin\left(\frac{n\pi x}{l}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>In order for this to equal 0 for all \(x,t\), and for \(u\) to be nontrivial, we must have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[i\hbar\omega\sin(\omega t+ \phi) +\frac{\hbar ^2}{2m}\left(\frac{n \pi}{l}\right)^2\cos(\omega t+ \phi) = 0\]
+</div>
+</div>
+<div class="paragraph">
+<p>There are no conditions we can impose on the constants \(\omega, n, l, \phi\) so that this is true for all time, so \(u(x,t) = A\cos(\omega t+ \phi) \sin(\frac{n\pi x}{l}) \) is not a solution to the Schrödinger equation for a free particle.</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.1.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/collapse_of_wavefunction_direction_and_momentum/collapse_of_wavefunction_direction_and_momentum_inlined.html">Collapse of Wavefunction Direction and Momentum</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Notes: for this section, show just the position component; remove momentum.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_ideas_notes_materials"><a class="anchor" href="#_other_ideas_notes_materials"></a><a class="link" href="#_other_ideas_notes_materials">1.1.3. Other Ideas, Notes, Materials</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Interactive timeline like the ones in some of our WSU courses (e.g., <a href="https://worldscienceu.com/lessons/1-4-from-einstein-to-ligo/" target="_blank" rel="noopener">From Einstein to Ligo</a>).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_statistical_interpretation"><a class="anchor" href="#_the_statistical_interpretation"></a><a class="link" href="#_the_statistical_interpretation">1.2. The Statistical Interpretation</a></h3>
+<div class="sect3">
+<h4 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">1.2.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_4"><a class="anchor" href="#_problem_4"></a><a class="link" href="#_problem_4">1.2.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>In which of the following variations of the double slit experiment will a wavelike interference pattern be observed?</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Using single photons</p>
+</li>
+<li>
+<p>Using single electrons</p>
+</li>
+<li>
+<p>Using a beam of electrons</p>
+</li>
+<li>
+<p>Measuring which slit the particle passes through</p>
+</li>
+<li>
+<p>Using helium atoms</p>
+</li>
+</ul>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>For the double slit experiment, all light and matter create a wavelike interference pattern, regardless of whether single particles are used or beams of particles are used.
+In quantum mechanics, wavelike interference is not an artifact of collective motion&#8201;&#8212;&#8201;a single particle passes through both slits and interacts with <em>itself</em>!
+We see a wavelike interference pattern for a single photon, a single electron, a beam of electrons, or even helium atoms!
+However, if we set up an apparatus to measure which slit the particles travel through, we do <em>not</em> observe an interference pattern because the wavefunctions collapse upon measurement.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_5"><a class="anchor" href="#_problem_5"></a><a class="link" href="#_problem_5">1.2.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Let&#8217;s derive some of the observed properties of the interference pattern in the double slit experiment. Suppose that the (monochromatic) light has a wavelength \(\lambda\), that the slits are a distance \(d\) apart, and that the detector screen is a distance \(D\gg d\) from the slits.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Show that at a point \(P\) an angle \(\theta\) from the center of the detector screen, the difference in path lengths between the slits' two respective waves is given by \(\Delta l=d\sin\theta\).</p>
+</li>
+<li>
+<p>Show that the locations of maximum constructive interference (maximum intensity) are given by \(d\sin\theta=n\lambda\) for \(n\in\mathbb Z\).</p>
+</li>
+<li>
+<p>Show that the locations of maximum destructive interference (minimum intensity) are given by \(d\sin\theta=\left(n+\frac{1}{2}\right)\lambda\) for \(n\in\mathbb Z\).</p>
+</li>
+<li>
+<p>Using the assumption that \(D\gg d\) (and so the rays emanating from the two slits are approximately parallel), and the additional assumption that the \(n\)<sup>th</sup> crest is not too far from the center of the screen (i.e., that \(\tan\theta\) is small), show that the distance from the center of the detector screen to the \(n\)<sup>th</sup> crest is approximately \(\frac{n\lambda D}{d}\).</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Refer to the diagram below:</p>
+</div>
+<div class="imageblock">
+<div class="content">
+<img src="_images/1.2.2.A/img.svg" alt="img" width="400">
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The two rays of light each form a right triangle of which they are the hypotenuse and with one leg of length \(D\).
+For \(l_1\), the other leg is of length \(D\tan\theta+\frac{d}{2}\), so by the Pythagorean theorem,</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+l_1^2&amp;=D^2+(D\tan\theta+d/2)^2\\
+&amp;=D^2+D^2\tan^2\theta+Dd\tan\theta+\frac{1}{4}d^2\\
+&amp;=D^2\left(sec^2\theta+\frac{d\tan\theta}{D}+\frac{d^2}{4D^2}\right)\\
+&amp;=D^2\sec^2\theta\left(1+\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\right)\\
+l_1&amp;=D\sec\theta\sqrt{1+K_1}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(K_1=\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}\).
+Since the only term in \(K_1\) that could be negative is \(\frac{d\sin\theta\cos\theta}{D}\), and it must lie between \(-1\) and \(1\), the term under the square root is positive and so its Taylor expansion exists.
+Using the first two terms of the Taylor expansion of \(f(x)=\sqrt{1+x}\) about \(x=0,\) we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+l_1&amp;\approx D\sec\theta\left(1+\frac{K_1}{2}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Similarly, \(l_2\approx D\sec\theta\left(1+\frac{K_2}{2}\right)\), where \(K_2=-\frac{d\sin\theta\cos\theta}{D}+\frac{d^2\cos^2\theta}{4D^2}.\)
+And so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Delta l&amp;=l_1-l_2\\
+&amp;\approx D\sec\theta\ \frac{K_1 - K_2}{2}\\
+&amp;=D\sec\theta\left(\frac{d\sin\theta\cos\theta}{D}\right)\\
+&amp;=d\sin\theta
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</li>
+<li>
+<p>Two waves exhibit maximum constructive interference when the first wave&#8217;s peaks are aligned with the second wave&#8217;s peaks (which would imply that their troughs are also aligned with each other), which occurs when the waves’ wavefronts are an <em>integer</em> — \(\ldots,-2, -1, 0, 1, 2,\ldots\) — number of wavelengths apart.
+By part (a), the wavefronts are a distance \(d\sin\theta\) apart, and so maximum constructive interference occurs when \(d\sin\theta=n\lambda\).</p>
+</li>
+<li>
+<p>Similarly, two waves exhibit maximum destructive interference when the first wave&#8217;s peaks are aligned with the second wave&#8217;s troughs (which would imply that the second wave&#8217;s peaks are also aligned with the first wave&#8217;s troughs), which occurs when the waves’ wavefronts are a <em>half-integer</em> — \(\ldots,-2+\frac{1}{2}, -1+\frac{1}{2}, \frac{1}{2}, 1+\frac{1}{2}, 2+\frac{1}{2},\ldots\) — number of wavelengths apart, or when \(d\sin\theta=(n+\frac{1}{2})\lambda\).</p>
+</li>
+<li>
+<p>As we saw in part (b), the \(n\)<sup>th</sup> crest of the interference pattern occurs where \(d\sin\theta=n\lambda\), or where \(\theta=\sin^{-1}\left(\frac{n\lambda}{d}\right)\).
+If \(\theta\) is small, then</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\tan\theta&amp;=\frac{\sin\theta}{\cos\theta}\\
+&amp;\approx\frac{\sin\theta}{1-\frac{\theta^2}{2}}\\
+&amp;\approx\sin\theta
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Since point \(P\) in the diagram is a distance \(r=D\tan\theta\) from the midpoint of the screen, if a crest occurs there, then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+r&amp;=D\tan\theta\\
+&amp;\approx D\sin\theta\\
+&amp;=D\sin\left(\sin^{-1}(n\lambda/d)\right)\\
+&amp;=\frac{n\lambda D}{d}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">1.2.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wave_particle_duality_double_slit/wave_particle_duality_double_slit_inlined.html?t=1653613543" target="_blank" rel="noopener">Double slit detector simulation (2D)</a></p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/constructive_destructive_interference/constructive_destructive_interference_inlined.html?t=1657044227" target="_blank" rel="noopener">Double slit with waves (3D)</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_probability"><a class="anchor" href="#_probability"></a><a class="link" href="#_probability">1.3. Probability</a></h3>
+<div class="sect3">
+<h4 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">1.3.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_6"><a class="anchor" href="#_problem_6"></a><a class="link" href="#_problem_6">1.3.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>An integer is chosen uniformly at random from the set \(\{0,1, 2,\ldots, 199\}\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>What are the probabilities of selecting a number with 1, 2, or 3 digits?</p>
+</li>
+<li>
+<p>Calculate the expected number of digits.</p>
+</li>
+<li>
+<p>Find the standard deviation of the number of digits.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>There are 10 possible 1-digit numbers, 90 possible 2-digit numbers, and 100 3-digit numbers.
+The probability of selecting a 1, 2, or 3 digit number are:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+P(\textrm{1}) &amp;= \frac{10}{200} = \frac{1}{20}\\[.1in]
+P(\textrm{2}) &amp;= \frac{90}{200} = \frac{9}{20}\\[.1in]
+P(\textrm{3}) &amp;= \frac{100}{200} = \frac{1}{2}
+\end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p>The expected number of digits is</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}\Braket{d} &amp;= (1)P(1)+(2)P(2) + (3)P(3) \\ &amp;=  (1)\frac{1}{20}+ (2)\frac{9}{20}+(3)\frac{1}{2} \\ &amp;=  2.45  \end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>If you choose a number at random, the expected value for the number of digits is 2.45.</p>
+</div>
+</li>
+<li>
+<p>Standard deviation is given by \(\sqrt{\Braket{d^2} - \Braket{d}^2}\), where \(d\) is the number of digits that a selected number has.</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*} \Braket{d^2}  &amp;=  (1^2)P(1)+(2^2)P(2) + (3^2)P(3) \\ &amp;=  (1)\frac{1}{20}+ (4)\frac{9}{20}+(9)\frac{1}{2} \\ &amp;=  6.35 \end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>The standard deviation is: [stem]</p>
+</div>
+</li>
+</ol>
+</div>
+\sigma = \sqrt{6.35-(2.45)^2} = 0.59
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_7"><a class="anchor" href="#_problem_7"></a><a class="link" href="#_problem_7">1.3.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>You survey your neighbors to determine the number of pets they have in their households and collect the following data:</p>
+</div>
+<table id="pets-table" class="tableblock frame-all grid-all stripes-none" style="width: 40%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">Number of pets in household</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Number of households with that number of pets</strong></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">0</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">3</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">1</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">6</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">2</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">5</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">3</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">4</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">2</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">5</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">6</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">7</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">8</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">9</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">10</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">1</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>Verify that both ways of computing standard deviation give the same answer (i.e. show that \(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2}\) where \(n\) is the number of pets in the household).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>First you&#8217;ll need to use the above table to find the <em>probability</em> of encountering a household with each number of pets.
+To do this, simply divide each count by the total number of houses, 20, to obtain</p>
+</div>
+<table id="pets-table-2" class="tableblock frame-all grid-all stripes-none" style="width: 40%;">
+<colgroup>
+<col style="width: 50%;">
+<col style="width: 50%;">
+</colgroup>
+<tbody>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">Number of pets in household</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><strong>Probability a household has that number of pets</strong></p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">0</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.15</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">1</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.3</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">2</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.25</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">3</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.1</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">4</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.1</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">5</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">6</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">7</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.05</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">8</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">9</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-right valign-top"><p class="tableblock">10</p></th>
+<td class="tableblock halign-left valign-top"><p class="tableblock">0.05</p></td>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>We&#8217;ll calculate \(\Braket{n}\), \(\Braket{n^2}\), and \(\Braket{(\Delta n)^2}\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*} \Braket{n} &amp;= 0(.15) + 1(.3) + 2 (.25)+ 3(.1)+ 4(.1)  \\ &amp;\quad+5(0) + 6(0) + 7(.05) + 8(0) + 9(0) + 10(.05) \\&amp;= 0+ .3 + .5 + .3 + . 4 + 0 + 0+ .35+ 0 + 0 +.5 \\&amp;= 2.35\\
+ \Braket{n^2} &amp;= 0(.15) + 1(.3) + 4(.25)+ 9(.1)+ 16(.1)  \\ &amp;\quad+25(0) + 36(0) + 49(.05) + 64(0) + 81(0) + 100(.05) \\&amp;= 0+ .3 + 1 + .9 + 1.6  + 0 + 0+ 2.45 + 0 + 0 + 5 \\&amp;=  11.25 \\
+ \Braket{(\Delta n)^2} &amp;= (0-2.35)^2(.15) + (1-2.35)^2(.3) +(2-2.35)^2(.25) \\ &amp;\quad+(3-2.35)^2(.1)+ (4-2.35)^2(.1) + (5-2.35)^2(0) \\ &amp;\quad+(6-2.35)^2(0) + (7-2.35)^2(.05) + (8-2.35)^2(0)\\ &amp;\quad+(9-2.35)^2(0) + (10-2.35)^2(.05) \\&amp;= 0.828375 + 0.54675 + 0.030625 + 0.04225 \\ &amp;\quad+ 0.27225 + 0 + 0 + 1.081125 + 0 + 0 + 2.926125\\ &amp;= 5.7275 \end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We find that \(\sqrt{\Braket{(\Delta n)^2}} = \sqrt{\Braket{n^2} - \Braket{n} ^2} = 2.39\)</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_8"><a class="anchor" href="#_problem_8"></a><a class="link" href="#_problem_8">1.3.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>Plot the following two probability density distributions over the interval 0 to 1:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\rho_1(x)&amp;=
+    \begin{cases}
+        4x &amp; 0\le x \le \frac{1}{2}\\
+        -4x+4 &amp; \frac{1}{2}\le x\le 1
+    \end{cases}\\
+    \rho_2(x) &amp;= 2\sin^2(2\pi x)\end{align*}\]
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Make a prediction: on your graphs, sketch a solid line where you think the expectation value of x will be and sketch dotted lines where you think the standard deviation will fall, one line at a standard deviation below the mean and one line at a standard deviation above the mean.</p>
+</li>
+<li>
+<p>Calculate \(\Braket{x}\) and \(\sigma\) for both distributions.</p>
+</li>
+<li>
+<p>For both distributions, calculate the probability of selecting a value that falls within 1 standard deviation of the mean.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The correct graphs are below.
+The expectation is marked with a solid gray line and one standard deviation above and below are marked with dashed gray lines.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fig-1.3.1-graphs.svg" alt="fig 1.3.1 graphs" width="450">
+</div>
+</div>
+</li>
+<li>
+<p>For the first probability distribution, \(\rho_1(x)\):</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*} \Braket{x} &amp;= \int_0^\frac{1}{2} x (4x) dx + \int_\frac{1}{2}^1 x (-4x+4)dx \\
+&amp;= \left.\frac{4}{3}x^3 \right|_0^\frac{1}{2} + \left. \left( -\frac{4}{3}x^3 + 2x^2 \right)\right|_\frac{1}{2}^1 \\
+&amp;= \frac{1}{6} - \frac{4}{3} + 2 + \frac{1}{6} - \frac{1}{2} \\
+&amp;= \frac{1}{2} \\\\
+  \Braket{x^2} &amp;=   \int_0^\frac{1}{2} x^2 (4x) dx + \int_\frac{1}{2}^1 x^2 (-4x+4)dx \\
+&amp;= \left. x^4 \right|_0^\frac{1}{2}  + \left. \left( -x^4 + \frac{4}{3}x^3 \right) \right|_\frac{1}{2}^1 \\
+&amp;= \frac{1}{16} - 1 + \frac{4}{3} + \frac{1}{16} - \frac{1}{6} \\
+&amp;= \frac{7}{24} \\
+\sigma &amp;= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\frac{7}{24}-\frac{1}{4}} \approx 0.204
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>For the second probability distribution, \(\rho_2(x)\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*} \Braket{x} &amp;= \int_0^1 x (2\sin^2{(2 \pi x)}) dx \\
+&amp;= \int_0^1 x (1-\cos(4 \pi x)) dx \\
+&amp;= \left. \frac{x^2}{2} - \frac{x\sin(4 \pi x)}{4\pi} - \frac{\cos(4 \pi x)}{16\pi^2} \right|_0^1  \\
+&amp;= \frac{1}{2} - \frac{1}{16\pi^2} + \frac{1}{16\pi^2} \\
+&amp;= \frac{1}{2} \\
+\Braket{x^2} &amp;= \int_0^1 x^2(2\sin^2{(2 \pi x)}) dx \\
+&amp;= \int_0^1 x^2 (1-\cos(4 \pi x)) dx \\
+ &amp;= \left. \frac{x^3}{3} - \frac{x^2\sin(4 \pi x)}{4\pi} - \frac{x\cos(4 \pi x)}{8\pi^2} + \frac{\sin(4 \pi x )}{32 \pi^3}\right|_0^1  \\ &amp;= \frac{1}{3} - \frac{1}{8\pi^2}
+ \\  \sigma &amp;= \sqrt{\Braket{x^2} - \Braket{x}^2} = \sqrt{\left(\frac{1}{3}-\frac{1}{8\pi^2}\right) - \frac{1}{4}}
+  \approx 0.266
+  \end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p>For \(\rho_1\) the probability of selecting a value within one standard deviation of the mean is given by:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*} &amp;\phantom{=}\int_{0.296}^{0.5} (4x)dx + \int_{0.5}^{0.704} (-4x+4)dx \\ &amp;= 2x^2 \Bigr|_ {0.296}^{0.5} + \left( -2x^2 + 4x \right) \Bigr|_{0.5}^{0.704} \\
+&amp;= 0.650 \end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>For \(\rho_2\) the probability of selecting a value within one standard deviation of the mean is given by: [stem]</p>
+</div>
+</li>
+</ol>
+</div>
+\begin{align*} &\int_{0.234}^{0.766} 2\sin^2(2\pi x)dx =  \left. x - \frac{\sin(4 \pi x)}{4 \pi} \right|_{0.234}^{0.766}  = 0.564 \end{align*}
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_9"><a class="anchor" href="#_problem_9"></a><a class="link" href="#_problem_9">1.3.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>You are standing at the center of a number line (\(x=0\)).
+You repeatedly flip a coin. Every time you flip heads, you take a unit step in the positive direction.
+Every time you flip tails, you take a unit step in the negative direction.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Where on the number line could you end up after flipping the coin exactly once (\(n=1\))?
+How many total paths are there?</p>
+</li>
+<li>
+<p>For \(n=0\) to \(n=3\), how many sequences of \(n\) coin flips land you at each integer?
+How many total paths are there?
+Do you notice a pattern?</p>
+</li>
+<li>
+<p>Use <a href="https://en.wikipedia.org/wiki/Pascal&#8217;s_triangle">Pascal&#8217;s triangle</a> to determine the probability of landing at each integer after 7 steps.
+Where are you most likely to land?
+Calculate the expected value and standard deviation.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>You could end up at \(x = \pm 1\). There is 1 path, \(T\), to \(x = - 1\) and 1 path, \(H\), to \(x =1\), for a total of 2 paths.</p>
+</li>
+<li>
+<p>For 0 to 3 flips:</p>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 20%;">
+<col style="width: 20%;">
+<col style="width: 60%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">\(\boldsymbol n\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol x\)</th>
+<th class="tableblock halign-left valign-top">Paths</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="2"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\emptyset\) (the empty path; no coin flips)</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">1</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="3"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">T</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">H</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">2</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="4"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TH, HT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HH</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">4</p></th>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="5"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TTT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">TTH, THT, HTT</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HHT, HTH, THH</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">HHH</p></td>
+</tr>
+<tr>
+<th class="tableblock halign-left valign-top"><p class="tableblock">Total</p></th>
+<th class="tableblock halign-left valign-top"><p class="tableblock">8</p></th>
+</tr>
+</tbody>
+</table>
+<div class="paragraph">
+<p>For each \(n\), there are \(2^n\) total paths, and the number of paths to get to each endpoint are given by binomial coefficients \(\binom{n}{k}\) where \(k\) is the number of heads, which we will see in Pascal&#8217;s triangle.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+You should justify to yourself <em>why</em> there are \(2^n\) total paths.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>Pascal&#8217;s triangle is shown below.</p>
+<div class="imageblock">
+<div class="content">
+<img src="_images/fig-1.3.4-pascal-triangle.svg" alt="Pascal&#8217;s Triangle" width="300">
+</div>
+</div>
+<div class="paragraph">
+<p>The \(k\)<sup>th</sup> element in the \(n\)<sup>th</sup> row (where \(k\) and \(n\) both start from 0), \(\binom nk\), is the number of sequences of H and T of length \(n\) containing \(k\) H&lsquo;s.
+A path with \(k\)&#x2007;H&lsquo;s will contain \(n-k\)&#x2007;T&lsquo;s, and so its final position will be \(x=\#\mathrm H-\#\mathrm T=k-(n-k)=2k-n\).
+(Check that this matches what you found above.)
+There are \(2^7=128\) sequences of length 7, so the probabilities of landing at each integer are as follows:</p>
+</div>
+<table class="tableblock frame-all grid-all stretch">
+<colgroup>
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 11.1111%;">
+<col style="width: 33.3333%;">
+<col style="width: 33.3334%;">
+</colgroup>
+<thead>
+<tr>
+<th class="tableblock halign-left valign-top">\(\boldsymbol n\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol k\)</th>
+<th class="tableblock halign-left valign-top">\(\boldsymbol{x=2k-n}\)</th>
+<th class="tableblock halign-left valign-top">Number of paths</th>
+<th class="tableblock halign-left valign-top">Probability</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="tableblock halign-left valign-top" rowspan="8"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(0\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{1}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{7}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(2\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(21\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{21}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(-1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(35\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{35}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(4\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(35\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{35}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(3\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(21\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{21}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(6\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(5\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{7}{128}\)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(7\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(1\)</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">\(\frac{1}{128}\)</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_10"><a class="anchor" href="#_problem_10"></a><a class="link" href="#_problem_10">1.3.1.5. Problem<sup>&dagger;</sup></a></h5>
+<div class="paragraph">
+<p>In one dimension, the <em>probability current</em> \(J\) describes the rate at which probability flows past point \(x\). For a free particle with mass \(m\) whose wavefunction is \(\Psi(x,t)\), or \(\Psi\) for short, it is given by</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[J(x,t) = \frac{i
+    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial
+    x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
+</div>
+</div>
+<div class="paragraph">
+<p>(In higher dimensions, \(\frac{\partial }{\partial x}\) is replaced by \(\nabla\), and the interpretation relies on Gauss&#8217;s divergence theorem.)</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that</p>
+<div class="stemblock">
+<div class="content">
+\[\frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t)\]
+</div>
+</div>
+<div class="paragraph">
+<p>What “law” does this equation represent?
+What happens to the probability current in the region from \(-\infty\) to \(\infty\)?
+What does this mean?</p>
+</div>
+</li>
+<li>
+<p>[From the Bernd Thaller book] Write \(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\).
+Show that \(J\) as defined above points in the direction of \(\frac{\partial \varphi}{\partial x}\) (or in the 3D case, \(\nabla \varphi\)), i.e., in the direction of increasing phase.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First, recall the Schrödinger equation for a free particle,</p>
+<div class="stemblock">
+<div class="content">
+\[ i\hbar\frac{\partial \Psi}{\partial t}=-\frac{\hbar^2}{2m}\frac{\partial^2}{\partial x^2}\Psi\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now recall that \(\frac{\partial(f^*)}{\partial x}=\left(\frac{\partial f}{\partial x}\right)^*\). Then,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{\partial \Psi}{\partial t}&amp;=\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\\
+\frac{\partial \Psi^*}{\partial t}&amp;=-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, applying the product rule twice, once forwards and once backwards,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{d}{dt}|\Psi|^2&amp;=\frac{d}{dt} (\Psi^*\Psi)\\
+&amp;=\frac{d\Psi^*}{dt}\Psi +\Psi^*\frac{d\Psi}{dt}\\
+&amp;=\left(-\frac{i\hbar}{2m}\frac{\partial^2\Psi^*}{\partial x^2}\right)\Psi+\Psi^*\left(\frac{i\hbar}{2m}\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}-\Psi^*\frac{\partial^2\Psi}{\partial x^2}\right)\\
+&amp;=-\frac{i\hbar}{2m}\left[\left(\Psi\frac{\partial^2\Psi^*}{\partial x^2}+\frac{\partial \Psi}{\partial x}\frac{\partial\Psi^*}{\partial x}\right)\right.\\
+&amp;\phantom{=\frac{i\hbar}{2m}[}-\left.\left(\Psi^*\frac{\partial^2\Psi}{\partial x^2}+\frac{\partial \Psi^*}{\partial x}\frac{\partial\Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{i\hbar}{2m}\left[\frac{\partial}{\partial x} \left(\Psi\frac{\partial\Psi^*}{\partial x}\right)-\frac{\partial}{\partial x}\left(\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial}{\partial x}\left[\frac{i\hbar}{2m}\left(\Psi\frac{\partial\Psi^*}{\partial x}-\Psi^* \frac{\partial \Psi}{\partial x}\right)\right]\\
+&amp;=-\frac{\partial J}{\partial x}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And the integral is now trivial:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{d}{dt}\int_a^b |\Psi|^2\,dx&amp;=\int_a^b\frac{d}{dt} |\Psi|^2\,dx\\
+&amp;=\int_a^b-\frac{\partial J}{\partial x}\,dx\\
+&amp;=-J(x,t)\Bigr|^{x=b}_{x=a}\\
+&amp;=J(a,t)-J(b,t)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We see that the net amount of probability leaving or entering the region \([a,b\)] is the difference between the values of the probability current at \(a\) and \(b\).
+This means that “probability current” is, in fact, a good name for this quantity:
+if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region&#8217;s boundary, then, via <a href="https://en.wikipedia.org/wiki/Divergence_theorem" target="_blank" rel="noopener">Gauss&#8217;s Theorem</a>, we can liken the function&#8217;s value on the surface to a flux, or current. (For more info, see <a href="https://en.wikipedia.org/wiki/Continuity_equation" target="_blank" rel="noopener">Transport Equation</a>.)
+From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region&#8217;s boundary.
+(This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when \(\frac{\partial \Psi}{\partial x}\) is replaced by \(\nabla \Psi\) and the region&#8217;s boundary is an actual surface and not just two points on either side.)</p>
+</div>
+<div class="paragraph">
+<p>Since \(\Psi\) is square integrable, it must go to 0 as \(x\to\pm\infty\), and therefore so must \(J\) (just by the definition).
+And so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{d}{dt}\int_{-\infty}^\infty |\Psi|^2\,dx=0\]
+</div>
+</div>
+<div class="paragraph">
+<p>This indicates that probability is conserved: it cannot just appear out of or disappear into nowhere; it can only move from one place to another.
+(This is good — we <em>need</em> probabilities to always add up to 1.)</p>
+</div>
+</li>
+<li>
+<p>First,</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{\partial (|\Psi|e^{\pm i\varphi})}{\partial x}&amp;=\frac{\partial |\Psi|}{\partial x}e^{\pm i\varphi}+|\Psi|\frac{\partial e^{\pm i\varphi}}{\partial x}\\
+&amp;=\frac{\partial |\Psi|}{\partial x} e^{\pm i\varphi}+|\Psi|e^{\pm i\varphi}\left(\pm i\frac{\partial \varphi}{\partial x}\right)\\
+&amp;= e^{\pm i\varphi}\left(\frac{\partial |\Psi|}{\partial x} \pm i|\Psi|\frac{\partial \varphi}{\partial x}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+J&amp;=\frac{i\hbar}{2m}\left((|\Psi| e^{i\varphi})\frac{\partial (|\Psi| e^{-i\varphi})}{\partial x}-(|\Psi| e^{-i\varphi})\frac{\partial (|\Psi| e^{i\varphi})}{\partial x}\right)\\
+&amp;=\frac{i\hbar}{2m}\left[(|\Psi| e^{i\varphi}) e^{-i\varphi}\left(\frac{\partial |\Psi|}{\partial x} - i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right. \\
+&amp;\phantom{=\frac{i\hbar}{2m}}\quad-\left.(|\Psi| e^{-i\varphi}) e^{ i\varphi}\left(\frac{\partial |\Psi|}{\partial x} + i|\Psi|\frac{\partial \varphi}{\partial x}\right)\right]\\
+&amp;=\frac{i\hbar}{2m}\left[-2i|\Psi|\frac{\partial \varphi}{\partial x}\right]\\
+&amp;=\frac{\hbar}{m}|\Psi|\frac{\partial \varphi}{\partial x}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>which does indeed point in the direction of \(\frac{\partial \varphi}{\partial x}\) (or, in higher dimensions, where we would have taken \(\nabla (|\Psi|e^{\pm i\varphi})\), it points in the direction of \(\nabla \varphi\)).</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_3"><a class="anchor" href="#_demonstrations_3"></a><a class="link" href="#_demonstrations_3">1.3.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Discrete density function</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/ball_sampling/ball_sampling_inlined.html?t=1656456918" target="_blank" rel="noopener">Balls in a bag</a></p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/dice_sampling/dice_sampling_inlined.html?t=1656456918" target="_blank" rel="noopener">Sum of N dice</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Continuous density function</p>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (1D)</a></p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment_2D/wavefunctions_and_probability_sampling_experiment_2D_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (2D)</a></p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Show how the moments of various distributions depend on their parameters (e.g., show one standard deviation of a gaussian and how it changes with the parameter \(\sigma\)).</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_other_ideas_notes_materials_2"><a class="anchor" href="#_other_ideas_notes_materials_2"></a><a class="link" href="#_other_ideas_notes_materials_2">1.3.3. Other Ideas, Notes, Materials</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Discuss basic properties of probability distributions:</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Linearity of expectation</p>
+</li>
+<li>
+<p>How scaling \(x\) affects \(\sigma\)</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_normalization"><a class="anchor" href="#_normalization"></a><a class="link" href="#_normalization">1.4. Normalization</a></h3>
+<div class="sect3">
+<h4 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">1.4.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_11"><a class="anchor" href="#_problem_11"></a><a class="link" href="#_problem_11">1.4.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>Normalize the following wavefunctions (i.e. find \(A_i\)) over the domain \(x\in(-\infty,\infty)\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\Psi_1(x,t)= A_1e^{-(\frac{ax^2}{2}+i\omega t)}\)</p>
+</li>
+<li>
+<p>\(\Psi_2(x,0)= A_2e^{-\kappa|x|}\)</p>
+</li>
+<li>
+<p>\(\Psi_3(x,0)= A_3\frac{\sin(2x)}{x}\) (you may use the fact that \(\int_{-\infty}^\infty\frac{\sin(x)}{x}\,dx=\pi\))</p>
+</li>
+<li>
+<p>\(\Psi_4(x,t)= A_4\frac{e^{-i\omega t}}{x+e^{i \pi/2}}\)</p>
+</li>
+</ol>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+If \(A_i\) works then so does \(A_ie^{ix}\) for an real \(x\), so you might as well choose the \(A_i\) that is real and positive.
+</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The squared norm of a wavefunction \(\Psi\) is \(|\Psi|:=\int_{-\infty}^\infty|\Psi(x,t)|^2\,dx\).
+Normalizing a wavefunction simply requires setting its (squared) norm to 1, then solving for the normalization constant \(A\).</p>
+</div>
+<div class="paragraph">
+<p>Recall that a complex number \(ke^{ix}\) has magnitude \(k\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Let \(\sigma=\frac{1}{\sqrt{2a}}\). Then</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi_1|^2&amp;=\int_{-\infty}^\infty \left|A_1e^{-(\frac{ax^2}{2}+i\omega t)}\right|^2\,dx\\
+&amp;=\int_{-\infty}^\infty |A_1|^2e^{-ax^2}\,dx\\
+&amp;=\sigma\sqrt{2\pi}|A_1|^2\int_{-\infty}^\infty  \frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x}{\sigma}\right)^2}\,dx\\
+&amp;= \sigma\sqrt{2\pi}|A_1|^2\cdot 1\quad\textrm{(the integrand is a Gaussian)}\\
+&amp;=\sqrt{\frac{\pi}{a}}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Setting this equal to 1, we obtain \(A_1=\left(\frac{a}{\pi}\right)^{\frac{1}{4}}\).</p>
+</div>
+</li>
+<li>
+<p>We compute:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi_2|^2&amp;=\int_{-\infty}^\infty \left|A_2 e^{-\kappa|x|}\right|^2\,dx\\
+&amp;=\int_{-\infty}^\infty |A_2|^2 e^{-2\kappa|x|}\,dx\\
+&amp;=\int_{-\infty}^0 |A_2|^2 e^{2\kappa x}\,dx+\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&amp;=2\int_0^{\infty} |A_2|^2 e^{-2\kappa x}\,dx\\
+&amp;=2 |A_2|^2 \left.\frac{e^{-2\kappa x}}{-2\kappa}\right|^\infty_0\\
+&amp;=\frac{|A_2|^2}{\kappa}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Setting this equal to 1, we obtain \(A_2=\sqrt\kappa\).</p>
+</div>
+</li>
+<li>
+<p>We start off with the squared integral:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi_3|^2&amp;=\int_{-\infty}^\infty \left|A_3\frac{\sin(2x)}{x}\right|^2\,dx=|A_3|^2\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>To compute this complicated looking integral, we&#8217;ll use integration by parts:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+u&amp;=\sin^2(2x)&amp;dv&amp;=x^{-2}\,dx\\
+du&amp;=4\sin(2x)\cos(2x)\,dx&amp;v&amp;=-x^{-1}\\
+&amp;=2\sin(4x)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And so,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&amp;=-\left.\frac{\sin^2(2x)}{x}\right|^\infty_{-\infty} - \int_{-\infty}^\infty -\frac{2\sin(4x)}{x}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, \(\frac{\sin^2(x)}{x}\) is an odd function, so its integral over \((-\infty,\infty)\) is \(0\). So we&#8217;re just left with</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty\frac{\sin^2(2x)}{x^2}\,dx&amp;= \int_{-\infty}^\infty \frac{2\sin(4x)}{x}\,dx\\
+&amp;=8\int_{-\infty}^\infty \frac{\sin(4x)}{4x}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, a \(u\)-substition with \(u=4x,du=4\,dx\) gives us</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;=8\int_{-\infty}^\infty \frac{\sin(u)}{u}\cdot\frac{1}{4}\,du\\
+&amp;=2\int_{-\infty}^\infty \frac{\sin(u)}{u}\,du\\
+&amp;=2\pi
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So, \(1=|\Psi_3|^2=|A_3|^2\cdot2\pi\), from which we conclude that <span class="no-break">\(A_3=\frac{1}{\sqrt{2\pi}}\).</span></p>
+</div>
+</li>
+<li>
+<p>We&#8217;ll need to compute \(|x+e^{i\pi/2}|\) so we&#8217;ll do that first.
+First note that \(e^{i\pi/2}=i\), and then</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|x+i|^2&amp;=(x+i)(x+i)^* =x^2+1
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi_4|^2&amp;=\int_{-\infty}^\infty \left|A_4\frac{e^{-i\omega t}}{x+e^{i\pi/2}}\right|^2\,dx\\
+&amp;=|A_4|^2\int_{-\infty}^\infty \frac{1}{x^2+1}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>If you are struggling to compute this integral and would like a hint: don&#8217;t read any further, and set \(x=\tan\theta\).
+(The image of \(\tan\) is \((-\infty,\infty)\), so this is sound.)</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="paragraph">
+<p>Letting \(x=\tan\theta\), we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+x^2+1&amp;=\tan^2\theta+1\\
+&amp;=\frac{\sin^2\theta}{\cos^2\theta}+1\\
+&amp;=\frac{\sin^2\theta+\cos^2\theta}{\cos^2\theta}\\
+&amp;=\frac{1}{\cos^2\theta}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>and so \(\frac{1}{x^2+1}=\cos^2\theta\).
+Also,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{dx}{d\theta}&amp;=\frac{d}{d\theta}\left(\frac{\sin\theta}{\cos\theta}\right)=\frac{d}{d\theta}\left(\sin\theta\cos^{-1}\theta\right)\\
+&amp;=(\cos\theta)(\cos^{-1}\theta)+(\sin\theta)(-\sin\theta(-\cos^{-2}\theta))\\
+&amp;=1+\frac{\sin^2\theta}{\cos^2\theta}\\
+&amp;=\frac{\cos^2\theta+\sin^2\theta}{\cos^2\theta}\\
+&amp;=\frac{1}{\cos^2\theta}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Finally, note that \(\tan(\pm\infty)=\pm\frac{\pi}{2}\).
+Therefore,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty\frac{1}{x^2+1}dx&amp;=\int_{-\pi/2}^{\pi/2}(\cos^2\theta)\left(\frac{1}{\cos^2\theta}\right)\,d\theta\\
+&amp;=\int_{-\pi/2}^{\pi/2} d\theta\\
+&amp;=\theta\Bigr|_{-\pi/2}^{\pi/2}\\
+&amp;=\pi
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And so \(1=|\Psi_4|^2=|A_4|^2\pi\) and (once again) \(A_4=\frac{1}{\sqrt\pi}\).</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_12"><a class="anchor" href="#_problem_12"></a><a class="link" href="#_problem_12">1.4.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Write a normalized wavefunction, \(\Psi(x,t)\), with expectation \(\Braket{x}\) and standard deviation \(\sigma\) at time \(t=0\).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>It&#8217;s easiest to start with a known probability distribution — their means and standard deviations are often part of their parameterization, and by definition they&#8217;re normalized — and then work backwards to the wavefunction.</p>
+</div>
+<div class="paragraph">
+<p>One probability distribution parameterized by its mean and standard deviation is the normal distribution.
+The normal distribution with mean \(\Braket{x}\) and standard deviation \(\sigma\) is</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[f(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{1}{2}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]
+</div>
+</div>
+<div class="paragraph">
+<p>One wavefunction whose probability distribution is \(f\) is \(f\)’s square root:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\psi(x)=\sqrt{f(x)} =\frac{1}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]
+</div>
+</div>
+<div class="paragraph">
+<p>For fun, we can throw in a phase dependence on \(t\); it won&#8217;t affect the magnitude:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,t)=\frac{e^{-it}}{\sqrt{\sigma\sqrt{2\pi}}}e^{-\frac{1}{4}\left(\frac{x-\Braket{x}}{\sigma}\right)}\]
+</div>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_4"><a class="anchor" href="#_demonstrations_4"></a><a class="link" href="#_demonstrations_4">1.4.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/wavefunctions_and_probability_sampling_experiment/wavefunctions_and_probability_sampling_experiment_inlined.html?t=1653613543" target="_blank" rel="noopener">Probability and Sampling Experiment (1D)</a></p>
+<div class="ulist">
+<ul>
+<li>
+<p>Already shown above, but this time you can emphasize how after changing the shape of the wavefunction, it immediately adjusts \(\psi\) so that its squared magnitude remains 1.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_momentum"><a class="anchor" href="#_momentum"></a><a class="link" href="#_momentum">1.5. Momentum</a></h3>
+<div class="sect3">
+<h4 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">1.5.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_13"><a class="anchor" href="#_problem_13"></a><a class="link" href="#_problem_13">1.5.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>For the following wavefunction over the interval \([0,1\)]</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)\]
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \(\Psi(x,t)\) is normalized.</p>
+</li>
+<li>
+<p>Calculate \(\Braket{x}\).</p>
+</li>
+<li>
+<p>Calculate \(\Braket{p} \).</p>
+</li>
+<li>
+<p>Compare and contrast this to the classical system of a ball bouncing back and forth between two walls.
+Does Ehrenfest&#8217;s theorem apply to this wavefunction?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>You will want to have on hand a big list of trigonometric identities.
+Here are the main ones we&#8217;ll use:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\sin^2(x)&amp;=\frac{1}{2}(1-\cos(2x))\\
+\sin(2\alpha)&amp;=2\sin(\alpha)\cos(\alpha)\\
+\sin(\alpha)\sin(\beta)&amp;=\frac{1}{2}(\cos(\alpha-\beta)-\cos(\alpha+\beta))\\
+\sin(\alpha)\cos(\beta)&amp;=\frac{1}{2}(\sin(\alpha-\beta)+\sin(\alpha+\beta))
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll also want the following two integrals: for integer \(n\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^1\cos(n\pi x)\,dx&amp;=\left.\frac{\sin(n\pi x)}{n\pi}\right|^1_0=0\\
+\int_0^1\sin(n\pi x)\,dx&amp;=\left.-\frac{\cos(n\pi x)}{n\pi}\right|^1_0=\begin{cases}\frac{2}{n\pi}&amp;n\ \textrm{odd}\\0&amp;n\ \textrm{even}\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And we&#8217;ll want the following, which requires integration by parts.
+Let \(u=x,dv=\cos(n\pi x)\,dx\).
+Then \(du=dx\) and \(v=\frac{\sin(n\pi x)}{n \pi }\).</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^1x\cos(n\pi x)\,dx&amp;=\int_0^1u\,dv\\
+&amp;=uv\Bigr|^1_0 - \int_0^1v\,du\\
+&amp;=\left.\frac{x\sin(n\pi x)}{n\pi}\right|^1_0-\int_0^1\frac{\sin(n\pi x)}{n\pi }\,dx\\
+&amp;=\begin{cases}-\frac{2}{(n\pi)^2}&amp;n\ \textrm{odd}\\0&amp;n\ \textrm{even}\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Ok, on to the task at hand.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First note that</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^1\sin^2(n\pi x)\,dx =\int_0^1\frac{1}{2}(1-\cos(2n\pi x))\,dx=\frac{1}{2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And if \(m\ne n\) then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\int_0^1\sin(m\pi x)\sin(n \pi x)\,dx\\
+&amp;=\int_0^1\frac{1}{2}(\cos((m-n)\pi x)-\cos((m+n)\pi x))\,dx\\
+&amp;=0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi(x,t)|^2&amp;=\Psi^*\Psi\\
+&amp;=(e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x))\\
+&amp;\phantom{=}\cdot (e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x))\\
+&amp;=\sin^2(\pi x)+\sin^2(2\pi x) \\
+&amp;\phantom{=}+ \left(e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\right)\sin(\pi x)\sin(2\pi x)\\
+&amp;=\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}\).
+Now we simply compute:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\Psi|^2&amp;=\int_{0}^1 \Psi^*\Psi \,dx\\
+&amp;=\int_0^1 \sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x)\,dx\\
+&amp;=\frac{1}{2}+\frac{1}{2}+0\\
+&amp;=1
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(\Psi\) is indeed normalized.</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>&#160;</p>
+<div class="openblock">
+<div class="content">
+<div class="admonitionblock warning">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-warning" title="Warning"></i>
+</td>
+<td class="content">
+These integrals won&#8217;t be pretty.
+</td>
+</tr>
+</table>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{x}&amp;=\int_0^1\Psi(x,t)^*\,x\,\Psi(x,t)\,dx\\
+&amp;=\int_0^1x|\Psi(x,t)|^2\,dx\\
+&amp;=\int_0^1 x(\sin^2(\pi x)+\sin^2(2\pi x)+\phi\sin(\pi x)\sin(2\pi x))\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll do the three components separately, starting with the first two.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^1x\sin^2(n\pi x)&amp;=\int_0^1 x\cdot\frac{1}{2}(1-\cos(2 n\pi x))\,dx\\
+&amp;=\frac{1}{2}\left(\int_0^1x \,dx - \int_0^1x\cos(2 n \pi x)\,dx\right)\\
+&amp;=\frac{1}{2}\left(\left.\frac{x^2}{2}\right|^1_0-0\right)\\
+&amp;=\frac{1}{4}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Great, that&#8217;s two components down. Now let&#8217;s do the third component (without the \(\phi\) constant for now).</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\int_0^1x\sin(\pi x)\sin(2\pi x)\,dx\\
+&amp;=\int_0^1 x\cdot\frac{1}{2}\left(\cos(-x)-\cos(3x)\right)\,dx\\
+&amp;=\frac{1}{2}\left(-\frac{2}{(-\pi)^2}-\frac{2}{(3\pi)^2}\right)\\
+&amp;=-\frac{8}{9\pi^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And so, we finally obtain</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Braket{x}=\frac{1}{4}+\frac{1}{4}-\frac{8\phi}{9\pi^2}=\frac{1}{2}-\frac{8\phi}{9\pi^2}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Wait a minute — \(\phi\) is complex, but \(\Braket{x}\) must be real.
+Well, if \(w\in\mathbb R\), then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+e^{iw}+e^{-iw}&amp;=e^{iw}+(e^{iw})^*\\
+&amp;=2\,\mathfrak{Re}[e^{iw}]\\
+&amp;=2\cos(w)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\phi=e^{i(\lambda_1-\lambda_2)t}+e^{-i(\lambda_1-\lambda_2)t}=2\cos((\lambda_1-\lambda_2)t)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(\phi\) was real along. We finally obtain</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{x} = \frac{1}{2}-\frac{16\cos((\lambda_1-\lambda_2)t)}{9\pi^2}
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>On to \(\braket{p}\)!</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{p}&amp;=\int_0^1 \Psi(x,t)^*\,\left(-i\hbar\frac{\partial }{\partial x} \right)\Psi(x,t)\,dx\\
+&amp;=-i\hbar\int_0^1\Psi^*\frac{\partial \Psi}{\partial x}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s compute the integrand:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi^* &amp;=e^{i\lambda_1 t}\sin(\pi x)+e^{i\lambda_2 t}\sin(2\pi x)\\
+\frac{\partial \Psi}{\partial x} &amp;=\pi e^{-i\lambda_1 t}\cos(\pi x)+2\pi e^{-i\lambda_2 t}\cos(2\pi x)\\\\
+\Psi^* \frac{\partial \Psi}{\partial x}&amp;=\pi\sin(\pi x)\cos(\pi x)+2\pi \sin(2\pi x)\cos(2\pi x)\\
+&amp;\phantom{=}+\,\pi e^{-i(\lambda_1-\lambda_2)t}\sin(2\pi x)\cos(\pi x)\\
+&amp;\phantom{=}+\,2\pi e^{i(\lambda_1-\lambda_2)t}\sin(\pi x)\cos(2\pi x)\\
+&amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&amp;\phantom{=}+\,\frac{\pi}{2} e^{-i(\lambda_1-\lambda_2)t}\left(\sin(\pi x)+\sin(3\pi x)\right)\\
+&amp;\phantom{=}+\,\pi e^{i(\lambda_1-\lambda_2)t}\left(\sin(-\pi x)+\sin(3\pi x)\right)\\
+&amp;=\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\\
+&amp;\phantom{=}+\,\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{=}+\,\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, we need to integrate this.
+Thankfully we already know how to compute \(\int_0^1 \sin(n\pi x)\,dx\), and so we obtain</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{p}&amp;=-i\hbar\int_0^1 \Psi^*\frac{\partial \Psi}{\partial x}\,dx\\
+&amp;=-i\hbar\int_0^1\left[\frac{\pi}{2}\sin(2\pi x)+\pi\sin(4\pi x)\right.\\
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\frac{\pi}{2}\sin(\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;\phantom{i\hbar\int_0^1}\quad\quad+\left.\frac{\pi}{2}\sin(3\pi x)\left(e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\,dx\\
+&amp;=-i\hbar\left[\left( e^{-i(\lambda_1-\lambda_2)t}-2 e^{i(\lambda_1-\lambda_2)t}\right)\right.\\
+&amp;\quad\quad+\,\left.\frac{1}{3}\left( e^{-i(\lambda_1-\lambda_2)t}+2 e^{i(\lambda_1-\lambda_2)t}\right)\right]\\
+&amp;=-i\hbar\left(\frac{4}{3}e^{-i(\lambda_1-\lambda_2)t}-\frac{4}{3}e^{i(\lambda_1-\lambda_2)t}\right)\\
+&amp;=-\frac{4i\hbar}{3}\left(e^{-i(\lambda_1-\lambda_2)t}-e^{i(\lambda_1-\lambda_2)t}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Uh oh, this also looks like it might not be real.
+But,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+e^{-iw}-e^{iw}&amp;=-(e^{iw}-(e^{iw})^*)\\
+&amp;=-2i\,\mathfrak{Im}[e^{iw}]\\
+&amp;=-2i\sin(w)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>and so, finally,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{p}&amp;=-\frac{4i\hbar}{3}\left(-2i\sin((\lambda_1-\lambda_2)t)\right)\\
+&amp;=\frac{8\hbar \sin((\lambda_2-\lambda_1)t)}{3}
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Regardless of the values of \(\lambda_1\) and \(\lambda_2\), the particle oscillates between the fixed points \(\frac{1}{2}\pm\frac{16}{9\pi}\).
+The values of the \(\lambda\)s only affects the rate at which it oscillates.
+Similarly, the particle&#8217;s momentum oscillates between \(\frac{8\hbar}{3}\), with the \(\lambda\)s only affecting the rate at which its momentum oscillates.
+This particle functions something like a classical ball bouncing between two walls, with two key differences:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The particle&#8217;s speed as it moves between the two walls is sinusoidal, not constant.</p>
+</li>
+<li>
+<p>The particle&#8217;s maximum momentum does not increase as its rate of oscillation increases.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>This latter point may seem to violate Ehrenfest&#8217;s theorem — how can a particle&#8217;s velocity increase without its momentum increasing?
+However, Ehrenfest&#8217;s theorem applies only to linear operators over the whole real line.
+Since the wavefunction in question was defined only on \([0,1\)], Ehrenfest&#8217;s theorem does not hold.</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_14"><a class="anchor" href="#_problem_14"></a><a class="link" href="#_problem_14">1.5.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Suppose a particle of mass \(m\) has the following wavefunction:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,t)=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2} \exp\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(p_0\in\mathbb R\), \(\sigma&gt;0\), and \(T:=1+\frac{i\hbar t}{2m\sigma^2}\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that the particle&#8217;s probability distribution at time \(t\) is the normal distribution \(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right),\) i.e., the normal distribution with mean \(\frac{p_0t}{m}\) and variance \((\sigma|T|)^2\).</p>
+</li>
+<li>
+<p>Find \(\Braket{x}\) by computing \(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\).
+(You should be able to predict the answer from part (a).)</p>
+</li>
+<li>
+<p>Find \(\Braket{p}\) by computing \(\int_{-\infty}^\infty \Psi^*\left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\,dx\).
+(You should be able to predict the answer from part (a).)</p>
+</li>
+<li>
+<p>Calculate \(\frac{d \Braket{x}}{dt}\) from your answer in part (b).</p>
+</li>
+<li>
+<p>Apply Ehrenfest&#8217;s Theorem to part (c) to find \(\Braket{- \frac{\partial V}{\partial x}}\).</p>
+</li>
+<li>
+<p>How would you describe this particle, in words?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First, note that for any complex \(z\), \((e^z)^* =e^{z^*}\), so \((e^z)(e^z)^* =e^{z+z^*}=e^{2\Re(z)}\).</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Also, \((z^a)^* =(z^*)^a\).
+Therefore,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi^* \Psi &amp;= \frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[2\Re\left(\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right)\right]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{1}{T}&amp;=\frac{1}{T}\cdot\frac{T^*}{T^*}=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Therefore</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&amp;=\frac{1-\frac{i\hbar t}{2m\sigma^2}}{|T|^2}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\\
+&amp;=\frac{1}{|T|^2}\left[\left(-\frac{x^2}{4\sigma^2}+\frac{t\left(p_0x - \frac{p_0^2t}{2m}\right)}{2m\sigma^2}\right)+i\left(\textrm{etc.}\right)\right]\\
+&amp;=-\frac{1}{4\sigma^2|T|^2}\left(x^2-\frac{2p_0 tx}{m}+\frac{p_0^2t^2}{m^2}\right)+i\left(\textrm{etc.}\right)\\
+&amp;=-\frac{1}{4\sigma^2|T|^2}\left(x-\frac{p_0t}{m^2}\right)^2+i\left(\textrm{etc.}\right)\\
+&amp;=-\frac{1}{4}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2+i\left(\textrm{etc.}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ve deliberately skipped computing the imaginary component because we&#8217;ll only need the real component.</p>
+</div>
+<div class="paragraph">
+<p>So, we see that</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi^*\Psi&amp;=\frac{1}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>which is the normal distribution \(\mathcal N\left(\frac{p_0t}{m},(\sigma|T|)^2\right)\)</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>We wish to compute \(\int_{-\infty}^\infty x\Psi^*\Psi\,dx\), i.e.,</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>This requires us to integrate something of the form</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>We&#8217;ll compute this using \(u\)-substitution. Letting \(u=\frac{x-a}{b}\), we have \(x=b u+a\) and \(dx=b\,du\), and when \(x=\pm\infty\) then \(u\) does as well, so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty xe^{-\frac{1}{2}\left(\frac{x-a}{b}\right)^2}\,dx&amp;=\int_{-\infty}^\infty (b u+a)e^{-\frac{1}{2}u^2}b\,du\\
+&amp;=\int_{-\infty}^\infty b^2ue^{-\frac{1}{2}u^2}\,du + \int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>The first of these integrals is of an odd function over the real line, so it&#8217;s equal to 0.
+The second can be computed as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^\infty ab e^{-\frac{1}{2}u^2}\,du&amp;=ab\sqrt{2\pi}\int_{-\infty}^\infty \frac{1}{\sqrt{2\pi}} e^{-\frac{1}{2}u^2}\,du\\
+&amp;=ab\sqrt{2\pi}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Substituting \(a\to\frac{p_0t}{m}\) and \(b\to\sigma|T|\) from above, we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{x}&amp;=\int_{-\infty}^\infty x\Psi^*\Psi\,dx\\
+&amp;=\int_{-\infty}^\infty \frac{x}{\sigma |T| \sqrt{2\pi}} \exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&amp;=\frac{1}{\sigma |T| \sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&amp;=\frac{p_0 t}{m}
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>We wish to compute \(\int_{-\infty}^\infty \Psi^*\left(-i\hbar \frac{\partial }{\partial x}\right)\Psi\,dx\).</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>For brevity, we&#8217;ll give a name to the inside of the exponent in \(\Psi\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+K=\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Then,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{\partial \Psi}{\partial x}&amp;=\left(\frac{1}{\sigma T\sqrt{2\pi}}\right)^\frac{1}{2}e^K\frac{\partial K}{\partial x}\\
+&amp;=\Psi\frac{\partial }{\partial x}\left[\frac{1}{T}\left(-\frac{x^2}{4\sigma^2} + \frac{i}{\hbar}\left(p_0x - \frac{p_0^2t}{2m}\right)\right)\right]\\
+&amp;=\Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\Psi^* \left(-i\hbar\frac{\partial }{\partial x}\right)\Psi\\
+&amp;=-i\hbar\Psi^* \Psi\left(\frac{1}{T}\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\right)\\
+&amp;=-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}+\frac{ip_0}{\hbar}\right)\\
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>To integrate this, we&#8217;ll split the sum in the third term into \(-\frac{x}{2\sigma^2}\) and \(\frac{ip_0}{\hbar}\) and integrate separately.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(-\frac{x}{2\sigma^2}\right)\,dx\\
+&amp;=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\int_{-\infty}^\infty x\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&amp;=\frac{i\hbar}{2\sigma^3|T|T\sqrt{2\pi}}\left(\frac{p_0t}{m}\sigma|T|\sqrt{2\pi}\right)\\
+&amp;=\frac{i\hbar p_0t}{2m\sigma^2T}\\
+\\
+&amp;\phantom{=}\int_{-\infty}^\infty-\frac{i\hbar}{\sigma|T|T\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\left(\frac{ip_0}{\hbar}\right)\,dx\\
+&amp;=\frac{p_0}{T}\int_{-\infty}^\infty \frac{1}{\sigma|T|\sqrt{2\pi}}\exp\left[-\frac{1}{2}\left(\frac{x-\frac{p_0t}{m}}{\sigma|T|}\right)^2\right]\,dx\\
+&amp;=\frac{p_0}{T}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And when we add these up, recalling that \(T:=1+\frac{i\hbar t}{2m\sigma^2}\), we find that</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket p &amp;=\frac{i\hbar p_0t}{2m\sigma^2T}+\frac{p_0}{T}\\
+&amp;=\frac{p_0}{1+\frac{i\hbar t}{2m\sigma^2}} \left(\frac{i\hbar t}{2m\sigma^2}+1\right)\\
+&amp;=p_0
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>\(\frac{d\braket x}{dt} = \frac{p_0}{m}\).
+So this particle moves at a constant velocity, \(\frac{p_0}{m}\) (as would a classical particle launched with momentum \(p_0\) in the absence of external forces).</p>
+</li>
+<li>
+<p>\(\Braket{-\frac{\partial V}{\partial x}}=\frac{d\braket{p}}{dt}=0\).
+So in fact this particle is moving in zero potential (which we could have gathered from the fact that it&#8217;s not accelerating).</p>
+</li>
+<li>
+<p>The particle whose wavefunction this is was launched with initial momentum \(p_0\) and travels through a region of zero potential.
+Its probability distribution is a Gaussian that widens with time.
+Its observables obey the classical behavior: its expected position is the mean of the Gaussian and the expected velocity is the (constant) velocity of the Gaussian&#8217;s mean.</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_15"><a class="anchor" href="#_problem_15"></a><a class="link" href="#_problem_15">1.5.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]
+</div>
+</div>
+<div class="paragraph">
+<p>In other words, if the potential is quadratic then we can say “the expectation of the force at \(x\) is the force evaluated at \(\Braket{x}\)”.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Starting with Ehrenfest&#8217;s theorem, all we need to do is compute \(-\frac{\partial V}{\partial x}\) and use the linearity of expectation:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{d\Braket{p}}{dt}&amp;=\Braket{-\frac{\partial V}{\partial x}}\\
+&amp;=\Braket{-(2ax+b)}\\
+&amp;=-(2a\Braket{x} + b)\\
+&amp;=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>If \(V\) had any higher-order \(x\) terms, then its derivative would have a term of order \(x^2\) or higher, and the above procedure wouldn&#8217;t work because in general \(\Braket{x^n}\ne\Braket{x}^n\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_16"><a class="anchor" href="#_problem_16"></a><a class="link" href="#_problem_16">1.5.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>Any dynamical variable can be expressed in terms of position and momentum.
+Angular momentum is given by</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\textbf{L} = \textbf{r} \times \textbf{p}.\]
+</div>
+</div>
+<div class="paragraph">
+<p>In this problem you will get a small preview of orbital angular momentum, which you will learn much more about in Module 4.
+We will be working in three dimensions, where \(\textbf{r} = r\hat{r}\) and \(\textbf{p} = -i \hbar \nabla \).</p>
+</div>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>In spherical coordinates,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\nabla=\frac{\partial }{\partial r}\hat r+\frac{1}{r}\frac{\partial }{\partial \theta}\hat\theta +\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}\hat\phi.
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>It may help to use the identity</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(\textbf a\times \textbf b)\cdot(\textbf c\times \textbf d)=(\textbf a\cdot \textbf c)(\textbf b\cdot\textbf d)-(\textbf a\cdot\textbf d)(\textbf b\cdot\textbf c)
+\end{align*}\]
+</div>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find the expression for \(\textbf{L}\) in spherical coordinates.</p>
+</li>
+<li>
+<p>Find \(L^2\), the squared magnitude of \(\mathbf  L\).</p>
+</li>
+<li>
+<p>Calculate \(\Braket{L^2}\) for the spatial component of the wavefunction \( \psi(\theta,\phi)=\sqrt{\frac{15}{8\pi}}\sin{\theta}\cos{\theta}e^{-i\phi} \).</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\textbf L=(r\hat r)\times(p\hat p)=(r\hat r)\times(-i\hbar\nabla\hat p)\), which we may compute as follows:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(r\hat r)\times(-i\hbar\nabla\hat p)&amp;=-i\hbar r\begin{vmatrix}
+\hat r&amp;\hat\theta&amp;\hat\phi\\
+1&amp;0&amp;0\\
+\frac{\partial }{\partial r}&amp;\frac{1}{r}\frac{\partial }{\partial \theta}&amp;\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}
+\end{vmatrix}\\
+&amp;=-i\hbar r\left[\hat r(0-0)-\hat\theta\left(\frac{1}{r\sin\theta}\frac{\partial }{\partial \phi}-0\right)+\hat\phi\left(\frac{1}{r}\frac{\partial}{\partial\theta}-0\right)\right]\\
+&amp;=i\hbar\left(\frac{1}{\sin\theta}\frac{\partial }{\partial \phi}\hat\theta-\frac{\partial }{\partial \theta}\hat\phi\right)
+\end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p></p>
+</li>
+<li>
+<p>In Part (b) we found that</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+L^2&amp;=-\hbar^2\left(-\hbar^2\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right]\right)
+\end{align*}\]
+</div>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Eventually we will find \(\braket{L^2}=\int_\mathcal D\psi^*L^2\psi\,dr\), but for now we&#8217;ll just find \(L^2\psi\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+L^2 \psi&amp;=-\hbar^2\left[\frac{1}{\sin \theta}\right.\left.\frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\right] \sqrt{\frac{15}{8 \pi}} \sin \theta \cos \theta e^{-i \phi} \\
+&amp;=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&amp;\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>The second term in the brackets is easy to compute; it&#8217;s simply \(-\frac{1}{\sin^2\theta}\sin\theta\cos\theta e^{-i\phi}=-\cot\theta e^{-i\phi}\).
+As for the first term,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\\
+&amp;=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta (\cos^2 \theta-\sin^2\theta)\right)\\
+&amp;=\frac{e^{-i\phi}}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin\theta\cos^2 \theta-\sin^3\theta\right)\\
+&amp;=\frac{e^{-i\phi}}{\sin \theta}\left(\cos^3\theta -2\sin^2\theta\cos\theta-3\sin^2\theta\cos\theta\right)\\
+&amp;=\frac{e^{-i\phi}}{\sin \theta} \left(\cos^3\theta -5\sin^2\theta\cos\theta\right)\\
+&amp;=e^{-i\phi}\cot\theta \left(\cos^2\theta -5\sin^2\theta\right)\\
+&amp;=e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>(Depending on which trig identities you used, you might have gotten a different but equal result, as \(\cos2\theta=2\cos^2\theta-1=\cos^2\theta-\sin^2\theta=1-2\sin^2\theta\).)
+And so,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;=-\hbar^2 \sqrt{\frac{15}{8 \pi}} {\left[\frac{1}{\sin \theta} \frac{\partial}{\partial \theta}\left(\sin \theta \frac{\partial}{\partial \theta}\right)\left(\sin \theta \cos \theta e^{-i \phi}\right)\right.} \\
+&amp;\phantom{=-\hbar^2 \sqrt{\frac{15}{8 \pi}} [}\left.+\frac{1}{\sin ^2 \theta} \frac{\partial^2}{\partial \phi^2}\left(\sin \theta \cos \theta e^{-i \phi}\right)\right]\\
+&amp;=-\hbar^2\sqrt\frac{15}{8\pi}(e^{-i\phi}\cot\theta \left(1-6\sin^2\theta\right)-\cot\theta e^{-i\phi})\\
+&amp;=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\cot\theta \sin^2\theta\\
+&amp;=6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, to find \(\braket{L^2}\) (we&#8217;re in spherical coordinates, so don&#8217;t forget the Jacobian!):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{L^2}&amp;=\int_0^{2\pi}\int_0^\pi \psi^*L^2\psi\sin\theta\,d\theta\,d\phi\\
+&amp;=\int_0^{2\pi}\int_0^\pi \left(\sqrt\frac{15}{8\pi}\sin\theta\cos\theta e^{i\phi}\right)\left(6\sqrt\frac{15}{8\pi}\ \hbar^2e^{-i\phi}\sin\theta \cos\theta\right)\sin\theta\,d\theta\,d\phi\\
+&amp;=6\frac{15}{8\pi}\hbar^2\int_0^{2\pi}\int_0^\pi \sin^3\theta\cos^2\theta\,d\theta\,d\phi\\
+&amp;=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(1-\cos^2\theta)\cos^2\theta\,d\theta\,d\phi\\
+&amp;=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, using a \(u\)-substitution with \(u=\cos\theta\), we get \(\sin\theta\,d\theta=-du\) and \(\cos(0)=1, \cos(\pi)=-1\), and so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_0^\pi \sin\theta(\cos^2-\cos^4\theta)\,d\theta\,d\phi\\
+&amp;=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\int_1^{-1} -(u^2-u^4)\,du\,d\phi\\
+&amp;=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\left.\frac{u^5}{5}-\frac{u^3}{3}\right|_{1}^{-1}\,d\phi\\
+&amp;=\frac{45\hbar^2}{4\pi}\int_0^{2\pi}\frac{4}{15}\,d\phi\\
+&amp;=6\hbar^2
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_5"><a class="anchor" href="#_demonstrations_5"></a><a class="link" href="#_demonstrations_5">1.5.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p>Demonstrate Ehrenfest&#8217;s Theorem on various wavefunctions evolving over time by showing \(\Braket{x}_\psi\) and \(\Braket{p}_\psi\).</p>
+<div class="ulist checklist">
+<ul class="checklist">
+<li>
+<p><i class="fa fa-check-square-o"></i> Harmonic oscillator: <a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1653613543" target="_blank" rel="noopener">the quantum harmonic oscillator</a></p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> Particle in a box</p>
+</li>
+<li>
+<p><i class="fa fa-square-o"></i> others?</p>
+</li>
+</ul>
+</div>
+</li>
+<li>
+<p>Sample from these wavefunctions, e.g., let the harmonic oscillator evolve a bunch, then sample its position at a given point in time (pretending that we have an ensemble of identically prepared harmonic oscillators).
+Let the resulting \(\delta\) function evolve (spread out, oscillate), then sample again. Etc.</p>
+<div class="ulist">
+<ul>
+<li>
+<p>Unfortunately this doesn&#8217;t seem feasible.
+The universe is fortunate to get to run its computations instantly, but computers aren&#8217;t so lucky.
+While in QM a wavefunction is an infinite linear combination of basis functions, actually rendering it on a computer requires taking only a finite linear combination, and for Gaussians with variance outside a relative narrow band centered around 1 it takes more terms to render them faithfully than be computed in a reasonable amount of time.</p>
+</li>
+</ul>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_uncertainty_principle"><a class="anchor" href="#_the_uncertainty_principle"></a><a class="link" href="#_the_uncertainty_principle">1.6. The Uncertainty Principle</a></h3>
+<div class="sect3">
+<h4 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">1.6.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_17"><a class="anchor" href="#_problem_17"></a><a class="link" href="#_problem_17">1.6.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>For the wavefunction from 1.5.1,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,t) = e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)\]
+</div>
+</div>
+<div class="paragraph">
+<p>on the interval \([0,1\)].</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Calculate \(\Braket{p^2}\) and \(\sigma_p\).</p>
+<div class="admonitionblock tip">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-tip" title="Tip"></i>
+</td>
+<td class="content">
+You can reuse many of the calculations you did in 1.5.1.
+</td>
+</tr>
+</table>
+</div>
+</li>
+<li>
+<p>What is the minimum possible value of \(\sigma_x\)?</p>
+</li>
+<li>
+<p>Calculate \(\Braket{x^2}\) and \(\sigma_x\). Does the Heisenberg uncertainty principle hold?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In general,</p>
+</li>
+</ol>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{p^2}=\int_\mathcal D \Psi^*\left(-\hbar^2\frac{\partial ^2}{\partial x^2}\right)\Psi\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>For the \(\Psi\) above,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi &amp;= e^{-i \lambda_1 t}\sin(\pi x) + e^{-i \lambda_2 t}\sin(2 \pi x)\\
+\frac{\partial \Psi}{\partial x} &amp;= \pi e^{-i \lambda_1 t}\cos(\pi x) +2\pi e^{-i \lambda_2 t}\cos(2 \pi x)\\
+\frac{\partial^2 \Psi}{\partial x^2} &amp;= -\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And also</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi^* &amp;= e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{p^2}&amp;=-\hbar^2\int_0^1 \bigl[e^{i \lambda_1 t}\sin(\pi x) + e^{i \lambda_2 t}\sin(2 \pi x)\bigr]\\
+&amp;\phantom{=-\hbar^2}\quad\quad\cdot\bigl[-\pi^2 e^{-i \lambda_1 t}\sin(\pi x) -4\pi^2 e^{-i \lambda_2 t}\sin(2 \pi x)\bigr]\,dx\\
+&amp;=\hbar^2\pi^2\int_0^1\sin^2(\pi x)+4\sin^2(2\pi x)\\
+&amp;\quad\quad\quad\quad\quad\quad+(4e^{i(\lambda_1-\lambda_2)t}+e^{i(\lambda_2-\lambda_1)t})\sin(\pi x)\sin(2\pi x)\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Thankfully we&#8217;ve already done all three of these integrals (in 1.5.1):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^1\sin^2(\pi x)\,dx&amp;=\frac{1}{2}\\
+\int_0^1\sin^2(2\pi x)\,dx&amp;=\frac{1}{2}\\
+\int_0^1\sin(\pi x)\sin(2\pi x)\,dx&amp;=0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{p^2}&amp;=\hbar^2\pi^2\left(\frac{1}{2}+4\cdot\frac{1}{2}+0\right)\\
+&amp;=\frac{5\hbar^2\pi^2}{2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And in 1.5.1 we computed</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket{p}&amp;=\frac{8}{3}\hbar\sin((\lambda_1-\lambda_2)t)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\sigma_p&amp;=\sqrt{\braket{p^2}-\braket{p}^2}\\
+&amp;=\sqrt{\frac{5\hbar^2\pi^2}{2}-\frac{64}{9}\hbar^2\sin^2((\lambda_1-\lambda_2)t)}\\
+&amp;=\hbar\sqrt{\frac{5\pi^2}{2}-\frac{64}{9}\sin^2((\lambda_1-\lambda_2)t)}
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_18"><a class="anchor" href="#_problem_18"></a><a class="link" href="#_problem_18">1.6.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Estimate \(\sigma_p\) for a photon that is confined to a cone cell in the eye with a diameter of 2 \(\mu\)m.</p>
+</div>
+<details>
+<summary class="title">Solution (placeholder)</summary>
+<div class="content">
+<div class="paragraph">
+<p>This is the solution</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_6"><a class="anchor" href="#_demonstrations_6"></a><a class="link" href="#_demonstrations_6">1.6.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/fourier_transform_gaussian/fourier_transform_gaussian_inlined.html?t=1653613543" target="_blank" rel="noopener">Fourier Transformed Gaussian</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1 qm-chapter chap-2">
+<h2 id="_the_time_independent_schrödinger_equation"><a class="anchor" href="#_the_time_independent_schrödinger_equation"></a><a class="link" href="#_the_time_independent_schrödinger_equation">2. The Time-Independent Schrödinger Equation</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_stationary_states"><a class="anchor" href="#_stationary_states"></a><a class="link" href="#_stationary_states">2.1. Stationary States</a></h3>
+<div class="sect3">
+<h4 id="_questions_7"><a class="anchor" href="#_questions_7"></a><a class="link" href="#_questions_7">2.1.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_19"><a class="anchor" href="#_problem_19"></a><a class="link" href="#_problem_19">2.1.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>Which of the following are always true when we use separation of variables to solve the Schrodinger equation?</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\Psi(x,t)=\psi(x)\phi(t)\)</p>
+</li>
+<li>
+<p>Both sides of the Schrodinger equation are constant</p>
+</li>
+<li>
+<p>\(\Psi(x,t)\) is a stationary state</p>
+</li>
+<li>
+<p>\(V(x,t) = V(x)\)</p>
+</li>
+<li>
+<p>\(i\hbar \frac{\partial \Psi}{\partial t} = 0\)</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Only (a) is true. NEED TO EDIT! Check other answers in 2</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_20"><a class="anchor" href="#_problem_20"></a><a class="link" href="#_problem_20">2.1.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Why is \(\Psi_E(x,t)= \psi_E(x)e^{-iEt/\hbar}\) called a stationary state if it is time-dependent?</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \(|\Psi_E(x,t)|^2 = |\psi_E(x)|^2\).</p>
+</li>
+<li>
+<p>Show that \( \Braket{p} = 0\) for \(\Psi_E(x,t)\).</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>&#160;</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}|
+\Psi_E(x,t)|^2 &amp;= \Psi_E^* \Psi_E\\
+&amp;= (\psi_E^*(x)e^{iEt/\hbar}) (\psi_E(x) e^{-iEt/\hbar}) \\
+&amp;= |\psi_E(x)|^2
+\end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p>For a particle in state \(\Psi_E\),</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{x}&amp;=\int_{\mathcal D} x|\Psi_E(x,t)|^2 \,dx\\
+&amp;=\int_{\mathcal D} x|\psi_E(x)|^2\,dx\\
+&amp;=\textrm{constant w.r.t time}
+\end{align*}\]
+</div>
+</div>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>So \(\frac{d\Braket{x}}{dt}=0\).
+Then, Ehrenfest&#8217;s theorem says that \(\Braket{p}=m\frac{d\Braket{x}}{dt}=0\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_21"><a class="anchor" href="#_problem_21"></a><a class="link" href="#_problem_21">2.1.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>[Similar to Griffiths text (not a problem). Need to modify more]
+The classical Hamiltonian, the total energy in a system, is given by \(H(x,p)=\frac{p^2}{2m}+V(x)\), where \(\frac{p^2}{2m}\) is the kinetic energy and \(V(x)\) is the potential energy.</p>
+</div>
+<div class="ulist loweralpha">
+<ul class="loweralpha">
+<li>
+<p>Using the quantum mechanical substitution rule \(p \rightarrow -i\hbar \frac{\partial}{\partial x}\), find the quantum mechanical Hamiltonian \(\hat H\).
+Substituting this Hamiltonian into the time-independent Schrödinger equation</p>
+<div class="stemblock">
+<div class="content">
+\[-\frac{\hbar^2}{2m}\frac{d^2\psi}{dx^2}+V\psi = E\psi\]
+</div>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>yields \(\hat H\psi=E\psi\).
+* Show that \(\braket{\hat H} = E\).
+* Show that \(\braket{\hat H^2} = E^2\). (Hint: first show that \(\hat H^2\psi=E^2\psi\))
+* Conclude that the variance of \(\hat H\) is 0.</p>
+</div>
+<div class="paragraph">
+<p>In other words, every measurement of the total energy of a solution to the time-dependent Schrödinger equation will yield \(E\).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_22"><a class="anchor" href="#_problem_22"></a><a class="link" href="#_problem_22">2.1.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>If you were to measure the energy of a particle with the wavefunction \(\Psi(x,t) = \frac{4}{5}\Psi_1(x,t) - \frac{3i}{5} \Psi_2(x,t)\), what is the probability that you’d measure the energy to be \(E_2\)?</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>When a wavefunction is written as \(\Psi(x,t)=\sum_n c_n\Psi_n(x)=\sum_n c_n\psi_n(x) e^{-iE_n t/\hbar}\), the probability that a measurement of the energy yields \(E_n\) is \(|c_n|^2\).
+The probability that energy is \(E_2\), then, is \(\left|c_2\right|^2=\left|-\frac{3i}{5}\right|^2=\frac{9}{25}\).
+(As there are only two eigenstates in this example, the probability of measuring an energy of \(E_1\) must be one minus this, or \(\frac{16}{25}\).)</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_23"><a class="anchor" href="#_problem_23"></a><a class="link" href="#_problem_23">2.1.1.5. Problem</a></h5>
+<div class="paragraph">
+<p>Griffiths&#8217;s questions 2.1 and 2.2 are very good. Check to see how those can be modified.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_infinite_square_well"><a class="anchor" href="#_the_infinite_square_well"></a><a class="link" href="#_the_infinite_square_well">2.2. The Infinite Square Well</a></h3>
+<div class="sect3">
+<h4 id="_questions_8"><a class="anchor" href="#_questions_8"></a><a class="link" href="#_questions_8">2.2.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_24"><a class="anchor" href="#_problem_24"></a><a class="link" href="#_problem_24">2.2.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>The solutions to the time-independent Schrödinger equation in the infinite square well of width \(a\) are \(\psi_n(x)=\sqrt{2/a}\sin\left(\frac{n\pi}{a}x\right)\) with \(n\ge 1\).
+Show that these functions are <em>orthonormal</em>, i.e., that \(\Braket{\psi_m,\psi_n}\) is 1 when \(m=n\) and 0 otherwise.
+(Hint: \(\cos\) is an even function, \(\sin\) is an odd function, and \(\cos(a+b)=\cos a\cos b-\sin a\sin b\).)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Using the trigonometric identities in the hint, we have</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\cos(a+b)&amp;=\cos a\cos b-\sin a\sin b\\
+\cos(a-b)&amp;=\cos a\cos b+\sin a\sin b\\
+\cos(a+b)-\cos(a-b)&amp;=-2\sin a\sin b\\
+\sin a \sin b &amp;=\frac{1}{2}(\cos(a-b) - \cos(a+b))
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Regardless of whether \(m=n\),</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{\psi_m,\psi_n}&amp;= \int_0^a \psi_m^*\psi_n\,dx\\
+&amp;=\int_0^a \sqrt\frac{2}{a}\sin\left(\frac{m\pi}{a}x\right)\ \sqrt\frac{2}{a}\sin\left(\frac{n\pi}{a}x\right)\,dx\\
+&amp;=\frac{1}{a}\int_0^a \cos\left(\frac{(m-n)\pi}{a}x\right)-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>And for \(k\ne 0\),</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^a \cos\left(\frac{k\pi}{a}x\right)\,dx=\left.\frac{a}{k\pi}\sin\left(\frac{k\pi}{a}x\right)\right|^a_0=0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>When \(m=n\), \(\Braket{\psi_m,\psi_n}\) becomes</p>
+</div>
+<div class="paragraph">
+<p>+</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{1}{a}\int_0^a \cos 0-\cos\left(\frac{(m+n)\pi}{a}x\right)\,dx=\frac{1}{a}\int_0^a dx=1
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>When \(m\ne n\), both of the \(\cos\) terms in the integral are of the form \(\cos\left(\frac{k\pi}{a}x\right),k\ne 0\) and so they both integrate to 0, and then \(\Braket{\psi_m,\psi_n}=0\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_25"><a class="anchor" href="#_problem_25"></a><a class="link" href="#_problem_25">2.2.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Let \(V\) be the potential in the infinite square well:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[V(x) = \begin{cases}
+            0 &amp;  0 \leq x \leq a \\
+            \infty &amp;  \textrm{otherwise}
+\end{cases}\]
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find the general solution using the time-independent Schrödinger equation, the simple harmonic oscillator equation, and applying the constraints of the infinite square well.</p>
+</li>
+<li>
+<p>Apply the boundary conditions to solve for the constants \(A\) and \(B\).</p>
+</li>
+<li>
+<p>Find solutions for \(kx\) and, using those results, solve for the possible values of the energy \(E\).</p>
+</li>
+<li>
+<p>How does this result compare to what we’d expect from a classical case?</p>
+</li>
+<li>
+<p>Use this result and normalize \(\Psi\) to solve for stationary states.</p>
+</li>
+<li>
+<p>What is the significance of this result?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Inside the well, \(V(x) = 0\), and so the Schrödinger equation says \(\frac{-\hbar^2}{2m}\frac{\partial^2\psi}{\partial x^2}=E\psi(x)\).
+Letting \(k=\sqrt{2mE/\hbar}\), we have
+\(\frac{d^2\psi(x)}{dx^2}= -k^2\psi(x)\).
+ Assuming \(E\geq0\), the solution isn’t contradicting the boundary conditions. Recognize:
+\(\frac{d^2\psi(x)}{dx^2} + k^2\psi = 0\) as the equation of the
+simple harmonic oscillator.
+The solution of this equation is
+\(\psi(x)=A\sin(kx)+B\cos(kx)\) where \(A,B\) are constants determined by the boundary conditions.</p>
+</li>
+<li>
+<p>For \(\psi\) to be continuous at \(0\) and \(a\), we must have \(\psi(0) =\psi(a)=0\).
+So \(\psi(0) = A\sin(0) + B\cos(0) = B\), and hence
+\(B=0\).
+This leaves us with: \(\psi(x)=A\sin(kx)\),
+so either \(A=0\) — in which case \(\psi\) is 0 everywhere, which is not a valid wavefunction — or \(\sin(ka)=0\).</p>
+</li>
+<li>
+<p>The boundary condition \(\psi(a)=A\sin(ka)=0\) requires that \(k= \frac{n\pi}{a}\) with \(n\) an integer.
+But if \(n=0\) then \(\psi(x)=0\) everywhere, so \(n\) must in fact be nonzero.
+Additionally, \(\sin\left(\frac{-n\pi}{a}x\right)=-\sin\left(\frac{n\pi}{a}x\right)\) — a solution we&#8217;ve already accounted for, since \(A\) can absorb the leading minus sign — so the distinct solutions are \(k= \frac{n\pi}{a}\) for positive integer \(n\).
+Therefore the permissible values of the energy \(E\) are
+\(E_n=\frac{\hbar^2 k_n^2}{2m} =\frac{\pi^2 n^2\hbar^2}{2ma^2}\) with \(n\) a positive integer.</p>
+</li>
+<li>
+<p>Unlike the classical case, a quantum particle in the infinite square well cannot have an arbitrary value of energy.
+Instead, a quantum particle can only be in a superposition of one of these special <em>allowed</em> states that fit within the constraints of the infinite square well.
+When observed, a quantum particle in the infinite square well will have an energy that is one of the \(E_n\).</p>
+</li>
+<li>
+<p>To compute the integral, we&#8217;ll need the fact that \(\sin^2(a)=\frac{1}{2}(1-\cos(2a))\).</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+|\psi_n(x)|^2&amp;=\int_0^a |A|^2\sin^2\left(\frac{n\pi}{a}x\right)\,dx\\
+&amp;=|A|^2\int_0^a\frac{1}{2}\left[1-\cos\left(\frac{2n\pi}{a}x\right)\right]\,dx\\
+&amp;=\frac{|A|^2}{2}\left.\left[x-\frac{\sin(\frac{2n\pi}{a}x)}{\frac{2n\pi}{a}}\right]\right|^a_0\\
+&amp;=\frac{|A|^2a}{2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>For the norm to be 1, we must have \(|A|=\sqrt{\frac{2}{a}}\).
+Any choice of \(A\) satisfying this will do — \(A\) can be complex, but its phase doesn&#8217;t matter — so let&#8217;s pick the most obvious and simplest choice, \(A=\sqrt{\frac{2}{a}}\), to obtain \(\psi_n(x)=\sqrt\frac{2}{a}\sin\left(\frac{\pi}{a}x\right)\).
+(In general, it&#8217;s always simplest to choose the stationary states that are real-valued.)</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_26"><a class="anchor" href="#_problem_26"></a><a class="link" href="#_problem_26">2.2.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>What are the four properties of the functions \(\Psi_n(x)\) in the infinite square well?
+Are these properties unique to the infinite square well?
+Why are they so important?</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>These functions are alternatively even and odd about
+the center of the potential well.
+This is true for any symmetrical potential well.</p>
+</li>
+<li>
+<p>With increasing \(n\), each successive state has one more node in the wavefunction.
+This is true regardless of the shape of the potential well.</p>
+</li>
+<li>
+<p>They are mutually orthogonal: \(\int \psi_m(x)^*\psi_n(x)\,dx=\delta_{mn}\).
+This is true regardless of the potential well, as long as it&#8217;s normalized.</p>
+</li>
+<li>
+<p>The state functions form a complete set. This is not
+universal, but is almost always applicable for any potential we will
+encounter.</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>These properties are so important because they hold true for almost all potentials, which means we can apply these four properties to help solve many different types of problems.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_27"><a class="anchor" href="#_problem_27"></a><a class="link" href="#_problem_27">2.2.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>A particle in the infinite square well of width \(a\) has the following initial wave function: \(\Psi(x,0)=A(\psi_1(x) + \psi_4(x))\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Normalize to find \(A\).
+(You can assume \(A\) is real and positive.)</p>
+</li>
+<li>
+<p>Find the constants \(c_n\) in the expression \(\Psi(x,0)=\sum_n c_n\psi_n(x)\).</p>
+</li>
+<li>
+<p>Compute \(\left|\Psi(x,t)\right|^2\) (this isn&#8217;t very useful on its own, but you&#8217;ll need it for part (d)).</p>
+</li>
+<li>
+<p>Compute \(\braket x\) as a function of \(t\).
+What is the frequency of oscillations?
+What is the amplitude?</p>
+</li>
+</ol>
+</div>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>To normalize, we set \(\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=1\) and simply compute, using the fact that the \(\psi_n\) are orthonormal over \([0,a\)].
+(In the integrals below, for brevity, we omit the \(x\) as an argument of the <span class="no-break">\(\psi_n\).</span>)</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+1&amp;=\int_0^a\left|\Psi(x,0)\right|\\
+&amp;=\int_0^a\left|A(\psi_1+\psi_4)\right|^2\,dx\\
+&amp;=\int_0^a\left|A\right|^2(\psi_1^2+2\psi_1\psi_4+\psi_4^2)\,dx\\
+&amp;=\left|A\right|^2(1+2\cdot 0+1)\\
+&amp;=2\left|A\right|^2
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(A=\frac{1}{\sqrt{2}}\) (or any complex number with that magnitude, but we can always take the normalization constant to be real, so we might as well do so.)</p>
+</div>
+</li>
+<li>
+<p>Simply referring to the expression for \(\Psi\) in the problem statement, we have</p>
+<div class="stemblock">
+<div class="content">
+\[\Psi(x,0)=A(\psi_1(x)+\psi_4(x))=\frac{1}{\sqrt{2}}\psi_1(x)+\frac{1}{\sqrt{2}}\psi_4(x)\]
+</div>
+</div>
+<div class="paragraph">
+<p>so \(c_1=c_4=\frac{1}{\sqrt{2}}\) and the other \(c_n\) are zero.</p>
+</div>
+</li>
+<li>
+<p>In general, if \(\Psi(x,0)=\sum_n c_n\psi_n(x)\), then \(\Psi(x,t)=\sum_n c_n\psi_n(x)\varphi_n(t) \) where \(\varphi_n(t):=e^{-iE_nt/\hbar}\).</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>And if we write <span class="no-break">\(E_n=\frac{n^2\pi^2\hbar^2}{2ma^2}=n^2E_1\),</span> then <span class="no-break">\(\varphi_n(t)=e^{-i n^2E_1t/\hbar}\),</span> and so we can compute something that we&#8217;ll need very soon:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) &amp;= e^{-i E_1t/\hbar}\left(e^{-16i E_1t/\hbar}\right)^* =e^{15iE_1t/\hbar}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>which means</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\varphi_1(t)\varphi_4^* (t) + \varphi_1^*(t)\varphi_4(t)&amp;=\varphi_1(t)\varphi_4^* (t) + (\varphi_1(t)\varphi_4^*(t))^*\\
+&amp;=2\Re[\varphi_1(t)\varphi_4^*(t)]\\
+&amp;=2\cos(15E_1t/\hbar)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now to compute \(\left|\Psi(x,t)\right|^2\).
+Below, for brevity, we&#8217;ll write \(\varphi_n\) instead of \(\varphi_n(t)\) and \(\psi_n\) instead of \(\psi_n(x)\), and use the fact that \(c_n\) and \(\psi_n\) are real.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\left|\Psi(x,t)\right|^2&amp;=\Psi(x,t)^*\Psi(x,t)\\
+&amp;=\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)^*\left(c_1\psi_1\varphi_1+c_4\psi_4\varphi_4\right)\\
+&amp;=\left|c_1\psi_1\varphi_1\right|^2+\left|c_4\psi_4\varphi_4\right|^2\\
+&amp;\quad+((c_1\varphi_1)^* (c_4\varphi_4)+(c_1\varphi_1)(c_4\varphi_4)^*)\psi_1\psi_4\\
+&amp;=c_1^2\psi_1^2+c_4^2\psi_4^2+c_1c_4(\varphi_1^* \varphi_4+\varphi_1\varphi_4^*)\psi_1\psi_4\\
+&amp;=\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>We wish to compute \(\braket x\) (as a function of \(t\)), which is just the following expression:</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket x&amp;=\int_0^a x\left|\Psi(x,t)\right|^2\,dx
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Before proceeding we&#8217;ll want the following facts (which you can feel free to derive on your own).
+If \(m\) and \(n\) are integers, then if \(m\ne n\), then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx&amp;=\frac{2mna^2((-1)^{m+n}-1)}{(m^2-n^2)^2\pi^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>and if \(m=n\) then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^a x\sin\left(\frac{m\pi}{a}x\right)\sin\left(\frac{n\pi}{a}x\right)\,dx=\int_0^a x\sin^2\left(\frac{n\pi}{a}x\right)\,dx=\frac{a^2}{4}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>(Note that this second one does not actually depend on \(n\).)
+So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^a x\,\psi_1^2\,dx&amp;=\int_0^a x\left[\sqrt{2/a}\sin\left(\frac{\pi}{a} x\right)\right]^2\,dx\\
+&amp;=\frac{2}{a}\int_0^ax\sin^2\left(\frac{\pi}{a} x\right)\,dx\\
+&amp;=\frac{2}{a}\cdot\frac{a^2}{4}\\
+&amp;=\frac{a}{2}\\\\
+\int_0^a x\,\psi_4^2\,dx&amp;=\frac{a}{2}\\\\
+\int_0^a x\,\psi_1\psi_4 \,dx&amp;=\int_0^ax\left[\sqrt{2/a}\sin\left(\frac{\pi}{a}x\right)\right]\left[\sqrt{2/a}\sin\left(\frac{4\pi}{a}x\right)\right]\,dx\\
+&amp;=\frac{2}{a}\cdot\frac{2\cdot1\cdot4a^2(-2)}{(1^2-4^2)^2\pi^2}\\
+&amp;=-\frac{32a}{225\pi^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So, we may finally compute our answer:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\braket x&amp;=\int_0^a x\left|\Psi(x,t)\right|^2\,dx\\
+&amp;=\int_0^a x\left(\frac{1}{2}\psi_1^2+\frac{1}{2}\psi_4^2+\cos(15E_1t/\hbar)\psi_1\psi_4\right)\,dx\\
+&amp;=\frac{1}{2}\left(\frac{a}{2}\right)+\frac{1}{2}\left(\frac{a}{2}\right)+\cos(15E_1t/\hbar)\left(-\frac{32a}{225\pi^2}\right)\\
+&amp;=\frac{a}{2}-\frac{32a\cos(15E_1t/\hbar)}{225\pi^2}\\
+&amp;=a\left(\frac{1}{2}-\frac{32}{225\pi^2}\cos(15E_1t/\hbar)\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>The frequency of oscillation is \(\frac{15E_1}{2\pi\hbar}=\frac{15\pi\hbar}{4ma^2}\).
+The particle oscillates between \(a\left(\frac{1}{2}\pm\frac{32}{225\pi^2}\right)\) and so its amplitude is \(\frac{64a}{225\pi^2}\).</p>
+</div>
+<div class="paragraph">
+<p>Notably, unlike a classical particle, its amplitude is <em>not</em> \(\frac{a}{2}\) (\(\frac{64}{225\pi^2}\approx0.0288\ll 0.5\)).
+The expected position of a quantum mechanical particle <em>cannot</em> get arbitrarily close to the walls of the well — why not?</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_harmonic_oscillator"><a class="anchor" href="#_the_harmonic_oscillator"></a><a class="link" href="#_the_harmonic_oscillator">2.3. The Harmonic Oscillator</a></h3>
+<div class="sect3">
+<h4 id="_questions_9"><a class="anchor" href="#_questions_9"></a><a class="link" href="#_questions_9">2.3.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_28"><a class="anchor" href="#_problem_28"></a><a class="link" href="#_problem_28">2.3.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>Show that every solution of the time-independent harmonic oscillator Schrödinger equation \(\hat H\psi = E\psi\) lies on the same &#8220;ladder&#8221;:
+for every pair of solutions \(\psi_a,\psi_b\) with \(a &gt;b\), there is some \(m\) for which \(\psi_a=k\hat a_{+}^m\psi_b\) (for some normalization constant \(k\)).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Suppose \(\psi_a\) lies on ladder \(A\) and \(\psi_b\) on ladder \(B\).
+By successively applying the lowering operator to \(\psi_a\) and \(\psi_b\), we obtain the bottommost rungs on the two ladders, which we&#8217;ll denote \(\psi_{A,0}\) and \(\psi_{B,0}\).
+By virtue of being the bottommost rungs, they must satisfy \(\hat a_-\psi_{A,0}=\hat a_-\psi_{B,0}=0\).
+Substituting \(\hat a_-=\frac{1}{\sqrt{2\hbar m\omega}}(i\hat p+m\omega x)\), we obtain the differential equation \(\frac{d\psi_{L,0}}{dx}=-\frac{m\omega}{\hbar}x\psi_{L,0}\) for \(L=A,B\).
+In both cases this leads to the same solution:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\psi_{A,0}(x)=\psi_{B,0}(x)=\left(\frac{m\omega}{\pi\hbar}\right)^{\frac{1}{4}}e^{-\frac{m\omega}{2\hbar}x^2}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So the ladders share their bottom rung, which we may now write as just \(\psi_0(x)\).
+Every subsequent rung — on either ladder — is given by successive applications of the raising operator: \(\psi_{A,n}=\psi_{B,n}=k(\hat a_+)^n\psi_{0}\).
+So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\psi_a&amp;=k(\hat a_+)^{a}\psi_0\\
+&amp;=k(\hat a_+)^{a-b}(\hat a_+)^b\psi_0\\
+&amp;=k(\hat a_+)^{n-b}\psi_b
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_29"><a class="anchor" href="#_problem_29"></a><a class="link" href="#_problem_29">2.3.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>For small displacements, the harmonic oscillator is a good second-order approximation of many potential fields.
+What is an example of a potential field \(V(x)\) for which the harmonic oscillator is <em>not</em> a good approximation?</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>\(V(x)=x^4\) is one such potential, as it has no quadratic terms.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_30"><a class="anchor" href="#_problem_30"></a><a class="link" href="#_problem_30">2.3.1.3. Problem</a></h5>
+<div class="paragraph">
+<p><strong>Coherent States</strong> A <em>coherent state</em> of the harmonic oscillator is a &#8220;minimum uncertainty wavepacket&#8221;: a Gaussian wavefunction \(\Psi\) for which \(\sigma_x^2+\sigma_p^2\) at \(t=0\) is minimized.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find \(\sigma_x\) and \(\sigma_p\) at \(t=0\).</p>
+</li>
+<li>
+<p>Show that \(\sigma_x\) and \(\sigma_p\) are, in fact, constant over time (hence the name <em>coherent</em> state — the probability distribution does not change shape over time).</p>
+</li>
+<li>
+<p>Show that \(\Psi\) is an eigenfunction of the lowering operator \(\hat a_-\) (or the raising operator, as they have the same eigenvectors).</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_31"><a class="anchor" href="#_problem_31"></a><a class="link" href="#_problem_31">2.3.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>[Thaller] Show that solutions \(\Psi(x,t)\) of the harmonic oscillator satisfy \(\Psi(x,t+\pi)=e^{-i\pi/2}\Psi(-x,t)\).
+(Corollary: \(\Psi(x,t+2\pi)=-\Psi(x,t)\).)
+So, while the probability distribution has period \(2\pi\), matching the situation in classical physics, the wavefunction itself only has period \(4\pi\).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_32"><a class="anchor" href="#_problem_32"></a><a class="link" href="#_problem_32">2.3.1.5. Problem</a></h5>
+<div class="paragraph">
+<p>Show that in the harmonic oscillator, \( \frac{d\braket p}{dt}=-k\braket x\).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_33"><a class="anchor" href="#_problem_33"></a><a class="link" href="#_problem_33">2.3.1.6. Problem</a></h5>
+<div class="paragraph">
+<p>The <strong>Rodrigues formula</strong> says that \(H_n(x)=(-1)^n e^{x^2}\frac{d^n}{dx^n}(e^{-x^2})\).</p>
+</div>
+<div class="ulist loweralpha">
+<ul class="loweralpha">
+<li>
+<p>Use this to derive the recurrence relation \(H_{n+1}(x)=2xH_n(x)-2nH_{n-1}(x)\).</p>
+</li>
+<li>
+<p>Show that \(H_n\) satisfies \(\frac{d H_n(x)}{dx}=2nH_{n-1}(x)\).</p>
+</li>
+<li>
+<p>Show that \(H_n(x)=\left.\frac{d^n}{dz^n}(e^{-z^2+2zx})\right|_{z=0}\).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_7"><a class="anchor" href="#_demonstrations_7"></a><a class="link" href="#_demonstrations_7">2.3.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_inlined.html?t=1657044816" target="_blank" rel="noopener">Harmonic oscillator stationary states (static)</a></p>
+</li>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/harmonic_oscillator/harmonic_oscillator_evolution_inlined.html?t=1657044816" target="_blank" rel="noopener">Harmonic oscillator evolution over time</a></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_free_particle"><a class="anchor" href="#_the_free_particle"></a><a class="link" href="#_the_free_particle">2.4. The Free Particle</a></h3>
+<div class="sect3">
+<h4 id="_questions_10"><a class="anchor" href="#_questions_10"></a><a class="link" href="#_questions_10">2.4.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_34"><a class="anchor" href="#_problem_34"></a><a class="link" href="#_problem_34">2.4.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>Show that the more localized a free particle is initially (\(\braket{x^2}\) small at \(t=0\)), the faster it will spread out over time (\(\frac{d}{dt}\braket{x^2}\) large for small <span class="no-break">\(t\));</span> and, inversely, show that the less localized a free particle is initially, the more slowly it will spread out over time.
+(Hint: this depends heavily on the dispersion relation for particles, <span class="no-break">\(\omega=\frac{\hbar k^2}{2m}\).)</span></p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_35"><a class="anchor" href="#_problem_35"></a><a class="link" href="#_problem_35">2.4.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Suppose a free particle has the initial wavefunction <span class="no-break">\(\Psi(x,0)=\delta(x)\)</span>, where \(\delta(x)\) is the Dirac delta “function”.
+Compute \(\Psi(x,t)\).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_36"><a class="anchor" href="#_problem_36"></a><a class="link" href="#_problem_36">2.4.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>Suppose a free particle has the initial wavefunction <span class="no-break">\(\psi(x) = \frac{\sin(x)}{\pi x}\).</span>
+(Take our word for it that this wavefunction is already normalized.)</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \(F(k):=\mathcal{F}[\psi\)(k)].
+You may use computational software to help you calculate the integral.
+(But don&#8217;t just type in &#8220;Fourier transform of \(\frac{\sin(x)}{\pi x}\)&#8221;!)</p>
+</li>
+<li>
+<p>Verify that your result satisfies \(\Psi(x,0)=\frac{\sin(x)}{\pi x}\).</p>
+</li>
+<li>
+<p>If you&#8217;re feeling particularly ambitious, find \(\Psi(x,t)\).
+Note that the integral involves the so-called special function the <em>error function</em>, \(\textrm{erf}(x)\coloneqq\frac{2}{\sqrt\pi}\int_0^xe^{-t^2}\,dt\), which has no elementary form.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>&#160;</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+F(k)&amp;=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \psi(x)e^{-ikx}\,dx\\
+&amp;=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty \frac{1}{\pi} \ \frac{\sin(x)e^{-ikx}}{x}\,dx\\
+&amp;= \textrm{(... computational software ...)}\\
+&amp;=\frac{1}{\pi\sqrt{2\pi}}\begin{cases}\pi&amp;-1 \lt k \lt 1\\
+0&amp;\textrm{otherwise}
+\end{cases}\\
+&amp;=\begin{cases}\frac{1}{\sqrt{2\pi}} &amp;-1 \lt k \lt 1 \\
+0&amp;\textrm{otherwise}
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p>For all \(t\),</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi(x,t)&amp;=\frac{1}{\sqrt{2\pi}}\int_{-\infty}^\infty F(k)e^{i(kx-\frac{\hbar k^2}{2m}t)}\,dk\\
+&amp;=\frac{1}{\sqrt{2\pi}}\int_{-1}^1 \frac{1}{\sqrt{2\pi}}e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk\\
+&amp;=\frac{1}{2\pi}\int_{-1}^1 e^{i(kx-k^2\frac{\hbar t}{2m})}\,dk
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>When \(t=0\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi(x,0)&amp;=\frac{1}{2\pi}\int_{-1}^1 e^{ikx}\,dk\\
+&amp;=\frac{1}{2\pi}\left.\frac{e^{ikx}}{ix}\right|^{k=1}_{k=-1}\\
+&amp;=\frac{1}{2\pi ix}(e^{ix}-e^{-ix})\\
+&amp;=\frac{2i\sin(x)}{2\pi ix}\\
+&amp;=\frac{\sin(x)}{\pi x}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_37"><a class="anchor" href="#_problem_37"></a><a class="link" href="#_problem_37">2.4.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>Using the same steps as 2.4.1, find \(\Psi(x,t)\) for \(\Psi(x,0) = A\frac{\sin(x)}{x}\). You may use computational software to help you with the integrals.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_38"><a class="anchor" href="#_problem_38"></a><a class="link" href="#_problem_38">2.4.1.5. Problem</a></h5>
+<div class="paragraph">
+<p>Phase and group velocity: show that \(v_g-v_p=k\frac{d}{dk}v_p\).</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_39"><a class="anchor" href="#_problem_39"></a><a class="link" href="#_problem_39">2.4.1.6. Problem</a></h5>
+<div class="paragraph">
+<p>The phase and group velocity of light:</p>
+</div>
+<div class="olist sublist-style">
+<ol class="sublist-style">
+<li>
+<p>Show that in a vacuum, the phase velocity and group velocity of light are the same.</p>
+</li>
+<li>
+<p>In a medium with refractive index \(&gt;1\) (where light travels slower than \(c\)), which is greater, the phase velocity or the group velocity?</p>
+</li>
+</ol>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_delta_function_potential"><a class="anchor" href="#_the_delta_function_potential"></a><a class="link" href="#_the_delta_function_potential">2.5. The Delta-Function Potential</a></h3>
+<div class="sect3">
+<h4 id="_questions_11"><a class="anchor" href="#_questions_11"></a><a class="link" href="#_questions_11">2.5.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_40"><a class="anchor" href="#_problem_40"></a><a class="link" href="#_problem_40">2.5.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>For a fixed constant \(a\), compute the closed form for \(f(x)\coloneqq\int_{-\infty}^x\delta (t-a)\,dt\).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>First, use \(u\)-substitution with \(u=t-a\) to obtain <span class="no-break">\(f(x)=\int_{-\infty}^{x-a} \delta(u)\,du\).</span>
+Then, if \(x&lt; a\), the integrand is everywhere 0, so \(f(x)=0\).
+Meanwhile if \(x&gt; a\), then the integrand includes \(\delta(0)\) and so \(f(x)=1\).
+The value of \(f(a)\) depends on your interpretation of \(\int_{-\infty}^0\delta(t)\,dt\), which could be undefined, \(\frac{1}{2}\), or 1.
+So we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+f(x)&amp;=\begin{cases}
+0&amp;x&lt;a\\
+\textrm{?}&amp;x=a\\
+1&amp;x&gt;a
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Why is it so hard to define \(\int_{-\infty}^0\delta (t)\,dt\)?
+There are three possible values:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Undefined, simply because by definition the only integrals of the \(\delta\) function that exist are those containing an <em>interval</em> containing \(0\).</p>
+</li>
+<li>
+<p>\(\frac{1}{2}\), because \(\delta\) is an even &#8220;function&#8221;, so its integral from \(-\infty\) to \(0\) should be half of its integral from \(-\infty\) to <span class="no-break">\(\infty\).</span></p>
+</li>
+<li>
+<p>\(1\), because the domain of integration includes everywhere that <span class="no-break">\(\delta(x)\ne 0\).</span></p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>This helps to illustrate the thorniness of \(\delta\) and why it is not considered a function at all.</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_41"><a class="anchor" href="#_problem_41"></a><a class="link" href="#_problem_41">2.5.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Show that the \(\delta\) function can be approximated by a \(0\)-centered Gaussian \(\varphi(x)=\frac{1}{\sigma\sqrt{2\pi}}e^{-\frac{x^2}{\sigma^2}}\) whose variance \(\sigma^2\) approaches 0.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Clearly, the integral of a Gaussian over the number line is 1, no matter what.
+As its variance approaches 0, its integral over domains that do not include the origin must approach 0, i.e., for \(\varepsilon&gt;0\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\lim_{\sigma^2\to0}\int_{-\infty}^{-\varepsilon}\mathcal \varphi(x)\,dx=\lim_{\sigma^2\to0}\int_{\varepsilon}^{\infty}\mathcal \varphi(x)\,dx=0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Since \(\varphi(x)&gt;0\) for all \(x\), the only way the above integrals approach \(0\) as \(\sigma^2\to 0\) is if \(\varphi(x)\to 0\) for \(x\ne 0\).
+Since \(\varphi(x)\to0\) when \(x\ne 0\) and \(\int_{-\infty}^\infty\varphi(x)\,dx=1\), it is indeed that case that \(\lim_{\sigma^2\to 0}\varphi(x)=\delta(x)\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_42"><a class="anchor" href="#_problem_42"></a><a class="link" href="#_problem_42">2.5.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>Show the following:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\displaystyle\delta(x)=\lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\]
+</div>
+</div>
+<div class="paragraph">
+<p>This provides another continuous approximation of the \(\delta\) function which improves as \(k\) grows.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The simplest way to show this is to observe how the expression on the RHS behaves when integrated:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+&amp;\phantom{=}\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&amp;= \lim_{k\to\infty}\int_{-\infty}^z\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx\\
+&amp;= \lim_{k\to\infty}\left(\left.\frac{1}{1+e^{-kx}}\right|_{-\infty}^z\right)\\
+&amp;= \lim_{k\to\infty}\left(\frac{1}{1+e^{-kz}}-0\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>When \(z&lt; 0\), \(e^{-kz}\to\infty\) and so \(\frac{1}{1+e^{-kz}}\to0\), making the integral 0.
+Meanwhile, when \(z&gt;0\), \(e^{-kz}\to0\) and so \(\frac{1}{1+e^{-kz}}\to1\), making the integral 1.
+So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_{-\infty}^z \lim_{k\to\infty}\frac{d}{dx}\left(\frac{1}{1+e^{-kx}}\right)\,dx&amp;=\begin{cases}
+0&amp;z\lt 0\\
+1&amp;z\gt 0
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>which does indeed match the \(\delta\) function.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_43"><a class="anchor" href="#_problem_43"></a><a class="link" href="#_problem_43">2.5.1.4. Problem</a></h5>
+<div class="paragraph">
+<p>Graph an example of:
+(Show the classical turning points, \(E\), and label your axes.)
+(problem may be too similar to the textbook chapter)</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>A bound state</p>
+</li>
+<li>
+<p>A scattering state</p>
+</li>
+<li>
+<p>A classical bound state/quantum scattering state (made
+possible by quantum tunneling), and explain what quantum tunneling is.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Graphs vary, but potential solutions on pg. 62 of Griffiths.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_44"><a class="anchor" href="#_problem_44"></a><a class="link" href="#_problem_44">2.5.1.5. Problem</a></h5>
+<div class="paragraph">
+<p>Derive the reflection and transmission coefficients for the delta-function well.
+When are these coefficients exactly the same?</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_45"><a class="anchor" href="#_problem_45"></a><a class="link" href="#_problem_45">2.5.1.6. Problem</a></h5>
+<div class="paragraph">
+<p>Describe what happens when identical waves approach the delta-potential well from <em>both</em> sides.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_46"><a class="anchor" href="#_problem_46"></a><a class="link" href="#_problem_46">2.5.1.7. Problem</a></h5>
+<div class="paragraph">
+<p>Solve the asymmetric double delta-function potential,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+V(x)=\alpha \delta(x+a)+\beta\delta(x-a)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(\alpha\) and \(\beta\) are arbitrary constants (positive, negative, or zero).
+When exactly one of \(\alpha\) and \(\beta\) is negative, how many bound states does this system have?</p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_the_finite_square_well"><a class="anchor" href="#_the_finite_square_well"></a><a class="link" href="#_the_finite_square_well">2.6. The Finite Square Well</a></h3>
+<div class="sect3">
+<h4 id="_questions_12"><a class="anchor" href="#_questions_12"></a><a class="link" href="#_questions_12">2.6.1. Questions</a></h4>
+<div class="sect4">
+<h5 id="_problem_47"><a class="anchor" href="#_problem_47"></a><a class="link" href="#_problem_47">2.6.1.1. Problem</a></h5>
+<div class="paragraph">
+<p>When is the square well approximation valid and why is it usable to make fair predictions?</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>If the de Broglie wavelength of the particle
+(\(\lambda = \hbar/p\)) \(&lt;\)
+\(\Delta x_1\) \(\Delta x_2\), the square well
+approximation is valid.
+(Unless the particle is relativistic).
+Nothing we are trying to predict, like transmission and reflection coefficients,
+changes after making this approximation (as long as the above condition is met).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="question-finite-well-diff-eq"><a class="anchor" href="#question-finite-well-diff-eq"></a><a class="link" href="#question-finite-well-diff-eq">2.6.1.2. Problem</a></h5>
+<div class="paragraph">
+<p>Find the general solution to the finite square well differential equations for each section of the well (with \(V_0&gt;0\)):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[V(x) = \begin{cases}
+-V_0 &amp;   |x| \le a \\
+0 &amp;  |x| \gt a
+\end{cases}\]
+</div>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Left side of the well (\(x&lt;-a\))</p>
+</li>
+<li>
+<p>Middle of the well (\(-a\le x\le a\))</p>
+</li>
+<li>
+<p>Right side of the well (\(x&gt;a\))</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>If \(V(x) = 0\) then the Schrödinger equation says \(-\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx} = E\psi\).
+Then \(\frac{d^2\psi}{dx^2}=k^2\psi\) where \(k=-\sqrt{2mE/\hbar}&gt;0\) (because \(E&lt; 0\)), which has solutions of the form \(\psi_1(x)=Ae^{-kx} + Be^{kx}\).</p>
+</li>
+<li>
+<p>If \(V(x) = -V_0\) then Schrödinger equation says \(\left(-V_0-\frac{\hbar^2}{2m} \frac{d^2 \psi}{dx}\right) \psi= E\psi\), so \(\frac{d^2\psi}{dx^2}=-\frac{2m}{\hbar^2}(E+V_0)\psi\), which has solutions \(\psi_2(x)=C\sin(lx)+D\cos(lx)\) where \(l=\sqrt{2m(E+V_0)} &gt; 0\).</p>
+</li>
+<li>
+<p>This is the same as part (a): \(\psi_3(x) = Ee^{-kx}+Fe^{kx}\).</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_48"><a class="anchor" href="#_problem_48"></a><a class="link" href="#_problem_48">2.6.1.3. Problem</a></h5>
+<div class="paragraph">
+<p>Using your results from <a href="#question-finite-well-diff-eq">the above problem</a>, apply the boundary conditions to all the general solutions.
+Use these equations and their coefficients to derive the transcendental equation:
+\((k-il)/(k+il)= \pm e^{2ila}\). (Hint: \(k\) as coefficient from \(a\) and \(l\) as coefficient from \(b\).)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The boundary conditions constitute the following:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Finite as \(x\to-\infty\): \(\psi_1(x\rightarrow-\infty) &lt; \infty\).</p>
+</li>
+<li>
+<p>Finite as \(x\to-\infty\):
+\(\psi_3(x\rightarrow\infty) &lt; \infty\).</p>
+</li>
+<li>
+<p>Continuous at the boundaries: \(\psi_1(-a)=\psi_2(-a)\) and \(\psi_2(a) = \psi_3(a)\).</p>
+</li>
+<li>
+<p>The derivative of the wave function is continuous at boundaries:</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\left.\frac{d\psi_1}{dx}\right|_{x=-a} &amp;= \left.\frac{d\psi_2}{dx}\right|_{x=-a}\\
+\left.\frac{d\psi_2}{dx}\right|_{x=a} &amp;= \left.\frac{d\psi_3}{dx}\right|_{x=a}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Applying these conditions to the results from <a href="#question-finite-well-diff-eq">Problem</a>:</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>\(\psi_1(-\infty)&lt;\infty\) implies that \(A=0\) and so \(\psi_1(x)=Be^{kx}\).</p>
+</li>
+<li>
+<p>\(\psi_3(\infty)&lt;\infty\) implies that \(D=0\) and so \(\psi_3(x)=Ce^{-kx}\).</p>
+</li>
+<li>
+<p>As in part (b) of <a href="#question-finite-well-diff-eq">Problem</a>, let \(\psi_2(x)=Ce\)
+\(\frac{}{} \psi_1(x=-\infty)&lt;\infty\) A=0
+\(\psi_1(x) =  Be^{kx}\)</p>
+</li>
+</ol>
+</div>
+<div class="paragraph">
+<p>2. \(\psi_3(x=\infty)&lt;\infty\) D=0
+\(\psi_3(x)=Ce^{-kx}\)</p>
+</div>
+<div class="paragraph">
+<p>3. Let \(\psi_2 = Ce^{ilx} + De^{-ilx}\)
+\(Be^{-ka}=Ce^{-ila} + De^{ila}\)(eq.1) and
+\(Be^{-ka} = Cile^{-ila} - Dile^{ila}\)(eq.2) Now take:
+k(eq.1) - (eq.2):
+\(Cke^{-ila} + Dke^{ila} = Cile^{-ila} - Dile^{ila}\)
+\(C(ile^{-ila} - ke^{-ila})  = D(ke^{-ila} + ile^{ila})\)
+\(C/D = - ((k+il)/(k-il))e^{2ila}\) (eq.*)</p>
+</div>
+<div class="paragraph">
+<p>4.
+\(\psi_2(x=a)=\psi_3(x=a) an\frac{d d\psi_2}{dx}|_{x=a} = \frac{d\psi_3}{dx}|_{x=a}\)
+\(Ce^{-ila} + De^{-ila} = Ee^{-ka}\)(eq.3) and
+\(ilCe^{-ila}-ilDe^{-ila}=-kEe^{-ka}\)(eq.4)</p>
+</div>
+<div class="paragraph">
+<p>Now take: k(eq.3) + (eq.4):</p>
+</div>
+<div class="paragraph">
+<p>\(Cke^{-ila}+Dke^{-ila}+ilCe^{-ila}-ilDe^{-ila}=0\)</p>
+</div>
+<div class="paragraph">
+<p>\(C(ke^{-ila}+ile^{-ila})=-D(ke^{-ila}-ile^{-ila})\)</p>
+</div>
+<div class="paragraph">
+<p>\(C/D = - ((k+il)/(k-il))e^{-2ila}\) (eq.**)</p>
+</div>
+<div class="paragraph">
+<p>Now set (eq.* = eq. **):
+\(((k+il)/(k-il))e^{2ila}=((k-il)/(k+il))e^{-2ila}\)
+\(((k-il)/(k+il))^2=e^{4ila}\)
+\((k-il)/(k+il) = \pm e^{2ila}\)</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect4">
+<h5 id="_problem_49"><a class="anchor" href="#_problem_49"></a><a class="link" href="#_problem_49">2.6.1.4. Problem</a></h5>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Calculate the transmission and reflection coefficients for <a href="#question-finite-well-diff-eq">Problem</a>.</p>
+</li>
+<li>
+<p>What happens as \(T\to 1\) and \(R\to 1\)?</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_50"><a class="anchor" href="#_problem_50"></a><a class="link" href="#_problem_50">2.6.1.5. Problem</a></h5>
+<div class="paragraph">
+<p>Graph the allowed energies for the even bound state wave function of the finite square well.
+Show the possible energy values and explain your reasoning.</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_51"><a class="anchor" href="#_problem_51"></a><a class="link" href="#_problem_51">2.6.1.6. Problem</a></h5>
+<div class="paragraph">
+<p>Using a graphical plotting program, examine some properties of the finite height well.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>How does the number of bound states (both odd and even) depend on the particle&#8217;s mass (\(m\)) and the well&#8217;s width (\(a\)) and depth (\(V_0\))?
+Which variable causes the number of bound states to increase the fastest?
+How does this depend on the current values of \(m\), \(a\), and <span class="no-break">\(V_0\)?</span></p>
+</li>
+<li>
+<p>In the finite height well, at the boundary of the well (\(x=\pm a\)), the bound states go from purely sinusoidal to exponentially decaying.
+How do the values of \(m\), \(a\), \(V_0\), and the energy \(E\) of the particle affect how rapidly the bound states decay outside of the well (and in turn how likely you are to find the particle outside of the well)?</p>
+</li>
+</ol>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_52"><a class="anchor" href="#_problem_52"></a><a class="link" href="#_problem_52">2.6.1.7. Problem</a></h5>
+<div class="paragraph">
+<p>For what energies \(E=E_n+V_0\) is the finite square well ”opaque” to incoming wave packets, i.e., the transmission coefficient is 0?</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_53"><a class="anchor" href="#_problem_53"></a><a class="link" href="#_problem_53">2.6.1.8. Problem</a></h5>
+<div class="paragraph">
+<p>Solve the “finite square wall”:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+V(x)=\begin{cases}
+V_0\gt 0&amp;-a\le x\le a\\
+0&amp;|x|\ge a
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>(Obviously there are only scattering states.)
+When is the wall “transparent” to incoming waves?
+Opaque?</p>
+</div>
+</div>
+<div class="sect4">
+<h5 id="_problem_54"><a class="anchor" href="#_problem_54"></a><a class="link" href="#_problem_54">2.6.1.9. Problem</a></h5>
+<div class="paragraph">
+<p>Solve the asymmetric finite square well:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+V(x)=\begin{cases}
+V_1&amp;x&lt;-a\\
+0&amp;-a\le x\le a\\
+V_2&amp;x&gt;a
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(V_1,V_2\) are positive constants.
+Show that when \(V_1=V_2\) you recover the solution to the symmetric finite square well.</p>
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_demonstrations_8"><a class="anchor" href="#_demonstrations_8"></a><a class="link" href="#_demonstrations_8">2.6.2. Demonstrations</a></h4>
+<div class="ulist">
+<ul>
+<li>
+<p><a href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/New%20demos/particle_finite_height_box/particle_finite_height_box_inlined.html?t=1657044816" target="_blank" rel="noopener">Finite square well stationary states (static)</a></p>
+<div class="admonitionblock caution">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-caution" title="Caution"></i>
+</td>
+<td class="content">
+The stationary states are solved numerically in the browser (requires solving something like \(\tan z=\sqrt{(z_0/z)^2-1}\), which cannot be solved exactly), so at a handful of slider values a stationary state will be lost.
+This is just a bug due to limited precision/compute time.
+(Again, the universe is lucky, it gets to run its calculations to arbitrary precision in no time at all.)
+</td>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+</html>

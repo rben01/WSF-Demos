@@ -1,5 +1,10 @@
 {
-  "devDependencies": {
-    "antora": "3.1.9"
-  }
+	"devDependencies": {
+		"antora": "3.1.9"
+	},
+	"scripts": {
+		"pregenerate": "cd site && git init . && git commit --allow-empty -m init && cd ..",
+		"generate": "npx antora generate --clean antora-playbook.yml",
+		"postgenerate": "cd site && rm -rf .git"
+	}
 }

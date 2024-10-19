@@ -1,0 +1,1464 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Formalism :: Quantum Mechanics Problems</title>
+    <meta name="generator" content="Antora 3.1.9">
+    <link rel="stylesheet" href="./_/css/site.css">
+<script async>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            macros: {
+                v: ["\\mathbf{#1}", 1],
+            }
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+
+    (function () {
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js';
+        script.async = true;
+        document.head.appendChild(script);
+    })();
+</script>
+  </head>
+  <body class="article qm-chapter chap-3">
+<header class="header">
+  <nav class="navbar">
+    <div class="navbar-brand">
+      <a class="navbar-item" href=".">Quantum Mechanics Problems</a>
+      <button class="navbar-burger" aria-controls="topbar-nav" aria-expanded="false" aria-label="Toggle main menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <div id="topbar-nav" class="navbar-menu">
+      <div class="navbar-end">
+        <a class="navbar-item" target="_blank"
+          href="https://dts333.github.io/WSF-Demos/RB/src/dist/Quantum%20Mechanics/index.html">Quantum demos</a>
+      </div>
+    </div>
+  </nav>
+</header>
+<div class="body">
+<div class="nav-container"  data-component="ROOT"
+  data-version="" >
+  <aside class="nav">
+    <div class="panels">
+      <div class="nav-panel-menu is-active" data-panel="menu">
+  <nav class="nav-menu">
+    <button class="nav-menu-toggle" aria-label="Toggle expand/collapse all" style="display: none"></button>
+    <h3 class="title"><a href="index.html">QM</a></h3>
+  <ul class="nav-list">
+      <li class="nav-item is-active"
+        data-depth="0">
+          <ul class="nav-list">
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="index.html">All Problems</a>
+              </li>
+  </ul>
+      </li>
+      <li class="nav-item is-active"
+        data-depth="0">
+            <button class="nav-item-toggle"></button>
+            <span class="nav-text">Individual Sections</span>
+          <ul class="nav-list">
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-1.html">1. The Wavefunction</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-2.html">2. The Time-Independent Schrödinger Equation</a>
+              </li>
+      <li class="nav-item is-active is-current-page"
+        data-depth="1">
+            <a class="nav-link" href="chap-3.html">3. Formalism</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-4.html">4. 3D</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-5.html">5. Identical Particles</a>
+              </li>
+      <li class="nav-item is-active"
+        data-depth="1">
+            <a class="nav-link" href="chap-6.html">6. Symmetries and Conservation Laws</a>
+              </li>
+  </ul>
+      </li>
+  </ul>
+  </nav>
+</div>
+    </div>
+  </aside>
+</div>
+<main class="article">
+<div class="toolbar" role="navigation">
+  <button class="nav-toggle"></button>
+    <a href="index.html" class="home-link"></a>
+  <nav class="breadcrumbs" aria-label="breadcrumbs">
+  <ul>
+    <li><a href="index.html">QM</a></li>
+    <li>Individual Sections</li>
+    <li><a href="chap-3.html">3. Formalism</a></li>
+  </ul>
+</nav>
+  </div>
+  <div class="content">
+<aside class="toc sidebar" data-title="Contents" data-levels="2">
+  <div class="toc-menu"></div>
+</aside>
+<article class="doc">
+<h1 class="page">Formalism</h1>
+<div class="sect1">
+<h2 id="_hilbert_space"><a class="anchor" href="#_hilbert_space"></a><a class="link" href="#_hilbert_space">1. Hilbert Space</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem"><a class="anchor" href="#_problem"></a><a class="link" href="#_problem">1.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>[This problem is Griffiths 3.1 but is too simple to be his I.P.] Formally, a <em>vector space</em> is a set \(S\) closed under linear combinations: if for all \(\vec u,\vec v\in S\) and for all \(a,b\in\mathbb C\), \(a\vec u+b\vec v\) is also in \(S\), then \(S\) is a vector space.
+Show that the set of square-integrable functions does indeed form a vector space. CHANGE</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problem_2"><a class="anchor" href="#_problem_2"></a><a class="link" href="#_problem_2">1.1.2. Problem</a></h4>
+<div class="paragraph">
+<p>[Griffiths 3.2; same caveat as above] A vector space \(S\) is said to have an inner product \(\Braket{\cdot|\cdot}\) when, for all \(u,v,w\in S\) and \(a,b\in\mathbb C\), the following properties hold:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Conjugate symmetry: \(\Braket{v|u}=\Braket{u|v}^*\)</p>
+</li>
+<li>
+<p>Nonnegativity: \(\Braket{u|u}\ge 0\) (in particular, it&#8217;s real), and \(\Braket{u|u}=0\) if and only if \(\Ket{u}=\Ket 0\)</p>
+</li>
+<li>
+<p>Linearity: \(\Braket{u|(av+bw)}=a\Braket{u|v} + b\Braket{u|w}\)</p>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>In addition, we define the <em>norm</em> of a vector, corresponding to the length of a vector in \(\mathbb R^n\), to be \(\|v\|=\sqrt{\Braket{v|v}}\) (or \(\|v\|^2=\Braket{v|v}\)).<br>
+Show that the inner product below, defined on the set of square-integrable functions over domain \((a,b)\), satisfies these properties.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{f|g}:=\int_a^b f^*(x)g(x)\,dx
+\end{align*}\]
+</div>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problem_3"><a class="anchor" href="#_problem_3"></a><a class="link" href="#_problem_3">1.1.3. Problem</a></h4>
+<div class="paragraph">
+<p>A function \(f\) is said to be absolutely integrable when \(|f|\) is integrable.</p>
+</div>
+<div class="olist arabic">
+<ol class="arabic">
+<li>
+<p>Find a continuous real-valued function on \((0,\infty)\) that is absolutely integrable, but not square-integrable.</p>
+</li>
+<li>
+<p>Find a continuous real-valued function on \((0,\infty)\) that is square-integrable, but not absolutely integrable.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The “trick” is find functions that approach the \(x\)- or \(y\)-axis quickly enough to have a finite integral, but no longer do so when squared (part (a)) or square-rooted (part (b)).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>One example is the following function:</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+f(x)=\begin{cases}
+x^{-\frac{1}{2}}-1&amp;x\le1\\
+0&amp;x\ge 1
+\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/fig-3.1.1-f1.svg" alt="A function that is integrable but not square-integrable" width="500">
+</div>
+</div>
+<div class="paragraph">
+<p>Ultimately this relies on the fact that \(\int_0^1 x^n\,dx\) is finite if and only if \(n &gt; -1\).</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^\infty f(x)\,dx&amp;=\int_0^1 x^{-\frac{1}{2}}-1\,dx\\
+&amp;=2x^\frac{1}{2}-x\Bigr|_0^1\\
+&amp;=1\\
+\int_0^\infty f(x)^2\,dx&amp;=\int_0^1 x^{-1}-2x^{-\frac{1}{2}}+1\,dx\\
+&amp;=\ln(x)-4x^{\frac{1}{2}}+x\Bigr|_0^1\\
+&amp;=\infty
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(f(x)\) is integrable, but \(f(x)^2\) is not.</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>One example is the following function:</p>
+</li>
+</ol>
+</div>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+f(x)=\frac{1}{x+1}
+\end{align*}\]
+</div>
+</div>
+<div class="imageblock text-center">
+<div class="content">
+<img src="_images/fig-3.1.1-f2.svg" alt="A function that is square-integrable but not integrable" width="500">
+</div>
+</div>
+<div class="paragraph">
+<p>As shown below,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\int_0^\infty f(x)\,dx &amp;=\int_0^\infty\frac{1}{x+1}\,dx\\
+&amp;=\ln(x+1)\Bigr|_0^\infty\\
+&amp;=\infty\\
+\int_0^\infty f(x)^2\,dx&amp;=\int_0^\infty \frac{1}{(x+1)^2}\,dx\\
+&amp;=-\frac{1}{x+1}\Bigr|_0^1\\
+&amp;=\frac{1}{2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(f(x)\) is not integrable, but \(f(x)^2\) is.</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_4"><a class="anchor" href="#_problem_4"></a><a class="link" href="#_problem_4">1.1.4. Problem</a></h4>
+<div class="paragraph">
+<p>Show that the commutator is linear in its first argument: \([aA+bB, C]=a[A,C]+b[B,C]\).
+(It is also linear in its second argument; the proof is practically identical.)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Operators don&#8217;t necessarily commute, but scalars do.
+So,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+[aA+bB,C]&amp;=(aA+bB)C - C(aA+bB)\\
+&amp;=aAC-aCA+bBC-bCB\\
+&amp;=a(AC-CA)+b(BC-CB)\\
+&amp;=a[A,C]+b[B,C]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="Cauchy-Schwarz"><a class="anchor" href="#Cauchy-Schwarz"></a><a class="link" href="#Cauchy-Schwarz">1.1.5. Problem</a></h4>
+<div class="paragraph">
+<p>Let&#8217;s prove the Cauchy-Schwarz Inequality: \(\left|\Braket{x|y}\right|^2\le \Braket{x|x}\Braket{y|y}\), or equivalently \(\left|\Braket{x|y}\right|\le \|x\|\|y\|\) (“the magnitude of the inner product is at most the product of the norms.”).
+This inequality is pivotal in quantum mechanics because it is the basis of the uncertainty principle for all incompatible pairs of observables (i.e., hermitian operators with a nonzero commutator).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>First, prove the Pythagorean Theorem for vectors: If \(x\) and \(y\) are orthogonal, then \(\|x+y\|^2=\|x\|^2+\|y\|^2\).</p>
+</li>
+<li>
+<p>Use this to prove the Cauchy-Schwarz Inequality.
+(Hint: let \(z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y\).)</p>
+</li>
+<li>
+<p>For which pairs of vectors \(x,y\) is the quantity on the left hand side maximized, i.e., when is the inequality an equality?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Since \(x\) and \(y\) are orthogonal, \(\Braket{x|y}=\Braket{y|x}=0\). Now we simply apply the linearity of the inner product:</p>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\|x+y\|^2&amp;=\Braket{x+y|x+y}\\
+&amp;=\Braket{x|x}+\Braket{x|y} +\Braket{y|x} +\Braket{y|y}\\
+&amp;=\Braket{x|x}+\Braket{y|y}\\
+&amp;=\|x\|^2+\|y\|^2
+\end{align*}\]
+</div>
+</div>
+</li>
+<li>
+<p>First, if \(y=\Ket{0}\), this is trivial; both sides of the inequality are 0.
+So assume \(y\ne\Ket{0}\), from which it follows that \(\Braket{y|y}\ne 0\).
+As the hint suggests, let \(z=x-\frac{\Braket{y|x}}{\Braket{y|y}}y\). This reason for this choice of \(z\) will soon be clear:</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{y|z}&amp;=\Braket{y|x-\frac{\Braket{y|x}}{\Braket{y|y}}y}\\
+&amp;=\Braket{y|x}-\frac{\Braket{y|x}}{\Braket{y|y}}\Braket{y|y}\\
+&amp;=\Braket{y|x}-\Braket{y|x}\\
+&amp;=0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(y\) and \(z\) are orthogonal.
+(In fact, \(\frac{\Braket{y|x}}{\Braket{y|y}}y\) is the projection of \(x\) onto \(y\), which when subtracted from \(x\) leaves the portion of \(x\) orthogonal to \(y\).)
+Now, \(x=z+\frac{\Braket{y|x}}{\Braket{y|y}}y\), the sum of two orthogonal vectors.
+And, of course, \(\|z\|\ge 0\).
+So, applying the Pythagorean Theorem, we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\|x\|^2&amp;=\|z\|^2+\left\|\frac{\Braket{y|x}}{\Braket{y|y}}y\right\|^2\\
+&amp;=\|z\|^2+\left|\frac{\Braket{y|x}}{\|y\|^2}\right|^2\|y\|^2\\
+&amp;=\|z\|^2+\frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}\\
+&amp;\ge \frac{\left|\Braket{y|x}\right|^2}{\|y\|^2}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Therefore,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\left|\Braket{x|y}\right|^2\le \|x\|^2\|y\|^2=\Braket{x|x}\Braket{y|y}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+<div class="paragraph">
+<p>Let&#8217;s think about what this actually means, using the following form of the statement: \(\|x\|\ge \frac{|\Braket{y|x}|}{\|y\|}\).
+If we define \(y'=\frac{y}{\|y\|}\) to be \(y\) normalized, and define \(P_{y'}=\Ket{y'}\Bra{y'}\) to be the projection operator onto \(y'\), then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Bigl\|P_{y'}\Ket{x}\Bigr\|&amp;=\Bigl\|\Ket{y'}\Braket{y'|x}\Bigr\|\\
+&amp;=\left|\Braket{y'|x}\right|\ \Bigl\|\Ket{y'}\Bigr\|\\
+&amp;=\frac{\left|\Braket{y|x}\right|}{\|y\|}\cdot 1\\
+&amp;=\frac{\left|\Braket{y|x}\right|}{\|y\|}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So all the Cauchy-Schwarz Inequality says is that \(\left\|P_{y'}\Ket{x}\right\|\le\|x\|\), i.e. the norm of the projection of a vector \(x\) onto some other vector cannot exceed the norm of \(x\) itself, which on its face is obvious (how could a vector get longer by taking only a portion of it?).</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>For this inequality to be an equality, we need \(\|z\|^2=0\), which implies \(x=\frac{\Braket{y|x}}{\Braket{y|y}}y\). So \(x\) must be a scalar multiple of \(y\) (which, in the finite-dimensional case, would mean they&#8217;re parallel).</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.2. Demonstrations</a></h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_observables"><a class="anchor" href="#_observables"></a><a class="link" href="#_observables">2. Observables</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">2.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem_5"><a class="anchor" href="#_problem_5"></a><a class="link" href="#_problem_5">2.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>Show that if \(P=Q^\dagger Q\) for some operator \(Q\), then \(\Braket{f|Pf}\ge 0\) for all \(f\).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{f|Pf}&amp;=\Braket{f|Q^\dagger Qf}\\
+&amp;=\Braket{Qf| Qf}\\
+&amp;=\|Qf\|^2\\
+&amp;\ge 0
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_6"><a class="anchor" href="#_problem_6"></a><a class="link" href="#_problem_6">2.1.2. Problem</a></h4>
+<div class="paragraph">
+<p>Show that \(Q^{\dagger\dagger}=Q\) for any operator \(Q\). (In other words, show that the adjoint of the adjoint is the original operator.)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Simply by the definition of the adjoint and the fact that \(\Braket{g|f}=\Braket{f|g}^*\), we have, for all \(f\) and \(g\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{Q^{\dagger\dagger} f|g}&amp;=\Braket{f|Q^\dagger g}\\
+&amp;=\Braket{Q^\dagger g|f}^*\\
+&amp;=\Braket{g|Qf}^*\\
+&amp;=\Braket{Qf|g}^{**}\\
+&amp;=\Braket{Qf|g}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now, because the inner product is linear,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+0&amp;=\Braket{Q^{\dagger\dagger} f|g}-\Braket{Qf|g}\\
+&amp;=\Braket{Q^{\dagger\dagger} f-Qf|g}\\
+&amp;=\Braket{(Q^{\dagger\dagger} -Q)f|g}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>In particular, taking \(g=(Q^{\dagger\dagger} -Q)f\), we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+0&amp;=\Braket{(Q^{\dagger\dagger} -Q)f|(Q^{\dagger\dagger} -Q)f}\\
+&amp;=\|(Q^{\dagger\dagger} -Q)f\|^2
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Hence \((Q^{\dagger\dagger} -Q)f=\Ket 0\).
+Since \(f\) was arbitrary, \(Q^{\dagger\dagger} -Q\) must be the zero operator, and so \(Q^{\dagger\dagger} =Q\).</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_eigenfunctions_of_a_hermitian_operator"><a class="anchor" href="#_eigenfunctions_of_a_hermitian_operator"></a><a class="link" href="#_eigenfunctions_of_a_hermitian_operator">3. Eigenfunctions of a Hermitian Operator</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">3.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem_7"><a class="anchor" href="#_problem_7"></a><a class="link" href="#_problem_7">3.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>Find the eigenfunctions and eigenvalues of the position operator \(x\), defined by \(x(f)=xf\), and \(p\), defined by \(p(f)=-i\hbar \frac{\partial f}{\partial x}\).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problem_8"><a class="anchor" href="#_problem_8"></a><a class="link" href="#_problem_8">3.1.2. Problem</a></h4>
+<div class="paragraph">
+<p>Suppose \(f\) is an eigenfunction of \(A\) with eigenvalue \(\lambda\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Must \(f\) also be an eigenfunction of \(A^\dagger\)?
+Either show that this is the case or find a counterexample.</p>
+</li>
+<li>
+<p>When is \(\lambda^*\) an eigenvalue of \(A^\dagger\)?</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>No, \(f\) need not be an eigenfunction of \(A^\dagger\).
+For instance, if \(\displaystyle A=\begin{pmatrix}3&amp;2\\0&amp;1\end{pmatrix}\), then</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+A\begin{bmatrix}1\\0\end{bmatrix}=\begin{pmatrix}3&amp;2\\0&amp;1\end{pmatrix}\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\0\end{bmatrix}=3\begin{bmatrix}1\\0\end{bmatrix}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>yet</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+A^\dagger=\begin{pmatrix}3&amp;0\\2&amp;1\end{pmatrix}\\
+A^\dagger\begin{bmatrix}1\\0\end{bmatrix}=\begin{bmatrix}3\\2\end{bmatrix}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>so while \(\begin{bmatrix}1\\0\end{bmatrix}\) is an eigenvector of \(A\), it is not an eigenvector of \(A^\dagger\).</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>\(\lambda^*\) is an eigenvalue of \(A^\dagger\) as long as the underlying vector space is finite-dimensional (for instance, the Hilbert space of square-integrable functions is <em>not</em> finite-dimensional).</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Supposing \(\lambda^*\) were <em>not</em> an eigenvalue of \(A^\dagger\), then there would be no nonzero \(f\) for which \((A^\dagger-\lambda^* I)f=0\), from which we may conclude that \(A^\dagger-\lambda^* I\) is invertible; call its inverse \(B\). Then \((A^\dagger-\lambda^* I)B=I\), and so \(I=I^\dagger=B^\dagger(A^\dagger-\lambda^* I)^\dagger = B^\dagger (A -\lambda I)\).
+So \(A-\lambda I\) is also invertible, which means \(\lambda\) is not an eigenvalue of \(A\).
+By the contrapositive, if \(\lambda\) is an eigenvalue of \(A\), then \(\lambda^*\) is an eigenvalue of \(A^\dagger\).
+But if the underlying vector space is infinite dimensional, then consider \(T\) defined on the Hilbert space of square-integrable functions over \([0,\infty)\) by \(Tf(x):=f(x+1)\).
+(Showing that \(T\) is linear is left as an exercise to the reader.) Then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Braket{g,Tf}&amp;=\int_{0}^\infty g^*(x)Tf(x)\,dx\\
+&amp;=\int_{0}^\infty g^*(x)f(x+1)\,dx\\
+&amp;=\int_{1}^\infty g^*(x-1)f(x)\,dx\\
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So, evidently,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+T^\dagger g(x)=\begin{cases}0&amp;0\le x\lt 1\\g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>If \(f(x):=\lambda^x\) (with \(0&lt;\lambda&lt; 1\) for square integrability), then \(Tf=\lambda^{x+1}=\lambda\lambda^x=\lambda f\), so \(f\) is an eigenvalue of \(T\) with eigenvalue \(\lambda\).
+Yet, if \(g\) were an eigenvalue of \(T^\dagger\) with eigenvalue \(\kappa\), then we&#8217;d have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\kappa g(x)&amp;=\begin{cases}0&amp;0\le x\lt 1\\g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>If \(\kappa=0\), then \(g(x-1)=0\) for all \(x\ge 1\), which is to say \(g(x)=0\) for all \(x\).
+But \(0\) is not a permissible eigenfunction, so we must have \(\kappa\ne0\), from which we conclude that</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+g(x)&amp;=\begin{cases}0&amp;0\le x\lt 1\\\frac{1}{\kappa}g(x-1)&amp;x\ge 1\end{cases}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Since \(g(x)=0\) for \(0\le x&lt; 1\), we must also have \(g(x)=0\) for \(1\le x&lt; 2\), then for \(2\le x&lt; 3\), and indeed for all of \([0,\infty)\) — \(g\) is again identically 0!
+So, in fact, \(T^\dagger\) has <em>no</em> eigenvalues whatsoever (and certainly not \(\lambda^*\)).</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>In the first part of part (b), where exactly did we use the finite dimensionality of the underlying vector space?</p>
+</div>
+<div class="paragraph">
+<p>Answer: it was in stating if there is no nonzero \(f\) for which \((A^\dagger - \kappa^* I)f=0\), then \(A^\dagger - \kappa^* I\) has an inverse: an operator \(B\) such that \((A^\dagger - \kappa^* I)B=I\).
+In infinite dimensional vector spaces, just because an operator does not send any nonzero vectors to 0 does not mean it has an inverse operator.
+Indeed, \(T\) as defined above sends to zero all (not-identically-zero) functions that are zero for \(x\ge 1\), and yet \(T\) has no inverse — it shifts functions one unit to the left, but since the domain ends at 0, there is no way to "un-shift" the portion of the function on \([0,1)\); it&#8217;s just lost.</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_9"><a class="anchor" href="#_problem_9"></a><a class="link" href="#_problem_9">3.1.3. Problem</a></h4>
+<div class="paragraph">
+<p>Suppose that \(f\) is an eigenfunction of operators \(Q_1\) and \(Q_2\) with eigenvalues \(q_1\) and \(q_2\), respectively.
+Show that \(f\) is an eigenfunction of the following operators, and find the corresponding eigenvalues.</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\alpha Q_1\) for \(\alpha\in\mathbb C \)</p>
+</li>
+<li>
+<p>\(Q_1+Q_2\)</p>
+</li>
+<li>
+<p>\(Q_1Q_2\)</p>
+</li>
+<li>
+<p>\(Q_2Q_1\)</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The following laws are helpful:</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p>Operator application is associative</p>
+</li>
+<li>
+<p>Operator application distributes over addition</p>
+</li>
+<li>
+<p>Scalars commute with everything</p>
+</li>
+</ul>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\((\alpha Q_1)f=\alpha (Q_1f)=\alpha q_1f\), so \(f\) is an eigenfunction of \(\alpha Q_1\) with eigenvalue \(\alpha q_1\).</p>
+</li>
+<li>
+<p>\((Q_1+Q_2)f=Q_1f+Q_2f=q_1f+q_2f=(q_1+q_2)f\), so \(f\) is an eigenfunction of \(Q_1+Q_2\) with eigenvalue \(q_1+q_2\).</p>
+</li>
+<li>
+<p>&#160;</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(Q_1Q_2)f&amp;=Q_1(Q_2f)\\
+&amp;=Q_1(q_2f)\\
+&amp;=q_2(Q_1f)\\
+&amp;=q_2q_1f
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(f\) is an eigenfunction of \(Q_1Q_2\) with eigenvalue \(q_1q_2\).</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>The proof proceeds exactly as above. The eigenvalue is again \(q_1q_2\). So, while operators may not commute, the eigenvalues of the product of two operators does not depend on the order of the product.</p>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_10"><a class="anchor" href="#_problem_10"></a><a class="link" href="#_problem_10">3.1.4. Problem</a></h4>
+<div class="paragraph">
+<p>Show that if \(A\) and \(B\) commute, then \(AB\) and \(BA\) have the same eigenfunctions and eigenvalues.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>If \(f\) is an eigenfunction of \(AB\) with eigenvalue \(\lambda\), then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(BA) f&amp;=(AB)f=\lambda f
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_11"><a class="anchor" href="#_problem_11"></a><a class="link" href="#_problem_11">3.1.5. Problem</a></h4>
+<div class="paragraph">
+<p>Find the eigenfunctions and eigenvalues of the operator \(\frac{d^n}{dx^n}\) for positive integer \(n\).
+(Don&#8217;t worry about whether the solutions are square-integrable.)</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>For fixed \(q\ne 0\), solving \(\frac{d^n}{dx^n}f(x)=qf(x)\) yields</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[ f_q(x)=\sum_{k=1}^{n}c_k \exp\left[(-1)^{2k/n}q^{1/n}x\right]\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(f_q\) is the eigenfunction belonging to eigenvalue \(q\), and the \(c_k\) are constants determined by the boundary conditions.
+Evidently, every nonzero complex number is an eigenvalue.</p>
+</div>
+<div class="paragraph">
+<p>If \(q=0\), then the solutions to \(\frac{d^n}{dx^n}f(x)=0\) are simply the polynomials of degree at most \(n-1\).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This problem highlights the fact that the eigenfunctions of an operator depend on the <em>precise</em> operator in question; \(\frac{d^n}{dx^n}-q\) is quite different from \(\frac{d^n}{dx^n}\) when \(q\ne0\).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_12"><a class="anchor" href="#_problem_12"></a><a class="link" href="#_problem_12">3.1.6. Problem</a></h4>
+<div class="paragraph">
+<p>Show that if two (not necessarily hermitian) operators \(A\) and \(B\) commute, then, given an eigenfunction \(f\) of \(A\) with eigenvalue \(\lambda\), either \(f\) is an eigenfunction of \(B\) or \(\lambda\) is a degenerate eigenvalue of \(A\) (i.e., there are at least two linearly independent eigenfunctions of \(A\) corresponding to \(\lambda\)).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>We have:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+A(Bf)&amp;=BAf\\
+&amp;=B(\lambda f)\\
+&amp;=\lambda (Bf)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>If \(Bf\) is a scalar multiple of \(f\), then by definition \(f\) is an eigenfunction of \(B\).
+(We don&#8217;t know the eigenvalue, but no matter.)
+Otherwise, \(Bf\) and \(f\) are linearly independent, and both are eigenfunctions of \(A\) corresponding to \(\lambda\), so indeed \(\lambda\) is degenerate.</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_generalized_statistical_interpretation"><a class="anchor" href="#_generalized_statistical_interpretation"></a><a class="link" href="#_generalized_statistical_interpretation">4. Generalized Statistical Interpretation</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">4.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem_13"><a class="anchor" href="#_problem_13"></a><a class="link" href="#_problem_13">4.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>Recall that if \(A\) is an observable with (normalized) eigenvectors \(f_\alpha\), we can write</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\Psi&amp;=\sum_{n} c_n f_n\quad \textrm{(discrete spectrum)}\\
+\Psi&amp;=\int_{\mathcal D} c_z f_z\,dz\quad \textrm{(continuous spectrum)}\\
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>and then due to the orthogonality of the eigenvectors of a hermitian operator, the coefficients are given by \(c_\alpha =\Braket{f_\alpha | \Psi}\).
+Show that this is equivalent to “projecting” \(\Psi\) onto \(f_\alpha\): if \(P_\alpha=\Ket{f_\alpha}\Bra{f_\alpha}\), then \(P_\alpha\Ket\Psi=c_\alpha \Ket{f_\alpha}\).</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The computation is straightforward:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+P_\alpha\Ket{\Psi}&amp;=(\Ket{f_\alpha}\Bra{f_\alpha})\Ket{\Psi}\\
+&amp;=\Ket{f_\alpha}\ \Braket{f_\alpha|\Psi}\\
+&amp;=c_\alpha \Ket{f_\alpha}
+\end{align*}\]
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+<div class="paragraph">
+<p>This is exactly why we can say that \(c_\alpha =\Braket{f_\alpha | \Psi}\) tells you how much of \(f_\alpha\) is in \(\Psi\). Because the inner project with a normalized vector \(u\) is equivalent to a projection onto \(u\), the inner product picks out just the component corresponding to \(u\).
+For a concrete example, consider the vector space \(\mathbb R^n\), where projecting a vector \(v\) onto the \(k\)<sup>th</sup> basis vector \(e_n\), i.e., computing \(\Braket{v|e_k}\), picks out the \(k\)<sup>th</sup> component of \(v\) — that&#8217;s what the components of a vector in \(\mathbb R^n\) <em>mean</em>.</p>
+</div>
+<div class="paragraph">
+<p>The Fourier transform is nothing more than a projection of a function onto the complex exponentials \(e^{-i\omega x}\).</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_the_uncertainty_principle"><a class="anchor" href="#_the_uncertainty_principle"></a><a class="link" href="#_the_uncertainty_principle">5. The Uncertainty Principle</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">5.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem_14"><a class="anchor" href="#_problem_14"></a><a class="link" href="#_problem_14">5.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>Show that the commutator of two hermitian operators is of the form \(iQ\) where \(Q\) is hermitian.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>Let \(A\) and \(B\) be two hermitian operators, i.e., \(A=A^\dagger\) and \(B=B^\dagger\).
+Then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+[A,B]^\dagger&amp;=(AB-BA)^\dagger\\
+&amp;=(AB)^\dagger-(BA)^\dagger\\
+&amp;=B^\dagger A^\dagger - A^\dagger B^\dagger\\
+&amp;=BA-AB\\
+&amp;=-[A,B]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Therefore,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(-i[A,B])^\dagger&amp;=(-i)^*[A,B]^\dagger\\
+&amp;=i(-[A,B])\\
+&amp;=-i[A,B]
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(-i[A,B]\) is hermitian.
+Letting \(Q=-i[A,B]\), we have \([A,B]=iQ\) with \(Q\) hermitian, as desired.</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+The operators \(R\) for which \(R^\dagger=-R\) are known as <a href="https://en.wikipedia.org/wiki/Skew-Hermitian_matrix"><em>anti-hermitian</em></a>.
+As we saw above, just as an imaginary number is \(i\) times a real number, an anti-hermitian matrix is \(i\) times a hermitian matrix.
+And in the same way that hermitian operators are akin to real numbers (e.g., their eigenvalues are all real), anti-hermitian operators are akin to imaginary numbers (e.g., their eigenvalues are all imaginary).
+</td>
+</tr>
+</table>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_15"><a class="anchor" href="#_problem_15"></a><a class="link" href="#_problem_15">5.1.2. Problem</a></h4>
+<div class="paragraph">
+<p>The so-called <strong>Generalized Ehrenfest Theorem</strong> states that for any observable \(Q(x,p,t)\),</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\frac{d}{dt}\Braket{Q}=\frac{i}{\hbar}\Braket{[\hat H,\hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
+</div>
+</div>
+<div class="paragraph">
+<p>One thing it states is that a sufficient condition for \(\Braket{Q}\) to be constant over time is that \(\Braket{[\hat H,\hat Q]}=0\) and \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\). (In particular, if \(Q\) does not depend on \(t\), then \(\Braket{\frac{\partial \hat Q}{\partial t}}=0\) and so all we need to check is that \(\Braket{[\hat H,\hat Q]}\)).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Using this fact, when is \(\Braket{x}\) constant?
+Before working it out explicitly, use your physical intuition to make a guess.</p>
+</li>
+<li>
+<p>For which Hamiltonians is \(\Braket{p}\) conserved?
+Before working it out explicitly, use your physical intuition to make a guess.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>\(\hat x\) doesn&#8217;t depend on time, so we only need to determine when \(\Braket{[\hat H,\hat x]}=0\).
+The general form of the Hamiltonian is \(-\hbar^2\frac{\partial ^2}{\partial x^2}+V(x)\), and so for an arbitrary wavefunction \(\psi\),</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(\hat x\hat H)\psi=x\left(-\hbar ^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>whereas</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(\hat H\hat x)\psi&amp;=\left(-\hbar ^2\frac{\partial^2}{\partial x^2}+V(x)\right)(x\psi)\\
+&amp;=-\hbar^2\frac{\partial }{\partial x}\left(\psi+x\frac{\partial \psi}{\partial x}\right)+xV(x)\psi\\
+&amp;=-\hbar^2\left(2\frac{\partial \psi}{\partial x}+x\frac{\partial ^2\psi}{\partial x}\right)+xV(x)\psi\\
+&amp;=x\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)-2\hbar^2\frac{\partial \psi}{\partial x}\\
+&amp;=(\hat x\hat H)\psi - 2\hbar^2\frac{\partial \psi}{\partial x}\\
+&amp;=(\hat x\hat H)\psi + 2i\hbar(\hat p\psi)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \([\hat H,\hat x]=2i\hbar \hat p\), and so</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{d\Braket{x}}{dt}=\Braket{[\hat H,\hat x]}&amp;=\Braket{2i\hbar \hat p}=2i\hbar\Braket{p}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>As expected, \(\Braket{x}\) is constant as long as \(\Braket{p}=0\).</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>\(\hat p\) also doesn&#8217;t depend on time so once again we simply need to find the Hamiltonians it commutes with.</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(\hat p\hat H)\psi &amp;=-i\hbar\frac{\partial }{\partial x}\left[\left(-\hbar^2\frac{\partial^2 }{\partial^2 x}+V(x)\right)\psi\right]\\
+&amp;=-i\hbar\frac{\partial }{\partial x}\left(-\hbar^2\frac{\partial^2 \psi}{\partial x^2}+V(x)\psi\right)\\
+&amp;=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+\frac{\partial V(x)}{\partial x}\psi+V(x)\frac{\partial \psi}{\partial x}\right)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>whereas</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(\hat H\hat p)\psi&amp;=\left(-\hbar^2\frac{\partial^2 }{\partial x^2}+V(x)\right)\left(-i\hbar\frac{\partial \psi}{\partial x}\right)\\
+&amp;=-i\hbar\left(-\hbar^2\frac{\partial ^3\psi}{\partial x^3}+V(x)\frac{\partial \psi}{\partial x}\right)\\
+&amp;=(\hat p\hat H)\psi +i\hbar\frac{\partial V(x)}{\partial x}\psi
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \([\hat H,\hat p]=i\hbar\frac{\partial V}{\partial x}\), and we want to determine when \(\Braket{[\hat H,\hat p]}=0\).
+\(\frac{\partial V}{\partial x}\) is an extrinsic property of the system — it doesn&#8217;t depend on \(\Psi\) — and so its expectation is just its value: \(\Braket{\frac{\partial V}{\partial x}}=\frac{\partial V}{\partial x}\).
+So, in order for \(\Braket{[\hat H,\hat p]}=0\), we need \(\frac{\partial V}{\partial x}=0\).
+In other words, \(\Braket p\) is conserved whenever the potential is uniform over all space.
+We would expect this result; in a flat potential, an object feels no net force, so its momentum won&#8217;t change.</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_vectors_and_operators"><a class="anchor" href="#_vectors_and_operators"></a><a class="link" href="#_vectors_and_operators">6. Vectors and Operators</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">6.1. Questions</a></h3>
+<div class="sect3">
+<h4 id="_problem_16"><a class="anchor" href="#_problem_16"></a><a class="link" href="#_problem_16">6.1.1. Problem</a></h4>
+<div class="paragraph">
+<p>Find the eigenvalues and normalized eigenvectors of</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[A=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\]
+</div>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>We wish to solve \(A\Ket{x}=\lambda \Ket{x}\) with \(\Ket{x}\ne \Ket{0}\).
+Subtracting \(\lambda\Ket{x}\) from both sides and factoring, we obtain \((A-\lambda I)\Ket{x}=\Ket{0}\), where \(I\) is the identity matrix (of the correct dimensions; in this case, \(2\times 2\)).
+Since \(\Ket{x}\ne \Ket{0}\), \(A-\lambda I\) must be singular (non-invertible), which means its determinant is 0.
+So, we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+0&amp;=\det (A-\lambda I)\\&amp;=(4-\lambda)(5-\lambda)-1\cdot 2\\&amp;=\lambda^2-9\lambda+18\\&amp;=(\lambda-3)(\lambda-6)
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So the eigenvalues are \(\lambda_1=3\) and \(\lambda_2=6\).</p>
+</div>
+<div class="paragraph">
+<p>Now we must solve \(\lambda_i\Ket{x} x=A\Ket{x}\) for the concrete eigenvalues \(\lambda_1, \lambda_2\).
+If \(\Ket{x}=\begin{bmatrix}x\\y\end{bmatrix}\), then we find the eigenvectors corresponding to \(\lambda_1\) as follows:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+3\begin{bmatrix}x\\y\end{bmatrix}&amp;=\begin{pmatrix}4&amp;2\\1&amp;5\end{pmatrix}\begin{bmatrix}x\\y\end{bmatrix}=\begin{bmatrix}4x+2y\\x+5y\end{bmatrix}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Since equal vectors must have equal components, we have the system of equations \(3x=4x+2y,3y=x+5y\).
+This has solution \(x=-2y\), which means the eigenvectors corresponding to \(\lambda_1=3\) are of the form \(\begin{bmatrix}-2y\\y\end{bmatrix}\), which as a unit vector is \(\dfrac{1}{\sqrt{5}}\begin{bmatrix}-2\\1\end{bmatrix}\).</p>
+</div>
+<div class="paragraph">
+<p>Similarly, for \(\lambda_2=6\), we obtain \(6x=4x+2y,6y=x+5y\) which has solution \(x=y\), so the unit eigenvector is \(\dfrac{1}{\sqrt{2}}\begin{bmatrix}1\\1\end{bmatrix}\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_17"><a class="anchor" href="#_problem_17"></a><a class="link" href="#_problem_17">6.1.2. Problem</a></h4>
+<div class="paragraph">
+<p>What are the eigenvalues and normalized eigenvectors of a diagonal matrix \(A\) with diagonal entries \(m_1, \ldots, m_n\)?</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>An \(n\)-dimensional matrix can have at most \(n\) linearly independent eigenvectors, so if we find \(n\) eigenvectors then we&#8217;re done.
+If we define \(v_k:=\) the \(k\)<sup>th</sup> column of the \(n\times n\) identity matrix — i.e., \(v_k\) is the vector whose only nonzero component is component \(k\), which is 1 — then clearly \(Av_k=m_k v_k\).
+So the normalized eigenvectors are these \(v_k\) and the corresponding eigenvalues are \(\lambda_k=m_k\).</p>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_18"><a class="anchor" href="#_problem_18"></a><a class="link" href="#_problem_18">6.1.3. Problem</a></h4>
+<div class="paragraph">
+<p>[This problem is technically in Griffiths but I imagine it&#8217;s also in every linear algebra book ever written.] Suppose \(P\) is a projection operator, i.e., that it can be written as \(P=\Ket{a}\Bra{a}\) for some unit vector \(a\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that \(P\) is <em>idempotent</em>, i.e., that \(P^2=P\).
+(Corollary: \(P^n=P\) for every positive integer \(n\).)</p>
+</li>
+<li>
+<p>What are the eigenvalues of \(P\)?</p>
+</li>
+<li>
+<p>What are the corresponding eigenvectors? (With \(P\) arbitrary, you can&#8217;t write out the eigenvectors explicitly, so merely describe them in terms of \(a\).)</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Every projection operator is of the form \(P=\Ket{a}\Bra{a}\) where \(a\) is a unit vector.</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>So</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+P^2&amp;=(\Ket{a}\Bra{a})(\Ket{a}\Bra{a})\\
+&amp;=\Ket{a}(\Braket{a|a})\Bra{a}\\
+&amp;=\Ket{a}(1)\Bra{a}|\\
+&amp;=\Ket{a}\Bra{a}\\
+&amp;=P
+\end{align*}\]
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>We wish to solve \(P\Ket{x}=\lambda\Ket{x}\) (with \(\Ket{x}\ne \Ket{0}\)).
+By the corollary to part (a), for every positive integer \(n\), we have \(\lambda^{n+1}\Ket{x}=P^{n+1}\Ket{x}=P\Ket{x}=\lambda x\), and so \((\lambda^{n+1}-\lambda)\Ket{x}=\Ket{0}\).
+Since \(\Ket{x}\ne \Ket{0}\), we have \(\lambda^{n+1}=\lambda\).
+The only values of \(\lambda\) for which this holds for all \(n\) are \(\lambda_0=0\) and \(\lambda_1=1\), so those are the two eigenvalues.</p>
+</li>
+<li>
+<p>We simply solve for \(\Ket{x}\) corresponding to \(\lambda_0\):</p>
+<div class="openblock">
+<div class="content">
+<div class="stemblock">
+<div class="content">
+\[\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_0\Ket{x}=\Ket{0}\]
+</div>
+</div>
+<div class="paragraph">
+<p>\(\Ket{a}\ne\Ket{0}\), so \(\Braket{a|x}=0\).
+Thus the eigenvectors corresponding to \(\lambda_0=0\) are the vectors orthogonal to \(a\).</p>
+</div>
+<div class="paragraph">
+<p>Now we solve for \(\Ket{x}\) corresponding to \(\lambda_1\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\Ket{a}\Braket{a|x}=P\Ket{x}=\lambda_1\Ket{x}=\Ket{x}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Since \(\Braket{a|x}\) is just a scalar, the eigenvectors corresponding to \(\lambda_1=1\) are the vectors parallel to \(a\).</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_19"><a class="anchor" href="#_problem_19"></a><a class="link" href="#_problem_19">6.1.4. Problem</a></h4>
+<div class="paragraph">
+<p>For a matrix \(A\), the <em>matrix exponential</em> is defined by replacing \(x\) in the power series for \(e^x\) with \(A\):</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[e^{A}:=\sum_{n=0}^\infty \frac{A^n}{n!}.\]
+</div>
+</div>
+<div class="paragraph">
+<p>(By analogy with numbers, \(A^0\) is defined to be the identity operator — perhaps the summation should be written \(e^{A}=I+\sum_{n=1}^\infty \frac{A^n}{n!}\).)
+The matrix exponential \(e^A\) shares some properties with the ordinary exponential \(e^z\) over complex numbers (or, with respect to the exponential, matrices themselves share several properties with complex numbers):</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that the matrix exponential of the zero operator is the identity operator. (Analog: \(e^0=1\).)</p>
+</li>
+<li>
+<p>Show that \(e^{A^\dagger}=(e^A)^\dagger\). (Analog: \(e^{z^*}=(e^z)^*\).)</p>
+</li>
+<li>
+<p>Show that if \(A\) is hermitian then so is \(e^A\). (Analog: the exponential of a real number is real.)</p>
+</li>
+<li>
+<p>Under what conditions on matrices \(A\) and \(B\) does it hold that \(e^{A+B}=e^Ae^B\)? (Analog: \(e^{z+w}=e^z e^w\), always.)</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>A helpful fact is the <strong>binomial theorem</strong>: if \(\binom{n}{k}=\frac{n!}{k!(n-k)!}\) represents the number of ways to choose a \(k\)-element subset from an \(n\)-element set, and \(x\) and \(y\) are numbers, then</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(x+y)^n=\sum_{k=0}^n\binom{n}{k}x^ky^{n-k}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>(Hint: under what conditions does the binomial theorem apply when \(x\) and \(y\) are replaced with operators?
+It may help to compute \((A+B)^3\) by hand.)</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>The proof of the binomial theorem is simple: in \((x+y)^n\), the coefficient of \(x^ky^{n-k}\) is the number of ways to pick which \(k\) of the \(n\) copies of \(x+y\) will contribute a factor of \(x\); the other \(n-k\) will contribute a factor of \(y\).
+But the number of ways to pick \(k\) things from a set of size \(n\) is, by definition, \(\binom nk\).
+It&#8217;s left as an exercise to the reader to show why \(\binom nk=\frac{n!}{k!(n-k)!}\).</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>A <em>unitary</em> matrix is a matrix \(U\) that satisfies \(UU^\dagger =U^\dagger U=I\) — its adjoint is its inverse.
+Just as the hermitian matrices are akin to real numbers (their eigenvalues are all real), and the anti-hermitian matrices — matrices of the form \(iQ\) where \(Q\) is hermitian — are akin to imaginary numbers (their eigenvalues are all imaginary), unitary matrices are akin to complex numbers with magnitude 1 (their eigenvalues all have magnitude 1, and their multiplicative inverse is equal to their hermitian conjugate).</p>
+<div class="paragraph">
+<p>Accordingly, show that if \(Q\) is hermitian then \(e^{iQ}\) is unitary.
+(Analog: the exponential of an imaginary number has magnitude 1.)</p>
+</div>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Let \(\mathbf 0\) denote the zero operator.
+\(e^{\mathbf 0}=\sum_{n=0}^\infty \frac{\mathbf 0^n}{n!}\).
+The only nonzero term of this sum is the \(n=0\) term, which by definition is the identity matrix.</p>
+</li>
+<li>
+<p>First, note that since \((AB)^\dagger=B^\dagger A^\dagger\) for all operators \(A,B\), we have \((A^\dagger)^n=(A^n)^\dagger\).</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Also recall that \((A+B)^\dagger=A^\dagger+B^\dagger\).
+Then,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+e^{A^\dagger}&amp;=\sum_{n=0}^\infty \frac{(A^\dagger)^n}{n!}\\
+&amp;=\sum_{n=0}^\infty \frac{(A^n)^\dagger}{n!}\\
+&amp;=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)^\dagger\\
+&amp;=(e^A)^\dagger
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>By part (b), if \(Q\) is hermitian, then \((e^{Q})^\dagger=e^{Q^\dagger}=e^Q\), so \(e^Q\) is indeed hermitian.</p>
+</li>
+<li>
+<p>For \(e^{A+B}=e^A e^B\) to hold, \(A\) and \(B\) must commute.</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>If and only if \(A\) and \(B\) commute, we have</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(A+B)^n&amp;=\sum_{k=0}^n \binom{n}{k}A^kB^{n-k}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>where \(\binom{n}{k}=\frac{n!}{k!(n-k)!}\) denotes the binomial coefficient.
+For instance, regardless of whether \(A\) and \(B\) commute,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+(A+B)^3&amp;=(A+B)(A+B)(A+B)\\
+&amp;=(A^2+AB+BA+B^2)(A+B)\\
+&amp;=A^3+ABA+BA^2+B^2A\\
+&amp;\phantom{=}+A^2B+AB^2+BAB+B^3
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Only if \(A\) and \(B\) commute can this be simplified to \(A^3+3A^2B+3AB^2+B^3\).</p>
+</div>
+<div class="paragraph">
+<p>Then,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+e^{A+B}&amp;=\sum_{n=0}^\infty \frac{(A+B)^n}{n!}\\
+&amp;=\sum_{n=0}^\infty \left(\frac{1}{n!}\sum_{k=0}^n\binom{n}{k}A^kB^{n-k}\right)\\
+&amp;=\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\\
+&amp;=\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\\
+&amp;=e^Ae^B
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+How did we turn \(\sum_{n=0}^\infty \sum_{k=0}^n \frac{A^k}{k!}\frac{B^{n-k}}{(n-k)!}\) into \(\left(\sum_{n=0}^\infty \frac{A^n}{n!}\right)\left(\sum_{n=0}^\infty \frac{B^n}{n!}\right)\)?
+This is just an advanced application of the distributive property.
+Simply write out the product of the summations by hand, apply the distributive property, and group terms according to the sum of the powers of \(A\) and \(B\) (so that e.g., the \(A^3\), \(A^2B\), \(AB^2\), and \(B^3\) terms are grouped together).
+You&#8217;ll see the nested summations appear.
+</div>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>First, note that \(iQ\) and \(-iQ\) commute — the scalars commute with everything and \(Q\) commutes with itself.</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>Then, if \(Q\) is hermitian,</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+e^{iQ}(e^{iQ})^\dagger&amp;=e^{iQ}e^{(iQ)^\dagger}&amp;\textrm{(part (b))}\\
+&amp;=e^{iQ}e^{-iQ}\\
+&amp;=e^{iQ + (-iQ)}&amp;\textrm{(part (d))}\\
+&amp;= e^{\mathbf{0}}\\
+&amp;=I&amp;\textrm{(part (a))}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>So \(e^{iQ}\) is indeed unitary.</p>
+</div>
+</div>
+</div>
+</li>
+</ol>
+</div>
+</div>
+</details>
+</div>
+<div class="sect3">
+<h4 id="_problem_20"><a class="anchor" href="#_problem_20"></a><a class="link" href="#_problem_20">6.1.5. Problem</a></h4>
+<div class="paragraph">
+<p>Let \(\hat x\) be the operator corresponding to the \(x\) observable, which is multiplication by \(x\) (in position space).
+Show that \(e^{\hat x}\Ket{f}=e^x \Ket{f}\), i.e., the operator exponential of \(\hat x\) is multiplication by \(e^x\).</p>
+</div>
+</div>
+<div class="sect3">
+<h4 id="_problem_21"><a class="anchor" href="#_problem_21"></a><a class="link" href="#_problem_21">6.1.6. Problem</a></h4>
+<div class="paragraph">
+<p>Show that the solution to the differential equation \(\frac{d}{dt}\Ket{x(t)}= A\Ket{x(t)}\) with initial condition \(\Ket{x(0)}=\Ket{x_0}\), where \(A\) is a constant nonzero operator, is \(\Ket{x(t)}=e^{At}\Ket{x_0}\).</p>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+This exactly mirrors the scalar-valued differential equation \(\frac{d}{dt}y(t)=ky(t),y(0)=y_0\) with \(k\) constant, which has solution \(y(t)=e^{kt}y_0\).
+</td>
+</tr>
+</table>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>First we&#8217;ll check the initial condition:</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[e^{A\cdot 0}\Ket{x_0}=I\Ket{x_0}=\Ket{x_0}\]
+</div>
+</div>
+<div class="paragraph">
+<p>Now we&#8217;ll check that the proposed solution satisfies the differential equation.</p>
+</div>
+<div class="stemblock">
+<div class="content">
+\[\begin{align*}
+\frac{d}{dt}\Ket{x(t)}&amp;=\frac{d}{dt}\Ket{\left(e^{At}\Ket{x_0}\right)}\\
+&amp;=\left(\frac{d}{dt}e^{At}\right)\Ket{x_0}\\
+&amp;=\frac{d}{dt}\left(\sum_{n=0}^\infty \frac{(At)^n}{n!}\right)\Ket{x_0}\\
+&amp;=\left(\sum_{n=1}^\infty \frac{A^n\,nt^{n-1}}{n!}\right)\Ket{x_0}\\
+&amp;=A\left(\sum_{n=1}^\infty \frac{A^{n-1}t^{n-1}}{(n-1)!}\right)\Ket{x_0}\\
+&amp;=A\left(\sum_{n=0}^\infty \frac{A^{n}t^{n}}{n!}\right)\Ket{x_0}\\
+&amp;=Ae^{At}\Ket{x_0}\\
+&amp;=A\Ket{x(t)}
+\end{align*}\]
+</div>
+</div>
+<div class="paragraph">
+<p>as desired.</p>
+</div>
+</div>
+</details>
+</div>
+</div>
+</div>
+</div>
+</article>
+  </div>
+</main>
+</div>
+<footer class="footer">
+  <p>This page was built using the Antora default UI.</p>
+  <p>The source code for this UI is licensed under the terms of the MPL-2.0 license.</p>
+</footer>
+<script id="site-script" src="./_/js/site.js" data-ui-root-path="./_"></script>
+<script async src="./_/js/vendor/highlight.js"></script>
+  </body>
+</html>

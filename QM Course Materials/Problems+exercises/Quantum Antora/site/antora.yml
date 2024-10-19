@@ -1,0 +1,33 @@
+name: ROOT
+version: ~
+title: "QM"
+start_page: index.adoc
+nav:
+  - modules/ROOT/nav.adoc
+
+asciidoc:
+  attributes:
+    stem: latexmath
+    "!linkcss": ""
+    nofooter: ""
+    table-settings: pass:[cols="<1s,<4a,<4a",options="header",frame="all",stripes="even",grid="all"]
+    imagesdir: images
+    sectlinks: ""
+    sectanchors: ""
+    sch: Schrödinger
+    sch-eq: Schrödinger equation
+    page-toclevels: 2@
+    "!webfonts": ""
+    sublist-style: loweralpha
+    sectnums: ""
+    sectnumlevels: 4
+    expect-x: pass:q[stem:[\langle x\rangle]]
+    expect-x2: pass:[\(\langle x^2\rangle\)]
+    expect-p: pass:[\(\langle p\rangle\)]
+    expect-p2: pass:[\(\langle p^2\rangle\)]
+    xl: pass:[\(\langle ]
+    xr: pass:[\rangle\)]
+    html-num-chapter-num: pass:[<span class="chapter-num"></span>]
+    html-num-topic-num: pass:[<span class="topic-num"></span>]
+    html-num-question-num: pass:[<span class="question-num"></span>]
+    q-num: pass:a[<span class="problem-number">{html-num-chapter-num}.{html-num-topic-num}.{html-num-question-num}</span>]

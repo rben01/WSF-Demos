@@ -1,0 +1,305 @@
+[.qm-chapter.chap-4]
+= Quantum Mechanics in Three Dimensions
+
+== The {sch} Equation
+
+=== Questions
+
+==== Problem
+Show that the position and momentum operators along different axes are compatible, e.g., that stem:[\sigma_x] and stem:[\sigma_{p_y}] (but also stem:[\sigma_x] and stem:[\sigma_{p_z}], stem:[\sigma_{y}] and stem:[\sigma_{p_x}], stem:[\sigma_y] and stem:[\sigma_{p_z}], etc.) are compatible operators and so stem:[\sigma_x\sigma_{p_y}] can equal 0.
+
+==== Problem
+The uncertainty principle stem:[\sigma_x \sigma_p\ge \frac{\hbar}{2}] only holds in one dimension.
+Show that in stem:[n] dimensions, in which stem:[\hat x\Ket{f}=\vec x f] and stem:[\hat p\Ket{f}=i\hbar \nabla f], the uncertainty principle becomes stem:[\sigma_x \sigma_p\ge \frac{n\hbar}{2}].
+(Hint: what's stem:[[x,p\]] with these new definitions of stem:[\hat x] and stem:[\hat p]?)
+
+==== Problem
+Show that the Legendre polynomials, defined by stem:[\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n], are orthgonal over stem:[[-1,1\]].
+(Hint: use integration by parts to compute stem:[\int_{-1}^1 P_m(x)P_n(x)\,dx] for stem:[m< n].)
+
+.Solution
+[%collapsible%open]
+====
+To compute stem:[\int_{-1}^1 P_m(x)P_n(x)\,dx] using integration by parts, let
+
+[stem]
+++++
+\begin{align*}
+u&=P_m(x)&dv&=P_n(x)\,dx\\
+du&=P_m'(x)\,dx&v&=F_{n,1}(x)
+\end{align*}
+++++
+
+where stem:[F_{n,1}(x)] is the antiderivative of stem:[P_n].
+While we can't easily compute stem:[F_{n,1}], we do know it has to be of the form stem:[F_{n,1}(x)=f_1(x)\frac{d^{n-1}}{dx^{n-1}}(x^2-1)^{n}] for some function stem:[f_1].
+Since taking fewer than stem:[n] derivatives of stem:[(x^2-1)^{n}] times must leave a factor of stem:[x^2-1], we see that stem:[F_{n,1}(1)=F_n(-1)=0].
+And so,
+
+[stem]
+++++
+\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)\,dx &=P_m(x)F_{n,1}(x)\Bigr|^1_{-1}-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx\\
+&=-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx
+\end{align*}
+++++
+
+We'll do a second integration by parts:
+
+[stem]
+++++
+\begin{align*}
+u&=P_m'(x)&dv&=F_{n,1}(x)\,dx\\
+du&=P_m''(x)&v&=F_{n,2}(x)
+\end{align*}
+++++
+
+where stem:[F_{n,2}] is the antiderivative of stem:[F_{n,1}].
+Again, we won't compute stem:[F_{n,2}], but we know it must be of the form stem:[F_{n,2}(x)=f_2(x)\frac{d^{n-2}}{dx^{n-2}}(x^2-1)^n], which, for the same reason as above, has a factor of stem:[x^2-1].
+Therefore,
+
+[stem]
+++++
+\begin{align*}
+\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx&= P_m'(x)F_{n,2}(x)\Bigr|^1_{-1}-\int_{-1}^2 P_m''(x) F_{n,2}(x)\,dx\\
+&=-\int_{-1}^1 P_m''(x) F_{n,2}(x)\,dx
+\end{align*}
+++++
+
+Were we to perform stem:[m] integrations by parts in total, we'd see that
+
+[stem]
+++++
+\begin{align*}
+\int_{-1}^1P_m(x)P_n(x)\,dx=(-1)^m \int_{-1}^1\frac{d^m P_m(x)}{dx^m} F_{n,m}(x)\,dx
+\end{align*}
+++++
+
+where stem:[F_{n,m}] is the stem:[m]^th^ antiderivative of stem:[P_n].
+But, since stem:[P_m] has degree stem:[m], stem:[\frac{d^m}{dx^m} P_m(x)] is some constant stem:[q], and so this is simply
+
+[stem]
+++++
+\begin{align*}
+(-1)^m \int_{-1}^1 q F_{n,m}(x)\,dx&=(-1)^m q F_{n,m+1}\Bigr|^1_{-1}
+\end{align*}
+++++
+
+But stem:[F_{n,m+1}] has no derivatives of stem:[x^2-1] and so it must carry a factor of stem:[x^2-1], so this integral is in fact 0!
+And so we see that
+
+[stem]
+++++
+\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)&=0
+\end{align*}
+++++
+
+as desired.
+[sidebar]
+--
+Since none of the Legendre polynomials are identically 0, stem:[\int_{-1}^1P_n(x)P_n(x)\ne 0].
+Why couldn't the above proof be used to show that stem:[\int_{-1}^1P_m(x)P_n(x)=0] when stem:[m=n]?
+Where would it fall apart?
+
+Answer: the highest antiderivative we had to take was stem:[F_{n,m+1}], and since stem:[m< n ] this looked like stem:[f_m(x)(x^2-1)^n].
+But if you take one more antiderivative you no longer have a factor of stem:[x^2-1] (for instance, stem:[\int x^2-1\,dx=\frac{x^3}{3}-x+C]).
+--
+====
+
+==== Problem
+[I have not worked out this equation yet] Solve the spherical harmonic oscillator, stem:[V(r)=-k\lVert\mathbf r\rVert^2].
+
+==== Problem
+In this question you will examine some of the constraints on the separation constants stem:[l(l+1)] and stem:[m^2].
+
+[{sublist-style}]
+. The solution to the azimuthal differential equation
++
+--
+[stem]
+++++
+\frac{d^2\Phi}{d\phi^2} = -m^2 \Phi
+++++
+is stem:[\Phi(\phi) = e^{im\phi}]. Show that stem:[m] must be an integer.
+--
+. Given the stem:[l]th Legendre polynomial, stem:[\displaystyle P_l(x)=\frac{1}{2^l l!}\left(\frac{d}{dx}\right)^l(x^2-1)^l], why must stem:[l] be a non-negative integer?
+. Explain why stem:[m\le l] using the Legendre function stem:[P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)]
+
+==== Problem
+
+[{sublist-style}]
+. Calculate the Legendre functions, stem:[P_l^m(x)], for stem:[l=2] and stem:[m = 0, \pm1, \pm2].
+. Show that if stem:[m>l] then stem:[P_2^m(x) = 0] (and therefore stem:[\Theta] is 0 as well).
+. Show that stem:[\Theta(\theta) = A P_2^2 (\cos\theta)] is a solution to the angular differential equation
++
+[stem]
+++++
+\sin\theta \frac{d}{d\theta} \left( \sin\theta \frac{d\Theta}{d\theta}\right)+ \left[ l(l+1) \sin^2\theta -m^2\right]\Theta = 0
+++++
+
+. Show that stem:[Y_2^2] is normalized.
+. Show that stem:[Y_2^2] and stem:[Y_2^{-2}] are orthogonal.
+
+==== Problem
+For a particle in the infinite spherical well, determine whether stem:[\psi_{320}] and stem:[\psi_{400}] are closer in energy or if stem:[\psi_{400}] and stem:[\psi_{530}] are closer in energy.
+
+=== Demonstrations
+
+* A Legendre polynomial demo similar to the Hermite polynomial demo (nothing fancy, just showing the polynomials)
+* Demonstration of spherical harmonics? (Not sure how it would look in practice, since there isn't really a good way to show all of a 3D surface... I'd have to think about it.)
+
+== The Hydrogen Atom
+
+=== Questions
+
+==== Problem
+Write out the radial wavefunctions stem:[R_{nl}(r)], and corresponding energies stem:[E_n], for the ground state and first two excited states of hydrogen (stem:[n=1,2,3]). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.
+
+==== Problem
+For a hydrogen atom with quantum numbers stem:[n=4] and stem:[l=1]:
+
+[{sublist-style}]
+. Use the recursion relation stem:[c_{j+1} = \frac{2(j+l+1-n)}{(j+1)(j+2l+2)} c_j ] to find stem:[v(\rho)].
+. Use the formula for associated Laguerre polynomials stem:[L_q^p(x) = \frac{e^x x^{-p}}{q!}\frac{d^q}{dx^q}(e^{-x}x^{p+q})] to find stem:[v(\rho)].
+. Write the normalized expression for stem:[R_{41}(r)].
+. Show that stem:[R_{41}(r)] is a solution to the radial equation.
+
+==== Problem
+For the hydrogen atom, why is stem:[n>l]? Why isn't stem:[n\ge l]?
+
+==== Problem
+Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.
+
+==== Problem
+Determine the corresponding quantum numbers for the following density plot of a hydrogen wave function based on its nodes. Write out the full, normalized wavefunction. [insert density plot of stem:[\psi_{410}]]
+
+==== Problem
+[*question 4.20 from Griffiths* - give credit or change. I really like this question and think it would be worth using and crediting] Consider the earth-sun system as a gravitational analog to the hydrogen atom.
+
+[{sublist-style}]
+. What is the potential energy function? (Let stem:[m_E] be the mass of the earth, and stem:[M] the mass of the sun.)
+. What is the "Bohr radius," stem:[a_g], for this system? Work out the actual number.
+. Write down the gravitational "Bohr formula," and, by equating stem:[E_n] to the classical energy of a planet in a circular orbit of radius stem:[r_0], show that stem:[n=\sqrt{r_0/a_g}]. From this, estimate the quantum number stem:[n] of the earth.
+. Suppose the earth made a transition to the next lower level (stem:[n-1]). How much energy (in Joules) would be released? What would the wavelength of the emitted photon (or, more likely, graviton) be? (Express your answer in light years -- is the remarkable answer a coincidence?)
+
+=== Demonstrations
+
+* A demo showing the orbitals?
+Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.
+
+== Angular Momentum
+=== Questions
+
+==== Problem
+Do stem:[L_+] and stem:[L_-] commute? Why is this significant?
+
+==== Problem
+Suppose you have a hydrogen atom in the orbital angular momentum state
+[stem]
+++++
+Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}
+++++
+
+[{sublist-style}]
+. Determine stem:[\braket{L^2}] and stem:[\braket{L_z}].
+. Find stem:[\braket{L_x}] and stem:[\braket{L_y}] (hint: use the raising and lowering operators).
+. Find the expectation value of the angular momentum in the stem:[\hat{n}] direction, where stem:[\hat{n} = \sin{\theta}\cos{\phi} \hat{x} + \sin{\theta}\sin{\phi} \hat{y} + \cos{\theta}\hat{z}] and stem:[\theta] is the angle incident to the z-axis. In other words, find stem:[\braket{L_n} ] with stem:[L_n = \vec{L} \cdot \hat{n}].
+
+==== Problem
+Convert stem:[L^2] from cartesian coordinates to spherical coordinates.
+
+==== Problem
+For the spherical harmonic stem:[Y_3^2 = \left (\frac{105}{32\pi}\right )^{\frac{1}{2}} \sin^2\theta\cos\theta e^{2i\phi}]
+
+[{sublist-style}]
+. Apply the raising and lowering operators, stem:[L_+ = \hbar e^{i\phi}(\frac{\partial}{\partial\theta} + i\cot\theta \frac{\partial}{\partial \phi})] and  stem:[L_- = -\hbar e^{-i\phi}(\frac{\partial}{\partial \theta} - i\cot\theta \frac{\partial}{\partial \phi})], to find  stem:[Y_3^3] and stem:[Y_3^1].
+. Using your results from part (a), verify that stem:[L_+Y_3^2] is an eigenfunction of stem:[L^2] with the same eigenvalue as the eigenfunction stem:[Y_3^2] (i.e. show that stem:[L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) ] and stem:[L^2 Y_3^2 = \lambda Y_3^2] where stem:[\lambda] is a constant).
+. Determine stem:[\sigma_{L_x}] and stem:[\sigma_{L_y}] for stem:[Y_3^2] and stem:[Y_3^3]. What do you notice?
+
+
+==== Problem
+[From *Angelini* "Solved Problems in Quantum Mechanics" *3.4(d)*]
+Prove that, in an eigenstate of stem:[J^2] and stem:[J_z] corresponding to the quantum numbers stem:[j] and stem:[m], the maximum accuracy of the simultaneous measurement of stem:[J_x] and stem:[J_y] is obtained when stem:[|m| = j].
+
+
+
+== Spin
+=== Questions
+
+==== Problem
+Given stem:[[S_x, S_y] = i\hbar S_z ], stem:[[S_y, S_z] = i\hbar S_x ], and stem:[[S_z, S_x] = i\hbar S_y], show that stem:[S_x], stem:[S_y], stem:[S_z], and stem:[S^2] are pairwise compatible observables.
+
+==== Problem
+This problem will walk you through the steps to algebraically determine the eigenvalues of stem:[S^2] and stem:[S_z].
+
+[{sublist-style}]
+. Find stem:[[S_{\pm}, S^2\]] and stem:[[S_{\pm}, S_z\]].
+. If stem:[\ket{a, b}] is an eigenstate of stem:[S^2]  and stem:[S_z] with eigenvalues stem:[a] and stem:[b] respectively, show that stem:[S_{\pm}\ket{a, b}] is also an eigenstate of stem:[S^2]  and stem:[S_z] with eigenvalues stem:[a] and stem:[b\pm\hbar].
+. Show that stem:[S^2(S_{\pm}^n \ket{a, b}) = a(S_{\pm}^n \ket{a, b})] and stem:[S_z(S_{\pm}^n \ket{a, b}) = (b\pm n\hbar)(S_{\pm}^n \ket{a, b})].
+. Since stem:[S^2 = S_x^2 + S_y^2 + S_z^2], then stem:[a^2 \ge (b+n\hbar)^2]. There must be a maximum value of stem:[n], which we will call stem:[N], such that stem:[S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}]  and stem:[S_z (S_+)^{N+1}\ket{a,b} = 0]. Use the operator stem:[S_{-}S_{+}] and eigenstate stem:[\ket{a, b+N\hbar}] to show that stem:[ a = (b+N\hbar)(b+N\hbar + \hbar) ].
+. Let stem:[b=\hbar m] and stem:[b+N\hbar = \hbar s]. Write out the full eigenvalue equations for stem:[S^2] and stem:[S_z].
+
+
+==== Problem
+For a spin-stem:[\frac{1}{2}] particle use the Pauli matrices, stem:[\sigma_{x} = \begin{pmatrix} 0 & 1 \\ 1 & 0 \end{pmatrix}], stem:[\sigma_{y} =  \begin{pmatrix} 0 & -i \\ i & 0 \end{pmatrix}], and stem:[\sigma_{z} =  \begin{pmatrix}1 & 0 \\ 0 & -1 \end{pmatrix} ] to
+
+[{sublist-style}]
+. Show that  stem:[[S_x, S_y\] = i\hbar S_z ], stem:[[S_y, S_z\] = i\hbar S_x ], and stem:[[S_z, S_x\] = i\hbar S_y] .
+. Find the eigenvalues for stem:[S_x], stem:[S_y], and stem:[S_z].
+. Find the eigenvectors for stem:[S_x], stem:[S_y], and stem:[S_z].
+
+
+==== Problem
+Suppose a spin-stem:[\frac{1}{2}] particle is in the state stem:[A\begin{pmatrix}3+4i\\12\end{pmatrix}].
+
+[{sublist-style}]
+. Compute stem:[A] so that the state is normalized.
+. For each spin observable stem:[S=S_x,S_y,S_z]:
+.. Rewrite the state as a linear combinations of the eigenvectors of stem:[S].
+.. What are the probabilities of getting stem:[\pm\frac{\hbar}{2}] if you measure stem:[S]?
+.. Compute stem:[\Braket{S}].
+
+
+==== Problem
+Compute stem:[e^{\sigma_r}] for stem:[r=x,y,z].
+
+
+==== Problem
+A beam of silver atoms passes through a Stern-Gerlach device. Half of the atoms are deflected in the stem:[+z] direction and half of the atoms are deflected in the stem:[-z] direction.
+
+[{sublist-style}]
+. The atoms deflected in the stem:[+z] direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the stem:[+z] or stem:[-z] direction. What percentage of the atoms are deflected in the stem:[+z] direction? The stem:[-z] direction?
+. The atoms from part (a) that were deflected in the stem:[+z] direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the stem:[+x] or stem:[-x] direction. What percentage of the atoms are deflected in the stem:[+x] direction? The stem:[-x] direction?
+. The atoms from part (b) that were deflected in the stem:[+x] direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the stem:[+z] or stem:[-z] direction. What percentage of the atoms are deflected in the stem:[+z] direction? The stem:[-z] direction?
+
+
+==== Problem
+[I remember especially liking the following question *(1.1) from Townsend* as an undergraduate] Determine the field gradient of a 50-cm-long Stern-Gerlach magnet that would produce a 1-mm separation at the detector between spin-up and spin-down silver atoms that are emitted from an over at stem:[T=1500 ]K. Assume the detector (see Fig 1.1) is located 50 cm from the magnet. _Note_: While the atoms in the oven have average kinetic energy stem:[3k_BT/2], the more energetic atoms strike the hold in hte oven more frequently. Thus the _emitted_ atoms have average kinetic energy stem:[2k_BT], where stem:[k_B] is the Boltzmann constant. The magnetic dipole moment of the silver atom is due to the intrinsic spin of the single electron. Appendix F gives the numerical value of the Bohr magneton, stem:[e\hbar /2m_ec], in a convenient form.
+
+==== Problem
+What are stem:[s] and stem:[m] for two particles in the state
+[stem]
+++++
+\Ket{s \, m} = \frac{\sqrt{3}}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-1}{2} \, \frac{-1}{2}} + \frac{1}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-3}{2} \, \frac{1}{2}}
+++++
+
+==== Problem
+You have a spin-stem:[2] and spin-stem:[\frac{1}{2}] particle in a combined state with stem:[s=\frac{3}{2}] and stem:[m=-\frac{3}{2}]. You may use a table of Clebsch-Gordan coefficients to help you.
+
+[{sublist-style}]
+. What are the possible spin states that each of the particles could be in?
+. What are the probabilities of each particle being in the spin states from part (a)?
+
+
+== Electromagnetic Interactions
+=== Questions
+==== Problem
+Generalize the method to derive 4.213 to time-dependent vector potentials stem:[\mathbf A] resulting in zero magnetic field (stem:[\mathbf{B}=\nabla\times \mathbf{A}=0]).
+
+==== Problem
+The total magnetic flux through a solenoid made of a wire of length stem:[l] coiled stem:[N] times, whose cross section has area stem:[A], and with a current stem:[I], is stem:[\Phi=\mu_0\frac{NIA}{l}] where stem:[\mu_0] is the permeability of free space.
+(Assume that the solenoid is long enough that end effects do not need to be taken into account.)
+
+. In the Aharonov–Bohm Effect, what values of stem:[l], stem:[N], stem:[I], and stem:[A] lead to maximum constructive interference of the two electron beams. How about for maximum destructive interference?
+. Suppose the center of the solenoid is now filled not with air, but with iron, which has a permeability of approximately stem:[2\times 10^6\mu_0].
+Repeat part (a).
