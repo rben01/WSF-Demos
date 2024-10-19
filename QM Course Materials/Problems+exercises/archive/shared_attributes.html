@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
-<title>Chapter 6: Symmetries and Conservation Laws</title>
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Untitled</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -139,7 +139,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content::before{content:none}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
 #header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
@@ -161,6 +161,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
 #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
 #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
@@ -207,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -329,7 +327,7 @@ a.image{text-decoration:none;display:inline-block}
 a.image object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
 #footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
@@ -392,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -782,298 +780,35 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article toc2 toc-left qm-chapter chap-6">
+<body class="article">
 <div id="header">
-<h1>Chapter 6: Symmetries and Conservation Laws</h1>
-<div id="toc" class="toc2">
-<div id="toctitle">Table of Contents</div>
-<ul class="sectlevel1">
-<li><a href="#_introduction">1. Introduction</a>
-<ul class="sectlevel2">
-<li><a href="#_questions">1.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_the_translation_operator">2. The Translation Operator</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_2">2.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_conservation_laws">3. Conservation Laws</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_3">3.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_parity">4. Parity</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_4">4.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_rotational_symmetry">5. Rotational Symmetry</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_5">5.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_degeneracy">6. Degeneracy</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_6">6.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_rotational_selection_rules">7. Rotational Selection Rules</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_7">7.1. Questions</a></li>
-</ul>
-</li>
-<li><a href="#_translations_in_time">8. Translations in Time</a>
-<ul class="sectlevel2">
-<li><a href="#_questions_8">8.1. Questions</a></li>
-</ul>
-</li>
-</ul>
-</div>
 </div>
 <div id="content">
-<div class="sect1">
-<h2 id="_introduction"><a class="anchor" href="#_introduction"></a><a class="link" href="#_introduction">1. Introduction</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Given a regular \(n\)-sided polygon \(P_n\), a symmetry of \(P_n\) is any mapping \(f\) between the vertices that preserves adjacency: if and only if vertices \(v_i\) and \(v_j\) are adjacent in \(P_n\) are \(f(v_i)\) and \(f(v_j)\) adjacent in \(f(P_n)\).</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Explicitly compute the symmetries of the equilateral triangle.
-How many are there?</p>
-</li>
-<li>
-<p>Do the same for the square.</p>
-</li>
-<li>
-<p>In words, describe the symmetries of \(P_n\).</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(\hat T(a)\hat\Pi=\hat\Pi\hat T(-a)\)</p>
-<details>
-<summary class="title">Solution</summary>
-<div class="content">
-<div class="paragraph">
-<p>We simply compute, using the test function \(f\):
-\[\begin{align*}
-\hat T(a)\hat\Pi f(x)&amp;=\hat T(a) f(-x)\\
-&amp;=f(-x-a)\\
-&amp;=\hat\Pi f(x+a)\\
-&amp;=\hat\Pi \hat T(-a)f(x)
-\end{align*}\]
-as desired.</p>
-</div>
-</div>
-</details>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_the_translation_operator"><a class="anchor" href="#_the_translation_operator"></a><a class="link" href="#_the_translation_operator">2. The Translation Operator</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">2.1. Questions</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \([T(a), \hat x]\), the commutator of the translation and position operators.</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that <em>all</em> observables invariant under translation (observables \(Q\) for which \(\hat T^\dagger Q\hat T=Q\)) are of the form \(Q(x,p)=\sum_{n=0}^\infty a_n p^n\), where the \(a_n\) are constants.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_conservation_laws"><a class="anchor" href="#_conservation_laws"></a><a class="link" href="#_conservation_laws">3. Conservation Laws</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">3.1. Questions</a></h3>
 
 </div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_parity"><a class="anchor" href="#_parity"></a><a class="link" href="#_parity">4. Parity</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">4.1. Questions</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators are &#8220;odd under parity&#8221;: if \(\hat\Pi\) is the parity operator, then</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>\(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\)</p>
-</li>
-<li>
-<p>\(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\)</p>
-</li>
-</ol>
-</div>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>You may assume that \(\hat \Pi\) is hermitian.</p>
-</div>
-<details>
-<summary class="title">Solution</summary>
-<div class="content">
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Using the test function \(f\), we have
-\[\begin{align*}
-\hat\Pi^\dagger \,\hat x\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat x f(-x)\\
-&amp;=(-\hat x)f(x)
-\end{align*}\]
-So indeed \(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\).</p>
-</li>
-<li>
-<p>Similarly,
-\[\begin{align*}
-\hat\Pi^\dagger \,\hat p\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat p f(-x)\\
-&amp;=\hat\Pi^\dagger \left(-i\hbar\frac{d}{dx}\right)f(-x)\\
-&amp;=-i\hbar\frac{d}{d(-x)}f(x)\\
-&amp;=i\hbar\frac{d}{dx}f(x)\\
-&amp;=-\hat pf(x)
-\end{align*}\]
-So indeed \(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\).</p>
-</li>
-</ol>
-</div>
-</div>
-</details>
-</div>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute the following two operator exponentials in terms of \(\hat\Pi\), \(I\) (the identity operator), and \(e\):</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>\(\exp(\hat\Pi)\)</p>
-</li>
-<li>
-<p>\(\exp(i\hat\Pi)\)</p>
-</li>
-</ol>
-</div>
-<details>
-<summary class="title">Solution</summary>
-<div class="content">
-<div class="paragraph">
-<p>As \(\hat\Pi\) is its own inverse,
-\[\begin{align*}
-\hat\Pi^n &amp;=\begin{cases}
-\hat\Pi&amp;n\ \textrm{odd}\\
-I&amp;n\ \textrm{even}
-\end{cases}
-\end{align*}\]</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Then,
-\[\begin{align*}
-\exp(\hat\Pi)&amp;=\sum_{n=0}^\infty \frac{\hat\Pi^n}{n!}\\
-&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{\hat\Pi^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi^n}{n!}\\
-&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi}{n!}\\
-&amp;=I\left(\frac{e+e^{-1}}{2}\right)+\hat\Pi\left(\frac{e-e^{-1}}{2}\right)\\
-&amp;=I\cosh(1)+\hat\Pi\sinh(1)
-\end{align*}\]</p>
-</li>
-<li>
-<p>Similarly,
-\[\begin{align*}
-\exp(i\hat\Pi)&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{(i\hat\Pi)^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{(i\hat\Pi)^n}{n!}\\
-&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{Ii^{n}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi i^{n}}{n!}\\
-&amp;=I\sum_{n=0}^\infty \frac{i^{2n}}{(2n)!}+\hat\Pi\sum_{n=0}^\infty \frac{i^{2n+1}}{(2n+1)!}\\
-&amp;=I\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n)!}+i\hat\Pi\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n+1)!}\\
-&amp;=I\cos(1)+\hat\Pi\ i\sin(1)
-\end{align*}\]</p>
-</li>
-</ol>
-</div>
-</div>
-</details>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_rotational_symmetry"><a class="anchor" href="#_rotational_symmetry"></a><a class="link" href="#_rotational_symmetry">5. Rotational Symmetry</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">5.1. Questions</a></h3>
-
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_degeneracy"><a class="anchor" href="#_degeneracy"></a><a class="link" href="#_degeneracy">6. Degeneracy</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">6.1. Questions</a></h3>
-
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_rotational_selection_rules"><a class="anchor" href="#_rotational_selection_rules"></a><a class="link" href="#_rotational_selection_rules">7. Rotational Selection Rules</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_7"><a class="anchor" href="#_questions_7"></a><a class="link" href="#_questions_7">7.1. Questions</a></h3>
-
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_translations_in_time"><a class="anchor" href="#_translations_in_time"></a><a class="link" href="#_translations_in_time">8. Translations in Time</a></h2>
-<div class="sectionbody">
-<div class="sect2">
-<h3 id="_questions_8"><a class="anchor" href="#_questions_8"></a><a class="link" href="#_questions_8">8.1. Questions</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The Generalized Ehrenfest Theorem states that
-\[\frac{d}{dt}\braket{\hat Q}=\frac{1}{i\hbar}\Braket{[\hat H, \hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
-In particular, if \(\hat Q\) commutes with the Hamiltonian, then the time-derivative of the expectation of \(\hat Q\) is the expectation of the time-derivative of \(\hat Q\).</p>
-<div class="paragraph">
-<p>But, in the Schrödinger picture, operators remain constant, while in the Heisenberg picture they change over time.
-So in the Schrödinger picture, the RHS of this equation is zero, while in the Heisenberg picture it&#8217;s nonzero.
-But in both cases the LHS of the equation is the same (and it&#8217;s an observable quantity, so it had better not depend on the formulation of QM used).</p>
-</div>
-<div class="paragraph">
-<p>Reconcile this with the Generalized Ehrenfest Theorem.
-Where in particular in the proof of the Theorem does the issue lie?</p>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In the quantum harmonic oscillator, where <span class="no-break">\(\hat H=\frac{1}{2m}\hat p^2+\frac{1}{2}m\omega^2\hat x^2\)</span>, let \(\hat x_H(t)\) and \(\hat p_H(t)\) be the Heisenberg picture position and momentum operators.
-Show that \(\frac{d}{dt}\hat x_H(t)=\frac{1}{m\omega^2}\hat p_H(t)\) and \(\frac{d}{dt}\hat p_H(t)=-m\omega^2\hat x_H(t)\) — just as is the case in the classical situation.</p>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</div>
-</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

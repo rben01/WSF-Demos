@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
+<meta name="generator" content="Asciidoctor 2.0.23">
 <title>Chapter 1: The Wave Function</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -139,7 +139,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content::before{content:none}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
 #header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
@@ -161,6 +161,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
 #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
 #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
@@ -207,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -329,7 +327,7 @@ a.image{text-decoration:none;display:inline-block}
 a.image object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
 #footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
@@ -392,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -854,7 +852,7 @@ What does this tell you about how the wavefunction flows over time?</p>
 </td>
 <td class="content">
 Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
-However it is still instructive and at a high level gives good intuition for how probability density &#8220;flows&#8221; over time.
+However it is still instructive and at a high level gives good intuition for how probability density “flows” over time.
 </td>
 </tr>
 </table>
@@ -872,7 +870,7 @@ However it is still instructive and at a high level gives good intuition for how
 </li>
 <li>
 <p>In the heat equation, with \(\kappa\) real, heat flows opposite the direction of the temperature gradient, and flows with a magnitude proportional to the magnitude of the gradient.
-In the Schrödinger equation, with \(\kappa\) imaginary, &#8220;probability current&#8221; (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction&#8217;s phase, and with a magnitude proportional to this gradient&#8217;s magnitude.</p>
+In the Schrödinger equation, with \(\kappa\) imaginary, “probability current” (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction&#8217;s phase, and with a magnitude proportional to this gradient&#8217;s magnitude.</p>
 </li>
 <li>
 <p>As with the heat equation, solutions to the Schrödinger equation in free space get smoother and more diffuse over time.
@@ -1600,7 +1598,7 @@ There are \(2^7=128\) sequences of length 7, so the probabilities of landing at 
 <ol class="loweralpha" type="a">
 <li>
 <p>Show that \[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]
-What &#8220;law&#8221; does this equation represent?
+What “law” does this equation represent?
 What happens to the probability current in the region from \(-\infty\) to \(\infty\)?
 What does this mean?</p>
 </li>
@@ -1643,7 +1641,7 @@ And the integral is now trivial:
 &amp;=J(a,t)-J(b,t)
 \end{align*}\]
 We see that the net amount of probability leaving or entering the region \([a,b]\) is the difference between the values of the probability current at \(a\) and \(b\).
-This means that &#8220;probability current&#8221; is, in fact, a good name for this quantity:
+This means that “probability current” is, in fact, a good name for this quantity:
 if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region&#8217;s boundary, then, via <a href="https://en.wikipedia.org/wiki/Divergence_theorem" target="_blank" rel="noopener">Gauss&#8217;s Theorem</a>, we can liken the function&#8217;s value on the surface to a flux, or current. (For more info, see <a href="https://en.wikipedia.org/wiki/Continuity_equation" target="_blank" rel="noopener">Transport Equation</a>.)
 From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region&#8217;s boundary.
 (This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when \(\frac{\partial \Psi}{\partial x}\) is replaced by \(\nabla \Psi\) and the region&#8217;s boundary is an actual surface and not just two points on either side.)</p>
@@ -2166,6 +2164,10 @@ Since the wavefunction in question was defined only on \([0,1]\), Ehrenfest&#821
 </div>
 </details>
 </li>
+</ul>
+</div>
+<div class="ulist">
+<ul>
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a particle of mass \(m\) has the following wavefunction:
 \[
@@ -2319,7 +2321,7 @@ Its observables obey the classical behavior: its expected position is the mean o
 <li>
 <p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that in a quadratic potential \(V(x)=ax^2+bx+c\), the following holds:
 \[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]
-In other words, if the potential is quadratic then we can say &#8220;the expectation of the force at \(x\) is the force evaluated at \(\Braket{x}\)&#8221;.</p>
+In other words, if the potential is quadratic then we can say “the expectation of the force at \(x\) is the force evaluated at \(\Braket{x}\)”.</p>
 <details>
 <summary class="title">Solution</summary>
 <div class="content">
@@ -2617,5 +2619,29 @@ Now,
 </div>
 </div>
 </div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

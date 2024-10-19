@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
-<title>Chapter 4: Quantum Mechanics in Three Dimensions</title>
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Chapter 6: Symmetries and Conservation Laws</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -139,7 +139,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content::before{content:none}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
 #header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
@@ -161,6 +161,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
 #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
 #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
@@ -207,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -329,7 +327,7 @@ a.image{text-decoration:none;display:inline-block}
 a.image object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
 #footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
@@ -392,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -782,37 +780,50 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article toc2 toc-left qm-chapter chap-4">
+<body class="article toc2 toc-left qm-chapter chap-6">
 <div id="header">
-<h1>Chapter 4: Quantum Mechanics in Three Dimensions</h1>
+<h1>Chapter 6: Symmetries and Conservation Laws</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_the_schrödinger_equation">1. The Schrödinger Equation</a>
+<li><a href="#_introduction">1. Introduction</a>
 <ul class="sectlevel2">
 <li><a href="#_questions">1.1. Questions</a></li>
-<li><a href="#_demonstrations">1.2. Demonstrations</a></li>
 </ul>
 </li>
-<li><a href="#_the_hydrogen_atom">2. The Hydrogen Atom</a>
+<li><a href="#_the_translation_operator">2. The Translation Operator</a>
 <ul class="sectlevel2">
 <li><a href="#_questions_2">2.1. Questions</a></li>
-<li><a href="#_demonstrations_2">2.2. Demonstrations</a></li>
 </ul>
 </li>
-<li><a href="#_angular_momentum">3. Angular Momentum</a>
+<li><a href="#_conservation_laws">3. Conservation Laws</a>
 <ul class="sectlevel2">
 <li><a href="#_questions_3">3.1. Questions</a></li>
 </ul>
 </li>
-<li><a href="#_spin">4. Spin</a>
+<li><a href="#_parity">4. Parity</a>
 <ul class="sectlevel2">
 <li><a href="#_questions_4">4.1. Questions</a></li>
 </ul>
 </li>
-<li><a href="#_electromagnetic_interactions">5. Electromagnetic Interactions</a>
+<li><a href="#_rotational_symmetry">5. Rotational Symmetry</a>
 <ul class="sectlevel2">
 <li><a href="#_questions_5">5.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_degeneracy">6. Degeneracy</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_6">6.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_rotational_selection_rules">7. Rotational Selection Rules</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_7">7.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_translations_in_time">8. Translations in Time</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_8">8.1. Questions</a></li>
 </ul>
 </li>
 </ul>
@@ -820,140 +831,46 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_the_schrödinger_equation"><a class="anchor" href="#_the_schrödinger_equation"></a><a class="link" href="#_the_schrödinger_equation">1. The Schrödinger Equation</a></h2>
+<h2 id="_introduction"><a class="anchor" href="#_introduction"></a><a class="link" href="#_introduction">1. Introduction</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators along different axes are compatible, e.g., that \(\sigma_x\) and \(\sigma_{p_y}\) (but also \(\sigma_x\) and \(\sigma_{p_z}\), \(\sigma_{y}\) and \(\sigma_{p_x}\), \(\sigma_y\) and \(\sigma_{p_z}\), etc.) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Given a regular \(n\)-sided polygon \(P_n\), a symmetry of \(P_n\) is any mapping \(f\) between the vertices that preserves adjacency: if and only if vertices \(v_i\) and \(v_j\) are adjacent in \(P_n\) are \(f(v_i)\) and \(f(v_j)\) adjacent in \(f(P_n)\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Explicitly compute the symmetries of the equilateral triangle.
+How many are there?</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
-Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
-(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
+<p>Do the same for the square.</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the Legendre polynomials, defined by \(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\), are orthgonal over \([-1,1]\).
-(Hint: use integration by parts to compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) for \(m&lt; n\).)</p>
-<details open>
+<p>In words, describe the symmetries of \(P_n\).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that \(\hat T(a)\hat\Pi=\hat\Pi\hat T(-a)\)</p>
+<details>
 <summary class="title">Solution</summary>
 <div class="content">
 <div class="paragraph">
-<p>To compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) using integration by parts, let
+<p>We simply compute, using the test function \(f\):
 \[\begin{align*}
-u&amp;=P_m(x)&amp;dv&amp;=P_n(x)\,dx\\
-du&amp;=P_m'(x)\,dx&amp;v&amp;=F_{n,1}(x)
-\end{align*}\]
-where \(F_{n,1}(x)\) is the antiderivative of \(P_n\).
-While we can&#8217;t easily compute \(F_{n,1}\), we do know it has to be of the form \(F_{n,1}(x)=f_1(x)\frac{d^{n-1}}{dx^{n-1}}(x^2-1)^{n}\) for some function \(f_1\).
-Since taking fewer than \(n\) derivatives of \((x^2-1)^{n}\) times must leave a factor of \(x^2-1\), we see that \(F_{n,1}(1)=F_n(-1)=0\).
-And so,
-\[\begin{align*}
-\int_{-1}^1 P_m(x)P_n(x)\,dx &amp;=P_m(x)F_{n,1}(x)\Bigr|^1_{-1}-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx\\
-&amp;=-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx
-\end{align*}\]
-We&#8217;ll do a second integration by parts:
-\[\begin{align*}
-u&amp;=P_m'(x)&amp;dv&amp;=F_{n,1}(x)\,dx\\
-du&amp;=P_m''(x)&amp;v&amp;=F_{n,2}(x)
-\end{align*}\]
-where \(F_{n,2}\) is the antiderivative of \(F_{n,1}\).
-Again, we won&#8217;t compute \(F_{n,2}\), but we know it must be of the form \(F_{n,2}(x)=f_2(x)\frac{d^{n-2}}{dx^{n-2}}(x^2-1)^n\), which, for the same reason as above, has a factor of \(x^2-1\).
-Therefore,
-\[\begin{align*}
-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx&amp;= P_m'(x)F_{n,2}(x)\Bigr|^1_{-1}-\int_{-1}^2 P_m''(x) F_{n,2}(x)\,dx\\
-&amp;=-\int_{-1}^1 P_m''(x) F_{n,2}(x)\,dx
-\end{align*}\]
-Were we to perform \(m\) integrations by parts in total, we&#8217;d see that
-\[\begin{align*}
-\int_{-1}^1P_m(x)P_n(x)\,dx=(-1)^m \int_{-1}^1\frac{d^m P_m(x)}{dx^m} F_{n,m}(x)\,dx
-\end{align*}\]
-where \(F_{n,m}\) is the \(m\)<sup>th</sup> antiderivative of \(P_n\).
-But, since \(P_m\) has degree \(m\), \(\frac{d^m}{dx^m} P_m(x)\) is some constant \(q\), and so this is simply
-\[\begin{align*}
-(-1)^m \int_{-1}^1 q F_{n,m}(x)\,dx&amp;=(-1)^m q F_{n,m+1}\Bigr|^1_{-1}
-\end{align*}\]
-But \(F_{n,m+1}\) has no derivatives of \(x^2-1\) and so it must carry a factor of \(x^2-1\), so this integral is in fact 0!
-And so we see that
-\[\begin{align*}
-\int_{-1}^1 P_m(x)P_n(x)&amp;=0
+\hat T(a)\hat\Pi f(x)&amp;=\hat T(a) f(-x)\\
+&amp;=f(-x-a)\\
+&amp;=\hat\Pi f(x+a)\\
+&amp;=\hat\Pi \hat T(-a)f(x)
 \end{align*}\]
 as desired.</p>
 </div>
-<div class="sidebarblock">
-<div class="content">
-<div class="paragraph">
-<p>Since none of the Legendre polynomials are identically 0, \(\int_{-1}^1P_n(x)P_n(x)\ne 0\).
-Why couldn&#8217;t the above proof be used to show that \(\int_{-1}^1P_m(x)P_n(x)=0\) when \(m=n\)?
-Where would it fall apart?</p>
-</div>
-<div class="paragraph">
-<p>Answer: the highest antiderivative we had to take was \(F_{n,m+1}\), and since \(m&lt; n \) this looked like \(f_m(x)(x^2-1)^n\).
-But if you take one more antiderivative you no longer have a factor of \(x^2-1\) (for instance, \(\int x^2-1\,dx=\frac{x^3}{3}-x+C\)).</p>
-</div>
-</div>
-</div>
 </div>
 </details>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert^2\).</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In this question you will examine some of the constraints on the separation constants \(l(l+1)\) and \(m^2\).</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>The solution to the azimuthal differential equation \[\frac{d^2\Phi}{d\phi^2} = -m^2 \Phi \] is \(\Phi(\phi) = e^{im\phi}\). Show that \(m\) must be an integer.</p>
-</li>
-<li>
-<p>Given the \(l\)th Legendre polynomial, \(\displaystyle P_l(x)=\frac{1}{2^l l!}\left(\frac{d}{dx}\right)^l(x^2-1)^l\), why must \(l\) be a non-negative integer?</p>
-</li>
-<li>
-<p>Explain why \(m\le l\) using the Legendre function \(P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)\)</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Calculate the Legendre functions, \(P_l^m(x)\), for \(l=2\) and \(m = 0, \pm1, \pm2\).</p>
-</li>
-<li>
-<p>Show that if \(m&gt;l\) then \(P_2^m(x) = 0\) (and therefore \(\Theta\) is 0 as well).</p>
-</li>
-<li>
-<p>Show that \(\Theta(\theta) = A P_2^2 (\cos\theta)\) is a solution to the angular differential equation \[\sin\theta \frac{d}{d\theta} \left( \sin\theta \frac{d\Theta}{d\theta}\right)+ \left[ l(l+1) \sin^2\theta -m^2\right]\Theta = 0 \]</p>
-</li>
-<li>
-<p>Show that \(Y_2^2\) is normalized.</p>
-</li>
-<li>
-<p>Show that \(Y_2^2\) and \(Y_2^{-2}\) are orthogonal.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a particle in the infinite spherical well, determine whether \(\psi_{320}\) and \(\psi_{400}\) are closer in energy or if \(\psi_{400}\) and \(\psi_{530}\) are closer in energy.</p>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.2. Demonstrations</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>A Legendre polynomial demo similar to the Hermite polynomial demo (nothing fancy, just showing the polynomials)</p>
-</li>
-<li>
-<p>Demonstration of spherical harmonics? (Not sure how it would look in practice, since there isn&#8217;t really a good way to show all of a 3D surface&#8230;&#8203; I&#8217;d have to think about it.)</p>
 </li>
 </ul>
 </div>
@@ -961,72 +878,17 @@ But if you take one more antiderivative you no longer have a factor of \(x^2-1\)
 </div>
 </div>
 <div class="sect1">
-<h2 id="_the_hydrogen_atom"><a class="anchor" href="#_the_hydrogen_atom"></a><a class="link" href="#_the_hydrogen_atom">2. The Hydrogen Atom</a></h2>
+<h2 id="_the_translation_operator"><a class="anchor" href="#_the_translation_operator"></a><a class="link" href="#_the_translation_operator">2. The Translation Operator</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">2.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write out the radial wavefunctions \(R_{nl}(r)\), and corresponding energies \(E_n\), for the ground state and first two excited states of hydrogen (\(n=1,2,3\)). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \([T(a), \hat x]\), the commutator of the translation and position operators.</p>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a hydrogen atom with quantum numbers \(n=4\) and \(l=1\):</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Use the recursion relation \(c_{j+1} = \frac{2(j+l+1-n)}{(j+1)(j+2l+2)} c_j \) to find \(v(\rho)\).</p>
-</li>
-<li>
-<p>Use the formula for associated Laguerre polynomials \(L_q^p(x) = \frac{e^x x^{-p}}{q!}\frac{d^q}{dx^q}(e^{-x}x^{p+q})\) to find \(v(\rho)\).</p>
-</li>
-<li>
-<p>Write the normalized expression for \(R_{41}(r)\).</p>
-</li>
-<li>
-<p>Show that \(R_{41}(r)\) is a solution to the radial equation.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the hydrogen atom, why is \(n&gt;l\)? Why isn&#8217;t \(n\ge l\)?</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Determine the corresponding quantum numbers for the following density plot of a hydrogen wave function based on its nodes. Write out the full, normalized wavefunction. [insert density plot of \(\psi_{410}\)]</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [<strong>question 4.20 from Griffiths</strong> - give credit or change. I really like this question and think it would be worth using and crediting] Consider the earth-sun system as a gravitational analog to the hydrogen atom.</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>What is the potential energy function? (Let \(m_E\) be the mass of the earth, and \(M\) the mass of the sun.)</p>
-</li>
-<li>
-<p>What is the "Bohr radius," \(a_g\), for this system? Work out the actual number.</p>
-</li>
-<li>
-<p>Write down the gravitational "Bohr formula," and, by equating \(E_n\) to the classical energy of a planet in a circular orbit of radius \(r_0\), show that \(n=\sqrt{r_0/a_g}\). From this, estimate the quantum number \(n\) of the earth.</p>
-</li>
-<li>
-<p>Suppose the earth made a transition to the next lower level (\(n-1\)). How much energy (in Joules) would be released? What would the wavelength of the emitted photon (or, more likely, graviton) be? (Express your answer in light years&#8201;&#8212;&#8201;is the remarkable answer a coincidence?)</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">2.2. Demonstrations</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p>A demo showing the orbitals?
-Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that <em>all</em> observables invariant under translation (observables \(Q\) for which \(\hat T^\dagger Q\hat T=Q\)) are of the form \(Q(x,p)=\sum_{n=0}^\infty a_n p^n\), where the \(a_n\) are constants.</p>
 </li>
 </ul>
 </div>
@@ -1034,170 +896,119 @@ Maybe show the iso-probability-density surfaces and let the user vary the densit
 </div>
 </div>
 <div class="sect1">
-<h2 id="_angular_momentum"><a class="anchor" href="#_angular_momentum"></a><a class="link" href="#_angular_momentum">3. Angular Momentum</a></h2>
+<h2 id="_conservation_laws"><a class="anchor" href="#_conservation_laws"></a><a class="link" href="#_conservation_laws">3. Conservation Laws</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">3.1. Questions</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Do \(L_+\) and \(L_-\) commute? Why is this significant?</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose you have a hydrogen atom in the orbital angular momentum state \[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Determine \(\braket{L^2}\) and \(\braket{L_z}\).</p>
-</li>
-<li>
-<p>Find \(\braket{L_x}\) and \(\braket{L_y}\) (hint: use the raising and lowering operators).</p>
-</li>
-<li>
-<p>Find the expectation value of the angular momentum in the \(\hat{n}\) direction, where \(\hat{n} = \sin{\theta}\cos{\phi} \hat{x} + \sin{\theta}\sin{\phi} \hat{y} + \cos{\theta}\hat{z}\) and \(\theta\) is the angle incident to the z-axis. In other words, find \(\braket{L_n} \) with \(L_n = \vec{L} \cdot \hat{n}\).</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Convert \(L^2\) from cartesian coordinates to spherical coordinates.</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the spherical harmonic \(Y_3^2 = \left (\frac{105}{32\pi}\right )^{\frac{1}{2}} \sin^2\theta\cos\theta e^{2i\phi}\)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Apply the raising and lowering operators, \(L_+ = \hbar e^{i\phi}(\frac{\partial}{\partial\theta} + i\cot\theta \frac{\partial}{\partial \phi})\) and  \(L_- = -\hbar e^{-i\phi}(\frac{\partial}{\partial \theta} - i\cot\theta \frac{\partial}{\partial \phi})\), to find  \(Y_3^3\) and \(Y_3^1\).</p>
-</li>
-<li>
-<p>Using your results from part (a), verify that \(L_+Y_3^2\) is an eigenfunction of \(L^2\) with the same eigenvalue as the eigenfunction \(Y_3^2\) (i.e. show that \(L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) \) and \(L^2 Y_3^2 = \lambda Y_3^2\) where \(\lambda\) is a constant).</p>
-</li>
-<li>
-<p>Determine \(\sigma_{L_x}\) and \(\sigma_{L_y}\) for \(Y_3^2\) and \(Y_3^3\). What do you notice?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [From <strong>Angelini</strong> "Solved Problems in Quantum Mechanics" <strong>3.4(d)</strong>]
-Prove that, in an eigenstate of \(J^2\) and \(J_z\) corresponding to the quantum numbers \(j\) and \(m\), the maximum accuracy of the simultaneous measurement of \(J_x\) and \(J_y\) is obtained when \(|m| = j\).</p>
-</li>
-</ul>
-</div>
+
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="_spin"><a class="anchor" href="#_spin"></a><a class="link" href="#_spin">4. Spin</a></h2>
+<h2 id="_parity"><a class="anchor" href="#_parity"></a><a class="link" href="#_parity">4. Parity</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">4.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Given \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\), show that \(S_x\), \(S_y\), \(S_z\), and \(S^2\) are pairwise compatible observables.</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> This problem will walk you through the steps to algebraically determine the eigenvalues of \(S^2\) and \(S_z\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators are &#8220;odd under parity&#8221;: if \(\hat\Pi\) is the parity operator, then</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Find \([S_{\pm}, S^2]\) and \([S_{\pm}, S_z]\).</p>
+<p>\(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\)</p>
 </li>
 <li>
-<p>If \(\ket{a, b}\) is an eigenstate of \(S^2\)  and \(S_z\) with eigenvalues \(a\) and \(b\) respectively, show that \(S_{\pm}\ket{a, b}\) is also an eigenstate of \(S^2\)  and \(S_z\) with eigenvalues \(a\) and \(b\pm\hbar\).</p>
-</li>
-<li>
-<p>Show that \(S^2(S_{\pm}^n \ket{a, b}) = a(S_{\pm}^n \ket{a, b})\) and \(S_z(S_{\pm}^n \ket{a, b}) = (b\pm n\hbar)(S_{\pm}^n \ket{a, b})\).</p>
-</li>
-<li>
-<p>Since \(S^2 = S_x^2 + S_y^2 + S_z^2\), then \(a^2 \ge (b+n\hbar)^2\). There must be a maximum value of \(n\), which we will call \(N\), such that \(S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}\)  and \(S_z (S_+)^{N+1}\ket{a,b} = 0\). Use the operator \(S_{-}S_{+}\) and eigenstate \(\ket{a, b+N\hbar}\) to show that \( a = (b+N\hbar)(b+N\hbar + \hbar) \).</p>
-</li>
-<li>
-<p>Let \(b=\hbar m\) and \(b+N\hbar = \hbar s\). Write out the full eigenvalue equations for \(S^2\) and \(S_z\).</p>
+<p>\(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\)</p>
 </li>
 </ol>
 </div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a spin-\(\frac{1}{2}\) particle use the Pauli matrices, \(\sigma_{x} = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}\), \(\sigma_{y} =  \begin{pmatrix} 0 &amp; -i \\ i &amp; 0 \end{pmatrix}\), and \(\sigma_{z} =  \begin{pmatrix}1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix} \) to</p>
+<div class="openblock">
+<div class="content">
+<div class="paragraph">
+<p>You may assume that \(\hat \Pi\) is hermitian.</p>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Show that  \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\) .</p>
+<p>Using the test function \(f\), we have
+\[\begin{align*}
+\hat\Pi^\dagger \,\hat x\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat x f(-x)\\
+&amp;=(-\hat x)f(x)
+\end{align*}\]
+So indeed \(\hat\Pi^\dagger \,\hat x\,\hat\Pi=-\hat x\).</p>
 </li>
 <li>
-<p>Find the eigenvalues for \(S_x\), \(S_y\), and \(S_z\).</p>
-</li>
-<li>
-<p>Find the eigenvectors for \(S_x\), \(S_y\), and \(S_z\).</p>
+<p>Similarly,
+\[\begin{align*}
+\hat\Pi^\dagger \,\hat p\,\hat\Pi f(x)&amp;=\hat\Pi^\dagger \,\hat p f(-x)\\
+&amp;=\hat\Pi^\dagger \left(-i\hbar\frac{d}{dx}\right)f(-x)\\
+&amp;=-i\hbar\frac{d}{d(-x)}f(x)\\
+&amp;=i\hbar\frac{d}{dx}f(x)\\
+&amp;=-\hat pf(x)
+\end{align*}\]
+So indeed \(\hat\Pi^\dagger \,\hat p\,\hat\Pi=-\hat p\).</p>
 </li>
 </ol>
 </div>
+</div>
+</details>
+</div>
+</div>
 </li>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a spin-\(\frac{1}{2}\) particle is in the state \(A\begin{pmatrix}3+4i\\12\end{pmatrix}\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute the following two operator exponentials in terms of \(\hat\Pi\), \(I\) (the identity operator), and \(e\):</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>Compute \(A\) so that the state is normalized.</p>
+<p>\(\exp(\hat\Pi)\)</p>
 </li>
 <li>
-<p>For each spin observable \(S=S_x,S_y,S_z\):</p>
-<div class="olist lowerroman">
-<ol class="lowerroman" type="i">
-<li>
-<p>Rewrite the state as a linear combinations of the eigenvectors of \(S\).</p>
-</li>
-<li>
-<p>What are the probabilities of getting \(\pm\frac{\hbar}{2}\) if you measure \(S\)?</p>
-</li>
-<li>
-<p>Compute \(\Braket{S}\).</p>
+<p>\(\exp(i\hat\Pi)\)</p>
 </li>
 </ol>
 </div>
-</li>
-</ol>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>As \(\hat\Pi\) is its own inverse,
+\[\begin{align*}
+\hat\Pi^n &amp;=\begin{cases}
+\hat\Pi&amp;n\ \textrm{odd}\\
+I&amp;n\ \textrm{even}
+\end{cases}
+\end{align*}\]</p>
 </div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \(e^{\sigma_r}\) for \(r=x,y,z\).</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A beam of silver atoms passes through a Stern-Gerlach device. Half of the atoms are deflected in the \(+z\) direction and half of the atoms are deflected in the \(-z\) direction.</p>
 <div class="olist loweralpha">
 <ol class="loweralpha" type="a">
 <li>
-<p>The atoms deflected in the \(+z\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+z\) or \(-z\) direction. What percentage of the atoms are deflected in the \(+z\) direction? The \(-z\) direction?</p>
+<p>Then,
+\[\begin{align*}
+\exp(\hat\Pi)&amp;=\sum_{n=0}^\infty \frac{\hat\Pi^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{\hat\Pi^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{I}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi}{n!}\\
+&amp;=I\left(\frac{e+e^{-1}}{2}\right)+\hat\Pi\left(\frac{e-e^{-1}}{2}\right)\\
+&amp;=I\cosh(1)+\hat\Pi\sinh(1)
+\end{align*}\]</p>
 </li>
 <li>
-<p>The atoms from part (a) that were deflected in the \(+z\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+x\) or \(-x\) direction. What percentage of the atoms are deflected in the \(+x\) direction? The \(-x\) direction?</p>
-</li>
-<li>
-<p>The atoms from part (b) that were deflected in the \(+x\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+z\) or \(-z\) direction. What percentage of the atoms are deflected in the \(+z\) direction? The \(-z\) direction?</p>
+<p>Similarly,
+\[\begin{align*}
+\exp(i\hat\Pi)&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{(i\hat\Pi)^n}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{(i\hat\Pi)^n}{n!}\\
+&amp;=\sum_{\substack{n=0\\n\ \textrm{even}}}^\infty \frac{Ii^{n}}{n!}+\sum_{\substack{n=1\\n\ \textrm{odd}}}^\infty \frac{\hat\Pi i^{n}}{n!}\\
+&amp;=I\sum_{n=0}^\infty \frac{i^{2n}}{(2n)!}+\hat\Pi\sum_{n=0}^\infty \frac{i^{2n+1}}{(2n+1)!}\\
+&amp;=I\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n)!}+i\hat\Pi\sum_{n=0}^\infty \frac{(-1)^{n}}{(2n+1)!}\\
+&amp;=I\cos(1)+\hat\Pi\ i\sin(1)
+\end{align*}\]</p>
 </li>
 </ol>
 </div>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I remember especially liking the following question <strong>(1.1) from Townsend</strong> as an undergraduate] Determine the field gradient of a 50-cm-long Stern-Gerlach magnet that would produce a 1-mm separation at the detector between spin-up and spin-down silver atoms that are emitted from an over at \(T=1500 \)K. Assume the detector (see Fig 1.1) is located 50 cm from the magnet. <em>Note</em>: While the atoms in the oven have average kinetic energy \(3k_BT/2\), the more energetic atoms strike the hold in hte oven more frequently. Thus the <em>emitted</em> atoms have average kinetic energy \(2k_BT\), where \(k_B\) is the Boltzmann constant. The magnetic dipole moment of the silver atom is due to the intrinsic spin of the single electron. Appendix F gives the numerical value of the Bohr magneton, \(e\hbar /2m_ec\), in a convenient form.</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> What are \(s\) and \(m\) for two particles in the state \[\Ket{s \, m} = \frac{\sqrt{3}}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-1}{2} \, \frac{-1}{2}} + \frac{1}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-3}{2} \, \frac{1}{2}} \]</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> You have a spin-\(2\) and spin-\(\frac{1}{2}\) particle in a combined state with \(s=\frac{3}{2}\) and \(m=-\frac{3}{2}\). You may use a table of Clebsch-Gordan coefficients to help you.</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>What are the possible spin states that each of the particles could be in?</p>
-</li>
-<li>
-<p>What are the probabilities of each particle being in the spin states from part (a)?</p>
-</li>
-</ol>
 </div>
+</details>
 </li>
 </ul>
 </div>
@@ -1205,29 +1016,56 @@ Prove that, in an eigenstate of \(J^2\) and \(J_z\) corresponding to the quantum
 </div>
 </div>
 <div class="sect1">
-<h2 id="_electromagnetic_interactions"><a class="anchor" href="#_electromagnetic_interactions"></a><a class="link" href="#_electromagnetic_interactions">5. Electromagnetic Interactions</a></h2>
+<h2 id="_rotational_symmetry"><a class="anchor" href="#_rotational_symmetry"></a><a class="link" href="#_rotational_symmetry">5. Rotational Symmetry</a></h2>
 <div class="sectionbody">
 <div class="sect2">
 <h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">5.1. Questions</a></h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_degeneracy"><a class="anchor" href="#_degeneracy"></a><a class="link" href="#_degeneracy">6. Degeneracy</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_6"><a class="anchor" href="#_questions_6"></a><a class="link" href="#_questions_6">6.1. Questions</a></h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_rotational_selection_rules"><a class="anchor" href="#_rotational_selection_rules"></a><a class="link" href="#_rotational_selection_rules">7. Rotational Selection Rules</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_7"><a class="anchor" href="#_questions_7"></a><a class="link" href="#_questions_7">7.1. Questions</a></h3>
+
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_translations_in_time"><a class="anchor" href="#_translations_in_time"></a><a class="link" href="#_translations_in_time">8. Translations in Time</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_8"><a class="anchor" href="#_questions_8"></a><a class="link" href="#_questions_8">8.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Generalize the method to derive 4.213 to time-dependent vector potentials \(\mathbf A\) resulting in zero magnetic field (\(\mathbf{B}=\nabla\times \mathbf{A}=0\)).</p>
-</li>
-<li>
-<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The total magnetic flux through a solenoid made of a wire of length \(l\) coiled \(N\) times, whose cross section has area \(A\), and with a current \(I\), is \(\Phi=\mu_0\frac{NIA}{l}\) where \(\mu_0\) is the permeability of free space.
-(Assume that the solenoid is long enough that end effects do not need to be taken into account.)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>In the Aharonov–Bohm Effect, what values of \(l\), \(N\), \(I\), and \(A\) lead to maximum constructive interference of the two electron beams. How about for maximum destructive interference?</p>
-</li>
-<li>
-<p>Suppose the center of the solenoid is now filled not with air, but with iron, which has a permeability of approximately\(2\times 10^6\mu_0\).
-Repeat part (a).</p>
-</li>
-</ol>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The Generalized Ehrenfest Theorem states that
+\[\frac{d}{dt}\braket{\hat Q}=\frac{1}{i\hbar}\Braket{[\hat H, \hat Q]}+\Braket{\frac{\partial \hat Q}{\partial t}}\]
+In particular, if \(\hat Q\) commutes with the Hamiltonian, then the time-derivative of the expectation of \(\hat Q\) is the expectation of the time-derivative of \(\hat Q\).</p>
+<div class="paragraph">
+<p>But, in the Schrödinger picture, operators remain constant, while in the Heisenberg picture they change over time.
+So in the Schrödinger picture, the RHS of this equation is zero, while in the Heisenberg picture it&#8217;s nonzero.
+But in both cases the LHS of the equation is the same (and it&#8217;s an observable quantity, so it had better not depend on the formulation of QM used).</p>
 </div>
+<div class="paragraph">
+<p>Reconcile this with the Generalized Ehrenfest Theorem.
+Where in particular in the proof of the Theorem does the issue lie?</p>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In the quantum harmonic oscillator, where <span class="no-break">\(\hat H=\frac{1}{2m}\hat p^2+\frac{1}{2}m\omega^2\hat x^2\)</span>, let \(\hat x_H(t)\) and \(\hat p_H(t)\) be the Heisenberg picture position and momentum operators.
+Show that \(\frac{d}{dt}\hat x_H(t)=\frac{1}{m\omega^2}\hat p_H(t)\) and \(\frac{d}{dt}\hat p_H(t)=-m\omega^2\hat x_H(t)\) — just as is the case in the classical situation.</p>
 </li>
 </ul>
 </div>
@@ -1235,5 +1073,29 @@ Repeat part (a).</p>
 </div>
 </div>
 </div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

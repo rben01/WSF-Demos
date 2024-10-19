@@ -1,0 +1,29 @@
+{{#with site.keys.googleAnalytics}}
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{this}}"></script>
+    <script>function gtag() { dataLayer.push(arguments); }; window.dataLayer = window.dataLayer || []; gtag('js', new Date()); gtag('config', '{{this}}')</script>
+{{/with}}
+{{!--
+    <script>var uiRootPath = '{{{uiRootPath}}}'</script>
+    --}}
+{{!-- https://docs.mathjax.org/en/latest/web/configuration.html --}}
+{{!-- mathjax --}}
+<script async>
+    window.MathJax = {
+        tex: {
+            inlineMath: [['\\(', '\\)']],
+            macros: {
+                v: ["\\mathbf{#1}", 1],
+            }
+        },
+        svg: {
+            fontCache: 'global'
+        }
+    };
+
+    (function () {
+        var script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg-full.js';
+        script.async = true;
+        document.head.appendChild(script);
+    })();
+</script>

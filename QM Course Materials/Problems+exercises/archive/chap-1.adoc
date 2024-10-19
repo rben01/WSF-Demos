@@ -4,7 +4,8 @@ include::shared_attributes.adoc[]
 
 == The {sch} Equation
 === Questions
-* {q-num} In the absence of potential (\(V(x,t)=0\)), the {sch} equation can be written as
+==== Problem
+* {q-num} In the absence of potential (stem:[V(x,t)=0]), the {sch} equation can be written as
 ++\[\frac{\partial\Psi}{\partial t}=\kappa\frac{\partial^2\Psi}{\partial x^2}\]++
 with ++\(\kappa=\frac{i\hbar}{2m}\)++.
 The physical interpretation of the position wavefunction \(\Psi\) is that its square magnitude is the probability density of a particle's position.
@@ -13,7 +14,7 @@ Compare this form of the {sch} equation to the https://en.wikipedia.org/wiki/Hea
 What does this tell you about how the wavefunction flows over time?
 +
 NOTE: Unlike in the heat equation, \(\kappa\) is imaginary, so the analog is not perfect.
-However it is still instructive and at a high level gives good intuition for how probability density "`flows`" over time.
+However it is still instructive and at a high level gives good intuition for how probability density “flows” over time.
 +
 .Solution
 [%collapsible]
@@ -22,7 +23,7 @@ Wavefunctions share the following features with solutions to the heat equation:
 
 * Solutions are waves!
 * In the heat equation, with ++\(\kappa\)++ real, heat flows opposite the direction of the temperature gradient, and flows with a magnitude proportional to the magnitude of the gradient.
-In the {sch} equation, with ++\(\kappa\)++ imaginary, "`probability current`" (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction's phase, and with a magnitude proportional to this gradient's magnitude.
+In the {sch} equation, with ++\(\kappa\)++ imaginary, “probability current” (which you will learn about later, but for now take it as a given that it is aptly named) flows opposite the direction of the gradient of the wavefunction's phase, and with a magnitude proportional to this gradient's magnitude.
 
 * As with the heat equation, solutions to the {sch} equation in free space get smoother and more diffuse over time.
 Combined with the above point, this means that the more concentrated a wavefunction is in space initially, the more rapidly it spreads out.
@@ -380,7 +381,7 @@ There are ++\(2^7=128\)++ sequences of length 7, so the probabilities of landing
 --
 [{sublist-style}]
 . Show that ++\[\ \frac{d}{dt} \int_a^b |\Psi|^2 \,dx= J(a,t) - J(b,t) \]++
-What "`law`" does this equation represent?
+What “law” does this equation represent?
 What happens to the probability current in the region from ++\(-\infty\)++ to ++\(\infty\)++?
 What does this mean?
 . [From the Bernd Thaller book] Write ++\(\Psi(x,t)=|\Psi(x,t)|e^{i\varphi(x,t)}\)++.
@@ -417,7 +418,7 @@ And the integral is now trivial:
 &=J(a,t)-J(b,t)
 \end{align*}\]++
 We see that the net amount of probability leaving or entering the region ++\([a,b]\)++ is the difference between the values of the probability current at ++\(a\)++ and ++\(b\)++.
-This means that "`probability current`" is, in fact, a good name for this quantity:
+This means that “probability current” is, in fact, a good name for this quantity:
 if the rate at which the total amount of some quantity contained in a region changes over time is given by the value of a function on the region's boundary, then, via https://en.wikipedia.org/wiki/Divergence_theorem[Gauss's Theorem^], we can liken the function's value on the surface to a flux, or current. (For more info, see https://en.wikipedia.org/wiki/Continuity_equation[Transport Equation^].)
 From this perspective, the probability current, as its name would suggest, represents the flow of probability, and the rate at which the net probability in a region changes is given by the net probability current over the region's boundary.
 (This is all somewhat trivial in this 1D case but it extends to higher dimensions as well, when ++\(\frac{\partial \Psi}{\partial x}\)++ is replaced by ++\(\nabla \Psi\)++ and the region's boundary is an actual surface and not just two points on either side.)
@@ -924,7 +925,7 @@ Its observables obey the classical behavior: its expected position is the mean o
 
 * {q-num} Show that in a quadratic potential ++\(V(x)=ax^2+bx+c\)++, the following holds:
 ++\[\frac{d\Braket{p}}{dt}=-\left.\frac{\partial V}{\partial x}\right|_{x=\Braket{x}}\]++
-In other words, if the potential is quadratic then we can say "`the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\Braket{x}\)++`".
+In other words, if the potential is quadratic then we can say “the expectation of the force at ++\(x\)++ is the force evaluated at ++\(\Braket{x}\)++”.
 +
 
 .Solution

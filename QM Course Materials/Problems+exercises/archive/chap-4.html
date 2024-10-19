@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
-<title>Chapter 2: Time-Independent Schrödinger Equation</title>
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Chapter 4: Quantum Mechanics in Three Dimensions</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -139,7 +139,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content::before{content:none}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
 #header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
@@ -161,6 +161,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
 #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
 #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
@@ -207,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -329,7 +327,7 @@ a.image{text-decoration:none;display:inline-block}
 a.image object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
 #footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
@@ -392,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -782,657 +780,178 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article toc2 toc-left qm-chapter chap-griffiths">
+<body class="article toc2 toc-left qm-chapter chap-4">
 <div id="header">
-<h1>Chapter 2: Time-Independent Schrödinger Equation</h1>
+<h1>Chapter 4: Quantum Mechanics in Three Dimensions</h1>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
-<li><a href="#_chapter_1_the_wave_function">1. Chapter 1: The Wave Function</a></li>
-<li><a href="#_chapter_2">2. Chapter 2</a>
+<li><a href="#_the_schrödinger_equation">1. The Schrödinger Equation</a>
 <ul class="sectlevel2">
-<li><a href="#_the_harmonic_oscillator">2.1. The Harmonic Oscillator</a></li>
-<li><a href="#_the_delta_function_potential">2.2. The Delta-Function Potential</a></li>
-<li><a href="#_the_finite_square_well">2.3. The Finite Square Well</a></li>
+<li><a href="#_questions">1.1. Questions</a></li>
+<li><a href="#_demonstrations">1.2. Demonstrations</a></li>
 </ul>
 </li>
-<li><a href="#_chapter_3_formalism">3. Chapter 3: Formalism</a></li>
+<li><a href="#_the_hydrogen_atom">2. The Hydrogen Atom</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_2">2.1. Questions</a></li>
+<li><a href="#_demonstrations_2">2.2. Demonstrations</a></li>
+</ul>
+</li>
+<li><a href="#_angular_momentum">3. Angular Momentum</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_3">3.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_spin">4. Spin</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_4">4.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_electromagnetic_interactions">5. Electromagnetic Interactions</a>
+<ul class="sectlevel2">
+<li><a href="#_questions_5">5.1. Questions</a></li>
+</ul>
+</li>
 </ul>
 </div>
 </div>
 <div id="content">
 <div class="sect1">
-<h2 id="_chapter_1_the_wave_function"><a class="anchor" href="#_chapter_1_the_wave_function"></a><a class="link" href="#_chapter_1_the_wave_function">1. Chapter 1: The Wave Function</a></h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
-<li>
-<p><strong>G.1.1</strong> For the distribution of ages in the example in Section 1.3.1:</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\langle j^2 \rangle_\psi\) and \(\langle j \rangle ^2\)</p>
-</li>
-<li>
-<p>Determine \(\Delta j\) for each \(j\), and use Equation 1.11 to compute the standard deviation.</p>
-</li>
-<li>
-<p>Use your results in (a) and (b) to check Equation 1.12.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.2</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find the standard deviation of the distribution in Example 1.2.</p>
-</li>
-<li>
-<p>What is the probability that a photograph, selected at random, would
-show a distance \(x\) more than one standard deviation away
-from the average?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.3</strong> Consider the <strong>gaussian</strong> distribution
-\[\rho(x)= Ae^{-\lambda(x-a)^2}\]
-where \(A\), \(a\), and \(\lambda\) are positive real constants. (The necessary integrals are inside the back cover.)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Use Equation 1.16 to determine \(A\).</p>
-</li>
-<li>
-<p>Find \(\langle x \rangle\), \(\langle x^2 \rangle\), and \(\sigma\).</p>
-</li>
-<li>
-<p>Sketch the graph of \(\rho(x)\).</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.4</strong> At time \(t=0\) a particle is represented by the wave
-function</p>
-<div class="paragraph">
-<p>\[\Psi(x,0)=
-    \begin{cases}
-        A(x/a), &amp; 0\le x \le a,\\
-        A(b-x)/A(b-a), &amp; a \le x \le b,\\
-        0, &amp; \textrm{otherwise},
-    \end{cases}\]
-where \(A\), \(a\), and \(b\) are
-(positive) constants.</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Normalize \(\Psi\) (that is, find \(A\) in terms
-of \(a\) and \(b\)).</p>
-</li>
-<li>
-<p>Sketch \(\Psi(x,0)\) as a function of \(x\).</p>
-</li>
-<li>
-<p>Where is the particle most likely to be found at \(t=0\)?</p>
-</li>
-<li>
-<p>What is the probability of finding the particle to the left of
-\(a\)? Check your result in the limiting cases
-\(b=a\) and \(b=2a\).</p>
-</li>
-<li>
-<p>What is the expectation value of \(x\)?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.5</strong> Consider the wave function
-\[\Psi(x,t)=Ae^{-\lambda|x|}e^{-i \omega t}\]
-where \(A\), \(\lambda\), and \(\omega\) are positive real constants.
-(We&#8217;ll see in Chapter 2 for what potential (\(V\)) this wave function satisfies the Schrödinger equation.)</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Normalize \(\Psi\).</p>
-</li>
-<li>
-<p>Determine the expectation values of \(x\) and \(x^2\).</p>
-</li>
-<li>
-<p>Find the standard deviation of \(x\).</p>
-<div class="paragraph">
-<p>Sketch the graph of \(|\Psi|^2\), as a function of \(x\), and mark the points \((\langle x \rangle + \sigma)\) and \((\langle x \rangle - \sigma)\), to illustrate the sense in which \(\sigma\) represents the &#8220;spread&#8221; in \(x\). What is the probability that the particle would be found outside this range?</p>
-</div>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.6</strong>
-Why can&#8217;t you do integration-by-parts directly on the middle expression in Equation 1.29&#8201;&#8212;&#8201;pull the time derivative over onto \(x\), note that \(\partial x / \partial t = 0\), and conclude that \(d\langle x \rangle / dt = 0\)?</p>
-</li>
-<li>
-<p><strong>G.1.7</strong> Calculate \(\frac{d\langle p \rangle}{dt}\). Answer:</p>
-<div class="paragraph">
-<p>\[\frac{d\langle p \rangle}{dt} = \left\langle- \frac{\partial V}{\partial x} \right\rangle.\]
-This is an instance of <strong>Ehrenfest&#8217;s theorem</strong>, which asserts that
-<em>expectation values obey the classical laws</em>.</p>
-</div>
-</li>
-<li>
-<p><strong>G.1.8</strong> Suppose you add a constant \(V_0\) to the
-potential energy (by &#8220;constant&#8221; I mean independent of \(x\)
-as well as \(t\)). In <em>classical</em> mechanics this doesn&#8217;t
-change anything, but what about <em>quantum</em> mechanics? Show that the wave
-function picks up a time-dependent phase factor:
-\(\exp(-iV_0t/\hbar)\). What effect does this have on the
-expectation value of a dynamical variable?</p>
-</li>
-<li>
-<p><strong>G.1.9</strong> A particle of mass \(m\) has the wave function
-\[\Psi(x,t) = Ae^{-a[(mx^2/\hbar)+it]},\]
-where \(A\) and \(a\) are positive real constants.</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(A\).</p>
-</li>
-<li>
-<p>For what potential energy function, \(V(x)\), is this a
-solution to the Schrödinger equation?</p>
-</li>
-<li>
-<p>Calculate the expectation values of \(x\),
-\(x^2\), \(p\), and \(p^2\).</p>
-</li>
-<li>
-<p>Find \(\sigma_{x}\) and \(\sigma_{p}\). Is their
-product consistent with the uncertainty principle?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.10</strong></p>
-<div class="paragraph">
-<p>Consider the first 25 digits in the decimal expansion of \(\pi\): \(3, 1, 4, 1, 5, 9, \ldots\).</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>If you selected one number at random, from this set, what are the
-probabilities of getting each of the 10 digits?</p>
-</li>
-<li>
-<p>What is the most probable digit? What is the median digit? What is the
-average value?</p>
-</li>
-<li>
-<p>Find the standard deviation for this distribution.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.1.11</strong></p>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="openblock">
-<div class="content">
-<div class="imageblock related thumb right">
-<div class="content">
-<img src="images/ch1_p1.11.jpg" alt="ch1 p1.11" width="225">
-</div>
-</div>
-<div class="paragraph">
-<p>[This problem generalizes Example 1.2.] Imagine a particle of mass \(m\) and energy \(E\) in a potential well \(V(x)\), sliding frictionlessly back and forth between the classical turning points (\(a\) and \(b\) in Figure 1.10).</p>
-</div>
-<div class="paragraph">
-<p>Classically, the probability of finding the particle in the range \(dx\) (if, for example, you took a snapshot at a random time \(t\)) is equal to the fraction of the time \(T\) it takes to get from \(a\) to \(b\) that it spends in the interval \(dx\):</p>
-</div>
-<div class="paragraph">
-<p>\[\rho(x)\,dx=\frac{dt}{T}=\frac{(dt/dx)\,dx}{T}=\frac{1}{v(x)T}\,dx,\]</p>
-</div>
-<div class="paragraph">
-<p>where \(v(x)\) is the speed, and</p>
-</div>
-<div class="paragraph">
-<p>\[T=\int_0^T dt = \int_a^b \frac{1}{v(x)}\,dx.\]</p>
-</div>
-<div class="paragraph">
-<p>Thus
-\[\rho(x)=\frac{1}{v(x)T}\]</p>
-</div>
-<div class="paragraph">
-<p>This is perhaps the closest classical analog to \(|\Psi|^2\).</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Use conservation of energy to express \(v(x)\) in terms of \(E\) and \(V(x)\).</p>
-</li>
-<li>
-<p>As an example, find \(\rho(x)\) for the simple harmonic oscillator, \(V(x)=k x^2/2\). Plot \(\rho(x)\), and check that it is correctly normalized.</p>
-</li>
-<li>
-<p>For the classical harmonic oscillator in part (b), find \(\langle x\rangle\), \(\langle x^2\rangle\), and \(\sigma_x\).</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-</li>
-<li>
-<p><strong>G.1.11</strong></p>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="paragraph">
-<p><strong>** 1.12</strong> What if we were interested in the distribution of <em>momenta</em>
-(\(p=mv\)) for the classical harmonic oscillator (Problem
-1.11(b)).</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find the classical probability distribution \(\rho(p)\)
-(note that \(p\) ranges from \(-\sqrt{2mE}\) to
-\(+\sqrt{2mE}\)).</p>
-</li>
-<li>
-<p>Calculate \(\langle p \rangle\),
-\(\langle p^2 \rangle\), and \(\sigma_{p}\).</p>
-</li>
-<li>
-<p>What’s the <em>classical</em> uncertainty product,
-\(\sigma_{x}\sigma_{p}\), for this system? Notice that this
-product can be as small as you like, classically, simply by sending
-\(E \rightarrow 0\). But in quantum mechanics, as we shall see
-in Chapter 2, the energy of a simple harmonic oscillator cannot be less
-than \(\hbar \omega /2\), where
-\(\omega = \sqrt{k/m}\) is the classical frequency. In that
-case what can you say abut the product
-\(\sigma_{x}\sigma_{p}\)?</p>
-</li>
-</ol>
-</div>
-</dd>
-</dl>
-</div>
-</li>
-<li>
-<p><strong>G.1.13</strong></p>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Check your results in Problem 1.11(b) with the following “numerical experiment.” The position of the oscillator at time \(t\) is</p>
-</div>
-<div class="paragraph">
-<p>\[x(t) = A\cos(\omega t)\]</p>
-</div>
-<div class="paragraph">
-<p>You might as well take \(\omega=1\) (that sets the scale for time) and \(A=1\) (that sets the scale for length). Make a plot of \(x\) at 10,000 random times, and compare it with \(\rho[x]\).
-<em>Hint</em>: In Mathematica, first define</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-mathematica" data-lang="mathematica">x[t_] := Cos[t]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>then construct a table of positions:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-mathematica" data-lang="mathematica">snapshots = Table[x[𝜋 RandomReal[j]], {j, 10000}]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>and finally, make a histogram of the data:</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="highlight"><code class="language-mathematica" data-lang="mathematica">Histogram[snapshots, 100, "PDF", PlotRange -&gt; {0,2}]</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>Meanwhile, make a plot of the density function, \(\rho(x)\), and, using <code>Show</code>, superimpose the two.</p>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-</li>
-<li>
-<p><strong>G.1.14</strong></p>
-<div class="dlist">
-<dl>
-<dt class="hdlist1">Griffiths</dt>
-<dd>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Let \(P_{ab}(t)\) be the probability of finding the
-particle in the range \((a&lt;x&lt;b)\), at time \(t\).</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Show that \[\frac{dP_{ab}}{dt} = J(a,t) - J(b,t)\] where
-\[J(x,t) \equiv \frac{i
-    \hbar}{2m}\left(\Psi\frac{\partial\Psi^{*}}{\partial x}-\Psi^{*}\frac{\partial\Psi}{\partial x}\right)\]
-What are the units of \(J(x,t)\)? <em>Comment:</em> \(J\)
-is called the <strong>probability current</strong> because it tells you the rate at
-which probability is &#8220;flowing&#8221; past the point \(x\). If
-\(P_{ab}(t)\) is increasing, then more probability is flowing
-into the region at one end than flows out the other.</p>
-</li>
-<li>
-<p>Find the probability current for the wave function in Problem 1.9.</p>
-</li>
-</ol>
-</div>
-<div class="paragraph">
-<p>(This is not a very pithy example, I’m afraid; we’ll encounter more
-substantial ones in due course.)</p>
-</div>
-</div>
-</div>
-</dd>
-</dl>
-</div>
-</li>
-<li>
-<p><strong>G.1.15</strong></p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Show that</p>
-</div>
-<div class="paragraph">
-<p>\[\frac{d}{dt}\int_{-\infty}^{\infty}\Psi_{1}^{*}\Psi_{2}\,dx = 0\]</p>
-</div>
-<div class="paragraph">
-<p>for any two (normalizable) solutions to the same Schrödinger equation (i.e., with
-the same \(V(x)\)), \(\Psi_{1}\) and
-\(\Psi_{2}\).</p>
-</div>
-</div>
-</div>
-</li>
-<li>
-<p><strong>G.1.16</strong></p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>A particle is represented (at time \(t=0\)) by the wave function</p>
-</div>
-<div class="paragraph">
-<p>\[
-\Psi(x,0)=\begin{cases}
-A(a^2-x^2)&amp;-a\le x\le +a\\
-0 &amp;\textrm{otherwise}
-\end{cases}
-\]</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Determine the normalization constant \(A\).</p>
-</li>
-<li>
-<p>What is the expectation value of \(x\)?</p>
-</li>
-<li>
-<p>What is the expectation value of \(p\)? (Note that you
-<em>cannot</em> get it from
-\(\langle p \rangle = m\frac{d\langle x \rangle}{dt}\). Why not?)</p>
-</li>
-<li>
-<p>Find the expectation value of \(x^2\).</p>
-</li>
-<li>
-<p>Find the expectation value of \(p^2\).</p>
-</li>
-<li>
-<p>Find the uncertainty in \(x\) (\(\sigma_{x}\)).</p>
-</li>
-<li>
-<p>Find the uncertainty in \(p\) (\(\sigma_{p}\)).</p>
-</li>
-<li>
-<p>Check that your results are consistent with the uncertainty principle.</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</li>
-<li>
-<p><strong>G.1.17</strong></p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Suppose you wanted to describe an <strong>unstable particle</strong> that spontaneously
-disintegrates with a &#8220;lifetime&#8221; \(\tau\). In that case the
-total probability of finding the particle somewhere should <em>not</em> be
-constant, but should decrease at (say) an exponential rate:
-\[P(t) \equiv \int_{-\infty}^{\infty}|\Psi(x,t)|^2dx=e^{-t/\tau}\]</p>
-</div>
-<div class="paragraph">
-<p>A crude way of achieving this result is as follows. In Equation 1.24 we
-tacitly assumed that V (the potential energy) is <em>real</em>. That is
-certainly reasonable, but it leads to the &#8220;conservation of
-probability&#8221; enshrined in Equation 1.27. What if we assign to
-\(V\) an imaginary part:
-\[V=V_{0}-i\Gamma\]
-where \(V_{0}\) is the true potential energy and
-\(\Gamma\) is a positive real constant?</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Show that (in place of Equation 1.27) we now get
-\[\frac{dP}{dt} = -\frac{2\Gamma}{\hbar}P.\]</p>
-</li>
-<li>
-<p>Solve for \(P(t)\), and find the lifetime of the particle in
-terms of \(\Gamma\).</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</li>
-<li>
-<p><strong>G.1.18</strong></p>
-<div class="openblock">
-<div class="content">
-<div class="paragraph">
-<p>Very roughly speaking, quantum mechanics is relevant when the de Broglie
-wavelength of the particle in question (\(h/p\)) is greater
-than the characteristic size of the system (\(d\)). In thermal
-equilibrium at (Kelvin) temperature \(T\), the average kinetic
-energy of a particle is</p>
-</div>
-<div class="paragraph">
-<p>\[\frac{p^2}{2m} = \frac{3}{2}k_BT\]</p>
-</div>
-<div class="paragraph">
-<p>(where \(k_B\) is Boltzmann’s constant), so the typical de
-Broglie wavelength is</p>
-</div>
-<div class="paragraph">
-<p>\[\lambda = \frac{h}{\sqrt{3mk_BT}}\]</p>
-</div>
-<div class="paragraph">
-<p>The purpose of this problem is to determine which systems will have to
-be treated quantum mechanically and which can safely be described
-classically.</p>
-</div>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p><strong>Solids.</strong> The lattice spacing in a typical solid is around
-\(d=0.3\,\textrm{mm}\). Find the temperature below which the unbound <em>electrons</em> in a solid are quantum mechanical. Below what temperature are the <em>nuclei</em> in a solid quantum mechanical? (Use silicon as an example.)</p>
-<div class="paragraph">
-<p><em>Moral</em>: The free electrons in a solid are <em>always</em> quantum mechanical; the nuclei are generally <em>not</em> quantum mechanical. The same goes for liquids (in which the interatomic spacing is roughly the same), with the exception of helium below \(4\,\textrm{K}\).</p>
-</div>
-</li>
-<li>
-<p><strong>Gases.</strong> For what temperatures are the atoms in an ideal gas at pressure \(P\) quantum mechanical? Hint: Use the ideal gas law (\(PV=Nk_BT\)) to deduce the interatomic spacing.
-<em>Answer</em>: \(T&lt;(1/k_B)(h^2/3m)^{3/5}P^{2/5}\).
-Obviously (for the gas to show quantum behavior) we want \(m\) to be as small as possible, and \(P\) as large as possible.
-Put in the numbers for helium at atmospheric pressure.
-Is hydrogen in outer space (where the interatomic spacing is about \(1\,\textrm{cm}\) and the temperature is \(3\,\textrm{K}\)) quantum mechanical?
-(Assume it&#8217;s monatomic hydrogen, not \(\ce{H2}\).)</p>
-</li>
-</ol>
-</div>
-</div>
-</div>
-</li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_chapter_2"><a class="anchor" href="#_chapter_2"></a><a class="link" href="#_chapter_2">2. Chapter 2</a></h2>
+<h2 id="_the_schrödinger_equation"><a class="anchor" href="#_the_schrödinger_equation"></a><a class="link" href="#_the_schrödinger_equation">1. The Schrödinger Equation</a></h2>
 <div class="sectionbody">
 <div class="sect2">
-<h3 id="_the_harmonic_oscillator"><a class="anchor" href="#_the_harmonic_oscillator"></a><a class="link" href="#_the_harmonic_oscillator">2.1. The Harmonic Oscillator</a></h3>
-
-</div>
-<div class="sect2">
-<h3 id="_the_delta_function_potential"><a class="anchor" href="#_the_delta_function_potential"></a><a class="link" href="#_the_delta_function_potential">2.2. The Delta-Function Potential</a></h3>
+<h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>G.2.10</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\psi_2(x)\). (Hint: \( \psi_{n+1}=\frac{\hat a_+}{\sqrt{n+1}}\psi_n \).)</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the position and momentum operators along different axes are compatible, e.g., that \(\sigma_x\) and \(\sigma_{p_y}\) (but also \(\sigma_x\) and \(\sigma_{p_z}\), \(\sigma_{y}\) and \(\sigma_{p_x}\), \(\sigma_y\) and \(\sigma_{p_z}\), etc.) are compatible operators and so \(\sigma_x\sigma_{p_y}\) can equal 0.</p>
 </li>
 <li>
-<p>Sketch \(\psi_0(x)\), \(\psi_1(x)\), and \(\psi_2(x)\).</p>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The uncertainty principle \(\sigma_x \sigma_p\ge \frac{\hbar}{2}\) only holds in one dimension.
+Show that in \(n\) dimensions, in which \(\hat x\Ket{f}=\vec x f\) and \(\hat p\Ket{f}=i\hbar \nabla f\), the uncertainty principle becomes \(\sigma_x \sigma_p\ge \frac{n\hbar}{2}\).
+(Hint: what&#8217;s \([x,p]\) with these new definitions of \(\hat x\) and \(\hat p\)?)</p>
 </li>
 <li>
-<p>Check the orthogonality of , and , by explicit integration.
-(Hint: If you exploit the even-ness and odd-ness of the functions, there is really only one integral left to do.)</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.2.11</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Compute \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), and \(\langle p^2\rangle\), for the states \(\psi_0\) (Equation 2.60) and \(\psi_1\) (Equation 2.63), by explicit integration.
-<em>Comment</em>: In this and other problems involving the harmonic oscillator it simplifies matters if you introduce the variable \(\xi =\sqrt{\frac{m\omega}{\hbar x}}\) and the constant \(\alpha=\left(\frac{m\omega}{\pi\hbar}\right)^\frac{1}{4}\)</p>
-</li>
-<li>
-<p>Check the uncertainty principle for these states.</p>
-</li>
-<li>
-<p>Compute \(\langle T\rangle\) and \(\langle V\rangle\) for these states. (No new integration allowed!) Is their sum what you would expect?</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.2.12</strong></p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(\langle x\rangle\), \(\langle p\rangle\), \(\langle x^2\rangle\), \(\langle p^2\rangle\), and \(\langle T\rangle\) for the \(n\)<sup>th</sup> stationary state of the harmonic oscillator, using the method of Example 2.5.
-Check that the uncertainty principle is satisfied.</p>
-</li>
-</ol>
-</div>
-</li>
-<li>
-<p><strong>G.2.13</strong>
-A particle in the harmonic oscillator potential starts out in the state \[\Psi(x,0)=A(3\psi_0(x)+4\psi_1(x)).\]</p>
-<div class="olist loweralpha">
-<ol class="loweralpha" type="a">
-<li>
-<p>Find \(A\).</p>
-</li>
-<li>
-<p>Construct \(\Psi(x,t)\) and \(|\Psi(x,t)|\).
-Don&#8217;t get too excited if  oscillates at exactly the classical frequency; what would it have been had I specified \(\psi_2\), instead of \(\psi_1\)?</p>
-</li>
-<li>
-<p>Find \(\langle x\rangle\) and \(\langle p\rangle\). Check that Ehrenfest&#8217;s theorem (Equation 1.38) holds, for this wave function.</p>
-</li>
-<li>
-<p>If you measured the energy of this particle, what values might you get, and with what probabilities?</p>
-</li>
-</ol>
-</div>
-</li>
-</ul>
-</div>
-</div>
-<div class="sect2">
-<h3 id="_the_finite_square_well"><a class="anchor" href="#_the_finite_square_well"></a><a class="link" href="#_the_finite_square_well">2.3. The Finite Square Well</a></h3>
-<div class="ulist">
-<ul>
-<li>
-<p><strong>G.2.29</strong> Analyze the odd bound state wave functions for the finite square well.
-Derive the transcendental equation for the allowed energies, and solve it graphically.
-Examine the two limiting cases.
-Is there always an odd bound state?</p>
-</li>
-<li>
-<p><strong>G.2.30</strong> For a fixed integer \(l\), normalize the following expression for the even solutions of the finite square well potential by finding \(F\) and \(D\):
-\[
-\psi=\begin{cases}
-Fe^{-\kappa x}&amp; x &gt; a\\
-D\cos(l x) &amp; 0&lt;x&lt;a\\
-\psi(-x)&amp;x&lt;0
-\end{cases}\]</p>
-</li>
-<li>
-<p><strong>G.2.31</strong> Problem 2.31 The Dirac delta function can be thought of as the limiting case of a rectangle of area 1, as the height goes to infinity and the width goes to zero.
-Show that the delta-function well, \(V(x)=-\alpha \delta(x)\), where
-\[
-\begin{align*}
-\delta(x):=
-\begin{dcases}
-0&amp;x\ne0\\
-\infty&amp;x=0
-\end{dcases}, \int_{-\infty}^\infty \delta(x)\,dx=1
-\end{align*}
-\]
-is a “weak” potential (even though it is infinitely deep), in the sense that \(z_0:=\frac{a}{\hbar}\sqrt{2mV_0}\rightarrow0\).
-Determine the bound state energy for the delta-function potential, by treating it as the limit of a finite square well.
-Check that your answer is consistent with the following:
-\[
-\begin{align*}
-\psi(x)&amp;=\frac{\sqrt{m\alpha}}{\hbar}e^{-m\alpha|x|/\hbar^2}\\
-E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the Legendre polynomials, defined by \(\displaystyle P_n(x):=\frac{1}{2^n n!}\frac{d^n}{dx^n}(x^2-1)^n\), are orthgonal over \([-1,1]\).
+(Hint: use integration by parts to compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) for \(m&lt; n\).)</p>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>To compute \(\int_{-1}^1 P_m(x)P_n(x)\,dx\) using integration by parts, let
+\[\begin{align*}
+u&amp;=P_m(x)&amp;dv&amp;=P_n(x)\,dx\\
+du&amp;=P_m'(x)\,dx&amp;v&amp;=F_{n,1}(x)
 \end{align*}\]
-&lt;This problem has a lot more math with huge ugly equations. I feel like that just grinding out computations isn&#8217;t really helpful here so I&#8217;ve omitted them.&gt;</p>
+where \(F_{n,1}(x)\) is the antiderivative of \(P_n\).
+While we can&#8217;t easily compute \(F_{n,1}\), we do know it has to be of the form \(F_{n,1}(x)=f_1(x)\frac{d^{n-1}}{dx^{n-1}}(x^2-1)^{n}\) for some function \(f_1\).
+Since taking fewer than \(n\) derivatives of \((x^2-1)^{n}\) times must leave a factor of \(x^2-1\), we see that \(F_{n,1}(1)=F_n(-1)=0\).
+And so,
+\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)\,dx &amp;=P_m(x)F_{n,1}(x)\Bigr|^1_{-1}-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx\\
+&amp;=-\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx
+\end{align*}\]
+We&#8217;ll do a second integration by parts:
+\[\begin{align*}
+u&amp;=P_m'(x)&amp;dv&amp;=F_{n,1}(x)\,dx\\
+du&amp;=P_m''(x)&amp;v&amp;=F_{n,2}(x)
+\end{align*}\]
+where \(F_{n,2}\) is the antiderivative of \(F_{n,1}\).
+Again, we won&#8217;t compute \(F_{n,2}\), but we know it must be of the form \(F_{n,2}(x)=f_2(x)\frac{d^{n-2}}{dx^{n-2}}(x^2-1)^n\), which, for the same reason as above, has a factor of \(x^2-1\).
+Therefore,
+\[\begin{align*}
+\int_{-1}^1 P_m'(x) F_{n,1}(x)\,dx&amp;= P_m'(x)F_{n,2}(x)\Bigr|^1_{-1}-\int_{-1}^2 P_m''(x) F_{n,2}(x)\,dx\\
+&amp;=-\int_{-1}^1 P_m''(x) F_{n,2}(x)\,dx
+\end{align*}\]
+Were we to perform \(m\) integrations by parts in total, we&#8217;d see that
+\[\begin{align*}
+\int_{-1}^1P_m(x)P_n(x)\,dx=(-1)^m \int_{-1}^1\frac{d^m P_m(x)}{dx^m} F_{n,m}(x)\,dx
+\end{align*}\]
+where \(F_{n,m}\) is the \(m\)<sup>th</sup> antiderivative of \(P_n\).
+But, since \(P_m\) has degree \(m\), \(\frac{d^m}{dx^m} P_m(x)\) is some constant \(q\), and so this is simply
+\[\begin{align*}
+(-1)^m \int_{-1}^1 q F_{n,m}(x)\,dx&amp;=(-1)^m q F_{n,m+1}\Bigr|^1_{-1}
+\end{align*}\]
+But \(F_{n,m+1}\) has no derivatives of \(x^2-1\) and so it must carry a factor of \(x^2-1\), so this integral is in fact 0!
+And so we see that
+\[\begin{align*}
+\int_{-1}^1 P_m(x)P_n(x)&amp;=0
+\end{align*}\]
+as desired.</p>
+</div>
+<div class="sidebarblock">
+<div class="content">
+<div class="paragraph">
+<p>Since none of the Legendre polynomials are identically 0, \(\int_{-1}^1P_n(x)P_n(x)\ne 0\).
+Why couldn&#8217;t the above proof be used to show that \(\int_{-1}^1P_m(x)P_n(x)=0\) when \(m=n\)?
+Where would it fall apart?</p>
+</div>
+<div class="paragraph">
+<p>Answer: the highest antiderivative we had to take was \(F_{n,m+1}\), and since \(m&lt; n \) this looked like \(f_m(x)(x^2-1)^n\).
+But if you take one more antiderivative you no longer have a factor of \(x^2-1\) (for instance, \(\int x^2-1\,dx=\frac{x^3}{3}-x+C\)).</p>
+</div>
+</div>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I have not worked out this equation yet] Solve the spherical harmonic oscillator, \(V(r)=-k\lVert\mathbf r\rVert^2\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> In this question you will examine some of the constraints on the separation constants \(l(l+1)\) and \(m^2\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The solution to the azimuthal differential equation \[\frac{d^2\Phi}{d\phi^2} = -m^2 \Phi \] is \(\Phi(\phi) = e^{im\phi}\). Show that \(m\) must be an integer.</p>
+</li>
+<li>
+<p>Given the \(l\)th Legendre polynomial, \(\displaystyle P_l(x)=\frac{1}{2^l l!}\left(\frac{d}{dx}\right)^l(x^2-1)^l\), why must \(l\) be a non-negative integer?</p>
+</li>
+<li>
+<p>Explain why \(m\le l\) using the Legendre function \(P_l^m(x) = (-1)^m (1-x^2)^{(m/2)}\left( \frac{d}{dx}\right)^m P_l(x)\)</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Calculate the Legendre functions, \(P_l^m(x)\), for \(l=2\) and \(m = 0, \pm1, \pm2\).</p>
+</li>
+<li>
+<p>Show that if \(m&gt;l\) then \(P_2^m(x) = 0\) (and therefore \(\Theta\) is 0 as well).</p>
+</li>
+<li>
+<p>Show that \(\Theta(\theta) = A P_2^2 (\cos\theta)\) is a solution to the angular differential equation \[\sin\theta \frac{d}{d\theta} \left( \sin\theta \frac{d\Theta}{d\theta}\right)+ \left[ l(l+1) \sin^2\theta -m^2\right]\Theta = 0 \]</p>
+</li>
+<li>
+<p>Show that \(Y_2^2\) is normalized.</p>
+</li>
+<li>
+<p>Show that \(Y_2^2\) and \(Y_2^{-2}\) are orthogonal.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a particle in the infinite spherical well, determine whether \(\psi_{320}\) and \(\psi_{400}\) are closer in energy or if \(\psi_{400}\) and \(\psi_{530}\) are closer in energy.</p>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">1.2. Demonstrations</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A Legendre polynomial demo similar to the Hermite polynomial demo (nothing fancy, just showing the polynomials)</p>
+</li>
+<li>
+<p>Demonstration of spherical harmonics? (Not sure how it would look in practice, since there isn&#8217;t really a good way to show all of a 3D surface&#8230;&#8203; I&#8217;d have to think about it.)</p>
 </li>
 </ul>
 </div>
@@ -1440,11 +959,303 @@ E&amp;=-\frac{m\alpha^2}{2\hbar^2}.
 </div>
 </div>
 <div class="sect1">
-<h2 id="_chapter_3_formalism"><a class="anchor" href="#_chapter_3_formalism"></a><a class="link" href="#_chapter_3_formalism">3. Chapter 3: Formalism</a></h2>
+<h2 id="_the_hydrogen_atom"><a class="anchor" href="#_the_hydrogen_atom"></a><a class="link" href="#_the_hydrogen_atom">2. The Hydrogen Atom</a></h2>
 <div class="sectionbody">
-
+<div class="sect2">
+<h3 id="_questions_2"><a class="anchor" href="#_questions_2"></a><a class="link" href="#_questions_2">2.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write out the radial wavefunctions \(R_{nl}(r)\), and corresponding energies \(E_n\), for the ground state and first two excited states of hydrogen (\(n=1,2,3\)). Include all degenerate states. You may use a table of associated Laguerre polynomials to help you.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a hydrogen atom with quantum numbers \(n=4\) and \(l=1\):</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Use the recursion relation \(c_{j+1} = \frac{2(j+l+1-n)}{(j+1)(j+2l+2)} c_j \) to find \(v(\rho)\).</p>
+</li>
+<li>
+<p>Use the formula for associated Laguerre polynomials \(L_q^p(x) = \frac{e^x x^{-p}}{q!}\frac{d^q}{dx^q}(e^{-x}x^{p+q})\) to find \(v(\rho)\).</p>
+</li>
+<li>
+<p>Write the normalized expression for \(R_{41}(r)\).</p>
+</li>
+<li>
+<p>Show that \(R_{41}(r)\) is a solution to the radial equation.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the hydrogen atom, why is \(n&gt;l\)? Why isn&#8217;t \(n\ge l\)?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that the wavefunctions of the hydrogen atom with different quantum numbers are orthogonal.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Determine the corresponding quantum numbers for the following density plot of a hydrogen wave function based on its nodes. Write out the full, normalized wavefunction. [insert density plot of \(\psi_{410}\)]</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [<strong>question 4.20 from Griffiths</strong> - give credit or change. I really like this question and think it would be worth using and crediting] Consider the earth-sun system as a gravitational analog to the hydrogen atom.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>What is the potential energy function? (Let \(m_E\) be the mass of the earth, and \(M\) the mass of the sun.)</p>
+</li>
+<li>
+<p>What is the "Bohr radius," \(a_g\), for this system? Work out the actual number.</p>
+</li>
+<li>
+<p>Write down the gravitational "Bohr formula," and, by equating \(E_n\) to the classical energy of a planet in a circular orbit of radius \(r_0\), show that \(n=\sqrt{r_0/a_g}\). From this, estimate the quantum number \(n\) of the earth.</p>
+</li>
+<li>
+<p>Suppose the earth made a transition to the next lower level (\(n-1\)). How much energy (in Joules) would be released? What would the wavelength of the emitted photon (or, more likely, graviton) be? (Express your answer in light years&#8201;&#8212;&#8201;is the remarkable answer a coincidence?)</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_demonstrations_2"><a class="anchor" href="#_demonstrations_2"></a><a class="link" href="#_demonstrations_2">2.2. Demonstrations</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p>A demo showing the orbitals?
+Maybe show the iso-probability-density surfaces and let the user vary the density to expand or contract the surface.</p>
+</li>
+</ul>
 </div>
 </div>
 </div>
+</div>
+<div class="sect1">
+<h2 id="_angular_momentum"><a class="anchor" href="#_angular_momentum"></a><a class="link" href="#_angular_momentum">3. Angular Momentum</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_3"><a class="anchor" href="#_questions_3"></a><a class="link" href="#_questions_3">3.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Do \(L_+\) and \(L_-\) commute? Why is this significant?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose you have a hydrogen atom in the orbital angular momentum state \[Y = \frac{1}{2}Y_1^1 + \frac{1}{\sqrt{2}}Y_1^0+ \frac{1}{2}Y_1^{-1}\]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Determine \(\braket{L^2}\) and \(\braket{L_z}\).</p>
+</li>
+<li>
+<p>Find \(\braket{L_x}\) and \(\braket{L_y}\) (hint: use the raising and lowering operators).</p>
+</li>
+<li>
+<p>Find the expectation value of the angular momentum in the \(\hat{n}\) direction, where \(\hat{n} = \sin{\theta}\cos{\phi} \hat{x} + \sin{\theta}\sin{\phi} \hat{y} + \cos{\theta}\hat{z}\) and \(\theta\) is the angle incident to the z-axis. In other words, find \(\braket{L_n} \) with \(L_n = \vec{L} \cdot \hat{n}\).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Convert \(L^2\) from cartesian coordinates to spherical coordinates.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For the spherical harmonic \(Y_3^2 = \left (\frac{105}{32\pi}\right )^{\frac{1}{2}} \sin^2\theta\cos\theta e^{2i\phi}\)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Apply the raising and lowering operators, \(L_+ = \hbar e^{i\phi}(\frac{\partial}{\partial\theta} + i\cot\theta \frac{\partial}{\partial \phi})\) and  \(L_- = -\hbar e^{-i\phi}(\frac{\partial}{\partial \theta} - i\cot\theta \frac{\partial}{\partial \phi})\), to find  \(Y_3^3\) and \(Y_3^1\).</p>
+</li>
+<li>
+<p>Using your results from part (a), verify that \(L_+Y_3^2\) is an eigenfunction of \(L^2\) with the same eigenvalue as the eigenfunction \(Y_3^2\) (i.e. show that \(L^2 (L_+Y_3^2) = \lambda (L_+Y_3^2) \) and \(L^2 Y_3^2 = \lambda Y_3^2\) where \(\lambda\) is a constant).</p>
+</li>
+<li>
+<p>Determine \(\sigma_{L_x}\) and \(\sigma_{L_y}\) for \(Y_3^2\) and \(Y_3^3\). What do you notice?</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [From <strong>Angelini</strong> "Solved Problems in Quantum Mechanics" <strong>3.4(d)</strong>]
+Prove that, in an eigenstate of \(J^2\) and \(J_z\) corresponding to the quantum numbers \(j\) and \(m\), the maximum accuracy of the simultaneous measurement of \(J_x\) and \(J_y\) is obtained when \(|m| = j\).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_spin"><a class="anchor" href="#_spin"></a><a class="link" href="#_spin">4. Spin</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_4"><a class="anchor" href="#_questions_4"></a><a class="link" href="#_questions_4">4.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Given \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\), show that \(S_x\), \(S_y\), \(S_z\), and \(S^2\) are pairwise compatible observables.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> This problem will walk you through the steps to algebraically determine the eigenvalues of \(S^2\) and \(S_z\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Find \([S_{\pm}, S^2]\) and \([S_{\pm}, S_z]\).</p>
+</li>
+<li>
+<p>If \(\ket{a, b}\) is an eigenstate of \(S^2\)  and \(S_z\) with eigenvalues \(a\) and \(b\) respectively, show that \(S_{\pm}\ket{a, b}\) is also an eigenstate of \(S^2\)  and \(S_z\) with eigenvalues \(a\) and \(b\pm\hbar\).</p>
+</li>
+<li>
+<p>Show that \(S^2(S_{\pm}^n \ket{a, b}) = a(S_{\pm}^n \ket{a, b})\) and \(S_z(S_{\pm}^n \ket{a, b}) = (b\pm n\hbar)(S_{\pm}^n \ket{a, b})\).</p>
+</li>
+<li>
+<p>Since \(S^2 = S_x^2 + S_y^2 + S_z^2\), then \(a^2 \ge (b+n\hbar)^2\). There must be a maximum value of \(n\), which we will call \(N\), such that \(S_z (S_+)^{N}\ket{a,b} = (b+N\hbar)(S_+)^{N}\ket{a,b}\)  and \(S_z (S_+)^{N+1}\ket{a,b} = 0\). Use the operator \(S_{-}S_{+}\) and eigenstate \(\ket{a, b+N\hbar}\) to show that \( a = (b+N\hbar)(b+N\hbar + \hbar) \).</p>
+</li>
+<li>
+<p>Let \(b=\hbar m\) and \(b+N\hbar = \hbar s\). Write out the full eigenvalue equations for \(S^2\) and \(S_z\).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> For a spin-\(\frac{1}{2}\) particle use the Pauli matrices, \(\sigma_{x} = \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}\), \(\sigma_{y} =  \begin{pmatrix} 0 &amp; -i \\ i &amp; 0 \end{pmatrix}\), and \(\sigma_{z} =  \begin{pmatrix}1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix} \) to</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Show that  \([S_x, S_y] = i\hbar S_z \), \([S_y, S_z] = i\hbar S_x \), and \([S_z, S_x] = i\hbar S_y\) .</p>
+</li>
+<li>
+<p>Find the eigenvalues for \(S_x\), \(S_y\), and \(S_z\).</p>
+</li>
+<li>
+<p>Find the eigenvectors for \(S_x\), \(S_y\), and \(S_z\).</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Suppose a spin-\(\frac{1}{2}\) particle is in the state \(A\begin{pmatrix}3+4i\\12\end{pmatrix}\).</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Compute \(A\) so that the state is normalized.</p>
+</li>
+<li>
+<p>For each spin observable \(S=S_x,S_y,S_z\):</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>Rewrite the state as a linear combinations of the eigenvectors of \(S\).</p>
+</li>
+<li>
+<p>What are the probabilities of getting \(\pm\frac{\hbar}{2}\) if you measure \(S\)?</p>
+</li>
+<li>
+<p>Compute \(\Braket{S}\).</p>
+</li>
+</ol>
+</div>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Compute \(e^{\sigma_r}\) for \(r=x,y,z\).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A beam of silver atoms passes through a Stern-Gerlach device. Half of the atoms are deflected in the \(+z\) direction and half of the atoms are deflected in the \(-z\) direction.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>The atoms deflected in the \(+z\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+z\) or \(-z\) direction. What percentage of the atoms are deflected in the \(+z\) direction? The \(-z\) direction?</p>
+</li>
+<li>
+<p>The atoms from part (a) that were deflected in the \(+z\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+x\) or \(-x\) direction. What percentage of the atoms are deflected in the \(+x\) direction? The \(-x\) direction?</p>
+</li>
+<li>
+<p>The atoms from part (b) that were deflected in the \(+x\) direction are now sent through another Stern-Gerlach device, oriented so that it is possible for the atoms to be deflected in the \(+z\) or \(-z\) direction. What percentage of the atoms are deflected in the \(+z\) direction? The \(-z\) direction?</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [I remember especially liking the following question <strong>(1.1) from Townsend</strong> as an undergraduate] Determine the field gradient of a 50-cm-long Stern-Gerlach magnet that would produce a 1-mm separation at the detector between spin-up and spin-down silver atoms that are emitted from an over at \(T=1500 \)K. Assume the detector (see Fig 1.1) is located 50 cm from the magnet. <em>Note</em>: While the atoms in the oven have average kinetic energy \(3k_BT/2\), the more energetic atoms strike the hold in hte oven more frequently. Thus the <em>emitted</em> atoms have average kinetic energy \(2k_BT\), where \(k_B\) is the Boltzmann constant. The magnetic dipole moment of the silver atom is due to the intrinsic spin of the single electron. Appendix F gives the numerical value of the Bohr magneton, \(e\hbar /2m_ec\), in a convenient form.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> What are \(s\) and \(m\) for two particles in the state \[\Ket{s \, m} = \frac{\sqrt{3}}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-1}{2} \, \frac{-1}{2}} + \frac{1}{2}\Ket{\frac{3}{2} \, \frac{1}{2} \, \frac{-3}{2} \, \frac{1}{2}} \]</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> You have a spin-\(2\) and spin-\(\frac{1}{2}\) particle in a combined state with \(s=\frac{3}{2}\) and \(m=-\frac{3}{2}\). You may use a table of Clebsch-Gordan coefficients to help you.</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>What are the possible spin states that each of the particles could be in?</p>
+</li>
+<li>
+<p>What are the probabilities of each particle being in the spin states from part (a)?</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_electromagnetic_interactions"><a class="anchor" href="#_electromagnetic_interactions"></a><a class="link" href="#_electromagnetic_interactions">5. Electromagnetic Interactions</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions_5"><a class="anchor" href="#_questions_5"></a><a class="link" href="#_questions_5">5.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Generalize the method to derive 4.213 to time-dependent vector potentials \(\mathbf A\) resulting in zero magnetic field (\(\mathbf{B}=\nabla\times \mathbf{A}=0\)).</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> The total magnetic flux through a solenoid made of a wire of length \(l\) coiled \(N\) times, whose cross section has area \(A\), and with a current \(I\), is \(\Phi=\mu_0\frac{NIA}{l}\) where \(\mu_0\) is the permeability of free space.
+(Assume that the solenoid is long enough that end effects do not need to be taken into account.)</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>In the Aharonov–Bohm Effect, what values of \(l\), \(N\), \(I\), and \(A\) lead to maximum constructive interference of the two electron beams. How about for maximum destructive interference?</p>
+</li>
+<li>
+<p>Suppose the center of the solenoid is now filled not with air, but with iron, which has a permeability of approximately\(2\times 10^6\mu_0\).
+Repeat part (a).</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

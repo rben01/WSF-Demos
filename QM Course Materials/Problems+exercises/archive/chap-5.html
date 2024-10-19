@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="generator" content="Asciidoctor 2.0.18">
-<title>Untitled</title>
+<meta name="generator" content="Asciidoctor 2.0.23">
+<title>Chapter 5: Identical Particles</title>
 <style>
 /*! Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
 /* Uncomment the following line when using as a custom stylesheet */
@@ -139,7 +139,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #content::before{content:none}
 #header>h1:first-child{color:rgba(0,0,0,.85);margin-top:2.25rem;margin-bottom:0}
 #header>h1:first-child+#toc{margin-top:8px;border-top:1px solid #dddddf}
-#header>h1:only-child,body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
+#header>h1:only-child{border-bottom:1px solid #dddddf;padding-bottom:8px}
 #header .details{border-bottom:1px solid #dddddf;line-height:1.45;padding-top:.25em;padding-bottom:.25em;padding-left:.25em;color:rgba(0,0,0,.6);display:flex;flex-flow:row wrap}
 #header .details span:first-child{margin-left:-.125em}
 #header .details span.email a{color:rgba(0,0,0,.85)}
@@ -161,6 +161,7 @@ p a>code:hover{color:rgba(0,0,0,.9)}
 #toctitle{color:#7a2518;font-size:1.2em}
 @media screen and (min-width:768px){#toctitle{font-size:1.375em}
 body.toc2{padding-left:15em;padding-right:0}
+body.toc2 #header>h1:nth-last-child(2){border-bottom:1px solid #dddddf;padding-bottom:8px}
 #toc.toc2{margin-top:0!important;background:#f8f8f7;position:fixed;width:15em;left:0;top:0;border-right:1px solid #e7e7e9;border-top-width:0!important;border-bottom-width:0!important;z-index:1000;padding:1.25em 1em;height:100%;overflow:auto}
 #toc.toc2 #toctitle{margin-top:0;margin-bottom:.8rem;font-size:1.2em}
 #toc.toc2>ul{font-size:.9em;margin-bottom:0}
@@ -207,13 +208,10 @@ table.tableblock.fit-content>caption.title{white-space:nowrap;width:0}
 .admonitionblock>table td.content{padding-left:1.125em;padding-right:1.25em;border-left:1px solid #dddddf;color:rgba(0,0,0,.6);word-wrap:anywhere}
 .admonitionblock>table td.content>:last-child>:last-child{margin-bottom:0}
 .exampleblock>.content{border:1px solid #e6e6e6;margin-bottom:1.25em;padding:1.25em;background:#fff;border-radius:4px}
-.exampleblock>.content>:first-child{margin-top:0}
-.exampleblock>.content>:last-child{margin-bottom:0}
 .sidebarblock{border:1px solid #dbdbd6;margin-bottom:1.25em;padding:1.25em;background:#f3f3f2;border-radius:4px}
-.sidebarblock>:first-child{margin-top:0}
-.sidebarblock>:last-child{margin-bottom:0}
 .sidebarblock>.content>.title{color:#7a2518;margin-top:0;text-align:center}
-.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
+.exampleblock>.content>:first-child,.sidebarblock>.content>:first-child{margin-top:0}
+.exampleblock>.content>:last-child,.exampleblock>.content>:last-child>:last-child,.exampleblock>.content .olist>ol>li:last-child>:last-child,.exampleblock>.content .ulist>ul>li:last-child>:last-child,.exampleblock>.content .qlist>ol>li:last-child>:last-child,.sidebarblock>.content>:last-child,.sidebarblock>.content>:last-child>:last-child,.sidebarblock>.content .olist>ol>li:last-child>:last-child,.sidebarblock>.content .ulist>ul>li:last-child>:last-child,.sidebarblock>.content .qlist>ol>li:last-child>:last-child{margin-bottom:0}
 .literalblock pre,.listingblock>.content>pre{border-radius:4px;overflow-x:auto;padding:1em;font-size:.8125em}
 @media screen and (min-width:768px){.literalblock pre,.listingblock>.content>pre{font-size:.90625em}}
 @media screen and (min-width:1280px){.literalblock pre,.listingblock>.content>pre{font-size:1em}}
@@ -329,7 +327,7 @@ a.image{text-decoration:none;display:inline-block}
 a.image object{pointer-events:none}
 sup.footnote,sup.footnoteref{font-size:.875em;position:static;vertical-align:super}
 sup.footnote a,sup.footnoteref a{text-decoration:none}
-sup.footnote a:active,sup.footnoteref a:active{text-decoration:underline}
+sup.footnote a:active,sup.footnoteref a:active,#footnotes .footnote a:first-of-type:active{text-decoration:underline}
 #footnotes{padding-top:.75em;padding-bottom:.75em;margin-bottom:.625em}
 #footnotes hr{width:20%;min-width:6.25em;margin:-.25em 0 .75em;border-width:1px 0 0}
 #footnotes .footnote{padding:0 .375em 0 .225em;line-height:1.3334;font-size:.875em;margin-left:1.2em;margin-bottom:.2em}
@@ -392,7 +390,7 @@ b.conum *{color:inherit!important}
 dt,th.tableblock,td.content,div.footnote{text-rendering:optimizeLegibility}
 h1,h2,p,td.content,span.alt,summary{letter-spacing:-.01em}
 p strong,td.content strong,div.footnote strong{letter-spacing:-.005em}
-p,blockquote,dt,td.content,span.alt,summary{font-size:1.0625rem}
+p,blockquote,dt,td.content,td.hdlist1,span.alt,summary{font-size:1.0625rem}
 p{margin-bottom:1.25rem}
 .sidebarblock p,.sidebarblock dt,.sidebarblock td.content,p.tableblock{font-size:1em}
 .exampleblock>.content{background:#fffef7;border-color:#e0e0dc;box-shadow:0 1px 4px #e0e0dc}
@@ -782,11 +780,309 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 	} */
 </style>
 </head>
-<body class="article">
+<body class="article toc2 toc-left qm-chapter chap-5">
 <div id="header">
+<h1>Chapter 5: Identical Particles</h1>
+<div id="toc" class="toc2">
+<div id="toctitle">Table of Contents</div>
+<ul class="sectlevel1">
+<li><a href="#_two_particle_systems">1. Two-Particle Systems</a>
+<ul class="sectlevel2">
+<li><a href="#_questions">1.1. Questions</a></li>
+</ul>
+</li>
+<li><a href="#_atoms">2. Atoms</a></li>
+<li><a href="#_solids">3. Solids</a></li>
+<li><a href="#_demonstrations">4. Demonstrations</a></li>
+</ul>
+</div>
 </div>
 <div id="content">
+<div class="sect1">
+<h2 id="_two_particle_systems"><a class="anchor" href="#_two_particle_systems"></a><a class="link" href="#_two_particle_systems">1. Two-Particle Systems</a></h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_questions"><a class="anchor" href="#_questions"></a><a class="link" href="#_questions">1.1. Questions</a></h3>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Show that an operator \(P\) satisfying \(P^2=I\) (such as the <strong>exchange operator</strong>) has no eigenvalues other than \(1\) and \(-1\).
+(Since the eigenvalues are real, such an operator is necessarily hermitian.)</p>
+<details open>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>We want to solve \(Pf=\lambda f\) with \(f\ne\ket0\).
+Multiplying both sides by \(P\), we have
+\[\begin{align*}
+f&amp;=P^2f\\
+&amp;=P(Pf)\\
+&amp;=P(\lambda f)\\
+&amp;=\lambda (Pf)\\
+&amp;=\lambda^2 f
+\end{align*}\]
+Since \(\lambda^2 f=f\) and \(f\ne\ket0\), we see that \(\lambda^2=1\).
+The only solutions to this equation are \(\lambda=\pm 1\).
+(\(P\) need not have <em>both</em> \(+1\) and \(-1\) as eigenvalues; the identity operator satisfies \(P^2=I\) but its only eigenvalue is \(1\).
+\(\pm1\) are simply the only <em>permissible</em> eigenvalues.)</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <em>Slater Determinants</em> are a methodological approach to using the antisymmetrization principle to compute the joint wavefunctions of identical fermions.
+In this problem we&#8217;ll build them up from scratch.</p>
+<div class="paragraph">
+<p>The wavefunction \(\Psi_k\) of a fermion with label \(k\) is the product of its position wavefunction and its spin: \(\Psi_k(\v r_k)=\Psi_k(\v r_k)\chi_k\).</p>
+</div>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>We know that the wavefunction for two identical, non-interacting fermions is \[\Psi_-(\v r_1, \v r_2)=A[\Psi_1(\v r_1)\Psi_2(\v r_2)-\Psi_2(\v r_1)\Psi_1(\v r_2)]\]
+where \(A\) is the normalization factor.
+This wavefunction has the property that it is antisymmetric under exchange of the particles.</p>
+<div class="paragraph">
+<p>Write the wavefunction for <em>three</em> identical, non-interacting fermions labeled \((1,2,3)\) whose individual states are \(\Psi_1\), \(\Psi_2\), and <span class="no-break">\(\Psi_3\).</span>
+This wavefunction should be the sum of \(3!=6\) different terms and should have the property that swapping any two particles — any two indices \(m,n\in\{1,2,3\}\) — should negate the resulting wavefunction.
+(Without more information about the individual wavefunctions, the normalization factor will have to remain unspecified.)</p>
+</div>
+<div class="exampleblock">
+<div class="content">
+<div class="paragraph">
+<p>Why \(3!\)&#160;?
+In order for the wavefunction to be truly indeterminate about which particle is in which state, it has to be a linear combination of all assignments of the particles to the states, and \(3!=6\) is the number of ways to assign the 3 <span class="no-break">\(\v r\)’s</span> to the 3 <span class="no-break">\(\Psi\)’s.</span>
+(In general, \(n!\) is the number of <em>permutations</em>, or orderings, of \(n\) items.)</p>
+</div>
+</div>
+</div>
+</li>
+<li>
+<p>Suppose that three fermions labeled \((1,2,3)\) are exchanged so that they are now labeled \((3,1,2)\).
+In terms of the original wavefunction you found in part (a), what is the new wavefunction?</p>
+</li>
+<li>
+<p>Without using the explicitly constructed wavefunction from part (a), repeat part (b).
+That is, using just the knowledge of the how the particles were relabeled, how can you tell whether the sign of the resulting wavefunction will change?
+(Hint: The wavefunction&#8217;s sign flips every time you exchange two fermions. Can you write the relabeling as the composition of multiple two-fermion exchanges?)</p>
+</li>
+<li>
+<p>Using the &#8220;count the two-fermion exchanges&#8221; principle from part (c), how would the sign of the wavefunction change under the following four-particle exchanges?</p>
+<div class="olist lowerroman">
+<ol class="lowerroman" type="i">
+<li>
+<p>\((1,2,3,4) \to (2,1,4,3)\)</p>
+</li>
+<li>
+<p>\((1,2,3,4) \to (4,3,2,1)\)</p>
+</li>
+<li>
+<p>\((1,2,3,4) \to (4,1,2,3)\)</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p>If you write a permutation as the composition of pairwise swaps, the <em>sign</em> (or <em>parity</em>) of the permutation is the parity of the number of two-element swaps: \(+1\) if there are an even number of swaps and \(-1\) if there are an odd number.
+As you saw above, if you know the sign of a permutation, you know how the sign of the wavefunction of a system of multiple indistinguishable fermions will change when that permutation is used to relabel the fermions: the resulting sign change is just the sign of the permutation.</p>
+<div class="paragraph">
+<p>Show that the sign of a permutation is well-defined: no matter how you write a permutation as the composition of two-particle exchanges, the number of two-particle exchanges will either always be even or always be odd.
+In other words, an even number of two-particle exchanges will never result in the same permutation as an odd number of two-particle exchanges.</p>
+</div>
+</li>
+<li>
+<p>Thankfully, you did not have to write out the wavefunction for the four-particle system in part (d).
+However, it would not have been difficult to do so, as a standard procedure exists for computing the wavefunction of any \(N\)-fermion system.</p>
+<div class="paragraph">
+<p>Show that the <em>Slater determinant</em> shown below (where \(A\) is once again a normalization constant) satisfies the properties of the wavefunction of an \(N\)-fermion system: it contains all \(N!\) assignments of states to particles (so that it is fully indeterminate about which particle is i which state) and is antisymmetric under exchange of any two of the \(N\) fermions.
+\[\begin{align*}
+\Psi(\v r_1, \ldots, \v r_n):=A\begin{vmatrix}
+\Psi_{1}(\v r_1)&amp;\Psi_{2}(\v r_1)&amp;\cdots&amp; \Psi_{N}(\v r_1)\\
+\Psi_{1}(\v r_2)&amp;\Psi_{2}(\v r_2)&amp;\cdots&amp; \Psi_{N}(\v r_2)\\
+\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\
+\Psi_{1}(\v r_N)&amp;\Psi_{2}(\v r_N)&amp;\cdots&amp; \Psi_{N}(\v r_N)\\
+\end{vmatrix}
+\end{align*}\]
+Additionally, show that the three-fermion wavefunction you found in part (b) is indeed the third Slater determinant.</p>
+</div>
+</li>
+<li>
+<p>Assuming the \(\Psi_n\)’s are orthonormal, show that the normalization factor in the Slater determinant is \(A=\frac{1}{\sqrt N}\).</p>
+</li>
+<li>
+<p>Derive the Pauli exclusion principle from the Slater determinant — which property of the determinant leads to the Pauli exclusion principle?</p>
+</li>
+<li>
+<p>The <em>permanent</em> of a matrix is computed similarly to the determinant, except that there are no powers of \(-1\) in its cofactor expansion; you only ever <em>add</em> the submatrices (so, for instance, the permanent of \(\displaystyle\begin{pmatrix}a&amp;b\\c&amp;d\end{pmatrix}\) is \(ad+bc\)).
+Show that the <em>Slater permanent</em> gives the wavefunction of an \(N\)-<em>boson</em> system.</p>
+</li>
+</ol>
+</div>
+<details>
+<summary class="title">Solution</summary>
+<div class="content">
+<div class="paragraph">
+<p>The three-way swap can be decomposed into pairwise swaps: first we swap 1 and 2 to obtain \((2,1,3)\), and then we swap 2 and 3 to obtain \((3,1,2)\).
+Since both two-particle swaps multiply the wavefunction by \(-1\) (because the particles are fermions), the net result is that resulting wavefunction is equal to the original wavefunction.</p>
+</div>
+</div>
+</details>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Two non-interacting particles in states \(\Psi_a(\vec{r_1})\) and  \(
+\Psi_b(\vec{r_2})\) with  energies \(a\) and \(b\) form a system with total energy \(E=a+b\). For \(E=4\), determine all degenerate wavefunctions if the particles are&#8230;&#8203;</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Distinguishable</p>
+</li>
+<li>
+<p>Bosons</p>
+</li>
+<li>
+<p>Fermions</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write out the full wavefunction, including the spin and spatial components, for the following two-particle systems:</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Electrons in the total spin state \(\ket{0 \ 0}\) and energetic states \(a\) and \(b\).</p>
+</li>
+<li>
+<p>Identical spin-1 particles in the total spin state \(\ket{1 \ -1}\) and energetic states \(a\) and \(b\).</p>
+</li>
+<li>
+<p>A spin-1 particle and spin-\(\frac{1}{2}\) particle in total spin state \(\ket{\frac{3}{2} \ \frac{1}{2}}\) and energetic states \(a\) and \(b\), respectively.</p>
+</li>
+<li>
+<p>Identical spin-\(\frac{3}{2}\) particles in total spin state \(\ket{3 \ 0}\) and energetic states \(a\) and \(b\).</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+<div class="paragraph">
+<p>Note: we suggest using the notation \(\ket{s_1 \ s_2 \ m_1 \ m_2}\) and \(\psi_E\), where \(E=a,b\).</p>
+</div>
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Central potential question (need to think one up)</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> A positron is like an electron in every way except that its charge is positive instead of negative.
+What would the exchange force be between an electron and a positron (ignoring any electrical force between them).</p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_atoms"><a class="anchor" href="#_atoms"></a><a class="link" href="#_atoms">2. Atoms</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Using separation of variables, show that if you ignore the electron repulsion term in the Hamiltonian, the wavefunction for Helium can be written as a product of two hydrogenic wavefunctions.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> Write out the wavefunctions for the ground and first two excited states of helium using the notation \(\psi_{nlm_{l}}\) and \(\ket{s \ m_z}\). Indicate which are parahelium and orthohelium.</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> What would the ground state of helium be if its two electrons were distinguishable (say, one had a very slightly different mass)?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> <em>Positronium</em> is a system made of one electron and one positron.
+Analogously with helium, <em>para</em>-positronium has the two particles in the singlet state while <em>ortho</em>-positronium has the two particles in the triplet state.
+Which kind of positronium has a higher energy, para- or ortho-?
+By how much?</p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Question 5.17 from Griffiths - I think we should use this question in combo with 5.18]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p>Figure out the electron configurations (in the notation of Equation 5.44) for the first two rows of the periodic Table (up to neon), and check your results against Table 5.1.</p>
+</li>
+<li>
+<p>Figure out the corresponding total angular momenta, in the notation of Equation 5.45, for the first four elements. List all the <em>possibilities</em> for boron, carbon, and nitrogen.</p>
+</li>
+</ol>
+</div>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span> [Question 5.18 from Griffiths - I think 5.17 and 5.18 get at the heart of angular momentum configuration. I don&#8217;t know how else to gain familiarity with Hund&#8217;s rules other than just practicing on the periodic table]</p>
+<div class="olist loweralpha">
+<ol class="loweralpha" type="a">
+<li>
+<p><strong>Hund&#8217;s first rule</strong> says that, consistent with the Pauli principle, the state with the highest total spin (\(S\)) will have the lowest energy. What would this predict in the case of the excited states of helium?</p>
+</li>
+<li>
+<p><strong>Hund&#8217;s second rule</strong> says that, for a given spin, the state with the highest total orbital angular momentum (\(L\)), consistent with overall antisymmetrization, will have the lowest energy. Why doesn&#8217;t carbon have \(L=2\)? <em>Hint</em>: Note that the "top of the ladder" \(M_L = L\) is symmetric.</p>
+</li>
+<li>
+<p><strong>Hund&#8217;s third rule</strong> says that if a  subshell \(n, l\) is no more than half filled, then the lowest energy level has \(J= |L-S|\); if it is more than half filled, then \(J=L+S\) has the lowest energy. Use this to resolve the boron ambiguity in Problem 5.17(b).</p>
+</li>
+<li>
+<p>Use Hund&#8217;s rules, together with the fact that a symmetric spin state must go with an antisymmetric position state (and vice versa) to resolve the carbon and nitrogen ambiguities in Problem 5.17(b). <em>Hint</em>: Always go to the "top of the ladder" to figure out the symmetry of a state.</p>
+</li>
+</ol>
+</div>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_solids"><a class="anchor" href="#_solids"></a><a class="link" href="#_solids">3. Solids</a></h2>
+<div class="sectionbody">
+<div class="ulist">
+<ul>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+<li>
+<p><span class="problem-number"><span class="chapter-num"></span>.<span class="topic-num"></span>.<span class="question-num"></span></span></p>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_demonstrations"><a class="anchor" href="#_demonstrations"></a><a class="link" href="#_demonstrations">4. Demonstrations</a></h2>
+<div class="sectionbody">
 
 </div>
+</div>
+</div>
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  messageStyle: "none",
+  tex2jax: {
+    inlineMath: [["\\(", "\\)"]],
+    displayMath: [["\\[", "\\]"]],
+    ignoreClass: "nostem|nolatexmath"
+  },
+  asciimath2jax: {
+    delimiters: [["\\$", "\\$"]],
+    ignoreClass: "nostem|noasciimath"
+  },
+  TeX: { equationNumbers: { autoNumber: "none" } }
+})
+MathJax.Hub.Register.StartupHook("AsciiMath Jax Ready", function () {
+  MathJax.InputJax.AsciiMath.postfilterHooks.Add(function (data, node) {
+    if ((node = data.script.parentNode) && (node = node.parentNode) && node.classList.contains("stemblock")) {
+      data.math.root.display = "block"
+    }
+    return data
+  })
+})
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/MathJax.js?config=TeX-MML-AM_HTMLorMML"></script>
 </body>
 </html>

@@ -1,0 +1,12 @@
+site:
+  title: Quantum Mechanics Problems
+  start_page: ROOT::chap-1.adoc
+content:
+  sources:
+    - url: site
+      branches: HEAD
+
+ui:
+  bundle:
+    url: ./theme
+    snapshot: true

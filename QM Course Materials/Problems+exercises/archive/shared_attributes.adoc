@@ -1,4 +1,5 @@
 :docinfo: shared
+:stem: latexmath
 :toc: left
 :!linkcss:
 :nofooter:
