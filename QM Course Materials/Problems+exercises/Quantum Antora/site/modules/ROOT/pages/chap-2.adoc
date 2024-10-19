@@ -246,7 +246,7 @@ What is the frequency of oscillations?
 What is the amplitude?
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 [{sublist-style}]
 . To normalize, we set stem:[\left\|\Psi\right\|^2=\int_0^a\left|\Psi(x,0)\right|^2\,dx=1] and simply compute, using the fact that the stem:[\psi_n] are orthonormal over stem:[[0,a]].

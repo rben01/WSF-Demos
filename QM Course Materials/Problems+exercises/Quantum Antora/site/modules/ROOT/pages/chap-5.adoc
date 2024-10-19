@@ -10,7 +10,7 @@ Show that an operator stem:[P] satisfying stem:[P^2=I] (such as the *exchange op
 (Since the eigenvalues are real, such an operator is necessarily hermitian.)
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 We want to solve stem:[Pf=\lambda f] with stem:[f\ne\ket0].
 Multiplying both sides by stem:[P], we have

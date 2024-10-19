@@ -18,7 +18,7 @@ Show that the Legendre polynomials, defined by stem:[\displaystyle P_n(x):=\frac
 (Hint: use integration by parts to compute stem:[\int_{-1}^1 P_m(x)P_n(x)\,dx] for stem:[m< n].)
 
 .Solution
-[%collapsible%open]
+[%collapsible]
 ====
 To compute stem:[\int_{-1}^1 P_m(x)P_n(x)\,dx] using integration by parts, let
 
